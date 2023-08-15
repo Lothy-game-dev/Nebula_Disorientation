@@ -1,0 +1,2 @@
+To enable MLagents training, please clone the project inside the follow folder:
+E:\Nebula_Disorientation\

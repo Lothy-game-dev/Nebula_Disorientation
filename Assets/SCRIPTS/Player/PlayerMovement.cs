@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     #region InitializeVariables
     public float RotateSpeed;
     public float MovingSpeed;
+    public float DashingTime;
     #endregion
     #region NormalVariables
     private string CurrentKeyRotate;
@@ -87,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && DashingTimer<=0f)
         {
             Dashing = true;
-            DashingTimer = 0.5f;
+            DashingTimer = DashingTime;
             Dash();
         }
         if (Dashing)
