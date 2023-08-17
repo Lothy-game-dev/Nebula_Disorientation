@@ -59,7 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
+    <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
+    <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
+    <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\TargetCursor.cs" />

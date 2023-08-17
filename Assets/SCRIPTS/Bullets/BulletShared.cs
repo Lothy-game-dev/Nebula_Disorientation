@@ -11,6 +11,8 @@ public class BulletShared : MonoBehaviour
     public float Distance;
     public Vector2 Velocity;
     public Vector2 RealVelocity;
+    public float Damage;
+    public LayerMask EnemyLayer;
     #endregion
     #region Shared Functions
     // Calculate Velocity Required To Reach Destination
@@ -35,6 +37,20 @@ public class BulletShared : MonoBehaviour
             }
             rb.velocity = RealVelocity;
             yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    public void CalculateDamage()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
+        foreach (var col in cols)
+        {
+            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+            if (enemy!=null)
+            {
+                enemy.CurrentHP -= Damage;
+                Destroy(gameObject);
+            }
         }
     }
     #endregion

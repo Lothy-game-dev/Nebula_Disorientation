@@ -27,7 +27,7 @@ public class Rocket : BulletShared
     // Update is called once per frame
     void Update()
     {
-        
+        CalculateDamage();
     }
     #endregion
 }
