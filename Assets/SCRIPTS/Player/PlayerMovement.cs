@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float RotateSpeed;
     public float MovingSpeed;
     public float DashingTime;
+    public float DashSpeedRate;
     #endregion
     #region NormalVariables
     private string CurrentKeyRotate;
@@ -20,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
     private int SpeedUp;
     private bool Dashing;
     private float DashingTimer;
-    private bool Rotatable;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -34,6 +34,34 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Rotate Left Right
+        DetectADButton();
+        if (!Dashing) PlayerRotate();
+        // Dash using Spacebar
+        // Timer for Dashing
+        if (DashingTimer>0f)
+        {
+            DashingTimer -= Time.deltaTime;
+        }
+        else
+        {
+            Dashing = false;
+        }
+        // Dashing conditions
+        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer<=0f)
+        {
+            Dashing = true;
+            DashingTimer = DashingTime;
+            Dash();
+        }
+        // Moving Front and Back
+        DetectWSButton();
+        if (!Dashing) PlayerMoving();
+    }
+    #endregion
+    #region Moving Functions
+    // Detect Player's Input Cases on A and D
+    void DetectADButton()
+    {
         // Case: Hold A and no touch D => A
         if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
         {
@@ -75,36 +103,21 @@ public class PlayerMovement : MonoBehaviour
         {
             RotateDirection = 0;
         }
-        if (Rotatable) PlayerRotate();
-        // Dash using Spacebar
-        if (DashingTimer>0f)
-        {
-            DashingTimer -= Time.deltaTime;
-        }
-        else
-        {
-            Dashing = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer<=0f)
-        {
-            Dashing = true;
-            DashingTimer = DashingTime;
-            Dash();
-        }
-        if (Dashing)
-        {
-            Rotatable = false;
-        } else
-        {
-            Rotatable = true;
-        }
-        // Moving Front and Back
+    }
+    // Rotate Player With Degree
+    void PlayerRotate()
+    {
+        transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed));
+    }
+    // Detect Player's Input Cases for W and S
+    void DetectWSButton()
+    {
         // Case hold W and no touch S => W
         if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
         {
             SpeedUp = 1;
             CurrentKeyMove = "W";
-        } 
+        }
         // Case hold S and no touch W => S
         else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
         {
@@ -140,14 +153,6 @@ public class PlayerMovement : MonoBehaviour
         {
             SpeedUp = 0;
         }
-        if (!Dashing) PlayerMoving();
-    }
-    #endregion
-    #region Moving Functions
-    // Rotate Player With Degree
-    void PlayerRotate()
-    {
-        transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed));
     }
     // Move Player Forward Backward
     void PlayerMoving()
@@ -215,10 +220,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else return new Vector2(0, 0);
     }
+    // Dash Player
     void Dash()
     {
         Vector2 movementVector = CalculateMovement();
-        rb.velocity = movementVector * MovingSpeed * 2f;
+        rb.velocity = movementVector * MovingSpeed * DashSpeedRate;
     }
     #endregion
 }
