@@ -41,9 +41,9 @@ public class InitializeDatabase : MonoBehaviour
         IDbCommand dbCommandCreateTable = dbConnection.CreateCommand();
         dbCommandCreateTable.CommandText = dbScript;
         dbCommandCreateTable.ExecuteReader();
-
         dbConnection.Close();
-        
+        // Insert Init Data
+
     }
 
     // select data 
