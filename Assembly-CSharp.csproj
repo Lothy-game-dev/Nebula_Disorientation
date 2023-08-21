@@ -63,9 +63,12 @@
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\TargetCursor.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
   </ItemGroup>
