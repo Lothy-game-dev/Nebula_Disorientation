@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float MovingSpeed;
     public float DashingTime;
     public float DashSpeedRate;
+    public GameObject GameController;
     #endregion
     #region NormalVariables
     private string CurrentKeyRotate;
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private int SpeedUp;
     private bool Dashing;
     private float DashingTimer;
+    private InitializeDatabase db;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -28,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     {
         // Initialize components
         rb = GetComponent<Rigidbody2D>();
+        db = GameController.GetComponent<InitializeDatabase>();
+        db.CreateDatabase();
     }
 
     // Update is called once per frame
