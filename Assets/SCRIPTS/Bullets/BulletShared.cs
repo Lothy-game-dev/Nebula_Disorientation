@@ -13,6 +13,7 @@ public class BulletShared : MonoBehaviour
     public Vector2 RealVelocity;
     public float Damage;
     public LayerMask EnemyLayer;
+    public string Type;
     #endregion
     #region Shared Functions
     // Calculate Velocity Required To Reach Destination
