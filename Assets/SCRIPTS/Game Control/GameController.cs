@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
     {
         // Initialize variables
         db = GetComponent<InitializeDatabase>();
-        db.DropDatabase();
+        //db.DropDatabase();
         db.Initialization();
     }
 
