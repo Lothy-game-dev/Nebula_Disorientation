@@ -34,13 +34,11 @@ public class PlayerFighter : FighterShared
             if (Input.GetKeyDown(KeyCode.M))
             {
                 ReceiveThermalDamage(false);
-                RegenTimer = 2f;
                 testTimer = 1f;
             }
             else if (Input.GetKeyDown(KeyCode.N))
             {
                 ReceiveThermalDamage(true);
-                RegenTimer = 2f;
                 testTimer = 1f;
             }
         } else
