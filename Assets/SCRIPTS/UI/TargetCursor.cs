@@ -17,6 +17,12 @@ public class TargetCursor : MonoBehaviour
     private Vector3 MousePos;
     private bool LeftGlowing;
     private bool RightGlowing;
+    private bool LeftNotDown;
+    private bool RightNotDown;
+    private float LeftUpTimer;
+    private float LeftDownTimer;
+    private float RightUpTimer;
+    private float RightDownTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -37,79 +43,116 @@ public class TargetCursor : MonoBehaviour
         // Case Left Button Press
         if (Input.GetMouseButtonDown(0))
         {
-            // If the previous glow not found/has complete -> glow up from 0 to 1 and down from 1 to 0
-            if (!LeftGlowing)
+            LeftGlowing = true;
+        }
+        // Case Left Button Hold
+        if (Input.GetMouseButton(0))
+        {
+            LeftGlowing = true;
+            LeftNotDown = true;
+        }
+        // Case Left Button Exit
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (LeftNotDown)
             {
-                LeftGlowing = true;
-                StartCoroutine(GlowCursor(AimLeft));
-                LeftGlowing = false;
+                LeftNotDown = false;
             }
-            // If not: glow up the current to max and then down
-            else
+        } 
+        // Glowing Up for Left mouse
+        if (LeftGlowing && LeftUpTimer<=0f)
+        {
+            Color c = AimLeft.GetComponent<SpriteRenderer>().color;
+            if (c.a<1)
             {
-                StartCoroutine(GlowUpWhileGlowing(AimLeft));
+                GlowUpCursor(AimLeft);
+                LeftUpTimer = GlowTime / 20f;
+            } else if (!LeftNotDown)
+            {
                 LeftGlowing = false;
             }
         }
-        // Case Left Button Hold
+        // Glowing Down for Left mouse
+        if (!LeftGlowing && LeftDownTimer<=0f)
+        {
+            Color c = AimLeft.GetComponent<SpriteRenderer>().color;
+            if (c.a > 0)
+            {
+                GlowDownCursor(AimLeft);
+                LeftDownTimer = GlowTime / 20f;
+            }
+        }
         // Case Right Button Press
         if (Input.GetMouseButtonDown(1))
         {
-            // If the previous glow not found/has complete -> glow up from 0 to 1 and down from 1 to 0
-            if (!RightGlowing)
+            RightGlowing = true;
+            RightNotDown = true;
+        }
+        // Case Right Button Exit
+        if (Input.GetMouseButtonUp(1))
+        {
+            if (RightNotDown)
             {
-                RightGlowing = true;
-                StartCoroutine(GlowCursor(AimRight));
-                RightGlowing = false;
+                RightNotDown = false;
             }
-            // If not: glow up the current to max and then down
-            else
+        }
+        // Glowing Up for Right mouse
+        if (RightGlowing && RightUpTimer <= 0f)
+        {
+            Color c = AimRight.GetComponent<SpriteRenderer>().color;
+            if (c.a < 1)
             {
-                StartCoroutine(GlowUpWhileGlowing(AimRight));
+                GlowUpCursor(AimRight);
+                RightUpTimer = GlowTime / 20f;
+            }
+            else if (!RightNotDown)
+            {
                 RightGlowing = false;
             }
         }
-        // Case Right Button Hold
+        // Glowing Down for Right mouse
+        if (!RightGlowing && RightDownTimer <= 0f)
+        {
+            Color c = AimRight.GetComponent<SpriteRenderer>().color;
+            if (c.a > 0)
+            {
+                GlowDownCursor(AimRight);
+                RightDownTimer = GlowTime / 20f;
+            }
+        }
+        // Timer reset to 0 if > 0
+        if (LeftUpTimer > 0f)
+        {
+            LeftUpTimer -= Time.deltaTime;
+        }
+        if (LeftDownTimer > 0f)
+        {
+            LeftDownTimer -= Time.deltaTime;
+        }
+        if (RightUpTimer > 0f)
+        {
+            RightUpTimer -= Time.deltaTime;
+        }
+        if (RightDownTimer > 0f)
+        {
+            RightDownTimer -= Time.deltaTime;
+        }
     }
     #endregion
     #region Glow Cursor
     // Glow Up/Down Cursor by increase transparent of the object
-    IEnumerator GlowCursor(GameObject cursor)
+    void GlowUpCursor(GameObject cursor)
     {
-        for (int i=0; i<10; i++)
-        {
-            Color c = cursor.GetComponent<SpriteRenderer>().color;
-            c.a += 0.1f;
-            cursor.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(GlowTime/10f);
-        }
-        for (int i = 0; i < 10; i++)
-        {
-            Color c = cursor.GetComponent<SpriteRenderer>().color;
-            c.a -= 0.1f;
-            cursor.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(GlowTime / 10f);
-        }
+        Color c = cursor.GetComponent<SpriteRenderer>().color;
+        c.a += 0.1f;
+        cursor.GetComponent<SpriteRenderer>().color = c;
     }
-    // Glow Up Cursor While Previous Glowing Duration Still On
-    IEnumerator GlowUpWhileGlowing(GameObject cursor)
+    // Glow Down Cursor when not press
+    void GlowDownCursor(GameObject cursor)
     {
-        Color color = cursor.GetComponent<SpriteRenderer>().color;
-        int a = (int)(1 - color.a) * 10;
-        for (int i=0; i<a; i++)
-        {
-            Color c = cursor.GetComponent<SpriteRenderer>().color;
-            c.a += 0.1f;
-            cursor.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(GlowTime / 10f);
-        }
-        for (int i = 0; i < 10; i++)
-        {
-            Color c = cursor.GetComponent<SpriteRenderer>().color;
-            c.a -= 0.1f;
-            cursor.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(GlowTime / 10f);
-        }
+        Color c = cursor.GetComponent<SpriteRenderer>().color;
+        c.a -= 0.1f;
+        cursor.GetComponent<SpriteRenderer>().color = c;
     }
     #endregion
 }

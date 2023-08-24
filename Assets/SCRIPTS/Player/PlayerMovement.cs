@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     #region ComponentVariables
     private Rigidbody2D rb;
+    private PlayerFighter pf;
     #endregion
     #region InitializeVariables
     public float RotateSpeed;
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private int SpeedUp;
     private bool Dashing;
     private float DashingTimer;
+    private bool Movable;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -28,14 +30,25 @@ public class PlayerMovement : MonoBehaviour
     {
         // Initialize components
         rb = GetComponent<Rigidbody2D>();
+        pf = GetComponent<PlayerFighter>();
+        Movable = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (pf.isFrozen)
+        {
+            Movable = false;
+            rb.velocity = new Vector2(0, 0);
+            CurrentSpeed = 0f;
+        } else
+        {
+            Movable = true;
+        }
         // Rotate Left Right
         DetectADButton();
-        if (!Dashing) PlayerRotate();
+        if (!Dashing && Movable) PlayerRotate();
         // Dash using Spacebar
         // Timer for Dashing
         if (DashingTimer>0f)
@@ -47,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
             Dashing = false;
         }
         // Dashing conditions
-        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer<=0f)
+        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable)
         {
             Dashing = true;
             DashingTimer = DashingTime;
@@ -55,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         }
         // Moving Front and Back
         DetectWSButton();
-        if (!Dashing) PlayerMoving();
+        if (!Dashing && Movable) PlayerMoving();
     }
     #endregion
     #region Moving Functions
@@ -107,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
     // Rotate Player With Degree
     void PlayerRotate()
     {
-        transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed));
+        transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
     }
     // Detect Player's Input Cases for W and S
     void DetectWSButton()
@@ -159,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 movementVector = CalculateMovement();
         AccelerateSpeed();
-        rb.velocity = movementVector * CurrentSpeed;
+        rb.velocity = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale;
     }
     // Accelerate Players
     void AccelerateSpeed()

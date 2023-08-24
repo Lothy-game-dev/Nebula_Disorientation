@@ -52,6 +52,7 @@ public class Weapons : MonoBehaviour
         if (Input.GetMouseButtonDown(MouseInput) && Fireable)
         {
             FireBullet();
+            Fireable = false;
         }
     }
     #endregion
