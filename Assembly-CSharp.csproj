@@ -72,6 +72,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
   </ItemGroup>
   <ItemGroup>

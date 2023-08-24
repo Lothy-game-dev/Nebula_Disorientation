@@ -14,6 +14,7 @@ public class BulletShared : MonoBehaviour
     public float Damage;
     public LayerMask EnemyLayer;
     public string Type;
+    public float DistanceTravel;
     #endregion
     #region Shared Functions
     // Calculate Velocity Required To Reach Destination
@@ -52,6 +53,14 @@ public class BulletShared : MonoBehaviour
                 enemy.CurrentHP -= Damage;
                 Destroy(gameObject);
             }
+        }
+    }
+
+    public void CheckDistanceTravel(float distance)
+    {
+        if (DistanceTravel>=distance)
+        {
+            Destroy(gameObject);
         }
     }
     #endregion

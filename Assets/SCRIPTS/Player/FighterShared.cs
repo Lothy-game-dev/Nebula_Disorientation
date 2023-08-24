@@ -33,6 +33,7 @@ public class FighterShared : MonoBehaviour
         isRegenThermal = true;
         isImmuneFrozenSlow = false;
         RegenScale = 1f;
+        SlowedMoveSpdScale = 1;
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()

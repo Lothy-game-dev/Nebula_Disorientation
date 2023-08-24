@@ -28,6 +28,8 @@ public class Rocket : BulletShared
     void Update()
     {
         CalculateDamage();
+        DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
+        CheckDistanceTravel(100f);
     }
     #endregion
 }

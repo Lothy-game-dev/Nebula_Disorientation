@@ -98,10 +98,8 @@ public class Weapons : MonoBehaviour
         bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
         BulletShared bul = bulletFire.GetComponent<BulletShared>();
         bul.Destination = Aim.transform.position;
-        bul.Speed = 5;
+        bul.Speed = 100;
         bulletFire.SetActive(true);
-        // Hard Code Destroy 5s
-        Destroy(bulletFire, 5f);
     }
     #endregion
 }
