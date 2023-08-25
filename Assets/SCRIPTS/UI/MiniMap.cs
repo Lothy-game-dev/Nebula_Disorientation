@@ -40,6 +40,7 @@ public class MiniMap : MonoBehaviour
         MiniMapRange = RadiusRange.transform.position.y - transform.position.y;
         // Set Init Range and Scale For Zoom Out/Close
         InitRange = MiniMapRange;
+        Debug.Log(InitRange);
         InitScale = transform.localScale.x;
         // Set Render Rate for Distance from real world to minimap
         RenderRate = MiniMapRange / RenderRange;
@@ -209,6 +210,7 @@ public class MiniMap : MonoBehaviour
         {
             // If close -> All range and scale is half
             MiniMapRange = InitRange / 2;
+            RenderRate = MiniMapRange / RenderRange;
             transform.localScale = new Vector3(InitScale / 2, InitScale / 2, InitScale / 2);
             transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
         } 
@@ -216,6 +218,7 @@ public class MiniMap : MonoBehaviour
         {
             // If zoom out -> All range and scale is back to normal
             MiniMapRange = InitRange;
+            RenderRate = MiniMapRange / RenderRange;
             transform.localScale = new Vector3(InitScale, InitScale, InitScale);
             transform.position = new Vector3(ZoomOutPosition.transform.position.x, ZoomOutPosition.transform.position.y, transform.position.z);
         }

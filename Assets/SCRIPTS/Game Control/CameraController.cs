@@ -63,7 +63,6 @@ public class CameraController : MonoBehaviour
         // Calculate Height And Width
         CameraHeight = 2 * cam.orthographicSize;
         CameraWidth = CameraHeight * cam.aspect;
-        Debug.Log(CameraWidth);
         SetCameraPosition();
     }
     #endregion
