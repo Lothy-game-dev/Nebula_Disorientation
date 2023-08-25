@@ -13,7 +13,7 @@ public class TestDisk : EnemyShared
         MaxHP = 100f;
         CurrentHP = MaxHP;
         changeDirTimer = 2.5f;
-        rb.velocity = new Vector2(0, 1);
+        rb.velocity = new Vector2(0, 30);
     }
 
     // Update is called once per frame

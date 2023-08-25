@@ -9,11 +9,11 @@ public class GameController : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
+    public GameObject Camera;
+    public GameObject Player;
     #endregion
     #region NormalVariables
+    public bool IsClose;
     private InitializeDatabase db;
     #endregion
     #region Start & Update
@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour
         db = GetComponent<InitializeDatabase>();
         //db.DropDatabase();
         db.Initialization();
+        InitGame();
     }
 
     // Update is called once per frame
@@ -31,5 +32,12 @@ public class GameController : MonoBehaviour
     {
         // Call function and timer only if possible
     }
+    #endregion
+    #region Initialize Game
+    private void InitGame()
+    {
+        // Set Camera to follow player by default
+        Camera.GetComponent<CameraController>().FollowObject = Player;
+    } 
     #endregion
 }

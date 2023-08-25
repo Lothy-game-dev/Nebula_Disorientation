@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float DashSpeedRate;
     #endregion
     #region NormalVariables
+    public GameObject PlayerIcon;
     private string CurrentKeyRotate;
     private string CurrentKeyMove;
     private int RotateDirection;
@@ -117,10 +118,14 @@ public class PlayerMovement : MonoBehaviour
             RotateDirection = 0;
         }
     }
-    // Rotate Player With Degree
+    // Rotate Player and Icon on Minimap With Degree
     void PlayerRotate()
     {
         transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+        if (PlayerIcon!=null)
+        {
+            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+        }
     }
     // Detect Player's Input Cases for W and S
     void DetectWSButton()

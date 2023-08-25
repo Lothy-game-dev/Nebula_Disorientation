@@ -8,10 +8,11 @@ public class TargetCursor : MonoBehaviour
 
     #endregion
     #region InitializeVariables
-    public Camera camera;
+    public Camera cam;
     public GameObject AimLeft;
     public GameObject AimRight;
     public float GlowTime;
+    public GameController GameController;
     #endregion
     #region NormalVariables
     private Vector3 MousePos;
@@ -23,6 +24,7 @@ public class TargetCursor : MonoBehaviour
     private float LeftDownTimer;
     private float RightUpTimer;
     private float RightDownTimer;
+    private float InitScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,13 +32,22 @@ public class TargetCursor : MonoBehaviour
     {
         LeftGlowing = false;
         RightGlowing = false;
+        InitScale = transform.localScale.x;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Change size if cam is close
+        if (GameController.IsClose)
+        {
+            transform.localScale = new Vector3(InitScale / 2, InitScale / 2, InitScale / 2);
+        } else
+        {
+            transform.localScale = new Vector3(InitScale, InitScale, InitScale);
+        }
         // Change position of target to the same position as cursor
-        MousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+        MousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         MousePos.z = 0;
         transform.position = MousePos;
         // Check Mouse Input Left Right To Glow Up the right part of cursor
