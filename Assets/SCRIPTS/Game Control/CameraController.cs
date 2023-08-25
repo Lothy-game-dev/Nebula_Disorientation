@@ -48,14 +48,14 @@ public class CameraController : MonoBehaviour
         {
             if (!isClose)
             {
-                // 400x225
-                cam.orthographicSize = 112.5f;
+                // 975x675
+                cam.orthographicSize = 337.5f;
                 isClose = true;
                 GameController.GetComponent<GameController>().IsClose = true;
             } else
             {
-                // 800x450
-                cam.orthographicSize = 225f;
+                // 1950x1350
+                cam.orthographicSize = 675f;
                 isClose = false;
                 GameController.GetComponent<GameController>().IsClose = false;
             }
@@ -63,6 +63,7 @@ public class CameraController : MonoBehaviour
         // Calculate Height And Width
         CameraHeight = 2 * cam.orthographicSize;
         CameraWidth = CameraHeight * cam.aspect;
+        Debug.Log(CameraWidth);
         SetCameraPosition();
     }
     #endregion
