@@ -11,6 +11,10 @@ public class TargetCursor : MonoBehaviour
     public Camera cam;
     public GameObject AimLeft;
     public GameObject AimRight;
+    public GameObject AimLeftFalse;
+    public GameObject AimRightFalse;
+    public GameObject LeftWeapon;
+    public GameObject RightWeapon;
     public float GlowTime;
     public GameController GameController;
     #endregion
@@ -25,6 +29,8 @@ public class TargetCursor : MonoBehaviour
     private float RightUpTimer;
     private float RightDownTimer;
     private float InitScale;
+    private GameObject LeftAimToGlow;
+    private GameObject RightAimToGlow;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -50,6 +56,34 @@ public class TargetCursor : MonoBehaviour
         MousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         MousePos.z = 0;
         transform.position = MousePos;
+        // Check Weapon fireable
+        if (LeftWeapon.GetComponent<Weapons>().Fireable)
+        {
+            LeftAimToGlow = AimLeft;
+            Color c = AimLeftFalse.GetComponent<SpriteRenderer>().color;
+            c.a = 0f;
+            AimLeftFalse.GetComponent<SpriteRenderer>().color = c;
+        } else
+        {
+            LeftAimToGlow = AimLeftFalse;
+            Color c = AimLeft.GetComponent<SpriteRenderer>().color;
+            c.a = 0f;
+            AimLeft.GetComponent<SpriteRenderer>().color = c;
+        }
+        if (RightWeapon.GetComponent<Weapons>().Fireable)
+        {
+            RightAimToGlow = AimRight;
+            Color c = AimRightFalse.GetComponent<SpriteRenderer>().color;
+            c.a = 0f;
+            AimRightFalse.GetComponent<SpriteRenderer>().color = c;
+        }
+        else
+        {
+            RightAimToGlow = AimRightFalse;
+            Color c = AimRight.GetComponent<SpriteRenderer>().color;
+            c.a = 0f;
+            AimRight.GetComponent<SpriteRenderer>().color = c;
+        }
         // Check Mouse Input Left Right To Glow Up the right part of cursor
         // Case Left Button Press
         if (Input.GetMouseButtonDown(0))
@@ -73,10 +107,10 @@ public class TargetCursor : MonoBehaviour
         // Glowing Up for Left mouse
         if (LeftGlowing && LeftUpTimer<=0f)
         {
-            Color c = AimLeft.GetComponent<SpriteRenderer>().color;
+            Color c = LeftAimToGlow.GetComponent<SpriteRenderer>().color;
             if (c.a<1)
             {
-                GlowUpCursor(AimLeft);
+                GlowUpCursor(LeftAimToGlow);
                 LeftUpTimer = GlowTime / 20f;
             } else if (!LeftNotDown)
             {
@@ -86,10 +120,10 @@ public class TargetCursor : MonoBehaviour
         // Glowing Down for Left mouse
         if (!LeftGlowing && LeftDownTimer<=0f)
         {
-            Color c = AimLeft.GetComponent<SpriteRenderer>().color;
+            Color c = LeftAimToGlow.GetComponent<SpriteRenderer>().color;
             if (c.a > 0)
             {
-                GlowDownCursor(AimLeft);
+                GlowDownCursor(LeftAimToGlow);
                 LeftDownTimer = GlowTime / 20f;
             }
         }
@@ -110,10 +144,10 @@ public class TargetCursor : MonoBehaviour
         // Glowing Up for Right mouse
         if (RightGlowing && RightUpTimer <= 0f)
         {
-            Color c = AimRight.GetComponent<SpriteRenderer>().color;
+            Color c = RightAimToGlow.GetComponent<SpriteRenderer>().color;
             if (c.a < 1)
             {
-                GlowUpCursor(AimRight);
+                GlowUpCursor(RightAimToGlow);
                 RightUpTimer = GlowTime / 20f;
             }
             else if (!RightNotDown)
@@ -124,10 +158,10 @@ public class TargetCursor : MonoBehaviour
         // Glowing Down for Right mouse
         if (!RightGlowing && RightDownTimer <= 0f)
         {
-            Color c = AimRight.GetComponent<SpriteRenderer>().color;
+            Color c = RightAimToGlow.GetComponent<SpriteRenderer>().color;
             if (c.a > 0)
             {
-                GlowDownCursor(AimRight);
+                GlowDownCursor(RightAimToGlow);
                 RightDownTimer = GlowTime / 20f;
             }
         }

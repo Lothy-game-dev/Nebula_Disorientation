@@ -40,7 +40,6 @@ public class MiniMap : MonoBehaviour
         MiniMapRange = RadiusRange.transform.position.y - transform.position.y;
         // Set Init Range and Scale For Zoom Out/Close
         InitRange = MiniMapRange;
-        Debug.Log(InitRange);
         InitScale = transform.localScale.x;
         // Set Render Rate for Distance from real world to minimap
         RenderRate = MiniMapRange / RenderRange;

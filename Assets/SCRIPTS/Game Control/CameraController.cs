@@ -13,7 +13,8 @@ public class CameraController : MonoBehaviour
     public GameObject BottomBoundary;
     public GameObject LeftBoundary;
     public GameObject RightBoundary;
-
+    public float ZoomOutHeight;
+    public float CloseHeight;
     public GameObject GameController;
     #endregion
     #region NormalVariables
@@ -37,6 +38,7 @@ public class CameraController : MonoBehaviour
         cam = GetComponent<Camera>();
         isClose = false;
         CameraTracking = true;
+        cam.orthographicSize = ZoomOutHeight / 2;
     }
 
     // Update is called once per frame
@@ -49,13 +51,13 @@ public class CameraController : MonoBehaviour
             if (!isClose)
             {
                 // 975x675
-                cam.orthographicSize = 337.5f;
+                cam.orthographicSize = CloseHeight / 2;
                 isClose = true;
                 GameController.GetComponent<GameController>().IsClose = true;
             } else
             {
                 // 1950x1350
-                cam.orthographicSize = 675f;
+                cam.orthographicSize = ZoomOutHeight / 2;
                 isClose = false;
                 GameController.GetComponent<GameController>().IsClose = false;
             }

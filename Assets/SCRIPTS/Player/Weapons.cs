@@ -8,26 +8,39 @@ public class Weapons : MonoBehaviour
 
     #endregion
     #region InitializeVariables
+    public GameObject Fighter;
     public GameObject Aim;
     public GameObject RotatePoint;
     public GameObject WeaponPosition;
     public GameObject ShootingPosition;
     public bool isLeftWeapon;
     public GameObject Bullet;
+    public float RotateLimitNegative;
+    public float RotateLimitPositive;
     #endregion
     #region NormalVariables
+    public float RateOfFire;
+    private float FireTimer;
+    private PlayerMovement pm;
     private float PrevAngle;
     private float CalAngle;
-    private bool tracking;
+    private float CurrentAngle;
+    private float ExpectedAngle;
+    private float LimitNegative;
+    private float LimitPositive;
+    private float AutoChangeDirAngle;
+    public bool tracking;
     private int MouseInput;
-    private bool Fireable;
+    public bool Fireable;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
+        pm = Fighter.GetComponent<PlayerMovement>();
         PrevAngle = 0;
         CalAngle = 0;
+        CurrentAngle = 0;
         if (isLeftWeapon) MouseInput = 0;
         else MouseInput = 1;
         Fireable = true;
@@ -40,19 +53,64 @@ public class Weapons : MonoBehaviour
         transform.position = WeaponPosition.transform.position;
         // Rotate the weapon around rotate point clockwise with angle calculated
         CalAngle = CalculateRotateAngle();
+        CurrentAngle %= 360;
+        PrevAngle %= 360;
         if (tracking)
         {
+            ExpectedAngle = CurrentAngle + CalAngle - PrevAngle;
+            if (ExpectedAngle >= 360)
+            {
+                ExpectedAngle -= 360;
+            } else if (ExpectedAngle < 0)
+            {
+                ExpectedAngle += 360;
+            }
+            LimitNegative = 360 + RotateLimitNegative + pm.CurrentRotateAngle % 360;
+            if (LimitNegative >= 360)
+            {
+
+                LimitNegative -= 360;
+            } else if (LimitNegative < 0)
+            {
+                LimitNegative += 360;
+            }
+            LimitPositive = RotateLimitPositive + pm.CurrentRotateAngle % 360;
+            if (LimitPositive >= 360)
+            {
+                LimitPositive -= 360;
+            } else if (LimitPositive < 0)
+            {
+                LimitPositive += 360;
+            }
             if (PrevAngle != CalAngle)
             {
-                transform.RotateAround(RotatePoint.transform.position, Vector3.back, CalAngle - PrevAngle);
-            }
-            PrevAngle = CalAngle;
+                if (CheckIfAngle1BetweenAngle2And3(ExpectedAngle, LimitNegative, LimitPositive))
+                {
+                    Fireable = true;
+                    transform.RotateAround(RotatePoint.transform.position, Vector3.back, CalAngle - PrevAngle);
+                    CurrentAngle = ExpectedAngle;
+                    PrevAngle = CalAngle;
+                } else
+                {
+                    Fireable = false;
+                    float NearestAngle = NearestPossibleAngle(CurrentAngle, LimitNegative, LimitPositive);
+                    transform.RotateAround(RotatePoint.transform.position, Vector3.back, NearestAngle);
+                    CurrentAngle += NearestAngle;
+                    PrevAngle += NearestAngle;
+                }
+            } 
         }
         // Fire Weapon's Bullet
-        if (Input.GetMouseButtonDown(MouseInput) && Fireable)
+        if (FireTimer <= 0f)
         {
-            FireBullet();
-            Fireable = false;
+            if (Input.GetMouseButton(MouseInput) && Fireable)
+            {
+                FireBullet();
+                FireTimer = 1 / RateOfFire;
+            }
+        } else
+        {
+            FireTimer -= Time.deltaTime;
         }
     }
     #endregion
@@ -89,6 +147,104 @@ public class Weapons : MonoBehaviour
         }
         else return 0;
     }
+
+    public bool CheckIfAngle1BetweenAngle2And3(float angle1, float angle2, float angle3)
+    {
+        if (0 <= angle1 && angle1 < 180)
+        {
+            if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+            {
+                if (angle1 <= angle3) return true;
+                else return false;
+            }
+            else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360) return false;
+            else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+            {
+                if (angle1 >= angle2) return true;
+                else return false;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180)
+            {
+                if (angle2 <= angle1 && angle1 <= angle3) return true;
+                else return false;
+            }
+            else return false;
+        } else if (180 <= angle1 && angle1 < 360)
+        {
+            if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+            {
+                if (angle1 >= angle2) return true;
+                else return false;
+            }
+            else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
+            {
+                if (angle2 <= angle1 && angle1 <= angle3) return true;
+                else return false;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+            {
+                if (angle1 <= angle3) return true;
+                else return false;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180) return false;
+            else return false;
+        } else return false;
+    }
+
+    public float NearestPossibleAngle(float angle1, float angle2, float angle3)
+    {
+        float AngleBetween12 = 0;
+        float AngleBetween13 = 0;
+        if (0 <= angle1 && angle1 < 180)
+        {
+            if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+            {
+                AngleBetween12 = angle2 - angle1;
+                AngleBetween13 = angle3 - angle1;
+            }
+            else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
+            {
+                AngleBetween12 = angle2 - angle1;
+                AngleBetween13 = angle3 - angle1;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+            {
+                AngleBetween12 = angle2 - angle1;
+                AngleBetween13 = angle3 - angle1;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180)
+            {
+                AngleBetween12 = angle2 - angle1;
+                AngleBetween13 = angle3 - angle1;
+            }
+            else return 0;
+        }
+        else if (180 <= angle1 && angle1 < 360)
+        {
+            if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+            {
+                AngleBetween12 = angle2 - angle1;
+                AngleBetween13 = angle3 + 360 - angle1;
+            }
+            else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
+            {
+                AngleBetween12 = angle2 - angle1;
+                AngleBetween13 = angle3 - angle1;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+            {
+                AngleBetween12 = angle2 + 360 - angle1;
+                AngleBetween13 = angle3 - angle1;
+            }
+            else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180)
+            {
+                AngleBetween12 = angle2 + 360 - angle1;
+                AngleBetween13 = angle3 + 360 - angle1;
+            }
+            else return 0;
+        }
+        return Mathf.Abs(AngleBetween12) > Mathf.Abs(AngleBetween13) ? AngleBetween13 : AngleBetween12;
+    }
     #endregion
     #region Weapon Fire
     // Fire Bullet
@@ -98,7 +254,6 @@ public class Weapons : MonoBehaviour
         bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
         BulletShared bul = bulletFire.GetComponent<BulletShared>();
         bul.Destination = Aim.transform.position;
-        bul.Speed = 100;
         bulletFire.SetActive(true);
     }
     #endregion

@@ -8,10 +8,11 @@ public class BulletShared : MonoBehaviour
     public Rigidbody2D rb;
     public Vector2 Destination;
     public float Speed;
-    public float Distance;
-    public Vector2 Velocity;
-    public Vector2 RealVelocity;
-    public float Damage;
+    private float Distance;
+    private Vector2 Velocity;
+    private Vector2 RealVelocity;
+    public float BaseDamagePerHit;
+    private float RealDamage;
     public LayerMask EnemyLayer;
     public string Type;
     public float DistanceTravel;
@@ -28,8 +29,8 @@ public class BulletShared : MonoBehaviour
             RealVelocity = new Vector2(0, 0);
         }
     }
-    // Acceleration for the first 1 second
-    public IEnumerator Accelerate()
+    // Acceleration for the first time second
+    public IEnumerator Accelerate(float time)
     {
         for (int i=0; i<10; i++)
         {
@@ -38,7 +39,7 @@ public class BulletShared : MonoBehaviour
                 RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 10, RealVelocity.y + Velocity.y / 10);
             }
             rb.velocity = RealVelocity;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(time/10f);
         }
     }
 
@@ -50,16 +51,29 @@ public class BulletShared : MonoBehaviour
             EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
             if (enemy!=null)
             {
-                enemy.CurrentHP -= Damage;
+                enemy.CurrentHP -= RealDamage;
+                Debug.Log(RealDamage);
                 Destroy(gameObject);
             }
         }
     }
 
-    public void CheckDistanceTravel(float distance)
+    public void CheckDistanceTravel(float EffectiveDistance, float MaxDistance)
     {
-        if (DistanceTravel>=distance)
+        if (DistanceTravel <= EffectiveDistance)
         {
+            RealDamage = BaseDamagePerHit;
+        }
+        if (DistanceTravel > EffectiveDistance && DistanceTravel < MaxDistance)
+        {
+            RealDamage = (0.5f + (MaxDistance - DistanceTravel)/(2*(MaxDistance - EffectiveDistance))) * BaseDamagePerHit;
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = 0.5f + (MaxDistance - DistanceTravel) / 2 * (MaxDistance - EffectiveDistance);
+            GetComponent<SpriteRenderer>().color = c;
+        }
+        if (DistanceTravel >= MaxDistance)
+        {
+            RealDamage = 0;
             Destroy(gameObject);
         }
     }

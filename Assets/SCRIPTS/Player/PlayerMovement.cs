@@ -13,9 +13,12 @@ public class PlayerMovement : MonoBehaviour
     public float MovingSpeed;
     public float DashingTime;
     public float DashSpeedRate;
+    public GameObject LeftWeapon;
+    public GameObject RightWeapon;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
+    public float CurrentRotateAngle;
     private string CurrentKeyRotate;
     private string CurrentKeyMove;
     private int RotateDirection;
@@ -33,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         pf = GetComponent<PlayerFighter>();
         Movable = true;
+        CurrentRotateAngle = 0;
     }
 
     // Update is called once per frame
@@ -122,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
     void PlayerRotate()
     {
         transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+        CurrentRotateAngle += RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale;
         if (PlayerIcon!=null)
         {
             PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
