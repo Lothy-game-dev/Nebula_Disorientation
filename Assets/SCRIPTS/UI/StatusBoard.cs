@@ -16,6 +16,8 @@ public class StatusBoard : MonoBehaviour
     // Zoom out and close related
     public GameObject ZoomOutPosition;
     public GameObject ClosePosition;
+    public GameObject ZoomOutAvatarPos;
+    public GameObject CloseAvatarPos;
     // Time Counter
     public float Timer;
     // Is hide or not 
@@ -68,7 +70,7 @@ public class StatusBoard : MonoBehaviour
             transform.localScale = new Vector3(initScale / 2, initScale / 2, initScale / 2);
             if (CloneEnemy != null)
             {
-                CloneEnemy.transform.position = initPosition / 2;
+                CloneEnemy.transform.position = new Vector3(CloseAvatarPos.transform.position.x, CloseAvatarPos.transform.position.y, transform.position.z);
                 CloneEnemy.transform.localScale = new Vector2(AvatarHeight / 2 , AvatarWidth / 2);
             }
         }
@@ -79,7 +81,7 @@ public class StatusBoard : MonoBehaviour
             transform.localScale = new Vector3(initScale, initScale, initScale);
             if (CloneEnemy != null)
             {
-                CloneEnemy.transform.position = initPosition;
+                CloneEnemy.transform.position = new Vector3(ZoomOutAvatarPos.transform.position.x, ZoomOutAvatarPos.transform.position.y, transform.position.z);
                 CloneEnemy.transform.localScale = new Vector2(AvatarHeight, AvatarWidth);
             }
         }

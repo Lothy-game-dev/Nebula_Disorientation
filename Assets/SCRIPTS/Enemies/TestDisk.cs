@@ -36,7 +36,9 @@ public class TestDisk : EnemyShared
         }
         if (CurrentHP<=0f)
         {
+            EnemyStatus.SetActive(false);
             Destroy(gameObject);
+            Status.DeleteClone(true);
         }
 
         if (Status.Timer > 0f)
