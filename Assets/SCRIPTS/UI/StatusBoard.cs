@@ -20,7 +20,6 @@ public class StatusBoard : MonoBehaviour
     public Slider HPSlider;
     public TMP_Text TemperText;
     public Slider TemperSlider;
-    public LayerMask AllLayer;
 
     //Image
     public GameObject EnemyImagePosition;
@@ -56,7 +55,10 @@ public class StatusBoard : MonoBehaviour
             ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
-        Physics2D.IgnoreLayerCollision(AllLayer, gameObject.layer, true);
+        for (int i=0; i< 8; i++)
+        {
+            Physics2D.IgnoreLayerCollision(i, gameObject.layer, true);
+        }
         alreadyDelete = false;
     }
 
@@ -260,9 +262,7 @@ public class StatusBoard : MonoBehaviour
         }
     }
 
-    #endregion
-
-    private void OnMouseOver()
+    public void CheckOnDestroy()
     {
         Timer = 5f;
         if (isEnding)
@@ -274,5 +274,11 @@ public class StatusBoard : MonoBehaviour
             anim.SetTrigger("Start");
             StartShowing(Enemy);
         }
+    }
+    #endregion
+
+    private void OnMouseOver()
+    {
+        CheckOnDestroy();
     }
 }

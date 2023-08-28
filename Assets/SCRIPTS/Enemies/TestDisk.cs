@@ -5,7 +5,7 @@ using UnityEngine;
 public class TestDisk : EnemyShared
 {
     public Rigidbody2D rb;
-    private float changeDirTimer;
+    public float changeDirTimer;
     public GameObject EnemyStatus;
     private StatusBoard Status;
     // Start is called before the first frame update
@@ -30,7 +30,14 @@ public class TestDisk : EnemyShared
         } else
         {
             changeDirTimer = 5f;
-            rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
+            if (rb.velocity!=new Vector2(0,0))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
+            } else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 30);
+            }
+            
         }
         if (CurrentHP<=0f)
         {
@@ -40,14 +47,15 @@ public class TestDisk : EnemyShared
       
     }
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
+        Status.Timer = 5f;
         Status.StartShowing(gameObject);
     }
 
     private void OnMouseExit()
     {
-        Status.Timer = 5f;
+        Status.CheckOnDestroy();
     }
     
 }
