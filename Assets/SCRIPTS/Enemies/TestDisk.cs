@@ -48,7 +48,6 @@ public class TestDisk : EnemyShared
     private void OnMouseExit()
     {
         Status.Timer = 5f;
-        Status.isShow = false;
     }
     
 }
