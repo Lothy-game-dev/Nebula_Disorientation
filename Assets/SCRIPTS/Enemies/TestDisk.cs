@@ -34,20 +34,17 @@ public class TestDisk : EnemyShared
         }
         if (CurrentHP<=0f)
         {
-            EnemyStatus.SetActive(false);
+            Status.StopShowing();
             Destroy(gameObject);
-            Status.DeleteClone(true);
         }      
       
     }
 
     private void OnMouseEnter()
     {
-        Status.isShow = true;
-        Status.Enemy = gameObject;
-        EnemyStatus.SetActive(true);
-        Status.ShowStatus();
+        Status.StartShowing(gameObject);
     }
+
     private void OnMouseExit()
     {
         Status.Timer = 5f;
