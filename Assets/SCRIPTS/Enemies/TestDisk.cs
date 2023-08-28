@@ -37,19 +37,7 @@ public class TestDisk : EnemyShared
             EnemyStatus.SetActive(false);
             Destroy(gameObject);
             Status.DeleteClone(true);
-        }
-
-        if (Status.Timer > 0f)
-        {
-            Status.Timer -= Time.deltaTime;
-        } else
-        {
-            if (!Status.isShow)
-            {
-                EnemyStatus.SetActive(false);
-                Status.DeleteClone(true);
-            }
-        }
+        }      
       
     }
 
@@ -62,7 +50,7 @@ public class TestDisk : EnemyShared
     }
     private void OnMouseExit()
     {
-        Status.Timer = 10f;
+        Status.Timer = 5f;
         Status.isShow = false;
     }
     

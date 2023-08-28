@@ -59,6 +59,19 @@ public class StatusBoard : MonoBehaviour
         
         // React When Player Zoom out/ close
         ReactWhenZoom();
+
+        if (Timer > 0f)
+        {
+            Timer -= Time.deltaTime;
+        }
+        else
+        {
+            if (!isShow && CloneEnemy != null)
+            {
+                gameObject.SetActive(false);
+                Destroy(CloneEnemy);
+            }
+        }
     }
     #endregion
     #region React When Zoom Out/Close
@@ -158,4 +171,12 @@ public class StatusBoard : MonoBehaviour
     }
 
     #endregion
+
+    private void OnMouseEnter()
+    {
+        Debug.Log("khang");
+        isShow = true;
+        Timer = 5f;
+        gameObject.SetActive(true);
+    }
 }
