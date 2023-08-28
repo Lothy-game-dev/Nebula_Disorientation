@@ -51,6 +51,7 @@ public class StatusBoard : MonoBehaviour
             ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
+        Physics.IgnoreLayerCollision(0, 7);
     }
 
     // Update is called once per frame
@@ -59,6 +60,19 @@ public class StatusBoard : MonoBehaviour
         
         // React When Player Zoom out/ close
         ReactWhenZoom();
+
+        if (Timer > 0f)
+        {
+            Timer -= Time.deltaTime;
+        }
+        else
+        {
+            if (!isShow && CloneEnemy != null)
+            {
+                gameObject.SetActive(false);
+                Destroy(CloneEnemy);
+            }
+        }
     }
     #endregion
     #region React When Zoom Out/Close
@@ -158,4 +172,12 @@ public class StatusBoard : MonoBehaviour
     }
 
     #endregion
+
+    private void OnMouseOver()
+    {
+        Timer = 5f;
+    }
+    
+
+
 }
