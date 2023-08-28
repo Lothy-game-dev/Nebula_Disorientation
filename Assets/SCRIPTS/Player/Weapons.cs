@@ -17,6 +17,8 @@ public class Weapons : MonoBehaviour
     public GameObject Bullet;
     public float RotateLimitNegative;
     public float RotateLimitPositive;
+    public bool isFlameThrowerTest;
+    public GameObject FTOrb;
     #endregion
     #region NormalVariables
     public float RateOfFire;
@@ -105,8 +107,14 @@ public class Weapons : MonoBehaviour
         {
             if (Input.GetMouseButton(MouseInput) && Fireable)
             {
-                FireBullet();
-                FireTimer = 1 / RateOfFire;
+                if (!isFlameThrowerTest) {
+                    FireBullet();
+                    FireTimer = 1 / RateOfFire; 
+                } else
+                {
+                    FireFlamethrowerOrb();
+                    FireTimer = 1 / RateOfFire;
+                }
             }
         } else
         {
@@ -255,6 +263,22 @@ public class Weapons : MonoBehaviour
         BulletShared bul = bulletFire.GetComponent<BulletShared>();
         bul.Destination = Aim.transform.position;
         bulletFire.SetActive(true);
+    }
+    void FireFlamethrowerOrb()
+    {
+        for (int i=0;i<10;i++)
+        {
+            GameObject orbFire = Instantiate(FTOrb, ShootingPosition.transform.position, Quaternion.identity);
+            float Angle = Random.Range(-30f, 30f);
+            orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + Angle);
+            BulletShared bul = orbFire.GetComponent<BulletShared>();
+            bul.Destination = new Vector2(Aim.transform.position.x + Angle, Aim.transform.position.y);
+            orbFire.SetActive(true);
+        }
+    }
+    Vector2 CalculateFTOrbDestination(float Angle)
+    {
+        return new Vector2(0, 0);
     }
     #endregion
 }

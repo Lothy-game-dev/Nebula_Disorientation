@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PulseCannonBullet : BulletShared
+public class FlamethrowerOrb : BulletShared
 {
     #region ComponentVariables
-    // Variables used for calling componenets attached to the game object only
-    // Can be public or private
+    private Animator anim;
     #endregion
     #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
+    public float StartAnimTimer;
+    public float EndAnimTimer;
     #endregion
     #region NormalVariables
+    private float AnimTimer;
+    private bool isStart;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -21,19 +21,40 @@ public class PulseCannonBullet : BulletShared
     {
         // Initialize variables
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
         StartCoroutine(Accelerate(0.1f));
+        AnimTimer = StartAnimTimer;
+        isStart = true;
+        InitializeBullet(10);
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
-        CalculateDamage();
+        UpdateBullet();
+        CalculateThermalDamage(false);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-        CheckDistanceTravel(800f,1000f);
+        CheckDistanceTravel(375, 375);
+        if (AnimTimer <= 0f)
+        {
+            if (isStart)
+            {
+                anim.SetTrigger("Start");
+                AnimTimer = EndAnimTimer;
+            }
+            else
+            {
+                anim.SetTrigger("End");
+            }
+        }
+        else
+        {
+            AnimTimer -= Time.deltaTime;
+        }
     }
     #endregion
     #region Function group 1

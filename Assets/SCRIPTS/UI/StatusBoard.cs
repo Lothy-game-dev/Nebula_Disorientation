@@ -120,15 +120,18 @@ public class StatusBoard : MonoBehaviour
             //Setting slider base on current temperature
             TemperSlider.gameObject.SetActive(true);
             TemperSlider.maxValue = 100;
-            TemperSlider.value = 100;
+            TemperSlider.value = EnemyObject.currentTemperature;
 
             //if temp > 50, the slider is red else blue
             if (EnemyObject.currentTemperature > 50)
             {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.red, TemperSlider.normalizedValue);
-            } else
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
+            } else if (EnemyObject.currentTemperature < 50)
             {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.red, Color.blue, TemperSlider.normalizedValue);
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
+            } else if (EnemyObject.currentTemperature == 50)
+            {
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
             }
 
             //Setting to show current tempurature

@@ -168,9 +168,11 @@ public class FighterShared : MonoBehaviour
             if (FrozenDuration > 0f)
             {
                 FrozenDuration -= Time.deltaTime;
+                GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             }
             else
             {
+                GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
                 isFrozen = false;
                 isImmuneFrozenSlow = true;
                 ImmuneDuration = 3f;
@@ -187,7 +189,7 @@ public class FighterShared : MonoBehaviour
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
     {
-        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * /*2*/5f;
+        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 2f;
         isRegenThermal = false;
         RegenDelayTimer = 2f;
     }
