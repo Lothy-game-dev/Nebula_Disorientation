@@ -8,23 +8,21 @@ public class TestDisk : EnemyShared
     private float changeDirTimer;
     public GameObject EnemyStatus;
     private StatusBoard Status;
-    private SpriteRenderer EnemySprite;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         MaxHP = 100f;
-        CurrentHP = MaxHP;
         changeDirTimer = 2.5f;
         rb.velocity = new Vector2(0, 30);
         Status = EnemyStatus.GetComponent<StatusBoard>();
-        EnemySprite = GetComponent<SpriteRenderer>();
+        InitializeFighter();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        CheckThermal();
         SetHealth();
         if (changeDirTimer > 0f)
         {

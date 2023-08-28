@@ -16,8 +16,28 @@ public class BulletShared : MonoBehaviour
     public LayerMask EnemyLayer;
     public string Type;
     public float DistanceTravel;
+    public int HitLimitPerSecond;
+    private int CurrentHitNumber;
+    private float ResetHitTimer;
+    private bool StartCounting;
     #endregion
     #region Shared Functions
+    public void InitializeBullet(int hitLimit)
+    {
+        HitLimitPerSecond = hitLimit;
+    }
+    public void UpdateBullet()
+    {
+        if (ResetHitTimer<=0f)
+        {
+            CurrentHitNumber = 0;
+            ResetHitTimer = 1f;
+            StartCounting = false;
+        } else
+        {
+            ResetHitTimer -= Time.deltaTime;
+        }
+    }
     // Calculate Velocity Required To Reach Destination
     public void CalculateVelocity()
     {
@@ -49,10 +69,35 @@ public class BulletShared : MonoBehaviour
         foreach (var col in cols)
         {
             EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
-            if (enemy!=null)
+            if (enemy!=null && CurrentHitNumber < HitLimitPerSecond)
             {
                 enemy.CurrentHP -= RealDamage;
-                Debug.Log(RealDamage);
+                if (!StartCounting)
+                {
+                    StartCounting = true;
+                    ResetHitTimer = 1f;
+                }
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void CalculateThermalDamage(bool isHeat)
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
+        foreach (var col in cols)
+        {
+            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+            if (enemy != null && CurrentHitNumber < HitLimitPerSecond)
+            {
+                enemy.CurrentHP -= RealDamage;
+                enemy.ReceiveThermalDamage(isHeat);
+                if (!StartCounting)
+                {
+                    StartCounting = true;
+                    ResetHitTimer = 1f;
+                }
+                CurrentHitNumber++;
                 Destroy(gameObject);
             }
         }

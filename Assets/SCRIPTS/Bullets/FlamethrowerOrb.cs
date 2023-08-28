@@ -28,13 +28,15 @@ public class FlamethrowerOrb : BulletShared
         StartCoroutine(Accelerate(0.1f));
         AnimTimer = StartAnimTimer;
         isStart = true;
+        InitializeBullet(10);
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
-        CalculateDamage();
+        UpdateBullet();
+        CalculateThermalDamage(true);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel(375, 375);
         if (AnimTimer <= 0f)
