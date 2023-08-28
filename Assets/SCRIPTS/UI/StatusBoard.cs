@@ -11,7 +11,7 @@ public class StatusBoard : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-    // Render related
+    // Status related
     public GameController GameController;
     // Zoom out and close related
     public GameObject ZoomOutPosition;
@@ -28,16 +28,14 @@ public class StatusBoard : MonoBehaviour
 
     //Image
     public GameObject EnemyImagePosition;
-    public float AvatarHeight;
-    public float AvatarWidth;
 
     #endregion
     #region NormalVariables
     public GameObject Enemy;
     private float initScale;
     private GameObject CloneEnemy;
-    private TestDisk EnemyObject;
-    private TestDisk CloneEnemyObject;
+    private EnemyShared EnemyObject;
+    private EnemyShared CloneEnemyObject;
     private Rigidbody2D CloneEnemyRb2D;
     private Collider2D CloneEnemyColl;
     private float ImageInitScaleX;
@@ -50,8 +48,8 @@ public class StatusBoard : MonoBehaviour
         initScale = transform.localScale.x;
         if (Enemy != null)
         {
-            ImageInitScaleX = Enemy.transform.localScale.x * 3 / transform.localScale.x;
-            ImageInitScaleY = Enemy.transform.localScale.y * 3 / transform.localScale.y;
+            ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
+            ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
     }
 
@@ -72,7 +70,7 @@ public class StatusBoard : MonoBehaviour
             // If close -> All range and scale is half
             transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
             transform.localScale = new Vector3(initScale / 2, initScale / 2, initScale / 2);
-            if (CloneEnemy!=null)
+            if (CloneEnemy != null)
             {
                 CloneEnemy.transform.localScale = new Vector2(ImageInitScaleX, ImageInitScaleY);
             }
@@ -81,11 +79,11 @@ public class StatusBoard : MonoBehaviour
         {
             // If zoom out -> All range and scale is back to normal
             transform.position = new Vector3(ZoomOutPosition.transform.position.x, ZoomOutPosition.transform.position.y, transform.position.z);
-            transform.localScale = new Vector3(initScale, initScale, initScale);
             if (CloneEnemy != null)
             {
                 CloneEnemy.transform.localScale = new Vector2(ImageInitScaleX, ImageInitScaleY);
             }
+            transform.localScale = new Vector3(initScale, initScale, initScale);
         }
     }
     #endregion

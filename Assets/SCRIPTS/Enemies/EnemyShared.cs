@@ -6,6 +6,7 @@ public class EnemyShared : FighterShared
 {
     #region Shared Variables
     public EnemyHealthBar HealthBar;
+    public float ScaleOnStatusBoard;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
