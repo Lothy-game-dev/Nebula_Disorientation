@@ -36,7 +36,7 @@ public class FlamethrowerOrb : BulletShared
     {
         // Call function and timer only if possible
         UpdateBullet();
-        CalculateThermalDamage(true);
+        CalculateThermalDamage(false);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel(375, 375);
         if (AnimTimer <= 0f)

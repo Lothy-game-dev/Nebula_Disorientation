@@ -168,9 +168,11 @@ public class FighterShared : MonoBehaviour
             if (FrozenDuration > 0f)
             {
                 FrozenDuration -= Time.deltaTime;
+                GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             }
             else
             {
+                GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
                 isFrozen = false;
                 isImmuneFrozenSlow = true;
                 ImmuneDuration = 3f;
