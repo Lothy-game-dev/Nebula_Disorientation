@@ -64,6 +64,7 @@ public class StatusBoard : MonoBehaviour
         if (Timer > 0f)
         {
             Timer -= Time.deltaTime;
+            ShowStatus();
         }
         else
         {
