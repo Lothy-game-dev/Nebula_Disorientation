@@ -51,6 +51,7 @@ public class StatusBoard : MonoBehaviour
             ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
+        Physics.IgnoreLayerCollision(0, 7);
     }
 
     // Update is called once per frame
@@ -172,11 +173,11 @@ public class StatusBoard : MonoBehaviour
 
     #endregion
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
-        Debug.Log("khang");
-        isShow = true;
         Timer = 5f;
-        gameObject.SetActive(true);
     }
+    
+
+
 }
