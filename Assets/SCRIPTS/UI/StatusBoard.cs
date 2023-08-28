@@ -16,8 +16,6 @@ public class StatusBoard : MonoBehaviour
     // Zoom out and close related
     public GameObject ZoomOutPosition;
     public GameObject ClosePosition;
-    public GameObject ZoomOutAvatarPos;
-    public GameObject CloseAvatarPos;
     // Time Counter
     public float Timer;
     // Is hide or not 
@@ -29,32 +27,38 @@ public class StatusBoard : MonoBehaviour
     public Slider TemperSlider;
 
     //Image
-    public GameObject Image;
+    public GameObject EnemyImagePosition;
     public float AvatarHeight;
     public float AvatarWidth;
 
     #endregion
     #region NormalVariables
+    public GameObject Enemy;
     private float initScale;
     private GameObject CloneEnemy;
     private TestDisk EnemyObject;
     private TestDisk CloneEnemyObject;
-    private MonoBehaviour CloneEnemyScript;
     private Rigidbody2D CloneEnemyRb2D;
     private Collider2D CloneEnemyColl;
-    private Vector2 initPosition;
+    private float ImageInitScaleX;
+    private float ImageInitScaleY;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         initScale = transform.localScale.x;
-        initPosition = Image.transform.position;
+        if (Enemy != null)
+        {
+            ImageInitScaleX = Enemy.transform.localScale.x * 3 / transform.localScale.x;
+            ImageInitScaleY = Enemy.transform.localScale.y * 3 / transform.localScale.y;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         // React When Player Zoom out/ close
         ReactWhenZoom();
     }
@@ -68,10 +72,9 @@ public class StatusBoard : MonoBehaviour
             // If close -> All range and scale is half
             transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
             transform.localScale = new Vector3(initScale / 2, initScale / 2, initScale / 2);
-            if (CloneEnemy != null)
+            if (CloneEnemy!=null)
             {
-                CloneEnemy.transform.position = new Vector3(CloseAvatarPos.transform.position.x, CloseAvatarPos.transform.position.y, transform.position.z);
-                CloneEnemy.transform.localScale = new Vector2(AvatarHeight / 2 , AvatarWidth / 2);
+                CloneEnemy.transform.localScale = new Vector2(ImageInitScaleX, ImageInitScaleY);
             }
         }
         else
@@ -81,22 +84,25 @@ public class StatusBoard : MonoBehaviour
             transform.localScale = new Vector3(initScale, initScale, initScale);
             if (CloneEnemy != null)
             {
-                CloneEnemy.transform.position = new Vector3(ZoomOutAvatarPos.transform.position.x, ZoomOutAvatarPos.transform.position.y, transform.position.z);
-                CloneEnemy.transform.localScale = new Vector2(AvatarHeight, AvatarWidth);
+                CloneEnemy.transform.localScale = new Vector2(ImageInitScaleX, ImageInitScaleY);
             }
         }
     }
     #endregion
     #region Show Status
 
-    public void ShowStatus(GameObject Enemy)
+    public void ShowStatus()
     {
         if (gameObject.activeSelf)
         {
             if (CloneEnemy == null)
             {
-                CloneEnemy = Instantiate(Enemy, Image.transform.position, Quaternion.identity);
-                CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 100;          
+                CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+                CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 100;
+                Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
+                c.a = 0.5f;
+                CloneEnemy.GetComponent<SpriteRenderer>().color = c;
+                CloneEnemy.transform.SetParent(transform);
                 // turn off scripts
                 CloneEnemyObject = CloneEnemy.GetComponent<TestDisk>();
                 CloneEnemyObject.enabled = false;

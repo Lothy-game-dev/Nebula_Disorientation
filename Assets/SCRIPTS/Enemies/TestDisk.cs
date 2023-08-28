@@ -56,13 +56,14 @@ public class TestDisk : EnemyShared
     private void OnMouseEnter()
     {
         Status.isShow = true;
+        Status.Enemy = gameObject;
         EnemyStatus.SetActive(true);
-        Status.ShowStatus(gameObject);       
+        Status.ShowStatus();
     }
     private void OnMouseExit()
     {
-        Status.isShow = false;
         Status.Timer = 10f;
+        Status.isShow = false;
     }
     
 }
