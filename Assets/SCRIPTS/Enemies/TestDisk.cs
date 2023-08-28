@@ -6,6 +6,9 @@ public class TestDisk : EnemyShared
 {
     public Rigidbody2D rb;
     private float changeDirTimer;
+    public GameObject EnemyStatus;
+    private StatusBoard Status;
+    private SpriteRenderer EnemySprite;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,11 +17,14 @@ public class TestDisk : EnemyShared
         CurrentHP = MaxHP;
         changeDirTimer = 2.5f;
         rb.velocity = new Vector2(0, 30);
+        Status = EnemyStatus.GetComponent<StatusBoard>();
+        EnemySprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         SetHealth();
         if (changeDirTimer > 0f)
         {
@@ -30,7 +36,35 @@ public class TestDisk : EnemyShared
         }
         if (CurrentHP<=0f)
         {
+            EnemyStatus.SetActive(false);
             Destroy(gameObject);
+            Status.DeleteClone(true);
         }
+
+        if (Status.Timer > 0f)
+        {
+            Status.Timer -= Time.deltaTime;
+        } else
+        {
+            if (!Status.isShow)
+            {
+                EnemyStatus.SetActive(false);
+                Status.DeleteClone(true);
+            }
+        }
+      
     }
+
+    private void OnMouseEnter()
+    {
+        Status.isShow = true;
+        EnemyStatus.SetActive(true);
+        Status.ShowStatus(gameObject);       
+    }
+    private void OnMouseExit()
+    {
+        Status.isShow = false;
+        Status.Timer = 10f;
+    }
+    
 }
