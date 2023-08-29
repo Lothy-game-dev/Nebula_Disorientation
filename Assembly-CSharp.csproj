@@ -72,6 +72,7 @@
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\SpawnController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\StatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />

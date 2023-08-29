@@ -17,6 +17,7 @@ public class BulletShared : MonoBehaviour
     public string Type;
     public float DistanceTravel;
     public int HitLimitPerSecond;
+    public float Range;
     private int CurrentHitNumber;
     private float ResetHitTimer;
     private bool StartCounting;
@@ -105,6 +106,11 @@ public class BulletShared : MonoBehaviour
 
     public void CheckDistanceTravel(float EffectiveDistance, float MaxDistance)
     {
+        if (Range!=0f)
+        {
+            EffectiveDistance = Range;
+            MaxDistance = Range;
+        }
         if (DistanceTravel <= EffectiveDistance)
         {
             RealDamage = BaseDamagePerHit;

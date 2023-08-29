@@ -8,13 +8,17 @@ public class TestDisk : EnemyShared
     public float changeDirTimer;
     public GameObject EnemyStatus;
     private StatusBoard Status;
+    private bool test;
+    private Vector2 check;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         MaxHP = 100f;
         changeDirTimer = 2.5f;
-        rb.velocity = new Vector2(0, 30);
+        test = false;
+        check = new Vector2(0, 30);
+        CalculateVelocity(!test ? check : -check);
         Status = EnemyStatus.GetComponent<StatusBoard>();
         InitializeFighter();
     }
@@ -23,6 +27,8 @@ public class TestDisk : EnemyShared
     void Update()
     {
         CheckThermal();
+        CheckInsideBlackhole();
+        CalculateVelocity(!test ? check : -check);
         SetHealth();
         if (changeDirTimer > 0f)
         {
@@ -30,14 +36,7 @@ public class TestDisk : EnemyShared
         } else
         {
             changeDirTimer = 5f;
-            if (rb.velocity!=new Vector2(0,0))
-            {
-                rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
-            } else
-            {
-                rb.velocity = new Vector2(rb.velocity.x, 30);
-            }
-            
+            test = !test;
         }
         if (CurrentHP<=0f)
         {
