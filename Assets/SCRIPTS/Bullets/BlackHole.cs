@@ -12,11 +12,17 @@ public class BlackHole : MonoBehaviour
     public float BasePullingForce;
     public GameObject RangeCheck;
     public GameObject CenterRange;
+    public LayerMask HitLayer;
     #endregion
     #region NormalVariables
     public Vector2 PullingVector;
+    public float BaseDmg;
+    public int RateOfHit;
+
     private float radius;
     private float centerRadius;
+    private float ResetHitTimer;
+    private bool alreadyDealDmg;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -25,6 +31,14 @@ public class BlackHole : MonoBehaviour
         // Initialize variables
         radius = Mathf.Abs((transform.position - RangeCheck.transform.position).magnitude);
         centerRadius = Mathf.Abs((transform.position - CenterRange.transform.position).magnitude);
+        if (BaseDmg==0)
+        {
+            BaseDmg = 10;
+        }
+        if (RateOfHit==0)
+        {
+            RateOfHit = 1;
+        }
     }
 
     // Update is called once per frame
@@ -32,6 +46,16 @@ public class BlackHole : MonoBehaviour
     {
         // Call function and timer only if possible
         transform.Rotate(new Vector3(0, 0, 1));
+        DealDamageToLayerInRange(HitLayer);
+        if (ResetHitTimer>0f)
+        {
+            ResetHitTimer -= Time.deltaTime;
+        }
+        else
+        {
+            alreadyDealDmg = false;
+            ResetHitTimer = 1f / RateOfHit;
+        }
     }
     #endregion
     #region Pulling Vector Cal
@@ -56,6 +80,43 @@ public class BlackHole : MonoBehaviour
             float ForceX = pullForceCal * vectorDis.x / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
             float ForceY = pullForceCal * vectorDis.y / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
             return new Vector2(ForceX, ForceY);
+        }
+    }
+
+    public void DealDamageToLayerInRange(LayerMask layer)
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, radius, layer);
+        if (cols.Length > 0)
+        {
+            if (!alreadyDealDmg)
+            {
+                alreadyDealDmg = true;
+                foreach (var col in cols)
+                {
+                    if (col.GetComponent<FighterShared>()!=null)
+                    {
+                        FighterShared fighter = col.GetComponent<FighterShared>();
+                        fighter.CurrentHP -= CalculateDamageDealt(fighter.gameObject);
+                    }
+                }
+            }
+        }
+    }
+
+    public float CalculateDamageDealt(GameObject go)
+    {
+        float distance = Mathf.Abs((go.transform.position - transform.position).magnitude);
+        if (distance > radius)
+        {
+            return 0;
+        }
+        else if (distance <= centerRadius)
+        {
+            return BaseDmg;
+        }
+        else
+        {
+            return BaseDmg * (50 + distance / radius * 50) / 100;
         }
     }
     #endregion

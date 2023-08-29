@@ -28,8 +28,7 @@ public class PlayerFighter : FighterShared
     // Update is called once per frame
     void Update()
     {
-        CheckThermal();
-        CheckInsideBlackhole();
+        UpdateFighter();
         if (testTimer <= 0f)
         {
             if (Input.GetKeyDown(KeyCode.M))
