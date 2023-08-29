@@ -38,6 +38,12 @@ public class FighterShared : MonoBehaviour
         RegenScale = 1f;
         SlowedMoveSpdScale = 1;
     }
+    // Update For Fighter
+    public void UpdateFighter()
+    {
+        CheckThermal();
+        CheckInsideBlackhole();
+    }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
     {
@@ -244,17 +250,13 @@ public class FighterShared : MonoBehaviour
                 if (bh!=null)
                 {
                     isBHPulled = true;
-                    PulledVector.Add(bh.CalculatePullingVector(gameObject));
-                    ReceiveBlackholeDamage();
+                    Vector2 vectorPull = bh.CalculatePullingVector(gameObject);
+                    PulledVector.Add(vectorPull);
                 }
             }
         }
     }
 
-    public void ReceiveBlackholeDamage()
-    {
-
-    }
 
     public void CalculateVelocity(Vector2 veloc)
     {

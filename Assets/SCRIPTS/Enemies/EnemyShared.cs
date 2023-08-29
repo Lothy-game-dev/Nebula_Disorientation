@@ -25,8 +25,7 @@ public class EnemyShared : FighterShared
     public void UpdateEnemy()
     {
         SetHealth();
-        CheckThermal();
-        CheckInsideBlackhole();
+        UpdateFighter();
         if (CurrentHP <= 0f)
         {
             Status.StopShowing();
