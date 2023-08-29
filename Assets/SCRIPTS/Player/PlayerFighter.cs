@@ -29,6 +29,7 @@ public class PlayerFighter : FighterShared
     void Update()
     {
         CheckThermal();
+        CheckInsideBlackhole();
         if (testTimer <= 0f)
         {
             if (Input.GetKeyDown(KeyCode.M))

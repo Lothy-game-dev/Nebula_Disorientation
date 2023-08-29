@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     private bool Dashing;
     private float DashingTimer;
     private bool Movable;
+    private Vector2 speedVector;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -45,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
         if (pf.isFrozen)
         {
             Movable = false;
-            rb.velocity = new Vector2(0, 0);
+            speedVector = new Vector2(0, 0);
             CurrentSpeed = 0f;
         } else
         {
@@ -74,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
         // Moving Front and Back
         DetectWSButton();
         if (!Dashing && Movable) PlayerMoving();
+        pf.CalculateVelocity(speedVector);
     }
     #endregion
     #region Moving Functions
@@ -182,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 movementVector = CalculateMovement();
         AccelerateSpeed();
-        rb.velocity = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale;
+        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale;
     }
     // Accelerate Players
     void AccelerateSpeed()
@@ -247,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
     void Dash()
     {
         Vector2 movementVector = CalculateMovement();
-        rb.velocity = movementVector * MovingSpeed * DashSpeedRate;
+        speedVector = movementVector * MovingSpeed * DashSpeedRate;
     }
     #endregion
 }

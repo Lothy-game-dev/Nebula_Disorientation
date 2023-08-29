@@ -7,12 +7,42 @@ public class EnemyShared : FighterShared
     #region Shared Variables
     public EnemyHealthBar HealthBar;
     public float ScaleOnStatusBoard;
+    public GameObject EnemyStatus;
+    private StatusBoard Status;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
     public void SetHealth()
     {
         HealthBar.SetValue(CurrentHP, MaxHP);
+    }
+
+    public void StartEnemy(float MHP)
+    {
+        Status = EnemyStatus.GetComponent<StatusBoard>();
+        MaxHP = MHP;
+    }
+    public void UpdateEnemy()
+    {
+        SetHealth();
+        CheckThermal();
+        CheckInsideBlackhole();
+        if (CurrentHP <= 0f)
+        {
+            Status.StopShowing();
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnMouseOver()
+    {
+        Status.Timer = 5f;
+        Status.StartShowing(gameObject);
+    }
+
+    private void OnMouseExit()
+    {
+        Status.CheckOnDestroy();
     }
     #endregion
 }

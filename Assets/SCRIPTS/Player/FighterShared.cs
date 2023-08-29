@@ -23,6 +23,9 @@ public class FighterShared : MonoBehaviour
     public float RegenScale;
     public bool isImmuneFrozenSlow;
     public float ImmuneDuration;
+    public bool isBHPulled;
+    public List<Vector2> PulledVector;
+    public LayerMask BlackHoleLayer;
     #endregion
     #region Shared Functions
     // Initialize
@@ -225,6 +228,44 @@ public class FighterShared : MonoBehaviour
                 RegenDelayTimer -= Time.deltaTime;
             }
         }
+    }
+    #endregion
+    #region Check Blackhole Pulling
+    public void CheckInsideBlackhole()
+    {
+        isBHPulled = false;
+        PulledVector = new List<Vector2>();
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackHoleLayer);
+        if (cols.Length>0)
+        {
+            foreach (var col in cols)
+            {
+                BlackHole bh = col.GetComponent<BlackHole>();
+                if (bh!=null)
+                {
+                    isBHPulled = true;
+                    PulledVector.Add(bh.CalculatePullingVector(gameObject));
+                    ReceiveBlackholeDamage();
+                }
+            }
+        }
+    }
+
+    public void ReceiveBlackholeDamage()
+    {
+
+    }
+
+    public void CalculateVelocity(Vector2 veloc)
+    {
+        if (isBHPulled)
+        {
+            foreach (Vector2 v in PulledVector)
+            {
+                veloc += v;
+            }
+        }
+        GetComponent<Rigidbody2D>().velocity = veloc;
     }
     #endregion
 }

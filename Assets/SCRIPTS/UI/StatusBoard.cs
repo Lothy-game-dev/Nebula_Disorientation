@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class StatusBoard : MonoBehaviour
 {
     #region ComponentVariables
-    // Variables used for calling componenets attached to the game object only
-    // Can be public or private
+    private Animator anim;
     #endregion
     #region InitializeVariables
     // Status related
@@ -16,10 +15,6 @@ public class StatusBoard : MonoBehaviour
     // Zoom out and close related
     public GameObject ZoomOutPosition;
     public GameObject ClosePosition;
-    // Time Counter
-    public float Timer;
-    // Is hide or not 
-    public bool isShow;
     //Status
     public TMP_Text HealthText;
     public Slider HPSlider;
@@ -32,6 +27,10 @@ public class StatusBoard : MonoBehaviour
     #endregion
     #region NormalVariables
     public GameObject Enemy;
+    // Time Counter
+    public float Timer;
+    // Is hide or not 
+    public bool isShow;
     private float initScale;
     private GameObject CloneEnemy;
     private EnemyShared EnemyObject;
@@ -40,18 +39,27 @@ public class StatusBoard : MonoBehaviour
     private Collider2D CloneEnemyColl;
     private float ImageInitScaleX;
     private float ImageInitScaleY;
+    private bool isEnding;
+    private bool startCounting;
+    private bool OkToDestroy;
+    private bool alreadyDelete;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         initScale = transform.localScale.x;
         if (Enemy != null)
         {
             ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
-        Physics.IgnoreLayerCollision(0, 7);
+        for (int i=0; i< 8; i++)
+        {
+            Physics2D.IgnoreLayerCollision(i, gameObject.layer, true);
+        }
+        alreadyDelete = false;
     }
 
     // Update is called once per frame
@@ -60,18 +68,29 @@ public class StatusBoard : MonoBehaviour
         
         // React When Player Zoom out/ close
         ReactWhenZoom();
-
-        if (Timer > 0f)
+        if (isShow)
         {
-            Timer -= Time.deltaTime;
-            ShowStatus();
+            UpdateStatus();
         }
-        else
+        if (startCounting)
         {
-            if (!isShow && CloneEnemy != null)
+            if (Timer > 0f)
             {
-                gameObject.SetActive(false);
-                Destroy(CloneEnemy);
+                Timer -= Time.deltaTime;
+            }
+            else
+            {
+                isShow = false;
+                if (CloneEnemy != null)
+                {
+                    Destroy(CloneEnemy);
+                    HealthText.gameObject.SetActive(false);
+                    HPSlider.gameObject.SetActive(false);
+                    TemperText.gameObject.SetActive(false);
+                    TemperSlider.gameObject.SetActive(false);
+                    alreadyDelete = true;
+                }
+                StartCoroutine(CloseBoard());
             }
         }
     }
@@ -103,82 +122,163 @@ public class StatusBoard : MonoBehaviour
     }
     #endregion
     #region Show Status
-
-    public void ShowStatus()
+    public void StartShowing(GameObject enemy)
     {
-        if (gameObject.activeSelf)
+        Enemy = enemy;
+        isShow = false;
+        startCounting = false;
+        if (!gameObject.activeSelf)
         {
-            if (CloneEnemy == null)
-            {
-                CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
-                CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 100;
-                Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
-                c.a = 0.5f;
-                CloneEnemy.GetComponent<SpriteRenderer>().color = c;
-                CloneEnemy.transform.SetParent(transform);
-                // turn off scripts
-                CloneEnemyObject = CloneEnemy.GetComponent<TestDisk>();
-                CloneEnemyObject.enabled = false;
-                // turn off component
-                CloneEnemyRb2D = CloneEnemy.GetComponent<Rigidbody2D>();
-                CloneEnemyRb2D.simulated = false;
-                CloneEnemyColl = CloneEnemy.GetComponent<Collider2D>();
-                CloneEnemyColl.enabled = false;
-            }
-            EnemyObject = Enemy.GetComponent<TestDisk>();
-
-            //Setting slider base on current HP
-            HPSlider.gameObject.SetActive(true);
-            HPSlider.maxValue = EnemyObject.MaxHP;
-            HPSlider.value = EnemyObject.CurrentHP;
-
-            //Set HP to show how much current HP
-            HealthText.gameObject.SetActive(true);
-            HealthText.text = EnemyObject.CurrentHP + "/" + EnemyObject.MaxHP;
-
-            //Setting slider base on current temperature
-            TemperSlider.gameObject.SetActive(true);
-            TemperSlider.maxValue = 100;
-            TemperSlider.value = EnemyObject.currentTemperature;
-
-            //if temp > 50, the slider is red else blue
-            if (EnemyObject.currentTemperature > 50)
-            {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
-            } else if (EnemyObject.currentTemperature < 50)
-            {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
-            } else if (EnemyObject.currentTemperature == 50)
-            {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
-            }
-
-            //Setting to show current tempurature
-            TemperText.gameObject.SetActive(true);
-            TemperText.text = EnemyObject.currentTemperature + "°C";
-
-            
-
-        }
-
-        
-    }
-    
-    public void DeleteClone(bool option)
-    {
-        if (option)
+            gameObject.SetActive(true);
+            StartCoroutine(DelayShow());
+        } else
         {
-            Destroy(CloneEnemy);
+            if (alreadyDelete)
+            {
+                alreadyDelete = false;
+                StartCoroutine(DelayShow());
+            } else
+            {
+                if (Timer == 0f)
+                {
+                    Timer = 1000f;
+                }
+                startCounting = true;
+                isShow = true;
+            }
         }
     }
 
+    private IEnumerator DelayShow()
+    {
+        // Wait for animation 1s to show enemy
+        yield return new WaitForSeconds(0.6f);
+        if (CloneEnemy == null)
+        {
+            CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 100;
+            Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
+            c.a = 0.5f;
+            c.r = 1;
+            c.g = 1;
+            c.b = 1;
+            CloneEnemy.GetComponent<SpriteRenderer>().color = c;
+            CloneEnemy.transform.SetParent(transform);
+            // turn off scripts
+            CloneEnemyObject = CloneEnemy.GetComponent<TestDisk>();
+            CloneEnemyObject.enabled = false;
+            // turn off component
+            CloneEnemyRb2D = CloneEnemy.GetComponent<Rigidbody2D>();
+            CloneEnemyRb2D.simulated = false;
+            CloneEnemyColl = CloneEnemy.GetComponent<Collider2D>();
+            CloneEnemyColl.enabled = false;
+        }
+
+        // WAit for 1s to show HP and temp bar
+        yield return new WaitForSeconds(0.4f);
+        EnemyObject = Enemy.GetComponent<EnemyShared>();
+        HPSlider.gameObject.SetActive(true);
+        HPSlider.maxValue = EnemyObject.MaxHP;
+        HPSlider.value = EnemyObject.CurrentHP;
+
+        //Set HP to show how much current HP
+        HealthText.gameObject.SetActive(true);
+        HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
+
+        //Setting slider base on current temperature
+        TemperSlider.gameObject.SetActive(true);
+        TemperSlider.maxValue = 100;
+        TemperSlider.value = EnemyObject.currentTemperature;
+
+        //if temp > 50, the slider is red else blue
+        if (EnemyObject.currentTemperature > 50)
+        {
+            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
+        }
+        else if (EnemyObject.currentTemperature < 50)
+        {
+            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
+        }
+        else if (EnemyObject.currentTemperature == 50)
+        {
+            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+        }
+
+        //Setting to show current tempurature
+        TemperText.gameObject.SetActive(true);
+        TemperText.text = EnemyObject.currentTemperature + "°C";
+        if (Timer==0f)
+        {
+            Timer = 1000f;
+        }
+        startCounting = true;
+        isShow = true;
+    }
+
+    public void UpdateStatus()
+    {
+        EnemyObject = Enemy.GetComponent<EnemyShared>();
+        HPSlider.maxValue = EnemyObject.MaxHP;
+        HPSlider.value = EnemyObject.CurrentHP;
+
+        //Set HP to show how much current HP
+        HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
+
+        //Setting slider base on current temperature
+        TemperSlider.value = EnemyObject.currentTemperature;
+
+        //if temp > 50, the slider is red else blue
+        if (EnemyObject.currentTemperature > 50)
+        {
+            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
+        } else if (EnemyObject.currentTemperature < 50)
+        {
+            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
+        } else if (EnemyObject.currentTemperature == 50)
+        {
+            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+        }
+
+        //Setting to show current tempurature
+        TemperText.text = EnemyObject.currentTemperature + "°C";
+    }
+
+    public void StopShowing()
+    {
+        gameObject.SetActive(false);
+        Destroy(CloneEnemy);
+    }
+
+    private IEnumerator CloseBoard()
+    {
+        isEnding = true;
+        OkToDestroy = true;
+        anim.SetTrigger("End");
+        yield return new WaitForSeconds(1f);
+        isEnding = false;
+        if (OkToDestroy)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void CheckOnDestroy()
+    {
+        Timer = 5f;
+        if (isEnding)
+        {
+            isEnding = false;
+            anim.ResetTrigger("End");
+            OkToDestroy = false;
+            StopCoroutine(CloseBoard());
+            anim.SetTrigger("Start");
+            StartShowing(Enemy);
+        }
+    }
     #endregion
 
     private void OnMouseOver()
     {
-        Timer = 5f;
+        CheckOnDestroy();
     }
-    
-
-
 }
