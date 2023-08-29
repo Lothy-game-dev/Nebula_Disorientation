@@ -21,6 +21,9 @@ public class BulletShared : MonoBehaviour
     private int CurrentHitNumber;
     private float ResetHitTimer;
     private bool StartCounting;
+    private bool isBHPulled;
+    public List<Vector2> PulledVector;
+    public LayerMask BlackholeLayer;
     #endregion
     #region Shared Functions
     public void InitializeBullet(int hitLimit)
@@ -38,6 +41,8 @@ public class BulletShared : MonoBehaviour
         {
             ResetHitTimer -= Time.deltaTime;
         }
+        CheckInsideBlackhole();
+        CalculateVelocity(RealVelocity);
     }
     // Calculate Velocity Required To Reach Destination
     public void CalculateVelocity()
@@ -59,7 +64,7 @@ public class BulletShared : MonoBehaviour
             {
                 RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 10, RealVelocity.y + Velocity.y / 10);
             }
-            rb.velocity = RealVelocity;
+            CalculateVelocity(RealVelocity);
             yield return new WaitForSeconds(time/10f);
         }
     }
@@ -127,6 +132,35 @@ public class BulletShared : MonoBehaviour
             RealDamage = 0;
             Destroy(gameObject);
         }
+    }
+    public void CheckInsideBlackhole()
+    {
+        isBHPulled = false;
+        PulledVector = new List<Vector2>();
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackholeLayer);
+        if (cols.Length > 0)
+        {
+            foreach (var col in cols)
+            {
+                BlackHole bh = col.GetComponent<BlackHole>();
+                if (bh != null)
+                {
+                    isBHPulled = true;
+                    PulledVector.Add(bh.CalculatePullingVector(gameObject));
+                }
+            }
+        }
+    }
+    public void CalculateVelocity(Vector2 veloc)
+    {
+        if (isBHPulled)
+        {
+            foreach (Vector2 v in PulledVector)
+            {
+                veloc += v;
+            }
+        }
+        GetComponent<Rigidbody2D>().velocity = veloc;
     }
     #endregion
 }
