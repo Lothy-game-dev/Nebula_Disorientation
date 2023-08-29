@@ -35,6 +35,11 @@ public class MainMenuButtons : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (transform.position.x >= AfterPosition.transform.position.x)
+        {
+            rb.velocity = new Vector2(0, 0);
+            transform.position = AfterPosition.transform.position;
+        }
     }
     #endregion
     #region Mouse Check
@@ -89,33 +94,40 @@ public class MainMenuButtons : MonoBehaviour
         {
             but.GetComponent<MainMenuButtons>().ExitView();
         }
-        if (name.Equals("NewStoryButton"))
-        {
-
-        }
-        else if (name.Equals("LoadStoryButton"))
-        {
-
-        }
-        else if (name.Equals("EncyclopediaButton"))
-        {
-
-        }
-        else if (name.Equals("TutorialButton"))
-        {
-
-        }
-        else if (name.Equals("OptionsButton"))
-        {
-
-        }
-        else if (name.Equals("ExitButton"))
-        {
-
-        }
+        StartCoroutine(DelayTransfer());
     }
     #endregion
     #region Enter and Exit
+    private IEnumerator DelayTransfer()
+    {
+        bool isDown = true;
+        for (int i=0;i<20;i++)
+        {
+            Color c = GetComponent<SpriteRenderer>().color;
+            Color c2 = Text.GetComponent<SpriteRenderer>().color;
+            if (c.a >= 1)
+            {
+                isDown = true;
+            } else if (c.a <= 0)
+            {
+                isDown = false;
+            }
+            if (isDown)
+            {
+                c.a -= 0.5f;
+                c2.a -= 0.5f;
+            } else
+            {
+                c.a += 0.5f;
+                c2.a += 0.5f;
+            }
+            GetComponent<SpriteRenderer>().color = c;
+            Text.GetComponent<SpriteRenderer>().color = c2;
+            yield return new WaitForSeconds(0.1f);
+        }
+        FindObjectOfType<MainMenuCameraController>().ChangeToScene(AfterMenuSelectPosition);
+    }
+
     public void EnterView()
     {
         Color c = GetComponent<SpriteRenderer>().color;
@@ -132,25 +144,25 @@ public class MainMenuButtons : MonoBehaviour
     {
         if (name.Equals("LoadStoryButton"))
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
         }
         else if (name.Equals("EncyclopediaButton"))
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
         }
         else if (name.Equals("TutorialButton"))
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.75f);
         }
         else if (name.Equals("OptionsButton"))
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
         }
         else if (name.Equals("ExitButton"))
         {
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(1.25f);
         }
-        rb.velocity = (AfterPosition.transform.position - BeforePosition.transform.position) / 2.5f;
+        rb.velocity = (AfterPosition.transform.position - BeforePosition.transform.position) / 1.5f;
         for (int i = 0; i < 10; i++)
         {
             Color c = GetComponent<SpriteRenderer>().color;
@@ -159,9 +171,29 @@ public class MainMenuButtons : MonoBehaviour
             Color c2 = Text.GetComponent<SpriteRenderer>().color;
             c2.a += 0.1f;
             Text.GetComponent<SpriteRenderer>().color = c2;
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.15f);
         }
         rb.velocity = new Vector2(0, 0);
+        if (name.Equals("NewStoryButton"))
+        {
+            yield return new WaitForSeconds(1.25f);
+        }
+        else if (name.Equals("LoadStoryButton"))
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        else if (name.Equals("EncyclopediaButton"))
+        {
+            yield return new WaitForSeconds(0.75f);
+        }
+        else if (name.Equals("TutorialButton"))
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+        else if (name.Equals("OptionsButton"))
+        {
+            yield return new WaitForSeconds(0.25f);
+        }
         GetComponent<Collider2D>().enabled = true;
     }
 
@@ -173,16 +205,16 @@ public class MainMenuButtons : MonoBehaviour
 
     private IEnumerator MoveToBeforePos()
     {
-        rb.velocity = (BeforePosition.transform.position - AfterPosition.transform.position) / 5f;
-        for (int i = 0; i < 10; i++)
+        rb.velocity = (BeforePosition.transform.position - AfterPosition.transform.position) / 4f;
+        for (int i = 0; i < 5; i++)
         {
             Color c = GetComponent<SpriteRenderer>().color;
-            c.a -= 0.1f;
+            c.a -= 0.2f;
             GetComponent<SpriteRenderer>().color = c;
             Color c2 = Text.GetComponent<SpriteRenderer>().color;
-            c2.a -= 0.1f;
+            c2.a -= 0.2f;
             Text.GetComponent<SpriteRenderer>().color = c2;
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.2f);
         }
         rb.velocity = new Vector2(0, 0);
     }
