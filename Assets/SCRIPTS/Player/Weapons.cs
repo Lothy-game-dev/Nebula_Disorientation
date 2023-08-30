@@ -277,7 +277,7 @@ public class Weapons : MonoBehaviour
     }
     void FireFlamethrowerOrb()
     {
-        for (int i=0;i<10;i++)
+        for (int i=0;i<20;i++)
         {
             GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
             float Angle = Random.Range(-10f, 10f);
