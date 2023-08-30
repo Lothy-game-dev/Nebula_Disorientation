@@ -283,15 +283,16 @@ public class Weapons : MonoBehaviour
             float Angle = Random.Range(-10f, 10f);
             orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + Angle);
             BulletShared bul = orbFire.GetComponent<BulletShared>();
-            bul.Destination = CalculateFTOrbDestination(Angle);
+            bul.Destination = CalculateFTOrbDestination(Angle, bul);
             bul.Range = 375 + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
             orbFire.SetActive(true);
         }
     }
-    Vector2 CalculateFTOrbDestination(float Angle)
+    Vector2 CalculateFTOrbDestination(float Angle, BulletShared bul)
     {
         Vector2 baseVector = Aim.transform.position - ShootingPosition.transform.position;
+        baseVector = baseVector * bul.MaxEffectiveDistance * 1.5f / baseVector.magnitude;
         float length = baseVector.magnitude;
         float length1 = length * Mathf.Cos(Angle * Mathf.Deg2Rad);
         Vector2 JoinPos = new Vector2(ShootingPosition.transform.position.x, ShootingPosition.transform.position.y)
