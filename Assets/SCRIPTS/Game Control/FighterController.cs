@@ -12,15 +12,14 @@ public class FighterController : MonoBehaviour
     #region InitializeVariables
     public GameObject[] Weapons;
     public GameObject[] Bullets;
-    public GameObject RightWeaponPosition;
-    public GameObject LeftWeaponPosition;
     public GameObject PlayerFighter;
+    public GameObject Aim;
     #endregion
     #region NormalVariables
     public GameObject CurrentLeftWeapon;
-    public GameObject LeftWeaponBullet;
     public GameObject CurrentRightWeapon;
-    public GameObject RightWeaponBullet;
+    public GameObject RightWeaponPosition;
+    public GameObject LeftWeaponPosition;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -28,6 +27,7 @@ public class FighterController : MonoBehaviour
     {
         // Initialize variables
         // Retrieve Datas from DB to get inits data
+        InitData();
     }
 
     // Update is called once per frame
@@ -36,7 +36,29 @@ public class FighterController : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Initialize Datas
     // Group all function that serve the same algorithm
+    private void InitData()
+    {
+        // set current weapons from DB
+        // clone and set Left Right weapon to aim
+        LeftWeaponPosition = PlayerFighter.transform.GetChild(0).gameObject;
+        RightWeaponPosition = PlayerFighter.transform.GetChild(1).gameObject;
+        GameObject LeftWeapon = Instantiate(CurrentLeftWeapon, LeftWeaponPosition.transform.position, Quaternion.identity);
+        GameObject RightWeapon = Instantiate(CurrentRightWeapon, RightWeaponPosition.transform.position, Quaternion.identity);
+        LeftWeapon.SetActive(true);
+        Weapons LW = LeftWeapon.GetComponent<Weapons>();
+        LW.isLeftWeapon = true;
+        LW.Fighter = PlayerFighter;
+        LW.Aim = Aim;
+        LW.WeaponPosition = LeftWeaponPosition;
+        RightWeapon.SetActive(true);
+        Weapons RW = RightWeapon.GetComponent<Weapons>();
+        RW.Fighter = PlayerFighter;
+        RW.Aim = Aim;
+        RW.WeaponPosition = RightWeaponPosition;
+        Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
+        Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
+    }
     #endregion
 }

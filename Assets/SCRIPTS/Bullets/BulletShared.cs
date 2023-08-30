@@ -87,6 +87,7 @@ public class BulletShared : MonoBehaviour
                         if (enemy!=null)
                         {
                             enemy.CurrentHP -= RealDamage;
+                            Debug.Log(RealDamage);
                         }
                     }
                     WeaponShoot.CurrentHitCount++;
@@ -122,6 +123,7 @@ public class BulletShared : MonoBehaviour
                         {
                             enemy.CurrentHP -= RealDamage;
                             enemy.ReceiveThermalDamage(isHeat);
+                            Debug.Log(RealDamage);
                         }
                     }
                     WeaponShoot.CurrentHitCount++;
