@@ -5,42 +5,39 @@ using UnityEngine;
 public class BulletShared : MonoBehaviour
 {
     #region Shared Variables
-    public Rigidbody2D rb;
-    public Vector2 Destination;
+    public Weapons WeaponShoot;
+    public float MaxEffectiveDistance;
+    public float MaximumDistance;
     public float Speed;
-    private float Distance;
-    private Vector2 Velocity;
-    private Vector2 RealVelocity;
+    public float AoE;
     public float BaseDamagePerHit;
-    private float RealDamage;
     public LayerMask EnemyLayer;
-    public string Type;
-    public float DistanceTravel;
-    public int HitLimitPerSecond;
+    public LayerMask BlackholeLayer;
     public float Range;
-    private int CurrentHitNumber;
-    private float ResetHitTimer;
+    public Vector2 Destination;
+
+    protected Rigidbody2D rb;
+    protected float Distance;
+    protected Vector2 Velocity;
+    protected Vector2 RealVelocity;
+    protected float DistanceTravel;
+
+    private float RealDamage;
     private bool StartCounting;
     private bool isBHPulled;
-    public List<Vector2> PulledVector;
-    public LayerMask BlackholeLayer;
+    private List<Vector2> PulledVector;
+    private bool AlreadyHit;
     #endregion
     #region Shared Functions
-    public void InitializeBullet(int hitLimit)
+    public void InitializeBullet()
     {
-        HitLimitPerSecond = hitLimit;
+        if (MaximumDistance==0f)
+        {
+            MaximumDistance = MaxEffectiveDistance;
+        }
     }
     public void UpdateBullet()
     {
-        if (ResetHitTimer<=0f)
-        {
-            CurrentHitNumber = 0;
-            ResetHitTimer = 1f;
-            StartCounting = false;
-        } else
-        {
-            ResetHitTimer -= Time.deltaTime;
-        }
         CheckInsideBlackhole();
         CalculateVelocity(RealVelocity);
     }
@@ -74,17 +71,32 @@ public class BulletShared : MonoBehaviour
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
         foreach (var col in cols)
         {
-            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
-            if (enemy!=null && CurrentHitNumber < HitLimitPerSecond)
+            if (!AlreadyHit)
             {
-                enemy.CurrentHP -= RealDamage;
-                if (!StartCounting)
+                AlreadyHit = true;
+                if (WeaponShoot.CurrentHitCount < WeaponShoot.RateOfHit)
                 {
-                    StartCounting = true;
-                    ResetHitTimer = 1f;
+                    if (WeaponShoot.CurrentHitCount == 0)
+                    {
+                        WeaponShoot.HitCountResetTimer = 1f;
+                    }
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
+                    foreach (var col2 in cols2)
+                    {
+                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        if (enemy!=null)
+                        {
+                            enemy.CurrentHP -= RealDamage;
+                        }
+                    }
+                    WeaponShoot.CurrentHitCount++;
+                    Destroy(gameObject);
+                } else
+                {
+                    Destroy(gameObject);
                 }
-                Destroy(gameObject);
             }
+            break;
         }
     }
 
@@ -93,41 +105,52 @@ public class BulletShared : MonoBehaviour
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
         foreach (var col in cols)
         {
-            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
-            if (enemy != null && CurrentHitNumber < HitLimitPerSecond)
+            if (!AlreadyHit)
             {
-                enemy.CurrentHP -= RealDamage;
-                enemy.ReceiveThermalDamage(isHeat);
-                if (!StartCounting)
+                AlreadyHit = true;
+                if (WeaponShoot.CurrentHitCount < WeaponShoot.RateOfHit)
                 {
-                    StartCounting = true;
-                    ResetHitTimer = 1f;
+                    if (WeaponShoot.CurrentHitCount == 0)
+                    {
+                        WeaponShoot.HitCountResetTimer = 1f;
+                    }
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
+                    foreach (var col2 in cols2)
+                    {
+                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        if (enemy != null)
+                        {
+                            enemy.CurrentHP -= RealDamage;
+                            enemy.ReceiveThermalDamage(isHeat);
+                        }
+                    }
+                    WeaponShoot.CurrentHitCount++;
+                    Destroy(gameObject);
                 }
-                CurrentHitNumber++;
-                Destroy(gameObject);
             }
+            break;
         }
     }
 
-    public void CheckDistanceTravel(float EffectiveDistance, float MaxDistance)
+    public void CheckDistanceTravel()
     {
         if (Range!=0f)
         {
-            EffectiveDistance = Range;
-            MaxDistance = Range;
+            MaxEffectiveDistance = Range;
+            MaximumDistance = Range;
         }
-        if (DistanceTravel <= EffectiveDistance)
+        if (DistanceTravel <= MaxEffectiveDistance)
         {
             RealDamage = BaseDamagePerHit;
         }
-        if (DistanceTravel > EffectiveDistance && DistanceTravel < MaxDistance)
+        if (DistanceTravel > MaxEffectiveDistance && DistanceTravel < MaximumDistance)
         {
-            RealDamage = (0.5f + (MaxDistance - DistanceTravel)/(2*(MaxDistance - EffectiveDistance))) * BaseDamagePerHit;
+            RealDamage = (0.5f + (MaximumDistance - DistanceTravel) / (2*(MaximumDistance - MaxEffectiveDistance))) * BaseDamagePerHit;
             Color c = GetComponent<SpriteRenderer>().color;
-            c.a = 0.5f + (MaxDistance - DistanceTravel) / 2 * (MaxDistance - EffectiveDistance);
+            c.a = (MaximumDistance - DistanceTravel) / (MaximumDistance - MaxEffectiveDistance);
             GetComponent<SpriteRenderer>().color = c;
         }
-        if (DistanceTravel >= MaxDistance)
+        if (DistanceTravel >= MaximumDistance)
         {
             RealDamage = 0;
             Destroy(gameObject);

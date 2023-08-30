@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PulseCannonBullet : BulletShared
+public class UsualKineticBullet : BulletShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -33,7 +33,7 @@ public class PulseCannonBullet : BulletShared
         // Call function and timer only if possible
         CalculateDamage();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-        CheckDistanceTravel(800f,1000f);
+        CheckDistanceTravel();
     }
     #endregion
     #region Function group 1

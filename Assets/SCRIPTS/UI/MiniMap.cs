@@ -14,6 +14,7 @@ public class MiniMap : MonoBehaviour
     public GameObject EliteEnemyIcon;
     public GameObject BossEnemyIcon;
     public GameObject PlayerIcon;
+    public GameObject BlackholeIcon;
     // Render related
     public GameObject Player;
     public float RenderRange;
@@ -126,6 +127,28 @@ public class MiniMap : MonoBehaviour
                         new Vector3(icon.transform.localScale.x * transform.localScale.x / InitScale,
                         icon.transform.localScale.x * transform.localScale.x / InitScale,
                         icon.transform.localScale.x * transform.localScale.x / InitScale);
+                    icon.SetActive(true);
+                    icon.name = col.name + " Icon";
+                    icons.Add(icon);
+                }
+            }
+            else if (col.tag == "Blackhole")
+            {
+                GameObject iconCheck = IconExist(col.name);
+                if (iconCheck != null)
+                {
+                    iconCheck.transform.position = CalculateIconPosition(col.transform.position);
+                }
+                else
+                {
+                    GameObject icon = Instantiate(BlackholeIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
+                    icon.transform.SetParent(transform);
+                    float BHRange = col.GetComponent<BlackHole>().radius;
+                    float iconBHRange = Mathf.Abs(icon.transform.position.y - icon.transform.GetChild(0).transform.position.y);
+                    icon.transform.localScale =
+                        new Vector3(icon.transform.localScale.x * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale,
+                        icon.transform.localScale.x * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale,
+                        icon.transform.localScale.x * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale);
                     icon.SetActive(true);
                     icon.name = col.name + " Icon";
                     icons.Add(icon);

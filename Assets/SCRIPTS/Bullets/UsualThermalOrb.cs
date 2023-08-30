@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlamethrowerOrb : BulletShared
+public class UsualThermalOrb : BulletShared
 {
     #region ComponentVariables
     private Animator anim;
@@ -10,6 +10,7 @@ public class FlamethrowerOrb : BulletShared
     #region InitializeVariables
     public float StartAnimTimer;
     public float EndAnimTimer;
+    public bool isHeat;
     #endregion
     #region NormalVariables
     private float AnimTimer;
@@ -28,7 +29,7 @@ public class FlamethrowerOrb : BulletShared
         StartCoroutine(Accelerate(0.1f));
         AnimTimer = StartAnimTimer;
         isStart = true;
-        InitializeBullet(10);
+        InitializeBullet();
     }
 
     // Update is called once per frame
@@ -36,9 +37,9 @@ public class FlamethrowerOrb : BulletShared
     {
         // Call function and timer only if possible
         UpdateBullet();
-        CalculateThermalDamage(true);
+        CalculateThermalDamage(isHeat);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-        CheckDistanceTravel(375, 375);
+        CheckDistanceTravel();
         if (AnimTimer <= 0f)
         {
             if (isStart)

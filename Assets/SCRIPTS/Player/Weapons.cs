@@ -17,11 +17,16 @@ public class Weapons : MonoBehaviour
     public GameObject Bullet;
     public float RotateLimitNegative;
     public float RotateLimitPositive;
-    public bool isFlameThrowerTest;
-    public GameObject FTOrb;
+    public bool IsThermalType;
     #endregion
     #region NormalVariables
+    public int RateOfHit;
     public float RateOfFire;
+    public bool tracking;
+    public bool Fireable;
+    public int CurrentHitCount;
+    public float HitCountResetTimer;
+
     private float FireTimer;
     private PlayerMovement pm;
     private float PrevAngle;
@@ -30,10 +35,7 @@ public class Weapons : MonoBehaviour
     private float ExpectedAngle;
     private float LimitNegative;
     private float LimitPositive;
-    private float AutoChangeDirAngle;
-    public bool tracking;
     private int MouseInput;
-    public bool Fireable;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -107,7 +109,7 @@ public class Weapons : MonoBehaviour
         {
             if (Input.GetMouseButton(MouseInput) && Fireable)
             {
-                if (!isFlameThrowerTest) {
+                if (!IsThermalType) {
                     FireBullet();
                     FireTimer = 1 / RateOfFire; 
                 } else
@@ -119,6 +121,14 @@ public class Weapons : MonoBehaviour
         } else
         {
             FireTimer -= Time.deltaTime;
+        }
+        if (HitCountResetTimer > 0f)
+        {
+            HitCountResetTimer -= Time.deltaTime;
+        } else
+        {
+            CurrentHitCount = 0;
+            HitCountResetTimer = 1f;
         }
     }
     #endregion
@@ -262,18 +272,20 @@ public class Weapons : MonoBehaviour
         bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
         BulletShared bul = bulletFire.GetComponent<BulletShared>();
         bul.Destination = Aim.transform.position;
+        bul.WeaponShoot = this;
         bulletFire.SetActive(true);
     }
     void FireFlamethrowerOrb()
     {
         for (int i=0;i<10;i++)
         {
-            GameObject orbFire = Instantiate(FTOrb, ShootingPosition.transform.position, Quaternion.identity);
+            GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
             float Angle = Random.Range(-10f, 10f);
             orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + Angle);
             BulletShared bul = orbFire.GetComponent<BulletShared>();
             bul.Destination = CalculateFTOrbDestination(Angle);
             bul.Range = 375 + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
+            bul.WeaponShoot = this;
             orbFire.SetActive(true);
         }
     }

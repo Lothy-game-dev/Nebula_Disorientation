@@ -15,7 +15,7 @@ public class TestDisk : EnemyShared
         changeDirTimer = 2.5f;
         test = false;
         check = new Vector2(0, 30);
-        StartEnemy(100f);
+        StartEnemy(10000f);
         CalculateVelocity(!test ? check : -check);
         InitializeFighter();
     }
@@ -24,7 +24,10 @@ public class TestDisk : EnemyShared
     void Update()
     {
         UpdateEnemy();
-        CalculateVelocity(!test ? check : -check);
+        if (!isFrozen)
+        {
+            CalculateVelocity(!test ? check : -check);
+        }
         if (changeDirTimer > 0f)
         {
             changeDirTimer -= Time.deltaTime;

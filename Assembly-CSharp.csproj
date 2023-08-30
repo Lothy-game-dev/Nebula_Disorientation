@@ -62,7 +62,6 @@
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
-    <Compile Include="Assets\SCRIPTS\Bullets\FlamethrowerOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
@@ -82,8 +81,9 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
-    <Compile Include="Assets\SCRIPTS\Bullets\PulseCannonBullet.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

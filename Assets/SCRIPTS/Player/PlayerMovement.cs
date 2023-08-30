@@ -130,11 +130,12 @@ public class PlayerMovement : MonoBehaviour
     // Rotate Player and Icon on Minimap With Degree
     void PlayerRotate()
     {
-        transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
-        CurrentRotateAngle += RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale;
+        float RotateScale = 2;
+        transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale;
         if (PlayerIcon!=null)
         {
-            PlayerIcon.transform.Rotate(new Vector3(0, 0, -2 * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
         }
     }
     // Detect Player's Input Cases for W and S
