@@ -14,6 +14,8 @@ public class FighterController : MonoBehaviour
     public GameObject[] Bullets;
     public GameObject PlayerFighter;
     public GameObject Aim;
+    public GameObject LeftOverheatBar;
+    public GameObject RightOverheatBar;
     #endregion
     #region NormalVariables
     public GameObject CurrentLeftWeapon;
@@ -59,6 +61,8 @@ public class FighterController : MonoBehaviour
         RW.WeaponPosition = RightWeaponPosition;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
+        LeftOverheatBar.GetComponent<OverheatBar>().Weapon = LeftWeapon.GetComponent<Weapons>();
+        RightOverheatBar.GetComponent<OverheatBar>().Weapon = RightWeapon.GetComponent<Weapons>();
     }
     #endregion
 }

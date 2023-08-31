@@ -18,14 +18,23 @@ public class Weapons : MonoBehaviour
     public float RotateLimitNegative;
     public float RotateLimitPositive;
     public bool IsThermalType;
-    #endregion
-    #region NormalVariables
     public int RateOfHit;
     public float RateOfFire;
+    public bool CanBeOverheat;
+    public float OverheatIncreasePerShot;
+    public float OverheatResetTimer;
+    public float OverheatTimer;
+    #endregion
+    #region NormalVariables
     public bool tracking;
     public bool Fireable;
     public int CurrentHitCount;
     public float HitCountResetTimer;
+    public float OverheatSpeedIncreaseRate;
+    public float currentOverheat;
+    private bool isOverheatted;
+    private float OverheatCDTimer;
+    private float OverheatDecreaseTimer;
 
     private float FireTimer;
     private PlayerMovement pm;
@@ -36,6 +45,9 @@ public class Weapons : MonoBehaviour
     private float LimitNegative;
     private float LimitPositive;
     private int MouseInput;
+
+    private int test=0;
+    private float testTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -48,6 +60,7 @@ public class Weapons : MonoBehaviour
         if (isLeftWeapon) MouseInput = 0;
         else MouseInput = 1;
         Fireable = true;
+        OverheatSpeedIncreaseRate = 1f;
     }
 
     // Update is called once per frame
@@ -104,23 +117,14 @@ public class Weapons : MonoBehaviour
                 }
             } 
         }
-        // Fire Weapon's Bullet
-        if (FireTimer <= 0f)
+        
+        if (testTimer<=0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable)
-            {
-                if (!IsThermalType) {
-                    FireBullet();
-                    FireTimer = 1 / RateOfFire; 
-                } else
-                {
-                    FireFlamethrowerOrb();
-                    FireTimer = 1 / RateOfFire;
-                }
-            }
+            test = 0;
+            testTimer = 1f;
         } else
         {
-            FireTimer -= Time.deltaTime;
+            testTimer -= Time.deltaTime;
         }
         if (HitCountResetTimer > 0f)
         {
@@ -128,8 +132,32 @@ public class Weapons : MonoBehaviour
         } else
         {
             CurrentHitCount = 0;
-            HitCountResetTimer = 1f;
+            HitCountResetTimer = 1/RateOfHit;
         }
+        CheckOverheatStatus();
+    }
+    private void FixedUpdate()
+    {
+        // Fire Weapon's Bullet
+        if (FireTimer <= 0f)
+        {
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
+            {
+                test++;
+                Debug.Log(test);
+                if (!IsThermalType)
+                {
+                    FireBullet();
+                    FireTimer = 1 / RateOfFire;
+                }
+                else
+                {
+                    FireFlamethrowerOrb();
+                    FireTimer = 1 / RateOfFire;
+                }
+            }
+        }
+        FireTimer -= Time.deltaTime;
     }
     #endregion
     #region Weapon Rotation
@@ -274,10 +302,12 @@ public class Weapons : MonoBehaviour
         bul.Destination = Aim.transform.position;
         bul.WeaponShoot = this;
         bulletFire.SetActive(true);
+        currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+        OverheatDecreaseTimer = OverheatResetTimer;
     }
     void FireFlamethrowerOrb()
     {
-        for (int i=0;i<20;i++)
+        for (int i=0;i<5;i++)
         {
             GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
             float Angle = Random.Range(-10f, 10f);
@@ -287,6 +317,8 @@ public class Weapons : MonoBehaviour
             bul.Range = 375 + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
             orbFire.SetActive(true);
+            currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+            OverheatDecreaseTimer = OverheatResetTimer;
         }
     }
     Vector2 CalculateFTOrbDestination(float Angle, BulletShared bul)
@@ -301,6 +333,51 @@ public class Weapons : MonoBehaviour
         float length2 = length * Mathf.Sin(Angle * Mathf.Deg2Rad);
         Vector2 aimPos = JoinPos + peVector * length2 / length;
         return aimPos;
+    }
+    #endregion
+    #region Overheat System
+    void CheckOverheatStatus()
+    {
+        if (currentOverheat >= 100 && !isOverheatted)
+        {
+            isOverheatted = true;
+            OverheatCDTimer = OverheatTimer;
+        }
+        if (OverheatCDTimer > 0f)
+        {
+            OverheatCDTimer -= Time.deltaTime;
+        }
+        else
+        {
+            if (isOverheatted)
+            {
+                isOverheatted = false;
+                currentOverheat = 0f;
+            }
+        }
+        if (isOverheatted)
+        {
+            Fireable = false;
+        }
+        else
+        {
+            if (OverheatDecreaseTimer > 0f)
+            {
+                OverheatDecreaseTimer -= Time.deltaTime;
+            }
+            else
+            {
+                if (currentOverheat >= 1)
+                {
+                    currentOverheat -= 1;
+                }
+                else
+                {
+                    currentOverheat = 0;
+                }
+                OverheatDecreaseTimer = 1 / 20f;
+            }
+        }
     }
     #endregion
 }

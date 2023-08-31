@@ -5,7 +5,6 @@ using UnityEngine;
 public class UsualThermalOrb : BulletShared
 {
     #region ComponentVariables
-    private Animator anim;
     #endregion
     #region InitializeVariables
     public float StartAnimTimer;
@@ -22,7 +21,6 @@ public class UsualThermalOrb : BulletShared
     {
         // Initialize variables
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
@@ -40,22 +38,6 @@ public class UsualThermalOrb : BulletShared
         CalculateThermalDamage(isHeat);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel();
-        if (AnimTimer <= 0f)
-        {
-            if (isStart)
-            {
-                anim.SetTrigger("Start");
-                AnimTimer = EndAnimTimer;
-            }
-            else
-            {
-                anim.SetTrigger("End");
-            }
-        }
-        else
-        {
-            AnimTimer -= Time.deltaTime;
-        }
     }
     #endregion
     #region Function group 1

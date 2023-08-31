@@ -116,15 +116,15 @@ public class BulletShared : MonoBehaviour
                     if (enemy != null)
                     {
                         enemy.CurrentHP -= RealDamage;
-                        if (WeaponShoot.CurrentHitCount < WeaponShoot.RateOfHit)
+                        if (WeaponShoot.CurrentHitCount < 1)
                         {
                             if (WeaponShoot.CurrentHitCount == 0)
                             {
-                                WeaponShoot.HitCountResetTimer = 1f;
+                                WeaponShoot.HitCountResetTimer = 1f/WeaponShoot.RateOfHit;
                             }
 
                             enemy.ReceiveThermalDamage(isHeat);
-                            WeaponShoot.CurrentHitCount++;
+                            WeaponShoot.CurrentHitCount=1;
                         }
                     }
                 }

@@ -68,6 +68,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\OverheatBar.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
