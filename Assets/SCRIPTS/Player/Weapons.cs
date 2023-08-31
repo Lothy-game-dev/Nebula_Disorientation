@@ -20,7 +20,7 @@ public class Weapons : MonoBehaviour
     public bool IsThermalType;
     public int RateOfHit;
     public float RateOfFire;
-    public bool CanBeOverheat;
+    public bool NoOverheat;
     public float OverheatIncreasePerShot;
     public float OverheatResetTimer;
     public float OverheatTimer;
@@ -58,6 +58,10 @@ public class Weapons : MonoBehaviour
         else MouseInput = 1;
         Fireable = true;
         OverheatSpeedIncreaseRate = 1f;
+        if (NoOverheat)
+        {
+            OverheatIncreasePerShot = 0;
+        }
     }
 
     // Update is called once per frame

@@ -48,7 +48,8 @@ public class BulletShared : MonoBehaviour
         {
             Distance = Mathf.Sqrt((Destination.x - transform.position.x) * (Destination.x - transform.position.x)
             + (Destination.y - transform.position.y) * (Destination.y - transform.position.y));
-            Velocity = new Vector2((Destination.x - transform.position.x) / (Distance / Speed + 1), (Destination.y - transform.position.y) / (Distance / Speed + 1));
+            Vector2 distanceVec = Destination - new Vector2(transform.position.x, transform.position.y);
+            Velocity = distanceVec / distanceVec.magnitude * Speed;
             RealVelocity = new Vector2(0, 0);
         }
     }
