@@ -45,9 +45,6 @@ public class Weapons : MonoBehaviour
     private float LimitNegative;
     private float LimitPositive;
     private int MouseInput;
-
-    private int test=0;
-    private float testTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -117,15 +114,6 @@ public class Weapons : MonoBehaviour
                 }
             } 
         }
-        
-        if (testTimer<=0f)
-        {
-            test = 0;
-            testTimer = 1f;
-        } else
-        {
-            testTimer -= Time.deltaTime;
-        }
         if (HitCountResetTimer > 0f)
         {
             HitCountResetTimer -= Time.deltaTime;
@@ -143,8 +131,6 @@ public class Weapons : MonoBehaviour
         {
             if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
             {
-                test++;
-                Debug.Log(test);
                 if (!IsThermalType)
                 {
                     FireBullet();

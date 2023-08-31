@@ -15,7 +15,6 @@ public class PlayerFighter : FighterShared
     #endregion
     #region NormalVariables
     private float testTimer;
-    private int testCount=0;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
