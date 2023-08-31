@@ -69,6 +69,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
+    <Compile Include="Assets\SCRIPTS\Database\AccessDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\PulseCannonBullet.cs" />
   </ItemGroup>
   <ItemGroup>
