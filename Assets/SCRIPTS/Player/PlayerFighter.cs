@@ -12,6 +12,7 @@ public class PlayerFighter : FighterShared
     public AudioClip DashSound;
     public AudioClip OverheatWarning;
     public AudioClip Overheated;
+    public AudioSource DashAudioSource;
     #endregion
     #region NormalVariables
     private float testTimer;
@@ -67,8 +68,10 @@ public class PlayerFighter : FighterShared
 
     public void PlayDashSound()
     {
-        aus.clip = DashSound;
-        aus.Play();
+        DashAudioSource.clip = DashSound;
+        DashAudioSource.loop = false;
+        DashAudioSource.volume = 0.75f;
+        DashAudioSource.Play();
     }
     #endregion
 }

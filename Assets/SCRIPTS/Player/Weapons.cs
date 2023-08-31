@@ -115,6 +115,10 @@ public class Weapons : MonoBehaviour
                 } else
                 {
                     Fireable = false;
+                    if (!isWarning && !isOverheatted && aus.clip!=null && IsThermalType)
+                    {
+                        EndSound();
+                    }
                     float NearestAngle = NearestPossibleAngle(CurrentAngle, LimitNegative, LimitPositive);
                     transform.RotateAround(RotatePoint.transform.position, Vector3.back, NearestAngle);
                     CurrentAngle += NearestAngle;
@@ -133,7 +137,7 @@ public class Weapons : MonoBehaviour
         CheckOverheatStatus();
         if (Input.GetMouseButtonUp(MouseInput))
         {
-            if (!isWarning && !isOverheatted)
+            if (!isWarning && !isOverheatted && IsThermalType)
             {
                 EndSound();
             }
@@ -348,7 +352,7 @@ public class Weapons : MonoBehaviour
         }
         if (currentOverheat >= 80 && !isOverheatted)
         {
-            OverheatSound80Percent(((currentOverheat-80)*4+20)/100);
+            OverheatSound80Percent((currentOverheat-80)/100);
             isWarning = true;
         }
         if (currentOverheat >= 100 && !isOverheatted)
@@ -430,7 +434,7 @@ public class Weapons : MonoBehaviour
             aus.loop = true;
             aus.Play();
             if (Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f;
-            else aus.volume = 0.5f;
+            else aus.volume = 0.2f;
         }
     }
 
@@ -456,7 +460,7 @@ public class Weapons : MonoBehaviour
         aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
         aus.loop = true;
         aus.Play();
-        aus.volume = 0.1f;
+        aus.volume = 0.08f;
     }
     #endregion
 }

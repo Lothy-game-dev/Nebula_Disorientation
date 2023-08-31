@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
             Dashing = false;
         }
         // Dashing conditions
-        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable)
+        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed)
         {
             Dashing = true;
             DashingTimer = DashingTime;
