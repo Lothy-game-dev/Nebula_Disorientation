@@ -35,6 +35,9 @@ public class OverheatBar : MonoBehaviour
         Slider.maxValue = 100;
         Slider.value = Weapon.currentOverheat;
         Slider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, Slider.normalizedValue);
+        Color c = Slider.fillRect.GetComponentInChildren<Image>().color;
+        c.a = 0.3f + 0.3f * Slider.normalizedValue;
+        Slider.fillRect.GetComponentInChildren<Image>().color = c;
     }
     #endregion
 }

@@ -341,7 +341,9 @@ public class Weapons : MonoBehaviour
         if (currentOverheat >= 100 && !isOverheatted)
         {
             isOverheatted = true;
+            currentOverheat = 100;
             OverheatCDTimer = OverheatTimer;
+            OverheatDecreaseTimer = 0f;
         }
         if (OverheatCDTimer > 0f)
         {
@@ -358,6 +360,22 @@ public class Weapons : MonoBehaviour
         if (isOverheatted)
         {
             Fireable = false;
+            if (OverheatDecreaseTimer > 0f)
+            {
+                OverheatDecreaseTimer -= Time.deltaTime;
+            }
+            else
+            {
+                if (currentOverheat >= 100 / OverheatTimer)
+                {
+                    currentOverheat -= 100 / OverheatTimer;
+                }
+                else
+                {
+                    currentOverheat = 0;
+                }
+                OverheatDecreaseTimer = 1;
+            }
         }
         else
         {
