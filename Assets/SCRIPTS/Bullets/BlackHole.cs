@@ -18,8 +18,8 @@ public class BlackHole : MonoBehaviour
     public Vector2 PullingVector;
     public float BaseDmg;
     public int RateOfHit;
+    public float radius;
 
-    private float radius;
     private float centerRadius;
     private float ResetHitTimer;
     private bool alreadyDealDmg;

@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour
         //db.DropDatabase();
         db.Initialization();
         InitGame();
+        Application.targetFrameRate = 120;
     }
 
     // Update is called once per frame

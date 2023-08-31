@@ -17,11 +17,25 @@ public class Weapons : MonoBehaviour
     public GameObject Bullet;
     public float RotateLimitNegative;
     public float RotateLimitPositive;
-    public bool isFlameThrowerTest;
-    public GameObject FTOrb;
+    public bool IsThermalType;
+    public int RateOfHit;
+    public float RateOfFire;
+    public bool CanBeOverheat;
+    public float OverheatIncreasePerShot;
+    public float OverheatResetTimer;
+    public float OverheatTimer;
     #endregion
     #region NormalVariables
-    public float RateOfFire;
+    public bool tracking;
+    public bool Fireable;
+    public int CurrentHitCount;
+    public float HitCountResetTimer;
+    public float OverheatSpeedIncreaseRate;
+    public float currentOverheat;
+    private bool isOverheatted;
+    private float OverheatCDTimer;
+    private float OverheatDecreaseTimer;
+
     private float FireTimer;
     private PlayerMovement pm;
     private float PrevAngle;
@@ -30,10 +44,10 @@ public class Weapons : MonoBehaviour
     private float ExpectedAngle;
     private float LimitNegative;
     private float LimitPositive;
-    private float AutoChangeDirAngle;
-    public bool tracking;
     private int MouseInput;
-    public bool Fireable;
+
+    private int test=0;
+    private float testTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -46,6 +60,7 @@ public class Weapons : MonoBehaviour
         if (isLeftWeapon) MouseInput = 0;
         else MouseInput = 1;
         Fireable = true;
+        OverheatSpeedIncreaseRate = 1f;
     }
 
     // Update is called once per frame
@@ -102,24 +117,47 @@ public class Weapons : MonoBehaviour
                 }
             } 
         }
+        
+        if (testTimer<=0f)
+        {
+            test = 0;
+            testTimer = 1f;
+        } else
+        {
+            testTimer -= Time.deltaTime;
+        }
+        if (HitCountResetTimer > 0f)
+        {
+            HitCountResetTimer -= Time.deltaTime;
+        } else
+        {
+            CurrentHitCount = 0;
+            HitCountResetTimer = 1/RateOfHit;
+        }
+        CheckOverheatStatus();
+    }
+    private void FixedUpdate()
+    {
         // Fire Weapon's Bullet
         if (FireTimer <= 0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable)
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
             {
-                if (!isFlameThrowerTest) {
+                test++;
+                Debug.Log(test);
+                if (!IsThermalType)
+                {
                     FireBullet();
-                    FireTimer = 1 / RateOfFire; 
-                } else
+                    FireTimer = 1 / RateOfFire;
+                }
+                else
                 {
                     FireFlamethrowerOrb();
                     FireTimer = 1 / RateOfFire;
                 }
             }
-        } else
-        {
-            FireTimer -= Time.deltaTime;
         }
+        FireTimer -= Time.deltaTime;
     }
     #endregion
     #region Weapon Rotation
@@ -262,24 +300,31 @@ public class Weapons : MonoBehaviour
         bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
         BulletShared bul = bulletFire.GetComponent<BulletShared>();
         bul.Destination = Aim.transform.position;
+        bul.WeaponShoot = this;
         bulletFire.SetActive(true);
+        currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+        OverheatDecreaseTimer = OverheatResetTimer;
     }
     void FireFlamethrowerOrb()
     {
-        for (int i=0;i<10;i++)
+        for (int i=0;i<5;i++)
         {
-            GameObject orbFire = Instantiate(FTOrb, ShootingPosition.transform.position, Quaternion.identity);
+            GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
             float Angle = Random.Range(-10f, 10f);
             orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + Angle);
             BulletShared bul = orbFire.GetComponent<BulletShared>();
-            bul.Destination = CalculateFTOrbDestination(Angle);
+            bul.Destination = CalculateFTOrbDestination(Angle, bul);
             bul.Range = 375 + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
+            bul.WeaponShoot = this;
             orbFire.SetActive(true);
+            currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+            OverheatDecreaseTimer = OverheatResetTimer;
         }
     }
-    Vector2 CalculateFTOrbDestination(float Angle)
+    Vector2 CalculateFTOrbDestination(float Angle, BulletShared bul)
     {
         Vector2 baseVector = Aim.transform.position - ShootingPosition.transform.position;
+        baseVector = baseVector * bul.MaxEffectiveDistance * 1.5f / baseVector.magnitude;
         float length = baseVector.magnitude;
         float length1 = length * Mathf.Cos(Angle * Mathf.Deg2Rad);
         Vector2 JoinPos = new Vector2(ShootingPosition.transform.position.x, ShootingPosition.transform.position.y)
@@ -288,6 +333,51 @@ public class Weapons : MonoBehaviour
         float length2 = length * Mathf.Sin(Angle * Mathf.Deg2Rad);
         Vector2 aimPos = JoinPos + peVector * length2 / length;
         return aimPos;
+    }
+    #endregion
+    #region Overheat System
+    void CheckOverheatStatus()
+    {
+        if (currentOverheat >= 100 && !isOverheatted)
+        {
+            isOverheatted = true;
+            OverheatCDTimer = OverheatTimer;
+        }
+        if (OverheatCDTimer > 0f)
+        {
+            OverheatCDTimer -= Time.deltaTime;
+        }
+        else
+        {
+            if (isOverheatted)
+            {
+                isOverheatted = false;
+                currentOverheat = 0f;
+            }
+        }
+        if (isOverheatted)
+        {
+            Fireable = false;
+        }
+        else
+        {
+            if (OverheatDecreaseTimer > 0f)
+            {
+                OverheatDecreaseTimer -= Time.deltaTime;
+            }
+            else
+            {
+                if (currentOverheat >= 1)
+                {
+                    currentOverheat -= 1;
+                }
+                else
+                {
+                    currentOverheat = 0;
+                }
+                OverheatDecreaseTimer = 1 / 20f;
+            }
+        }
     }
     #endregion
 }

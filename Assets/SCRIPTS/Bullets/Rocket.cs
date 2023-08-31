@@ -29,7 +29,7 @@ public class Rocket : BulletShared
     {
         CalculateDamage();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-        CheckDistanceTravel(100f,100f);
+        CheckDistanceTravel();
     }
     #endregion
 }

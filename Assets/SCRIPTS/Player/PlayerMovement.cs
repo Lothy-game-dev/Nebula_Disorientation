@@ -54,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
         }
         // Rotate Left Right
         DetectADButton();
-        if (!Dashing && Movable) PlayerRotate();
         // Dash using Spacebar
         // Timer for Dashing
         if (DashingTimer>0f)
@@ -76,6 +75,10 @@ public class PlayerMovement : MonoBehaviour
         DetectWSButton();
         if (!Dashing && Movable) PlayerMoving();
         pf.CalculateVelocity(speedVector);
+    }
+    private void FixedUpdate()
+    {
+        if (!Dashing && Movable) PlayerRotate();
     }
     #endregion
     #region Moving Functions
@@ -127,11 +130,12 @@ public class PlayerMovement : MonoBehaviour
     // Rotate Player and Icon on Minimap With Degree
     void PlayerRotate()
     {
-        transform.Rotate(new Vector3(0,0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
-        CurrentRotateAngle += RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale;
+        float RotateScale = 2;
+        transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale;
         if (PlayerIcon!=null)
         {
-            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
         }
     }
     // Detect Player's Input Cases for W and S
