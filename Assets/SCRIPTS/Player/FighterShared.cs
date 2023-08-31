@@ -11,7 +11,7 @@ public class FighterShared : MonoBehaviour
     // Thermal Stats
     public float currentTemperature;
     public bool isOverloadded;
-    public float OverloaddedRoFScale;
+    public float OverheatIncreaseScale;
     public bool isBurned;
     public float BurnedDelay;
     public bool isSlowed;
@@ -37,6 +37,7 @@ public class FighterShared : MonoBehaviour
         isImmuneFrozenSlow = false;
         RegenScale = 1f;
         SlowedMoveSpdScale = 1;
+        OverheatIncreaseScale = 0;
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -71,6 +72,7 @@ public class FighterShared : MonoBehaviour
         else if (currentTemperature >= 90)
         {
             isOverloadded = false;
+            OverheatIncreaseScale = 0;
             if (!isBurned)
             {
                 isBurned = true;
@@ -80,6 +82,12 @@ public class FighterShared : MonoBehaviour
             c.g = 0;
             c.b = 0;
         } 
+        else if (currentTemperature==50)
+        {
+            isOverloadded = false;
+            isBurned = false;
+            isSlowed = false;
+        }
         // If 0 < temp < 50 -> slowed
         else if (currentTemperature > 0 && currentTemperature < 50 && !isImmuneFrozenSlow)
         {
@@ -156,7 +164,10 @@ public class FighterShared : MonoBehaviour
         if (isOverloadded)
         {
             // If overloadded, reduce RoF
-            OverloaddedRoFScale = (100 - (currentTemperature - 50) / 40 * 25) / 100;
+            OverheatIncreaseScale = (50 + (currentTemperature-50) / 40 * 50) / 100;
+        } else
+        {
+            OverheatIncreaseScale = 0;
         }
         if (isSlowed)
         {

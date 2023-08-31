@@ -292,7 +292,7 @@ public class Weapons : MonoBehaviour
         bul.Destination = Aim.transform.position;
         bul.WeaponShoot = this;
         bulletFire.SetActive(true);
-        currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
         OverheatDecreaseTimer = OverheatResetTimer;
     }
     void FireFlamethrowerOrb()
@@ -300,14 +300,14 @@ public class Weapons : MonoBehaviour
         for (int i=0;i<5;i++)
         {
             GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
-            float Angle = Random.Range(-10f, 10f);
+            float Angle = Random.Range(-5f, 5f);
             orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + Angle);
             BulletShared bul = orbFire.GetComponent<BulletShared>();
             bul.Destination = CalculateFTOrbDestination(Angle, bul);
-            bul.Range = 375 + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
+            bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
             orbFire.SetActive(true);
-            currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+            currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
             OverheatDecreaseTimer = OverheatResetTimer;
         }
     }

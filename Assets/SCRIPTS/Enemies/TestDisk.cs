@@ -16,7 +16,7 @@ public class TestDisk : EnemyShared
         test = false;
         check = new Vector2(0, 30);
         StartEnemy(10000f);
-        CalculateVelocity(!test ? check : -check);
+        /*CalculateVelocity(!test ? check : -check);*/
         InitializeFighter();
     }
 
@@ -26,7 +26,7 @@ public class TestDisk : EnemyShared
         UpdateEnemy();
         if (!isFrozen)
         {
-            CalculateVelocity(!test ? check : -check);
+            /*CalculateVelocity(!test ? check : -check);*/
         }
         if (changeDirTimer > 0f)
         {
