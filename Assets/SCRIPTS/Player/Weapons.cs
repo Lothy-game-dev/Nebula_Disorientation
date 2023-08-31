@@ -5,7 +5,7 @@ using UnityEngine;
 public class Weapons : MonoBehaviour
 {
     #region ComponentVariables
-
+    private AudioSource aus;
     #endregion
     #region InitializeVariables
     public GameObject Fighter;
@@ -24,6 +24,7 @@ public class Weapons : MonoBehaviour
     public float OverheatIncreasePerShot;
     public float OverheatResetTimer;
     public float OverheatTimer;
+    public AudioClip WeaponShootSound;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -35,6 +36,7 @@ public class Weapons : MonoBehaviour
     private bool isOverheatted;
     private float OverheatCDTimer;
     private float OverheatDecreaseTimer;
+    private bool isWarning;
 
     private float FireTimer;
     private PlayerMovement pm;
@@ -62,6 +64,8 @@ public class Weapons : MonoBehaviour
         {
             OverheatIncreasePerShot = 0;
         }
+        gameObject.AddComponent<AudioSource>();
+        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -127,6 +131,13 @@ public class Weapons : MonoBehaviour
             HitCountResetTimer = 1/RateOfHit;
         }
         CheckOverheatStatus();
+        if (Input.GetMouseButtonUp(MouseInput))
+        {
+            if (!isWarning && !isOverheatted)
+            {
+                EndSound();
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -294,6 +305,7 @@ public class Weapons : MonoBehaviour
         bulletFire.SetActive(true);
         currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
         OverheatDecreaseTimer = OverheatResetTimer;
+        if (!isWarning && !isOverheatted) KineticSound();
     }
     void FireFlamethrowerOrb()
     {
@@ -307,6 +319,7 @@ public class Weapons : MonoBehaviour
             bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
             orbFire.SetActive(true);
+            if (!isWarning && !isOverheatted) ThermalSound();
             currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
             OverheatDecreaseTimer = OverheatResetTimer;
         }
@@ -328,9 +341,20 @@ public class Weapons : MonoBehaviour
     #region Overheat System
     void CheckOverheatStatus()
     {
+        if (currentOverheat <80 && !isOverheatted && isWarning)
+        {
+            EndSound();
+            isWarning = false;
+        }
+        if (currentOverheat >= 80 && !isOverheatted)
+        {
+            OverheatSound80Percent(((currentOverheat-80)*4+20)/100);
+            isWarning = true;
+        }
         if (currentOverheat >= 100 && !isOverheatted)
         {
             isOverheatted = true;
+            OverheatedSound();
             currentOverheat = 100;
             OverheatCDTimer = OverheatTimer;
             OverheatDecreaseTimer = 0f;
@@ -344,6 +368,8 @@ public class Weapons : MonoBehaviour
             if (isOverheatted)
             {
                 isOverheatted = false;
+                isWarning = false;
+                EndSound();
                 currentOverheat = 0f;
             }
         }
@@ -386,6 +412,51 @@ public class Weapons : MonoBehaviour
                 OverheatDecreaseTimer = 1 / 20f;
             }
         }
+    }
+    #endregion
+    #region Weapon Sound
+    public void KineticSound()
+    {
+        aus.clip = WeaponShootSound;
+        aus.loop = false;
+        aus.Play();
+        aus.volume = 1f;
+    }
+    public void ThermalSound()
+    {
+        if (aus.clip!=WeaponShootSound)
+        {
+            aus.clip = WeaponShootSound;
+            aus.loop = true;
+            aus.Play();
+            if (Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f;
+            else aus.volume = 0.5f;
+        }
+    }
+
+    public void EndSound()
+    {
+        Debug.Log("End");
+        aus.clip = null;
+    }
+
+    public void OverheatSound80Percent(float volume)
+    {
+        if (aus.clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
+        {
+            aus.clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
+            aus.loop = true;
+            aus.Play();
+        }
+        aus.volume = volume;
+    }
+
+    public void OverheatedSound()
+    {
+        aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
+        aus.loop = true;
+        aus.Play();
+        aus.volume = 0.1f;
     }
     #endregion
 }

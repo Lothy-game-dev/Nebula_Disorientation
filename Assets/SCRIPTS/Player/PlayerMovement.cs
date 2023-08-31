@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float DashSpeedRate;
     public GameObject LeftWeapon;
     public GameObject RightWeapon;
+    public GameObject backFire;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private bool Dashing;
     private float DashingTimer;
     private bool Movable;
+    private float BackFireInitScale;
     private Vector2 speedVector;
     #endregion
     #region Start & Update
@@ -38,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
         pf = GetComponent<PlayerFighter>();
         Movable = true;
         CurrentRotateAngle = 0;
+        BackFireInitScale = backFire.transform.localScale.x;
     }
 
     // Update is called once per frame
@@ -187,6 +190,22 @@ public class PlayerMovement : MonoBehaviour
     void PlayerMoving()
     {
         Vector2 movementVector = CalculateMovement();
+        if (CurrentSpeed>0)
+        {
+            GetComponent<PlayerFighter>().PlayMovingSound(CurrentSpeed/MovingSpeed);
+            if (!backFire.activeSelf)
+            {
+                backFire.SetActive(true);
+            }
+            backFire.transform.localScale =
+                new Vector3(CurrentSpeed / MovingSpeed * BackFireInitScale,
+                CurrentSpeed / MovingSpeed * BackFireInitScale,
+                backFire.transform.localScale.z);
+        } else
+        {
+            GetComponent<PlayerFighter>().StopSound();
+            backFire.SetActive(false);
+        }
         AccelerateSpeed();
         speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale;
     }
@@ -253,6 +272,7 @@ public class PlayerMovement : MonoBehaviour
     void Dash()
     {
         Vector2 movementVector = CalculateMovement();
+        GetComponent<PlayerFighter>().PlayDashSound();
         speedVector = movementVector * MovingSpeed * DashSpeedRate;
     }
     #endregion
