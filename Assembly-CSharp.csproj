@@ -66,6 +66,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\UI\OverheatBar.cs" />

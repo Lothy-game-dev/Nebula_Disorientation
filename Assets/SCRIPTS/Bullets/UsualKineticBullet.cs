@@ -25,6 +25,7 @@ public class UsualKineticBullet : BulletShared
         CalculateVelocity();
         // Accelerate Bullet
         StartCoroutine(Accelerate(0.1f));
+        InitializeBullet();
     }
 
     // Update is called once per frame

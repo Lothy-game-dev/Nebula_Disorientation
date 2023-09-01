@@ -67,36 +67,53 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    public IEnumerator AccelerateLaser(float time, float initScale)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            if (Mathf.Abs(RealVelocity.x) < Mathf.Abs(Velocity.x) && Mathf.Abs(RealVelocity.y) < Mathf.Abs(Velocity.y))
+            {
+                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 10, RealVelocity.y + Velocity.y / 10);
+            }
+            CalculateVelocity(RealVelocity);
+            transform.localScale = new Vector3(initScale*i/10,initScale*i/10,transform.localScale.z);
+            yield return new WaitForSeconds(time / 10f);
+        }
+    }
+
     public void CalculateDamage()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10, EnemyLayer);
         foreach (var col in cols)
         {
             if (!AlreadyHit)
             {
                 AlreadyHit = true;
-                if (WeaponShoot.CurrentHitCount < WeaponShoot.RateOfHit)
+                if (AoE>0)
                 {
-                    if (WeaponShoot.CurrentHitCount == 0)
-                    {
-                        WeaponShoot.HitCountResetTimer = 1f;
-                    }
-                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
                         EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
-                        if (enemy!=null)
+                        if (enemy != null)
                         {
                             enemy.CurrentHP -= RealDamage;
-                            Debug.Log(RealDamage);
                         }
                     }
-                    WeaponShoot.CurrentHitCount++;
-                    Destroy(gameObject);
                 } else
                 {
-                    Destroy(gameObject);
+                    EnemyShared enemy = col.GetComponent<EnemyShared>();
+                    if (enemy!=null)
+                    {
+                        enemy.CurrentHP -= RealDamage;
+                    }
                 }
+                WeaponShoot.CurrentHitCount++;
+                Destroy(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
             }
             break;
         }
@@ -110,10 +127,29 @@ public class BulletShared : MonoBehaviour
             if (!AlreadyHit)
             {
                 AlreadyHit = true;
-                Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
-                foreach (var col2 in cols2)
+                if (AoE>0)
                 {
-                    EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
+                    foreach (var col2 in cols2)
+                    {
+                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        if (enemy != null)
+                        {
+                            enemy.CurrentHP -= RealDamage;
+                            if (WeaponShoot.CurrentHitCount < 1)
+                            {
+                                if (WeaponShoot.CurrentHitCount == 0)
+                                {
+                                    WeaponShoot.HitCountResetTimer = 1f / WeaponShoot.RateOfHit;
+                                }
+                                enemy.ReceiveThermalDamage(isHeat);
+                                WeaponShoot.CurrentHitCount = 1;
+                            }
+                        }
+                    }
+                } else
+                {
+                    EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
                     if (enemy != null)
                     {
                         enemy.CurrentHP -= RealDamage;
@@ -121,11 +157,11 @@ public class BulletShared : MonoBehaviour
                         {
                             if (WeaponShoot.CurrentHitCount == 0)
                             {
-                                WeaponShoot.HitCountResetTimer = 1f/WeaponShoot.RateOfHit;
+                                WeaponShoot.HitCountResetTimer = 1f / WeaponShoot.RateOfHit;
                             }
 
                             enemy.ReceiveThermalDamage(isHeat);
-                            WeaponShoot.CurrentHitCount=1;
+                            WeaponShoot.CurrentHitCount = 1;
                         }
                     }
                 }
