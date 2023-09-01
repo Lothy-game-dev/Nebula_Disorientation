@@ -19,6 +19,7 @@ public class BlackHole : MonoBehaviour
     public float BaseDmg;
     public int RateOfHit;
     public float radius;
+    public float RadiusWhenCreate;
 
     private float centerRadius;
     private float ResetHitTimer;
@@ -38,6 +39,15 @@ public class BlackHole : MonoBehaviour
         if (RateOfHit==0)
         {
             RateOfHit = 1;
+        }
+        if (RadiusWhenCreate!=0)
+        {
+            transform.localScale = new Vector3
+                (transform.localScale.x * RadiusWhenCreate / radius,
+                transform.localScale.y * RadiusWhenCreate / radius,
+                transform.localScale.z);
+            radius = Mathf.Abs((transform.position - RangeCheck.transform.position).magnitude);
+            centerRadius = Mathf.Abs((transform.position - CenterRange.transform.position).magnitude);
         }
     }
 

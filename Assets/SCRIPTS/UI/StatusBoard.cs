@@ -164,6 +164,7 @@ public class StatusBoard : MonoBehaviour
             c.b = 1;
             CloneEnemy.GetComponent<SpriteRenderer>().color = c;
             CloneEnemy.transform.SetParent(transform);
+            Destroy(CloneEnemy.transform.GetChild(1).gameObject);
             // turn off scripts
             CloneEnemyObject = CloneEnemy.GetComponent<TestDisk>();
             CloneEnemyObject.enabled = false;

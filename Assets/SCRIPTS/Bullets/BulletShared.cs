@@ -91,6 +91,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE>0)
                 {
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -108,7 +109,6 @@ public class BulletShared : MonoBehaviour
                         enemy.CurrentHP -= RealDamage;
                     }
                 }
-                WeaponShoot.CurrentHitCount++;
                 Destroy(gameObject);
             }
             else
@@ -129,6 +129,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE>0)
                 {
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -171,6 +172,76 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    public void CalculateLavaOrbDamage()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, EnemyLayer);
+        foreach (var col in cols)
+        {
+            if (!AlreadyHit)
+            {
+                AlreadyHit = true;
+                if (AoE > 0)
+                {
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                    foreach (var col2 in cols2)
+                    {
+                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        if (enemy != null)
+                        {
+                            Debug.Log(RealDamage);
+                            enemy.CurrentHP -= RealDamage;
+                            enemy.InflictLavaBurned(RealDamage/10f);
+                        }
+                    }
+                }
+                else
+                {
+                    EnemyShared enemy = col.GetComponent<EnemyShared>();
+                    if (enemy != null)
+                    {
+                        enemy.CurrentHP -= RealDamage;
+                        enemy.InflictLavaBurned(RealDamage / 10f);
+                    }
+                }
+                Destroy(transform.parent.gameObject);
+            }
+            else
+            {
+                Destroy(transform.parent.gameObject);
+            }
+            break;
+        }
+    }
+
+    public void CheckCreateBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, EnemyLayer);
+        foreach (var col in cols)
+        {
+            if (!AlreadyHit)
+            {
+                AlreadyHit = true;
+                CreateBlackHole(BlackHole, radius, timer, pullingForce);
+                Destroy(gameObject);
+                break;
+            }
+        }
+    }
+
+    public void CreateBlackHole(GameObject BlackHole, float radius, float timer, float pullingForce)
+    {
+        GameObject bh = Instantiate(BlackHole, transform.position, Quaternion.identity);
+        BlackHole bhole = bh.GetComponent<BlackHole>();
+        if (bhole != null)
+        {
+            bhole.BaseDmg = BaseDamagePerHit;
+            bhole.RadiusWhenCreate = radius;
+            bhole.BasePullingForce = pullingForce;
+        }
+        bh.SetActive(true);
+        Destroy(bh, timer);
+    }
     public void CheckDistanceTravel()
     {
         if (Range!=0f)
@@ -192,6 +263,32 @@ public class BulletShared : MonoBehaviour
         if (DistanceTravel >= MaximumDistance)
         {
             RealDamage = 0;
+            Destroy(gameObject);
+        }
+    }
+
+    public void CheckDistanceTravelBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
+    {
+        if (Range != 0f)
+        {
+            MaxEffectiveDistance = Range;
+            MaximumDistance = Range;
+        }
+        if (DistanceTravel <= MaxEffectiveDistance)
+        {
+            RealDamage = BaseDamagePerHit;
+        }
+        if (DistanceTravel > MaxEffectiveDistance && DistanceTravel < MaximumDistance)
+        {
+            RealDamage = (0.5f + (MaximumDistance - DistanceTravel) / (2 * (MaximumDistance - MaxEffectiveDistance))) * BaseDamagePerHit;
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = (MaximumDistance - DistanceTravel) / (MaximumDistance - MaxEffectiveDistance);
+            GetComponent<SpriteRenderer>().color = c;
+        }
+        if (DistanceTravel >= MaximumDistance)
+        {
+            RealDamage = 0;
+            CreateBlackHole(BlackHole, radius, timer, pullingForce);
             Destroy(gameObject);
         }
     }

@@ -26,6 +26,11 @@ public class FighterShared : MonoBehaviour
     public bool isBHPulled;
     public List<Vector2> PulledVector;
     public LayerMask BlackHoleLayer;
+    public bool isLavaBurned;
+    public int LavaBurnedCount;
+    public float LavaBurnedDamageTimer;
+    public float LavaBurnedDamage;
+    public GameObject OnFireGO;
     #endregion
     #region Shared Functions
     // Initialize
@@ -44,6 +49,7 @@ public class FighterShared : MonoBehaviour
     {
         CheckThermal();
         CheckInsideBlackhole();
+        CheckSpecialEffectStatus();
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
@@ -159,6 +165,16 @@ public class FighterShared : MonoBehaviour
             } else if (BurnedDelay > 0f)
             {
                 BurnedDelay -= Time.deltaTime;
+            }
+            if (!OnFireGO.activeSelf)
+            {
+                OnFireGO.SetActive(true);
+            }
+        } else
+        {
+            if (OnFireGO.activeSelf && !isLavaBurned)
+            {
+                OnFireGO.SetActive(false);
             }
         }
         if (isOverloadded)
@@ -278,6 +294,47 @@ public class FighterShared : MonoBehaviour
             }
         }
         GetComponent<Rigidbody2D>().velocity = veloc;
+    }
+    #endregion
+    #region Check Weapon Special Effects
+    public void CheckSpecialEffectStatus()
+    {
+        if (isLavaBurned)
+        {
+            if (LavaBurnedCount < 10)
+            {
+                if (!OnFireGO.activeSelf)
+                {
+                    OnFireGO.SetActive(true);
+                }
+                if (LavaBurnedDamageTimer>0f)
+                {
+                    LavaBurnedDamageTimer -= Time.deltaTime;
+                } else
+                {
+                    CurrentHP -= LavaBurnedDamage;
+                    ReceiveThermalDamage(true);
+                    LavaBurnedCount++;
+                    LavaBurnedDamageTimer = 0.1f;
+                }
+            } 
+            else
+            {
+                isLavaBurned = false;
+                if (OnFireGO.activeSelf && !isBurned)
+                {
+                    OnFireGO.SetActive(false);
+                }
+            }
+        }   
+    }
+
+    public void InflictLavaBurned(float dmg)
+    {
+        LavaBurnedDamage = dmg;
+        LavaBurnedDamageTimer = 0f;
+        LavaBurnedCount = 0;
+        isLavaBurned = true;
     }
     #endregion
 }

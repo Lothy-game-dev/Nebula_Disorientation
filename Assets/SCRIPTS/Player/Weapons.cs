@@ -25,6 +25,7 @@ public class Weapons : MonoBehaviour
     public float OverheatResetTimer;
     public float OverheatTimer;
     public AudioClip WeaponShootSound;
+    public bool IsOrbWeapon;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -47,6 +48,8 @@ public class Weapons : MonoBehaviour
     private float LimitNegative;
     private float LimitPositive;
     private int MouseInput;
+    private GameObject bulletFire;
+    private BulletShared bul;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -301,9 +304,22 @@ public class Weapons : MonoBehaviour
     // Fire Bullet
     void FireBullet()
     {
-        GameObject bulletFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+        if (IsOrbWeapon)
+        {
+            bulletFire = Instantiate(Bullet.transform.parent.gameObject, ShootingPosition.transform.position, Quaternion.identity);
+        } 
+        else
+        {
+            bulletFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+        }
         bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
-        BulletShared bul = bulletFire.GetComponent<BulletShared>();
+        if (IsOrbWeapon)
+        {
+            bul = bulletFire.transform.GetChild(0).GetComponent<BulletShared>();
+        } else
+        {
+            bul = bulletFire.GetComponent<BulletShared>();
+        }
         bul.Destination = Aim.transform.position;
         bul.WeaponShoot = this;
         bulletFire.SetActive(true);
@@ -352,7 +368,7 @@ public class Weapons : MonoBehaviour
         }
         if (currentOverheat >= 80 && !isOverheatted)
         {
-            OverheatSound80Percent((currentOverheat-80)/100);
+            OverheatSound80Percent((currentOverheat-75)/100);
             isWarning = true;
         }
         if (currentOverheat >= 100 && !isOverheatted)

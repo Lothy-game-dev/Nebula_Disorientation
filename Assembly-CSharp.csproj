@@ -63,9 +63,11 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenuSpinBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\SpawnController.cs" />
