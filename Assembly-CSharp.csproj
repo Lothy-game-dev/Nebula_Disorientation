@@ -69,9 +69,11 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\OverheatBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />

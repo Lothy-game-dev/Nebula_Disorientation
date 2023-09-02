@@ -15,6 +15,9 @@ public class BulletShared : MonoBehaviour
     public LayerMask BlackholeLayer;
     public float Range;
     public Vector2 Destination;
+    public bool InflictGravitationalSlow;
+    public float GravitationalSlowScale;
+    public float GravitationalSlowTime;
 
     protected Rigidbody2D rb;
     protected float Distance;
@@ -110,6 +113,10 @@ public class BulletShared : MonoBehaviour
                         if (enemy != null)
                         {
                             enemy.CurrentHP -= RealDamage;
+                            if (InflictGravitationalSlow)
+                            {
+                                enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
+                            }
                         }
                     }
                 } 
@@ -120,6 +127,10 @@ public class BulletShared : MonoBehaviour
                     if (enemy!=null)
                     {
                         enemy.CurrentHP -= RealDamage;
+                        if (InflictGravitationalSlow)
+                        {
+                            enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
+                        }
                     }
                 }
                 // Destroy after hit
@@ -180,7 +191,6 @@ public class BulletShared : MonoBehaviour
                             {
                                 WeaponShoot.HitCountResetTimer = 1f / WeaponShoot.RateOfHit;
                             }
-
                             enemy.ReceiveThermalDamage(isHeat);
                             WeaponShoot.CurrentHitCount = 1;
                         }
@@ -191,6 +201,41 @@ public class BulletShared : MonoBehaviour
             break;
         }
     }
+
+    // Superior Freezing Blaster Special Power
+    public void CalculateSFreezeBlasterDamage(float freezingChance, float freezingDuration, float addingFreezeDuration)
+    {
+        // Detect enemy
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
+        foreach (var col in cols)
+        {
+            if (!AlreadyHit)
+            {
+                AlreadyHit = true;
+                EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+                if (enemy != null)
+                {
+                    enemy.CurrentHP -= RealDamage;
+                    float a = Random.Range(0, 100f);
+                    if (a <= freezingChance)
+                    {
+                        enemy.InflictSuperiorFreezingBlasterFreeze(freezingDuration, addingFreezeDuration);
+                    }
+                    if (WeaponShoot.CurrentHitCount < 1)
+                    {
+                        if (WeaponShoot.CurrentHitCount == 0)
+                        {
+                            WeaponShoot.HitCountResetTimer = 1f / WeaponShoot.RateOfHit;
+                        }
+                        enemy.ReceiveThermalDamage(false);
+                        WeaponShoot.CurrentHitCount = 1;
+                    }
+                }
+                Destroy(gameObject);
+            }
+            break;
+        }
+    } 
 
     // Lava orb damage
     public void CalculateLavaOrbDamage()

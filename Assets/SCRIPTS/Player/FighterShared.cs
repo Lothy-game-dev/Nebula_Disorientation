@@ -31,6 +31,13 @@ public class FighterShared : MonoBehaviour
     public float LavaBurnedDamageTimer;
     public float LavaBurnedDamage;
     public GameObject OnFireGO;
+    public bool isGravitationalSlow;
+    public float GravitationalSlow;
+    public float GravitationalSlowMultiplier;
+    public float GravitationalSlowTimer;
+    public bool isSFBFreeze;
+    public float SFBFreezeTimer;
+    public GameObject OnFreezeGO;
     #endregion
     #region Shared Functions
     // Initialize
@@ -43,6 +50,7 @@ public class FighterShared : MonoBehaviour
         RegenScale = 1f;
         SlowedMoveSpdScale = 1;
         OverheatIncreaseScale = 0;
+        GravitationalSlowMultiplier = 1;
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -109,6 +117,11 @@ public class FighterShared : MonoBehaviour
             isOverloadded = false;
             isBurned = false;
             isSlowed = false;
+            if (isSFBFreeze)
+            {
+                isSFBFreeze = false;
+                SFBFreezeTimer = 0;
+            }
             if (!isImmuneFrozenSlow)
             {
                 isFrozen = true;
@@ -205,9 +218,17 @@ public class FighterShared : MonoBehaviour
             {
                 FrozenDuration -= Time.deltaTime;
                 CalculateVelocity(new Vector2(0, 0));
+                if (!OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(true);
+                }
             }
             else
             {
+                if (OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(false);
+                }
                 isFrozen = false;
                 isImmuneFrozenSlow = true;
                 ImmuneDuration = 3f;
@@ -296,7 +317,7 @@ public class FighterShared : MonoBehaviour
                 veloc += v;
             }
         }
-        GetComponent<Rigidbody2D>().velocity = veloc;
+        GetComponent<Rigidbody2D>().velocity = veloc * GravitationalSlowMultiplier;
     }
     #endregion
     #region Check Weapon Special Effects
@@ -332,6 +353,41 @@ public class FighterShared : MonoBehaviour
                 }
             }
         }   
+        // Gravitational Slow
+        if (isGravitationalSlow)
+        {
+            if (GravitationalSlowTimer > 0f)
+            {
+                GravitationalSlowTimer -= Time.deltaTime;
+                GravitationalSlowMultiplier = 1 - GravitationalSlow;
+            }
+            else
+            {
+                isGravitationalSlow = false;
+                GravitationalSlowMultiplier = 1;
+            }
+        }
+        // Superior Freezing Blaster Freeze
+        if (isSFBFreeze)
+        {
+            if (SFBFreezeTimer > 0f)
+            {
+                SFBFreezeTimer -= Time.deltaTime;
+                CalculateVelocity(new Vector2(0, 0));
+                if (!OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(true);
+                }
+            } 
+            else
+            {
+                isSFBFreeze = false;
+                if (OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(false);
+                }
+            }
+        }
     }
 
     // Inflict self with lava burned (called by outer factors)
@@ -341,6 +397,28 @@ public class FighterShared : MonoBehaviour
         LavaBurnedDamageTimer = 0f;
         LavaBurnedCount = 0;
         isLavaBurned = true;
+    }
+
+    public void InflictGravitationalSlow(float SlowScale, float Time)
+    {
+        GravitationalSlowTimer = Time;
+        isGravitationalSlow = true;
+        GravitationalSlow = SlowScale;
+    }
+
+    public void InflictSuperiorFreezingBlasterFreeze(float FreezingDuration, float AddingFreezingDuration)
+    {
+        if (isFrozen)
+        {
+            FrozenDuration += AddingFreezingDuration;
+        } else
+        {
+            if (!isSFBFreeze)
+            {
+                isSFBFreeze = true;
+            }
+            SFBFreezeTimer = FreezingDuration;
+        }
     }
     #endregion
 }

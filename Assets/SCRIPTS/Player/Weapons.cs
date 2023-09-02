@@ -491,7 +491,7 @@ public class Weapons : MonoBehaviour
             aus.clip = WeaponShootSound;
             aus.loop = true;
             aus.Play();
-            if (Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f;
+            if (Bullet.GetComponent<UsualThermalOrb>()!=null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f;
             else aus.volume = 0.2f;
         }
     }

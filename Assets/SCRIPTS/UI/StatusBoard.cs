@@ -55,10 +55,6 @@ public class StatusBoard : MonoBehaviour
             ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
-        for (int i=0; i< 8; i++)
-        {
-            Physics2D.IgnoreLayerCollision(i, gameObject.layer, true);
-        }
         alreadyDelete = false;
     }
 
