@@ -153,7 +153,7 @@ public class Weapons : MonoBehaviour
         // Kinetic and other type unaffected
         if (Input.GetMouseButtonUp(MouseInput))
         {
-            if (!isWarning && !isOverheatted && IsThermalType)
+            if (!isOverheatted && IsThermalType)
             {
                 EndSound();
             }
