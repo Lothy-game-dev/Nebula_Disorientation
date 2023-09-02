@@ -264,7 +264,7 @@ public class BulletShared : MonoBehaviour
                             Debug.Log(RealDamage);
                             enemy.CurrentHP -= RealDamage;
                             // Inflict lava burned
-                            enemy.InflictLavaBurned(enemy.CurrentHP * 0.1f / 100, LavaBurnCount);
+                            enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
                         }
                     }
                 }
@@ -274,7 +274,7 @@ public class BulletShared : MonoBehaviour
                     if (enemy != null)
                     {
                         enemy.CurrentHP -= RealDamage;
-                        enemy.InflictLavaBurned(enemy.CurrentHP * 0.1f / 100, LavaBurnCount);
+                        enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
                     }
                 }
                 Destroy(transform.parent.gameObject);
