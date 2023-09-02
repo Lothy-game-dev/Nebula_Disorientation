@@ -19,6 +19,8 @@ public class BulletShared : MonoBehaviour
     public float GravitationalSlowScale;
     public float GravitationalSlowTime;
     public bool ApplyNanoEffect;
+    public int LavaBurnCount;
+    public GameObject HitBoxRange;
 
     protected Rigidbody2D rb;
     protected float Distance;
@@ -33,6 +35,7 @@ public class BulletShared : MonoBehaviour
     private bool isPenetrating;
     private bool AlreadyHit;
     private List<GameObject> PenetrateAlreadyDealDamge;
+    private float HitBox;
     #endregion
     #region Shared Functions
     public void InitializeBullet()
@@ -42,6 +45,8 @@ public class BulletShared : MonoBehaviour
             MaximumDistance = MaxEffectiveDistance;
         }
         PenetrateAlreadyDealDamge = new List<GameObject>();
+        if (HitBoxRange!=null)
+        HitBox = Mathf.Abs((HitBoxRange.transform.position - transform.position).magnitude);
     }
     public void UpdateBullet()
     {
@@ -93,7 +98,7 @@ public class BulletShared : MonoBehaviour
     public void CalculateDamage()
     {
         // Detect any enemy with in range
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10, EnemyLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, HitBox, EnemyLayer);
         foreach (var col in cols)
         {
             // If there is enemy, make sure this function will not be called twice
@@ -241,7 +246,7 @@ public class BulletShared : MonoBehaviour
     // Lava orb damage
     public void CalculateLavaOrbDamage()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, EnemyLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, HitBox, EnemyLayer);
         foreach (var col in cols)
         {
             if (!AlreadyHit)
@@ -259,7 +264,7 @@ public class BulletShared : MonoBehaviour
                             Debug.Log(RealDamage);
                             enemy.CurrentHP -= RealDamage;
                             // Inflict lava burned
-                            enemy.InflictLavaBurned(RealDamage/10f);
+                            enemy.InflictLavaBurned(enemy.CurrentHP * 0.1f / 100, LavaBurnCount);
                         }
                     }
                 }
@@ -269,7 +274,7 @@ public class BulletShared : MonoBehaviour
                     if (enemy != null)
                     {
                         enemy.CurrentHP -= RealDamage;
-                        enemy.InflictLavaBurned(RealDamage / 10f);
+                        enemy.InflictLavaBurned(enemy.CurrentHP * 0.1f / 100, LavaBurnCount);
                     }
                 }
                 Destroy(transform.parent.gameObject);
@@ -286,7 +291,7 @@ public class BulletShared : MonoBehaviour
     {
 
         // Detect any enemy with in range
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 20, EnemyLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, HitBox*2, EnemyLayer);
         foreach (var col in cols)
         {
             if (AoE>0f)
@@ -374,7 +379,7 @@ public class BulletShared : MonoBehaviour
     // Black hole orb
     public void CheckCreateBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, EnemyLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, HitBox, EnemyLayer);
         foreach (var col in cols)
         {
             if (!AlreadyHit)

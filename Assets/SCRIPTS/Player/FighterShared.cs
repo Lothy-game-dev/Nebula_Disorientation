@@ -28,6 +28,7 @@ public class FighterShared : MonoBehaviour
     public LayerMask BlackHoleLayer;
     public bool isLavaBurned;
     public int LavaBurnedCount;
+    public int LavaBurnedDmgNumber;
     public float LavaBurnedDamageTimer;
     public float LavaBurnedDamage;
     public GameObject OnFireGO;
@@ -341,7 +342,7 @@ public class FighterShared : MonoBehaviour
         // Lava orb's Lavaburned
         if (isLavaBurned)
         {
-            if (LavaBurnedCount < 10)
+            if (LavaBurnedCount < LavaBurnedDmgNumber)
             {
                 if (!OnFireGO.activeSelf)
                 {
@@ -420,10 +421,11 @@ public class FighterShared : MonoBehaviour
     }
 
     // Inflict self with lava burned (called by outer factors)
-    public void InflictLavaBurned(float dmg)
+    public void InflictLavaBurned(float dmg, int numberOfTimes)
     {
         LavaBurnedDamage = dmg;
         LavaBurnedDamageTimer = 0f;
+        LavaBurnedDmgNumber = numberOfTimes;
         LavaBurnedCount = 0;
         isLavaBurned = true;
     }
