@@ -33,11 +33,6 @@ public class BlackHole : MonoBehaviour
         // Calculate Radius and Center Radius
         radius = Mathf.Abs((transform.position - RangeCheck.transform.position).magnitude);
         centerRadius = Mathf.Abs((transform.position - CenterRange.transform.position).magnitude);
-        // If Base DMg is not set, set Base DMG
-        if (BaseDmg==0)
-        {
-            BaseDmg = 1000;
-        }
         // If Rate Of hit is not set, set RoH
         if (RateOfHit==0)
         {
@@ -50,8 +45,8 @@ public class BlackHole : MonoBehaviour
                 (transform.localScale.x * RadiusWhenCreate / radius,
                 transform.localScale.y * RadiusWhenCreate / radius,
                 transform.localScale.z);
-            radius = Mathf.Abs((transform.position - RangeCheck.transform.position).magnitude);
-            centerRadius = Mathf.Abs((transform.position - CenterRange.transform.position).magnitude);
+            radius = RadiusWhenCreate;
+            centerRadius = centerRadius * RadiusWhenCreate/radius;
         }
     }
 

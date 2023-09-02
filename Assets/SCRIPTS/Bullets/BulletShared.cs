@@ -392,10 +392,19 @@ public class BulletShared : MonoBehaviour
     public void CreateBlackHole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
         GameObject bh = Instantiate(BlackHole, transform.position, Quaternion.identity);
+        Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, radius, EnemyLayer);
+        foreach (var col2 in cols2)
+        {
+            // Deal damage to all enemies in AoE range
+            EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+            if (enemy != null)
+            {
+                enemy.CurrentHP -= RealDamage;
+            }
+        }
         BlackHole bhole = bh.GetComponent<BlackHole>();
         if (bhole != null)
         {
-            bhole.BaseDmg = BaseDamagePerHit;
             bhole.RadiusWhenCreate = radius;
             bhole.BasePullingForce = pullingForce;
             bhole.HitLayer = EnemyLayer;
@@ -433,6 +442,35 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // Check distance the bulllet travel, for setting the damage
+    public void CheckDistanceTravelLavaOrb()
+    {
+        // Case Range is set for flamethrower type
+        if (Range != 0f)
+        {
+            MaxEffectiveDistance = Range;
+            MaximumDistance = Range;
+        }
+        // If distace travel <= max effective => DMG = base DMG
+        if (DistanceTravel <= MaxEffectiveDistance)
+        {
+            RealDamage = BaseDamagePerHit;
+        }
+        // If max effective < distance travel < max distance => DMG and trasparency decreasing 
+        if (DistanceTravel > MaxEffectiveDistance && DistanceTravel < MaximumDistance)
+        {
+            RealDamage = (0.5f + (MaximumDistance - DistanceTravel) / (2 * (MaximumDistance - MaxEffectiveDistance))) * BaseDamagePerHit;
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = (MaximumDistance - DistanceTravel) / (MaximumDistance - MaxEffectiveDistance);
+            GetComponent<SpriteRenderer>().color = c;
+        }
+        // If distance travel > max distance => DMG = 0 (prevent bug for deal dmg out side range) and destroy it
+        if (DistanceTravel >= MaximumDistance)
+        {
+            RealDamage = 0;
+            Destroy(transform.parent.gameObject);
+        }
+    }
     // distance travel for blackhole orb only
     public void CheckDistanceTravelBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
@@ -454,7 +492,7 @@ public class BulletShared : MonoBehaviour
         }
         if (DistanceTravel >= MaximumDistance)
         {
-            RealDamage = 0;
+            RealDamage = BaseDamagePerHit;
             // Create blackhole at the end of the distance
             CreateBlackHole(BlackHole, radius, timer, pullingForce);
             Destroy(gameObject);

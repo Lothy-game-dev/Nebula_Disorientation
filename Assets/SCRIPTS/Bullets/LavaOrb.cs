@@ -40,7 +40,7 @@ public class LavaOrb : BulletShared
         UpdateBullet();
         CalculateLavaOrbDamage();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-        CheckDistanceTravel();
+        CheckDistanceTravelLavaOrb();
         RotateOrb();
         Tracer.transform.position = transform.position;
     }
