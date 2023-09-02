@@ -26,7 +26,9 @@ public class BulletShared : MonoBehaviour
     private bool StartCounting;
     private bool isBHPulled;
     private List<Vector2> PulledVector;
+    private bool isPenetrating;
     private bool AlreadyHit;
+    private List<GameObject> PenetrateAlreadyDealDamge;
     #endregion
     #region Shared Functions
     public void InitializeBullet()
@@ -35,6 +37,7 @@ public class BulletShared : MonoBehaviour
         {
             MaximumDistance = MaxEffectiveDistance;
         }
+        PenetrateAlreadyDealDamge = new List<GameObject>();
     }
     public void UpdateBullet()
     {
@@ -200,7 +203,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE > 0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE, 0.8f);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -233,6 +236,29 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    public void CalculatePenetrateDamage()
+    {
+
+        // Detect any enemy with in range
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10, EnemyLayer);
+        foreach (var col in cols)
+        {
+            if (!PenetrateAlreadyDealDamge.Contains(col.gameObject))
+            {
+                PenetrateAlreadyDealDamge.Add(col.gameObject);
+                EnemyShared enemy = col.GetComponent<EnemyShared>();
+                if (enemy!=null)
+                {
+                    enemy.CurrentHP -= RealDamage;
+                }
+                if (!isPenetrating)
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+    }
+
     // Black hole orb
     public void CheckCreateBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
@@ -260,6 +286,7 @@ public class BulletShared : MonoBehaviour
             bhole.BaseDmg = BaseDamagePerHit;
             bhole.RadiusWhenCreate = radius;
             bhole.BasePullingForce = pullingForce;
+            bhole.HitLayer = EnemyLayer;
         }
         bh.SetActive(true);
         Destroy(bh, timer);
@@ -321,6 +348,40 @@ public class BulletShared : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void CheckDistanceTravelPenetrate(float penetrateRange)
+    {
+        if (Range != 0f)
+        {
+            MaxEffectiveDistance = Range;
+            MaximumDistance = Range;
+        }
+        if (DistanceTravel <= penetrateRange)
+        {
+            isPenetrating = true;
+        } else
+        {
+            isPenetrating = false;
+        }
+        if (DistanceTravel <= MaxEffectiveDistance)
+        {
+            RealDamage = BaseDamagePerHit;
+        }
+        if (DistanceTravel > MaxEffectiveDistance && DistanceTravel < MaximumDistance)
+        {
+            RealDamage = (0.5f + (MaximumDistance - DistanceTravel) / (2 * (MaximumDistance - MaxEffectiveDistance))) * BaseDamagePerHit;
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = (MaximumDistance - DistanceTravel) / (MaximumDistance - MaxEffectiveDistance);
+            GetComponent<SpriteRenderer>().color = c;
+        }
+        if (DistanceTravel >= MaximumDistance)
+        {
+            RealDamage = 0;
+            // Create blackhole at the end of the distance
+            Destroy(gameObject);
+        }
+    }
+
     // Check if bullets is pulled by blackhole, Same algorithm as fighters
     public void CheckInsideBlackhole()
     {

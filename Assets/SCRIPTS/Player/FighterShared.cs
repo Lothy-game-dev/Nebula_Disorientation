@@ -276,7 +276,7 @@ public class FighterShared : MonoBehaviour
             foreach (var col in cols)
             {
                 BlackHole bh = col.GetComponent<BlackHole>();
-                if (bh!=null)
+                if (bh != null && bh.HitLayer.value == 1<<gameObject.layer)
                 {
                     isBHPulled = true;
                     Vector2 vectorPull = bh.CalculatePullingVector(gameObject);

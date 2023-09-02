@@ -74,7 +74,7 @@ public class FighterController : MonoBehaviour
             new Vector3(LeftWeaponIcon.transform.localScale.x * 12,
             LeftWeaponIcon.transform.localScale.y * 12,
             LeftWeaponIcon.transform.localScale.z);
-        LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
         Color lc = LeftWeaponIcon.GetComponent<SpriteRenderer>().color;
         lc.a = 120 / 255f;
         LeftWeaponIcon.GetComponent<SpriteRenderer>().color = lc;
@@ -85,7 +85,7 @@ public class FighterController : MonoBehaviour
             new Vector3(RightWeaponIcon.transform.localScale.x * 12,
             RightWeaponIcon.transform.localScale.y * 12,
             RightWeaponIcon.transform.localScale.z);
-        RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
         RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);
         Color rc = RightWeaponIcon.GetComponent<SpriteRenderer>().color;
         rc.a = 120 / 255f;
