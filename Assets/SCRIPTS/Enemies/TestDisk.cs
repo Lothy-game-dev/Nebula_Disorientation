@@ -26,7 +26,8 @@ public class TestDisk : EnemyShared
         UpdateEnemy();
         if (!isFrozen && !isSFBFreeze)
         {
-            CalculateVelocity(!test ? check : -check);
+            /*CalculateVelocity(!test ? check : -check);*/
+            CalculateVelocity(new Vector2(0, 0));
         }
         if (changeDirTimer > 0f)
         {

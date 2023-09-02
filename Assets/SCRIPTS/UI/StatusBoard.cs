@@ -172,7 +172,7 @@ public class StatusBoard : MonoBehaviour
             CloneEnemy.transform.SetParent(transform);
             // Destroy objects need to be destroyed so it wont interact
             Destroy(CloneEnemy.transform.GetChild(1).gameObject);
-
+            Destroy(CloneEnemy.transform.GetChild(2).gameObject);
             // turn off scripts
             CloneEnemyObject = CloneEnemy.GetComponent<TestDisk>();
             CloneEnemyObject.enabled = false;
@@ -215,7 +215,7 @@ public class StatusBoard : MonoBehaviour
 
         //Setting to show current tempurature
         TemperText.gameObject.SetActive(true);
-        TemperText.text = EnemyObject.currentTemperature + "°C";
+        TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
         if (Timer==0f)
         {
             Timer = 1000f;
@@ -249,7 +249,7 @@ public class StatusBoard : MonoBehaviour
         }
 
         //Setting to show current tempurature
-        TemperText.text = EnemyObject.currentTemperature + "°C";
+        TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
     }
 
     // Stop showing board

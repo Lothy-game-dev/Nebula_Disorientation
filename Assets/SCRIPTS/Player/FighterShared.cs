@@ -38,6 +38,11 @@ public class FighterShared : MonoBehaviour
     public bool isSFBFreeze;
     public float SFBFreezeTimer;
     public GameObject OnFreezeGO;
+    public float NanoEffectFrozenDurationIncrease;
+    public bool IsNanoTemp;
+    public float NanoTempScale;
+    public int NanoTempStacks;
+    public float NanoTempTimer;
     #endregion
     #region Shared Functions
     // Initialize
@@ -51,6 +56,8 @@ public class FighterShared : MonoBehaviour
         SlowedMoveSpdScale = 1;
         OverheatIncreaseScale = 0;
         GravitationalSlowMultiplier = 1;
+        NanoTempScale = 1;
+        NanoTempStacks = 0;
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -125,7 +132,7 @@ public class FighterShared : MonoBehaviour
             if (!isImmuneFrozenSlow)
             {
                 isFrozen = true;
-                FrozenDuration = 5f;
+                FrozenDuration = 5f * NanoTempScale;
                 c.r = 0;
                 c.g = 0;
             }
@@ -173,7 +180,7 @@ public class FighterShared : MonoBehaviour
             // If burn, deal dmg per second
             if (BurnedDelay <= 0f)
             {
-                CurrentHP -= MaxHP * (1 + (currentTemperature - 90) / 10) / 100;
+                ReceiveBurnedDamage(1);
                 BurnedDelay = 1f;
             } else if (BurnedDelay > 0f)
             {
@@ -192,8 +199,8 @@ public class FighterShared : MonoBehaviour
         }
         if (isOverloadded)
         {
-            // If overloadded, reduce RoF
-            OverheatIncreaseScale = (50 + (currentTemperature-50) / 40 * 50) / 100;
+            // If overloadded, increasing overheat rate
+            OverheatIncreaseScale = (50 + (currentTemperature-50) / 40 * 50) / 100 * NanoTempScale;
         } else
         {
             OverheatIncreaseScale = 0;
@@ -203,7 +210,8 @@ public class FighterShared : MonoBehaviour
             // if Slowed, reduce move and rotate spd
             if (!isImmuneFrozenSlow)
             {
-                SlowedMoveSpdScale = 1 - (50 - currentTemperature) / 50;
+                SlowedMoveSpdScale = (1 - (50 - currentTemperature) * NanoTempScale / 50)
+                    < 0.1f ? 0.1f : (1 - (50 - currentTemperature) * NanoTempScale / 50);
             } else
             {
                 SlowedMoveSpdScale = 1;
@@ -233,6 +241,7 @@ public class FighterShared : MonoBehaviour
                 isImmuneFrozenSlow = true;
                 ImmuneDuration = 3f;
                 isRegenThermal = true;
+                NanoEffectFrozenDurationIncrease = 0f;
                 RegenScale = 2;
                 RegenDelayTimer = 0f;
                 Color c = GetComponent<SpriteRenderer>().color;
@@ -242,10 +251,15 @@ public class FighterShared : MonoBehaviour
             }
         }
     }
+    // Receive Burn Damage
+    public void ReceiveBurnedDamage(float scale)
+    {
+        CurrentHP -= MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100;
+    }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
     {
-        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 2f;
+        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 2f * NanoTempScale;
         isRegenThermal = false;
         RegenDelayTimer = 2f;
     }
@@ -388,6 +402,21 @@ public class FighterShared : MonoBehaviour
                 }
             }
         }
+        // Nano Temp Effect
+        if (IsNanoTemp)
+        {
+            if (NanoTempTimer > 0f)
+            {
+                NanoTempTimer -= Time.deltaTime;
+                NanoTempScale = 1 + NanoTempStacks * 15f / 100;
+            } 
+            else
+            {
+                NanoTempStacks = 0;
+                NanoTempScale = 1;
+                IsNanoTemp = false;
+            }
+        }
     }
 
     // Inflict self with lava burned (called by outer factors)
@@ -417,7 +446,23 @@ public class FighterShared : MonoBehaviour
             {
                 isSFBFreeze = true;
             }
-            SFBFreezeTimer = FreezingDuration;
+            SFBFreezeTimer = FreezingDuration * NanoTempScale;
+        }
+    }
+    public void InflictNanoTemp()
+    {
+        if (!IsNanoTemp)
+        {
+            IsNanoTemp = true;
+            NanoTempStacks = 1;
+            NanoTempTimer = 2f;
+        } else
+        {
+            if (NanoTempStacks<4)
+            {
+                NanoTempStacks++;
+            }
+            NanoTempTimer = 2f;
         }
     }
     #endregion

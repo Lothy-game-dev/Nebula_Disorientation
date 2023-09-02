@@ -18,6 +18,7 @@ public class BulletShared : MonoBehaviour
     public bool InflictGravitationalSlow;
     public float GravitationalSlowScale;
     public float GravitationalSlowTime;
+    public bool ApplyNanoEffect;
 
     protected Rigidbody2D rb;
     protected float Distance;
@@ -285,9 +286,25 @@ public class BulletShared : MonoBehaviour
     {
 
         // Detect any enemy with in range
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10, EnemyLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 20, EnemyLayer);
         foreach (var col in cols)
         {
+            if (AoE>0f)
+            {
+                // Create AoE effect
+                FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE, 0, 0);
+                // Check all enemies in AoE range
+                Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                foreach (var col2 in cols2)
+                {
+                    // Deal damage to all enemies in AoE range
+                    EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                    if (enemy != null)
+                    {
+                        enemy.CurrentHP -= RealDamage;
+                    }
+                }
+            }
             if (!PenetrateAlreadyDealDamge.Contains(col.gameObject))
             {
                 PenetrateAlreadyDealDamge.Add(col.gameObject);
@@ -295,6 +312,56 @@ public class BulletShared : MonoBehaviour
                 if (enemy!=null)
                 {
                     enemy.CurrentHP -= RealDamage;
+                }
+                if (ApplyNanoEffect)
+                {
+                    enemy.InflictNanoTemp();
+                    if (enemy.currentTemperature == 50f)
+                    {
+                        int a = Random.Range(40, 61);
+                        if (a == 50)
+                        {
+                            a += (Random.Range(0, 1f) >= 0.5f ? 1 : -1) * 10;
+                        }
+                        else if (a > 50)
+                        {
+                            a += 10;
+                        }
+                        else
+                        {
+                            a -= 10;
+                        }
+                        enemy.currentTemperature = a;
+                    }
+                    else if (enemy.currentTemperature > 50f && enemy.currentTemperature < 90f)
+                    {
+                        enemy.ReceiveThermalDamage(true);
+                    }
+                    else if (enemy.currentTemperature >= 90f)
+                    {
+                        enemy.ReceiveThermalDamage(true);
+                        enemy.ReceiveBurnedDamage(3);
+                    }
+                    else if (enemy.currentTemperature < 50f && enemy.currentTemperature > 0f)
+                    {
+                        enemy.ReceiveThermalDamage(false);
+                    }
+                    else if (enemy.currentTemperature <= 0f)
+                    {
+                        enemy.ReceiveThermalDamage(false);
+                        if (enemy.FrozenDuration > 0f)
+                        {
+                            if (enemy.NanoEffectFrozenDurationIncrease < (6f - 1.5f * enemy.NanoTempScale))
+                            {
+                                enemy.FrozenDuration += 1.5f * enemy.NanoTempScale;
+                                enemy.NanoEffectFrozenDurationIncrease += 1.5f * enemy.NanoTempScale;
+                            } else
+                            {
+                                enemy.FrozenDuration += 6f - enemy.NanoEffectFrozenDurationIncrease;
+                                enemy.NanoEffectFrozenDurationIncrease = 6f;
+                            }
+                        }
+                    }
                 }
                 if (!isPenetrating)
                 {

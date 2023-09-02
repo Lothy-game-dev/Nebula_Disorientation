@@ -33,7 +33,7 @@ public class AreaOfEffect : MonoBehaviour
     #endregion
     #region Create Area Of Effect
     // Create AoE effect, will be called by bullet shared
-    public void CreateAreaOfEffect(Vector2 position, float AoERange, float Redness = 0)
+    public void CreateAreaOfEffect(Vector2 position, float AoERange, float Redness = 0, float Greenness = 1)
     {
         GameObject go = Instantiate(AoE, position, Quaternion.identity);
         // Set right scale based on the AoE range
@@ -55,6 +55,10 @@ public class AreaOfEffect : MonoBehaviour
         {
             c.g = 1 - Redness;
             c.b = 1 - Redness;
+        }
+        if (Greenness<1)
+        {
+            c.g = Greenness;
         }
         go.GetComponent<SpriteRenderer>().color = c;
         go.SetActive(true);

@@ -13,6 +13,7 @@ public class Weapons : MonoBehaviour
     public GameObject RotatePoint;
     public GameObject WeaponPosition;
     public GameObject ShootingPosition;
+    public GameObject OverHeatImage;
     public bool isLeftWeapon;
     public GameObject Bullet;
     public float RotateLimitNegative;
@@ -345,7 +346,7 @@ public class Weapons : MonoBehaviour
         // Set reset timer
         OverheatDecreaseTimer = OverheatResetTimer;
         // Create sound
-        if (!isWarning && !isOverheatted) KineticSound();
+        if (!isOverheatted) KineticSound();
     }
     // Fire Flamethrower type orbs
     void FireFlamethrowerOrb()
@@ -366,7 +367,7 @@ public class Weapons : MonoBehaviour
             bul.WeaponShoot = this;
             orbFire.SetActive(true);
             // Sound
-            if (!isWarning && !isOverheatted) ThermalSound();
+            if (!isOverheatted) ThermalSound();
             // Overheat
             currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
             OverheatDecreaseTimer = OverheatResetTimer;
@@ -399,19 +400,20 @@ public class Weapons : MonoBehaviour
         // If overheat rate < 80% when is not overheatted then remove warning sound
         if (currentOverheat <80 && !isOverheatted && isWarning)
         {
-            EndSound();
+            EndOverheatWarningSound();
             isWarning = false;
         }
         // If overheat rate >= 80% then play overheat warning sounds
         if (currentOverheat >= 80 && !isOverheatted)
         {
-            OverheatSound80Percent((currentOverheat-75)/100);
+            OverheatSound80Percent(((currentOverheat-75)*2)/100);
             isWarning = true;
         }
         // If overheat rate >= 100% and is not overheatted then become overheatted and set timer, etc.
         if (currentOverheat >= 100 && !isOverheatted)
         {
             isOverheatted = true;
+            EndOverheatWarningSound();
             OverheatedSound();
             // Set overheat rate to 100 for exact animation
             currentOverheat = 100;
@@ -498,19 +500,24 @@ public class Weapons : MonoBehaviour
 
     public void EndSound()
     {
-        Debug.Log("End");
         aus.clip = null;
     }
 
     public void OverheatSound80Percent(float volume)
     {
-        if (aus.clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
+        if (OverHeatImage.GetComponent<AudioSource>().clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
         {
-            aus.clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
-            aus.loop = true;
-            aus.Play();
+            OverHeatImage.GetComponent<AudioSource>().clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
+            OverHeatImage.GetComponent<AudioSource>().loop = true;
+            OverHeatImage.GetComponent<AudioSource>().Play();
         }
-        aus.volume = volume;
+        OverHeatImage.GetComponent<AudioSource>().volume = volume;
+        OverHeatImage.GetComponent<AudioSource>().priority = 10;
+    }
+
+    public void EndOverheatWarningSound()
+    {
+        OverHeatImage.GetComponent<AudioSource>().clip = null;
     }
 
     public void OverheatedSound()
