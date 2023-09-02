@@ -63,6 +63,7 @@ public class FighterController : MonoBehaviour
         RW.WeaponPosition = RightWeaponPosition;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
+        // Set left right weapon to overheat bar
         LeftOverheatBar.GetComponent<OverheatBar>().Weapon = LeftWeapon.GetComponent<Weapons>();
         RightOverheatBar.GetComponent<OverheatBar>().Weapon = RightWeapon.GetComponent<Weapons>();
         GameObject LeftWeaponIcon = Instantiate(CurrentLeftWeapon, LeftOverheatImage.transform.position, Quaternion.identity);

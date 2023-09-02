@@ -32,22 +32,28 @@ public class AreaOfEffect : MonoBehaviour
     }
     #endregion
     #region Create Area Of Effect
+    // Create AoE effect, will be called by bullet shared
     public void CreateAreaOfEffect(Vector2 position, float AoERange)
     {
         GameObject go = Instantiate(AoE, position, Quaternion.identity);
+        // Set right scale based on the AoE range
         go.transform.localScale = new Vector3(
             go.transform.localScale.x * AoERange / AoEInitRange,
             go.transform.localScale.y * AoERange / AoEInitRange,
             go.transform.localScale.z);
+        // Set the final scale for animation
         float EndScale = go.transform.localScale.x;
+        // Set the scale to 1/5 to start animation
         go.transform.localScale = new Vector3(
             go.transform.localScale.x/5,
             go.transform.localScale.y/5,
             go.transform.localScale.z);
+        // Set transparency to 1/5 to start animation
         Color c = go.GetComponent<SpriteRenderer>().color;
         c.a = currentTransparency / 5;
         go.GetComponent<SpriteRenderer>().color = c;
         go.SetActive(true);
+        // Start animation
         StartCoroutine(AoEEffect(EndScale, go));
     }
 
@@ -55,6 +61,7 @@ public class AreaOfEffect : MonoBehaviour
     {
         for (int i=0;i<10;i++)
         {
+            // Increasing the transparecy and scale by the time passed
             Color c = AoEGO.GetComponent<SpriteRenderer>().color;
             c.a += currentTransparency * 2/25;
             AoEGO.GetComponent<SpriteRenderer>().color = c;
@@ -64,6 +71,7 @@ public class AreaOfEffect : MonoBehaviour
             AoEGO.transform.localScale.z);
             yield return new WaitForSeconds(time / 10);
         }
+        // Destroy when end animation immediately
         Destroy(AoEGO);
     }
     #endregion

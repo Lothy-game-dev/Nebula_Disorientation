@@ -67,6 +67,7 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // Laser Special Accel: Increasing in both speed and size 
     public IEnumerator AccelerateLaser(float time, float initScale)
     {
         for (int i = 0; i < 10; i++)
@@ -81,27 +82,36 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // Calculate Damage for kinetic/laser/lava orb weapons
     public void CalculateDamage()
     {
+        // Detect any enemy with in range
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10, EnemyLayer);
         foreach (var col in cols)
         {
+            // If there is enemy, make sure this function will not be called twice
             if (!AlreadyHit)
             {
                 AlreadyHit = true;
+                // In case bullet has AoE
                 if (AoE>0)
                 {
+                    // Create AoE effect
                     FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    // Check all enemies in AoE range
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
+                        // Deal damage to all enemies in AoE range
                         EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
                         if (enemy != null)
                         {
                             enemy.CurrentHP -= RealDamage;
                         }
                     }
-                } else
+                } 
+                // In case bullet does not have AoE: Deal dmg to the enemy detected only
+                else
                 {
                     EnemyShared enemy = col.GetComponent<EnemyShared>();
                     if (enemy!=null)
@@ -109,18 +119,23 @@ public class BulletShared : MonoBehaviour
                         enemy.CurrentHP -= RealDamage;
                     }
                 }
+                // Destroy after hit
                 Destroy(gameObject);
             }
             else
             {
+                // If already hit then destroy game object, just in case the above destroy does not work
                 Destroy(gameObject);
             }
+            // Break just in case, for performance purpose
             break;
         }
     }
 
+    // Flamethrower type damage
     public void CalculateThermalDamage(bool isHeat)
     {
+        // Detect enemy
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.01f, EnemyLayer);
         foreach (var col in cols)
         {
@@ -137,10 +152,12 @@ public class BulletShared : MonoBehaviour
                         if (enemy != null)
                         {
                             enemy.CurrentHP -= RealDamage;
+                            // Receive thermal Damage
                             if (WeaponShoot.CurrentHitCount < 1)
                             {
                                 if (WeaponShoot.CurrentHitCount == 0)
                                 {
+                                    // Set reset timer
                                     WeaponShoot.HitCountResetTimer = 1f / WeaponShoot.RateOfHit;
                                 }
                                 enemy.ReceiveThermalDamage(isHeat);
@@ -172,6 +189,7 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // Lava orb damage
     public void CalculateLavaOrbDamage()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, EnemyLayer);
@@ -191,6 +209,7 @@ public class BulletShared : MonoBehaviour
                         {
                             Debug.Log(RealDamage);
                             enemy.CurrentHP -= RealDamage;
+                            // Inflict lava burned
                             enemy.InflictLavaBurned(RealDamage/10f);
                         }
                     }
@@ -214,6 +233,7 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // Black hole orb
     public void CheckCreateBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, EnemyLayer);
@@ -222,6 +242,7 @@ public class BulletShared : MonoBehaviour
             if (!AlreadyHit)
             {
                 AlreadyHit = true;
+                // If hit, create blackhole at hit position
                 CreateBlackHole(BlackHole, radius, timer, pullingForce);
                 Destroy(gameObject);
                 break;
@@ -229,6 +250,7 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // Create black hole
     public void CreateBlackHole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
         GameObject bh = Instantiate(BlackHole, transform.position, Quaternion.identity);
@@ -242,17 +264,21 @@ public class BulletShared : MonoBehaviour
         bh.SetActive(true);
         Destroy(bh, timer);
     }
+    // Check distance the bulllet travel, for setting the damage
     public void CheckDistanceTravel()
     {
+        // Case Range is set for flamethrower type
         if (Range!=0f)
         {
             MaxEffectiveDistance = Range;
             MaximumDistance = Range;
         }
+        // If distace travel <= max effective => DMG = base DMG
         if (DistanceTravel <= MaxEffectiveDistance)
         {
             RealDamage = BaseDamagePerHit;
         }
+        // If max effective < distance travel < max distance => DMG and trasparency decreasing 
         if (DistanceTravel > MaxEffectiveDistance && DistanceTravel < MaximumDistance)
         {
             RealDamage = (0.5f + (MaximumDistance - DistanceTravel) / (2*(MaximumDistance - MaxEffectiveDistance))) * BaseDamagePerHit;
@@ -260,6 +286,7 @@ public class BulletShared : MonoBehaviour
             c.a = (MaximumDistance - DistanceTravel) / (MaximumDistance - MaxEffectiveDistance);
             GetComponent<SpriteRenderer>().color = c;
         }
+        // If distance travel > max distance => DMG = 0 (prevent bug for deal dmg out side range) and destroy it
         if (DistanceTravel >= MaximumDistance)
         {
             RealDamage = 0;
@@ -267,6 +294,7 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    // distance travel for blackhole orb only
     public void CheckDistanceTravelBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
         if (Range != 0f)
@@ -288,10 +316,12 @@ public class BulletShared : MonoBehaviour
         if (DistanceTravel >= MaximumDistance)
         {
             RealDamage = 0;
+            // Create blackhole at the end of the distance
             CreateBlackHole(BlackHole, radius, timer, pullingForce);
             Destroy(gameObject);
         }
     }
+    // Check if bullets is pulled by blackhole, Same algorithm as fighters
     public void CheckInsideBlackhole()
     {
         isBHPulled = false;

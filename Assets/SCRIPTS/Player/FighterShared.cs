@@ -263,13 +263,16 @@ public class FighterShared : MonoBehaviour
     }
     #endregion
     #region Check Blackhole Pulling
+    // Check blackhole pulling force
     public void CheckInsideBlackhole()
     {
         isBHPulled = false;
         PulledVector = new List<Vector2>();
+        // Get all blackhole at current position
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackHoleLayer);
         if (cols.Length>0)
         {
+            // If there are blackhole(s), add its pulling vector to list
             foreach (var col in cols)
             {
                 BlackHole bh = col.GetComponent<BlackHole>();
@@ -283,7 +286,7 @@ public class FighterShared : MonoBehaviour
         }
     }
 
-
+    // Calculate Velocity based on blackhole pulling vector
     public void CalculateVelocity(Vector2 veloc)
     {
         if (isBHPulled)
@@ -297,8 +300,10 @@ public class FighterShared : MonoBehaviour
     }
     #endregion
     #region Check Weapon Special Effects
+    // Check weapon's special effect
     public void CheckSpecialEffectStatus()
     {
+        // Lava orb's Lavaburned
         if (isLavaBurned)
         {
             if (LavaBurnedCount < 10)
@@ -329,6 +334,7 @@ public class FighterShared : MonoBehaviour
         }   
     }
 
+    // Inflict self with lava burned (called by outer factors)
     public void InflictLavaBurned(float dmg)
     {
         LavaBurnedDamage = dmg;

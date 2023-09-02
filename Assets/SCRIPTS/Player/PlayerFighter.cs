@@ -30,6 +30,8 @@ public class PlayerFighter : FighterShared
     void Update()
     {
         UpdateFighter();
+        // For thermal test only, increase temp by pressing N and decrease by pressing M
+        // Will be deleted
         if (testTimer <= 0f)
         {
             if (Input.GetKeyDown(KeyCode.M))
