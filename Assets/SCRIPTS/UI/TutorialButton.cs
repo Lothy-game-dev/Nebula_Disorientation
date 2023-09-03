@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TutorialButton : MonoBehaviour
@@ -44,6 +45,9 @@ public class TutorialButton : MonoBehaviour
     {
         if (TutorialMenu.SectionDesc != null && TutorialMenu.SectionName != null)
         {
+            Color c = TutorialMenu.SectionDesc.GetComponent<TMP_Text>().color;
+            c.a = 0f;
+            TutorialMenu.SectionDesc.GetComponent<TMP_Text>().color = c;
             TutorialMenu.SectionDesc.SetActive(false);
             TutorialMenu.SectionName.SetActive(false);
         }
@@ -57,6 +61,7 @@ public class TutorialButton : MonoBehaviour
             TutorialMenu.SectionName = SectionName;
             TutorialMenu.ItemChoosen = gameObject.name;
             TutorialMenu.isChoose = true;
+            TutorialMenu.WordFade();
         }
     }
     private void OnMouseEnter()
@@ -107,6 +112,6 @@ public class TutorialButton : MonoBehaviour
     }
     #endregion
     #region Function group ...
-    // Group all function that serve the same algorithm
+    
     #endregion
 }
