@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Controller used to generate Fighter as start of each stage.
 public class FighterController : MonoBehaviour
@@ -18,6 +19,8 @@ public class FighterController : MonoBehaviour
     public GameObject RightOverheatBar;
     public GameObject LeftOverheatImage;
     public GameObject RightOverheatImage;
+    public Slider LeftReloadBar;
+    public Slider RightReloadBar;
     #endregion
     #region NormalVariables
     public GameObject CurrentLeftWeapon;
@@ -92,6 +95,9 @@ public class FighterController : MonoBehaviour
         Color rc = RightWeaponIcon.GetComponent<SpriteRenderer>().color;
         rc.a = 120 / 255f;
         RightWeaponIcon.GetComponent<SpriteRenderer>().color = rc;
+        // Set Reload Bar
+        LeftWeapon.GetComponent<Weapons>().ReloadBar = LeftReloadBar;
+        RightWeapon.GetComponent<Weapons>().ReloadBar = RightReloadBar;
     }
     #endregion
 }

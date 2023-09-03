@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapons : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class Weapons : MonoBehaviour
     public float OverheatTimer;
     public AudioClip WeaponShootSound;
     public bool IsOrbWeapon;
+    public Slider ReloadBar;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -70,6 +72,8 @@ public class Weapons : MonoBehaviour
         }
         gameObject.AddComponent<AudioSource>();
         aus = GetComponent<AudioSource>();
+        ReloadBar.maxValue = 1/Time.fixedDeltaTime;
+        ReloadBar.value = ReloadBar.maxValue;
     }
 
     // Update is called once per frame
@@ -166,6 +170,7 @@ public class Weapons : MonoBehaviour
         {
             if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
             {
+                ReloadBar.value = 0;
                 if (!IsThermalType)
                 {
                     FireBullet();
@@ -177,6 +182,14 @@ public class Weapons : MonoBehaviour
                     FireTimer = 1 / RateOfFire;
                 }
             }
+        }
+        if (ReloadBar.value < ReloadBar.maxValue - RateOfFire)
+        {
+            ReloadBar.value += RateOfFire;
+        }
+        else
+        {
+            ReloadBar.value = ReloadBar.maxValue;
         }
         FireTimer -= Time.deltaTime;
     }
@@ -413,6 +426,8 @@ public class Weapons : MonoBehaviour
         if (currentOverheat >= 100 && !isOverheatted)
         {
             isOverheatted = true;
+            // Hide reload bar
+            ReloadBar.gameObject.SetActive(false);
             EndOverheatWarningSound();
             OverheatedSound();
             // Set overheat rate to 100 for exact animation
@@ -430,6 +445,8 @@ public class Weapons : MonoBehaviour
             if (isOverheatted)
             {
                 isOverheatted = false;
+                ReloadBar.gameObject.SetActive(true);
+                ReloadBar.value = ReloadBar.maxValue;
                 isWarning = false;
                 EndSound();
                 currentOverheat = 0f;
