@@ -38,7 +38,7 @@ public class MainMenuButtons : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (transform.position.x >= AfterPosition.transform.position.x)
+        if (transform.position.x > AfterPosition.transform.position.x)
         {
             rb.velocity = new Vector2(0, 0);
             transform.position = AfterPosition.transform.position;
@@ -135,9 +135,15 @@ public class MainMenuButtons : MonoBehaviour
     {
         Color c = GetComponent<SpriteRenderer>().color;
         c.a = 0;
+        c.r = 1;
+        c.g = 1;
+        c.b = 1;
         GetComponent<SpriteRenderer>().color = c;
         Color c2 = Text.GetComponent<SpriteRenderer>().color;
         c2.a = 0;
+        c2.r = 1;
+        c2.g = 1;
+        c2.b = 1;
         Text.GetComponent<SpriteRenderer>().color = c2;
         transform.position = BeforePosition.transform.position;
         StartCoroutine(MoveToAfterPos());
@@ -208,7 +214,7 @@ public class MainMenuButtons : MonoBehaviour
 
     private IEnumerator MoveToBeforePos()
     {
-        rb.velocity = (BeforePosition.transform.position - AfterPosition.transform.position) / 4f;
+        rb.velocity = (BeforePosition.transform.position - AfterPosition.transform.position)/4f;
         for (int i = 0; i < 5; i++)
         {
             Color c = GetComponent<SpriteRenderer>().color;

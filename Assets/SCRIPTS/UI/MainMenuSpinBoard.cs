@@ -10,7 +10,6 @@ public class MainMenuSpinBoard : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-    public GameObject ModelNameText;
     #endregion
     #region NormalVariables
     private GameObject currentSpinModel;
@@ -76,7 +75,6 @@ public class MainMenuSpinBoard : MonoBehaviour
         currentSpinModel.transform.localScale = new Vector3(initScaleX / 40, initScaleY / 40, initScaleZ / 40);
         currentSpinModel.transform.Rotate(new Vector3(0, 0, currentRotate));
         currentSpinModel.SetActive(true);
-        ModelNameText.GetComponent<TextMeshPro>().text = currentSpinModel.name;
         StartCoroutine(BiggerModel(initScaleX, initScaleY, initScaleZ));
     }
 
@@ -104,7 +102,6 @@ public class MainMenuSpinBoard : MonoBehaviour
         ChangeTimer = 5f;
         ChooseRandomModel();
         doneStart = true;
-        ModelNameText.SetActive(true);
     }
 
     private IEnumerator BrightDown()

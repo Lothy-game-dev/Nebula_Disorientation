@@ -10,6 +10,7 @@ public class MainMenuCameraController : MonoBehaviour
     #endregion
     #region InitializeVariables
     public GameObject StartScene;
+    public MainMenuButtons[] MainMenuButtons;
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
@@ -39,6 +40,18 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
+    }
+    public void BackToMainMenu()
+    {
+        if (CurrentScene!=StartScene)
+        {
+            CurrentScene = StartScene;
+        }
+        transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y, transform.position.z);
+        foreach (var but in MainMenuButtons)
+        {
+            but.EnterView();
+        }
     }
     #endregion
 }
