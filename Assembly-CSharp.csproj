@@ -74,11 +74,14 @@
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\TutorialMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\OverheatBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
+    <Compile Include="Assets\SCRIPTS\Database\AccessDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\TutorialButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenuSpinBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
