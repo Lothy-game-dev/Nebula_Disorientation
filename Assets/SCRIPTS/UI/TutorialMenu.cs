@@ -54,16 +54,10 @@ public class TutorialMenu : MonoBehaviour
                 SectionDesc.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
             } else
             {
-                if ("BackButton".Equals(ItemChoosen))
-                {                  
-                    MainCam.transform.position = MainCamBeforeMove.transform.position;
-                } else
+                if ("Shopping".Equals(ItemChoosen))
                 {
-                    if ("Shopping".Equals(ItemChoosen))
-                    {
-                        SectionName.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
-                        SectionDesc.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
-                    }
+                    SectionName.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
+                    SectionDesc.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
                 }
             }
         } 

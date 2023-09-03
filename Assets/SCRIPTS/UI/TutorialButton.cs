@@ -40,7 +40,10 @@ public class TutorialButton : MonoBehaviour
     #region Check mouse
     private void OnMouseDown()
     {
-        TutorialMenu.ItemChoosen = gameObject.name;
+        if ("BackButton".Equals(gameObject.name))
+        {
+            FindObjectOfType<MainMenuCameraController>().BackToMainMenu();
+        } else TutorialMenu.ItemChoosen = gameObject.name; 
     }
     private void OnMouseEnter()
     {
@@ -78,13 +81,13 @@ public class TutorialButton : MonoBehaviour
             c.r = 1;
             c.b = 1;
             GetComponent<SpriteRenderer>().color = c;
-            GetComponent<SpriteRenderer>().sortingOrder = 1;
+            GetComponent<SpriteRenderer>().sortingOrder = 3;
             Color c2 = Text.GetComponent<SpriteRenderer>().color;
             c2.r = 1;
             c2.g = 1;
             c2.b = 1;
             Text.GetComponent<SpriteRenderer>().color = c2;
-            Text.GetComponent<SpriteRenderer>().sortingOrder = 2;
+            Text.GetComponent<SpriteRenderer>().sortingOrder = 4;
             transform.localScale = new Vector3(InitScale.x, InitScale.y, InitScale.z);
         }
     }
