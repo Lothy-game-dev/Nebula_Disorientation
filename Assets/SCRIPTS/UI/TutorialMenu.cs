@@ -35,23 +35,29 @@ public class TutorialMenu : MonoBehaviour
     {
        if (ItemChoosen != null && isChoose)
        {
-            CheckItemChoosen();
+            SectionName.SetActive(true);
+            SectionDesc.SetActive(true);
             isChoose = false;
        }    
     }
     #endregion
-    #region Check what item choosen
-    public void CheckItemChoosen()
+
+    #region
+
+    public void WordFade()
     {
-        if (ItemChoosen != null)
-        {
-            Debug.Log("1");
-            //turn off all child before choosing
-            SectionName.SetActive(true);
-            SectionDesc.SetActive(true);
-            
-        } 
+        StartCoroutine(TextHiddentoUnhidden());
+    }
+    private IEnumerator TextHiddentoUnhidden()
+    {       
+        for (int i = 0; i < 10; i++)
+        {           
+            Color c = SectionDesc.GetComponent<TMP_Text>().color;
+            c.a += 0.2f;
+            SectionDesc.GetComponent<TMP_Text>().color = c;
+            yield return new WaitForSeconds(0.15f);
+        }      
     }
     #endregion
-    
+
 }
