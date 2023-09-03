@@ -17,22 +17,29 @@ public class Arsenal : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject GameController;
     public GameObject Item;
-    public List<Image> WeaponList;
+    public List<GameObject> WeaponList;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     private GameObject CloneItem;
+    private GameObject CloneWeapon;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         AccDB = GameController.GetComponent<AccessDatabase>();
-        for (int i = 0; i < AccDB.ArsenalWeaponCount(); i++)
-        {
+        for (int i = 1; i < AccDB.ArsenalWeaponCount(); i++)
+        {           
             CloneItem = Instantiate(Item, Item.transform.position, Quaternion.identity);
             CloneItem.transform.SetParent(gameObject.transform);
+        }
+        for (int i = 1; i < WeaponList.Count; i++)
+        {
+            CloneWeapon = Instantiate(WeaponList[i], gameObject.transform.GetChild(i).transform.position, Quaternion.identity);
+            gameObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite 
+                = WeaponList[i].GetComponent<SpriteRenderer>().sprite;           
         }
     }
 

@@ -10,6 +10,7 @@ public class MainMenuCameraController : MonoBehaviour
     #endregion
     #region InitializeVariables
     public GameObject StartScene;
+    public GameObject TutorialScenePos;
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
