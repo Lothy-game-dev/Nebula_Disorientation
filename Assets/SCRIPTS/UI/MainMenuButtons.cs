@@ -13,9 +13,9 @@ public class MainMenuButtons : MonoBehaviour
     public GameObject AfterPosition;
     public GameObject[] OtherButtons;
     public GameObject AfterMenuSelectPosition;
-    public GameObject CamPosAfterMove;
+/*    public GameObject CamPosAfterMove;
     public GameObject CamPosBeforeMove;
-    public GameObject MainCam;
+    public GameObject MainCam;*/
     #endregion
     #region NormalVariables
     private float InitScale;
