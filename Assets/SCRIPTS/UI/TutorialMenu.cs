@@ -22,19 +22,22 @@ public class TutorialMenu : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string ItemChoosen;
-    private GameObject CloneSecName;
+    public bool isChoose;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
-       
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckItemChoosen();     
+       if (ItemChoosen != null && isChoose)
+       {
+            CheckItemChoosen();
+            isChoose = false;
+       }    
     }
     #endregion
     #region Check what item choosen
@@ -42,24 +45,11 @@ public class TutorialMenu : MonoBehaviour
     {
         if (ItemChoosen != null)
         {
+            Debug.Log("1");
             //turn off all child before choosing
-            for (int i = 0; i < SectionName.transform.GetChild(0).transform.childCount; i++)
-            {
-                SectionName.transform.GetChild(0).transform.GetChild(i).gameObject.SetActive(false);
-                SectionDesc.transform.GetChild(0).transform.GetChild(i).gameObject.SetActive(false);
-            }
-            if ("Control".Equals(ItemChoosen))
-            {
-                SectionName.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-                SectionDesc.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-            } else
-            {
-                if ("Shopping".Equals(ItemChoosen))
-                {
-                    SectionName.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
-                    SectionDesc.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
-                }
-            }
+            SectionName.SetActive(true);
+            SectionDesc.SetActive(true);
+            
         } 
     }
     #endregion

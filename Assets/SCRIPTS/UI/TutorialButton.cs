@@ -15,6 +15,8 @@ public class TutorialButton : MonoBehaviour
     public GameObject ItemType;
     public GameObject TutorialBoard;
     public GameObject Text;
+    public GameObject SectionDesc;
+    public GameObject SectionName;
     #endregion
     #region NormalVariables
     private TutorialMenu TutorialMenu;
@@ -40,10 +42,22 @@ public class TutorialButton : MonoBehaviour
     #region Check mouse
     private void OnMouseDown()
     {
+        if (TutorialMenu.SectionDesc != null && TutorialMenu.SectionName != null)
+        {
+            TutorialMenu.SectionDesc.SetActive(false);
+            TutorialMenu.SectionName.SetActive(false);
+        }
         if ("BackButton".Equals(gameObject.name))
         {
             FindObjectOfType<MainMenuCameraController>().BackToMainMenu();
-        } else TutorialMenu.ItemChoosen = gameObject.name; 
+        }
+        else
+        {
+            TutorialMenu.SectionDesc = SectionDesc;
+            TutorialMenu.SectionName = SectionName;
+            TutorialMenu.ItemChoosen = gameObject.name;
+            TutorialMenu.isChoose = true;
+        }
     }
     private void OnMouseEnter()
     {
