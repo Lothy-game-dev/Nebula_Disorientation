@@ -92,14 +92,12 @@ public class MainMenuButtons : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //alreadySelect = true;
-        // after click the button, the camera position will change to other scene (New Story,....)
-        MainCam.transform.position = CamPosAfterMove.transform.position;
-        /*foreach (var but in OtherButtons)
+        alreadySelect = true;
+        foreach (var but in OtherButtons)
         {
             but.GetComponent<MainMenuButtons>().ExitView();
         }
-        StartCoroutine(DelayTransfer());*/
+        StartCoroutine(DelayTransfer());
     }
     #endregion
     #region Enter and Exit

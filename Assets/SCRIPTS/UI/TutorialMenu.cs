@@ -15,8 +15,7 @@ public class TutorialMenu : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject SectionDesc;
     public GameObject SectionName;
-    public GameObject MainCam;
-    public GameObject MainCamBeforeMove;
+    public GameObject AfterMenuSelectPosition;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -55,8 +54,9 @@ public class TutorialMenu : MonoBehaviour
             } else
             {
                 if ("BackButton".Equals(ItemChoosen))
-                {                  
-                    MainCam.transform.position = MainCamBeforeMove.transform.position;
+                {
+                    FindObjectOfType<MainMenuCameraController>().ChangeToScene(AfterMenuSelectPosition);
+                    /*AfterMenuSelectPosition.transform.Find("TutorialButton").GetComponent<MainMenuButtons>().EnterView();*/
                 } else
                 {
                     if ("Shopping".Equals(ItemChoosen))
