@@ -13,6 +13,9 @@ public class MainMenuButtons : MonoBehaviour
     public GameObject AfterPosition;
     public GameObject[] OtherButtons;
     public GameObject AfterMenuSelectPosition;
+    public GameObject CamPosAfterMove;
+    public GameObject CamPosBeforeMove;
+    public GameObject MainCam;
     #endregion
     #region NormalVariables
     private float InitScale;
@@ -89,12 +92,14 @@ public class MainMenuButtons : MonoBehaviour
 
     private void OnMouseDown()
     {
-        alreadySelect = true;
-        foreach (var but in OtherButtons)
+        //alreadySelect = true;
+        // after click the button, the camera position will change to other scene (New Story,....)
+        MainCam.transform.position = CamPosAfterMove.transform.position;
+        /*foreach (var but in OtherButtons)
         {
             but.GetComponent<MainMenuButtons>().ExitView();
         }
-        StartCoroutine(DelayTransfer());
+        StartCoroutine(DelayTransfer());*/
     }
     #endregion
     #region Enter and Exit
