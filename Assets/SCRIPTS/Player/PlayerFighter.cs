@@ -5,17 +5,17 @@ using UnityEngine;
 public class PlayerFighter : FighterShared
 {
     #region ComponentVariables
-    // Variables used for calling componenets attached to the game object only
-    // Can be public or private
+    private AudioSource aus;
     #endregion
     #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
+    public AudioClip MovingSound;
+    public AudioClip DashSound;
+    public AudioClip OverheatWarning;
+    public AudioClip Overheated;
+    public AudioSource DashAudioSource;
     #endregion
     #region NormalVariables
     private float testTimer;
-    private int testCount=0;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -23,12 +23,15 @@ public class PlayerFighter : FighterShared
     {
         // Initialize variables
         InitializeFighter();
+        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateFighter();
+        // For thermal test only, increase temp by pressing N and decrease by pressing M
+        // Will be deleted
         if (testTimer <= 0f)
         {
             if (Input.GetKeyDown(KeyCode.M))
@@ -48,7 +51,29 @@ public class PlayerFighter : FighterShared
         
     }
     #endregion
-    #region Function group 1
-    // Group all function that serve the same algorithm
+    #region Play Sound
+    public void PlayMovingSound(float volume)
+    {
+        if (aus.clip!=MovingSound)
+        {
+            aus.clip = MovingSound;
+            aus.loop = true;
+            aus.Play();
+        }
+        aus.volume = volume;
+    }
+
+    public void StopSound()
+    {
+        aus.clip = null;
+    }
+
+    public void PlayDashSound()
+    {
+        DashAudioSource.clip = DashSound;
+        DashAudioSource.loop = false;
+        DashAudioSource.volume = 0.75f;
+        DashAudioSource.Play();
+    }
     #endregion
 }

@@ -55,10 +55,6 @@ public class StatusBoard : MonoBehaviour
             ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
         }
-        for (int i=0; i< 8; i++)
-        {
-            Physics2D.IgnoreLayerCollision(i, gameObject.layer, true);
-        }
         alreadyDelete = false;
     }
 
@@ -122,16 +118,22 @@ public class StatusBoard : MonoBehaviour
     }
     #endregion
     #region Show Status
+    // Start showing enemy
     public void StartShowing(GameObject enemy)
     {
         Enemy = enemy;
         isShow = false;
         startCounting = false;
+        // if not active -> active and start animation
         if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
+            // Start animation
             StartCoroutine(DelayShow());
-        } else
+        } 
+        // if already active: case when the stats and image still on: reset timer and variables
+        // case when stats and image already destroy during closing: re-show them
+        else
         {
             if (alreadyDelete)
             {
@@ -141,6 +143,7 @@ public class StatusBoard : MonoBehaviour
             {
                 if (Timer == 0f)
                 {
+                    // Make the board will not close until other function to set its timer
                     Timer = 1000f;
                 }
                 startCounting = true;
@@ -156,14 +159,20 @@ public class StatusBoard : MonoBehaviour
         if (CloneEnemy == null)
         {
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            // set Sorting order
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 100;
+            // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
             c.a = 0.5f;
             c.r = 1;
             c.g = 1;
             c.b = 1;
             CloneEnemy.GetComponent<SpriteRenderer>().color = c;
+            // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
+            // Destroy objects need to be destroyed so it wont interact
+            Destroy(CloneEnemy.transform.GetChild(1).gameObject);
+            Destroy(CloneEnemy.transform.GetChild(2).gameObject);
             // turn off scripts
             CloneEnemyObject = CloneEnemy.GetComponent<TestDisk>();
             CloneEnemyObject.enabled = false;
@@ -206,7 +215,7 @@ public class StatusBoard : MonoBehaviour
 
         //Setting to show current tempurature
         TemperText.gameObject.SetActive(true);
-        TemperText.text = EnemyObject.currentTemperature + "°C";
+        TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
         if (Timer==0f)
         {
             Timer = 1000f;
@@ -240,20 +249,23 @@ public class StatusBoard : MonoBehaviour
         }
 
         //Setting to show current tempurature
-        TemperText.text = EnemyObject.currentTemperature + "°C";
+        TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
     }
 
+    // Stop showing board
     public void StopShowing()
     {
         gameObject.SetActive(false);
         Destroy(CloneEnemy);
     }
 
+    // Close board
     private IEnumerator CloseBoard()
     {
         isEnding = true;
         OkToDestroy = true;
         anim.SetTrigger("End");
+        // Wait for aniamtion
         yield return new WaitForSeconds(1f);
         isEnding = false;
         if (OkToDestroy)
@@ -262,16 +274,23 @@ public class StatusBoard : MonoBehaviour
         }
     }
 
+    // Check if re-open board on closing phase
     public void CheckOnDestroy()
     {
+        // Set Timer to close to 5s
         Timer = 5f;
         if (isEnding)
         {
             isEnding = false;
+            // Remove trigger end from animator
             anim.ResetTrigger("End");
+            // Deny destroy object
             OkToDestroy = false;
+            // Stop the coroutine for closing board
             StopCoroutine(CloseBoard());
+            // Trigger Start anim again
             anim.SetTrigger("Start");
+            // Show stats
             StartShowing(Enemy);
         }
     }

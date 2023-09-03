@@ -32,9 +32,15 @@ public class OverheatBar : MonoBehaviour
     // Group all function that serve the same algorithm
     public void SetOverheatBar()
     {
+        // set Value
         Slider.maxValue = 100;
         Slider.value = Weapon.currentOverheat;
+        // Bar changing color from green -> red as the value rise
         Slider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, Slider.normalizedValue);
+        // Set transparency
+        Color c = Slider.fillRect.GetComponentInChildren<Image>().color;
+        c.a = 0.3f + 0.3f * Slider.normalizedValue;
+        Slider.fillRect.GetComponentInChildren<Image>().color = c;
     }
     #endregion
 }

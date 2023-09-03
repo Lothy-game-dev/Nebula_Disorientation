@@ -16,6 +16,8 @@ public class FighterController : MonoBehaviour
     public GameObject Aim;
     public GameObject LeftOverheatBar;
     public GameObject RightOverheatBar;
+    public GameObject LeftOverheatImage;
+    public GameObject RightOverheatImage;
     #endregion
     #region NormalVariables
     public GameObject CurrentLeftWeapon;
@@ -61,8 +63,35 @@ public class FighterController : MonoBehaviour
         RW.WeaponPosition = RightWeaponPosition;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
+        LeftWeapon.GetComponent<Weapons>().OverHeatImage = LeftOverheatImage;
+        RightWeapon.GetComponent<Weapons>().OverHeatImage = RightOverheatImage;
+        // Set left right weapon to overheat bar
         LeftOverheatBar.GetComponent<OverheatBar>().Weapon = LeftWeapon.GetComponent<Weapons>();
         RightOverheatBar.GetComponent<OverheatBar>().Weapon = RightWeapon.GetComponent<Weapons>();
+        GameObject LeftWeaponIcon = Instantiate(CurrentLeftWeapon, LeftOverheatImage.transform.position, Quaternion.identity);
+        GameObject RightWeaponIcon = Instantiate(CurrentRightWeapon, RightOverheatImage.transform.position, Quaternion.identity);
+        LeftWeaponIcon.SetActive(true);
+        LeftWeaponIcon.GetComponent<Weapons>().enabled = false;
+        LeftWeaponIcon.transform.localScale =
+            new Vector3(LeftWeaponIcon.transform.localScale.x * 12,
+            LeftWeaponIcon.transform.localScale.y * 12,
+            LeftWeaponIcon.transform.localScale.z);
+        LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        Color lc = LeftWeaponIcon.GetComponent<SpriteRenderer>().color;
+        lc.a = 120 / 255f;
+        LeftWeaponIcon.GetComponent<SpriteRenderer>().color = lc;
+        LeftWeaponIcon.transform.SetParent(LeftOverheatImage.transform);
+        RightWeaponIcon.SetActive(true);
+        RightWeaponIcon.GetComponent<Weapons>().enabled = false;
+        RightWeaponIcon.transform.localScale =
+            new Vector3(RightWeaponIcon.transform.localScale.x * 12,
+            RightWeaponIcon.transform.localScale.y * 12,
+            RightWeaponIcon.transform.localScale.z);
+        RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);
+        Color rc = RightWeaponIcon.GetComponent<SpriteRenderer>().color;
+        rc.a = 120 / 255f;
+        RightWeaponIcon.GetComponent<SpriteRenderer>().color = rc;
     }
     #endregion
 }

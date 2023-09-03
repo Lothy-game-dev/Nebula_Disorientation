@@ -26,6 +26,10 @@ public class GameController : MonoBehaviour
         db.Initialization();
         InitGame();
         Application.targetFrameRate = 120;
+        for (int i = 0; i < 8; i++)
+        {
+                Physics2D.IgnoreLayerCollision(i, 5, true);
+        }
     }
 
     // Update is called once per frame

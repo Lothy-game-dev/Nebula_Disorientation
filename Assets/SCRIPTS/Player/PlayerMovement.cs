@@ -15,6 +15,11 @@ public class PlayerMovement : MonoBehaviour
     public float DashSpeedRate;
     public GameObject LeftWeapon;
     public GameObject RightWeapon;
+    public GameObject backFire;
+    public GameObject TopBorder;
+    public GameObject BottomBorder;
+    public GameObject LeftBorder;
+    public GameObject RightBorder;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -27,7 +32,9 @@ public class PlayerMovement : MonoBehaviour
     private bool Dashing;
     private float DashingTimer;
     private bool Movable;
+    private float BackFireInitScale;
     private Vector2 speedVector;
+    private float LimitSpeedScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -38,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         pf = GetComponent<PlayerFighter>();
         Movable = true;
         CurrentRotateAngle = 0;
+        BackFireInitScale = backFire.transform.localScale.x;
     }
 
     // Update is called once per frame
@@ -65,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
             Dashing = false;
         }
         // Dashing conditions
-        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable)
+        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed)
         {
             Dashing = true;
             DashingTimer = DashingTime;
@@ -75,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
         DetectWSButton();
         if (!Dashing && Movable) PlayerMoving();
         pf.CalculateVelocity(speedVector);
+        CheckLimit();
     }
     private void FixedUpdate()
     {
@@ -187,8 +196,24 @@ public class PlayerMovement : MonoBehaviour
     void PlayerMoving()
     {
         Vector2 movementVector = CalculateMovement();
+        if (CurrentSpeed>0)
+        {
+            GetComponent<PlayerFighter>().PlayMovingSound(CurrentSpeed * pf.SlowedMoveSpdScale / MovingSpeed);
+            if (!backFire.activeSelf)
+            {
+                backFire.SetActive(true);
+            }
+            backFire.transform.localScale =
+                new Vector3(CurrentSpeed * pf.SlowedMoveSpdScale / MovingSpeed * BackFireInitScale,
+                CurrentSpeed * pf.SlowedMoveSpdScale / MovingSpeed * BackFireInitScale,
+                backFire.transform.localScale.z);
+        } else
+        {
+            GetComponent<PlayerFighter>().StopSound();
+            backFire.SetActive(false);
+        }
         AccelerateSpeed();
-        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale;
+        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale;
     }
     // Accelerate Players
     void AccelerateSpeed()
@@ -253,7 +278,58 @@ public class PlayerMovement : MonoBehaviour
     void Dash()
     {
         Vector2 movementVector = CalculateMovement();
-        speedVector = movementVector * MovingSpeed * DashSpeedRate;
+        GetComponent<PlayerFighter>().PlayDashSound();
+        speedVector = movementVector * MovingSpeed * DashSpeedRate * LimitSpeedScale;
+    }
+    #endregion
+    #region Check Limit
+    private void CheckLimit()
+    {
+        float LimitTopY = TopBorder.transform.position.y - 100;
+        float LimitBottomY = BottomBorder.transform.position.y + 100;
+        float LimitLeftX = LeftBorder.transform.position.x + 100;
+        float LimitRightX = RightBorder.transform.position.x - 100;
+        if (transform.position.x >= LimitRightX)
+        {
+            LimitSpeedScale = (50 - (transform.position.x - LimitRightX)) / 50;
+        }
+        else if (transform.position.x <= LimitLeftX)
+        {
+            LimitSpeedScale = (50 - (LimitLeftX - transform.position.x)) / 50;
+        }
+        else if (transform.position.y >= LimitTopY)
+        {
+            LimitSpeedScale = (50 - (transform.position.y - LimitTopY)) / 50;
+        }
+        else if (transform.position.y <= LimitBottomY)
+        {
+            LimitSpeedScale = (50 - (LimitBottomY - transform.position.y)) / 50;
+        }
+        else LimitSpeedScale = 1;
+        if (LimitSpeedScale<0f)
+        {
+            LimitSpeedScale = 0f;
+        }
+        if (transform.position.x >= (LimitRightX + 50)) 
+        {
+            StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
+        } else if (transform.position.x <= (LimitLeftX - 50))
+        {
+            StartCoroutine(TeleportBack(new Vector2(LimitLeftX, transform.position.y)));
+        } else if (transform.position.y >= (LimitTopY + 50))
+        {
+            StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitTopY)));
+        } else if (transform.position.y <= (LimitBottomY - 50))
+        {
+            StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitBottomY)));
+        }
+    }
+
+    IEnumerator TeleportBack(Vector2 Position)
+    {
+        yield return new WaitForSeconds(0.1f);
+        transform.position = new Vector3(Position.x, Position.y, transform.position.z);
+        CurrentSpeed = 0f;
     }
     #endregion
 }

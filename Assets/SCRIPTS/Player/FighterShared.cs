@@ -11,7 +11,7 @@ public class FighterShared : MonoBehaviour
     // Thermal Stats
     public float currentTemperature;
     public bool isOverloadded;
-    public float OverloaddedRoFScale;
+    public float OverheatIncreaseScale;
     public bool isBurned;
     public float BurnedDelay;
     public bool isSlowed;
@@ -26,6 +26,24 @@ public class FighterShared : MonoBehaviour
     public bool isBHPulled;
     public List<Vector2> PulledVector;
     public LayerMask BlackHoleLayer;
+    public bool isLavaBurned;
+    public int LavaBurnedCount;
+    public int LavaBurnedDmgNumber;
+    public float LavaBurnedDamageTimer;
+    public float LavaBurnedDamage;
+    public GameObject OnFireGO;
+    public bool isGravitationalSlow;
+    public float GravitationalSlow;
+    public float GravitationalSlowMultiplier;
+    public float GravitationalSlowTimer;
+    public bool isSFBFreeze;
+    public float SFBFreezeTimer;
+    public GameObject OnFreezeGO;
+    public float NanoEffectFrozenDurationIncrease;
+    public bool IsNanoTemp;
+    public float NanoTempScale;
+    public int NanoTempStacks;
+    public float NanoTempTimer;
     #endregion
     #region Shared Functions
     // Initialize
@@ -37,12 +55,17 @@ public class FighterShared : MonoBehaviour
         isImmuneFrozenSlow = false;
         RegenScale = 1f;
         SlowedMoveSpdScale = 1;
+        OverheatIncreaseScale = 0;
+        GravitationalSlowMultiplier = 1;
+        NanoTempScale = 1;
+        NanoTempStacks = 0;
     }
     // Update For Fighter
     public void UpdateFighter()
     {
         CheckThermal();
         CheckInsideBlackhole();
+        CheckSpecialEffectStatus();
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
@@ -71,6 +94,7 @@ public class FighterShared : MonoBehaviour
         else if (currentTemperature >= 90)
         {
             isOverloadded = false;
+            OverheatIncreaseScale = 0;
             if (!isBurned)
             {
                 isBurned = true;
@@ -80,6 +104,12 @@ public class FighterShared : MonoBehaviour
             c.g = 0;
             c.b = 0;
         } 
+        else if (currentTemperature==50)
+        {
+            isOverloadded = false;
+            isBurned = false;
+            isSlowed = false;
+        }
         // If 0 < temp < 50 -> slowed
         else if (currentTemperature > 0 && currentTemperature < 50 && !isImmuneFrozenSlow)
         {
@@ -95,10 +125,15 @@ public class FighterShared : MonoBehaviour
             isOverloadded = false;
             isBurned = false;
             isSlowed = false;
+            if (isSFBFreeze)
+            {
+                isSFBFreeze = false;
+                SFBFreezeTimer = 0;
+            }
             if (!isImmuneFrozenSlow)
             {
                 isFrozen = true;
-                FrozenDuration = 5f;
+                FrozenDuration = 5f * NanoTempScale;
                 c.r = 0;
                 c.g = 0;
             }
@@ -146,24 +181,38 @@ public class FighterShared : MonoBehaviour
             // If burn, deal dmg per second
             if (BurnedDelay <= 0f)
             {
-                CurrentHP -= MaxHP * (1 + (currentTemperature - 90) / 10) / 100;
+                ReceiveBurnedDamage(1);
                 BurnedDelay = 1f;
             } else if (BurnedDelay > 0f)
             {
                 BurnedDelay -= Time.deltaTime;
             }
+            if (!OnFireGO.activeSelf)
+            {
+                OnFireGO.SetActive(true);
+            }
+        } else
+        {
+            if (OnFireGO.activeSelf && !isLavaBurned)
+            {
+                OnFireGO.SetActive(false);
+            }
         }
         if (isOverloadded)
         {
-            // If overloadded, reduce RoF
-            OverloaddedRoFScale = (100 - (currentTemperature - 50) / 40 * 25) / 100;
+            // If overloadded, increasing overheat rate
+            OverheatIncreaseScale = (50 + (currentTemperature-50) / 40 * 50) / 100 * NanoTempScale;
+        } else
+        {
+            OverheatIncreaseScale = 0;
         }
         if (isSlowed)
         {
             // if Slowed, reduce move and rotate spd
             if (!isImmuneFrozenSlow)
             {
-                SlowedMoveSpdScale = 1 - (50 - currentTemperature) / 50;
+                SlowedMoveSpdScale = (1 - (50 - currentTemperature) * NanoTempScale / 50)
+                    < 0.1f ? 0.1f : (1 - (50 - currentTemperature) * NanoTempScale / 50);
             } else
             {
                 SlowedMoveSpdScale = 1;
@@ -178,13 +227,22 @@ public class FighterShared : MonoBehaviour
             {
                 FrozenDuration -= Time.deltaTime;
                 CalculateVelocity(new Vector2(0, 0));
+                if (!OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(true);
+                }
             }
             else
             {
+                if (OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(false);
+                }
                 isFrozen = false;
                 isImmuneFrozenSlow = true;
                 ImmuneDuration = 3f;
                 isRegenThermal = true;
+                NanoEffectFrozenDurationIncrease = 0f;
                 RegenScale = 2;
                 RegenDelayTimer = 0f;
                 Color c = GetComponent<SpriteRenderer>().color;
@@ -194,10 +252,15 @@ public class FighterShared : MonoBehaviour
             }
         }
     }
+    // Receive Burn Damage
+    public void ReceiveBurnedDamage(float scale)
+    {
+        CurrentHP -= MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100;
+    }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
     {
-        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 2f;
+        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 2f * NanoTempScale;
         isRegenThermal = false;
         RegenDelayTimer = 2f;
     }
@@ -236,17 +299,20 @@ public class FighterShared : MonoBehaviour
     }
     #endregion
     #region Check Blackhole Pulling
+    // Check blackhole pulling force
     public void CheckInsideBlackhole()
     {
         isBHPulled = false;
         PulledVector = new List<Vector2>();
+        // Get all blackhole at current position
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackHoleLayer);
         if (cols.Length>0)
         {
+            // If there are blackhole(s), add its pulling vector to list
             foreach (var col in cols)
             {
                 BlackHole bh = col.GetComponent<BlackHole>();
-                if (bh!=null)
+                if (bh != null && bh.HitLayer.value == 1<<gameObject.layer)
                 {
                     isBHPulled = true;
                     Vector2 vectorPull = bh.CalculatePullingVector(gameObject);
@@ -256,7 +322,7 @@ public class FighterShared : MonoBehaviour
         }
     }
 
-
+    // Calculate Velocity based on blackhole pulling vector
     public void CalculateVelocity(Vector2 veloc)
     {
         if (isBHPulled)
@@ -266,7 +332,140 @@ public class FighterShared : MonoBehaviour
                 veloc += v;
             }
         }
-        GetComponent<Rigidbody2D>().velocity = veloc;
+        GetComponent<Rigidbody2D>().velocity = veloc * GravitationalSlowMultiplier;
+    }
+    #endregion
+    #region Check Weapon Special Effects
+    // Check weapon's special effect
+    public void CheckSpecialEffectStatus()
+    {
+        // Lava orb's Lavaburned
+        if (isLavaBurned)
+        {
+            if (LavaBurnedCount < LavaBurnedDmgNumber)
+            {
+                if (!OnFireGO.activeSelf)
+                {
+                    OnFireGO.SetActive(true);
+                }
+                if (LavaBurnedDamageTimer>0f)
+                {
+                    LavaBurnedDamageTimer -= Time.deltaTime;
+                } else
+                {
+                    CurrentHP -= LavaBurnedDamage;
+                    ReceiveThermalDamage(true);
+                    LavaBurnedCount++;
+                    LavaBurnedDamageTimer = 0.1f;
+                }
+            } 
+            else
+            {
+                isLavaBurned = false;
+                if (OnFireGO.activeSelf && !isBurned)
+                {
+                    OnFireGO.SetActive(false);
+                }
+            }
+        }   
+        // Gravitational Slow
+        if (isGravitationalSlow)
+        {
+            if (GravitationalSlowTimer > 0f)
+            {
+                GravitationalSlowTimer -= Time.deltaTime;
+                GravitationalSlowMultiplier = 1 - GravitationalSlow;
+            }
+            else
+            {
+                isGravitationalSlow = false;
+                GravitationalSlowMultiplier = 1;
+            }
+        }
+        // Superior Freezing Blaster Freeze
+        if (isSFBFreeze)
+        {
+            if (SFBFreezeTimer > 0f)
+            {
+                SFBFreezeTimer -= Time.deltaTime;
+                CalculateVelocity(new Vector2(0, 0));
+                if (!OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(true);
+                }
+            } 
+            else
+            {
+                isSFBFreeze = false;
+                if (OnFreezeGO.activeSelf)
+                {
+                    OnFreezeGO.SetActive(false);
+                }
+            }
+        }
+        // Nano Temp Effect
+        if (IsNanoTemp)
+        {
+            if (NanoTempTimer > 0f)
+            {
+                NanoTempTimer -= Time.deltaTime;
+                NanoTempScale = 1 + NanoTempStacks * 15f / 100;
+            } 
+            else
+            {
+                NanoTempStacks = 0;
+                NanoTempScale = 1;
+                IsNanoTemp = false;
+            }
+        }
+    }
+
+    // Inflict self with lava burned (called by outer factors)
+    public void InflictLavaBurned(float dmg, int numberOfTimes)
+    {
+        LavaBurnedDamage = dmg;
+        LavaBurnedDamageTimer = 0f;
+        LavaBurnedDmgNumber = numberOfTimes;
+        LavaBurnedCount = 0;
+        isLavaBurned = true;
+    }
+
+    public void InflictGravitationalSlow(float SlowScale, float Time)
+    {
+        GravitationalSlowTimer = Time;
+        isGravitationalSlow = true;
+        GravitationalSlow = SlowScale;
+    }
+
+    public void InflictSuperiorFreezingBlasterFreeze(float FreezingDuration, float AddingFreezingDuration)
+    {
+        if (isFrozen)
+        {
+            FrozenDuration += AddingFreezingDuration;
+        } else
+        {
+            if (!isSFBFreeze)
+            {
+                isSFBFreeze = true;
+            }
+            SFBFreezeTimer = FreezingDuration * NanoTempScale;
+        }
+    }
+    public void InflictNanoTemp()
+    {
+        if (!IsNanoTemp)
+        {
+            IsNanoTemp = true;
+            NanoTempStacks = 1;
+            NanoTempTimer = 2f;
+        } else
+        {
+            if (NanoTempStacks<4)
+            {
+                NanoTempStacks++;
+            }
+            NanoTempTimer = 2f;
+        }
     }
     #endregion
 }

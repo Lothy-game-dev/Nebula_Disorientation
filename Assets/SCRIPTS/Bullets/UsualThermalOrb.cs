@@ -12,8 +12,6 @@ public class UsualThermalOrb : BulletShared
     public bool isHeat;
     #endregion
     #region NormalVariables
-    private float AnimTimer;
-    private bool isStart;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -25,8 +23,6 @@ public class UsualThermalOrb : BulletShared
         CalculateVelocity();
         // Accelerate Bullet
         StartCoroutine(Accelerate(0.1f));
-        AnimTimer = StartAnimTimer;
-        isStart = true;
         InitializeBullet();
     }
 

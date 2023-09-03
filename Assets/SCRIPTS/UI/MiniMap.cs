@@ -132,6 +132,7 @@ public class MiniMap : MonoBehaviour
                     icons.Add(icon);
                 }
             }
+            // Blackhole
             else if (col.tag == "Blackhole")
             {
                 GameObject iconCheck = IconExist(col.name);

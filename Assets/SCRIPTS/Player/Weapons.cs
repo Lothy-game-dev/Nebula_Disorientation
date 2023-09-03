@@ -5,7 +5,7 @@ using UnityEngine;
 public class Weapons : MonoBehaviour
 {
     #region ComponentVariables
-
+    private AudioSource aus;
     #endregion
     #region InitializeVariables
     public GameObject Fighter;
@@ -13,6 +13,7 @@ public class Weapons : MonoBehaviour
     public GameObject RotatePoint;
     public GameObject WeaponPosition;
     public GameObject ShootingPosition;
+    public GameObject OverHeatImage;
     public bool isLeftWeapon;
     public GameObject Bullet;
     public float RotateLimitNegative;
@@ -20,10 +21,12 @@ public class Weapons : MonoBehaviour
     public bool IsThermalType;
     public int RateOfHit;
     public float RateOfFire;
-    public bool CanBeOverheat;
+    public bool NoOverheat;
     public float OverheatIncreasePerShot;
     public float OverheatResetTimer;
     public float OverheatTimer;
+    public AudioClip WeaponShootSound;
+    public bool IsOrbWeapon;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -35,6 +38,7 @@ public class Weapons : MonoBehaviour
     private bool isOverheatted;
     private float OverheatCDTimer;
     private float OverheatDecreaseTimer;
+    private bool isWarning;
 
     private float FireTimer;
     private PlayerMovement pm;
@@ -45,9 +49,8 @@ public class Weapons : MonoBehaviour
     private float LimitNegative;
     private float LimitPositive;
     private int MouseInput;
-
-    private int test=0;
-    private float testTimer;
+    private GameObject bulletFire;
+    private BulletShared bul;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -61,6 +64,12 @@ public class Weapons : MonoBehaviour
         else MouseInput = 1;
         Fireable = true;
         OverheatSpeedIncreaseRate = 1f;
+        if (NoOverheat)
+        {
+            OverheatIncreasePerShot = 0;
+        }
+        gameObject.AddComponent<AudioSource>();
+        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -74,6 +83,7 @@ public class Weapons : MonoBehaviour
         PrevAngle %= 360;
         if (tracking)
         {
+            // Calculate Angel and if they are <0 or >360 then set them to between 0 and 360
             ExpectedAngle = CurrentAngle + CalAngle - PrevAngle;
             if (ExpectedAngle >= 360)
             {
@@ -99,8 +109,11 @@ public class Weapons : MonoBehaviour
             {
                 LimitPositive += 360;
             }
+            // In case the mouse doesnt change position: Will not add the rotation
             if (PrevAngle != CalAngle)
             {
+                // If the mouse aim vector in shootable range -> set fireable = true
+                // And rotate the weapon to the mouse aim position
                 if (CheckIfAngle1BetweenAngle2And3(ExpectedAngle, LimitNegative, LimitPositive))
                 {
                     Fireable = true;
@@ -109,7 +122,15 @@ public class Weapons : MonoBehaviour
                     PrevAngle = CalAngle;
                 } else
                 {
+                    // Else set fireable = false
+                    // And rotate the weapon to the nearest posible position to the mouse
+                    // also end weapon sound if there is sound
+                    // (only thermal weapon get this case since their sounds loop)
                     Fireable = false;
+                    if (!isWarning && !isOverheatted && aus.clip!=null && IsThermalType)
+                    {
+                        EndSound();
+                    }
                     float NearestAngle = NearestPossibleAngle(CurrentAngle, LimitNegative, LimitPositive);
                     transform.RotateAround(RotatePoint.transform.position, Vector3.back, NearestAngle);
                     CurrentAngle += NearestAngle;
@@ -117,15 +138,7 @@ public class Weapons : MonoBehaviour
                 }
             } 
         }
-        
-        if (testTimer<=0f)
-        {
-            test = 0;
-            testTimer = 1f;
-        } else
-        {
-            testTimer -= Time.deltaTime;
-        }
+        // Reset thermal hit count per 1/rate of hit second
         if (HitCountResetTimer > 0f)
         {
             HitCountResetTimer -= Time.deltaTime;
@@ -134,7 +147,17 @@ public class Weapons : MonoBehaviour
             CurrentHitCount = 0;
             HitCountResetTimer = 1/RateOfHit;
         }
+        // Check weapon overheat
         CheckOverheatStatus();
+        // Remove sound when stop holding for thermal weapon
+        // Kinetic and other type unaffected
+        if (Input.GetMouseButtonUp(MouseInput))
+        {
+            if (!isOverheatted && IsThermalType)
+            {
+                EndSound();
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -143,8 +166,6 @@ public class Weapons : MonoBehaviour
         {
             if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
             {
-                test++;
-                Debug.Log(test);
                 if (!IsThermalType)
                 {
                     FireBullet();
@@ -293,39 +314,76 @@ public class Weapons : MonoBehaviour
     }
     #endregion
     #region Weapon Fire
-    // Fire Bullet
+    // Fire Kinetic/Laser/Orb Bullet
     void FireBullet()
     {
-        GameObject bulletFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+        // Incase Lava orb weapon, the gameobject will be different for tracer && rotate animation
+        // so there will be an if clause
+        if (IsOrbWeapon)
+        {
+            bulletFire = Instantiate(Bullet.transform.parent.gameObject, ShootingPosition.transform.position, Quaternion.identity);
+        } 
+        else
+        {
+            bulletFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+        }
+        // Rotate the bullet to the firing position
         bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
-        BulletShared bul = bulletFire.GetComponent<BulletShared>();
+        // Same as above
+        if (IsOrbWeapon)
+        {
+            bul = bulletFire.transform.GetChild(0).GetComponent<BulletShared>();
+        } else
+        {
+            bul = bulletFire.GetComponent<BulletShared>();
+        }
+        // Set bullet's properties required
         bul.Destination = Aim.transform.position;
         bul.WeaponShoot = this;
         bulletFire.SetActive(true);
-        currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+        // Increase overheat bar for each shot, increasing with themral status overloadded
+        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
+        // Set reset timer
         OverheatDecreaseTimer = OverheatResetTimer;
+        // Create sound
+        if (!isOverheatted) KineticSound();
     }
+    // Fire Flamethrower type orbs
     void FireFlamethrowerOrb()
     {
+        // Because of performance issues, flamethrower type will fire 30 times each second,
+        // with each time firing 5 orbs
         for (int i=0;i<5;i++)
         {
+            // Mostly same as kinetic bullet
             GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
-            float Angle = Random.Range(-10f, 10f);
+            // Set Angle random between -5 and 5 degree so that it could make the fire looks real
+            float Angle = Random.Range(-5f, 5f);
             orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + Angle);
             BulletShared bul = orbFire.GetComponent<BulletShared>();
             bul.Destination = CalculateFTOrbDestination(Angle, bul);
-            bul.Range = 375 + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
+            // For the fire shape
+            bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
             orbFire.SetActive(true);
-            currentOverheat += OverheatIncreasePerShot * OverheatSpeedIncreaseRate;
+            // Sound
+            if (!isOverheatted) ThermalSound();
+            // Overheat
+            currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
             OverheatDecreaseTimer = OverheatResetTimer;
         }
     }
+
+    // Calculate Flamethrower type Orb
     Vector2 CalculateFTOrbDestination(float Angle, BulletShared bul)
     {
+        // Get the vector from shooting pos to aim pos
         Vector2 baseVector = Aim.transform.position - ShootingPosition.transform.position;
+        // This is mostly for animation to be real
         baseVector = baseVector * bul.MaxEffectiveDistance * 1.5f / baseVector.magnitude;
+        // Get the length of the vector
         float length = baseVector.magnitude;
+        // This is pure Mathematics. Calculate the position the orb will be
         float length1 = length * Mathf.Cos(Angle * Mathf.Deg2Rad);
         Vector2 JoinPos = new Vector2(ShootingPosition.transform.position.x, ShootingPosition.transform.position.y)
             + baseVector * length1 / length;
@@ -336,13 +394,33 @@ public class Weapons : MonoBehaviour
     }
     #endregion
     #region Overheat System
+    // Check overheat
     void CheckOverheatStatus()
     {
+        // If overheat rate < 80% when is not overheatted then remove warning sound
+        if (currentOverheat <80 && !isOverheatted && isWarning)
+        {
+            EndOverheatWarningSound();
+            isWarning = false;
+        }
+        // If overheat rate >= 80% then play overheat warning sounds
+        if (currentOverheat >= 80 && !isOverheatted)
+        {
+            OverheatSound80Percent(((currentOverheat-75)*2)/100);
+            isWarning = true;
+        }
+        // If overheat rate >= 100% and is not overheatted then become overheatted and set timer, etc.
         if (currentOverheat >= 100 && !isOverheatted)
         {
             isOverheatted = true;
+            EndOverheatWarningSound();
+            OverheatedSound();
+            // Set overheat rate to 100 for exact animation
+            currentOverheat = 100;
             OverheatCDTimer = OverheatTimer;
+            OverheatDecreaseTimer = 0f;
         }
+        // Overheat run out timer;
         if (OverheatCDTimer > 0f)
         {
             OverheatCDTimer -= Time.deltaTime;
@@ -352,13 +430,33 @@ public class Weapons : MonoBehaviour
             if (isOverheatted)
             {
                 isOverheatted = false;
+                isWarning = false;
+                EndSound();
                 currentOverheat = 0f;
             }
         }
+        // If is overheatted, set fireable = false and decrease overheat rate 100/overheatTimer per second
         if (isOverheatted)
         {
             Fireable = false;
+            if (OverheatDecreaseTimer > 0f)
+            {
+                OverheatDecreaseTimer -= Time.deltaTime;
+            }
+            else
+            {
+                if (currentOverheat >= 100 / OverheatTimer)
+                {
+                    currentOverheat -= 100 / OverheatTimer;
+                }
+                else
+                {
+                    currentOverheat = 0;
+                }
+                OverheatDecreaseTimer = 1;
+            }
         }
+        // If not overheatted: Automatically decrease overheat when not firing based on the stats of weapons
         else
         {
             if (OverheatDecreaseTimer > 0f)
@@ -378,6 +476,56 @@ public class Weapons : MonoBehaviour
                 OverheatDecreaseTimer = 1 / 20f;
             }
         }
+    }
+    #endregion
+    #region Weapon Sound
+    public void KineticSound()
+    {
+        aus.clip = WeaponShootSound;
+        aus.loop = false;
+        aus.Play();
+        aus.volume = 1f;
+    }
+    public void ThermalSound()
+    {
+        if (aus.clip!=WeaponShootSound)
+        {
+            aus.clip = WeaponShootSound;
+            aus.loop = true;
+            aus.Play();
+            if (Bullet.GetComponent<UsualThermalOrb>()!=null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f;
+            else aus.volume = 0.2f;
+        }
+    }
+
+    public void EndSound()
+    {
+        aus.clip = null;
+    }
+
+    public void OverheatSound80Percent(float volume)
+    {
+        if (OverHeatImage.GetComponent<AudioSource>().clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
+        {
+            OverHeatImage.GetComponent<AudioSource>().clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
+            OverHeatImage.GetComponent<AudioSource>().loop = true;
+            OverHeatImage.GetComponent<AudioSource>().Play();
+        }
+        OverHeatImage.GetComponent<AudioSource>().volume = volume;
+        OverHeatImage.GetComponent<AudioSource>().priority = 10;
+    }
+
+    public void EndOverheatWarningSound()
+    {
+        OverHeatImage.GetComponent<AudioSource>().clip = null;
+    }
+
+    public void OverheatedSound()
+    {
+        aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
+        aus.loop = true;
+        aus.Play();
+        aus.volume = 0.08f;
     }
     #endregion
 }

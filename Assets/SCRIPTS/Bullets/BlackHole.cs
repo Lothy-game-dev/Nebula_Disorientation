@@ -19,6 +19,7 @@ public class BlackHole : MonoBehaviour
     public float BaseDmg;
     public int RateOfHit;
     public float radius;
+    public float RadiusWhenCreate;
 
     private float centerRadius;
     private float ResetHitTimer;
@@ -29,15 +30,23 @@ public class BlackHole : MonoBehaviour
     void Start()
     {
         // Initialize variables
+        // Calculate Radius and Center Radius
         radius = Mathf.Abs((transform.position - RangeCheck.transform.position).magnitude);
         centerRadius = Mathf.Abs((transform.position - CenterRange.transform.position).magnitude);
-        if (BaseDmg==0)
-        {
-            BaseDmg = 10;
-        }
+        // If Rate Of hit is not set, set RoH
         if (RateOfHit==0)
         {
             RateOfHit = 1;
+        }
+        // If blackhole is created by other scripts, set the scale
+        if (RadiusWhenCreate!=0)
+        {
+            transform.localScale = new Vector3
+                (transform.localScale.x * RadiusWhenCreate / radius,
+                transform.localScale.y * RadiusWhenCreate / radius,
+                transform.localScale.z);
+            radius = RadiusWhenCreate;
+            centerRadius = centerRadius * RadiusWhenCreate/radius;
         }
     }
 
@@ -46,7 +55,9 @@ public class BlackHole : MonoBehaviour
     {
         // Call function and timer only if possible
         transform.Rotate(new Vector3(0, 0, 1));
+        // Deal dmg to all hit layer within range
         DealDamageToLayerInRange(HitLayer);
+        // Reset hit timer
         if (ResetHitTimer>0f)
         {
             ResetHitTimer -= Time.deltaTime;
@@ -59,6 +70,7 @@ public class BlackHole : MonoBehaviour
     }
     #endregion
     #region Pulling Vector Cal
+    // Calculate pulling vector
     public Vector2 CalculatePullingVector(GameObject go)
     {
         float distance = Mathf.Abs((go.transform.position - transform.position).magnitude);
@@ -68,6 +80,7 @@ public class BlackHole : MonoBehaviour
         } 
         else if (distance <= centerRadius)
         {
+            // Inside center radius: Vector pulling at maximum power
             Vector2 vectorDis = transform.position - go.transform.position;
             float ForceX = BasePullingForce * vectorDis.x / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
             float ForceY = BasePullingForce * vectorDis.y / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
@@ -75,6 +88,7 @@ public class BlackHole : MonoBehaviour
         }
         else
         {
+            // Outside center radius: Vector pulling reduced the further the object from the center point
             Vector2 vectorDis = transform.position - go.transform.position;
             float pullForceCal = (radius - distance / 2) / radius * BasePullingForce;
             float ForceX = pullForceCal * vectorDis.x / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
@@ -83,6 +97,7 @@ public class BlackHole : MonoBehaviour
         }
     }
 
+    // Deal dmg to layer in range: same to deal dmg algorithm in bullets
     public void DealDamageToLayerInRange(LayerMask layer)
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, radius, layer);
@@ -103,6 +118,7 @@ public class BlackHole : MonoBehaviour
         }
     }
 
+    // Calculate DMG dealt based on distance
     public float CalculateDamageDealt(GameObject go)
     {
         float distance = Mathf.Abs((go.transform.position - transform.position).magnitude);

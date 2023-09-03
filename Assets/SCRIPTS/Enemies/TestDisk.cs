@@ -14,8 +14,8 @@ public class TestDisk : EnemyShared
         rb = GetComponent<Rigidbody2D>();
         changeDirTimer = 2.5f;
         test = false;
-        check = new Vector2(0, 30);
-        StartEnemy(10000f);
+        check = new Vector2(0, 300);
+        StartEnemy(50000f);
         CalculateVelocity(!test ? check : -check);
         InitializeFighter();
     }
@@ -24,9 +24,10 @@ public class TestDisk : EnemyShared
     void Update()
     {
         UpdateEnemy();
-        if (!isFrozen)
+        if (!isFrozen && !isSFBFreeze)
         {
-            CalculateVelocity(!test ? check : -check);
+            /*CalculateVelocity(!test ? check : -check);*/
+            CalculateVelocity(new Vector2(0, 0));
         }
         if (changeDirTimer > 0f)
         {
