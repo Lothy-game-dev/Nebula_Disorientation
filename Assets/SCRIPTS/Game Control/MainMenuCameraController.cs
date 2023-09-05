@@ -11,6 +11,7 @@ public class MainMenuCameraController : MonoBehaviour
     #region InitializeVariables
     public GameObject StartScene;
     public MainMenuButtons[] MainMenuButtons;
+    public GameObject LoadingScene;
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
@@ -40,6 +41,7 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
+        GenerateLoadingScene(5f);
         MainMenuSceneShared m = SceneGO.GetComponent<MainMenuSceneShared>();
         if (m != null)
         {
@@ -57,6 +59,16 @@ public class MainMenuCameraController : MonoBehaviour
         {
             but.EnterView();
         }
+    }
+
+    public void GenerateLoadingScene(float sec)
+    {
+        GameObject load = Instantiate(LoadingScene, CurrentScene.transform.position, Quaternion.identity);
+        load.GetComponent<SpriteRenderer>().sortingOrder = 100;
+        load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
+        load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
+        load.SetActive(true);
+        Destroy(load, sec);
     }
     #endregion
 }
