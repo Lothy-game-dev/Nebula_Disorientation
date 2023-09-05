@@ -70,6 +70,7 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadingScene.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
