@@ -42,16 +42,9 @@ public class LoadingScene : MonoBehaviour
         for (int i = 0; i < 40; i++)
         {
             LoadingSlider.value += 100f/40;
-            Debug.Log(LoadingSlider.value);
             yield return new WaitForSeconds(second/40);
         }
     }
     #endregion
-    #region Generate loading scene
-    public void GenerateLoadingScene(float second)
-    {
-
-    }
-    // Group all function that serve the same algorithm
-    #endregion
+  
 }
