@@ -30,7 +30,6 @@ public class MainMenuButtons : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         InitScale = transform.localScale.x;
         ExpectedScale = transform.localScale.x * 1.1f;
-        GetComponent<Collider2D>().enabled = false;
         EnterView();
     }
 
@@ -48,7 +47,6 @@ public class MainMenuButtons : MonoBehaviour
     #region Mouse Check
     private void OnMouseEnter()
     {
-        alreadySelect = false;
     }
     private void OnMouseOver()
     {
@@ -92,12 +90,15 @@ public class MainMenuButtons : MonoBehaviour
 
     private void OnMouseDown()
     {
-        alreadySelect = true;
-        foreach (var but in OtherButtons)
+        if (!alreadySelect)
         {
-            but.GetComponent<MainMenuButtons>().ExitView();
+            alreadySelect = true;
+            foreach (var but in OtherButtons)
+            {
+                but.GetComponent<MainMenuButtons>().ExitView();
+            }
+            StartCoroutine(DelayTransfer());
         }
-        StartCoroutine(DelayTransfer());
     }
     #endregion
     #region Enter and Exit
@@ -133,6 +134,8 @@ public class MainMenuButtons : MonoBehaviour
 
     public void EnterView()
     {
+        alreadySelect = false;
+        GetComponent<Collider2D>().enabled = false;
         Color c = GetComponent<SpriteRenderer>().color;
         c.a = 0;
         c.r = 1;

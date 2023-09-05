@@ -35,7 +35,7 @@ public class LoadingScene : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Loading animation
     // Group all function that serve the same algorithm
     private IEnumerator LoadingAnimation(float second)
     {
@@ -47,7 +47,11 @@ public class LoadingScene : MonoBehaviour
         }
     }
     #endregion
-    #region Function group ...
+    #region Generate loading scene
+    public void GenerateLoadingScene(float second)
+    {
+
+    }
     // Group all function that serve the same algorithm
     #endregion
 }
