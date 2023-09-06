@@ -22,7 +22,7 @@ public class LoadingScene : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         LoadingSlider.maxValue = 100;
         StartCoroutine(LoadingAnimation(LoadingTime));
@@ -46,5 +46,4 @@ public class LoadingScene : MonoBehaviour
         }
     }
     #endregion
-  
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PilotContract : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PilotContract : MonoBehaviour
     public GameObject LeftButton;
     public GameObject RightButton;
     public GameObject TOSButton;
+    public GameObject counter;
     #endregion
     #region NormalVariables
     public int currentPages;
@@ -85,6 +87,24 @@ public class PilotContract : MonoBehaviour
         {
             RightButton.GetComponent<PilotContractButton>().ResetPosLeftRight();
             LeftButton.GetComponent<PilotContractButton>().ResetPosLeftRight();
+        }
+        if (currentPages >= 1 && currentPages <= EULAList.Length-1)
+        {
+            if (!counter.activeSelf)
+            {
+                counter.SetActive(true);
+            }
+            TextMeshPro tm = counter.GetComponent<TextMeshPro>();
+            if (tm!=null)
+            {
+                tm.text = currentPages.ToString() + "/" + (EULAList.Length - 1).ToString();
+            }
+        } else
+        {
+            if (counter.activeSelf)
+            {
+                counter.SetActive(false);
+            }
         }
     }
     #endregion
