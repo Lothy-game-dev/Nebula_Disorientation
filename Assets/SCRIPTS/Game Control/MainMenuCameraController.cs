@@ -46,7 +46,7 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
-        GenerateLoadingScene(3f);
+        GenerateLoadingScene(0.5f);
         MainMenuSceneShared m = SceneGO.GetComponent<MainMenuSceneShared>();
         if (m != null)
         {
@@ -68,8 +68,8 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec)
     {
-        Direc = new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
-        Load = Instantiate(LoadingScene, CurrentScene.transform.position, Quaternion.identity);
+        Direc = new Vector2(Random.Range(-1, 2), Random.Range(-1, 2)) / sec;
+        Load = Instantiate(LoadingScene, new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y, LoadingScene.transform.position.z), Quaternion.identity);
         Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
         Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
         Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;       

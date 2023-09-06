@@ -14,6 +14,7 @@ public class PilotSignContract : MonoBehaviour
     public GameObject SignButton;
     public GameObject[] Warning;
     public GameObject SignWord;
+    public GameObject ScenePos;
     #endregion
     #region NormalVariables
     private float InitScaleX;
@@ -49,7 +50,7 @@ public class PilotSignContract : MonoBehaviour
         {
             if (InputField.isFocused)
             {
-                if (InputField.text.Length < 8f || InputField.text.Length > 16f)
+                if (InputField.text.Length < 6f || InputField.text.Length > 16f)
                 {
                     foreach (var warn in Warning)
                     {
@@ -58,8 +59,8 @@ public class PilotSignContract : MonoBehaviour
                             warn.SetActive(true);
                         }
                         Color c = warn.GetComponent<SpriteRenderer>().color;
-                        c.g = (8 - InputField.text.Length) / 8;
-                        c.b = (8 - InputField.text.Length) / 8;
+                        c.g = (6 - InputField.text.Length) / 6;
+                        c.b = (6 - InputField.text.Length) / 6;
                         warn.GetComponent<SpriteRenderer>().color = c;
                     }
                     if (SignButton.activeSelf) SignButton.SetActive(false);
@@ -92,10 +93,6 @@ public class PilotSignContract : MonoBehaviour
     }
     #endregion
     #region Sign Contract
-    private void OnMouseEnter()
-    {
-        alreadySign = false;
-    }
     private void OnMouseDown()
     {
         if (name == "Sign" && !alreadySign)
@@ -109,8 +106,22 @@ public class PilotSignContract : MonoBehaviour
         if (!alreadySign)
         {
             alreadySign = true;
-            Debug.Log("Signed");
-            // Sign 
+            string check = "";
+            AccessDatabase ad = FindObjectOfType<AccessDatabase>();
+            if (ad!=null)
+            {
+                check = ad.CreateNewPlayerProfile(InputField.text.ToUpper());
+            }
+            if ("Success".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
+                    "Contract signed successfully!\nEnjoy your adventure in Nebula Disorientation!",5f);
+            } else if ("Exist".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
+                    "Contract signed failed!\nPilot's Name has already existed.", 5f);
+                alreadySign = false;
+            }
         }
     }
 

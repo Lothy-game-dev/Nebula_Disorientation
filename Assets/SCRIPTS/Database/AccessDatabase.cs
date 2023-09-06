@@ -39,11 +39,93 @@ public class AccessDatabase : MonoBehaviour
         {
             count = reader.GetInt32(0);
         }
-
+        dbConnection.Close();
         return count;
     }
     #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
+    #region Access Player Profile
+    public string CreateNewPlayerProfile(string name)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE Name='" + name + "'";
+        IDataReader reader = dbCheckCommand.ExecuteReader();
+        bool check = true;
+        while (reader.Read())
+        {
+            check = false;
+            break;
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Exist";
+        }
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCore,Cash,TimelessShard,DailyIncome,DailyMissionDone) " +
+            "VALUES ('"+ name +"',null,null,10,500,5,500,0)";
+        dbCommand.ExecuteNonQuery();
+        dbConnection.Close();
+        return "Success";
+    }
+
+    public bool UpdatePlayerProfileRank(int profileId, int rank)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT RankID FROM RankSystem WHERE RankID=" + rank + "";
+        bool check = false;
+        IDataReader reader = dbCheckCommand.ExecuteReader();
+        while (reader.Read())
+        {
+            check = true;
+            break;
+        }
+        if (!check)
+        {
+            return false;
+        }
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "UPDATE PlayerProfile SET Rank=" + rank + " WHERE PlayerId=" + profileId;
+        dbCommand.ExecuteNonQuery();
+        dbConnection.Close();
+        return true;
+    }
+
+    public List<List<string>> GetAllNameAndRankFromPlayerProfile()
+    {
+        List<List<string>> result = new List<List<string>>();
+        List<string> Names = new List<string>();
+        List<string> Ranks = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT Name,Rank FROM PlayerProfile WHERE 1=1";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            Names.Add(dataReader.GetString(0));
+            object rankTemp = dataReader.GetValue(1);
+            if (rankTemp!=null && rankTemp.ToString().Length>0)
+            {
+                Ranks.Add(rankTemp.ToString());
+            } else
+            {
+                Ranks.Add("Unranked");
+            }
+        }
+        dbConnection.Close();
+        result.Add(Names);
+        result.Add(Ranks);
+        return result;
+    }
     #endregion
 }
