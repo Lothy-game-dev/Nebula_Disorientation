@@ -15,6 +15,8 @@ public class MainMenuCameraController : MonoBehaviour
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
+    private GameObject Load;
+    private Vector2 Direc;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -27,7 +29,10 @@ public class MainMenuCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Call function and timer only if possible
+        if (Load != null && Load.activeSelf)
+        {
+            Load.transform.GetChild(2).Translate(new Vector3(Direc.x, Direc.y, 0) * Time.deltaTime);
+        }
     }
     #endregion
     #region Scene Control
@@ -41,7 +46,7 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
-        GenerateLoadingScene(5f);
+        GenerateLoadingScene(3f);
         MainMenuSceneShared m = SceneGO.GetComponent<MainMenuSceneShared>();
         if (m != null)
         {
@@ -63,12 +68,14 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec)
     {
-        GameObject load = Instantiate(LoadingScene, CurrentScene.transform.position, Quaternion.identity);
-        load.GetComponent<SpriteRenderer>().sortingOrder = 100;
-        load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
-        load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
-        load.SetActive(true);
-        Destroy(load, sec);
+        Direc = new Vector2(Random.Range(-1, 2), Random.Range(-1, 2));
+        Load = Instantiate(LoadingScene, CurrentScene.transform.position, Quaternion.identity);
+        Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
+        Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
+        Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;       
+        Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
+        Load.SetActive(true);
+        Destroy(Load, sec);
     }
     #endregion
 }
