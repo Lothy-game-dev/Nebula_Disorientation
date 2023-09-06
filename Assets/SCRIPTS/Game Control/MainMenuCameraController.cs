@@ -46,7 +46,7 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
-        GenerateLoadingScene(3f);
+        GenerateLoadingScene(0.5f);
         MainMenuSceneShared m = SceneGO.GetComponent<MainMenuSceneShared>();
         if (m != null)
         {
