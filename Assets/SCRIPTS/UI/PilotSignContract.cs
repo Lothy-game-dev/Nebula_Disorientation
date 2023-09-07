@@ -121,6 +121,11 @@ public class PilotSignContract : MonoBehaviour
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
                     "Contract signed failed!\nPilot's Name has already existed.", 5f);
                 alreadySign = false;
+            } else if ("Fail".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
+                    "Contract signed failed!\nPlease try again.", 5f);
+                alreadySign = false;
             }
         }
     }

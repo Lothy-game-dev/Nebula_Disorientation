@@ -15,6 +15,7 @@ public class LoadStoryScene : MainMenuSceneShared
     public GameObject ItemBoxTop;
     public GameObject ItemBoxBottom;
     public GameObject ItemBoxInitPos;
+    public ScrollRect ScrollRect;
     public GameObject TopArrow;
     public GameObject BottomArrow;
     #endregion
@@ -34,6 +35,7 @@ public class LoadStoryScene : MainMenuSceneShared
         distanceToTop = ItemBoxTop.transform.position.y - ItemBoxInitPos.transform.position.y;
         distanceToBottom = ItemBoxInitPos.transform.position.y - ItemBoxBottom.transform.position.y;
         currentPilotList = new List<GameObject>();
+        CurrentPressPilot = null;
     }
 
     // Update is called once per frame
@@ -57,7 +59,8 @@ public class LoadStoryScene : MainMenuSceneShared
         DeleteCurrentList();
         // Get Data from DB
         List<List<string>> NameAndRank = FindObjectOfType<AccessDatabase>().GetAllNameAndRankFromPlayerProfile();
-        maximumHeight = (Mathf.Abs(distanceToTop) + Mathf.Abs(distanceToBottom)) * (NameAndRank[0].Count > 3 ? NameAndRank[0].Count - 1 : NameAndRank[0].Count);
+        maximumHeight = (Mathf.Abs(distanceToTop) + Mathf.Abs(distanceToBottom)) * NameAndRank[0].Count;
+        ScrollRect.vertical = false;
         BoardContent.GetComponent<RectTransform>().sizeDelta
             = new Vector2(BoardContent.GetComponent<RectTransform>().sizeDelta.x,
             maximumHeight);
@@ -81,6 +84,7 @@ public class LoadStoryScene : MainMenuSceneShared
         Vector3 pos = BoardContent.transform.position;
         pos.y = 0;
         BoardContent.transform.position = pos;
+        ScrollRect.vertical = true;
     }
 
     private void DeleteCurrentList()
@@ -89,11 +93,12 @@ public class LoadStoryScene : MainMenuSceneShared
         while (i < currentPilotList.Count)
         {
             GameObject temp = currentPilotList[i];
-            if (temp!=null)
+            if (temp != null)
             {
                 currentPilotList.RemoveAt(i);
                 Destroy(temp);
-            } else
+            }
+            else
             {
                 i++;
             }
@@ -109,14 +114,15 @@ public class LoadStoryScene : MainMenuSceneShared
             {
                 TopArrow.SetActive(true);
             }
-        } else
+        }
+        else
         {
             if (TopArrow.activeSelf)
             {
                 TopArrow.SetActive(false);
             }
         }
-        if (posY < (maximumHeight - (Mathf.Abs(distanceToTop) + Mathf.Abs(distanceToBottom))*4))
+        if (posY < (maximumHeight - (Mathf.Abs(distanceToTop) + Mathf.Abs(distanceToBottom)) * 4))
         {
             if (!BottomArrow.activeSelf)
             {
@@ -135,7 +141,7 @@ public class LoadStoryScene : MainMenuSceneShared
     #region Check Pilot List
     void CheckPilotList()
     {
-        if (CurrentPressPilot!=null)
+        if (CurrentPressPilot != null)
         {
             Color c = CurrentPressPilot.GetComponent<Image>().color;
             c.r = 0;
@@ -143,12 +149,13 @@ public class LoadStoryScene : MainMenuSceneShared
             CurrentPressPilot.GetComponent<Image>().color = c;
             foreach (var go in currentPilotList)
             {
-                if (go.GetComponent<Image>().color!=Color.white && go!=CurrentPressPilot)
+                if (go.GetComponent<Image>().color != Color.white && go != CurrentPressPilot)
                 {
                     go.GetComponent<Image>().color = Color.white;
                 }
             }
-        } else
+        }
+        else
         {
             foreach (var go in currentPilotList)
             {
@@ -161,19 +168,87 @@ public class LoadStoryScene : MainMenuSceneShared
     }
     #endregion
     #region Button Activate
-    public void DeleteSelected()
+    public void CheckBeforeDelete()
     {
         if (CurrentPressPilot != null)
         {
-
+            FindObjectOfType<NotificationBoardController>().VoidReturnFunction = DeleteSelected;
+            PilotNameBar pn = CurrentPressPilot.GetComponent<PilotNameBar>();
+            string name = "";
+            string rank = "";
+            if (pn != null)
+            {
+                name = pn.PilotName;
+                rank = pn.PilotRank;
+            }
+            string confirmText = "Do you want to delete " + rank + " pilot - " + name + "?";
+            FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(transform.position,
+                confirmText);
+        }
+        else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Please Select a pilot contract to perform actions!", 5f);
         }
     }
+    public void DeleteSelected()
+    {
+        PilotNameBar pn = CurrentPressPilot.GetComponent<PilotNameBar>();
+        string check = "";
+        if (pn != null)
+        {
+            check = FindObjectOfType<AccessDatabase>().DeletePlayerProfileByName(pn.PilotName);
+        }
+        if ("Success".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Delete pilot contract successfully!", 5f);
+            CurrentPressPilot = null;
+        }
+        else if ("Fail".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Delete pilot contract fail. Please try again!", 5f);
+        }
+        else if ("No Exist".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Pilot contract does not exist. Please try again!", 5f);
+        }
+        GetData();
+    }
 
-    public void OnwardSeleted()
+    public void CheckOnward()
     {
         if (CurrentPressPilot != null)
         {
-
+            FindObjectOfType<NotificationBoardController>().VoidReturnFunction = OnwardSeleted;
+            PilotNameBar pn = CurrentPressPilot.GetComponent<PilotNameBar>();
+            string name = "";
+            string rank = "";
+            if (pn != null)
+            {
+                name = pn.PilotName;
+                rank = pn.PilotRank;
+            }
+            string confirmText = "Continue " + rank + " - " + name + "'s contract onward?";
+            FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(transform.position,
+                confirmText);
+        }
+        else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Please Select a pilot contract to perform actions!", 5f);
+        }
+    }
+    public void OnwardSeleted()
+    {
+        PilotNameBar pn = CurrentPressPilot.GetComponent<PilotNameBar>();
+        if (pn!=null)
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                        "Welcome back to Nebula Disorientation, " + pn.PilotName + "!", 5f);
+            CurrentPressPilot = null;
         }
     }
     #endregion

@@ -98,6 +98,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PilotContractButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\NewStoryScene.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadStoryButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\SpawnController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\StatusBoard.cs" />

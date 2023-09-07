@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NotiBoardOKButton : MonoBehaviour
+public class LoadStoryButtons : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
     #endregion
     #region InitializeVariables
-    public GameObject NotiBoard;
+    public LoadStoryScene Scene;
     #endregion
     #region NormalVariables
+    // All other variables apart from the two aforementioned types
+    // Can be public or private, prioritize private if possible
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -26,16 +28,16 @@ public class NotiBoardOKButton : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Mouse Check
+    #region Function group 1
+
     private void OnMouseDown()
     {
-        if ("OKButton".Equals(name) || "CancelButton".Equals(name))
+        if (name=="Delete")
         {
-            Destroy(NotiBoard);
-        } else if ("CertainButton".Equals(name))
+            Scene.CheckBeforeDelete();
+        } else if (name=="Onward")
         {
-            FindObjectOfType<NotificationBoardController>().ConfirmOnConfirmationBoard();
-            Destroy(NotiBoard);
+            Scene.CheckOnward();
         }
     }
     #endregion

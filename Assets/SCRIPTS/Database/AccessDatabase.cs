@@ -67,7 +67,11 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCore,Cash,TimelessShard,DailyIncome,DailyMissionDone) " +
             "VALUES ('"+ name +"',null,null,10,500,5,500,0)";
-        dbCommand.ExecuteNonQuery();
+        int n = dbCommand.ExecuteNonQuery();
+        if (n == 0)
+        {
+            return "Fail";
+        }
         dbConnection.Close();
         return "Success";
     }
@@ -126,6 +130,36 @@ public class AccessDatabase : MonoBehaviour
         result.Add(Names);
         result.Add(Ranks);
         return result;
+    }
+
+    public string DeletePlayerProfileByName(string name)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT PlayerId FROM PlayerProfile WHERE Name='" + name + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            break;
+        }
+        if (!check)
+        {
+            return "No Exist";
+        }
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "DELETE FROM PlayerProfile WHERE Name='" + name +"'";
+        int n = dbCommand.ExecuteNonQuery();
+        if (n==0)
+        {
+            return "Fail";
+        }
+        dbConnection.Close();
+        return "Success";
     }
     #endregion
 }
