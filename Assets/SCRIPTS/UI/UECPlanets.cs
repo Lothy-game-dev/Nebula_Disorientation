@@ -57,7 +57,6 @@ public class UECPlanets : MonoBehaviour
             {
                 ConfigureNextPlace();
             }
-            SelfRotate();
         } else
         {
             rb.velocity = new Vector2(0,0);
@@ -86,11 +85,6 @@ public class UECPlanets : MonoBehaviour
         rb.velocity = (NextPlace.transform.position - transform.position) * 0.05f / (NextPlace.transform.position - transform.position).magnitude;
     }
 
-    private void SelfRotate()
-    {
-        transform.Rotate(new Vector3(0, 0, 0.1f));
-        Text.transform.Rotate(new Vector3(0, 0, -0.1f));
-    }
     #endregion
     #region Mouse check
     private void OnMouseEnter()

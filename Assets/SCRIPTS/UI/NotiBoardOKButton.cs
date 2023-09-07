@@ -12,18 +12,21 @@ public class NotiBoardOKButton : MonoBehaviour
     public GameObject NotiBoard;
     #endregion
     #region NormalVariables
+    private float currentTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        currentTimer = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        currentTimer += Time.deltaTime;
     }
     #endregion
     #region Mouse Check
@@ -37,6 +40,13 @@ public class NotiBoardOKButton : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().ConfirmOnConfirmationBoard();
             Destroy(NotiBoard);
         }
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log(currentTimer);
+        if (FindObjectOfType<MainMenuCameraController>() != null && "OKButton".Equals(name))
+            FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(8f - currentTimer);
     }
     #endregion
 }

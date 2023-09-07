@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuCameraController : MonoBehaviour
 {
@@ -69,6 +70,18 @@ public class MainMenuCameraController : MonoBehaviour
         Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
         Load.SetActive(true);
         Destroy(Load, sec);
+    }
+
+    public void MoveToUEC(float sec)
+    {
+        StartCoroutine(DelayMoveScene(sec));   
+    }
+
+    private IEnumerator DelayMoveScene(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        SceneManager.LoadSceneAsync("UECMainMenu");
+        SceneManager.UnloadSceneAsync("MainMenu");
     }
     #endregion
 }

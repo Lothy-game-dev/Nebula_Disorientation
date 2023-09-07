@@ -17,6 +17,7 @@ public class NotificationBoardController : MonoBehaviour
     public delegate void VoidFunctionPass();
     public VoidFunctionPass VoidReturnFunction;
     private float InitScale;
+
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -24,12 +25,14 @@ public class NotificationBoardController : MonoBehaviour
     {
         // Initialize variables
         InitScale = NotificationBoard.transform.GetChild(0).localScale.x;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+
     }
     #endregion
     #region Create Noti Board
@@ -54,6 +57,7 @@ public class NotificationBoardController : MonoBehaviour
             c.b = 0;
             notiBoard.transform.GetChild(0).GetComponent<SpriteRenderer>().color = c;
         }
+        // Loading Scene
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }

@@ -42,7 +42,7 @@ public class LoadingScene : MonoBehaviour
         for (int i = 0; i < second*60; i++)
         {
             LoadingSlider.value += 100f/(second * 60);
-            yield return new WaitForSeconds(second/40f);
+            yield return new WaitForSeconds(1/60f);
         }
     }
     #endregion

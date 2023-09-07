@@ -247,9 +247,9 @@ public class LoadStoryScene : MainMenuSceneShared
         if (pn!=null)
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                        "Welcome back to Nebula Disorientation, " + pn.PilotName + "!", 5f);
-            // Onward
+                        "Welcome back to Nebula Disorientation, " + pn.PilotName + "!\n(Auto close in 5 seconds)", 5f);
             CurrentPressPilot = null;
+            FindObjectOfType<MainMenuCameraController>().MoveToUEC(8f);
         }
     }
     #endregion
