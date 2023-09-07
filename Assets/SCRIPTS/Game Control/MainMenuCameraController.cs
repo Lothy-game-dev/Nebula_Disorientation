@@ -17,11 +17,15 @@ public class MainMenuCameraController : MonoBehaviour
     #region NormalVariables
     private GameObject CurrentScene;
     private GameObject Load;
+    private InitializeDatabase db;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Awake()
     {
+        db = GetComponent<InitializeDatabase>();
+        //db.DropDatabase();
+        db.Initialization();
         // Initialize variables
         CurrentScene = StartScene;
     }
