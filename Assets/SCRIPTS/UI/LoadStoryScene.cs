@@ -248,6 +248,7 @@ public class LoadStoryScene : MainMenuSceneShared
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                         "Welcome back to Nebula Disorientation, " + pn.PilotName + "!", 5f);
+            // Onward
             CurrentPressPilot = null;
         }
     }

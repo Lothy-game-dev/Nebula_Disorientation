@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class LoadingScene : MonoBehaviour
+public class UECController : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -13,20 +12,16 @@ public class LoadingScene : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public Slider LoadingSlider;
-    public float LoadingTime;
     #endregion
     #region NormalVariables
-    // All other variables apart from the two aforementioned types
-    // Can be public or private, prioritize private if possible
+    public bool isPlanetMoving;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void OnEnable()
+    void Start()
     {
-        LoadingSlider.maxValue = 100;
-        StartCoroutine(LoadingAnimation(LoadingTime));
         // Initialize variables
+        isPlanetMoving = true;
     }
 
     // Update is called once per frame
@@ -35,15 +30,7 @@ public class LoadingScene : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Loading animation
+    #region Function group 1
     // Group all function that serve the same algorithm
-    private IEnumerator LoadingAnimation(float second)
-    {
-        for (int i = 0; i < second*60; i++)
-        {
-            LoadingSlider.value += 100f/(second * 60);
-            yield return new WaitForSeconds(second/40f);
-        }
-    }
     #endregion
 }

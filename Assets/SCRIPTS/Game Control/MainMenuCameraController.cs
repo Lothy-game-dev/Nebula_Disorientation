@@ -16,7 +16,6 @@ public class MainMenuCameraController : MonoBehaviour
     #region NormalVariables
     private GameObject CurrentScene;
     private GameObject Load;
-    private Vector2 Direc;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -29,10 +28,6 @@ public class MainMenuCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Load != null && Load.activeSelf)
-        {
-            Load.transform.GetChild(2).Translate(new Vector3(Direc.x, Direc.y, 0) * Time.deltaTime);
-        }
     }
     #endregion
     #region Scene Control
@@ -46,7 +41,6 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
-        GenerateLoadingScene(0.5f);
         MainMenuSceneShared m = SceneGO.GetComponent<MainMenuSceneShared>();
         if (m != null)
         {
@@ -68,7 +62,6 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec)
     {
-        Direc = new Vector2(Random.Range(-1, 2), Random.Range(-1, 2)) / sec;
         Load = Instantiate(LoadingScene, new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y, LoadingScene.transform.position.z), Quaternion.identity);
         Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
         Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
