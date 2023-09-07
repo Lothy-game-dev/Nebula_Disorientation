@@ -44,6 +44,16 @@ public class NotificationBoardController : MonoBehaviour
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
+
+    public void CreateUECMovingNotiBoard(Vector2 Position, string text, float autoCloseTimer)
+    {
+        GameObject notiBoard = Instantiate(NotificationBoard, new Vector3(Position.x, Position.y, NotificationBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
+        notiBoard.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = text;
+        notiBoard.transform.GetChild(0).GetChild(1).GetComponent<NotiBoardOKButton>().MoveToUEC = true;
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
+    }
     public void CreateCustomNotiBoard(Vector2 Position, string text, float autoCloseTimer, bool isRed, Color textColor)
     {
         GameObject notiBoard = Instantiate(NotificationBoard, new Vector3(Position.x, Position.y, NotificationBoard.transform.position.z), Quaternion.identity);

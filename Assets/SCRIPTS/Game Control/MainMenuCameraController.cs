@@ -20,7 +20,7 @@ public class MainMenuCameraController : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Initialize variables
         CurrentScene = StartScene;
@@ -69,17 +69,10 @@ public class MainMenuCameraController : MonoBehaviour
         Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;       
         Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
         Load.SetActive(true);
-        Destroy(Load, sec);
     }
 
-    public void MoveToUEC(float sec)
+    public void MoveToUEC()
     {
-        StartCoroutine(DelayMoveScene(sec));   
-    }
-
-    private IEnumerator DelayMoveScene(float sec)
-    {
-        yield return new WaitForSeconds(sec);
         SceneManager.LoadSceneAsync("UECMainMenu");
         SceneManager.UnloadSceneAsync("MainMenu");
     }

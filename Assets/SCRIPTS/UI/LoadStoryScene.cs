@@ -246,10 +246,10 @@ public class LoadStoryScene : MainMenuSceneShared
         PilotNameBar pn = CurrentPressPilot.GetComponent<PilotNameBar>();
         if (pn!=null)
         {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(transform.position,
                         "Welcome back to Nebula Disorientation, " + pn.PilotName + "!\n(Auto close in 5 seconds)", 5f);
             CurrentPressPilot = null;
-            FindObjectOfType<MainMenuCameraController>().MoveToUEC(8f);
+            //Save Data
         }
     }
     #endregion

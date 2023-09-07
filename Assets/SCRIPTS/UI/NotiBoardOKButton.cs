@@ -12,6 +12,7 @@ public class NotiBoardOKButton : MonoBehaviour
     public GameObject NotiBoard;
     #endregion
     #region NormalVariables
+    public bool MoveToUEC;
     private float currentTimer;
     #endregion
     #region Start & Update
@@ -44,9 +45,10 @@ public class NotiBoardOKButton : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log(currentTimer);
-        if (FindObjectOfType<MainMenuCameraController>() != null && "OKButton".Equals(name))
-            FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(8f - currentTimer);
+        if ("OKButton".Equals(name) && MoveToUEC)
+        {
+            FindObjectOfType<MainMenuCameraController>().MoveToUEC();
+        }   
     }
     #endregion
 }

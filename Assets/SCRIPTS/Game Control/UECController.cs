@@ -18,6 +18,10 @@ public class UECController : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
+    private void Awake()
+    {
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(1f);
+    }
     void Start()
     {
         // Initialize variables
