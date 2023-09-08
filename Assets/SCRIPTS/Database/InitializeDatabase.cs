@@ -202,10 +202,12 @@ public class InitializeDatabase : MonoBehaviour
                 "Name TEXT NOT NULL, " +
                 "Rank INTEGER, " +
                 "CurrentSession INTEGER, " +
-                "FuelCore INTEGER NOT NULL, " +
+                "FuelCell INTEGER NOT NULL, " +
+                "FuelEnergy INTEGER NOT NULL, " +
                 "Cash INTEGER NOT NULL, " +
                 "TimelessShard INTEGER NOT NULL, " +
                 "DailyIncome INTEGER NOT NULL, " +
+                "DailyIncomeReceived TEXT NOT NULL, " +
                 "DailyMissionDone INTEGER NOT NULL, " +
                 "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
                 "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
@@ -261,7 +263,15 @@ public class InitializeDatabase : MonoBehaviour
                 "PRIMARY KEY(StageID AUTOINCREMENT) );" +
             // Table to check if database already Init
             "CREATE TABLE IF NOT EXISTS DatabaseInitialize" +
-                "(AlreadyInitialize TEXT NOT NULL);";
+                "(AlreadyInitialize TEXT NOT NULL);" +
+            // Table for current play session
+            "CREATE TABLE IF NOT EXISTS CurrentPlaySession" +
+                "(PlaySessionId INTEGER," +
+                "PlayerId INTEGER," +
+                "SessionStartTime Text," +
+                "SessionEndTime Text," +
+                "FOREIGN KEY(PlayerId) REFERENCES PlayerProfile(PlayerId)," +
+                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );";
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +

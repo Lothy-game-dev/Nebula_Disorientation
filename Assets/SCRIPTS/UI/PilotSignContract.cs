@@ -114,8 +114,22 @@ public class PilotSignContract : MonoBehaviour
             }
             if ("Success".Equals(check))
             {
-                FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(ScenePos.transform.position,
-                    "Contract signed successfully!\nEnjoy your adventure in Nebula Disorientation!\n(Auto close in 5 seconds)",5f);
+                string check2 = ad.AddPlaySession(InputField.text.ToUpper());
+                if ("Success".Equals(check2))
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(ScenePos.transform.position,
+                    "Contract signed successfully!\nEnjoy your adventure in Nebula Disorientation!\n(Auto close in 5 seconds)", 5f);
+                } else if ("No Exist".Equals(check2))
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
+                    "Pilot does not exist!\n Please try again.", 5f);
+                    alreadySign = false;
+                } else if ("Fail".Equals(check2))
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
+                    "Play Session Creation Failed!\n Please try again.", 5f);
+                    alreadySign = false;
+                }
             } else if ("Exist".Equals(check))
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,

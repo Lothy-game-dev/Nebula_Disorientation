@@ -67,7 +67,14 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec)
     {
-        Load = Instantiate(LoadingScene, new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y, LoadingScene.transform.position.z), Quaternion.identity);
+        if (CurrentScene==null)
+        {
+            CurrentScene = StartScene;
+        }
+        Load = Instantiate(LoadingScene, 
+            new Vector3(CurrentScene.transform.position.x, 
+            CurrentScene.transform.position.y, 
+            LoadingScene.transform.position.z), Quaternion.identity);
         Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
         Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
         Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;       

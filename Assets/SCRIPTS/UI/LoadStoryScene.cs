@@ -246,10 +246,23 @@ public class LoadStoryScene : MainMenuSceneShared
         PilotNameBar pn = CurrentPressPilot.GetComponent<PilotNameBar>();
         if (pn!=null)
         {
-            FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(transform.position,
+            string check2 = FindObjectOfType<AccessDatabase>().AddPlaySession(pn.PilotName);
+            if ("Success".Equals(check2))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(transform.position,
                         "Welcome back to Nebula Disorientation, " + pn.PilotName + "!\n(Auto close in 5 seconds)", 5f);
-            CurrentPressPilot = null;
-            //Save Data
+                CurrentPressPilot = null;
+            }
+            else if ("No Exist".Equals(check2))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Pilot does not exist!\n Please try again.", 5f);
+            }
+            else if ("Fail".Equals(check2))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Play Session Creation Failed!\n Please try again.", 5f);
+            }
         }
     }
     #endregion
