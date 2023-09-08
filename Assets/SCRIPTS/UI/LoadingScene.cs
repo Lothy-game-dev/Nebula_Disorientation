@@ -25,7 +25,6 @@ public class LoadingScene : MonoBehaviour
     void OnEnable()
     {
         LoadingSlider.maxValue = 100;
-        StartCoroutine(LoadingAnimation(LoadingTime));
         // Initialize variables
     }
 
@@ -34,16 +33,27 @@ public class LoadingScene : MonoBehaviour
     {
         // Call function and timer only if possible
     }
-    #endregion
-    #region Loading animation
-    // Group all function that serve the same algorithm
-    private IEnumerator LoadingAnimation(float second)
+    private void FixedUpdate()
     {
-        for (int i = 0; i < 40; i++)
+        LoadingSlider.value += 100f / (LoadingTime * 60);
+        if (LoadingSlider.value >= 100)
         {
-            LoadingSlider.value += 100f/40;
-            yield return new WaitForSeconds(second/40);
+            Destroy(gameObject.transform.parent.gameObject);
         }
     }
+    #endregion
+    #region Loading animation
+/*    // Group all function that serve the same algorithm
+    private IEnumerator LoadingAnimation(float second)
+    {
+        Debug.Log("LoadingScene - " + second);
+        for (int i = 0; i < second*60; i++)
+        {
+            Debug.Log("LoadingScene for count - " + i);
+            LoadingSlider.value += 100f/(second * 60);
+            yield return new WaitForSeconds(1/60f);
+        }
+        Destroy(gameObject.transform.parent.gameObject);
+    }*/
     #endregion
 }

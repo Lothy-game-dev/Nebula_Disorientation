@@ -13,6 +13,8 @@ public class PilotNameBar : MonoBehaviour
     #endregion
     #region NormalVariables
     public GameObject Scene;
+    public string PilotName;
+    public string PilotRank;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,6 +32,8 @@ public class PilotNameBar : MonoBehaviour
     #region Set Text
     public void SetText(int count, string Name, string Rank)
     {
+        PilotName = Name;
+        PilotRank = Rank;
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text
             = "Pilot " + count.ToString() + " - Name: " + Name + "\nRank: " + Rank;
     }

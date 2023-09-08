@@ -11,9 +11,13 @@ public class NotificationBoardController : MonoBehaviour
     #endregion
     #region InitializeVariables
     public GameObject NotificationBoard;
+    public GameObject ConfirmationBoard;
     #endregion
     #region NormalVariables
+    public delegate void VoidFunctionPass();
+    public VoidFunctionPass VoidReturnFunction;
     private float InitScale;
+
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -21,12 +25,14 @@ public class NotificationBoardController : MonoBehaviour
     {
         // Initialize variables
         InitScale = NotificationBoard.transform.GetChild(0).localScale.x;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+
     }
     #endregion
     #region Create Noti Board
@@ -35,6 +41,16 @@ public class NotificationBoardController : MonoBehaviour
         GameObject notiBoard = Instantiate(NotificationBoard, new Vector3(Position.x,Position.y,NotificationBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
         notiBoard.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = text;
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
+    }
+
+    public void CreateUECMovingNotiBoard(Vector2 Position, string text, float autoCloseTimer)
+    {
+        GameObject notiBoard = Instantiate(NotificationBoard, new Vector3(Position.x, Position.y, NotificationBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
+        notiBoard.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = text;
+        notiBoard.transform.GetChild(0).GetChild(1).GetComponent<NotiBoardOKButton>().MoveToUEC = true;
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
@@ -51,6 +67,7 @@ public class NotificationBoardController : MonoBehaviour
             c.b = 0;
             notiBoard.transform.GetChild(0).GetComponent<SpriteRenderer>().color = c;
         }
+        // Loading Scene
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
@@ -62,7 +79,24 @@ public class NotificationBoardController : MonoBehaviour
             go.transform.localScale = new Vector2(go.transform.localScale.x + InitScale * 4.5f/100, go.transform.localScale.y + InitScale * 4.5f / 100);
             yield return new WaitForSeconds(0.01f);
         }
-        Destroy(go.transform.parent.gameObject, autoCloseTimer);
+        if (autoCloseTimer>0)
+        {
+            Destroy(go.transform.parent.gameObject, autoCloseTimer);
+        }
+    }
+
+    public void CreateNormalConfirmBoard(Vector2 Position, string text)
+    {
+        GameObject notiBoard = Instantiate(ConfirmationBoard, new Vector3(Position.x, Position.y, ConfirmationBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
+        notiBoard.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = text;
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
+    }
+
+    public void ConfirmOnConfirmationBoard()
+    {
+        VoidReturnFunction();
     }
     #endregion
 }

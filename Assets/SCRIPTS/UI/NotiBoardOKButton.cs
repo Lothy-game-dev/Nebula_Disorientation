@@ -12,26 +12,43 @@ public class NotiBoardOKButton : MonoBehaviour
     public GameObject NotiBoard;
     #endregion
     #region NormalVariables
-    // All other variables apart from the two aforementioned types
-    // Can be public or private, prioritize private if possible
+    public bool MoveToUEC;
+    private float currentTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        currentTimer = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        currentTimer += Time.deltaTime;
     }
     #endregion
     #region Mouse Check
     private void OnMouseDown()
     {
-        Destroy(NotiBoard);
+        if ("OKButton".Equals(name) || "CancelButton".Equals(name))
+        {
+            Destroy(NotiBoard);
+        } else if ("CertainButton".Equals(name))
+        {
+            FindObjectOfType<NotificationBoardController>().ConfirmOnConfirmationBoard();
+            Destroy(NotiBoard);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if ("OKButton".Equals(name) && MoveToUEC)
+        {
+            FindObjectOfType<MainMenuCameraController>().MoveToUEC();
+        }   
     }
     #endregion
 }
