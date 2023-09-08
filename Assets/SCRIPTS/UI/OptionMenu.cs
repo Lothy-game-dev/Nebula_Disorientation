@@ -19,11 +19,13 @@ public class OptionMenu : MonoBehaviour
     public GameObject ResolText;
     public Slider MusicVolumnSlider;
     public Slider SFXSlider;
+    public GameObject Notification;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public bool IsClicked;
+    public bool IsSaved;
     public string FpsCounter;
     public string Resol;
     public string Master;
@@ -61,25 +63,50 @@ public class OptionMenu : MonoBehaviour
     {
         if (IsClicked)
         {
-            FPSText.GetComponent<TMP_Text>().text = FpsCounter;
-            ResolText.GetComponent<TMP_Text>().text = Resol;
-            Application.targetFrameRate = int.Parse(FpsCounter);
+            FPSText.GetComponent<TextMeshPro>().text = FpsCounter;
+            ResolText.GetComponent<TextMeshPro>().text = Resol;
             IsClicked = false;
             Debug.Log(Application.targetFrameRate);
         }
+        if (IsSaved)
+        {
+            GameObject game = Instantiate(Notification, Notification.transform.position, Quaternion.identity);
+            game.transform.localScale = new Vector3(1, 1, 0);
+            game.SetActive(true);
+            Destroy(game, 1f);
+            Application.targetFrameRate = int.Parse(FpsCounter);
+            if ("FullScreen".Equals(Resol))
+            {
+                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
+            } else
+            {
+                if ("1920x1080".Equals(Resol))
+                {
+                    Screen.SetResolution(int.Parse(Resol.Substring(0, 4)), int.Parse(Resol.Substring(5, 4)), true);
+                } else
+                {
+                    Screen.SetResolution(int.Parse(Resol.Substring(0, 4)), int.Parse(Resol.Substring(5, 3)), false);
+                }
+            }
+            IsSaved = false;
+        }
     }
     #endregion
-    #region Function group 1
+    #region
     // Group all function that serve the same algorithm
     public void ValueChangeCheck()
     {
         Master = MasterVolumnSlider.value.ToString();
         Music = MusicVolumnSlider.value.ToString();
         Sound = SFXSlider.value.ToString();
+        MasterVolumnSlider.transform.GetChild(3).GetComponent<TextMeshPro>().text = Mathf.RoundToInt(float.Parse(Master)).ToString() + "%";
+        MusicVolumnSlider.transform.GetChild(3).GetComponent<TextMeshPro>().text = Mathf.RoundToInt(float.Parse(Music)).ToString() + "%";
+        SFXSlider.transform.GetChild(3).GetComponent<TextMeshPro>().text = Mathf.RoundToInt(float.Parse(Sound)).ToString() + "%";
     }
 
     #endregion
-    #region Function group ...
+    #region
     // Group all function that serve the same algorithm
+    
     #endregion
 }
