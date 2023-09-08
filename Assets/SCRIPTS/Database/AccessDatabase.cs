@@ -65,8 +65,8 @@ public class AccessDatabase : MonoBehaviour
             return "Exist";
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,DailyMissionDone) " +
-            "VALUES ('"+ name +"',null,null,10,0,500,5,500,N,0)";
+        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived) " +
+            "VALUES ('"+ name +"',null,null,10,0,500,5,500,'N')";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
@@ -180,16 +180,37 @@ public class AccessDatabase : MonoBehaviour
             while (dataReader.Read())
             {
                 check = true;
+                values.Add("ID", dataReader.GetInt32(0));
                 values.Add("Name", dataReader.GetString(1));
-                values.Add("Rank", dataReader.GetInt32(2));
-                values.Add("CurrentSession", dataReader.GetInt32(3));
+                if (dataReader.IsDBNull(2))
+                {
+                    values.Add("Rank", "Unranked");
+                } else
+                {
+                    IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                    dbCheckCommand2.CommandText = "SELECT RankName FROM RankSystem WHERE RankId=" + dataReader.GetInt32(2);
+                    IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
+                    string rank = "Unranked";
+                    while (dataReader2.Read())
+                    {
+                        rank = dataReader2.GetString(0);
+                    }
+                    values.Add("Rank", rank);
+                }
+                if (dataReader.IsDBNull(3))
+                {
+                    values.Add("CurrentSession", -1);
+                }
+                else
+                {
+                    values.Add("CurrentSession", dataReader.GetInt32(3));
+                }
                 values.Add("FuelCell", dataReader.GetInt32(4));
                 values.Add("FuelEnergy", dataReader.GetInt32(5));
                 values.Add("Cash", dataReader.GetInt32(6));
                 values.Add("TimelessShard", dataReader.GetInt32(7));
                 values.Add("DailyIncome", dataReader.GetInt32(8));
                 values.Add("DailyIncomeReceived", dataReader.GetString(9));
-                values.Add("DailyMissionDone", dataReader.GetInt32(10));
             }
             if (!check)
             {
@@ -224,7 +245,7 @@ public class AccessDatabase : MonoBehaviour
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "INSERT INTO CurrentPlaySession (PlayerId,SessionStartTime,SessionEndTime) VALUES" +
-            "(" + id.ToString() + ",datetime('now'),null)";
+            "(" + id.ToString() + ",datetime('now', '+7 hours'),null)";
         int n = dbCommand.ExecuteNonQuery();
         dbConnection.Close();
         if (n!=1)
@@ -250,6 +271,127 @@ public class AccessDatabase : MonoBehaviour
             id = dataReader.GetInt32(0);
         }
         return id;
+    }
+    #endregion
+    #region DailyMission
+    public int NumberOfDailyMissionById(int PlayerId)
+    {
+        System.DateTime date = System.DateTime.Now;
+        string currentDate = date.ToString("yyyy-MM-dd");
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT COUNT(*) FROM PlayerDailyMission WHERE PlayerID =" + PlayerId +" AND MissionDate='" + currentDate +"'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int count = 0;
+        while (dataReader.Read())
+        {
+            count = dataReader.GetInt32(0);
+        }
+        dbConnection.Close();
+        return count;
+    }
+    public string GenerateDailyMission(int PlayerId, int number)
+    {
+        System.DateTime date = System.DateTime.Now;
+        string currentDate = date.ToString("yyyy-MM-dd");
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT COUNT(*) FROM DailyMissions";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int numberOfDailyMissions = 0;
+        while (dataReader.Read())
+        {
+            numberOfDailyMissions = dataReader.GetInt32(0);
+        }
+        if (numberOfDailyMissions == 0)
+        {
+            return "Fail";
+        }
+        IDbCommand dbCommand2 = dbConnection.CreateCommand();
+        dbCommand2.CommandText = "SELECT MissionID FROM PlayerDailyMission WHERE PlayerId=" + PlayerId;
+        List<int> alreadyMission = new List<int>();
+        while (dataReader.Read())
+        {
+            alreadyMission.Add(dataReader.GetInt32(0));
+        }
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        string insertText = "INSERT INTO PlayerDailyMission (PlayerID,MissionID,IsComplete,MissionDate) VALUES ";
+        for (int i=0;i<number;i++)
+        {
+            if (alreadyMission.Count>0)
+            {
+                int n = 0;
+                do
+                {
+                    n = Random.Range(1, numberOfDailyMissions + 1);
+                } while (alreadyMission.Contains(n));
+                insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "')";
+                alreadyMission.Add(n);
+            } else
+            {
+                int n = Random.Range(1, numberOfDailyMissions + 1);
+                insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "')";
+                alreadyMission.Add(n);
+            }
+            if (i==number-1)
+            {
+                insertText += ";";
+            } else
+            {
+                insertText += ",";
+            }
+        }
+        dbCommand.CommandText = insertText;
+        int check = dbCommand.ExecuteNonQuery();
+        dbConnection.Close();
+        if (check==number)
+        {
+            return "Success";
+        } else
+        {
+            return "Fail";
+        }
+    }
+
+    public List<List<string>> GetListDailyMissionUndone(int PlayerId)
+    {
+        System.DateTime date = System.DateTime.Now;
+        string currentDate = date.ToString("yyyy-MM-dd");
+        List<List<string>> dailyMissions = new List<List<string>>();
+        dailyMissions.Add(new List<string>());
+        dailyMissions.Add(new List<string>());
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT MissionId FROM PlayerDailyMission WHERE PlayerId=" + PlayerId + " AND MissionDate='" + currentDate + "' AND IsComplete='N'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check1 = false;
+        while (dataReader.Read())
+        {
+            check1 = true;
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "SELECT MissionVerb, MissionNumber FROM DailyMissions WHERE MissionId=" + dataReader.GetInt32(0);
+            IDataReader dataReader2 = dbCommand.ExecuteReader();
+            bool check2 = false;
+            while (dataReader2.Read())
+            {
+                check2 = true;
+                dailyMissions[0].Add(dataReader2.GetString(0));
+                dailyMissions[1].Add(dataReader2.GetInt32(1).ToString());
+            }
+            if (!check2) return null;
+        }
+        if (!check1) return null;
+        dbConnection.Close();
+        return dailyMissions;
     }
     #endregion
 }
