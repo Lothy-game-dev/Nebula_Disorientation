@@ -270,7 +270,14 @@ public class InitializeDatabase : MonoBehaviour
                 "SessionStartTime Text," +
                 "SessionEndTime Text," +
                 "FOREIGN KEY(PlayerId) REFERENCES PlayerProfile(PlayerId)," +
-                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );";
+                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );" +
+             // Table for option
+             "CREATE TABLE IF NOT EXISTS Option" +
+                "(MasterVolume INTEGER," +
+                "MusicVolume INTEGER," +
+                "SoundFx INTEGER," +
+                "Fps INTEGER," +
+                "Resolution TEXT);";
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +
@@ -386,6 +393,7 @@ public class InitializeDatabase : MonoBehaviour
             "(7, 'CA', 4)," +
             "(8, 'CAA', 1)," +
             "(9, 'B', 1);";
+        string Option = "INSERT INTO Option VALUES (100, 100, 100, 60, '1920x1080');";
         // Initialize Data Success
         string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
@@ -400,7 +408,7 @@ public class InitializeDatabase : MonoBehaviour
         // Insert Data Query
         IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
         // Order: Rank > Other
-        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards + DailyMissions;
+        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards + DailyMissions + Option;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable
