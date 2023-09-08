@@ -16,21 +16,44 @@ public class OptionMenu : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public Slider MasterVolumnSlider;
     public GameObject FPSText;
+    public GameObject ResolText;
+    public Slider MusicVolumnSlider;
+    public Slider SFXSlider;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public bool IsClicked;
     public string FpsCounter;
+    public string Resol;
+    public string Master;
+    public string Music;
+    public string Sound;
+    private Dictionary<string, object> OptionSetting;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
+        OptionSetting = FindAnyObjectByType<AccessDatabase>().GetOption();
         // Initialize variables
         MasterVolumnSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
-        FPSText.GetComponent<TMP_Text>().text = "30";
-        FpsCounter = FPSText.GetComponent<TMP_Text>().text;
+        MusicVolumnSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        SFXSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        FPSText.GetComponent<TextMeshPro>().text = OptionSetting["Fps"].ToString();
+        FpsCounter = FPSText.GetComponent<TextMeshPro>().text;
+
+        MasterVolumnSlider.value = int.Parse(OptionSetting["MVolume"].ToString());
+        Master = OptionSetting["MVolume"].ToString();
+
+        ResolText.GetComponent<TextMeshPro>().text = OptionSetting["Resol"].ToString();
+        Resol = OptionSetting["Resol"].ToString();
+
+        MusicVolumnSlider.value = int.Parse(OptionSetting["MuVolume"].ToString());
+        Music = OptionSetting["MuVolume"].ToString();
+
+        SFXSlider.value = int.Parse(OptionSetting["Sfx"].ToString());
+        Sound = OptionSetting["Sfx"].ToString();
     }
 
     // Update is called once per frame
@@ -39,8 +62,10 @@ public class OptionMenu : MonoBehaviour
         if (IsClicked)
         {
             FPSText.GetComponent<TMP_Text>().text = FpsCounter;
+            ResolText.GetComponent<TMP_Text>().text = Resol;
+            Application.targetFrameRate = int.Parse(FpsCounter);
             IsClicked = false;
-            Debug.Log("1");
+            Debug.Log(Application.targetFrameRate);
         }
     }
     #endregion
@@ -48,7 +73,9 @@ public class OptionMenu : MonoBehaviour
     // Group all function that serve the same algorithm
     public void ValueChangeCheck()
     {
-        Debug.Log(1 / Time.deltaTime);
+        Master = MasterVolumnSlider.value.ToString();
+        Music = MusicVolumnSlider.value.ToString();
+        Sound = SFXSlider.value.ToString();
     }
 
     #endregion

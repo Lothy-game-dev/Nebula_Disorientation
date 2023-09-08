@@ -93,6 +93,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
+            dbConnection.Close();
             return false;
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
@@ -212,6 +213,7 @@ public class AccessDatabase : MonoBehaviour
                 values.Add("DailyIncome", dataReader.GetInt32(8));
                 values.Add("DailyIncomeReceived", dataReader.GetString(9));
             }
+            dbConnection.Close();
             if (!check)
             {
                 return null;
@@ -270,6 +272,7 @@ public class AccessDatabase : MonoBehaviour
         {
             id = dataReader.GetInt32(0);
         }
+        dbConnection.Close();
         return id;
     }
     #endregion
@@ -311,6 +314,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (numberOfDailyMissions == 0)
         {
+            dbConnection.Close();
             return "Fail";
         }
         IDbCommand dbCommand2 = dbConnection.CreateCommand();
@@ -392,6 +396,47 @@ public class AccessDatabase : MonoBehaviour
         if (!check1) return null;
         dbConnection.Close();
         return dailyMissions;
+    }
+    #endregion
+    #region Option
+    public Dictionary<string, object> GetOption()
+    {
+        Dictionary<string, object> option = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM Option";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+       
+        while (dataReader.Read())
+        {
+            option.Add("MVolume", dataReader.GetInt32(0));
+            option.Add("MuVolume", dataReader.GetInt32(1));
+            option.Add("Sfx", dataReader.GetInt32(2));
+            option.Add("Fps", dataReader.GetInt32(3));
+            option.Add("Resol", dataReader.GetString(4));
+        }
+        dbConnection.Close();
+        return option;
+    }
+    public void UpdateOptionSetting(int MVolume, int Music, int Sound, int Fps, string Resol)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "UPDATE Option SET " +
+            "MasterVolume = "+MVolume+", " +
+            "MusicVolume = " + Music + ", " +
+            "SoundFx = " + Sound + ", " +
+            "Fps= " + Fps + ", " +
+            "Resolution = '" + Resol + "' Where 1=1";
+
+        dbCheckCommand.ExecuteNonQuery();
+        dbConnection.Close();
     }
     #endregion
 }

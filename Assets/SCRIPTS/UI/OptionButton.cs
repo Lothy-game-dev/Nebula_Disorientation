@@ -21,6 +21,7 @@ public class OptionButton : MonoBehaviour
     private OptionMenu OptionMenu;
     private string FpsCounter;
     public bool isClick;
+    private List<string> ResolList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -28,6 +29,7 @@ public class OptionButton : MonoBehaviour
     {
         // Initialize variables
         OptionMenu = OptionBoard.GetComponent<OptionMenu>();
+        ResolList = new List<string>() {"FullScreen", "1920x1080", "1600x900" ,"1280x720" };
     }
 
     // Update is called once per frame
@@ -67,6 +69,39 @@ public class OptionButton : MonoBehaviour
                     OptionMenu.FpsCounter = down.ToString();
                 }
             }
+        }
+
+        int index = ResolList.IndexOf(OptionMenu.Resol);
+        if (("LeftResolButton").Equals(gameObject.name)) {
+            OptionMenu.IsClicked = true;
+            if ("FullScreen".Equals(OptionMenu.Resol))
+            {
+                OptionMenu.Resol = ResolList[2];
+            } else
+            {
+                OptionMenu.Resol = ResolList[index-1];
+            }
+        } else
+        {
+            if (("RightResolButton").Equals(gameObject.name))
+            {
+                OptionMenu.IsClicked = true;
+                if ("1280x720".Equals(OptionMenu.Resol))
+                {
+                    OptionMenu.Resol = ResolList[0];
+                }
+                else
+                {
+                    OptionMenu.Resol = ResolList[index + 1];
+                }
+            }
+        }
+        if ("SaveButton".Equals(gameObject.name))
+        {
+            Debug.Log(float.Parse(OptionMenu.Master));
+            FindAnyObjectByType<AccessDatabase>().UpdateOptionSetting(Mathf.RoundToInt(float.Parse(OptionMenu.Master)),
+                                    Mathf.RoundToInt(float.Parse(OptionMenu.Music)), Mathf.RoundToInt(float.Parse(OptionMenu.Sound)), Mathf.RoundToInt(float.Parse(OptionMenu.FpsCounter)), OptionMenu.Resol);
+            Debug.Log("1");
         }
     }
     #endregion
