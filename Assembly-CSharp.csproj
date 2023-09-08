@@ -71,6 +71,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UECPlanets.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\OptionButton.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadingScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\OptionMenu.cs" />

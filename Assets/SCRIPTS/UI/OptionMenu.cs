@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,10 +15,13 @@ public class OptionMenu : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public Slider MasterVolumnSlider;
+    public GameObject FPSText;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    public bool IsClicked;
+    public string FpsCounter;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -25,18 +29,26 @@ public class OptionMenu : MonoBehaviour
     {
         // Initialize variables
         MasterVolumnSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        FPSText.GetComponent<TMP_Text>().text = "30";
+        FpsCounter = FPSText.GetComponent<TMP_Text>().text;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (IsClicked)
+        {
+            FPSText.GetComponent<TMP_Text>().text = FpsCounter;
+            IsClicked = false;
+            Debug.Log("1");
+        }
     }
     #endregion
     #region Function group 1
     // Group all function that serve the same algorithm
     public void ValueChangeCheck()
     {
-        Debug.Log(Time.frameCount / Time.deltaTime);
+        Debug.Log(1 / Time.deltaTime);
     }
 
     #endregion
