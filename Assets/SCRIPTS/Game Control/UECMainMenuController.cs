@@ -21,6 +21,7 @@ public class UECMainMenuController : MonoBehaviour
     {
         // Initialize variables
         ad = FindObjectOfType<AccessDatabase>();
+        GetData();
     }
 
     // Update is called once per frame

@@ -83,7 +83,7 @@ public class InitializeDatabase : MonoBehaviour
                 "PlayerID INTEGER, " +
                 "MissionID INTEGER, " +
                 "IsComplete TEXT NOT NULL, " +
-                "MissionDate REAL NOT NULL, " +
+                "MissionDate TEXT NOT NULL, " +
                 "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
@@ -208,7 +208,6 @@ public class InitializeDatabase : MonoBehaviour
                 "TimelessShard INTEGER NOT NULL, " +
                 "DailyIncome INTEGER NOT NULL, " +
                 "DailyIncomeReceived TEXT NOT NULL, " +
-                "DailyMissionDone INTEGER NOT NULL, " +
                 "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
                 "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
@@ -376,6 +375,17 @@ public class InitializeDatabase : MonoBehaviour
             "(11, 'Reformation', 'DAP-2', 2.5, 1, 'Yes', '#bf2600')," +
             "(12, 'Supercharging', 'EAE-25', 2.5, 1, 'Yes', '#bf2600')," +
             "(13, 'Franklin Effect', 'DS-2', 2.5, null, 'No', '#bf2600');";
+        // Daily Missions
+        string DailyMissions = "INSERT INTO DailyMissions VALUES " +
+            "(1, 'KE', 20)," +
+            "(2, 'KB', 1)," +
+            "(3, 'C', 10)," +
+            "(4, 'S', 1000)," +
+            "(5, 'P', 30)," +
+            "(6, 'CD', 4)," +
+            "(7, 'CA', 4)," +
+            "(8, 'CAA', 1)," +
+            "(9, 'B', 1);";
         // Initialize Data Success
         string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
@@ -390,7 +400,7 @@ public class InitializeDatabase : MonoBehaviour
         // Insert Data Query
         IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
         // Order: Rank > Other
-        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards;
+        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards + DailyMissions;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable
