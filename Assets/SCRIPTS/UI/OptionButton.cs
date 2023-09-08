@@ -14,6 +14,7 @@ public class OptionButton : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject OptionBoard;
+    public GameObject Text;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -22,6 +23,9 @@ public class OptionButton : MonoBehaviour
     private string FpsCounter;
     public bool isClick;
     private List<string> ResolList;
+    private Vector3 InitScale;
+    private float ExpectedScale;    
+    private bool alreadySelect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,6 +34,8 @@ public class OptionButton : MonoBehaviour
         // Initialize variables
         OptionMenu = OptionBoard.GetComponent<OptionMenu>();
         ResolList = new List<string>() {"FullScreen", "1920x1080", "1600x900" ,"1280x720" };
+        InitScale = transform.localScale;
+        ExpectedScale = transform.localScale.x * 1.1f;
     }
 
     // Update is called once per frame
@@ -98,14 +104,61 @@ public class OptionButton : MonoBehaviour
         }
         if ("SaveButton".Equals(gameObject.name))
         {
-            Debug.Log(float.Parse(OptionMenu.Master));
             FindAnyObjectByType<AccessDatabase>().UpdateOptionSetting(Mathf.RoundToInt(float.Parse(OptionMenu.Master)),
                                     Mathf.RoundToInt(float.Parse(OptionMenu.Music)), Mathf.RoundToInt(float.Parse(OptionMenu.Sound)), Mathf.RoundToInt(float.Parse(OptionMenu.FpsCounter)), OptionMenu.Resol);
-            Debug.Log("1");
+            OptionMenu.IsSaved = true;
+        }
+        if ("BackButton".Equals(gameObject.name))
+        {
+            FindAnyObjectByType<MainMenuCameraController>().BackToMainMenu();
         }
     }
     #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
-    #endregion
+    private void OnMouseEnter()
+    {
+        alreadySelect = false;
+    }
+    private void OnMouseOver()
+    {
+        if ("BackButton".Equals(gameObject.name) || "SaveButton".Equals(gameObject.name))
+        {
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.r -= 0.01f;
+            c.b -= 0.01f;
+            GetComponent<SpriteRenderer>().color = c;
+            GetComponent<SpriteRenderer>().sortingOrder = 3;
+            Color c2 = Text.GetComponent<SpriteRenderer>().color;
+            c2.r -= 0.01f;
+            c2.g -= 0.01f;
+            c2.b -= 0.01f;
+            Text.GetComponent<SpriteRenderer>().color = c2;
+            Text.GetComponent<SpriteRenderer>().sortingOrder = 4;
+            if (transform.localScale.x < ExpectedScale)
+            {
+                transform.localScale = new Vector3
+                    (transform.localScale.x + InitScale.x * 0.002f,
+                    transform.localScale.y + InitScale.y * 0.002f,
+                    transform.localScale.z + InitScale.z * 0.002f);
+            }
+        }
+    }
+    private void OnMouseExit()
+    {
+        if (!alreadySelect && ("BackButton".Equals(gameObject.name) || "SaveButton".Equals(gameObject.name)))
+        {
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.r = 1;
+            c.b = 1;
+            GetComponent<SpriteRenderer>().color = c;
+            GetComponent<SpriteRenderer>().sortingOrder = 3;
+            Color c2 = Text.GetComponent<SpriteRenderer>().color;
+            c2.r = 1;
+            c2.g = 1;
+            c2.b = 1;
+            Text.GetComponent<SpriteRenderer>().color = c2;
+            Text.GetComponent<SpriteRenderer>().sortingOrder = 4;
+            transform.localScale = new Vector3(InitScale.x, InitScale.y, InitScale.z);
+        }
+    }
+
 }
