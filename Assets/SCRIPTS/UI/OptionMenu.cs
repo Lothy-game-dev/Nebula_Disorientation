@@ -107,7 +107,7 @@ public class OptionMenu : MainMenuSceneShared
     // Group all function that serve the same algorithm
     public override void StartAnimation()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("A");
     }
     #endregion
 }
