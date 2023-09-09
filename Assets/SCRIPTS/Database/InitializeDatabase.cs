@@ -387,12 +387,12 @@ public class InitializeDatabase : MonoBehaviour
             "(1, 'KE', 20)," +
             "(2, 'KB', 1)," +
             "(3, 'C', 10)," +
-            "(4, 'S', 1000)," +
+            "(4, 'S', 10000)," +
             "(5, 'P', 30)," +
-            "(6, 'CD', 4)," +
-            "(7, 'CA', 4)," +
+            "(6, 'CD', 3)," +
+            "(7, 'CA', 3)," +
             "(8, 'CAA', 1)," +
-            "(9, 'B', 1);";
+            "(9, 'B', 2);";
         string Option = "INSERT INTO Option VALUES (100, 100, 100, 60, '1920x1080');";
         // Initialize Data Success
         string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";

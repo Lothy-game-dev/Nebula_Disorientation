@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionMenu : MonoBehaviour
+public class OptionMenu : MainMenuSceneShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -70,10 +70,8 @@ public class OptionMenu : MonoBehaviour
         }
         if (IsSaved)
         {
-            GameObject game = Instantiate(Notification, Notification.transform.position, Quaternion.identity);
-            game.transform.localScale = new Vector3(1, 1, 0);
-            game.SetActive(true);
-            Destroy(game, 1f);
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Save Successfully!", 5f);
             Application.targetFrameRate = int.Parse(FpsCounter);
             if ("FullScreen".Equals(Resol))
             {
@@ -105,8 +103,11 @@ public class OptionMenu : MonoBehaviour
     }
 
     #endregion
-    #region
+    #region Start Anim
     // Group all function that serve the same algorithm
-    
+    public override void StartAnimation()
+    {
+        throw new System.NotImplementedException();
+    }
     #endregion
 }
