@@ -63,6 +63,7 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenuBackButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\UECPlusButton.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Assets\SCRIPTS\UI\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\NotificationBoardController.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
@@ -116,6 +118,8 @@
     <Compile Include="Assets\SCRIPTS\UI\UECEnterSession.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\NotificationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECPersonalArea.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />

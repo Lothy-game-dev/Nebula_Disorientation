@@ -12,12 +12,12 @@ public class NotificationBoardController : MonoBehaviour
     #region InitializeVariables
     public GameObject NotificationBoard;
     public GameObject ConfirmationBoard;
+    public GameObject ConvertBoard;
     #endregion
     #region NormalVariables
     public delegate void VoidFunctionPass();
     public VoidFunctionPass VoidReturnFunction;
     private float InitScale;
-
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -90,6 +90,15 @@ public class NotificationBoardController : MonoBehaviour
         GameObject notiBoard = Instantiate(ConfirmationBoard, new Vector3(Position.x, Position.y, ConfirmationBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
         notiBoard.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = text;
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
+    }
+
+    public void CreateNormalConvertBoard(Vector2 Position, string ConvertFrom, string ConvertTo, float Rate)
+    {
+        GameObject notiBoard = Instantiate(ConvertBoard, new Vector3(Position.x, Position.y, ConvertBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
+        notiBoard.transform.GetChild(0).GetComponent<ConvertBoard>().SetConvertItem(ConvertFrom, ConvertTo, Rate);
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
     }
