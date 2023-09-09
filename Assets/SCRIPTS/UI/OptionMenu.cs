@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionMenu : MonoBehaviour
+public class OptionMenu : MainMenuSceneShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -103,8 +103,11 @@ public class OptionMenu : MonoBehaviour
     }
 
     #endregion
-    #region
+    #region Start Anim
     // Group all function that serve the same algorithm
-    
+    public override void StartAnimation()
+    {
+        throw new System.NotImplementedException();
+    }
     #endregion
 }
