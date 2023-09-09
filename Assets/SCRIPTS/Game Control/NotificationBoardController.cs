@@ -97,6 +97,7 @@ public class NotificationBoardController : MonoBehaviour
     public void ConfirmOnConfirmationBoard()
     {
         VoidReturnFunction();
+        VoidReturnFunction = null;
     }
     #endregion
 }

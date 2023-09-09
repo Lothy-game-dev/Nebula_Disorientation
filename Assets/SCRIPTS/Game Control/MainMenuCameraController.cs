@@ -82,7 +82,6 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec)
     {
-        Debug.Log(sec);
         if (CurrentScene==null)
         {
             CurrentScene = StartScene;
