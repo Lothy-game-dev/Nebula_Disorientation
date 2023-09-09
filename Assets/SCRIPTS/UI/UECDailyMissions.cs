@@ -97,7 +97,7 @@ public class UECDailyMissions : MonoBehaviour
             }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions done";
+            DMText.GetComponent<TextMeshPro>().text = "completed!";
             BGToPos = DMBGBeforePos.transform.position;
         }
     }

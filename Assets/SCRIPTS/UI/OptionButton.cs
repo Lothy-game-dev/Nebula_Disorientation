@@ -110,7 +110,12 @@ public class OptionButton : MonoBehaviour
         }
         if ("BackButton".Equals(gameObject.name))
         {
-            FindAnyObjectByType<MainMenuCameraController>().BackToMainMenu();
+            if (PlayerPrefs.GetInt("BackToUEC") == 1)
+            {
+                PlayerPrefs.SetInt("BackToUEC", 0);
+                FindObjectOfType<MainMenuCameraController>().MoveToUEC();
+            }
+            else FindAnyObjectByType<MainMenuCameraController>().BackToMainMenu();
         }
     }
     #endregion

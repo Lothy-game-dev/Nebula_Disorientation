@@ -13,6 +13,7 @@ public class MainMenuCameraController : MonoBehaviour
     public GameObject StartScene;
     public MainMenuButtons[] MainMenuButtons;
     public GameObject LoadingScene;
+    public GameObject OptionScene;
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
@@ -30,6 +31,20 @@ public class MainMenuCameraController : MonoBehaviour
         CurrentScene = StartScene;
     }
 
+    private void OnEnable()
+    {
+        if (PlayerPrefs.GetFloat("CreateLoading") > 0f)
+        {
+            if (PlayerPrefs.GetInt("ToOption") == 1)
+            {
+                PlayerPrefs.SetInt("ToOption", 0);
+                ChangeToScene(OptionScene);
+                CurrentScene = OptionScene;
+            }
+            GenerateLoadingScene(PlayerPrefs.GetFloat("CreateLoading"));
+            PlayerPrefs.SetFloat("CreateLoading", 0f);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -67,6 +82,7 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec)
     {
+        Debug.Log(sec);
         if (CurrentScene==null)
         {
             CurrentScene = StartScene;

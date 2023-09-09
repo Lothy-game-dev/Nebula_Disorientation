@@ -82,7 +82,7 @@ public class UECPlanets : MonoBehaviour
     }
     private void MoveToPlace()
     {
-        rb.velocity = (NextPlace.transform.position - transform.position) * 0.05f / (NextPlace.transform.position - transform.position).magnitude;
+        rb.velocity = (NextPlace.transform.position - transform.position) * 0.5f / (NextPlace.transform.position - transform.position).magnitude;
     }
 
     #endregion

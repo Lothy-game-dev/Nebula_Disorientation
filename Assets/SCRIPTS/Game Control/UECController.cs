@@ -23,6 +23,7 @@ public class UECController : MonoBehaviour
     public GameObject FuelEnergy;
     public GameObject NameRankBox;
     public GameObject DailyMissionBar;
+    public GameObject EnterBattleButton;
     #endregion
     #region NormalVariables
     public bool isPlanetMoving;
@@ -104,10 +105,10 @@ public class UECController : MonoBehaviour
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["FuelEnergy"]).ToString();
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)datas["FuelCell"];
-        NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = GenerateNameRankText((string)datas["Name"], (string)datas["Rank"]);
+        NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = GenerateNameRankText((string)datas["Name"], (string)datas["Rank"], (datas.ContainsKey("RankColor")? (string)datas["RankColor"]:"") );
     }
 
-    private string GenerateNameRankText(string name, string rank)
+    private string GenerateNameRankText(string name, string rank, string rankColor)
     {
         System.DateTime currentTime = System.DateTime.Now;
         string text = "";
@@ -118,7 +119,7 @@ public class UECController : MonoBehaviour
         }
         else
         {
-            ranking = rank;
+            ranking = "<color=" + rankColor + ">" + rank + "</color>";
         }
         string time = currentTime.ToString("HH:mm");
         int hour;
@@ -187,13 +188,13 @@ public class UECController : MonoBehaviour
                         mission = "Kill " + listDM[1][i] + " boss enemy(s).";
                         break;
                     case "C":
-                        mission = "Clear any " + listDM[1][i] + " spacezone(s).";
+                        mission = "Complete " + listDM[1][i] + " spacezone(s).";
                         break;
                     case "S":
-                        mission = "Spend " + listDM[1][i] + " cash(s).";
+                        mission = "Spend " + listDM[1][i] + " cash(s) during a session.";
                         break;
                     case "P":
-                        mission = "Play for " + listDM[1][i] + " minute(s).";
+                        mission = "Play for at least " + listDM[1][i] + " minute(s).";
                         break;
                     case "CD":
                         mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
@@ -205,7 +206,7 @@ public class UECController : MonoBehaviour
                         mission = "Complete " + listDM[1][i] + " Assault Advanced Spacezone(s).";
                         break;
                     case "B":
-                        mission = "Buy any " + listDM[1][i] + " item(s) in shop.";
+                        mission = "Purchase " + listDM[1][i] + " item(s).";
                         break;
                     default: break;
                 }

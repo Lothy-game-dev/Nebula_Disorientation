@@ -121,7 +121,15 @@ public class AccessDatabase : MonoBehaviour
             object rankTemp = dataReader.GetValue(1);
             if (rankTemp!=null && rankTemp.ToString().Length>0)
             {
-                Ranks.Add(rankTemp.ToString());
+                IDbCommand dbCommand2 = dbConnection.CreateCommand();
+                dbCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankID=" + rankTemp;
+                IDataReader dataReader2 = dbCommand2.ExecuteReader();
+                string rank = "Unranked";
+                while (dataReader2.Read())
+                {
+                    rank = "<color=" + dataReader2.GetString(1) + ">" + dataReader2.GetString(0) + "</color>";
+                }
+                Ranks.Add(rank);
             } else
             {
                 Ranks.Add("Unranked");
@@ -189,14 +197,17 @@ public class AccessDatabase : MonoBehaviour
                 } else
                 {
                     IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
-                    dbCheckCommand2.CommandText = "SELECT RankName FROM RankSystem WHERE RankId=" + dataReader.GetInt32(2);
+                    dbCheckCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankId=" + dataReader.GetInt32(2);
                     IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
                     string rank = "Unranked";
+                    string color = "#ffffff";
                     while (dataReader2.Read())
                     {
                         rank = dataReader2.GetString(0);
+                        color = dataReader2.GetString(1);
                     }
                     values.Add("Rank", rank);
+                    values.Add("RankColor", color);
                 }
                 if (dataReader.IsDBNull(3))
                 {
