@@ -20,7 +20,6 @@ public class OptionMenu : MainMenuSceneShared
     public Slider MusicVolumnSlider;
     public Slider SFXSlider;
     public GameObject Notification;
-    public List<GameObject> AnimObject;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -57,7 +56,6 @@ public class OptionMenu : MainMenuSceneShared
 
         SFXSlider.value = int.Parse(OptionSetting["Sfx"].ToString());
         Sound = OptionSetting["Sfx"].ToString();
-
     }
 
     // Update is called once per frame
@@ -109,18 +107,7 @@ public class OptionMenu : MainMenuSceneShared
     // Group all function that serve the same algorithm
     public override void StartAnimation()
     {
-        Debug.Log("1");
+        Debug.Log("A");
     }
-    private IEnumerator MoveAnimation()
-    {
-        Debug.Log(AnimObject[0]);
-        for (int i = 0; i < 10; i++)
-        {
-            AnimObject[0].GetComponent<TextMeshPro>().text = i.ToString();
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-    
     #endregion
 }
- 
