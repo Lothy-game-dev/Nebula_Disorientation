@@ -70,6 +70,16 @@ public class NotiBoardOKButton : MonoBehaviour
         } else if ("BackButton".Equals(name))
         {
             Destroy(NotiBoard);
+        } else if ("ConfirmButton".Equals(name))
+        {
+            RechargeBoard rb = NotiBoard.transform.GetChild(0).GetComponent<RechargeBoard>();
+            if (rb!=null)
+            {
+                rb.Recharge();
+            }
+        } else if ("ReturnButton".Equals(name))
+        {
+            Destroy(NotiBoard);
         }
     }
 

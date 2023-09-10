@@ -63,6 +63,7 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenuBackButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\RechargeBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECPlusButton.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\NotificationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\RechargeBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECPersonalArea.cs" />

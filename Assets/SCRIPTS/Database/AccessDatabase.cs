@@ -234,6 +234,203 @@ public class AccessDatabase : MonoBehaviour
             }
         }
     }
+
+    public string CheckIfConvertable(int PlayerId, string ConvertFrom, string ConvertTo, string FromAmount, string ToAmount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        string from = "";
+        string to = "";
+        switch (ConvertFrom.Replace(" ", "").ToLower())
+        {
+            case "cash": from = "Cash"; break;
+            case "timelessshard": from = "TimelessShard"; break;
+            case "fuelcell": from = "FuelCell"; break;
+            case "fuelenergy": from = "FuelEnergy"; break;
+            default: break;
+        }
+        switch (ConvertTo.Replace(" ", "").ToLower())
+        {
+            case "cash": to = "Cash"; break;
+            case "timelessshard": to = "TimelessShard"; break;
+            case "fuelcell": to = "FuelCell"; break;
+            case "fuelenergy": to = "FuelEnergy"; break;
+            default: break;
+        }
+        if (from != "" && to != "")
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            bool check = false;
+            while (dataReader.Read())
+            {
+                check = true;
+                break;
+            }
+            if (!check)
+            {
+                dbConnection.Close();
+                return "No Exist";
+            }
+            if (to.Equals("FuelCell"))
+            {
+                IDbCommand dbCommand2 = dbConnection.CreateCommand();
+                dbCommand2.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerID=" + PlayerId;
+                IDataReader dataReader3 = dbCommand2.ExecuteReader();
+                bool check2 = false;
+                int fuelCheck = int.Parse(ToAmount);
+                while (dataReader3.Read())
+                {
+                    check2 = true;
+                    fuelCheck += dataReader3.GetInt32(0);
+                    break;
+                }
+                if (!check2)
+                {
+                    dbConnection.Close();
+                    return "Fail";
+                }
+                else
+                {
+                    if (fuelCheck > 10)
+                    {
+                        dbConnection.Close();
+                        return "Over Limit";
+                    }
+                }
+            }
+            IDbCommand dbCommand3 = dbConnection.CreateCommand();
+            dbCommand3.CommandText = "SELECT " + from + " FROM PlayerProfile WHERE PlayerID=" + PlayerId;
+            IDataReader dataReader4 = dbCommand3.ExecuteReader();
+            int k = -int.Parse(FromAmount);
+            bool check3 = false;
+            while (dataReader4.Read())
+            {
+                check3 = true;
+                k += dataReader4.GetInt32(0);
+                break;
+            }
+            if (!check3)
+            {
+                dbConnection.Close();
+                return "Fail";
+            }
+            else
+            {
+                if (k < 0)
+                {
+                    dbConnection.Close();
+                    return "Not Enough";
+                }
+            }
+            dbConnection.Close();
+            return "Success";
+        }
+        else
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+    }
+    public string ConvertCurrencyById(int PlayerId, string ConvertFrom, string ConvertTo, string FromAmount, string ToAmount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        string from = "";
+        string to = "";
+        switch (ConvertFrom.Replace(" ","").ToLower())
+        {
+            case "cash": from = "Cash";break;
+            case "timelessshard": from = "TimelessShard"; break;
+            case "fuelcell": from = "FuelCell"; break;
+            case "fuelenergy": from = "FuelEnergy"; break;
+            default: break;
+        }
+        switch (ConvertTo.Replace(" ", "").ToLower())
+        {
+            case "cash": to = "Cash"; break;
+            case "timelessshard": to = "TimelessShard"; break;
+            case "fuelcell": to = "FuelCell"; break;
+            case "fuelenergy": to = "FuelEnergy"; break;
+            default: break;
+        }
+        if (from!="" && to!="")
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            bool check = false;
+            while (dataReader.Read())
+            {
+                check = true;
+                break;
+            }
+            if (!check)
+            {
+                dbConnection.Close();
+                return "No Exist";
+            } else
+            {
+                IDbCommand dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = "UPDATE PlayerProfile SET " + from + " = " + from + " - " + FromAmount +
+                    "," + to + " = " + to + " + " + ToAmount + " WHERE PlayerID=" + PlayerId;
+                int n = dbCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (n != 1)
+                {
+                    return "Fail";
+                } else
+                {
+                    return "Success";
+                }
+            }
+        } else
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+    }
+
+    public string RechargeTimelessShard(int PlayerId, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            break;
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "No Exist";
+        } else
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "UPDATE PlayerProfile SET TimelessShard = TimelessShard + " + amount.ToString() + " WHERE PlayerID=" + PlayerId;
+            int n = dbCommand.ExecuteNonQuery();
+            if (n!=1)
+            {
+                dbConnection.Close();
+                return "Fail";
+            } else
+            {
+                dbConnection.Close();
+                return "Success";
+            }
+        }
+    }
     #endregion
     #region Access To Current Play Session
     public string AddPlaySession(string PlayerName)

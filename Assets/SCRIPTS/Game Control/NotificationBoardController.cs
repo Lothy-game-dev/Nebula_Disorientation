@@ -13,6 +13,7 @@ public class NotificationBoardController : MonoBehaviour
     public GameObject NotificationBoard;
     public GameObject ConfirmationBoard;
     public GameObject ConvertBoard;
+    public GameObject RechargeBoard;
     #endregion
     #region NormalVariables
     public delegate void VoidFunctionPass();
@@ -99,6 +100,14 @@ public class NotificationBoardController : MonoBehaviour
         GameObject notiBoard = Instantiate(ConvertBoard, new Vector3(Position.x, Position.y, ConvertBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
         notiBoard.transform.GetChild(0).GetComponent<ConvertBoard>().SetConvertItem(ConvertFrom, ConvertTo, Rate);
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
+    }
+
+    public void CreateNormalRechargeBoard(Vector2 Position)
+    {
+        GameObject notiBoard = Instantiate(RechargeBoard, new Vector3(Position.x, Position.y, RechargeBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
     }

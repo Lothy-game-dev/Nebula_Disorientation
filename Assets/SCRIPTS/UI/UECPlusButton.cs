@@ -9,6 +9,7 @@ public class UECPlusButton : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public string Action;
     public string ConvertFrom;
     public string ConvertTo;
     public float ConvertRate;
@@ -34,7 +35,13 @@ public class UECPlusButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
-        FindObjectOfType<NotificationBoardController>().CreateNormalConvertBoard(Scene.transform.position, ConvertFrom, ConvertTo, ConvertRate);
+        if ("Convert".Equals(Action))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalConvertBoard(Scene.transform.position, ConvertFrom, ConvertTo, ConvertRate);
+        } else if ("Recharge".Equals(Action))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalRechargeBoard(Scene.transform.position);
+        }
     }
     #endregion
 }

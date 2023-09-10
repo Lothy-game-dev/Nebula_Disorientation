@@ -57,22 +57,73 @@ public class ConvertBoard : MonoBehaviour
 
     public void Convert()
     {
-        if (int.Parse(TextOutput.text)>0)
-        {
-            ItemLeft.StartAnimation();
-        } else
+        int id = FindObjectOfType<UECMainMenuController>().PlayerId;
+        string check = FindObjectOfType<AccessDatabase>().CheckIfConvertable(id, From, To, TextInput.text, TextOutput.text);
+        if ("Fail".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Cannot convert, please re-enter the amount of the pre-converted item", 5f);
+            "Fail to fetch data.\nPlease try again or contact our email!", 5f);
+            ItemLeft.ShowItem(From);
+        }
+        else if ("No Exist".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Pilot does not exist!\n Please log-in again.", 5f);
+            ItemLeft.ShowItem(From);
+        }
+        else if ("Over Limit".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            To + "'s quantity after converted is over its limit!\n Please try again.", 5f);
+            TextInput.text = "0";
+            TextOutput.text = "0";
+            ItemLeft.ShowItem(From);
+        }
+        else if ("Not Enough".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Your " + From + " is not enough for this conversion!\n Please try again.", 5f);
+            TextInput.text = "0";
+            TextOutput.text = "0";
+            ItemLeft.ShowItem(From);
+        }
+        else if ("Success".Equals(check))
+        {
+            if (int.Parse(TextOutput.text) > 0)
+            {
+                ItemLeft.StartAnimation();
+            }
+            else
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Cannot convert, please re-enter the amount of the pre-converted item", 5f);
+            }
         }
     }
 
     public void ConvertDone()
     {
-        // Insert
-        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+        int id = FindObjectOfType<UECMainMenuController>().PlayerId;
+        string check = FindObjectOfType<AccessDatabase>().ConvertCurrencyById(id, From, To, TextInput.text, TextOutput.text);
+        if ("Fail".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Convert failed.\nPlease try again or contact our email!", 5f);
+            ItemLeft.ShowItem(From);
+        }
+        else if ("No Exist".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+            "Pilot does not exist!\n Please try again.", 5f);
+            ItemLeft.ShowItem(From);
+        }
+        else if ("Success".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
             "Convert successfully!!!\nYou received " + TextOutput.text + " " + To + "!", 5f);
-        Destroy(gameObject.transform.parent.gameObject);
+            FindObjectOfType<UECMainMenuController>().GetData();
+            Destroy(gameObject.transform.parent.gameObject);
+        }
     }
     #endregion
 }

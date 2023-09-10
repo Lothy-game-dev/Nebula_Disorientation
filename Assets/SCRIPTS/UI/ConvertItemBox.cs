@@ -62,7 +62,7 @@ public class ConvertItemBox : MonoBehaviour
                     maxSpeed = true;
                     StartSpinning = false;
                 }
-                increaseSpeedTimer = 0.5f;
+                increaseSpeedTimer = 0.2f;
             }
             else
             {
@@ -97,6 +97,9 @@ public class ConvertItemBox : MonoBehaviour
             {
                 Items.transform.GetChild(i).gameObject.SetActive(true);
                 CurrentItemObject = Items.transform.GetChild(i).gameObject;
+                Color c = CurrentItemObject.GetComponent<SpriteRenderer>().color;
+                c.a = 1;
+                CurrentItemObject.GetComponent<SpriteRenderer>().color = c;
                 break;
             }
         }
@@ -145,7 +148,7 @@ public class ConvertItemBox : MonoBehaviour
         CircleOuter.SetActive(false);
         //Move
         CircleAlreadyMove = true;
-        CircleInner.GetComponent<Rigidbody2D>().velocity = (OtherBox.transform.position - CircleInner.transform.position) / 1f;
+        CircleInner.GetComponent<Rigidbody2D>().velocity = (OtherBox.transform.position - CircleInner.transform.position) * 2f;
     }
     private void SpinOuter()
     {
