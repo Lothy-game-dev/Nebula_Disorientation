@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EncycButton : MonoBehaviour
 {
@@ -17,12 +18,14 @@ public class EncycButton : MonoBehaviour
     public List<SpriteRenderer> WeapImage;
     public List<SpriteRenderer> FighterImage;
     public List<SpriteRenderer> PowerImage;
+    public GameObject Content;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    public string Type;
+    public int Id;
     private EncycMenu Menu;
-    private string Type;
     private List<List<string>> WeapList;
     private List<string> wlist;
     private string Tier;
@@ -46,12 +49,11 @@ public class EncycButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        Menu.Arrow.SetActive(true);
-        Menu.Arrow.transform.position = new Vector3(Menu.Arrow.transform.position.x, gameObject.transform.position.y, 0);
-        Type = gameObject.transform.GetComponentInChildren<TMP_Text>().text;
-        if (Type.Substring(0,1) == "W")
+        
+        if (Type == "Weapon")
         {
             ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2.3f, 2.3f, 0f));
+            ChangeColorWhenChoosen(Id.ToString());
             if (wlist[2] == "Star Blaster")
             {
                 Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WeapImage[WeapImage.FindIndex(item => item.name == "Star")].sprite;
@@ -70,9 +72,10 @@ public class EncycButton : MonoBehaviour
         } else
         {
             //Fighter
-            if (Type.Substring(0,1) == "F")
+            if (Type == "Fighter")
             {
                 ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(1f, 1f, 0f));
+                ChangeColorWhenChoosen(Id.ToString());
                 if (wlist[1] == "SSS-MKL")
                 {
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = FighterImage[FighterImage.FindIndex(item => item.name == "SSSL")].sprite;
@@ -91,9 +94,10 @@ public class EncycButton : MonoBehaviour
             } else
             {
                 //Power
-                if (Type.Substring(0, 1) == "P")
+                if (Type == "Power")
                 {
-                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(1f, 1f, 0f));
+                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.6f, 0.6f, 0f));
+                    ChangeColorWhenChoosen(Id.ToString());
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = PowerImage[PowerImage.FindIndex(item => wlist[2].Replace(" ", "").ToLower() == item.name.ToLower())].sprite;                                          
                 }
             }
@@ -105,73 +109,34 @@ public class EncycButton : MonoBehaviour
     private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale)
     {
         Menu.ItemImage.transform.localScale = ImageScale;
-        wlist = list[int.Parse(Type.Remove(0, 1)) - 1];
-        Color c = Menu.ItemName.GetComponent<TMP_Text>().color;
-        Color c1 = Menu.ItemTier.GetComponent<TMP_Text>().color;
-        if ("#36b37e".Equals(wlist[TierIndex]))
+        wlist = list[Id];
+        
+        Menu.ItemName.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] +">"  + wlist[NameIndex] + "</color>";
+
+        switch(wlist[TierIndex])
         {
-            Tier = "Tier III";
-
-            c.r = 54;
-            c.g = 179;
-            c.b = 133;
-
-            c1.r = 54;
-            c1.g = 179;
-            c1.b = 133;
+            case "#36b37e": Tier = "Tier III";
+                            break;
+            case "#4c9aff": Tier = "Tier II";
+                            break;
+            case "#bf2600": Tier = "Tier I";
+                            break;
+            default: Tier = "Special"; break;
         }
-        else
+        Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";
+
+ 
+    }
+    #endregion
+    #region
+    public void ChangeColorWhenChoosen(string Id)
+    {
+        Debug.Log(Id);
+        for (int i = 0; i < Content.transform.childCount; i++)
         {
-            if ("#4c9aff".Equals(wlist[TierIndex]))
-            {
-                Tier = "Tier II";
-
-                c.r = 76;
-                c.g = 154;
-                c.b = 255;
-
-                c1.r = 76;
-                c1.g = 154;
-                c1.b = 255;
-            }
-            else
-            {
-                if ("#bf2600".Equals(wlist[TierIndex]))
-                {
-                    Tier = "Tier I";
-
-                    c.r = 191;
-                    c.g = 38;
-                    c.b = 0;
-
-                    c1.r = 191;
-                    c1.g = 38;
-                    c1.b = 0;
-                } else
-                {
-                    if (Type.Substring(0, 1) == "W")
-                    {
-                        if ("#800080".Equals(wlist[9]))
-                        {
-                            Tier = "Special";
-
-                            c.r = 128;
-                            c.g = 0;
-                            c.b = 128;
-
-                            c1.r = 128;
-                            c1.g = 0;
-                            c1.b = 128;
-                        }
-                    }
-                }
-            }
+            Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
         }
-        Menu.ItemName.GetComponent<TMP_Text>().text = wlist[NameIndex];
-        Menu.ItemTier.GetComponent<TMP_Text>().text = Tier;
-
-        Menu.ItemName.GetComponent<TMP_Text>().color = c;
-        Menu.ItemTier.GetComponent<TMP_Text>().color = c1;
+        Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
     }
     #endregion
 }
