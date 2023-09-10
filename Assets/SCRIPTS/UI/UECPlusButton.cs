@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UECEnterSession : MonoBehaviour
+public class UECPlusButton : MonoBehaviour
 {
     #region ComponentVariables
-    private Animator anim;
+    // Variables used for calling componenets attached to the game object only
+    // Can be public or private
     #endregion
     #region InitializeVariables
+    public string Action;
+    public string ConvertFrom;
+    public string ConvertTo;
+    public float ConvertRate;
+    public GameObject Scene;
     public string InfoText;
     #endregion
     #region NormalVariables
@@ -19,7 +25,6 @@ public class UECEnterSession : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,17 +34,22 @@ public class UECEnterSession : MonoBehaviour
     }
     #endregion
     #region Mouse Check
+    private void OnMouseDown()
+    {
+        if ("Convert".Equals(Action))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalConvertBoard(Scene.transform.position, ConvertFrom, ConvertTo, ConvertRate);
+        } else if ("Recharge".Equals(Action))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalRechargeBoard(Scene.transform.position);
+        }
+    }
     private void OnMouseEnter()
     {
-        anim.ResetTrigger("Stop");
-        anim.SetTrigger("Move");
         FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
     }
-
     private void OnMouseExit()
     {
-        anim.ResetTrigger("Move");
-        anim.SetTrigger("Stop");
         FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     #endregion

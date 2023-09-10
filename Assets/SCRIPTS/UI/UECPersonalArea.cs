@@ -11,6 +11,7 @@ public class UECPersonalArea : MonoBehaviour
     #region InitializeVariables
     public GameObject Inner;
     public GameObject Outer;
+    public string InfoText;
     #endregion
     #region NormalVariables
     private float initScale;
@@ -30,6 +31,10 @@ public class UECPersonalArea : MonoBehaviour
     }
     #endregion
     #region MouseCheck
+    private void OnMouseEnter()
+    {
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
+    }
     private void OnMouseOver()
     {
         Inner.transform.Rotate(new Vector3(0, 0, 2f));
@@ -39,6 +44,7 @@ public class UECPersonalArea : MonoBehaviour
     private void OnMouseExit()
     {
         transform.localScale = new Vector3(initScale, initScale, initScale);
+        FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     #endregion
 }

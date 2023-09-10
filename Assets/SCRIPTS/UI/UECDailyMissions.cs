@@ -18,6 +18,7 @@ public class UECDailyMissions : MonoBehaviour
     public GameObject DMBGBeforePos;
     public GameObject DMBG1MissionsPos;
     public GameObject DMBG2MissionsPos;
+    public string InfoText;
     #endregion
     #region NormalVariables
     public List<string> missions;
@@ -69,7 +70,7 @@ public class UECDailyMissions : MonoBehaviour
             }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions (0/2)";
+            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"red\">(0/2)</color>";
             BGToPos = DMBG2MissionsPos.transform.position;
         } else if (missions.Count == 1)
         {
@@ -83,7 +84,7 @@ public class UECDailyMissions : MonoBehaviour
             }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions (1/2)";
+            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(1/2)</color>";
             BGToPos = DMBG1MissionsPos.transform.position;
         } else if (missions.Count == 0)
         {
@@ -97,7 +98,7 @@ public class UECDailyMissions : MonoBehaviour
             }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-            DMText.GetComponent<TextMeshPro>().text = "completed!";
+            DMText.GetComponent<TextMeshPro>().text = "<color=\"green\">completed!</color>";
             BGToPos = DMBGBeforePos.transform.position;
         }
     }
@@ -118,6 +119,14 @@ public class UECDailyMissions : MonoBehaviour
             DMBG.GetComponent<Rigidbody2D>().velocity = Veloc;
         }
         
+    }
+    private void OnMouseEnter()
+    {
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
+    }
+    private void OnMouseExit()
+    {
+        FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     #endregion
 }

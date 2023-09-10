@@ -208,6 +208,7 @@ public class InitializeDatabase : MonoBehaviour
                 "TimelessShard INTEGER NOT NULL, " +
                 "DailyIncome INTEGER NOT NULL, " +
                 "DailyIncomeReceived TEXT NOT NULL, " +
+                "LastFuelCellUsedTime TEXT," +
                 "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
                 "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
