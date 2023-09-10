@@ -22,6 +22,7 @@ public class EncycMenu : MonoBehaviour
     public string[] Category;
     public GameObject CategoryContent;
     public GameObject CateTemplate;
+    public ScrollRect Scroll;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
