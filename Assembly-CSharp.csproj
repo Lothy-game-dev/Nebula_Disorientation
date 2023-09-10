@@ -77,6 +77,7 @@
     <Compile Include="Assets\SCRIPTS\UI\OptionMenu.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PilotNameBar.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\EncycButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PilotContract.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenuTutorialScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PilotSignContract.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenuSpinBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\EncycMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECController.cs" />
