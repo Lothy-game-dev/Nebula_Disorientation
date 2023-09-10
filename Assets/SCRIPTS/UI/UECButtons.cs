@@ -10,9 +10,7 @@ public class UECButtons : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
+    public string InfoText;
     #endregion
     #region NormalVariables
     private float initScaleX;
@@ -38,11 +36,13 @@ public class UECButtons : MonoBehaviour
     {
         transform.localScale = new Vector3(initScaleX * 1.1f, initScaleY * 1.1f, 0);
         GetComponent<SpriteRenderer>().sortingOrder = 2;
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
     }
     private void OnMouseExit()
     {
         transform.localScale = new Vector3(initScaleX, initScaleY, 0);
         GetComponent<SpriteRenderer>().sortingOrder = 1;
+        FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     private void OnMouseDown()
     {

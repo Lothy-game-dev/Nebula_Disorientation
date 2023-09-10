@@ -18,6 +18,7 @@ public class UECDailyMissions : MonoBehaviour
     public GameObject DMBGBeforePos;
     public GameObject DMBG1MissionsPos;
     public GameObject DMBG2MissionsPos;
+    public string InfoText;
     #endregion
     #region NormalVariables
     public List<string> missions;
@@ -118,6 +119,14 @@ public class UECDailyMissions : MonoBehaviour
             DMBG.GetComponent<Rigidbody2D>().velocity = Veloc;
         }
         
+    }
+    private void OnMouseEnter()
+    {
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
+    }
+    private void OnMouseExit()
+    {
+        FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     #endregion
 }

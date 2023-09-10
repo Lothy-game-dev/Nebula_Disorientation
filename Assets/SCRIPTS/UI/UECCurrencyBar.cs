@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UECEnterSession : MonoBehaviour
+public class UECCurrencyBar : MonoBehaviour
 {
     #region ComponentVariables
-    private Animator anim;
+    // Variables used for calling componenets attached to the game object only
+    // Can be public or private
     #endregion
     #region InitializeVariables
     public string InfoText;
@@ -19,7 +20,6 @@ public class UECEnterSession : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -28,18 +28,14 @@ public class UECEnterSession : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Mouse Check
+    #region MouseCheck
     private void OnMouseEnter()
     {
-        anim.ResetTrigger("Stop");
-        anim.SetTrigger("Move");
         FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
     }
 
     private void OnMouseExit()
     {
-        anim.ResetTrigger("Move");
-        anim.SetTrigger("Stop");
         FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     #endregion

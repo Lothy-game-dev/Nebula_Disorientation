@@ -14,11 +14,13 @@ public class NotificationBoardController : MonoBehaviour
     public GameObject ConfirmationBoard;
     public GameObject ConvertBoard;
     public GameObject RechargeBoard;
+    public GameObject InformationBoard;
     #endregion
     #region NormalVariables
     public delegate void VoidFunctionPass();
     public VoidFunctionPass VoidReturnFunction;
     private float InitScale;
+    private GameObject currentInfoBoard;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -110,6 +112,19 @@ public class NotificationBoardController : MonoBehaviour
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
+    }
+
+    public void CreateNormalInformationBoard(GameObject go, string text)
+    {
+        GameObject infoBoard = Instantiate(InformationBoard, new Vector3(go.transform.position.x, go.transform.position.y, RechargeBoard.transform.position.z), Quaternion.identity);
+        infoBoard.transform.GetChild(1).GetComponent<TextMeshPro>().text = text;
+        infoBoard.GetComponent<InformationBoard>().SetPosition(go);
+        currentInfoBoard = infoBoard;
+    }
+
+    public void DestroyCurrentInfoBoard()
+    {
+        currentInfoBoard.GetComponent<InformationBoard>().Close();
     }
 
     public void ConfirmOnConfirmationBoard()

@@ -14,6 +14,7 @@ public class UECPlanets : MonoBehaviour
     public GameObject InitNextPlace;
     public GameObject Text;
     public GameObject MoveToScene;
+    public string InfoText;
     #endregion
     #region NormalVariables
     private List<GameObject> OrbitPlaces;
@@ -90,10 +91,12 @@ public class UECPlanets : MonoBehaviour
     private void OnMouseEnter()
     {
         transform.localScale = new Vector2(transform.localScale.x * 1.2f, transform.localScale.y * 1.2f);
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
     }
     private void OnMouseExit()
     {
         transform.localScale = new Vector2(initScale, initScale);
+        FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     private void OnMouseDown()
     {

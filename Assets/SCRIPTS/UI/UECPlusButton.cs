@@ -14,6 +14,7 @@ public class UECPlusButton : MonoBehaviour
     public string ConvertTo;
     public float ConvertRate;
     public GameObject Scene;
+    public string InfoText;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -42,6 +43,14 @@ public class UECPlusButton : MonoBehaviour
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalRechargeBoard(Scene.transform.position);
         }
+    }
+    private void OnMouseEnter()
+    {
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
+    }
+    private void OnMouseExit()
+    {
+        FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
     #endregion
 }

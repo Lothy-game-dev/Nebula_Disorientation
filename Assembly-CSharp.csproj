@@ -89,6 +89,7 @@
     <Compile Include="Assets\SCRIPTS\UI\OverheatBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\NotificationBoardController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\InformationBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECButtons.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\SpawnController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECDailyMissions.cs" />
     <Compile Include="Assets\SCRIPTS\UI\StatusBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\UECCurrencyBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
