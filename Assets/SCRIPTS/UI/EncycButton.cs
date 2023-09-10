@@ -109,7 +109,7 @@ public class EncycButton : MonoBehaviour
     private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale)
     {
         Menu.ItemImage.transform.localScale = ImageScale;
-        wlist = list[Id];
+        wlist = list[Id - 1];
         
         Menu.ItemName.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] +">"  + wlist[NameIndex] + "</color>";
 
