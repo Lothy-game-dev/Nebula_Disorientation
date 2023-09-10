@@ -30,7 +30,14 @@ public class RechargeBoard : MonoBehaviour
     public void Recharge()
     {
         // Recharge
-        if (CurrentShardRecharging>0) InsertData();
+        if (CurrentShardRecharging>0)
+        {
+            InsertData();
+        } else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Recharge Failed!\nPlease choose one item to recharge.", 5f);
+        }   
     }
     private void InsertData()
     {
