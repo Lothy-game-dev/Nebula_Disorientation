@@ -72,6 +72,7 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECPlanets.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOutBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\OptionButton.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\SCRIPTS\UI\PilotNameBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PilotContract.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\UECMenuShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\PlayerPrefModifyController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Assets\SCRIPTS\UI\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\NotificationBoardController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\InformationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOutBarBackground.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECButtons.cs" />
@@ -121,13 +124,16 @@
     <Compile Include="Assets\SCRIPTS\UI\UECEnterSession.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOutBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\NotificationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadoutScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\RechargeBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UECPersonalArea.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\BackgroundBrieflyMoving.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
