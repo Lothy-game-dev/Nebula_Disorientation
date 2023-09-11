@@ -647,4 +647,133 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
     }
     #endregion
+    #region Get Weapon List
+    public List<List<string>> GetAllArsenalWeapon()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> weaplist;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM ArsenalWeapon";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+
+        while (dataReader.Read())
+        {
+            weaplist = new List<string>();
+            weaplist.Add(dataReader.GetInt32(0).ToString());
+            weaplist.Add(dataReader.GetString(1));
+            weaplist.Add(dataReader.GetString(2));
+            weaplist.Add(dataReader.GetString(3));
+            weaplist.Add(dataReader.GetString(4));
+            weaplist.Add(dataReader.GetString(5));           
+            if (dataReader.IsDBNull(6))
+            {
+                weaplist.Add("N/A");
+            }
+            else
+            {
+                weaplist.Add(dataReader.GetString(6));
+            }
+            if (dataReader.IsDBNull(7))
+            {
+                weaplist.Add("N/A");
+            } else
+            {
+                weaplist.Add(dataReader.GetInt32(7).ToString());
+            }
+            weaplist.Add(dataReader.GetInt32(8).ToString());
+            weaplist.Add(dataReader.GetString(9));
+            weaplist.Add(dataReader.GetString(10));
+            list.Add(weaplist);
+        }
+        dbConnection.Close();
+        return list;
+    }
+    #endregion
+
+    #region Get Fighter List
+    public List<List<string>> GetAllFighter()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> fighterlist;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM FactoryModel";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+
+        while (dataReader.Read())
+        {
+            fighterlist = new List<string>();
+            fighterlist.Add(dataReader.GetInt32(0).ToString());
+            fighterlist.Add(dataReader.GetString(1));
+            fighterlist.Add(dataReader.GetString(2));
+            fighterlist.Add(dataReader.GetString(3));
+            fighterlist.Add(dataReader.GetString(4));
+            if (dataReader.IsDBNull(5))
+            {
+                fighterlist.Add("N/A");
+            }
+            else
+            {
+                fighterlist.Add(dataReader.GetInt32(5).ToString());
+            }
+            fighterlist.Add(dataReader.GetString(6));
+            list.Add(fighterlist);
+        }
+        dbConnection.Close();
+        return list;
+    }
+    #endregion
+    #region Get All Power
+    public List<List<string>> GetAllPower()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> weaplist;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM ArsenalPower";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+
+        while (dataReader.Read())
+        {
+            weaplist = new List<string>();
+            weaplist.Add(dataReader.GetInt32(0).ToString());
+            weaplist.Add(dataReader.GetString(1));
+            weaplist.Add(dataReader.GetString(2));
+            weaplist.Add(dataReader.GetString(3));
+            weaplist.Add(dataReader.GetString(4));
+            weaplist.Add(dataReader.GetString(5));
+            if (dataReader.IsDBNull(6))
+            {
+                weaplist.Add("N/A");
+            }
+            else
+            {
+                weaplist.Add(dataReader.GetString(6));
+            }
+            if (dataReader.IsDBNull(7))
+            {
+                weaplist.Add("N/A");
+            }
+            else
+            {
+                weaplist.Add(dataReader.GetInt32(7).ToString());
+            }
+            weaplist.Add(dataReader.GetInt32(8).ToString());
+            weaplist.Add(dataReader.GetString(9));
+            list.Add(weaplist);
+        }
+        dbConnection.Close();
+        return list;
+    }
+    #endregion
 }
