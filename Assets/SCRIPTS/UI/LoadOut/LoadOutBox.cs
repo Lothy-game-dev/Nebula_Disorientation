@@ -46,6 +46,10 @@ public class LoadOutBox : MonoBehaviour
             {
                 bar.GetComponent<LoadOutBar>().CurrentItem = transform.parent.gameObject;
             }
+            if (bar.GetComponent<LoadOutBar>().Type.Contains("Weapon"))
+            {
+                bar.GetComponent<LoadOutBar>().SetWeaponToFighterDemo(transform.parent.name.Replace("(Clone)", "").Replace(" ", ""));
+            }
         }
     }
     #endregion
