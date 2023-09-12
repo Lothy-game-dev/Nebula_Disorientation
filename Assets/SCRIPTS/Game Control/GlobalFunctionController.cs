@@ -44,7 +44,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (DPH.Contains("DPH"))
         {
             DPH = DPH.Replace("DPH-", "");
-            finalString += "<b><i>Damage Per Hit:</i></b> " + DPH + " Damage\n";
+            finalString += "<b><i>Damage Per Hit:</i></b> " + DPH;
         } else
         {
             finalString += DPH;
@@ -54,7 +54,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (RoF.Contains("RoF"))
         {
             RoF = RoF.Replace("RoF-", "");
-            finalString += "<b><i>Rate of fire:</i></b> " + RoF + " shot(s) per second\n";
+            finalString += "<b><i>Rate of fire:</i></b> " + RoF;
         }
         else
         {
@@ -65,7 +65,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (AoE.Contains("AoE"))
         {
             AoE = AoE.Replace("AoE-", "");
-            finalString += "<b><i>Area Of Effect:</i></b> " + AoE + " space units\n";
+            finalString += "<b><i>Area Of Effect:</i></b> " + AoE;
         }
         else
         {
@@ -76,7 +76,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (V.Contains("V"))
         {
             V = V.Replace("V-", "");
-            finalString += "<b><i>Velocity:</i></b> " + V + " space units/second\n";
+            finalString += "<b><i>Velocity:</i></b> " + V;
         }
         else
         {
@@ -90,10 +90,10 @@ public class GlobalFunctionController : MonoBehaviour
             string[] ranges = R.Split(",");
             if (ranges.Length==1)
             {
-                finalString += "<b><i>Bullet Range:</i></b> " + ranges[0] + " space units\n";
+                finalString += "<b><i>Bullet Range:</i></b> " + ranges[0];
             } else if (ranges.Length==2)
             {
-                finalString += "<b><i>Bullet Range:</i></b> " + ranges[0] + "-" + ranges[1] + " space units\n";
+                finalString += "<b><i>Bullet Range:</i></b> " + ranges[0] + "-" + ranges[1];
             } else
             {
                 finalString += R;

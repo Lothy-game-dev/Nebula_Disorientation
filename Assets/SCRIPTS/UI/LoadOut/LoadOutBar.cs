@@ -10,6 +10,7 @@ public class LoadOutBar : MonoBehaviour
     #endregion
     #region InitializeVariables
     public GameObject Scene;
+    public GameObject FighterDemo;
     public string Type;
     public GameObject[] DisableColliderList;
     public GameObject StatusBoard;
@@ -117,6 +118,8 @@ public class LoadOutBar : MonoBehaviour
         }
         // Set sorting order to check
         GetComponent<SpriteRenderer>().sortingOrder = 50;
+        // Set Fighter Demo To Focus On Weapon
+        FighterDemo.GetComponent<LoadOutFighterDemo>().FocusOnWeapon(Type == "LeftWeapon");
         // Open background
         Background.SetActive(true);
         // Set background sorting order
@@ -152,6 +155,8 @@ public class LoadOutBar : MonoBehaviour
         AllowScroll = false;
         // Disable scroll
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
+        // Stop focus on weapon on fighter demo
+        FighterDemo.GetComponent<LoadOutFighterDemo>().StopFocusOnWeapon(Type == "LeftWeapon");
         // Set collider to enabled
         GetComponent<Collider2D>().enabled = true;
         foreach (var go in DisableColliderList)
@@ -160,8 +165,6 @@ public class LoadOutBar : MonoBehaviour
         }
         // Set sorting order to start
         GetComponent<SpriteRenderer>().sortingOrder = 5;
-        // Close background
-        Background.SetActive(false);
         // Play animation for close
         StartCoroutine(CloseAnimation());
     }
@@ -189,6 +192,8 @@ public class LoadOutBar : MonoBehaviour
         Contents.GetComponent<RectTransform>().offsetMax = new Vector2(RightShredViewport, Contents.GetComponent<RectTransform>().offsetMax.y);
         // Wait for animation
         yield return new WaitForSeconds(0.5f);
+        // Close background
+        Background.SetActive(false);
         // Destroy and remove current item
         GameObject temp2 = CurrentItem;
         string name = CurrentItem.name.Replace("(Clone)", "").Replace(" ", "");
@@ -197,6 +202,7 @@ public class LoadOutBar : MonoBehaviour
         // Set item back from start
         SetItem(ItemsFromStart, name);
     }
+
     #endregion
     #region Check Scroll
     // Check if scroll is left or right
@@ -333,16 +339,23 @@ public class LoadOutBar : MonoBehaviour
         if (Type == "LeftWeapon")
         {
             Scene.GetComponent<LoadoutScene>().LeftWeapon = cItem;
+            FighterDemo.GetComponent<LoadOutFighterDemo>().SetWeapon(true, cItem);
         }
         else if (Type == "RightWeapon")
         {
             Scene.GetComponent<LoadoutScene>().RightWeapon = cItem;
+            FighterDemo.GetComponent<LoadOutFighterDemo>().SetWeapon(false, cItem);
         }
         // Set item to status board
         StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(cItem);
         GenerateItems();
     }
     
+    public void SetWeaponToFighterDemo(string item)
+    {
+        FindObjectOfType<LoadOutFighterDemo>().SetWeapon(Type=="LeftWeapon", item);
+    }
+
     // Generate Items 
     private void GenerateItems()
     {

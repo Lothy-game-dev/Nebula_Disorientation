@@ -74,6 +74,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutModelBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutModelBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\Arsenal.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\InformationBoard.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutStatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\RechargeBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\NewStoryScene.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutFighterDemo.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBar.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
