@@ -4,19 +4,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UECController : MonoBehaviour
+public class UECController : UECMenuShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
     #endregion
     #region InitializeVariables
-    public GameObject LeftBorder;
-    public GameObject RightBorder;
-    public GameObject TopBorder;
-    public GameObject BottomBorder;
-    public GameObject Background;
-    public GameObject mainCamera;
     public GameObject Cash;
     public GameObject TimelessShard;
     public GameObject FuelCell;
@@ -29,10 +23,6 @@ public class UECController : MonoBehaviour
     public bool isPlanetMoving;
     private AccessDatabase ad;
     private int currentId;
-    private float BGMovingSpeed;
-    private Vector2 BGveloc;
-    private float HalfCamHeight;
-    private float HalfCamWidth;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -45,11 +35,6 @@ public class UECController : MonoBehaviour
         // Initialize variables
         isPlanetMoving = true;
         ad = FindObjectOfType<AccessDatabase>();
-        BGMovingSpeed = 0.25f;
-        HalfCamHeight = mainCamera.GetComponent<Camera>().orthographicSize;
-        HalfCamWidth = HalfCamHeight * mainCamera.GetComponent<Camera>().aspect;
-        BGveloc = new Vector2((Random.Range(0, 2) - 0.5f) * 2 * BGMovingSpeed, (Random.Range(0, 2) - 0.5f) * 2 * BGMovingSpeed);
-        Background.GetComponent<Rigidbody2D>().velocity = BGveloc;
         CheckDailyMission();
     }
 
@@ -57,43 +42,7 @@ public class UECController : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        DefineBackgroundVelocity();
-        Background.GetComponent<Rigidbody2D>().velocity = BGveloc;
         CheckDailyMission();
-    }
-    #endregion
-    #region Background moving
-    private void DefineBackgroundVelocity()
-    {
-        float x = 0;
-        float y = 0;
-        if (TopBorder.transform.position.y <= mainCamera.transform.position.y + HalfCamHeight)
-        {
-            y = Random.Range(0, BGMovingSpeed);
-        } else if (BottomBorder.transform.position.y >= mainCamera.transform.position.y - HalfCamHeight)
-        {
-            y = Random.Range(-BGMovingSpeed, 0);
-        }
-        if (LeftBorder.transform.position.x >= mainCamera.transform.position.x - HalfCamWidth)
-        {
-            x = Random.Range(-BGMovingSpeed, 0);
-        }
-        else if (RightBorder.transform.position.x <= mainCamera.transform.position.x + HalfCamWidth)
-        {
-            x = Random.Range(0, BGMovingSpeed);
-        }
-        if (x != 0 && y == 0)
-        {
-            BGveloc = new Vector2(x, BGveloc.y);
-        }
-        else if (x == 0 && y != 0)
-        {
-            BGveloc = new Vector2(BGveloc.x, y);
-        }
-        else if (x != 0 && y != 0)
-        {
-            BGveloc = new Vector2(x, y);
-        }
     }
     #endregion
     #region Data
@@ -219,6 +168,16 @@ public class UECController : MonoBehaviour
             }
             DailyMissionBar.GetComponent<UECDailyMissions>().missions = Missions;
         }
+    }
+    #endregion
+    #region Animation
+    public override void OnEnterAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = true;
+    }
+    public override void OnExitAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
     }
     #endregion
 }

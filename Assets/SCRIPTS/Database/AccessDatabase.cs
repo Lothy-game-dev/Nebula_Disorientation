@@ -692,6 +692,36 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public Dictionary<string, object> GetWeaponDataByName(string name)
+    {
+        Dictionary<string, object> list = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT WeaponName,WeaponDescription,WeaponStats,TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            list.Add("Name", dataReader.GetString(0));
+            list.Add("Description", dataReader.GetString(1));
+            list.Add("Stats", dataReader.GetString(2));
+            list.Add("Color", dataReader.GetString(3));
+            break;
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        } else
+        {
+            return list;
+        }
+    }
     #endregion
 
     #region Get Fighter List

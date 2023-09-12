@@ -9,6 +9,8 @@ public class UECEnterSession : MonoBehaviour
     #endregion
     #region InitializeVariables
     public string InfoText;
+    public GameObject UECScene;
+    public GameObject LoadoutScene;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -34,6 +36,12 @@ public class UECEnterSession : MonoBehaviour
         anim.ResetTrigger("Stop");
         anim.SetTrigger("Move");
         FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
+    }
+
+    private void OnMouseDown()
+    {
+        FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, LoadoutScene);
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(LoadoutScene.transform.position, 1f);
     }
 
     private void OnMouseExit()

@@ -97,6 +97,18 @@ public class MainMenuCameraController : MonoBehaviour
         Load.SetActive(true);
     }
 
+    public void GenerateLoadingSceneAtPos(Vector2 Pos, float sec)
+    {
+        Load = Instantiate(LoadingScene,
+            new Vector3(Pos.x, Pos.y,
+            LoadingScene.transform.position.z), Quaternion.identity);
+        Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
+        Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
+        Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;
+        Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
+        Load.SetActive(true);
+    }
+
     public void MoveToUEC()
     {
         SceneManager.LoadSceneAsync("UECMainMenu");

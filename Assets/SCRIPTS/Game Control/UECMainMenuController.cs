@@ -9,6 +9,7 @@ public class UECMainMenuController : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject MainCamera;
     public UECController controller;
     #endregion
     #region NormalVariables
@@ -42,6 +43,20 @@ public class UECMainMenuController : MonoBehaviour
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Can not find your pilot's data.\n Please try again or contact to our email.", 5f);
+        }
+    }
+    #endregion
+    #region Teleport To Scene
+    public void TeleportToScene(GameObject FromScene,GameObject ToScene)
+    {
+        if (FromScene.GetComponent<UECMenuShared>()!=null)
+        {
+            FromScene.GetComponent<UECMenuShared>().OnExitAnimation();
+        }
+        MainCamera.transform.position = new Vector3(ToScene.transform.position.x, ToScene.transform.position.y, MainCamera.transform.position.z);
+        if (ToScene.GetComponent<UECMenuShared>() != null)
+        {
+            ToScene.GetComponent<UECMenuShared>().OnEnterAnimation();
         }
     }
     #endregion

@@ -42,8 +42,6 @@ public class InformationBoard : MonoBehaviour
         DistanceToTop = (Top.transform.position - transform.position).magnitude;
         if (Position.y + Mathf.Abs(DistanceToBottom) + Mathf.Abs(DistanceToTop) > camera.gameObject.transform.position.y + HalfCameraHeight)
         {
-            Debug.Log(Position.y + Mathf.Abs(DistanceToBottom) + Mathf.Abs(DistanceToTop));
-            Debug.Log(camera.gameObject.transform.position.y + HalfCameraHeight);
             transform.Rotate(new Vector3(0, 0, 180f));
             transform.GetChild(1).Rotate(new Vector3(0, 0, 180f));
             transform.position = new Vector3(Position.x, Position.y - Mathf.Abs(DistanceToBottom),transform.position.z);
