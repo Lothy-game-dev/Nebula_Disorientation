@@ -701,16 +701,17 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT WeaponName,WeaponDescription,WeaponStats,TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT WeaponName,WeaponType,WeaponDescription,WeaponStats,TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
         {
             check = true;
             list.Add("Name", dataReader.GetString(0));
-            list.Add("Description", dataReader.GetString(1));
-            list.Add("Stats", dataReader.GetString(2));
-            list.Add("Color", dataReader.GetString(3));
+            list.Add("Type", dataReader.GetString(1));
+            list.Add("Description", dataReader.GetString(2));
+            list.Add("Stats", dataReader.GetString(3));
+            list.Add("Color", dataReader.GetString(4));
             break;
         }
         dbConnection.Close();

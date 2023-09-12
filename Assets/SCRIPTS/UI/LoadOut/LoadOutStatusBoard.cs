@@ -81,7 +81,7 @@ public class LoadOutStatusBoard : MonoBehaviour
         if (ItemName != null && itemName != "") { spin = true; }
         if (listData != null)
         {
-            ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>";
+            ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>\n" + (string)listData["Type"];
             ItemDescription = (string)listData["Description"];
             ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertWeaponStatsToString((string)listData["Stats"]);
         }

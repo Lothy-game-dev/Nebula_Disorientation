@@ -282,30 +282,30 @@ public class InitializeDatabase : MonoBehaviour
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +
-            "(1, 'Kinetic', 'Pulse Cannon', '', 'OH-1.25,2,10|DPH-375|RoF-4|AoE-0|V-1250|R-1250,1500', '0', '0', null, 1, '#36b37e', 'Gray')," +
-            "(2, 'Kinetic', 'Advanced Pulse Cannon', '', 'OH-1.25,2,10|DPH-562.5|RoF-4|AoE-0|V-1250|R-1250,1500', '2250', '50', 1, 1, '#36b37e', 'White')," +
-            "(3, 'Kinetic', 'Superior Pulse Cannon', '', 'OH-1.25,2,10|DPH-1125|RoF-4|AoE-0|V-1500|R-1250,1500', '4500', '50', 2, 1, '#36b37e', 'White')," +
-            "(4, 'Thermal', 'Nano Flame Thrower', '', 'OH-0.133,4,20|DPH-7.5|RoF-150|AoE-0|V-500|R-400', '1500', '50', null, 1, '#36b37e', 'Orange')," +
-            "(5, 'Thermal', 'Advanced Nano Flame Thrower', '', 'OH-0.133,4,20|DPH-12.5|RoF-150|AoE-0|V-500|R-400', '2500', '50', 4, 1, '#36b37e', 'Yellow')," +
-            "(6, 'Thermal', 'Superior Nano Flame Thrower ', '', 'OH-0.133,4,20|DPH-25|RoF-150|AoE-0|V-500|R-400', '5000', '50', 5, 1, '#36b37e', 'Yellow')," +
-            "(7, 'Kinetic', 'Blast Cannon', '', 'OH-2.5,2,10|DPH-375|RoF-2|AoE-100|V-1250|R-1250-1500', '2250', '50', 1, 1, '#36b37e', 'White')," +
-            "(8, 'Kinetic', 'Grand Blast Cannon', '', 'OH-2.5,2,10|DPH-750|RoF-2|AoE-150|V-1250|R-1250-1500', '6000', '50', 7, 1, '#36b37e', 'Light Blue')," +
-            "(9, 'Kinetic', 'Gravitational Artillery', '', 'OH-0|DPH-6000|RoF-0.25|AoE-250|V-1000|R-2000-2500', '6750', '150', 7, 5, '#4c9aff', 'Blue')," +
-            "(10, 'Thermal', 'Freezing Blaster', '', 'OH-0.1,2,30|DPH-25|RoF-150|AoE-0|V-500|R-600', '7500', '150', null, 5, '#4c9aff', 'Blue')," +
-            "(11, 'Thermal', 'Advanced Freezing Blaster', '', 'OH-0.1,2,30|DPH-37.5|RoF-150|AoE-0|V-500|R-600', '11250', '150', 10, 5, '#4c9aff', 'Light Blue')," +
-            "(12, 'Laser', 'Laser Cannon', '', 'OH-2,3,10|DPH-937.5|RoF-4|AoE-0|V-2000|R-2000', '7500', '150', 7, 5, '#4c9aff', 'Light Red')," +
-            "(13, 'Laser', 'Advanced Laser Cannon', '', 'OH-2,3,10|DPH-1500|RoF-4|AoE-0|V-2000|R-2000', '12000', '150', 12, 5, '#4c9aff', 'Red')," +
-            "(14, 'Thermal', 'Orb of Lava Generator ', '', 'OH-10,4,20|DPH-2250|RoF-1|AoE-200|V-750|R-1000', '12000', '250', null, 5, '#4c9aff', 'Orange')," +
-            "(15, 'Grouping', 'Orb of Vacuum Generator ', '', 'OH-0|DPH-1500|RoF-0.1|AoE-200|V-750|R-500', '10000', '250', null, 5, '#4c9aff', 'Black')," +
-            "(16, 'Kinetic', 'Nano Cannon', '', 'OH-1,3,15|DPH-1875|RoF-8|AoE-0|V-1750|R-1750', '40000', null, 12, 9, '#bf2600', 'White')," +
-            "(17, 'Kinetic', 'Grand Gravitational Artillery', '', 'OH-0|DPH-12000|RoF-0.25|AoE-400|V-1000|R-2000-2500', '50000', null, 9, 9, '#bf2600', 'Blue')," +
-            "(18, 'Thermal', 'Superior Freezing Blaster ', '', 'OH-0.1,2,30|DPH-90|RoF-150|AoE-0|V-500|R-600', '48000', null, 11, 9, '#bf2600', 'White Blue')," +
-            "(19, 'Laser', 'Superior Laser Cannon', '', 'OH-2,3,10|DPH-3375|RoF-4|AoE-0|V-2250|R-2000', '48000', null, 13, 9, '#bf2600', 'Dark Red')," +
-            "(20, 'Laser', 'Plasma Cannon', '', 'OH-1,3,20|DPH-2062.5|RoF-8|AoE-0|V-1750|R-1750', '55000', null, 16, 9, '#bf2600', 'White')," +
-            "(21, 'Thermal', 'NanoEffectAnalyzer', '', 'OH-2.5,3,20|DPH-100|RoF-3|AoE-0|V-2000|R-2000', '50000', null, 16, 9, '#bf2600', 'White')," +
-            "(22, 'Thermal', 'Orb of Magma Generator', '', 'OH-10,3,30|DPH-4500|RoF-1|AoE-300|V-750|R-1000', '100000', null, 14, 9, '#800080', 'Red')," +
-            "(23, 'Grouping', 'Orb of Gray Hole Generator', '', 'OH-0|DPH-7500|RoF-0.1|AoE-300|V-750|R-500', '100000', null, 15, 9, '#800080', 'Gray')," +
-            "(24, 'Laser', 'Star Blaster', '', 'OH-1.5,3,10|DPH-2250|RoF-5|AoE-25|V-2500|R-2000', '120000', null, 19, 9, '#800080', 'Purple');";
+            "(1, 'Kinetic', 'Pulse Cannon', 'A common cannon that fires small, gray bullets.', 'OH-1.25,2,10|DPH-375|RoF-4|AoE-0|V-1250|R-1250,1500', '0', '0', null, 1, '#36b37e', 'Gray')," +
+            "(2, 'Kinetic', 'Advanced Pulse Cannon', 'An advanced version of Pulse Cannon.', 'OH-1.25,2,10|DPH-562.5|RoF-4|AoE-0|V-1250|R-1250,1500', '2250', '50', 1, 1, '#36b37e', 'White')," +
+            "(3, 'Kinetic', 'Superior Pulse Cannon', 'The most powerful version of Pulse Cannon.', 'OH-1.25,2,10|DPH-1125|RoF-4|AoE-0|V-1500|R-1250,1500', '4500', '50', 2, 1, '#36b37e', 'White')," +
+            "(4, 'Thermal', 'Nano Flame Thrower', 'A Thermal weapon that emits straight beam of yellow flames.', 'OH-0.133,4,20|DPH-7.5|RoF-150|AoE-0|V-500|R-400', '1500', '50', null, 1, '#36b37e', 'Orange')," +
+            "(5, 'Thermal', 'Advanced Nano Flame Thrower', 'An upgraded edition of Nano Flame Thrower, which now emits a yellow flame with red aura.', 'OH-0.133,4,20|DPH-12.5|RoF-150|AoE-0|V-500|R-400', '2500', '50', 4, 1, '#36b37e', 'Yellow')," +
+            "(6, 'Thermal', 'Superior Nano Flame Thrower ', 'The most powerful version of the Nano Flame Thrower.', 'OH-0.133,4,20|DPH-25|RoF-150|AoE-0|V-500|R-400', '5000', '50', 5, 1, '#36b37e', 'Yellow')," +
+            "(7, 'Kinetic', 'Blast Cannon', 'A cannon that fires large, yellow bullets.', 'OH-2.5,2,10|DPH-375|RoF-2|AoE-100|V-1250|R-1250-1500', '2250', '50', 1, 1, '#36b37e', 'White')," +
+            "(8, 'Kinetic', 'Grand Blast Cannon', 'An advanced version of the Blast Cannon. It now shoots light blue bullets.', 'OH-2.5,2,10|DPH-750|RoF-2|AoE-150|V-1250|R-1250-1500', '6000', '50', 7, 1, '#36b37e', 'Light Blue')," +
+            "(9, 'Kinetic', 'Gravitational Artillery', 'A grand artillery that shoots super artillery shells.', 'OH-0|DPH-6000|RoF-0.25|AoE-250|V-1000|R-2000-2500', '6750', '150', 7, 5, '#4c9aff', 'Blue')," +
+            "(10, 'Thermal', 'Freezing Blaster', 'A powerful thermal weapon that emits a straight beam of blue freezing ice.', 'OH-0.1,2,30|DPH-25|RoF-150|AoE-0|V-500|R-600', '7500', '150', null, 5, '#4c9aff', 'Blue')," +
+            "(11, 'Thermal', 'Advanced Freezing Blaster', 'An upgraded edition of the Freezing Blaster, which now emits a beam of light blue ice.', 'OH-0.1,2,30|DPH-37.5|RoF-150|AoE-0|V-500|R-600', '11250', '150', 10, 5, '#4c9aff', 'Light Blue')," +
+            "(12, 'Laser', 'Laser Cannon', 'Laser-powered weapon that shoot light-red laser projectiles.', 'OH-2,3,10|DPH-937.5|RoF-4|AoE-0|V-2000|R-2000', '7500', '150', 7, 5, '#4c9aff', 'Light Red')," +
+            "(13, 'Laser', 'Advanced Laser Cannon', 'An advanced version of the Laser Cannon. It now shoots pure red laser projectiles.', 'OH-2,3,10|DPH-1500|RoF-4|AoE-0|V-2000|R-2000', '12000', '150', 12, 5, '#4c9aff', 'Red')," +
+            "(14, 'Thermal', 'Orb of Lava Generator ', 'A cannon that Generate a large orb of burning lava and direct it into enemies.', 'OH-10,4,20|DPH-2250|RoF-1|AoE-200|V-750|R-1000', '12000', '250', null, 5, '#4c9aff', 'Orange')," +
+            "(15, 'Grouping', 'Orb of Vacuum Generator ', 'A cannon that Generate a space wormhole that group nearby enemies into the center.', 'OH-0|DPH-1500|RoF-0.1|AoE-200|V-750|R-500', '10000', '250', null, 5, '#4c9aff', 'Black')," +
+            "(16, 'Kinetic', 'Nano Cannon', 'A high-tech cannon that shoots nano projectiles.', 'OH-1,3,15|DPH-1875|RoF-8|AoE-0|V-1750|R-1750', '40000', null, 12, 9, '#bf2600', 'White')," +
+            "(17, 'Kinetic', 'Grand Gravitational Artillery', 'The most powerful version of the Gravitational Artillery.', 'OH-0|DPH-12000|RoF-0.25|AoE-400|V-1000|R-2000-2500', '50000', null, 9, 9, '#bf2600', 'Blue')," +
+            "(18, 'Thermal', 'Superior Freezing Blaster ', 'The top tier version of the Freezing Blaster, which now emits a beam of white blue ice.', 'OH-0.1,2,30|DPH-90|RoF-150|AoE-0|V-500|R-600', '48000', null, 11, 9, '#bf2600', 'White Blue')," +
+            "(19, 'Laser', 'Superior Laser Cannon', 'The top tier version of the Laser Cannon. It now shoots much refined red laser projectiles.', 'OH-2,3,10|DPH-3375|RoF-4|AoE-0|V-2250|R-2000', '48000', null, 13, 9, '#bf2600', 'Dark Red')," +
+            "(20, 'Laser', 'Plasma Cannon', 'An Plasma version of the Nano Cannon. ', 'OH-1,3,20|DPH-2062.5|RoF-8|AoE-0|V-1750|R-1750', '55000', null, 16, 9, '#bf2600', 'White')," +
+            "(21, 'Thermal', 'NanoEffectAnalyzer', 'A high-level cannon that amplify the power of Thermal Status.', 'OH-2.5,3,20|DPH-100|RoF-3|AoE-0|V-2000|R-2000', '50000', null, 16, 9, '#bf2600', 'White')," +
+            "(22, 'Thermal', 'Orb of Magma Generator', 'A special edition of the Orb of Lava Generator. It now generate orbs of deadly magma.', 'OH-10,3,30|DPH-4500|RoF-1|AoE-300|V-750|R-1000', '100000', null, 14, 9, '#800080', 'Red')," +
+            "(23, 'Grouping', 'Orb of Gray Hole Generator', 'A special edition of the Orb of Vacuum Generator It now generate a more powerful space wormhole.', 'OH-0|DPH-7500|RoF-0.1|AoE-300|V-750|R-500', '100000', null, 15, 9, '#800080', 'Gray')," +
+            "(24, 'Laser', 'Star Blaster', 'A superior weapon that fires star-like projectiles with insane capability.', 'OH-1.5,3,10|DPH-2250|RoF-5|AoE-25|V-2500|R-2000', '120000', null, 19, 9, '#800080', 'Purple');";
         // ArsenalPower
         string ArsenalPower = "INSERT INTO ArsenalPower VALUES " +
             "(1, 'DEF', 'Situational Barrier', '', 'BR-x2|DC-10,45', '0', '0', null, 1, '#36b37e')," +
