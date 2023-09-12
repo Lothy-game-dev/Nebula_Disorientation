@@ -282,29 +282,30 @@ public class InitializeDatabase : MonoBehaviour
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +
-            "(1, 'Kinetic', 'Pulse Cannon', '', 'DPH-100|RoF-1|AoE-1|V-100|R-100,200', '0', '0', null, 1, '#36b37e', 'Gray')," +
-            "(2, 'Kinetic', 'Advanced Pulse Cannon', '', 'DPH-150|RoF-1|AoE-1|V-100|R-100,200', '2250', '50', 1, 1, '#36b37e', 'White')," +
-            "(3, 'Kinetic', 'Superior Pulse Cannon', '', 'DPH-150|RoF-2|AoE-1|V-100|R-100,200', '4500', '50', 2, 1, '#36b37e', 'White')," +
-            "(4, 'Thermal', 'Nano Flame Thrower', '', 'DPH-15|RoF-10|AoE-2|V-300|R-50,50', '1500', '50', null, 1, '#36b37e', 'Orange')," +
-            "(5, 'Thermal', 'Advanced Nano Flame Thrower', '', 'DPH-25|RoF-10|AoE-2|V-300|R-50,50', '2500', '50', 4, 1, '#36b37e', 'Yellow')," +
-            "(6, 'Thermal', 'Superior Nano Flame Thrower ', '', 'DPH-25|RoF-20|AoE-2|V-300|R-50,50', '5000', '50', 5, 1, '#36b37e', 'Yellow')," +
-            "(7, 'Kinetic', 'Blast Cannon', '', 'DPH-100|RoF-0.5|AoE-3|V-100|R-100,200', '2250', '50', 1, 1, '#36b37e', 'White')," +
-            "(8, 'Kinetic', 'Grand Blast Cannon', '', 'DPH-400|RoF-0.25|AoE-4|V-100|R-100,200', '6000', '50', 7, 1, '#36b37e', 'Light Blue')," +
-            "(9, 'Kinetic', 'Gravitational Artillery', '', 'DPH-200|RoF-0.5|AoE-3|V-200|R-150,300', '6750', '150', 7, 5, '#4c9aff', 'Blue')," +
-            "(10, 'Thermal', 'Freezing Blaster', '', 'DPH-50|RoF-10|AoE-2|V-300|R-75,75', '7500', '150', null, 5, '#4c9aff', 'Blue')," +
-            "(11, 'Thermal', 'Advanced Freezing Blaster', '', 'DPH-50|RoF-15|AoE-2|V-300|R-75,75', '11250', '150', 10, 5, '#4c9aff', 'Light Blue')," +
-            "(12, 'Laser', 'Laser Cannon', '', 'DPH-250|RoF-1|AoE-1|V-200|R-300,300', '7500', '150', 7, 5, '#4c9aff', 'Light Red')," +
-            "(13, 'Laser', 'Advanced Laser Cannon', '', 'DPH-250|RoF-2|AoE-1|V-200|R-300,300', '12000', '150', 12, 5, '#4c9aff', 'Red')," +
-            "(14, 'Thermal', 'Orb of Lava Generator ', '', 'DPH-300|RoF-1|AoE-4|V-50|R-200,200', '12000', '250', null, 5, '#4c9aff', 'Orange')," +
-            "(15, 'Grouping', 'Orb of Vacuum Generator ', '', 'DPH-200|RoF-0.25|AoE-10|V-50|R-50,50', '10000', '250', null, 5, '#4c9aff', 'Black')," +
-            "(16, 'Kinetic', 'Nano Cannon', '', 'DPH-250|RoF-4|AoE-11|V-200|R-200,400', '40000', null, 12, 9, '#bf2600', 'White')," +
-            "(17, 'Kinetic', 'Grand Gravitational Artillery', '', 'DPH-400|RoF-0.5|AoE-5|V-200|R-250,500', '50000', null, 9, 9, '#bf2600', 'Blue')," +
-            "(18, 'Thermal', 'Superior Freezing Blaster ', '', 'DPH-90|RoF-20|AoE-2|V-300|R-100,100', '48000', null, 11, 9, '#bf2600', 'White Blue')," +
-            "(19, 'Laser', 'Superior Laser Cannon', '', 'DPH-450|RoF-2|AoE-1|V-200|R-400,400', '48000', null, 13, 9, '#bf2600', 'Dark Red')," +
-            "(20, 'Kinetic', 'Grand Nano Cannon', '', 'DPH-275|RoF-4|AoE-1|V-200|R-250,500', '55000', null, 16, 9, '#bf2600', 'White')," +
-            "(21, 'Thermal', 'Orb of Magma Generator', '', 'DPH-600|RoF-1|AoE-4|V-50|R-200,200', '100000', null, 14, 9, '#800080', 'Red')," +
-            "(22, 'Grouping', 'Orb of Gray Hole Generator', '', 'DPH-500|RoF-0.25|AoE-20|V-100|R-100,100', '100000', null, 15, 9, '#800080', 'Gray')," +
-            "(23, 'Laser', 'Star Blaster', '', 'DPH-150|RoF-5|AoE-2|V-300|R-400,400', '120000', null, 19, 9, '#800080', 'Purple');";
+            "(1, 'Kinetic', 'Pulse Cannon', '', 'OH-1.25,2,10|DPH-375|RoF-4|AoE-0|V-1250|R-1250,1500', '0', '0', null, 1, '#36b37e', 'Gray')," +
+            "(2, 'Kinetic', 'Advanced Pulse Cannon', '', 'OH-1.25,2,10|DPH-562.5|RoF-4|AoE-0|V-1250|R-1250,1500', '2250', '50', 1, 1, '#36b37e', 'White')," +
+            "(3, 'Kinetic', 'Superior Pulse Cannon', '', 'OH-1.25,2,10|DPH-1125|RoF-4|AoE-0|V-1500|R-1250,1500', '4500', '50', 2, 1, '#36b37e', 'White')," +
+            "(4, 'Thermal', 'Nano Flame Thrower', '', 'OH-0.133,4,20|DPH-7.5|RoF-150|AoE-0|V-500|R-400', '1500', '50', null, 1, '#36b37e', 'Orange')," +
+            "(5, 'Thermal', 'Advanced Nano Flame Thrower', '', 'OH-0.133,4,20|DPH-12.5|RoF-150|AoE-0|V-500|R-400', '2500', '50', 4, 1, '#36b37e', 'Yellow')," +
+            "(6, 'Thermal', 'Superior Nano Flame Thrower ', '', 'OH-0.133,4,20|DPH-25|RoF-150|AoE-0|V-500|R-400', '5000', '50', 5, 1, '#36b37e', 'Yellow')," +
+            "(7, 'Kinetic', 'Blast Cannon', '', 'OH-2.5,2,10|DPH-375|RoF-2|AoE-100|V-1250|R-1250-1500', '2250', '50', 1, 1, '#36b37e', 'White')," +
+            "(8, 'Kinetic', 'Grand Blast Cannon', '', 'OH-2.5,2,10|DPH-750|RoF-2|AoE-150|V-1250|R-1250-1500', '6000', '50', 7, 1, '#36b37e', 'Light Blue')," +
+            "(9, 'Kinetic', 'Gravitational Artillery', '', 'OH-0|DPH-6000|RoF-0.25|AoE-250|V-1000|R-2000-2500', '6750', '150', 7, 5, '#4c9aff', 'Blue')," +
+            "(10, 'Thermal', 'Freezing Blaster', '', 'OH-0.1,2,30|DPH-25|RoF-150|AoE-0|V-500|R-600', '7500', '150', null, 5, '#4c9aff', 'Blue')," +
+            "(11, 'Thermal', 'Advanced Freezing Blaster', '', 'OH-0.1,2,30|DPH-37.5|RoF-150|AoE-0|V-500|R-600', '11250', '150', 10, 5, '#4c9aff', 'Light Blue')," +
+            "(12, 'Laser', 'Laser Cannon', '', 'OH-2,3,10|DPH-937.5|RoF-4|AoE-0|V-2000|R-2000', '7500', '150', 7, 5, '#4c9aff', 'Light Red')," +
+            "(13, 'Laser', 'Advanced Laser Cannon', '', 'OH-2,3,10|DPH-1500|RoF-4|AoE-0|V-2000|R-2000', '12000', '150', 12, 5, '#4c9aff', 'Red')," +
+            "(14, 'Thermal', 'Orb of Lava Generator ', '', 'OH-10,4,20|DPH-2250|RoF-1|AoE-200|V-750|R-1000', '12000', '250', null, 5, '#4c9aff', 'Orange')," +
+            "(15, 'Grouping', 'Orb of Vacuum Generator ', '', 'OH-0|DPH-1500|RoF-0.1|AoE-200|V-750|R-500', '10000', '250', null, 5, '#4c9aff', 'Black')," +
+            "(16, 'Kinetic', 'Nano Cannon', '', 'OH-1,3,15|DPH-1875|RoF-8|AoE-0|V-1750|R-1750', '40000', null, 12, 9, '#bf2600', 'White')," +
+            "(17, 'Kinetic', 'Grand Gravitational Artillery', '', 'OH-0|DPH-12000|RoF-0.25|AoE-400|V-1000|R-2000-2500', '50000', null, 9, 9, '#bf2600', 'Blue')," +
+            "(18, 'Thermal', 'Superior Freezing Blaster ', '', 'OH-0.1,2,30|DPH-90|RoF-150|AoE-0|V-500|R-600', '48000', null, 11, 9, '#bf2600', 'White Blue')," +
+            "(19, 'Laser', 'Superior Laser Cannon', '', 'OH-2,3,10|DPH-3375|RoF-4|AoE-0|V-2250|R-2000', '48000', null, 13, 9, '#bf2600', 'Dark Red')," +
+            "(20, 'Laser', 'Plasma Cannon', '', 'OH-1,3,20|DPH-2062.5|RoF-8|AoE-0|V-1750|R-1750', '55000', null, 16, 9, '#bf2600', 'White')," +
+            "(21, 'Thermal', 'NanoEffectAnalyzer', '', 'OH-2.5,3,20|DPH-100|RoF-3|AoE-0|V-2000|R-2000', '50000', null, 16, 9, '#bf2600', 'White')," +
+            "(22, 'Thermal', 'Orb of Magma Generator', '', 'OH-10,3,30|DPH-4500|RoF-1|AoE-300|V-750|R-1000', '100000', null, 14, 9, '#800080', 'Red')," +
+            "(23, 'Grouping', 'Orb of Gray Hole Generator', '', 'OH-0|DPH-7500|RoF-0.1|AoE-300|V-750|R-500', '100000', null, 15, 9, '#800080', 'Gray')," +
+            "(24, 'Laser', 'Star Blaster', '', 'OH-1.5,3,10|DPH-2250|RoF-5|AoE-25|V-2500|R-2000', '120000', null, 19, 9, '#800080', 'Purple');";
         // ArsenalPower
         string ArsenalPower = "INSERT INTO ArsenalPower VALUES " +
             "(1, 'DEF', 'Situational Barrier', '', 'BR-x2|DC-10,45', '0', '0', null, 1, '#36b37e')," +
@@ -321,7 +322,7 @@ public class InitializeDatabase : MonoBehaviour
             "(12, 'MOV', 'Advanced Instant Wormhole', '', 'DPH-null|AoH-null|AoE-null|V-null|R-100|DC-0,45', '60000', null, 8, 9, '#bf2600'); ";
         // FactoryModel
         string FactoryModel = "INSERT INTO FactoryModel VALUES " +
-            "(1, 'SS29-MK1', '', 'HP-10000|SPD-11|ROT-180|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '0', null, '#36b37e')," +
+            "(1, 'SS29-MK1', '', 'HP-10000|SPD-500|ROT-0.75|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '0', null, '#36b37e')," +
             "(2, 'SS29-MK2', '', 'HP-8000|SPD-13|ROT-120|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
             "(3, 'SS29-MK3', '', 'HP-12000|SPD-9|ROT-90|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
             "(4, 'SSS-MK1', '', 'HP-12000|SPD-10|ROT-180|DM-1.1|RM-1.0|PM-1.0|SP-2|SC-4', '50000 | 200', 5, '#4c9aff')," +
