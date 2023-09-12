@@ -9,7 +9,7 @@ public class LoadOutBar : MonoBehaviour
     private Animator anim;
     #endregion
     #region InitializeVariables
-    public GameObject OtherWeapon;
+    public GameObject StatusBoard;
     public GameObject Background;
     public GameObject ListSprite;
     public GameObject Contents;
@@ -58,7 +58,7 @@ public class LoadOutBar : MonoBehaviour
         items.Add("NanoFlameThrower");
         items.Add("BlastCannon");
         items.Add("NanoCannon");
-        items.Add("StarBlaster");
+        /*items.Add("StarBlaster");*/
         // Set view port to the box before animation
         ViewPort.GetComponent<RectTransform>().offsetMin = new Vector2(LeftShredViewport,0);
         ViewPort.GetComponent<RectTransform>().offsetMax = new Vector2(-RightShredViewport,0);
@@ -76,10 +76,13 @@ public class LoadOutBar : MonoBehaviour
         // If mouse in side of scroll range: disable collider for background
         if (CheckIfMouseOutsideScrollRange())
         {
-            ScrollRect.GetComponent<ScrollRect>().StopMovement();
-            if (ScrollRect.GetComponent<ScrollRect>().enabled)
+            if (AfterGenerateList.Count > 4)
             {
-                ScrollRect.GetComponent<ScrollRect>().enabled = false;
+                ScrollRect.GetComponent<ScrollRect>().StopMovement();
+                if (ScrollRect.GetComponent<ScrollRect>().enabled)
+                {
+                    ScrollRect.GetComponent<ScrollRect>().enabled = false;
+                }
             }
         } else
         {
@@ -105,7 +108,7 @@ public class LoadOutBar : MonoBehaviour
         anim.SetTrigger("Start");
         // Set colliders of both weapons disabled = false
         GetComponent<Collider2D>().enabled = false;
-        OtherWeapon.GetComponent<Collider2D>().enabled = false;
+        StatusBoard.GetComponent<Collider2D>().enabled = false;
         // Set sorting order to check
         GetComponent<SpriteRenderer>().sortingOrder = 50;
         // Open background
@@ -146,7 +149,7 @@ public class LoadOutBar : MonoBehaviour
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
         // Set collider to enabled
         GetComponent<Collider2D>().enabled = true;
-        OtherWeapon.GetComponent<Collider2D>().enabled = true;
+        StatusBoard.GetComponent<Collider2D>().enabled = true;
         // Set sorting order to start
         GetComponent<SpriteRenderer>().sortingOrder = 5;
         // Close background
@@ -363,7 +366,7 @@ public class LoadOutBar : MonoBehaviour
             AllowScroll = true;
             if (ListItem.Count==4)
             {
-                ScrollRect.GetComponent<ScrollRect>().movementType = UnityEngine.UI.ScrollRect.MovementType.Clamped;
+                ScrollRect.GetComponent<ScrollRect>().movementType = UnityEngine.UI.ScrollRect.MovementType.Elastic;
             }
             // set current right to check scroll direction
             CurrentRightOfScroll = Contents.GetComponent<RectTransform>().offsetMax.x;
