@@ -109,9 +109,25 @@ public class GlobalFunctionController : MonoBehaviour
     {
         return null;
     }
-    public string ConvertPowerStats(string stats)
+
+    public string ConvertPowerStatsToString(string stats)
     {
         return "";
+    }
+
+    public Dictionary<string, object> ConvertPowerStatsToDictionary(string stats)
+    {
+        return null;
+    }
+
+    public string ConvertModelStatsToString(string stats)
+    {
+        return "";
+    }
+
+    public Dictionary<string, object> ConvertModelStatsToDictionary(string stats)
+    {
+        return null;
     }
     #endregion
 }

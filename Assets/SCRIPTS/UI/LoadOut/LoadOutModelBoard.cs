@@ -129,6 +129,7 @@ public class LoadOutModelBoard : MonoBehaviour
             }
         }
         FighterDemo.GetComponent<LoadOutFighterDemo>().SetModel(ModelName);
+        Scene.GetComponent<LoadoutScene>().Model = ModelName;
     }
     #endregion
 }

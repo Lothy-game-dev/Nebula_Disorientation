@@ -122,6 +122,9 @@ public class LoadOutBar : MonoBehaviour
         FighterDemo.GetComponent<LoadOutFighterDemo>().FocusOnWeapon(Type == "LeftWeapon");
         // Open background
         Background.SetActive(true);
+        // disable click on bg to exit 
+        Background.GetComponent<Collider2D>().enabled = false;
+        Background.GetComponent<LoadOutBarBackground>().enabled = false;
         // Set background sorting order
         Background.GetComponent<SpriteRenderer>().sortingOrder = 49;
         // Set viewport to after animation
@@ -157,12 +160,6 @@ public class LoadOutBar : MonoBehaviour
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
         // Stop focus on weapon on fighter demo
         FighterDemo.GetComponent<LoadOutFighterDemo>().StopFocusOnWeapon(Type == "LeftWeapon");
-        // Set collider to enabled
-        GetComponent<Collider2D>().enabled = true;
-        foreach (var go in DisableColliderList)
-        {
-            go.GetComponent<Collider2D>().enabled = true;
-        }
         // Set sorting order to start
         GetComponent<SpriteRenderer>().sortingOrder = 5;
         // Play animation for close
@@ -201,6 +198,13 @@ public class LoadOutBar : MonoBehaviour
         AfterGenerateList.RemoveAt(0);
         // Set item back from start
         SetItem(ItemsFromStart, name);
+        yield return new WaitForSeconds(1f);
+        // Set collider to enabled
+        GetComponent<Collider2D>().enabled = true;
+        foreach (var go in DisableColliderList)
+        {
+            go.GetComponent<Collider2D>().enabled = true;
+        }
     }
 
     #endregion
@@ -296,6 +300,10 @@ public class LoadOutBar : MonoBehaviour
             AfterGenerateList[i].SetActive(true);
             AfterGenerateList[i].transform.GetChild(0).GetComponent<LoadOutBox>().detectMouse = true;
         }
+        yield return new WaitForSeconds(0.5f);
+        // enable click in bg to exit
+        Background.GetComponent<Collider2D>().enabled = true;
+        Background.GetComponent<LoadOutBarBackground>().enabled = true;
     }
     public void SetItem(List<string> Items, string cItem)
     {
