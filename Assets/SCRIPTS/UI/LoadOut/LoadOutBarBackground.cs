@@ -13,6 +13,7 @@ public class LoadOutBarBackground : MonoBehaviour
     #endregion
     #region NormalVariables
     public int DisableCollider;
+    private bool alreadyClick;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -20,6 +21,11 @@ public class LoadOutBarBackground : MonoBehaviour
     {
         // Initialize variables
         DisableCollider = 1;
+    }
+
+    private void OnEnable()
+    {
+        alreadyClick = false;
     }
 
     // Update is called once per frame
@@ -43,9 +49,13 @@ public class LoadOutBarBackground : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
-        if (Bar.GetComponent<LoadOutBar>()!=null)
+        if (!alreadyClick)
         {
-            Bar.GetComponent<LoadOutBar>().BackgroundMouseDown();
+            alreadyClick = true;
+            if (Bar.GetComponent<LoadOutBar>() != null)
+            {
+                Bar.GetComponent<LoadOutBar>().BackgroundMouseDown();
+            }
         }
     }
     #endregion
