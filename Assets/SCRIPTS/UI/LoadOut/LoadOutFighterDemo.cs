@@ -10,9 +10,11 @@ public class LoadOutFighterDemo : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
     public GameObject Border;
     public GameObject ModelList;
     public GameObject WeaponList;
+    public LoadOutDetailStatus DetailStatus;
     #endregion
     #region NormalVariables
     private GameObject Model;
@@ -78,6 +80,17 @@ public class LoadOutFighterDemo : MonoBehaviour
             ModelAfterGenerate.transform.GetChild(0).GetComponent<Canvas>().sortingOrder = 4;
         }
         ModelInitPos = ModelAfterGenerate.transform.position;
+        Dictionary<string, object> statsDict = new Dictionary<string, object>();
+        string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(currentModel);
+        if ("Fail".Equals(stats))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Unable to fetch fighter's data!\nPlease try again.", 5f);
+        } else
+        {
+            statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionary(stats);
+        }
+        DetailStatus.SetData(currentModel, statsDict);
         ModelAfterGenerate.SetActive(true);
     }
     public void FocusOnWeapon(bool isLeftWeapon)
@@ -110,15 +123,6 @@ public class LoadOutFighterDemo : MonoBehaviour
     private IEnumerator ZoomToWeapon(bool isLeft)
     {
         Vector2 speed = new Vector2();
-        if (isLeft)
-        {
-            speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(0).position
-                - ModelAfterGenerate.transform.position) * 2f;
-        } else
-        {
-            speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(1).position
-                - ModelAfterGenerate.transform.position) * 2f;
-        }
         Rigidbody2D rb;
         if (ModelAfterGenerate.GetComponent<Rigidbody2D>()==null)
         {
@@ -130,7 +134,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         rb.isKinematic = true;
         for (int i=0;i<50;i++)
         {
-            if (i==15)
+            if (i==12)
             {
                 if (isLeft)
                 {
@@ -140,21 +144,21 @@ public class LoadOutFighterDemo : MonoBehaviour
                     ModelAfterGenerate.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
             }
-            if (isLeft)
-            {
-                speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(0).position
-                    - ModelAfterGenerate.transform.position) * 2f;
-            }
-            else
-            {
-                speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(1).position
-                    - ModelAfterGenerate.transform.position) * 2f;
-            }
-            rb.velocity = -speed;
             ModelAfterGenerate.transform.localScale = new Vector3(
                 ModelAfterGenerate.transform.localScale.x + initScaleModel * 0.04f,
                 ModelAfterGenerate.transform.localScale.y + initScaleModel * 0.04f,
                 ModelAfterGenerate.transform.localScale.z);
+            if (isLeft)
+            {
+                speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(0).position
+                    - transform.position) * 3f;
+            }
+            else
+            {
+                speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(1).position
+                    - transform.position) * 3f;
+            }
+            rb.velocity = -speed;
             yield return new WaitForSeconds(0.01f);
         }
         rb.velocity = new Vector2(0, 0);
@@ -174,7 +178,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         rb.isKinematic = true;
         for (int i = 0; i < 50; i++)
         {
-            if (i==35)
+            if (i==32)
             {
                 if (isLeft)
                 {
@@ -185,21 +189,12 @@ public class LoadOutFighterDemo : MonoBehaviour
                     ModelAfterGenerate.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 }
             }
-            if (isLeft)
-            {
-                speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(0).position
-                    - ModelAfterGenerate.transform.position) * 2f;
-            }
-            else
-            {
-                speed = (ModelAfterGenerate.transform.GetChild(0).GetChild(1).position
-                    - ModelAfterGenerate.transform.position) * 2f;
-            }
-            rb.velocity = speed;
             ModelAfterGenerate.transform.localScale = new Vector3(
                 ModelAfterGenerate.transform.localScale.x - initScaleModel * 0.04f,
                 ModelAfterGenerate.transform.localScale.y - initScaleModel * 0.04f,
                 ModelAfterGenerate.transform.localScale.z);
+            speed = (ModelAfterGenerate.transform.position - transform.position) *3f;
+            rb.velocity = -speed;
             yield return new WaitForSeconds(0.01f);
         }
         rb.velocity = new Vector2(0, 0);

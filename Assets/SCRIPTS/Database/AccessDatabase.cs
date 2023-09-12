@@ -724,7 +724,6 @@ public class AccessDatabase : MonoBehaviour
         }
     }
     #endregion
-
     #region Get Fighter List
     public List<List<string>> GetAllFighter()
     {
@@ -759,6 +758,31 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return list;
+    }
+    public string GetFighterStatsByName(string name)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ModelStats FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + name.Replace(" ","").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        string stats = "";
+        while (dataReader.Read())
+        {
+            check = true;
+            stats = dataReader.GetString(0);
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return "Fail";
+        } else
+        {
+            return stats;
+        }
     }
     #endregion
     #region Get All Power

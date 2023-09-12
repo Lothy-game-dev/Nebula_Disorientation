@@ -322,20 +322,20 @@ public class InitializeDatabase : MonoBehaviour
             "(12, 'MOV', 'Advanced Instant Wormhole', '', 'DPH-null|AoH-null|AoE-null|V-null|R-100|DC-0,45', '60000', null, 8, 9, '#bf2600'); ";
         // FactoryModel
         string FactoryModel = "INSERT INTO FactoryModel VALUES " +
-            "(1, 'SS29-MK1', '', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '0', null, '#36b37e')," +
-            "(2, 'SS29-MK2', '', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
-            "(3, 'SS29-MK3', '', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|RM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
-            "(4, 'SSS-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|RM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
-            "(5, 'SSS-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|RM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
-            "(6, 'SSS-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|RM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
-            "(7, 'SSS-MKL', '', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.1|RM-1.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff')," +
-            "(8, 'UEC29-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|RM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
-            "(9, 'UEC29-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|RM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
-            "(10, 'UEC29-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|RM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
-            "(11, 'UEC29-MKL', '', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|RM-2.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff')," +
-            "(12, 'ND-Prot No. 0', '', 'HP-12000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|RM-1.0|PM-0.5|SP-2|SC-3', '250000 | 1500', 13, '#bf2600')," +
-            "(13, 'ND-Zartillery', '', 'HP-5000|SPD-400|ROT-0.25|AOF-45,45|DM-1.15|RM-2.0|PM-1.0|SP-2|SC-3', '250000 | 1500', 13, '#bf2600')," +
-            "(14, 'ND-MKZ', '', 'HP-20000|SPD-400|ROT-1|AOF-90,90|DM-1.25|RM-1.0|PM-0.8|SP-2|SC-4', '250000 | 1500', 13, '#bf2600'); ";
+            "(1, 'SS29-MK1', '', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '0', null, '#36b37e')," +
+            "(2, 'SS29-MK2', '', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
+            "(3, 'SS29-MK3', '', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
+            "(4, 'SSS-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
+            "(5, 'SSS-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
+            "(6, 'SSS-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
+            "(7, 'SSS-MKL', '', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.1|AM-1.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff')," +
+            "(8, 'UEC29-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
+            "(9, 'UEC29-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
+            "(10, 'UEC29-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
+            "(11, 'UEC29-MKL', '', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|AM-2.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff')," +
+            "(12, 'ND-Prot No. 0', '', 'HP-12000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5|SP-2|SC-3', '250000 | 1500', 13, '#bf2600')," +
+            "(13, 'ND-Zartillery', '', 'HP-5000|SPD-400|ROT-0.25|AOF-45,45|DM-1.15|AM-2.0|PM-1.0|SP-2|SC-3', '250000 | 1500', 13, '#bf2600')," +
+            "(14, 'ND-MKZ', '', 'HP-20000|SPD-400|ROT-1|AOF-90,90|DM-1.25|RM-1.0|AM-0.8|SP-2|SC-4', '250000 | 1500', 13, '#bf2600'); ";
         // RankSystem
         string RankSystem = "INSERT INTO RankSystem VALUES" +
             "(1, 'Soldier', 0, null, 0, 500, 'UA-3', '#97a0af')," +
