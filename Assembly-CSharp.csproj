@@ -73,8 +73,9 @@
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackholeOrb.cs" />
-    <Compile Include="Assets\SCRIPTS\UI\Arsenal\Arsenal.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutModelBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialMenu.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal\Arsenal.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\InformationBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
@@ -82,8 +83,8 @@
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECCurrencyBar.cs" />
-    <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\StatusBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\BackgroundBrieflyMoving.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContract.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\GlobalFunctionController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />

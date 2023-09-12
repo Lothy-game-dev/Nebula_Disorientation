@@ -9,6 +9,9 @@ public class LoadOutBar : MonoBehaviour
     private Animator anim;
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
+    public string Type;
+    public GameObject[] DisableColliderList;
     public GameObject StatusBoard;
     public GameObject Background;
     public GameObject ListSprite;
@@ -54,11 +57,11 @@ public class LoadOutBar : MonoBehaviour
         AllowScroll = false;
         // Preset data
         AfterGenerateList = new List<GameObject>();
-        items.Add("GravitionalArtillery");
+        items.Add("GravitationalArtillery");
         items.Add("NanoFlameThrower");
         items.Add("BlastCannon");
         items.Add("NanoCannon");
-        /*items.Add("StarBlaster");*/
+        items.Add("StarBlaster");
         // Set view port to the box before animation
         ViewPort.GetComponent<RectTransform>().offsetMin = new Vector2(LeftShredViewport,0);
         ViewPort.GetComponent<RectTransform>().offsetMax = new Vector2(-RightShredViewport,0);
@@ -108,7 +111,10 @@ public class LoadOutBar : MonoBehaviour
         anim.SetTrigger("Start");
         // Set colliders of both weapons disabled = false
         GetComponent<Collider2D>().enabled = false;
-        StatusBoard.GetComponent<Collider2D>().enabled = false;
+        foreach (var go in DisableColliderList)
+        {
+            go.GetComponent<Collider2D>().enabled = false;
+        }
         // Set sorting order to check
         GetComponent<SpriteRenderer>().sortingOrder = 50;
         // Open background
@@ -142,14 +148,16 @@ public class LoadOutBar : MonoBehaviour
         anim.SetTrigger("End");
         anim.ResetTrigger("Start");
         // Reset data
-        ListItem = new List<GameObject>();
-        List<string> items = new List<string>();
+        /*ListItem = new List<GameObject>();*/
         AllowScroll = false;
         // Disable scroll
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
         // Set collider to enabled
         GetComponent<Collider2D>().enabled = true;
-        StatusBoard.GetComponent<Collider2D>().enabled = true;
+        foreach (var go in DisableColliderList)
+        {
+            go.GetComponent<Collider2D>().enabled = true;
+        }
         // Set sorting order to start
         GetComponent<SpriteRenderer>().sortingOrder = 5;
         // Close background
@@ -293,6 +301,7 @@ public class LoadOutBar : MonoBehaviour
         }
         // Set items for next time click usage
         ItemsFromStart = Items;
+        ListItem = new List<GameObject>();
         // Get all game objects to the list
         for (int i = 0; i < Items.Count; i++)
         {
@@ -320,6 +329,17 @@ public class LoadOutBar : MonoBehaviour
                 break;
             }
         }
+        // Update current item to scene controller
+        if (Type == "LeftWeapon")
+        {
+            Scene.GetComponent<LoadoutScene>().LeftWeapon = cItem;
+        }
+        else if (Type == "RightWeapon")
+        {
+            Scene.GetComponent<LoadoutScene>().RightWeapon = cItem;
+        }
+        // Set item to status board
+        StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(cItem);
         GenerateItems();
     }
     

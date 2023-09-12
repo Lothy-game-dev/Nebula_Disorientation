@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class LoadOutStatusBoard : MonoBehaviour
@@ -9,19 +10,27 @@ public class LoadOutStatusBoard : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
+    public GameObject StatusBoardRotate;
+    public GameObject NameText;
+    public GameObject StatsText;
+    public GameObject InfoText;
+    public string Type;
     #endregion
     #region NormalVariables
-    // All other variables apart from the two aforementioned types
-    // Can be public or private, prioritize private if possible
+    private AccessDatabase ad;
+    private string Item;
+    private string ItemName;
+    private string ItemDescription;
+    private string ItemStats;
+    private bool isShowingDes;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Initialize variables
+        GetComponent<Collider2D>().enabled = false;
+        ad = FindObjectOfType<AccessDatabase>();
     }
 
     // Update is called once per frame
@@ -30,7 +39,79 @@ public class LoadOutStatusBoard : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
-    // Group all function that serve the same algorithm
+    #region Mouse Check
+    private void OnMouseDown()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        NameText.SetActive(false);
+        StatsText.SetActive(false);
+        InfoText.SetActive(false);
+        StartCoroutine(RotateStatusBoard());
+    }
+    #endregion
+    #region Animation
+    private IEnumerator RotateStatusBoard()
+    {
+        for (int i=0;i<18;i++)
+        {
+            StatusBoardRotate.transform.Rotate(new Vector3(0, 10, 0));
+            yield return new WaitForSeconds(1/18f);
+        }
+        GetComponent<Collider2D>().enabled = true;
+        if (isShowingDes)
+        {
+            isShowingDes = false;
+            StatsText.SetActive(true);
+        } else
+        {
+            isShowingDes = true;
+            NameText.SetActive(true);
+            InfoText.SetActive(true);
+        }
+    }
+    #endregion
+    #region Set Data
+    public void SetData(string itemName)
+    {
+        Item = itemName;
+        GetComponent<Collider2D>().enabled = true;
+        // Retrieve Data
+        Dictionary<string, object> listData = ad.GetWeaponDataByName(Item);
+        bool spin = false;
+        if (ItemName != null && itemName != "") { spin = true; }
+        if (listData != null)
+        {
+            ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>";
+            ItemDescription = (string)listData["Description"];
+            ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertWeaponStatsToString((string)listData["Stats"]);
+        }
+        else
+        {
+            ItemName = "!!!ERROR!!!";
+            ItemDescription = "404! Can not found Data related to this " + Type + "!";
+            ItemStats = "404! Can not found Data related to this " + Type + "!";
+        }
+        NameText.GetComponent<TextMeshPro>().text = ItemName;
+        InfoText.GetComponent<TextMeshPro>().text = ItemDescription;
+        StatsText.GetComponent<TextMeshPro>().text = ItemStats;
+        if (spin)
+        {
+            isShowingDes = false;
+            GetComponent<Collider2D>().enabled = false;
+            NameText.SetActive(false);
+            StatsText.SetActive(false);
+            InfoText.SetActive(false);
+            StartCoroutine(RotateStatusBoard());
+        }
+        else
+        {
+            isShowingDes = true;
+            GetComponent<Collider2D>().enabled = true;
+            NameText.SetActive(true);
+            InfoText.SetActive(true);
+            StatsText.SetActive(false);
+        }
+
+    }
     #endregion
 }
