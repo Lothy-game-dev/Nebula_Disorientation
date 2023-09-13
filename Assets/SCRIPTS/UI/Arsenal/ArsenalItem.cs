@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ArsenalItem : MonoBehaviour
@@ -20,6 +21,10 @@ public class ArsenalItem : MonoBehaviour
     public string Id;
     public string Type;
     private Arsenal ar;
+    private Dictionary<string, object> Status;
+    private Dictionary<string, object> RankSys;
+    private string PriceColor;
+    private string RankColor;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -39,7 +44,49 @@ public class ArsenalItem : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        Debug.Log(FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToString(ar.WeaponList[int.Parse(Id) - 1][4]));
+
+        if (Type == "Weapon")
+        {
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ar.WeaponList[int.Parse(Id) - 1][8]));
+            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ar.WeaponList[int.Parse(Id) - 1][4]);
+            for (int i = 0; i < ar.ItemStatus.Count; i++)
+            {
+                ar.ItemStatus[i].GetComponent<TextMeshPro>().text = (string)Status[ar.ItemStatus[i].name];
+            }
+            ar.DescContent.GetComponent<TMP_Text>().text = ar.WeaponList[int.Parse(Id) - 1][3];
+            // check if enough timeless shard
+            if ((int)ar.PlayerInformation["TimelessShard"] < int.Parse(ar.WeaponList[int.Parse(Id) - 1][6]))
+            {
+                PriceColor = "red";
+                ar.IsEnough = false;
+            } else
+            {
+                if ((int)ar.PlayerInformation["TimelessShard"] == 0)
+                {
+                    ar.IsEnough = false;
+                    PriceColor = "red";
+                } else
+                {
+                    PriceColor = "green";
+                    ar.IsEnough = true;
+                }               
+            }
+
+            if ((int)ar.PlayerInformation["Cash"] < int.Parse(ar.WeaponList[int.Parse(Id) - 1][5]))
+            {
+                PriceColor = "red";
+                ar.IsEnough = false;
+            }
+            else
+            {
+                PriceColor = "green";
+                ar.IsEnough = true;
+            }
+            RankColor = "green";
+            ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ar.WeaponList[int.Parse(Id) - 1][6] +"</color>" ;
+            ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ar.WeaponList[int.Parse(Id) - 1][5] + "</color>";
+            ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required<br>" + (string)RankSys["RankName"] + "</color> ";
+        }
     }
     #endregion
     #region Function group ...

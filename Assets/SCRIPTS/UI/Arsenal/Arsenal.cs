@@ -21,12 +21,21 @@ public class Arsenal : MonoBehaviour
     public List<SpriteRenderer> WeaponImage;
     public List<SpriteRenderer> PowerImage;
     public GameObject OtherButton;
+    public List<GameObject> ItemStatus;
+    public GameObject DescContent;
+    public GameObject ItemCash;
+    public GameObject ItemTimelessShard;
+    public GameObject Rank;
+    public GameObject BuyButton;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public List<List<string>> WeaponList;
     public List<List<string>> PowerList;
+    public Dictionary<string, object> PlayerInformation;
+    private int PlayerId;
+    public bool IsEnough;
     #endregion
     #region Start & Update
 
@@ -35,6 +44,8 @@ public class Arsenal : MonoBehaviour
     {
         WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
         PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
+        PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
+        PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
     } 
 
     // Update is called once per frame
