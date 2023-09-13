@@ -785,7 +785,7 @@ public class AccessDatabase : MonoBehaviour
         }
     }
     #endregion
-    #region Get All Power
+    #region Access Power
     public List<List<string>> GetAllPower()
     {
         List<List<string>> list = new List<List<string>>();
@@ -829,6 +829,61 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return list;
+    }
+
+    public Dictionary<string,object> GetPowerDataByName(string name)
+    {
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ","").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            string Type = dataReader.GetString(0);
+            if (Type.Equals("DEF"))
+            {
+                Type = "Defensive";
+            } else if (Type.Equals("OFF"))
+            {
+                Type = "Offensive";
+            } else if (Type.Equals("MOV"))
+            {
+                Type = "Movement";
+            }
+            datas.Add("Type",Type);
+            datas.Add("Name", dataReader.GetString(1));
+            datas.Add("Description", dataReader.GetString(2));
+            datas.Add("Stats", dataReader.GetString(3));
+            datas.Add("Color", dataReader.GetString(4));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        } else
+        {
+            return datas;
+        }
+    }
+    #endregion
+    #region Access Consumables
+    public Dictionary<string, object> GetConsumableDataByName(string itemName)
+    {
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        return datas;
     }
     #endregion
 }

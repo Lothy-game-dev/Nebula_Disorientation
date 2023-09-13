@@ -131,9 +131,158 @@ public class GlobalFunctionController : MonoBehaviour
         return null;
     }
 
+    // Case 1: BR-xn|DC-n,m
+    // Case 2: BR-n|BR-xn|DC-n,m
+    // Case 3: DPH-n|AoH-n/s or AoH-n|AoE-n|V-n|R-n|DC-n,m
+    // If null will not add to string/dictionary
     public string ConvertPowerStatsToString(string stats)
     {
-        return "";
+        string[] StatList = stats.Split("|");
+        string finalString = "";
+        if (StatList.Length==3)
+        {
+            if (StatList[0].Contains("BR-"))
+            {
+                string BR = StatList[0].Replace("BR-", "");
+                finalString += "Barrier Strength: " + BR + "%HP\n";
+            }
+            // BR
+            if (StatList[1].Contains("BR-x"))
+            {
+                string BR = StatList[1].Replace("BR-x", "");
+                finalString += "Barrier Strength Multiplier: " + BR + "x\n";
+            }
+            else
+            {
+                finalString += StatList[1];
+            }
+            // DC
+            if (StatList[2].Contains("DC-"))
+            {
+                string DC = StatList[2].Replace("DC-", "");
+                string[] DCstats = DC.Split(",");
+                if (DCstats[0]=="0")
+                {
+                    finalString += "Cooldown: " + DCstats[1] + "s\n";
+                } else
+                finalString += "Duration: " + DCstats[0] + "s\nCooldown: " + DCstats[1] + "s\n";
+            }
+            else
+            {
+                finalString += StatList[2];
+            }
+        } else if (StatList.Length==2)
+        {
+            // BR
+            if (StatList[0].Contains("BR-x"))
+            {
+                string BR = StatList[0].Replace("BR-x", "");
+                finalString += "Barrier Strength Multiplier: " + BR + "x\n";
+            } else
+            {
+                finalString += StatList[0];
+            }
+            // DC
+            if (StatList[1].Contains("DC-"))
+            {
+                string DC = StatList[1].Replace("DC-", "");
+                string[] DCstats = DC.Split(",");
+                if (DCstats[0] == "0")
+                {
+                    finalString += "Cooldown: " + DCstats[1] + "s\n";
+                }
+                else
+                    finalString += "Duration: " + DCstats[0] + "s\nCooldown: " + DCstats[1] + "s\n";
+            }
+            else
+            {
+                finalString += StatList[1];
+            }
+        } else
+        {
+            //DPH
+            if (StatList[0].Contains("DPH-"))
+            {
+                string DPH = StatList[0].Replace("DPH-", "");
+                if (DPH!="null")
+                {
+                    finalString += "Damage Per Hit: " + DPH + "\n";
+                }
+            }
+            else
+            {
+                finalString += StatList[0];
+            }
+            //AoH
+            if (StatList[1].Contains("AoH-"))
+            {
+                string AoH = StatList[1].Replace("AoH-", "");
+                if (AoH!="null")
+                {
+                    finalString += "Amount Of Hit: " + AoH + "\n";
+                }
+            }
+            else
+            {
+                finalString += StatList[1];
+            }
+            //AoE
+            if (StatList[2].Contains("AoE-"))
+            {
+                string AoE = StatList[2].Replace("AoE-", "");
+                if (AoE!="null")
+                {
+                    finalString += "Area of Effect: " + AoE + "\n";
+                }
+            }
+            else
+            {
+                finalString += StatList[2];
+            }
+            //V
+            if (StatList[3].Contains("V-"))
+            {
+                string V = StatList[3].Replace("V-", "");
+                if (V!="null")
+                {
+                    finalString += "Velocity: " + V + "\n";
+                }
+            }
+            else
+            {
+                finalString += StatList[3];
+            }
+            //R
+            if (StatList[4].Contains("R-"))
+            {
+                string R = StatList[4].Replace("R-", "");
+                if (R!="null")
+                {
+                    finalString += "Range: " + R + "\n";
+                }
+            }
+            else
+            {
+                finalString += StatList[4];
+            }
+            // DC
+            if (StatList[5].Contains("DC-"))
+            {
+                string DC = StatList[5].Replace("DC-", "");
+                string[] DCstats = DC.Split(",");
+                if (DCstats[0] == "0")
+                {
+                    finalString += "Cooldown: " + DCstats[1] + "s\n";
+                }
+                else
+                    finalString += "Duration: " + DCstats[0] + "s\nCooldown: " + DCstats[1] + "s\n";
+            }
+            else
+            {
+                finalString += StatList[5];
+            }
+        }
+        return finalString;
     }
 
     public Dictionary<string, object> ConvertPowerStatsToDictionary(string stats)

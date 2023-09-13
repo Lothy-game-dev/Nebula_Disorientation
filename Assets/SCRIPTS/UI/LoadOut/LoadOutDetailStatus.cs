@@ -48,9 +48,21 @@ public class LoadOutDetailStatus : MonoBehaviour
         AoEMod.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = (string)data["AM"];
         PowerCDMod.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = (string)data["PM"];
         string AoFDemo = (string)data["AOFDemo"];
+        for (int i=0;i< AoFImage.transform.GetChild(0).childCount;i++)
+        {
+            AoFImage.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
+        }
         if ("45".Equals(AoFDemo))
         {
-
+            AoFImage.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        } 
+        else if ("90".Equals(AoFDemo))
+        {
+            AoFImage.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+        }
+        else if ("120".Equals(AoFDemo))
+        {
+            AoFImage.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
         }
     }
     #endregion

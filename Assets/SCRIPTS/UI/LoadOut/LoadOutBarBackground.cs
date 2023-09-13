@@ -55,6 +55,12 @@ public class LoadOutBarBackground : MonoBehaviour
             if (Bar.GetComponent<LoadOutBar>() != null)
             {
                 Bar.GetComponent<LoadOutBar>().BackgroundMouseDown();
+            } else if (Bar.GetComponent<LoadOutPowerBar>()!=null)
+            {
+                Bar.GetComponent<LoadOutPowerBar>().OnBackgroundMouseDown();
+            } else if (Bar.GetComponent<LoadOutConsumables>()!=null)
+            {
+                Bar.GetComponent<LoadOutConsumables>().OnBackgroundMouseDown();
             }
         }
     }

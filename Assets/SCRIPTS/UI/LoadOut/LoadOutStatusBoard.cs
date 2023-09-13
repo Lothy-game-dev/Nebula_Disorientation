@@ -73,23 +73,36 @@ public class LoadOutStatusBoard : MonoBehaviour
     #region Set Data
     public void SetData(string itemName)
     {
+        ad = FindObjectOfType<AccessDatabase>();
         Item = itemName;
         GetComponent<Collider2D>().enabled = true;
-        // Retrieve Data
-        Dictionary<string, object> listData = ad.GetWeaponDataByName(Item);
         bool spin = false;
         if (ItemName != null && itemName != "") { spin = true; }
-        if (listData != null)
-        {
-            ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>\n" + (string)listData["Type"];
-            ItemDescription = (string)listData["Description"];
-            ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertWeaponStatsToString((string)listData["Stats"]);
-        }
         else
         {
             ItemName = "!!!ERROR!!!";
             ItemDescription = "404! Can not found Data related to this " + Type + "!";
             ItemStats = "404! Can not found Data related to this " + Type + "!";
+        }
+        // Retrieve Data
+        if (Type.Equals("Weapon"))
+        {
+            Dictionary<string, object> listData = ad.GetWeaponDataByName(Item);
+            if (listData != null)
+            {
+                ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>\n" + (string)listData["Type"];
+                ItemDescription = (string)listData["Description"];
+                ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertWeaponStatsToString((string)listData["Stats"]);
+            }
+        } else if (Type.Equals("Power"))
+        {
+            Dictionary<string, object> listData = ad.GetPowerDataByName(Item);
+            if (listData != null)
+            {
+                ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>\n" + (string)listData["Type"];
+                ItemDescription = (string)listData["Description"];
+                ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertPowerStatsToString((string)listData["Stats"]);
+            }
         }
         NameText.GetComponent<TextMeshPro>().text = ItemName;
         InfoText.GetComponent<TextMeshPro>().text = ItemDescription;
