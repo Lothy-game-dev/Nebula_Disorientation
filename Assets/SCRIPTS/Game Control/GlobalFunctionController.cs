@@ -39,8 +39,19 @@ public class GlobalFunctionController : MonoBehaviour
         string[] StatList = stats.Split("|");
         string finalString = "";
         //Overheat WIP
+        string OH = StatList[0];
+        if (OH.Contains("OH"))
+        {
+            OH = OH.Replace("OH-", "");
+            string[] OHL = OH.Split(",");
+            finalString += "<b><i>Overheat: </i></b> ";
+        }
+        else
+        {
+            finalString += OH;
+        }
         //DPH
-        string DPH = StatList[0];
+        string DPH = StatList[1];
         if (DPH.Contains("DPH"))
         {
             DPH = DPH.Replace("DPH-", "");
@@ -50,7 +61,7 @@ public class GlobalFunctionController : MonoBehaviour
             finalString += DPH;
         }
         //RoF
-        string RoF = StatList[1];
+        string RoF = StatList[2];
         if (RoF.Contains("RoF"))
         {
             RoF = RoF.Replace("RoF-", "");
@@ -61,7 +72,7 @@ public class GlobalFunctionController : MonoBehaviour
             finalString += RoF;
         }
         //AoE
-        string AoE = StatList[2];
+        string AoE = StatList[3];
         if (AoE.Contains("AoE"))
         {
             AoE = AoE.Replace("AoE-", "");
@@ -72,7 +83,7 @@ public class GlobalFunctionController : MonoBehaviour
             finalString += AoE;
         }
         //V
-        string V = StatList[3];
+        string V = StatList[4];
         if (V.Contains("V"))
         {
             V = V.Replace("V-", "");
@@ -83,7 +94,7 @@ public class GlobalFunctionController : MonoBehaviour
             finalString += V;
         }
         //R
-        string R = StatList[4];
+        string R = StatList[5];
         if (R.Contains("R"))
         {
             R = R.Replace("R-", "");

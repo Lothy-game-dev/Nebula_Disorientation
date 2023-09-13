@@ -67,6 +67,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSpinBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuTutorialScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\TargetCursor.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalItem.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
