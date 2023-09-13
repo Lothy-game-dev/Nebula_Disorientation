@@ -66,7 +66,7 @@ public class AccessDatabase : MonoBehaviour
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime) " +
-            "VALUES ('"+ name +"',null,null,10,0,500,5,500,'N',null)";
+            "VALUES ('" + name + "',null,null,10,0,500,5,500,'N',null)";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
@@ -119,7 +119,7 @@ public class AccessDatabase : MonoBehaviour
         {
             Names.Add(dataReader.GetString(0));
             object rankTemp = dataReader.GetValue(1);
-            if (rankTemp!=null && rankTemp.ToString().Length>0)
+            if (rankTemp != null && rankTemp.ToString().Length > 0)
             {
                 IDbCommand dbCommand2 = dbConnection.CreateCommand();
                 dbCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankID=" + rankTemp;
@@ -161,9 +161,9 @@ public class AccessDatabase : MonoBehaviour
             return "No Exist";
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "DELETE FROM PlayerProfile WHERE Name='" + name +"'";
+        dbCommand.CommandText = "DELETE FROM PlayerProfile WHERE Name='" + name + "'";
         int n = dbCommand.ExecuteNonQuery();
-        if (n==0)
+        if (n == 0)
         {
             return "Fail";
         }
@@ -172,7 +172,7 @@ public class AccessDatabase : MonoBehaviour
     }
     public Dictionary<string, object> GetPlayerInformationById(int PlayerId)
     {
-        if (PlayerId==-1)
+        if (PlayerId == -1)
         {
             return null;
         } else
@@ -343,9 +343,9 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         string from = "";
         string to = "";
-        switch (ConvertFrom.Replace(" ","").ToLower())
+        switch (ConvertFrom.Replace(" ", "").ToLower())
         {
-            case "cash": from = "Cash";break;
+            case "cash": from = "Cash"; break;
             case "timelessshard": from = "TimelessShard"; break;
             case "fuelcell": from = "FuelCell"; break;
             case "fuelenergy": from = "FuelEnergy"; break;
@@ -359,7 +359,7 @@ public class AccessDatabase : MonoBehaviour
             case "fuelenergy": to = "FuelEnergy"; break;
             default: break;
         }
-        if (from!="" && to!="")
+        if (from != "" && to != "")
         {
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
@@ -420,7 +420,7 @@ public class AccessDatabase : MonoBehaviour
             IDbCommand dbCommand = dbConnection.CreateCommand();
             dbCommand.CommandText = "UPDATE PlayerProfile SET TimelessShard = TimelessShard + " + amount.ToString() + " WHERE PlayerID=" + PlayerId;
             int n = dbCommand.ExecuteNonQuery();
-            if (n!=1)
+            if (n != 1)
             {
                 dbConnection.Close();
                 return "Fail";
@@ -458,7 +458,7 @@ public class AccessDatabase : MonoBehaviour
             "(" + id.ToString() + ",datetime('now', '+7 hours'),null)";
         int n = dbCommand.ExecuteNonQuery();
         dbConnection.Close();
-        if (n!=1)
+        if (n != 1)
         {
             return "Fail";
         } else
@@ -494,7 +494,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT COUNT(*) FROM PlayerDailyMission WHERE PlayerID =" + PlayerId +" AND MissionDate='" + currentDate +"'";
+        dbCheckCommand.CommandText = "SELECT COUNT(*) FROM PlayerDailyMission WHERE PlayerID =" + PlayerId + " AND MissionDate='" + currentDate + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int count = 0;
         while (dataReader.Read())
@@ -534,9 +534,9 @@ public class AccessDatabase : MonoBehaviour
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
         string insertText = "INSERT INTO PlayerDailyMission (PlayerID,MissionID,IsComplete,MissionDate) VALUES ";
-        for (int i=0;i<number;i++)
+        for (int i = 0; i < number; i++)
         {
-            if (alreadyMission.Count>0)
+            if (alreadyMission.Count > 0)
             {
                 int n = 0;
                 do
@@ -551,7 +551,7 @@ public class AccessDatabase : MonoBehaviour
                 insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "')";
                 alreadyMission.Add(n);
             }
-            if (i==number-1)
+            if (i == number - 1)
             {
                 insertText += ";";
             } else
@@ -562,7 +562,7 @@ public class AccessDatabase : MonoBehaviour
         dbCommand.CommandText = insertText;
         int check = dbCommand.ExecuteNonQuery();
         dbConnection.Close();
-        if (check==number)
+        if (check == number)
         {
             return "Success";
         } else
@@ -617,7 +617,7 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM Option";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
-       
+
         while (dataReader.Read())
         {
             option.Add("MVolume", dataReader.GetInt32(0));
@@ -637,7 +637,7 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
         dbCheckCommand.CommandText = "UPDATE Option SET " +
-            "MasterVolume = "+MVolume+", " +
+            "MasterVolume = " + MVolume + ", " +
             "MusicVolume = " + Music + ", " +
             "SoundFx = " + Sound + ", " +
             "Fps= " + Fps + ", " +
@@ -668,7 +668,7 @@ public class AccessDatabase : MonoBehaviour
             weaplist.Add(dataReader.GetString(2));
             weaplist.Add(dataReader.GetString(3));
             weaplist.Add(dataReader.GetString(4));
-            weaplist.Add(dataReader.GetString(5));           
+            weaplist.Add(dataReader.GetString(5));
             if (dataReader.IsDBNull(6))
             {
                 weaplist.Add("N/A");
@@ -766,7 +766,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ModelStats FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + name.Replace(" ","").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT ModelStats FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         string stats = "";
@@ -885,5 +885,30 @@ public class AccessDatabase : MonoBehaviour
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         return datas;
     }
+    #endregion
+    #region Access Rank
+    public Dictionary<string, object> GetRankById(int id)
+    {
+        Dictionary<string, object> rank = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM RankSystem WHERE RankId=" + id + "";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check1 = false;
+        while (dataReader.Read())
+        {
+            check1 = true;
+            rank.Add("RankId", dataReader.GetInt32(0).ToString());
+            rank.Add("RankName", dataReader.GetString(1));
+        }   
+        if (!check1) return null;
+        dbConnection.Close();
+ 
+        return rank;
+     }
+
     #endregion
 }

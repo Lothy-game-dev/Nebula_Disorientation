@@ -74,7 +74,7 @@ public class EncycButton : MonoBehaviour
             //Fighter
             if (Type == "Fighter")
             {
-                ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(1f, 1f, 0f));
+                ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f));
                 ChangeColorWhenChoosen(Id.ToString());
                 if (wlist[1] == "SSS-MKL")
                 {
