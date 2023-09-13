@@ -38,13 +38,23 @@ public class GlobalFunctionController : MonoBehaviour
     {
         string[] StatList = stats.Split("|");
         string finalString = "";
-        //Overheat WIP
+        //Overheat
         string OH = StatList[0];
         if (OH.Contains("OH"))
         {
             OH = OH.Replace("OH-", "");
-            string[] OHL = OH.Split(",");
-            finalString += "<b><i>Overheat: </i></b> ";
+            string[] listOH = OH.Split(",");
+            if (listOH.Length==3)
+            {
+                finalString += "<b>Overheat:  </b><i>" + listOH[0] + " | " + listOH[1] + " | " + listOH[2] + "</i>\n";
+            }
+            else if (listOH.Length==1)
+            {
+                finalString += "<b>Overheat:  </b><i>" + listOH[0] + "</i>\n";
+            } else
+            {
+                finalString += OH;
+            }
         }
         else
         {
@@ -55,7 +65,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (DPH.Contains("DPH"))
         {
             DPH = DPH.Replace("DPH-", "");
-            finalString += "<b><i>Damage Per Hit:</i></b> " + DPH;
+            finalString += "<b>Damage Per Hit:  </b><i>" + DPH + "</i>\n";
         } else
         {
             finalString += DPH;
@@ -65,7 +75,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (RoF.Contains("RoF"))
         {
             RoF = RoF.Replace("RoF-", "");
-            finalString += "<b><i>Rate of fire:</i></b> " + RoF;
+            finalString += "<b>Rate of fire:  </b><i>" + RoF + "/s</i>\n";
         }
         else
         {
@@ -76,7 +86,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (AoE.Contains("AoE"))
         {
             AoE = AoE.Replace("AoE-", "");
-            finalString += "<b><i>Area Of Effect:</i></b> " + AoE;
+            finalString += "<b>Area Of Effect:  </b><i>" + AoE + "</i>\n";
         }
         else
         {
@@ -87,7 +97,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (V.Contains("V"))
         {
             V = V.Replace("V-", "");
-            finalString += "<b><i>Velocity:</i></b> " + V;
+            finalString += "<b>Velocity:  </b><i>" + V + "</i>\n";
         }
         else
         {
@@ -98,13 +108,13 @@ public class GlobalFunctionController : MonoBehaviour
         if (R.Contains("R"))
         {
             R = R.Replace("R-", "");
-            string[] ranges = R.Split(",");
+            string[] ranges = R.Split("-");
             if (ranges.Length==1)
             {
-                finalString += "<b><i>Bullet Range:</i></b> " + ranges[0];
+                finalString += "<b>Range:  </b><i>" + ranges[0] + "</i>\n";
             } else if (ranges.Length==2)
             {
-                finalString += "<b><i>Bullet Range:</i></b> " + ranges[0] + "-" + ranges[1];
+                finalString += "<b>Range:  </b><i>" + ranges[0] + "-" + ranges[1] + "</i>\n";
             } else
             {
                 finalString += R;
@@ -136,9 +146,110 @@ public class GlobalFunctionController : MonoBehaviour
         return "";
     }
 
+    //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n|SP-n|SC-n
     public Dictionary<string, object> ConvertModelStatsToDictionary(string stats)
     {
-        return null;
+        Dictionary<string, object> StatsDictionary = new Dictionary<string, object>();
+        string[] StatsList = stats.Split("|");
+        //HP
+        string HP = StatsList[0];
+        if (HP.Contains("HP-"))
+        {
+            HP = HP.Replace("HP-", "");
+            StatsDictionary.Add("HP", HP);
+        } else
+        {
+            StatsDictionary.Add("HP", "0");
+        }
+        //SPD
+        string SPD = StatsList[1];
+        if (SPD.Contains("SPD-"))
+        {
+            SPD = SPD.Replace("SPD-", "");
+            StatsDictionary.Add("SPD", SPD);
+        } else
+        {
+            StatsDictionary.Add("SPD", "0");
+        }
+        //ROT
+        string ROT = StatsList[2];
+        if (ROT.Contains("ROT-"))
+        {
+            ROT = ROT.Replace("ROT-", "");
+            StatsDictionary.Add("ROT", (float.Parse(ROT)*120).ToString());
+        }
+        else
+        {
+            StatsDictionary.Add("ROT", "0");
+        }
+        //AOF
+        string AOF = StatsList[3];
+        if (AOF.Contains("AOF-"))
+        {
+            AOF = AOF.Replace("AOF-", "");
+            StatsDictionary.Add("AOF", "-" + AOF.Split(",")[0] + "° ~ " + AOF.Split(",")[1] + "°");
+            StatsDictionary.Add("AOFDemo", AOF.Split(",")[0]);
+        }
+        else
+        {
+            StatsDictionary.Add("AOF", "0");
+        }
+        //DM
+        string DM = StatsList[4];
+        if (DM.Contains("DM-"))
+        {
+            DM = DM.Replace("DM-", "");
+            StatsDictionary.Add("DM", DM + "x");
+        }
+        else
+        {
+            StatsDictionary.Add("DM", "0");
+        }
+        //AM
+        string AM = StatsList[5];
+        if (AM.Contains("AM-"))
+        {
+            AM = AM.Replace("AM-", "");
+            StatsDictionary.Add("AM", AM + "x");
+        }
+        else
+        {
+            StatsDictionary.Add("AM", "0");
+        }
+        //PM
+        string PM = StatsList[6];
+        if (PM.Contains("PM-"))
+        {
+            PM = PM.Replace("PM-", "");
+            StatsDictionary.Add("PM", PM + "x");
+        }
+        else
+        {
+            StatsDictionary.Add("PM", "0");
+        }
+        //SP
+        string SP = StatsList[7];
+        if (SP.Contains("SP-"))
+        {
+            SP = SP.Replace("SP-", "");
+            StatsDictionary.Add("SP", SP);
+        }
+        else
+        {
+            StatsDictionary.Add("SP", "0");
+        }
+        //SC
+        string SC = StatsList[8];
+        if (SC.Contains("SC-"))
+        {
+            SC = SC.Replace("SC-", "");
+            StatsDictionary.Add("SC", SC);
+        }
+        else
+        {
+            StatsDictionary.Add("SC", "0");
+        }
+        return StatsDictionary;
     }
     #endregion
 }

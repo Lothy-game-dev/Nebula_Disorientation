@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -104,6 +105,7 @@ public class LoadOutModelBoard : MonoBehaviour
             go.transform.localScale = new Vector2(BoxTemplate.transform.localScale.x, BoxTemplate.transform.localScale.y);
             go.GetComponent<LoadOutModelBox>().board = gameObject;
             go.transform.GetChild(0).GetComponent<Image>().sprite = ListOfModel[i].GetComponent<Image>().sprite;
+            go.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ListOfModel[i].name;
             go.SetActive(true);
             yield return new WaitForSeconds(0.05f);
         }
