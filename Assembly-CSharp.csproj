@@ -59,8 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSceneShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBox.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECPlanets.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumableBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECPersonalArea.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\NotificationBoardController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\RechargeBoard.cs" />
@@ -110,7 +113,9 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumablePopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionMenu.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\NewStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutFighterDemo.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUpBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBar.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />

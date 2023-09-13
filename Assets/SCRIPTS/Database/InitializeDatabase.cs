@@ -243,6 +243,7 @@ public class InitializeDatabase : MonoBehaviour
                 "(ItemID INTEGER, " +
                 "ItemName TEXT NOT NULL, " +
                 "ItemDescription TEXT NOT NULL, " +
+                "StockPerDays TEXT NOT NULL, " +
                 "ItemEffect TEXT NOT NULL, " +
                 "EffectDuration INTEGER, " +
                 "Stackable TEXT NOT NULL, " +
@@ -308,18 +309,18 @@ public class InitializeDatabase : MonoBehaviour
             "(24, 'Laser', 'Star Blaster', 'A superior weapon that fires star-like projectiles with insane capability.', 'OH-1.5,3,10|DPH-2250|RoF-5|AoE-25|V-2500|R-2000', '120000', null, 19, 9, '#800080', 'Purple');";
         // ArsenalPower
         string ArsenalPower = "INSERT INTO ArsenalPower VALUES " +
-            "(1, 'DEF', 'Situational Barrier', '', 'BR-x2|DC-10,45', '0', '0', null, 1, '#36b37e')," +
-            "(2, 'OFF', 'Short Laser Beam', '', 'DPH-250|AoH-3/s|AoE-2|V-null|R-25|DC-3,45', '0', '0', null, 1, '#36b37e')," +
-            "(3, 'OFF', 'Rocket Burst Device', '', 'DPH-150|AoH-10|AoE-2|V-75|R-150|DC-0,45', '3000', '50', null, 1, '#36b37e')," +
-            "(4, 'MOV', 'Instant Wormhole', '', 'DPH-null|AoH-null|AoE-null|V-null|R-50|DC-0,60', '3000', '50', null, 1, '#36b37e')," +
-            "(5, 'DEF(P)', 'Fortified Barrier', '', 'BR-30', '10000', '150', 1, 5, '#4c9aff')," +
-            "(6, 'OFF', 'Enhanced Short Laser Beam', '', 'DPH-500|AoH-3/s|AoE-2|V-null|R-25|DC-3,45', '15000', '150', 2, 5, '#4c9aff')," +
-            "(7, 'OFF', 'Enhanced Rocket Burst Device', '', 'DPH-150|AoH-15|AoE-2|V-75|R-150|DC-0,45', '15000', '150', 3, 5, '#4c9aff')," +
-            "(8, 'MOV', 'Boosted Instant Wormhole', '', 'DPH-null|AoH-null|AoE-null|V-null|R-50|DC-0,45', '20000', '150', 4, 5, '#4c9aff')," +
-            "(9, 'DEF(P)', 'Heavy Barrier', '', 'BR-60', '30000', null, 5, 9, '#bf2600')," +
-            "(10, 'OFF', 'Superior Short Laser Beam', '', 'DPH-500|AoH-5/s|AoE-2|V-null|R-50|DC-3,30', '45000', null, 6, 9, '#bf2600')," +
-            "(11, 'OFF', 'Superior Rocket Burst Device', '', 'DPH-300|AoH-20|AoE-2|V-100|R-150|DC-0,45', '45000', null, 7, 9, '#bf2600')," +
-            "(12, 'MOV', 'Advanced Instant Wormhole', '', 'DPH-null|AoH-null|AoE-null|V-null|R-100|DC-0,45', '60000', null, 8, 9, '#bf2600'); ";
+            "(1, 'DEF', 'Situational Barrier', 'Create a protecting sphere around the Fighter during its effect.', 'BR-x2|DC-10,20', '0', '0', null, 1, '#36b37e')," +
+            "(2, 'OFF', 'Short Laser Beam', 'Charging for 3 secs, then shoot out a powerful beam of laser in front for 10 seconds.', 'DPH-1000|AoH-10/s|AoE-25|V-100000|R-750|DC-3,20', '0', '0', null, 1, '#36b37e')," +
+            "(3, 'OFF', 'Rocket Burst Device', 'Spawn dozens of rockets that track down enemies nearby.', 'DPH-1500|AoH-10|AoE-50|V-5000|R-1500|DC-0,30', '3000', '50', null, 1, '#36b37e')," +
+            "(4, 'MOV', 'Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,30', '3000', '50', null, 1, '#36b37e')," +
+            "(5, 'DEF', 'Fortified Barrier', 'Create a protecting sphere around the Fighter during its effect. Passively increase shield strength.', 'BR-30|BR-x2|DC-10,20', '10000', '150', 1, 5, '#4c9aff')," +
+            "(6, 'OFF', 'Enhanced Short Laser Beam', 'Charging for 3 secs, then shoot out a powerful beam of laser in front for 10 seconds.', 'DPH-2000|AoH-10/s|AoE-25|V-100000|R-750|DC-3,20', '15000', '150', 2, 5, '#4c9aff')," +
+            "(7, 'OFF', 'Enhanced Rocket Burst Device', 'Spawn dozens of rockets that track down enemies nearby.', 'DPH-2000|AoH-20|AoE-75|V-5000|R-2000|DC-0,30', '15000', '150', 3, 5, '#4c9aff')," +
+            "(8, 'MOV', 'Boosted Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,30', '20000', '150', 4, 5, '#4c9aff')," +
+            "(9, 'DEF', 'Heavy Barrier', 'Create a protecting sphere around the Fighter during its effect. Passively increase shield strength.', 'BR-60|BR-x2|DC-10,20', '30000', null, 5, 9, '#bf2600')," +
+            "(10, 'OFF', 'Superior Short Laser Beam', 'Charging for 3 secs, then shoot out a powerful beam of laser in front for 10 seconds.', 'DPH-3000|AoH-10/s|AoE-25|V-100000|R-750|DC-3,20', '45000', null, 6, 9, '#bf2600')," +
+            "(11, 'OFF', 'Superior Rocket Burst Device', 'Spawn dozens of rockets that track down enemies nearby.', 'DPH-3000|AoH-30|AoE-100|V-7500|R-2500|DC-0,30', '45000', null, 7, 9, '#bf2600')," +
+            "(12, 'MOV', 'Advanced Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,5', '60000', null, 8, 9, '#bf2600'); ";
         // FactoryModel
         string FactoryModel = "INSERT INTO FactoryModel VALUES " +
             "(1, 'SS29-MK1', '', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '0', null, '#36b37e')," +
