@@ -128,7 +128,99 @@ public class GlobalFunctionController : MonoBehaviour
     }
     public Dictionary<string, object> ConvertWeaponStatsToDictionary(string stats)
     {
-        return null;
+        string[] StatList = stats.Split("|");
+        Dictionary<string,object> finalString = new Dictionary<string, object>();
+        //Overheat
+        string OH = StatList[0];
+        if (OH.Contains("OH"))
+        {
+            OH = OH.Replace("OH-", "");
+            string[] listOH = OH.Split(",");
+            if (listOH.Length == 3)
+            {
+                finalString.Add("OH", listOH[0] + " | " + listOH[1] + " | " + listOH[2]);
+            }
+            else if (listOH.Length == 1)
+            {
+                finalString.Add("OH", listOH[0]);
+            }
+            else
+            {
+                finalString.Add("OH", OH);
+            }
+        }
+        else
+        {
+            finalString.Add("OH", OH);
+        }
+        //DPH
+        string DPH = StatList[1];
+        if (DPH.Contains("DPH"))
+        {
+            DPH = DPH.Replace("DPH-", "");
+            finalString.Add("DPH", DPH);
+        }
+        else
+        {
+            finalString.Add("DPH", DPH);
+        }
+        //RoF
+        string RoF = StatList[2];
+        if (RoF.Contains("RoF"))
+        {
+            RoF = RoF.Replace("RoF-", "");
+            finalString.Add("ROF", RoF);
+        }
+        else
+        {
+            finalString.Add("ROF", RoF);
+        }
+        //AoE
+        string AoE = StatList[3];
+        if (AoE.Contains("AoE"))
+        {
+            AoE = AoE.Replace("AoE-", "");
+            finalString.Add("AOE", AoE);
+        }
+        else
+        {
+            finalString.Add("AOE", AoE);
+        }
+        //V
+        string V = StatList[4];
+        if (V.Contains("V"))
+        {
+            V = V.Replace("V-", "");
+            finalString.Add("SPD", V);
+        }
+        else
+        {
+            finalString.Add("SPD", V);
+        }
+        //R
+        string R = StatList[5];
+        if (R.Contains("R"))
+        {
+            R = R.Replace("R-", "");
+            string[] ranges = R.Split("-");
+            if (ranges.Length == 1)
+            {
+                finalString.Add("R", ranges[0]);
+            }
+            else if (ranges.Length == 2)
+            {
+                finalString.Add("R", ranges[0] + "-" + ranges[1]);
+            }
+            else
+            {
+                finalString.Add("R", R);
+            }
+        }
+        else
+        {
+            finalString.Add("R", R);
+        }
+        return finalString;
     }
 
     // Case 1: BR-xn|DC-n,m
