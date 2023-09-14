@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadoutScene : UECMenuShared
 {
@@ -15,6 +16,8 @@ public class LoadoutScene : UECMenuShared
     public GameObject Power1Bar;
     public GameObject Power2Bar;
     public GameObject ConsumableBar;
+    public GameObject FighterDemo;
+    public GameObject FuelCell;
     #endregion
     #region NormalVariables
     public string LeftWeapon;
@@ -23,6 +26,7 @@ public class LoadoutScene : UECMenuShared
     public string SecondPower;
     public Dictionary<string, int> Consumables;
     public string Model;
+    public int CurrentFuelCells;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -50,6 +54,7 @@ public class LoadoutScene : UECMenuShared
         Power1Bar.SetActive(true);
         Power2Bar.SetActive(true);
         ConsumableBar.SetActive(true);
+        FighterDemo.SetActive(true);
         GetData();
     }
     public override void OnExitAnimation()
@@ -62,6 +67,7 @@ public class LoadoutScene : UECMenuShared
         Power1Bar.SetActive(false);
         Power2Bar.SetActive(false);
         ConsumableBar.SetActive(false);
+        FighterDemo.SetActive(false);
     }
     #endregion
     #region On Enable Get Data
@@ -76,6 +82,15 @@ public class LoadoutScene : UECMenuShared
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllPowerName()),"");
         ConsumableBar.GetComponent<LoadOutConsumables>().SetInitData(
             FindObjectOfType<AccessDatabase>().GetAllDictionarySpaceShopCons());
+        Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
+            .GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
+        CurrentFuelCells = (int)ListData["FuelCell"];
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = CurrentFuelCells;
+        if (CurrentFuelCells == 10)
+        {
+            FuelCell.transform.GetChild(2).gameObject.SetActive(false);
+        }
     }
 
     private List<string> ListReplaceSpace(List<string> inList)
@@ -95,7 +110,7 @@ public class LoadoutScene : UECMenuShared
         return inList;
     }
 
-    public void SetDataToDb()
+    public string SetDataToDb()
     {
         string check = "Model:" + Model
             + ",Left Weapon:" + LeftWeapon
@@ -107,6 +122,7 @@ public class LoadoutScene : UECMenuShared
             check += ",Consumable:" + item.Key + " - " + item.Value;
         }
         Debug.Log(check);
+        return "Success";
     }
     #endregion
 }
