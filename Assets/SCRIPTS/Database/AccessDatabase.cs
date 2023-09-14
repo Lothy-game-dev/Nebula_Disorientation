@@ -843,7 +843,7 @@ public class AccessDatabase : MonoBehaviour
             weaplist.Add(dataReader.GetString(5));
             if (dataReader.IsDBNull(6))
             {
-                weaplist.Add("N/A");
+                weaplist.Add("0");
             }
             else
             {
@@ -851,7 +851,7 @@ public class AccessDatabase : MonoBehaviour
             }
             if (dataReader.IsDBNull(7))
             {
-                weaplist.Add("N/A");
+                weaplist.Add("0");
             }
             else
             {
