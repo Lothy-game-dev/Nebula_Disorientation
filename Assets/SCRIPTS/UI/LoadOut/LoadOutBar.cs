@@ -46,7 +46,7 @@ public class LoadOutBar : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Initialize variables
         anim = GetComponent<Animator>();
@@ -56,8 +56,8 @@ public class LoadOutBar : MonoBehaviour
         // Set view port to the box before animation
         ViewPort.GetComponent<RectTransform>().offsetMin = new Vector2(LeftShredViewport,0);
         ViewPort.GetComponent<RectTransform>().offsetMax = new Vector2(-RightShredViewport,0);
-        Contents.GetComponent<RectTransform>().offsetMin = new Vector2(Contents.GetComponent<RectTransform>().offsetMin.x - LeftShredViewport, Contents.GetComponent<RectTransform>().offsetMin.y);
-        Contents.GetComponent<RectTransform>().offsetMax = new Vector2(Contents.GetComponent<RectTransform>().offsetMax.x + RightShredViewport, Contents.GetComponent<RectTransform>().offsetMax.y);
+        Contents.GetComponent<RectTransform>().offsetMin = new Vector2(- LeftShredViewport, Contents.GetComponent<RectTransform>().offsetMin.y);
+        Contents.GetComponent<RectTransform>().offsetMax = new Vector2(RightShredViewport, Contents.GetComponent<RectTransform>().offsetMax.y);
         ListItem = new List<GameObject>();
         AllowScroll = false;
         // Preset data
@@ -499,6 +499,21 @@ public class LoadOutBar : MonoBehaviour
             inList[i] = inList[i].Replace(" ", "");
         }
         return inList;
+    }
+
+    private void OnDisable()
+    {
+        int i = 0;
+        while (i < AfterGenerateList.Count)
+        {
+            GameObject temp = AfterGenerateList[i];
+            AfterGenerateList.RemoveAt(i);
+            Destroy(temp);
+        }
+        if (!GetComponent<Collider2D>().enabled)
+        {
+            GetComponent<Collider2D>().enabled = true;
+        }
     }
     #endregion
 }

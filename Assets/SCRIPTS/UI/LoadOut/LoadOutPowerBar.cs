@@ -96,6 +96,7 @@ public class LoadOutPowerBar : MonoBehaviour
     private void OnDisable()
     {
         PopUp.transform.localScale = new Vector2(PopUpInitScale, PopUp.transform.localScale.y);
+        SetItem("");
     }
     #endregion
 }
