@@ -21,12 +21,18 @@ public class Arsenal : MonoBehaviour
     public List<SpriteRenderer> WeaponImage;
     public List<SpriteRenderer> PowerImage;
     public GameObject OtherButton;
-    public List<GameObject> ItemStatus;
+    public List<GameObject> WeaponStatus;
+    public List<GameObject> PowerStatus;
     public GameObject DescContent;
     public GameObject ItemCash;
     public GameObject ItemTimelessShard;
     public GameObject Rank;
     public GameObject BuyButton;
+    public GameObject StatusContent;
+    public GameObject OtherContent;
+    public GameObject PlayerCash;
+    public GameObject PlayerShard;
+
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -35,7 +41,8 @@ public class Arsenal : MonoBehaviour
     public List<List<string>> PowerList;
     public Dictionary<string, object> PlayerInformation;
     private int PlayerId;
-    public bool IsEnough;
+    public bool EnoughPrice;
+    public bool RankRequired;
     #endregion
     #region Start & Update
 
@@ -46,6 +53,11 @@ public class Arsenal : MonoBehaviour
         PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
+        if (gameObject.name == "Arsenal")
+        {
+            PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
+            PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
+        }
     } 
 
     // Update is called once per frame
@@ -60,8 +72,10 @@ public class Arsenal : MonoBehaviour
     {
         
         if ("Weapon" == gameObject.name)
-        {
+        {           
             DeleteAllChild();
+            StartCoroutine(StartAnimation());
+            StatusContent.SetActive(true);
             OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
             gameObject.GetComponent<SpriteRenderer>().color = Color.green;
             for (int i = 0; i < WeaponList.Count; i++)
@@ -72,6 +86,7 @@ public class Arsenal : MonoBehaviour
                 g.transform.GetChild(1).GetComponent<TMP_Text>().text = WeaponList[i][2];
                 g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
                 g.GetComponent<ArsenalItem>().Type = "Weapon";
+                g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
                 if (WeaponList[i][2] == "Star Blaster")
                 {
                     g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
@@ -87,14 +102,16 @@ public class Arsenal : MonoBehaviour
                         g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                     }
                 }
-                
                 g.SetActive(true);
             }
+          
+                
         } else
         {
             if ("Power" == gameObject.name)
             {
                 DeleteAllChild();
+                StatusContent.SetActive(true);
                 OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
                 gameObject.GetComponent<SpriteRenderer>().color = Color.green;
                 for (int i = 0; i < PowerList.Count; i++)
@@ -105,8 +122,18 @@ public class Arsenal : MonoBehaviour
                     g.transform.GetChild(1).GetComponent<TMP_Text>().text = PowerList[i][2];
                     g.GetComponent<ArsenalItem>().Id = PowerList[i][0];
                     g.GetComponent<ArsenalItem>().Type = "Power";
+                    g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
                     g.SetActive(true);
+                }
+            } else
+            {
+                if ("Buy" == gameObject.name)
+                {                  
+                    if (Item.GetComponent<Arsenal>().EnoughPrice && Item.GetComponent<Arsenal>().RankRequired)
+                    {
+                        Debug.Log("Buy");
+                    }
                 }
             }
         }
@@ -118,11 +145,34 @@ public class Arsenal : MonoBehaviour
     {
         if (Content.transform.childCount > 0)
         {
-            Debug.Log("a");
             for (int i = 0; i < Content.transform.childCount; i++)
             {
                 Destroy(Content.transform.GetChild(i).gameObject);
             }
+        }
+        DescContent.GetComponent<TMP_Text>().text = "";
+        ItemCash.GetComponentInChildren<TextMeshPro>().text = "";
+        ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "";
+        Rank.GetComponentInChildren<TextMeshPro>().text = "";
+        for (int i = 0; i < OtherContent.transform.childCount; i++)
+        {
+            OtherContent.transform.GetChild(i).GetComponentInChildren<TextMeshPro>().text = "";
+        }
+
+        OtherContent.SetActive(false);
+    }
+    #endregion
+    #region Animation
+    private IEnumerator StartAnimation()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = Item.GetComponent<Image>().color;
+            c.a += 0.2f;
+            Debug.Log(c.a);
+            Item.GetComponent<Image>().color = c;
+            Item.transform.GetChild(0).GetComponent<Image>().color = c;
+            yield return new WaitForSeconds(0.1f);
         }
     }
     #endregion

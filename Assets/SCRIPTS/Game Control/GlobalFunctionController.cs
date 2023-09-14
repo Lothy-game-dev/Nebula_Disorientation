@@ -379,7 +379,170 @@ public class GlobalFunctionController : MonoBehaviour
 
     public Dictionary<string, object> ConvertPowerStatsToDictionary(string stats)
     {
-        return null;
+        string[] StatList = stats.Split("|");
+        Dictionary<string,object> finalString = new Dictionary<string, object>();
+        if (StatList.Length == 3)
+        {
+            if (StatList[0].Contains("BR-"))
+            {
+                string BR = StatList[0].Replace("BR-", "");
+                finalString.Add("BR", BR + "%HP (P)");
+            }
+            // BR
+            if (StatList[1].Contains("BR-x"))
+            {
+                string BR = StatList[1].Replace("BR-x", "");
+                finalString["BR"] += " x" + BR;
+            }
+            else
+            {
+                finalString.Add("BR", StatList[1]);
+            }
+            // DC
+            if (StatList[2].Contains("DC-"))
+            {
+                string DC = StatList[2].Replace("DC-", "");
+                string[] DCstats = DC.Split(",");
+                if (DCstats[0] == "0")
+                {
+                    
+                    finalString.Add("CD", DCstats[1] + "s");
+                }
+                else
+                {
+                    finalString.Add("Dur", DCstats[0] + "s");
+                    finalString.Add("CD", DCstats[1] + "s");
+
+                }
+                    
+            }
+            else
+            {
+                finalString.Add("CD", StatList[2]);
+            }
+        }
+        else if (StatList.Length == 2)
+        {
+            // BR
+            if (StatList[0].Contains("BR-x"))
+            {
+                string BR = StatList[0].Replace("BR-x", "");
+                finalString.Add("BR", "x" + BR);
+            }
+            else
+            {
+                finalString.Add("BR", StatList[0]);
+            }
+            // DC
+            if (StatList[1].Contains("DC-"))
+            {
+                string DC = StatList[1].Replace("DC-", "");
+                string[] DCstats = DC.Split(",");
+                if (DCstats[0] == "0")
+                {
+                    finalString.Add("CD", DCstats[1] + "s");
+                }
+                else
+                {
+                    finalString.Add("Dur", DCstats[0] + "s");
+                    finalString.Add("CD", DCstats[1] + "s");
+
+                }
+            }
+            else
+            {
+                finalString.Add("CD", StatList[1]);
+            }
+        }
+        else
+        {
+            //DPH
+            if (StatList[0].Contains("DPH-"))
+            {
+                string DPH = StatList[0].Replace("DPH-", "");
+                if (DPH != "null")
+                {
+                    finalString.Add("DPH", DPH);
+                }
+            }
+            else
+            {
+                finalString.Add("DPH", StatList[0]);
+            }
+            //AoH
+            if (StatList[1].Contains("AoH-"))
+            {
+                string AoH = StatList[1].Replace("AoH-", "");
+                if (AoH != "null")
+                {
+                    finalString.Add("AOH", AoH);
+                }
+            }
+            else
+            {
+                finalString.Add("DPH", StatList[1]);
+            }
+            //AoE
+            if (StatList[2].Contains("AoE-"))
+            {
+                string AoE = StatList[2].Replace("AoE-", "");
+                if (AoE != "null")
+                {
+                    finalString.Add("AOE", AoE);
+                }
+            }
+            else
+            {
+                finalString.Add("AOE", StatList[2]);
+            }
+            //V
+            if (StatList[3].Contains("V-"))
+            {
+                string V = StatList[3].Replace("V-", "");
+                if (V != "null")
+                {
+                    finalString.Add("V", V);
+                }
+            }
+            else
+            {
+                finalString.Add("V", StatList[3]);
+            }
+            //R
+            if (StatList[4].Contains("R-"))
+            {
+                string R = StatList[4].Replace("R-", "");
+                if (R != "null")
+                {
+                    finalString.Add("R", R);
+                }
+            }
+            else
+            {
+                finalString.Add("R", StatList[4]);
+            }
+            // DC
+            if (StatList[5].Contains("DC-"))
+            {
+                string DC = StatList[5].Replace("DC-", "");
+                string[] DCstats = DC.Split(",");
+                if (DCstats[0] == "0")
+                {
+                    finalString.Add("CD", DCstats[1] + "s");
+                }
+                else
+                {
+                finalString.Add("Dur", DCstats[0] + "s");
+                finalString.Add("CD", DCstats[1] + "s");
+                }
+                    
+            }
+            else
+            {
+                finalString.Add("CD", StatList[5]);
+            }
+        }
+        return finalString;
     }
 
     public string ConvertModelStatsToString(string stats)
