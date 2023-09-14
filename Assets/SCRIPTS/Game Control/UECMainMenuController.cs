@@ -11,6 +11,7 @@ public class UECMainMenuController : MonoBehaviour
     #region InitializeVariables
     public GameObject MainCamera;
     public UECController controller;
+    public GameObject[] DisableUponActive;
     #endregion
     #region NormalVariables
     public int PlayerId;
@@ -18,10 +19,11 @@ public class UECMainMenuController : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Initialize variables
         ad = FindObjectOfType<AccessDatabase>();
+        ExitAnimationAllScene();
         GetData();
     }
 
@@ -57,6 +59,14 @@ public class UECMainMenuController : MonoBehaviour
         if (ToScene.GetComponent<UECMenuShared>() != null)
         {
             ToScene.GetComponent<UECMenuShared>().OnEnterAnimation();
+        }
+    }
+
+    public void ExitAnimationAllScene()
+    {
+        foreach (var scene in DisableUponActive)
+        {
+            scene.GetComponent<UECMenuShared>().OnExitAnimation();
         }
     }
     #endregion

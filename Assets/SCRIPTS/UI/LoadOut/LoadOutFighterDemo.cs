@@ -32,7 +32,7 @@ public class LoadOutFighterDemo : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Initialize variables
         currentNumberOfPower = 2;

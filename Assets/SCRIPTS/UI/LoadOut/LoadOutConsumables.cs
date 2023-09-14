@@ -219,6 +219,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     public void ResetNumberOfConsumable(int n)
     {
+        Debug.Log("b");
         if (n==3 && CurrentItems.Count==4)
         {
             if (Scene.GetComponent<LoadoutScene>().Consumables!=null &&
@@ -243,6 +244,15 @@ public class LoadOutConsumables : MonoBehaviour
             CurrentItemCount.Add(0);
             //Chain
             Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+        }
+    }
+
+    private void OnDisable()
+    {
+        for (int i = 0; i < Consumables.Length; i++)
+        {
+            Consumables[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+            Consumables[i].transform.GetChild(1).gameObject.SetActive(false);
         }
     }
     #endregion

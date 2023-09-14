@@ -127,5 +127,13 @@ public class LoadOutModelBoard : MonoBehaviour
         FighterDemo.GetComponent<LoadOutFighterDemo>().SetModel(ModelName);
         Scene.GetComponent<LoadoutScene>().Model = ModelName;
     }
+
+    private void OnDisable()
+    {
+        foreach (var item in ListOfModelAfterGen)
+        {
+            Destroy(item);
+        }
+    }
     #endregion
 }

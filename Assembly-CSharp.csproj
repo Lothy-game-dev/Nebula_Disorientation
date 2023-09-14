@@ -102,8 +102,8 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
-    <Compile Include="Assets\SCRIPTS\UI\UEC\UECPlanets.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutGoButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\UEC\UECPlanets.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumableBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECPersonalArea.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\NotificationBoardController.cs" />

@@ -47,9 +47,29 @@ public class LoadOutGoButton : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //Data
-        Scene.GetComponent<LoadoutScene>().SetDataToDb();
-        //Transfer
+        if (Scene.GetComponent<LoadoutScene>().CurrentFuelCells>0)
+        {
+            //Data
+            FindObjectOfType<NotificationBoardController>().VoidReturnFunction = SetDataToScene;
+            FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
+                    "Will these items be your final decision for this session?");
+            //Transfer
+        } else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "More Fuel Cell required!", 5f);
+        }
+
+    }
+
+    public void SetDataToScene()
+    {
+        string check = Scene.GetComponent<LoadoutScene>().SetDataToDb();
+        if ("Success".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Load out successfully!\nYour session will start soon!",3f);
+        }
     }
     #endregion
 }
