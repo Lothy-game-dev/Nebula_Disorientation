@@ -34,12 +34,6 @@ public class LoadOutModelBoard : MonoBehaviour
     {
         // Initialize variables
         Size = Mathf.Abs(Top.transform.position.y - Bottom.transform.position.y);
-        List<string> listModel = new List<string>();
-        listModel.Add("SS29-MK1");
-        listModel.Add("SSS-MK1");
-        listModel.Add("UEC29-MK1");
-        listModel.Add("ND-Zartillery");
-        SetItems(listModel, "SSS-MK1");
     }
 
     // Update is called once per frame
@@ -77,7 +71,7 @@ public class LoadOutModelBoard : MonoBehaviour
                 CurrentSelectedModel = model;
             }
         }
-        maximumHeight = Size * (ListOfModel.Count - 1);
+        maximumHeight = Size * (ListOfModel.Count) * 0.8f;
         Contents.GetComponent<RectTransform>().sizeDelta
             = new Vector2(Contents.GetComponent<RectTransform>().sizeDelta.x,
             maximumHeight);

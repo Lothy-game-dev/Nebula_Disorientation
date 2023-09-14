@@ -136,6 +136,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
             }
         }
         bar.GetComponent<LoadOutPowerBar>().SetItem(currentChosenName);
+        bar.GetComponent<LoadOutPowerBar>().AddDataFinal();
         gameObject.SetActive(false);
     }
     #endregion
@@ -185,7 +186,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
     private IEnumerator GenerateIcons()
     {
         Vector2 pos = FirstGenPos.transform.position;
-        maximumWidth = BoxWidth * (ListPowerIcon.Count) - ScrollRect.GetComponent<RectTransform>().sizeDelta.x;
+        maximumWidth = BoxWidth * (ListPowerIcon.Count) * 0.9f - ScrollRect.GetComponent<RectTransform>().sizeDelta.x;
         if (maximumWidth>0f)
         {
             Content.GetComponent<RectTransform>().sizeDelta

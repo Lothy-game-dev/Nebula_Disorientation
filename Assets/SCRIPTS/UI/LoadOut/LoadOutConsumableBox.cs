@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class LoadOutConsumableBox : MonoBehaviour
@@ -9,7 +10,9 @@ public class LoadOutConsumableBox : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-
+    public GameObject StackText;
+    public GameObject SelectedText;
+    public GameObject MinusButton;
     #endregion
     #region NormalVariables
     public GameObject PopUp;
@@ -31,7 +34,40 @@ public class LoadOutConsumableBox : MonoBehaviour
     private void OnMouseDown()
     {
         PopUp.GetComponent<LoadOutConsumablePopUp>().ShowClickItem(gameObject);
-        PopUp.GetComponent<LoadOutConsumablePopUp>().CheckSetClickItem(gameObject);
+        PopUp.GetComponent<LoadOutConsumablePopUp>().CheckIncreaseClickItem(gameObject);
+    }
+
+    public void SetStackText(int n)
+    {
+        StackText.GetComponent<TextMeshProUGUI>().text = n.ToString();
+    }
+
+    public void SetChosenAmount(int n)
+    {
+        if (n > 0)
+        {
+            if (!MinusButton.activeSelf)
+            {
+                MinusButton.SetActive(true);
+            }
+            if (!SelectedText.activeSelf)
+            {
+                SelectedText.SetActive(true);
+            }
+            SelectedText.GetComponent<TextMeshProUGUI>().text = n.ToString();
+        }
+        else
+        {
+            if (MinusButton.activeSelf)
+            {
+                MinusButton.SetActive(false);
+            }
+            if (SelectedText.activeSelf)
+            {
+                SelectedText.SetActive(false);
+            }
+            SelectedText.GetComponent<TextMeshProUGUI>().text = "";
+        }
     }
     #endregion
 }
