@@ -52,7 +52,6 @@ public class NotiBoardOKButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
-        Debug.Log("A");
         if ("OKButton".Equals(name) || "CancelButton".Equals(name))
         {
             Destroy(NotiBoard);

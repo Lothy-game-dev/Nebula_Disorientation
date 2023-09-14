@@ -32,7 +32,8 @@ public class LoadOutBar : MonoBehaviour
     #region NormalVariables
     public GameObject CurrentItem;
     private int CurrentIndex;
-    public List<string> ItemsFromStart;
+    private List<string> ItemsFromStart = new List<string>();
+    private string ChosenItemStart;
     public List<GameObject> ListItem;
     private float DistanceBetweenEach;
     private List<GameObject> AfterGenerateList;
@@ -52,24 +53,16 @@ public class LoadOutBar : MonoBehaviour
         // Distance between each weapon
         DistanceBetweenEach = ListSprite.transform.GetChild(0).GetChild(0).GetChild(1).position.x
             - ListSprite.transform.GetChild(0).GetChild(0).GetChild(2).position.x;
-        // Set data
-        ListItem = new List<GameObject>();
-        List<string> items = new List<string>();
-        AllowScroll = false;
-        // Preset data
-        AfterGenerateList = new List<GameObject>();
-        items.Add("GravitationalArtillery");
-        items.Add("NanoFlameThrower");
-        items.Add("BlastCannon");
-        items.Add("NanoCannon");
-        items.Add("StarBlaster");
         // Set view port to the box before animation
         ViewPort.GetComponent<RectTransform>().offsetMin = new Vector2(LeftShredViewport,0);
         ViewPort.GetComponent<RectTransform>().offsetMax = new Vector2(-RightShredViewport,0);
         Contents.GetComponent<RectTransform>().offsetMin = new Vector2(Contents.GetComponent<RectTransform>().offsetMin.x - LeftShredViewport, Contents.GetComponent<RectTransform>().offsetMin.y);
         Contents.GetComponent<RectTransform>().offsetMax = new Vector2(Contents.GetComponent<RectTransform>().offsetMax.x + RightShredViewport, Contents.GetComponent<RectTransform>().offsetMax.y);
-        SetItem(items, "BlastCannon");
-        
+        ListItem = new List<GameObject>();
+        AllowScroll = false;
+        // Preset data
+        AfterGenerateList = new List<GameObject>();
+        StartCoroutine(FirstSetItem());
     }
 
     // Update is called once per frame
@@ -207,6 +200,11 @@ public class LoadOutBar : MonoBehaviour
         }
     }
 
+    private IEnumerator FirstSetItem()
+    {
+        yield return new WaitForSeconds(3f);
+        SetItem(ItemsFromStart, ChosenItemStart);
+    }
     #endregion
     #region Check Scroll
     // Check if scroll is left or right
@@ -305,6 +303,12 @@ public class LoadOutBar : MonoBehaviour
         Background.GetComponent<Collider2D>().enabled = true;
         Background.GetComponent<LoadOutBarBackground>().enabled = true;
     }
+
+    public void PresetItems(List<string> items,string cItem)
+    {
+        ItemsFromStart = items;
+        ChosenItemStart = cItem;
+    }
     public void SetItem(List<string> Items, string cItem)
     {
         if (Items.IndexOf(cItem)==-1)
@@ -316,6 +320,9 @@ public class LoadOutBar : MonoBehaviour
         // Set items for next time click usage
         ItemsFromStart = Items;
         ListItem = new List<GameObject>();
+        AllowScroll = false;
+        // Preset data
+        AfterGenerateList = new List<GameObject>();
         // Get all game objects to the list
         for (int i = 0; i < Items.Count; i++)
         {

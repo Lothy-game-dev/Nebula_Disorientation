@@ -11,6 +11,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
     public GameObject ConsumeMain;
     public GameObject Top;
     public GameObject Bottom;
@@ -24,6 +25,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     public GameObject BoxRight;
     public GameObject Template;
     public GameObject[] DisableColliders;
+    public GameObject[] Lines;
     public GameObject Background;
     public GameObject ClickText;
     public GameObject Details;
@@ -34,6 +36,8 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     private List<GameObject> Models;
     private List<GameObject> IconAfterGen;
     private List<GameObject> ChosenGO;
+    private List<int> ListIconCount;
+    private List<int> ListIconSelectedCount;
     private List<string> ChosenName;
     private float currentTransparency;
     private float BoxSize;
@@ -68,7 +72,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     }
     #endregion
     #region Set Data
-    public void OpenPopup(List<string> ListConsumes, List<string> ChosenConsumes)
+    public void OpenPopup(Dictionary<string, int> ListConsumes, Dictionary<string, int> ChosenConsumes)
     {
         Color c = GetComponent<SpriteRenderer>().color;
         currentTransparency = 180 / 255f;
@@ -92,11 +96,15 @@ public class LoadOutConsumablePopUp : MonoBehaviour
                 col.GetComponent<Collider2D>().enabled = false;
             }
         }
+        foreach (var line in Lines)
+        {
+            line.SetActive(false);
+        }
         gameObject.SetActive(true);
         StartCoroutine(StartAnimation(ListConsumes, ChosenConsumes));
     }
 
-    private IEnumerator StartAnimation(List<string> ListConsumes, List<string> ChosenConsumes)
+    private IEnumerator StartAnimation(Dictionary<string, int> ListConsumes, Dictionary<string, int> ChosenConsumes)
     {
         for (int i=0;i<20;i++)
         {
@@ -104,6 +112,10 @@ public class LoadOutConsumablePopUp : MonoBehaviour
             c.a += currentTransparency / 20f;
             GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(0.02f);
+        }
+        foreach (var line in Lines)
+        {
+            line.SetActive(true);
         }
         Background.SetActive(true);
         SetData(ListConsumes, ChosenConsumes);
@@ -126,7 +138,12 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         }
         Content.GetComponent<RectTransform>().sizeDelta
             = new Vector2(0, 0);
+        foreach (var line in Lines)
+        {
+            line.SetActive(false);
+        }
         Background.SetActive(false);
+        Details.SetActive(false);
         StartCoroutine(CloseAnimation());
     }
 
@@ -149,8 +166,12 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void SetData(List<string> ListConsumes, List<string> ChosenConsumes)
+    private void SetData(Dictionary<string, int> DictConsumes, Dictionary<string, int> DictChosenConsumes)
     {
+        List<string> ListConsumes = new List<string>(DictConsumes.Keys);
+        ListIconCount = new List<int>(DictConsumes.Values);
+        List<string> ChosenConsumes = new List<string>(DictChosenConsumes.Keys);
+        ListIconSelectedCount = new List<int>(DictChosenConsumes.Values);
         foreach (string cons in ChosenConsumes)
         {
             if (!ListConsumes.Contains(cons))
@@ -181,7 +202,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     private IEnumerator GenerateItems()
     {
         Vector2 pos = FirstPos.transform.position;
-        maximumWidth = BoxSize * (Models.Count) - ScrollRect.GetComponent<RectTransform>().sizeDelta.x;
+        maximumWidth = BoxSize * (Models.Count) * 0.9f - ScrollRect.GetComponent<RectTransform>().sizeDelta.x;
         if (maximumWidth > 0f)
         {
             Content.GetComponent<RectTransform>().sizeDelta
@@ -202,12 +223,14 @@ public class LoadOutConsumablePopUp : MonoBehaviour
             go.transform.GetChild(0).GetComponent<Image>().sprite = Models[i].GetComponent<SpriteRenderer>().sprite;
             go.transform.localScale = Template.transform.localScale;
             go.name = Models[i].name;
+            go.GetComponent<LoadOutConsumableBox>().SetStackText(ListIconCount[i]);
             IconAfterGen.Add(go);
             for (int j=0;j<ChosenName.Count;j++)
             {
                 if (go.name.Replace(" ", "").ToLower().Equals(ChosenName[j].Replace(" ","").ToLower())) {
                     go.transform.GetComponent<Image>().color = Color.green;
                     ChosenGO.Add(go);
+                    go.GetComponent<LoadOutConsumableBox>().SetChosenAmount(ListIconSelectedCount[j]);
                     break;
                 }
             }
@@ -226,25 +249,51 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         // Set Data To Detail
         if (!Details.activeSelf) Details.SetActive(true);
         Details.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = item.transform.GetChild(0).GetComponent<Image>().sprite;
-
+        Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(item.name);
+        Details.transform.GetChild(1).GetComponent<TextMeshPro>().text = "<color=" + (string)data["Color"]
+            + "><b>" + (string)data["Name"] + "</b></color>";
+        Details.transform.GetChild(2).GetComponent<TextMeshPro>().text = (string)data["Description"] + "\n"
+            + FindObjectOfType<GlobalFunctionController>().ConvertEffectAndDurationOfConsumables((string)data["Effect"], (int)data["Duration"]) + "\n"
+            + "Max Stacks: " + (int)data["Stack"];
     }
-    public void CheckSetClickItem(GameObject item)
+    public void CheckIncreaseClickItem(GameObject item)
     {
         // Set Item to main
-        if (ConsumeMain.GetComponent<LoadOutConsumables>().SetItem(item.name))
+        int k = ConsumeMain.GetComponent<LoadOutConsumables>().IncreaseItem(item.name);
+        if (k > 0)
         {
-            ChosenGO.Add(item);
-            ChosenName.Add(item.name);
+            if (!ChosenGO.Contains(item)) ChosenGO.Add(item);
+            if (!ChosenName.Contains(item.name)) ChosenName.Add(item.name);
+            item.GetComponent<LoadOutConsumableBox>().SetChosenAmount(k);
         } else
         {
-            if (ChosenName.Contains(item.name))
-            {
-                ChosenName.Remove(item.name);
-            }
-            if (ChosenGO.Contains(item))
-            {
-                ChosenGO.Remove(item);
-            }
+            // You cannot add this item
+        }
+        // Change item UI
+        foreach (var icons in IconAfterGen)
+        {
+            icons.GetComponent<Image>().color = Color.white;
+        }
+        foreach (var go in ChosenGO)
+        {
+            go.GetComponent<Image>().color = Color.green;
+        }
+    }
+
+    public void CheckDecreaseClickItem(GameObject item)
+    {
+        // Set Item to main
+        int k = ConsumeMain.GetComponent<LoadOutConsumables>().DecreaseItem(item.name);
+        if (k > 0)
+        {
+            if (!ChosenGO.Contains(item)) ChosenGO.Add(item);
+            if (!ChosenName.Contains(item.name)) ChosenName.Add(item.name);
+            item.GetComponent<LoadOutConsumableBox>().SetChosenAmount(k);
+        } else
+        {
+            if (ChosenGO.Contains(item)) ChosenGO.Remove(item);
+            if (ChosenName.Contains(item.name)) ChosenName.Remove(item.name);
+            item.GetComponent<LoadOutConsumableBox>().SetChosenAmount(k);
         }
         // Change item UI
         foreach (var icons in IconAfterGen)

@@ -9,6 +9,7 @@ public class LoadOutPowerBar : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
     public GameObject Background;
     public GameObject PopUp;
     public GameObject PowerList;
@@ -16,6 +17,7 @@ public class LoadOutPowerBar : MonoBehaviour
     #endregion
     #region NormalVariables
     public string currentChosen;
+    private List<string> data;
     private float PopUpInitScale;
     #endregion
     #region Start & Update
@@ -39,18 +41,13 @@ public class LoadOutPowerBar : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().sortingOrder = 20;
         transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 21;
-        // Retrieve data
-        //Test
-        List<string> data = new List<string>();
-        data.Add("SituationalBarrier");
-        data.Add("ShortLaserBeam");
-        data.Add("SuperiorRocketBurstDevice");
-        data.Add("InstantWormhole");
-        data.Add("FortifiedBarrier");
-        data.Add("HeavyBarrier");
-        data.Add("EnhancedRocketBurstDevice");
-        PopUp.transform.localScale = new Vector2(PopUpInitScale, PopUp.transform.localScale.y);
         PopUp.GetComponent<LoadOutPowerPopUp>().OpenPopUp(data, currentChosen);
+    }
+
+    public void SetItems(List<string> datas, string Chosen)
+    {
+        data = datas;
+        currentChosen = Chosen;
     }
 
     public void OnBackgroundMouseDown()
@@ -58,6 +55,18 @@ public class LoadOutPowerBar : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = 0;
         transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 1;
         PopUp.GetComponent<LoadOutPowerPopUp>().ClosePopUp();
+    }
+
+    public void AddDataFinal()
+    {
+        if (name.Equals("1stPower"))
+        {
+            Scene.GetComponent<LoadoutScene>().FirstPower = currentChosen;
+        }
+        else if (name.Equals("2ndPower"))
+        {
+            Scene.GetComponent<LoadoutScene>().SecondPower = currentChosen;
+        }
     }
     #endregion
     #region Set Item

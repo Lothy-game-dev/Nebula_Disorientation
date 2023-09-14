@@ -693,6 +693,23 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
 
+    public List<string> GetAllWeaponName()
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT WeaponName FROM ArsenalWeapon WHERE 1=1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
+        }
+        dbConnection.Close();
+        return list;
+    } 
     public Dictionary<string, object> GetWeaponDataByName(string name)
     {
         Dictionary<string, object> list = new Dictionary<string, object>();
@@ -755,6 +772,23 @@ public class AccessDatabase : MonoBehaviour
             }
             fighterlist.Add(dataReader.GetString(6));
             list.Add(fighterlist);
+        }
+        dbConnection.Close();
+        return list;
+    }
+    public List<string> GetAllModelName()
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ModelName FROM FactoryModel WHERE 1=1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
         }
         dbConnection.Close();
         return list;
@@ -831,6 +865,23 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
 
+    public List<string> GetAllPowerName()
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT PowerName FROM ArsenalPower WHERE 1=1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
+        }
+        dbConnection.Close();
+        return list;
+    }
     public Dictionary<string,object> GetPowerDataByName(string name)
     {
         Dictionary<string, object> datas = new Dictionary<string, object>();
@@ -881,9 +932,70 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT ItemName, ItemDescription, ItemEffect, EffectDuration, MaxStack, TierColor FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            datas.Add("Name", dataReader.GetString(0));
+            datas.Add("Description", dataReader.GetString(1));
+            datas.Add("Effect", dataReader.GetString(2));
+            datas.Add("Duration", dataReader.GetInt32(3));
+            datas.Add("Stack", dataReader.GetInt32(4));
+            datas.Add("Color", dataReader.GetString(5));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        } else 
         return datas;
+    }
+
+    public int GetStackLimitOfConsumableByName(string itemName)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT MaxStack FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        int n = 0;
+        while (dataReader.Read())
+        {
+            check = true;
+            n = dataReader.GetInt32(0);
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return -1;
+        } else
+        {
+            return n;
+        }
+    }
+
+    //temp
+    public Dictionary<string,int> GetAllDictionarySpaceShopCons()
+    {
+        Dictionary<string, int> data = new Dictionary<string, int>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE 1=1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            data.Add(dataReader.GetString(0).Replace("-","").Replace(" ",""), 10);
+        }
+        dbConnection.Close();
+        return data;
     }
     #endregion
 }

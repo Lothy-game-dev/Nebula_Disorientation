@@ -400,5 +400,42 @@ public class GlobalFunctionController : MonoBehaviour
         }
         return StatsDictionary;
     }
+
+    // RED-
+    // AER-
+    // RMH-
+    // INV
+    // FC
+    public string ConvertEffectAndDurationOfConsumables(string Effect, int Duration)
+    {
+        string final = "";
+        if (Effect.Contains("RED-"))
+        {
+            Effect = Effect.Replace("RED-","");
+            final = "Reduce Damage received of <color=\"blue\"><b>Barrier</b></color> by " + Effect
+                + "% for " + Duration.ToString() + " seconds.";
+        } 
+        else if (Effect.Contains("AER-"))
+        {
+            Effect = Effect.Replace("AER-", "");
+            string count = Effect == "2" ? "Double" : Effect == "3" ? "Triple" : "";
+            final = count + " the <color=\"blue\"><b>AE Regen Speed</b></color> for " + Duration.ToString() + " seconds.";
+        }
+        else if (Effect.Contains("RMH-"))
+        {
+            Effect = Effect.Replace("RMH-", "");
+            final = "Repair " + Effect + "% <color=\"green\"><b>Max Health</b></color> in "
+                + Duration.ToString() + " seconds.";
+        }
+        else if (Effect.Contains("INV"))
+        {
+            final = "Render the <color=\"black\"><b>Fighter</b></color> invisible for " + Duration.ToString() + " seconds. (Cannot be targeted)";
+        }
+        else if (Effect.Contains("FC"))
+        {
+            final = "Instantly gain 1 <color=\"green\"><b>Fuel Core</b></color>. Can be purchased even when Fuel Core is full.";
+        }
+        return final;
+    }
     #endregion
 }

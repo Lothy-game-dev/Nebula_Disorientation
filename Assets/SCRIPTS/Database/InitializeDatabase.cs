@@ -243,13 +243,13 @@ public class InitializeDatabase : MonoBehaviour
                 "(ItemID INTEGER, " +
                 "ItemName TEXT NOT NULL, " +
                 "ItemDescription TEXT NOT NULL, " +
-                "StockPerDays TEXT NOT NULL, " +
+                "StockPerDays INTEGER, " +
                 "ItemEffect TEXT NOT NULL, " +
                 "EffectDuration INTEGER, " +
                 "Stackable TEXT NOT NULL, " +
                 "MaxStack INTEGER, " +
                 "ItemPrice INTEGER NOT NULL, " +
-                "Cooldown INTEGER NOT NULL, " +
+                "Cooldown INTEGER, " +
                 "TierColor TEXT NOT NULL, " +
                 "PRIMARY KEY(ItemID AUTOINCREMENT) ); " +
             // Stages
@@ -359,17 +359,18 @@ public class InitializeDatabase : MonoBehaviour
             "(18, 'Supreme Warrior of the UEC n', 225, null, 0, 45000, null, '#6554c0');";
         // SpaceShop
         string SpaceShop = "INSERT INTO SpaceShop VALUES " +
-            "(1, 'Wing Shield', '', 'RED-25', 10, 'T', 5, 200, 30, '#36b37e')," +
-            "(2, 'Engine Booster', '', 'AER-2', 10, 'T', 5, 200, 30, '#36b37e')," +
-            "(3, 'Auto-Repair Module', '', 'RMH-5', 15, 'T', 5, 250, 30, '#36b37e')," +
-            "(4, 'Fortified Wing Shield', '', 'RED-25', 20, 'T', 5, 500, 30, '#36b37e')," +
-            "(5, 'Advanced Engine Booster', '', 'AER-2', 20, 'T', 5, 500, 30, '#36b37e')," +
-            "(6, 'Advanced Auto-Repair Module', '', 'RMH-10', 15, 'T', 5, 600, 30, '#36b37e')," +
-            "(7, 'Reflective Wing Shield', '', 'RED-50', 15, 'T', 3, 1500, 60, '#4c9aff')," +
-            "(8, 'Superior Engine Booster', '', 'AER-3', 15, 'T', 3, 1500, 60, '#4c9aff')," +
-            "(9, 'Superior Auto-repair Module', '', 'RMH-15', 3, 'T', 3, 1800, 60, '#4c9aff')," +
-            "(10, 'Nano-Reflective Coat', '', 'INV', 5, 'T', 2, 5000, 120, '#bf2600')," +
-            "(11, 'Emergency Auto-Repair Module', '', 'RMH-30', 3, 'T', 2, 5000, 120, '#bf2600');";
+            "(1, 'Wing Shield', '', null, 'RED-25', 10, 'T', 5, 200, 15, '#36b37e')," +
+            "(2, 'Engine Booster', '', null, 'AER-2', 10, 'T', 5, 200, 15, '#36b37e')," +
+            "(3, 'Auto-Repair Module', '', null, 'RMH-3', 5, 'T', 5, 250, 15, '#36b37e')," +
+            "(4, 'Fortified Wing Shield', '', null, 'RED-25', 20, 'T', 5, 500, 15, '#36b37e')," +
+            "(5, 'Advanced Engine Booster', '', null, 'AER-2', 20, 'T', 5, 500, 15, '#36b37e')," +
+            "(6, 'Advanced Auto-Repair Module', '', null, 'RMH-5', 5, 'T', 5, 600, 15, '#36b37e')," +
+            "(7, 'Reflective Wing Shield', '', 15, 'RED-50', 15, 'T', 3, 1500, 60, '#4c9aff')," +
+            "(8, 'Superior Engine Booster', '', 15, 'AER-3', 15, 'T', 3, 1500, 60, '#4c9aff')," +
+            "(9, 'Superior Auto-repair Module', '', 15, 'RMH-10', 5, 'T', 3, 1800, 60, '#4c9aff')," +
+            "(10, 'Nano-Reflective Coat', '', 5, 'INV', 5, 'T', 2, 5000, 120, '#bf2600')," +
+            "(11, 'Emergency Auto-Repair Module', '', 5, 'RMH-20', 3, 'T', 2, 5000, 120, '#bf2600')," +
+            "(12, 'Fuel Core', '', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600');";
         // LOTWCards
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
             "(1, 'Gun Extension I', 'ENH-2', 10, 3, 'Yes', '#36b37e')," +
