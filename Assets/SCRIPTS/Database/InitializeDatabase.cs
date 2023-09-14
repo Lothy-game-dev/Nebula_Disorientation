@@ -305,7 +305,7 @@ public class InitializeDatabase : MonoBehaviour
             "(20, 'Laser', 'Plasma Cannon', 'An Plasma version of the Nano Cannon. ', 'OH-1,3,20|DPH-2062.5|RoF-8|AoE-0|V-1750|R-1750', '55000', null, 16, 9, '#bf2600', 'White')," +
             "(21, 'Thermal', 'NanoEffectAnalyzer', 'A high-level cannon that amplify the power of Thermal Status.', 'OH-2.5,3,20|DPH-100|RoF-3|AoE-0|V-2000|R-2000', '50000', null, 16, 9, '#bf2600', 'White')," +
             "(22, 'Thermal', 'Orb of Magma Generator', 'A special edition of the Orb of Lava Generator. It now generate orbs of deadly magma.', 'OH-10,3,30|DPH-4500|RoF-1|AoE-300|V-750|R-1000', '100000', null, 14, 9, '#800080', 'Red')," +
-            "(23, 'Grouping', 'Orb of Gray Hole Generator', 'A special edition of the Orb of Vacuum Generator It now generate a more powerful space wormhole.', 'OH-0|DPH-7500|RoF-0.1|AoE-300|V-750|R-500', '100000', null, 15, 9, '#800080', 'Gray')," +
+            "(23, 'Grouping', 'Orb of Black Hole Generator', 'A special edition of the Orb of Vacuum Generator It now generate a more powerful space wormhole.', 'OH-0|DPH-7500|RoF-0.1|AoE-300|V-750|R-500', '100000', null, 15, 9, '#800080', 'Gray')," +
             "(24, 'Laser', 'Star Blaster', 'A superior weapon that fires star-like projectiles with insane capability.', 'OH-1.5,3,10|DPH-2250|RoF-5|AoE-25|V-2500|R-2000', '120000', null, 19, 9, '#800080', 'Purple');";
         // ArsenalPower
         string ArsenalPower = "INSERT INTO ArsenalPower VALUES " +

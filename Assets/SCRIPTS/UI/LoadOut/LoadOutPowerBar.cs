@@ -41,6 +41,7 @@ public class LoadOutPowerBar : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().sortingOrder = 20;
         transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 21;
+        PopUp.transform.localScale = new Vector2(PopUpInitScale, PopUp.transform.localScale.y);
         PopUp.GetComponent<LoadOutPowerPopUp>().OpenPopUp(data, currentChosen);
     }
 
@@ -90,6 +91,11 @@ public class LoadOutPowerBar : MonoBehaviour
             }
         }
         StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(name);
+    }
+
+    private void OnDisable()
+    {
+        PopUp.transform.localScale = new Vector2(PopUpInitScale, PopUp.transform.localScale.y);
     }
     #endregion
 }

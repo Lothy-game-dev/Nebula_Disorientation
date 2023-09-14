@@ -43,21 +43,30 @@ public class LoadoutScene : UECMenuShared
     public override void OnEnterAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        Weapon1Bar.SetActive(true);
+        Weapon2Bar.SetActive(true);
+        ModelBoard.SetActive(true);
+        Power1Bar.SetActive(true);
+        Power2Bar.SetActive(true);
+        ConsumableBar.SetActive(true);
+        GetData();
     }
     public override void OnExitAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        Weapon1Bar.SetActive(false);
+        Weapon2Bar.SetActive(false);
+        ModelBoard.SetActive(false);
+        Power1Bar.SetActive(false);
+        Power2Bar.SetActive(false);
+        ConsumableBar.SetActive(false);
     }
     #endregion
     #region On Enable Get Data
     private void GetData()
     {
-        Weapon1Bar.GetComponent<LoadOutBar>().PresetItems(
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllWeaponName()),
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllWeaponName())[0]);
-        Weapon1Bar.GetComponent<LoadOutBar>().PresetItems(
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllWeaponName()),
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllWeaponName())[0]);
         ModelBoard.GetComponent<LoadOutModelBoard>().SetItems(
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName()),
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName())[0]);
@@ -84,6 +93,20 @@ public class LoadoutScene : UECMenuShared
             inList[i] = inList[i].Replace("-", "");
         }
         return inList;
+    }
+
+    public void SetDataToDb()
+    {
+        string check = "Model:" + Model
+            + ",Left Weapon:" + LeftWeapon
+            + ",Right Weapon:" + RightWeapon
+            + ",First Power:" + FirstPower
+            + ",Second Power:" + SecondPower;
+        foreach (var item in Consumables)
+        {
+            check += ",Consumable:" + item.Key + " - " + item.Value;
+        }
+        Debug.Log(check);
     }
     #endregion
 }

@@ -48,6 +48,7 @@ public class LoadOutGoButton : MonoBehaviour
     private void OnMouseDown()
     {
         //Data
+        Scene.GetComponent<LoadoutScene>().SetDataToDb();
         //Transfer
     }
     #endregion
