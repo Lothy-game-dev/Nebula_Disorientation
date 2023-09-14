@@ -16,9 +16,9 @@ public class LoadOutConsumables : MonoBehaviour
     public GameObject ConsumeList;
     #endregion
     #region NormalVariables
-    private GameObject[] CurrentItems;
-    private int[] CurrentItemCount;
-    private int[] CurrentItemLimit;
+    private List<GameObject> CurrentItems;
+    private List<int> CurrentItemCount;
+    private List<int> CurrentItemLimit;
     private Dictionary<string, int> Datas;
     private GameObject AddModel;
     #endregion
@@ -27,10 +27,9 @@ public class LoadOutConsumables : MonoBehaviour
     void OnEnable()
     {
         // Initialize variables
-        CurrentItems = new GameObject[4];
-        CurrentItemCount = new int[4];
-        CurrentItemLimit = new int[4];
-        Datas = new Dictionary<string, int>();
+        CurrentItems = new List<GameObject>(new GameObject[4]);
+        CurrentItemCount = new List<int>(new int[4]);
+        CurrentItemLimit = new List<int>(new int[4]);
     }
 
     // Update is called once per frame
@@ -58,15 +57,15 @@ public class LoadOutConsumables : MonoBehaviour
 
     private Dictionary<string, int> GetListCurrentChosen()
     {
-        Dictionary<string, int> Datas = new Dictionary<string, int>();
-        for (int i=0;i<CurrentItems.Length;i++)
+        Dictionary<string, int> DataTemp = new Dictionary<string, int>();
+        for (int i=0;i<CurrentItems.Count;i++)
         {
             if (CurrentItems[i]!=null)
             {
-                Datas.Add(CurrentItems[i].name.Replace(" ", ""), CurrentItemCount[i]);
+                DataTemp.Add(CurrentItems[i].name.Replace(" ", ""), CurrentItemCount[i]);
             }
         }
-        return Datas;
+        return DataTemp;
     }
 
     public void OnBackgroundMouseDown()
@@ -76,10 +75,14 @@ public class LoadOutConsumables : MonoBehaviour
             Consumables[i].GetComponent<SpriteRenderer>().sortingOrder = 4;
         }
         PopUp.GetComponent<LoadOutConsumablePopUp>().ClosePopup();
-        for (int i=0;i<CurrentItems.Length;i++)
+        for (int i=0;i<CurrentItems.Count;i++)
         {
             if (CurrentItems[i] !=null)
             {
+                if (Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[i].name))
+                {
+                    Scene.GetComponent<LoadoutScene>().Consumables[CurrentItems[i].name] = CurrentItemCount[i];
+                } else
                 Scene.GetComponent<LoadoutScene>().Consumables.Add(CurrentItems[i].name, CurrentItemCount[i]);
             }
         }
@@ -171,7 +174,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     private int GetAvaiSlotForNewItem(string ItemName)
     {
-        for (int i = 0; i < CurrentItems.Length;i++)
+        for (int i = 0; i < CurrentItems.Count;i++)
         {
             if (CurrentItems[i] == null)
             {
@@ -188,7 +191,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     private int ItemSelected(string name)
     {
-        for (int i = 0; i < CurrentItems.Length;i++)
+        for (int i = 0; i < CurrentItems.Count; i++)
         {
             if (CurrentItems[i]!=null && CurrentItems[i].name.Replace(" ", "").ToLower().Equals(name.Replace(" ", "").ToLower()))
             {
@@ -202,7 +205,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     private int ItemSelectedDecrease(string name)
     {
-        for (int i = 0; i < CurrentItems.Length; i++)
+        for (int i = 0; i < CurrentItems.Count; i++)
         {
             if (CurrentItems[i] != null && CurrentItems[i].name.Replace(" ", "").ToLower().Equals(name.Replace(" ", "").ToLower()))
             {
@@ -212,6 +215,35 @@ public class LoadOutConsumables : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    public void ResetNumberOfConsumable(int n)
+    {
+        if (n==3 && CurrentItems.Count==4)
+        {
+            if (Scene.GetComponent<LoadoutScene>().Consumables!=null &&
+                CurrentItems[3]!=null &&
+                Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[3].name))
+            {
+                Scene.GetComponent<LoadoutScene>().Consumables.Remove(CurrentItems[3].name);
+            }
+            CurrentItems.RemoveAt(3);
+            CurrentItemLimit.RemoveAt(3);
+            CurrentItemCount.RemoveAt(3);
+            Consumables[3].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+            Consumables[3].transform.GetChild(1).gameObject.SetActive(false);
+            Consumables[3].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+            // Chain
+            Consumables[3].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
+        } else if (n==4 && CurrentItems.Count == 3)
+        {
+            CurrentItems.Add(null);
+            CurrentItemLimit.Add(1);
+            CurrentItemCount.Add(0);
+            //Chain
+            Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+        }
     }
     #endregion
 }
