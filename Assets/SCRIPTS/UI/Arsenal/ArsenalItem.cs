@@ -91,42 +91,42 @@ public class ArsenalItem : MonoBehaviour
         if ((int)ar.PlayerInformation["TimelessShard"] < int.Parse(ItemList[int.Parse(Id) - 1][6]))
         {
             PriceColor = "red";
-            ar.CanBuy = false;
+            ar.EnoughPrice = false;
         }
         else
         {
             if ((int)ar.PlayerInformation["TimelessShard"] == 0)
             {
-                ar.CanBuy = false;
+                ar.EnoughPrice = false;
                 PriceColor = "red";
             }
             else
             {
                 PriceColor = "green";
-                ar.CanBuy = true;
+                ar.EnoughPrice = true;
             }
         }
         // check if enough cash
         if ((int)ar.PlayerInformation["Cash"] < int.Parse(ItemList[int.Parse(Id) - 1][5]))
         {
             PriceColor = "red";
-            ar.CanBuy = false;
+            ar.EnoughPrice = false;
         }
         else
         {
             PriceColor = "green";
-            ar.CanBuy = true;
+            ar.EnoughPrice = true;
         }
         //check rank required
         if ((string)ar.PlayerInformation["Rank"] == (string)RankSys["RankName"])
         {
             RankColor = "green";
-            ar.CanBuy = true;
+            ar.RankRequired = true;
         }
         else
         {
             RankColor = "red";
-            ar.CanBuy = true;
+            ar.RankRequired = false;
         }
         ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";

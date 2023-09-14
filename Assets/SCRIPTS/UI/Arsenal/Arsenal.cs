@@ -41,7 +41,8 @@ public class Arsenal : MonoBehaviour
     public List<List<string>> PowerList;
     public Dictionary<string, object> PlayerInformation;
     private int PlayerId;
-    public bool CanBuy;
+    public bool EnoughPrice;
+    public bool RankRequired;
     #endregion
     #region Start & Update
 
@@ -73,6 +74,7 @@ public class Arsenal : MonoBehaviour
         if ("Weapon" == gameObject.name)
         {           
             DeleteAllChild();
+            StartCoroutine(StartAnimation());
             StatusContent.SetActive(true);
             OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
             gameObject.GetComponent<SpriteRenderer>().color = Color.green;
@@ -124,6 +126,15 @@ public class Arsenal : MonoBehaviour
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
                     g.SetActive(true);
                 }
+            } else
+            {
+                if ("Buy" == gameObject.name)
+                {                  
+                    if (Item.GetComponent<Arsenal>().EnoughPrice && Item.GetComponent<Arsenal>().RankRequired)
+                    {
+                        Debug.Log("Buy");
+                    }
+                }
             }
         }
     }
@@ -134,7 +145,6 @@ public class Arsenal : MonoBehaviour
     {
         if (Content.transform.childCount > 0)
         {
-            Debug.Log("a");
             for (int i = 0; i < Content.transform.childCount; i++)
             {
                 Destroy(Content.transform.GetChild(i).gameObject);
@@ -144,7 +154,26 @@ public class Arsenal : MonoBehaviour
         ItemCash.GetComponentInChildren<TextMeshPro>().text = "";
         ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "";
         Rank.GetComponentInChildren<TextMeshPro>().text = "";
+        for (int i = 0; i < OtherContent.transform.childCount; i++)
+        {
+            OtherContent.transform.GetChild(i).GetComponentInChildren<TextMeshPro>().text = "";
+        }
+
         OtherContent.SetActive(false);
+    }
+    #endregion
+    #region Animation
+    private IEnumerator StartAnimation()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = Item.GetComponent<Image>().color;
+            c.a += 0.2f;
+            Debug.Log(c.a);
+            Item.GetComponent<Image>().color = c;
+            Item.transform.GetChild(0).GetComponent<Image>().color = c;
+            yield return new WaitForSeconds(0.1f);
+        }
     }
     #endregion
 }
