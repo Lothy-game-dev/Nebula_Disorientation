@@ -671,7 +671,7 @@ public class AccessDatabase : MonoBehaviour
             weaplist.Add(dataReader.GetString(5));
             if (dataReader.IsDBNull(6))
             {
-                weaplist.Add("N/A");
+                weaplist.Add("0");
             }
             else
             {
@@ -679,7 +679,7 @@ public class AccessDatabase : MonoBehaviour
             }
             if (dataReader.IsDBNull(7))
             {
-                weaplist.Add("N/A");
+                weaplist.Add("N.A");
             } else
             {
                 weaplist.Add(dataReader.GetInt32(7).ToString());
@@ -903,6 +903,7 @@ public class AccessDatabase : MonoBehaviour
             check1 = true;
             rank.Add("RankId", dataReader.GetInt32(0).ToString());
             rank.Add("RankName", dataReader.GetString(1));
+            rank.Add("RankTier", dataReader.GetString(7));
         }   
         if (!check1) return null;
         dbConnection.Close();
