@@ -997,6 +997,24 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return data;
     }
+
+    public List<string> GetSpaceShopItemNameSearchByName(string name)
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','') LIKE '%" + name.Replace(" ","").Replace("-","").ToLower() + "%'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
+        }
+        dbConnection.Close();
+        return list;
+    }
     #endregion
     #region Access Rank
     public Dictionary<string, object> GetRankById(int id)
