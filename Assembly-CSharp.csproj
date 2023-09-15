@@ -120,6 +120,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionMenu.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECController.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContract.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GlobalFunctionController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
