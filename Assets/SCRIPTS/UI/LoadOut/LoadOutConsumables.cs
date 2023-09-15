@@ -62,7 +62,7 @@ public class LoadOutConsumables : MonoBehaviour
         {
             if (CurrentItems[i]!=null)
             {
-                DataTemp.Add(CurrentItems[i].name.Replace(" ", ""), CurrentItemCount[i]);
+                DataTemp.Add(CurrentItems[i].name.Replace(" ", "").Replace("-", ""), CurrentItemCount[i]);
             }
         }
         return DataTemp;
@@ -219,7 +219,6 @@ public class LoadOutConsumables : MonoBehaviour
 
     public void ResetNumberOfConsumable(int n)
     {
-        Debug.Log("b");
         if (n==3 && CurrentItems.Count==4)
         {
             if (Scene.GetComponent<LoadoutScene>().Consumables!=null &&

@@ -359,18 +359,18 @@ public class InitializeDatabase : MonoBehaviour
             "(18, 'Supreme Warrior of the UEC n', 225, null, 0, 45000, null, '#6554c0');";
         // SpaceShop
         string SpaceShop = "INSERT INTO SpaceShop VALUES " +
-            "(1, 'Wing Shield', '', null, 'RED-25', 10, 'T', 5, 200, 15, '#36b37e')," +
-            "(2, 'Engine Booster', '', null, 'AER-2', 10, 'T', 5, 200, 15, '#36b37e')," +
-            "(3, 'Auto-Repair Module', '', null, 'RMH-3', 5, 'T', 5, 250, 15, '#36b37e')," +
-            "(4, 'Fortified Wing Shield', '', null, 'RED-25', 20, 'T', 5, 500, 15, '#36b37e')," +
-            "(5, 'Advanced Engine Booster', '', null, 'AER-2', 20, 'T', 5, 500, 15, '#36b37e')," +
-            "(6, 'Advanced Auto-Repair Module', '', null, 'RMH-5', 5, 'T', 5, 600, 15, '#36b37e')," +
-            "(7, 'Reflective Wing Shield', '', 15, 'RED-50', 15, 'T', 3, 1500, 60, '#4c9aff')," +
-            "(8, 'Superior Engine Booster', '', 15, 'AER-3', 15, 'T', 3, 1500, 60, '#4c9aff')," +
-            "(9, 'Superior Auto-repair Module', '', 15, 'RMH-10', 5, 'T', 3, 1800, 60, '#4c9aff')," +
-            "(10, 'Nano-Reflective Coat', '', 5, 'INV', 5, 'T', 2, 5000, 120, '#bf2600')," +
-            "(11, 'Emergency Auto-Repair Module', '', 5, 'RMH-20', 3, 'T', 2, 5000, 120, '#bf2600')," +
-            "(12, 'Fuel Core', '', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600');";
+            "(1, 'Wing Shield', 'Equip your Fighter’s Wings with Protective Shields that last for a duration.', null, 'RED-25', 10, 'T', 5, 200, 15, '#36b37e')," +
+            "(2, 'Engine Booster', 'Equip your Fighter’s Engines with extra boosters to improve its performance.', null, 'AER-2', 10, 'T', 5, 200, 15, '#36b37e')," +
+            "(3, 'Auto-Repair Module', 'A module that can repair your Fighter slightly during battle.', null, 'RMH-3', 5, 'T', 5, 250, 15, '#36b37e')," +
+            "(4, 'Fortified Wing Shield', 'Equip your Fighter’s Wings with Fortified Protective Shields that last for a extended duration.', null, 'RED-25', 20, 'T', 5, 500, 15, '#36b37e')," +
+            "(5, 'Advanced Engine Booster', 'Equip your Fighter’s Engines with advanced extra boosters to improve its performance.', null, 'AER-2', 20, 'T', 5, 500, 15, '#36b37e')," +
+            "(6, 'Advanced Auto-Repair Module', 'A module that can repair your Fighter during battle.', null, 'RMH-5', 5, 'T', 5, 600, 15, '#36b37e')," +
+            "(7, 'Reflective Wing Shield', 'Equip your Fighter’s Wings with Reflective Shields that last for a duration.', 15, 'RED-50', 15, 'T', 3, 1500, 60, '#4c9aff')," +
+            "(8, 'Superior Engine Booster', 'Equip your Fighter’s Engines with super extra boosters to greatly improve its performance.', 15, 'AER-3', 15, 'T', 3, 1500, 60, '#4c9aff')," +
+            "(9, 'Superior Auto-Repair Module', 'A module that can repair your Fighter efficiently during battle.', 15, 'RMH-10', 5, 'T', 3, 1800, 60, '#4c9aff')," +
+            "(10, 'Nano-Reflective Coat', 'A Nano-tech Coat that grant Invisibility to your Fighter for a few seconds after using.', 5, 'INV', 5, 'T', 2, 5000, 120, '#bf2600')," +
+            "(11, 'Emergency Auto-Repair Module', 'An emergency module that quickly repair your Fighter during battle. ', 5, 'RMH-20', 3, 'T', 2, 5000, 120, '#bf2600')," +
+            "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though…', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600');";
         // LOTWCards
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
             "(1, 'Gun Extension I', 'ENH-2', 10, 3, 'Yes', '#36b37e')," +

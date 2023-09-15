@@ -142,6 +142,10 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         {
             line.SetActive(false);
         }
+        if (ClickText.activeSelf)
+        {
+            ClickText.SetActive(false);
+        }
         Background.SetActive(false);
         Details.SetActive(false);
         StartCoroutine(CloseAnimation());
@@ -176,7 +180,8 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         {
             if (!ListConsumes.Contains(cons))
             {
-                // Error MSG
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Can not fetch data for " + cons + ".\nPlease try again!", 5f);
                 return;
             }
         }
@@ -239,6 +244,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         ScrollRect.GetComponent<ScrollRect>().horizontal = true;
+        if (Details.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite == null)
         ClickText.SetActive(true);
     }
 
@@ -254,7 +260,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
             + "><b>" + (string)data["Name"] + "</b></color>";
         Details.transform.GetChild(2).GetComponent<TextMeshPro>().text = (string)data["Description"] + "\n"
             + FindObjectOfType<GlobalFunctionController>().ConvertEffectAndDurationOfConsumables((string)data["Effect"], (int)data["Duration"]) + "\n"
-            + "Max Stacks: " + (int)data["Stack"];
+            + "Max Stacks: " + (int)data["Stack"] +" per session.";
     }
     public void CheckIncreaseClickItem(GameObject item)
     {
