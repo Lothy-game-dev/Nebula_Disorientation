@@ -74,6 +74,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Factory\Factory.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\FighterController.cs" />
