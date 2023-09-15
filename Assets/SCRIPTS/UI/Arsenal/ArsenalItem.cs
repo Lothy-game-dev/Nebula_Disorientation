@@ -40,26 +40,32 @@ public class ArsenalItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Call function and timer only if possible
+        
     }
     #endregion
     #region Function group 1
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        
         if (Type == "Weapon")
         {
             CheckCurrentItem(Id);
             ArsenalInformation(ar.WeaponList);
+            ar.ItemId = int.Parse(Id);
+            ar.ItemType = Type;
         } else
         {
             if (Type == "Power")
             {
                 CheckCurrentItem(Id);
                 ArsenalInformation(ar.PowerList);
+                ar.ItemId = int.Parse(Id);
+                ar.ItemType = Type;
             }
         }
     }
+    
     #endregion
     #region Show Arsenal (weapon,power) information
     // Group all function that serve the same algorithm
