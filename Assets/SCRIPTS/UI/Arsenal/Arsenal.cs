@@ -19,20 +19,14 @@ public class Arsenal : MonoBehaviour
     public GameObject Item;
     public GameObject Content;
     public List<SpriteRenderer> WeaponImage;
-    public List<SpriteRenderer> PowerImage;
-    public GameObject OtherButton;
     public List<GameObject> WeaponStatus;
     public List<GameObject> PowerStatus;
     public GameObject DescContent;
     public GameObject ItemCash;
     public GameObject ItemTimelessShard;
     public GameObject Rank;
-    public GameObject BuyButton;
-    public GameObject StatusContent;
-    public GameObject OtherContent;
     public GameObject PlayerCash;
     public GameObject PlayerShard;
-
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -43,6 +37,9 @@ public class Arsenal : MonoBehaviour
     private int PlayerId;
     public bool EnoughPrice;
     public bool RankRequired;
+    public string CurrentTab;
+    public int ItemId;
+    public string ItemType;
     #endregion
     #region Start & Update
 
@@ -58,6 +55,8 @@ public class Arsenal : MonoBehaviour
             PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
             PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
         }
+        CurrentTab = "Weapon";
+        FirstContent();
     } 
 
     // Update is called once per frame
@@ -66,113 +65,36 @@ public class Arsenal : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
-    // Group all function that serve the same algorithm
-    private void OnMouseDown()
+    #region
+    private void FirstContent()
     {
-        
-        if ("Weapon" == gameObject.name)
-        {           
-            DeleteAllChild();
-            StartCoroutine(StartAnimation());
-            StatusContent.SetActive(true);
-            OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-            for (int i = 0; i < WeaponList.Count; i++)
+        for (int i = 0; i < WeaponList.Count; i++)
+        {
+            GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
+            g.name = WeaponList[i][2];
+            g.transform.SetParent(Content.transform);
+            g.transform.localScale = new Vector3(1, 1, Item.transform.position.z);
+            g.transform.GetChild(1).GetComponent<TMP_Text>().text = WeaponList[i][2];
+            g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
+            g.GetComponent<ArsenalItem>().Type = "Weapon";
+            g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
+            g.GetComponent<ArsenalItem>().Content = Content;
+            if (WeaponList[i][2] == "Star Blaster")
             {
-                GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                g.transform.SetParent(Content.transform);
-                g.transform.localScale = new Vector3(1, 1, 0);
-                g.transform.GetChild(1).GetComponent<TMP_Text>().text = WeaponList[i][2];
-                g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
-                g.GetComponent<ArsenalItem>().Type = "Weapon";
-                g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
-                if (WeaponList[i][2] == "Star Blaster")
+                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
+            }
+            else
+            {
+                if (WeaponList[i][2].Contains("Nano Flame Thrower"))
                 {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
                 }
                 else
                 {
-                    if (WeaponList[i][2].Contains("Nano Flame Thrower"))
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                    }
-                    else
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
-                    }
-                }
-                g.SetActive(true);
-            }
-          
-                
-        } else
-        {
-            if ("Power" == gameObject.name)
-            {
-                DeleteAllChild();
-                StatusContent.SetActive(true);
-                OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
-                gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-                for (int i = 0; i < PowerList.Count; i++)
-                {
-                    GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                    g.transform.SetParent(Content.transform);
-                    g.transform.localScale = new Vector3(1, 1, 0);
-                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = PowerList[i][2];
-                    g.GetComponent<ArsenalItem>().Id = PowerList[i][0];
-                    g.GetComponent<ArsenalItem>().Type = "Power";
-                    g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
-                    g.SetActive(true);
-                }
-            } else
-            {
-                if ("Buy" == gameObject.name)
-                {                  
-                    if (Item.GetComponent<Arsenal>().EnoughPrice && Item.GetComponent<Arsenal>().RankRequired)
-                    {
-                        Debug.Log("Buy");
-                    }
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                 }
             }
-        }
-    }
-    #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
-    public void DeleteAllChild()
-    {
-        if (Content.transform.childCount > 0)
-        {
-            for (int i = 0; i < Content.transform.childCount; i++)
-            {
-                Destroy(Content.transform.GetChild(i).gameObject);
-            }
-        }
-        DescContent.GetComponent<TMP_Text>().text = "";
-        ItemCash.GetComponentInChildren<TextMeshPro>().text = "";
-        ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "";
-        Rank.GetComponentInChildren<TextMeshPro>().text = "";
-        for (int i = 0; i < OtherContent.transform.childCount; i++)
-        {
-            OtherContent.transform.GetChild(i).GetComponentInChildren<TextMeshPro>().text = "";
-        }
-
-        OtherContent.SetActive(false);
-    }
-    #endregion
-    #region Animation
-    private IEnumerator StartAnimation()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            Color c = Item.GetComponent<Image>().color;
-            c.a += 0.2f;
-            Debug.Log(c.a);
-            Item.GetComponent<Image>().color = c;
-            Item.transform.GetChild(0).GetComponent<Image>().color = c;
-            yield return new WaitForSeconds(0.1f);
+            g.SetActive(true);
         }
     }
     #endregion
