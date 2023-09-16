@@ -92,7 +92,7 @@ public class ArsenalItem : MonoBehaviour
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = (string)Status[ItemStatusList[i].name];
             }
         }
-        ar.DescContent.GetComponent<TMP_Text>().text = ItemList[int.Parse(Id) - 1][3];
+        //ar.DescContent.GetComponent<TMP_Text>().text = ItemList[int.Parse(Id) - 1][3];
         // check if enough timeless shard
         if ((int)ar.PlayerInformation["TimelessShard"] < int.Parse(ItemList[int.Parse(Id) - 1][6]))
         {
@@ -137,6 +137,7 @@ public class ArsenalItem : MonoBehaviour
         ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3]));
     }
     #endregion
     #region Check current item on mouse down
@@ -147,6 +148,19 @@ public class ArsenalItem : MonoBehaviour
             Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
         }
         Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
+    }
+    #endregion
+    #region
+    private IEnumerator TextRunning(string text)
+    {
+        ar.DescContent.GetComponent<TMP_Text>().text = "";
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
+            yield return new WaitForSeconds(0.05f);
+        }
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
     #endregion
 }
