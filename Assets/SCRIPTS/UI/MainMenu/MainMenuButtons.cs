@@ -156,25 +156,25 @@ public class MainMenuButtons : MonoBehaviour
     {
         if (name.Equals("LoadStoryButton"))
         {
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.1f);
         }
         else if (name.Equals("EncyclopediaButton"))
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
         else if (name.Equals("TutorialButton"))
         {
-            yield return new WaitForSeconds(0.75f);
+            yield return new WaitForSeconds(0.3f);
         }
         else if (name.Equals("OptionsButton"))
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.4f);
         }
         else if (name.Equals("ExitButton"))
         {
-            yield return new WaitForSeconds(1.25f);
+            yield return new WaitForSeconds(0.5f);
         }
-        rb.velocity = (AfterPosition.transform.position - BeforePosition.transform.position) / 1.5f;
+        rb.velocity = (AfterPosition.transform.position - BeforePosition.transform.position) / 0.5f;
         for (int i = 0; i < 10; i++)
         {
             Color c = GetComponent<SpriteRenderer>().color;
@@ -183,28 +183,28 @@ public class MainMenuButtons : MonoBehaviour
             Color c2 = Text.GetComponent<SpriteRenderer>().color;
             c2.a += 0.1f;
             Text.GetComponent<SpriteRenderer>().color = c2;
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.05f);
         }
         rb.velocity = new Vector2(0, 0);
         if (name.Equals("NewStoryButton"))
         {
-            yield return new WaitForSeconds(1.25f);
+            yield return new WaitForSeconds(0.5f);
         }
         else if (name.Equals("LoadStoryButton"))
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.4f);
         }
         else if (name.Equals("EncyclopediaButton"))
         {
-            yield return new WaitForSeconds(0.75f);
+            yield return new WaitForSeconds(0.3f);
         }
         else if (name.Equals("TutorialButton"))
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
         else if (name.Equals("OptionsButton"))
         {
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.1f);
         }
         GetComponent<Collider2D>().enabled = true;
     }

@@ -90,7 +90,7 @@ public class SpaceShopInformation : MonoBehaviour
         BuyButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
         BuyButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
-        if (!"fuelcell".Equals(BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text.Replace(" ","").ToLower()))
+        if (!"fuelcell".Equals(((string)DataDictionary["Name"]).Replace(" ","").ToLower()))
         {
             SellButton.SetActive(true);
             if (!SellButton.GetComponent<Collider2D>().enabled)
@@ -118,15 +118,16 @@ public class SpaceShopInformation : MonoBehaviour
         {
             if (MaxStock == 0)
             {
+                if (int.Parse(InputField.text) > 100)
+                {
+                    InputField.text = "100";
+                }
                 ShowBuySellInfo();
             } else
             {
                 if (int.Parse(InputField.text)>MaxStock)
                 {
                     InputField.text = MaxStock.ToString();
-                } else if (int.Parse(InputField.text)>100)
-                {
-                    InputField.text = "100";
                 }
                 ShowBuySellInfo();
             }
