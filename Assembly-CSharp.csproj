@@ -97,8 +97,11 @@
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumableMinusButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\OverheatBar.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInputButton.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\PlayerPrefModifyController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopItem.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInformation.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContractButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
@@ -112,6 +115,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECEnterSession.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopBuySellButton.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Database\AccessDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopLoading.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionMenu.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECController.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContract.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GlobalFunctionController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
