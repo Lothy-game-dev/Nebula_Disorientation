@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMenuBackButton : MonoBehaviour
+public class FactoryButton : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -12,21 +12,19 @@ public class MainMenuBackButton : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject BackScene;
+    public GameObject Factory;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private Factory FactoryController;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
-        if (GetComponent<Collider2D>() == null)
-        {
-            gameObject.AddComponent<BoxCollider2D>();
-        }
         // Initialize variables
+        FactoryController = Factory.GetComponent<Factory>();
     }
 
     // Update is called once per frame
@@ -39,13 +37,16 @@ public class MainMenuBackButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        if (BackScene != null && BackScene.name != "MainMenuScene")
+        if (FactoryController.EnoughPrice && FactoryController.RankRequired)
         {
-            FindObjectOfType<MainMenuCameraController>().ChangeToScene(BackScene);
-        } else
-        {
-            FindObjectOfType<MainMenuCameraController>().BackToMainMenu();
+            FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyFighterModel;
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Do you wanna buy?");
         }
+    }
+
+    private void BuyFighterModel()
+    {
+        Debug.Log(FactoryController.ItemId);
     }
     #endregion
     #region Function group ...

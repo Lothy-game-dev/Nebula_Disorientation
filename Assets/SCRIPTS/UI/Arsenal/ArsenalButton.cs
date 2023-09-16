@@ -88,6 +88,7 @@ public class ArsenalButton : MonoBehaviour
                 }
                 g.SetActive(true);
             }
+                ArsenalController.FirstItemChoosen(ArsenalController.WeaponList, WeaponStatus, "Weapon", Content);
 
 
         }
@@ -119,6 +120,7 @@ public class ArsenalButton : MonoBehaviour
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
                     g.SetActive(true);
                 }
+                ArsenalController.FirstItemChoosen(ArsenalController.PowerList, PowerStatus, "Power", Content);
             }
         }
     }

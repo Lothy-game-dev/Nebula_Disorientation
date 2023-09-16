@@ -97,8 +97,6 @@ public class ConvertBoard : MonoBehaviour
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Cannot convert, please re-enter the amount of the pre-converted item", 5f);
-                TextInput.text = "0";
-                TextOutput.text = "0";
             }
         }
     }

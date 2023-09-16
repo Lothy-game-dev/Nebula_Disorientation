@@ -303,7 +303,7 @@ public class InitializeDatabase : MonoBehaviour
             "(18, 'Thermal', 'Superior Freezing Blaster ', 'The top tier version of the Freezing Blaster, which now emits a beam of white blue ice.', 'OH-0.1,2,30|DPH-90|RoF-150|AoE-0|V-500|R-600', '48000', null, 11, 9, '#bf2600', 'White Blue')," +
             "(19, 'Laser', 'Superior Laser Cannon', 'The top tier version of the Laser Cannon. It now shoots much refined red laser projectiles.', 'OH-2,3,10|DPH-3375|RoF-4|AoE-0|V-2250|R-2000', '48000', null, 13, 9, '#bf2600', 'Dark Red')," +
             "(20, 'Laser', 'Plasma Cannon', 'An Plasma version of the Nano Cannon. ', 'OH-1,3,20|DPH-2062.5|RoF-8|AoE-0|V-1750|R-1750', '55000', null, 16, 9, '#bf2600', 'White')," +
-            "(21, 'Thermal', 'Nano Effect Analyzer', 'A high-level cannon that amplify the power of Thermal Status.', 'OH-2.5,3,20|DPH-100|RoF-3|AoE-0|V-2000|R-2000', '50000', null, 16, 9, '#bf2600', 'White')," +
+            "(21, 'Thermal', 'NanoEffectAnalyzer', 'A high-level cannon that amplify the power of Thermal Status.', 'OH-2.5,3,20|DPH-100|RoF-3|AoE-0|V-2000|R-2000', '50000', null, 16, 9, '#bf2600', 'White')," +
             "(22, 'Thermal', 'Orb of Magma Generator', 'A special edition of the Orb of Lava Generator. It now generate orbs of deadly magma.', 'OH-10,3,30|DPH-4500|RoF-1|AoE-300|V-750|R-1000', '100000', null, 14, 9, '#800080', 'Red')," +
             "(23, 'Grouping', 'Orb of Black Hole Generator', 'A special edition of the Orb of Vacuum Generator It now generate a more powerful space wormhole.', 'OH-0|DPH-7500|RoF-0.1|AoE-300|V-750|R-500', '100000', null, 15, 9, '#800080', 'Gray')," +
             "(24, 'Laser', 'Star Blaster', 'A superior weapon that fires star-like projectiles with insane capability.', 'OH-1.5,3,10|DPH-2250|RoF-5|AoE-25|V-2500|R-2000', '120000', null, 19, 9, '#800080', 'Purple');";
@@ -323,9 +323,9 @@ public class InitializeDatabase : MonoBehaviour
             "(12, 'MOV', 'Advanced Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,5', '60000', null, 8, 9, '#bf2600'); ";
         // FactoryModel
         string FactoryModel = "INSERT INTO FactoryModel VALUES " +
-            "(1, 'SS29-MK1', '', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '0', null, '#36b37e')," +
-            "(2, 'SS29-MK2', '', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
-            "(3, 'SS29-MK3', '', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '20000', null, '#36b37e')," +
+            "(1, 'SS29-MK1', '', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '0 | 0', null, '#36b37e')," +
+            "(2, 'SS29-MK2', '', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '20000 | 0', null, '#36b37e')," +
+            "(3, 'SS29-MK3', '', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-2|SC-3', '20000 | 0', null, '#36b37e')," +
             "(4, 'SSS-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
             "(5, 'SSS-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +
             "(6, 'SSS-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff')," +

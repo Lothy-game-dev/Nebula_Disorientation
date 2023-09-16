@@ -31,7 +31,6 @@ public class LoadOutBox : MonoBehaviour
     #region Check Mouse
     private void OnMouseDown()
     {
-        // Mouse down set select
         if (detectMouse)
         {
             for (int i = 1; i < transform.parent.parent.childCount; i++)

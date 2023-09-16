@@ -87,6 +87,10 @@ public class LoadoutScene : UECMenuShared
         CurrentFuelCells = (int)ListData["FuelCell"];
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = CurrentFuelCells;
+        if (CurrentFuelCells == 10)
+        {
+            FuelCell.transform.GetChild(2).gameObject.SetActive(false);
+        }
     }
 
     private List<string> ListReplaceSpace(List<string> inList)
