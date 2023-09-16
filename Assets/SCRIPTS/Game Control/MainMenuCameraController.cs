@@ -14,6 +14,7 @@ public class MainMenuCameraController : MonoBehaviour
     public MainMenuButtons[] MainMenuButtons;
     public GameObject LoadingScene;
     public GameObject OptionScene;
+    public GameObject EncyclopediaScene;
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
@@ -40,6 +41,11 @@ public class MainMenuCameraController : MonoBehaviour
                 PlayerPrefs.SetInt("ToOption", 0);
                 ChangeToScene(OptionScene);
                 CurrentScene = OptionScene;
+            } else if (PlayerPrefs.GetInt("ToEncyclopedia") == 1)
+            {
+                PlayerPrefs.SetInt("ToEncyclopedia", 0);
+                ChangeToScene(EncyclopediaScene);
+                CurrentScene = EncyclopediaScene;
             }
             GenerateLoadingScene(PlayerPrefs.GetFloat("CreateLoading"));
             PlayerPrefs.SetFloat("CreateLoading", 0f);
