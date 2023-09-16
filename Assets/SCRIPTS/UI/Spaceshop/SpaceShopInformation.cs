@@ -90,17 +90,25 @@ public class SpaceShopInformation : MonoBehaviour
         BuyButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
         BuyButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
-        if (!SellButton.GetComponent<Collider2D>().enabled)
+        if (!"fuelcell".Equals(BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text.Replace(" ","").ToLower()))
         {
-            SellButton.GetComponent<Collider2D>().enabled = true;
+            SellButton.SetActive(true);
+            if (!SellButton.GetComponent<Collider2D>().enabled)
+            {
+                SellButton.GetComponent<Collider2D>().enabled = true;
+            }
+            SellButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+            SellButton.GetComponent<SpriteRenderer>().color = Color.green;
+            SellButton.transform.GetChild(0).GetComponent<TextMeshPro>().text =
+                "Sell (" + (Price * int.Parse(InputField.text) / 2).ToString() + " <sprite index='0'>)";
+            SellButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text) / 2;
+            SellButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
+            SellButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
+        } else
+        {
+            SellButton.SetActive(false);
         }
-        SellButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
-        SellButton.GetComponent<SpriteRenderer>().color = Color.green;
-        SellButton.transform.GetChild(0).GetComponent<TextMeshPro>().text =
-            "Sell (" + (Price * int.Parse(InputField.text) / 2).ToString() + " <sprite index='0'>)";
-        SellButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text)/2;
-        SellButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
-        SellButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
+        
     }
 
     private void CheckInput()
@@ -116,7 +124,11 @@ public class SpaceShopInformation : MonoBehaviour
                 if (int.Parse(InputField.text)>MaxStock)
                 {
                     InputField.text = MaxStock.ToString();
+                } else if (int.Parse(InputField.text)>100)
+                {
+                    InputField.text = "100";
                 }
+                ShowBuySellInfo();
             }
         } else
         {
