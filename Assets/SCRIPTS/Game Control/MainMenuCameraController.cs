@@ -34,6 +34,7 @@ public class MainMenuCameraController : MonoBehaviour
 
     private void OnEnable()
     {
+        // Check teleport to scene: Use when back from UEC
         if (PlayerPrefs.GetFloat("CreateLoading") > 0f)
         {
             if (PlayerPrefs.GetInt("ToOption") == 1)
