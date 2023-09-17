@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ArsenalItem : MonoBehaviour
+public class FactoryItem : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -14,16 +14,16 @@ public class ArsenalItem : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject Arsenal;
+    public GameObject Factory;
     public GameObject BuyButton;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string Id;
-    public string Type;
-    private Arsenal ar;
+    private Factory Fac;
     private Dictionary<string, object> Status;
+    private Dictionary<string, object> ItemPrice;
     private Dictionary<string, object> RankSys;
     private string CashColor;
     private string ShardColor;
@@ -31,63 +31,48 @@ public class ArsenalItem : MonoBehaviour
     public List<GameObject> ItemStatusList;
     public GameObject Content;
     public bool LockedItem;
-
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        ar = Arsenal.GetComponent<Arsenal>();
+        Fac = Factory.GetComponent<Factory>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+
     }
     #endregion
-    #region Show information when click item
+    #region Show information when choose item
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        
-        if (Type == "Weapon")
-        {
-            CheckCurrentItem(Id);
-            ArsenalInformation(ar.WeaponList);
-            ar.ItemId = int.Parse(Id);
-            ar.ItemType = Type;
-        } else
-        {
-            if (Type == "Power")
-            {
-                CheckCurrentItem(Id);
-                ArsenalInformation(ar.PowerList);
-                ar.ItemId = int.Parse(Id);
-                ar.ItemType = Type;
-            }
-        }
+        CheckCurrentItem(Id);
+        FighterInformation(Fac.FighterList);
     }
-    
-    #endregion
-    #region Show Arsenal (weapon,power) information
-    // Group all function that serve the same algorithm
-    private void ArsenalInformation(List<List<string>> ItemList)
-    {
-        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(Id) - 1][8]));
-        if (Type == "Weapon")
-        {
-            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
-        } else
-        {
-            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
 
+
+    #endregion
+    #region Show Fighter information
+    // Group all function that serve the same algorithm
+    private void FighterInformation(List<List<string>> ItemList)
+    {
+        ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(ItemList[int.Parse(Id) - 1][4]);
+        if (ItemList[int.Parse(Id) - 1][5] == "N/A")
+        {
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(1);
         }
-        Debug.Log(Status.Count);
+        else
+        {
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(Id) - 1][5]));
+        }
+        Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(ItemList[int.Parse(Id) - 1][3]);
         for (int i = 0; i < ItemStatusList.Count; i++)
         {
-            Debug.Log("abcd");           
             if (!Status.ContainsKey(ItemStatusList[i].name))
             {
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = "N/A";
@@ -96,66 +81,65 @@ public class ArsenalItem : MonoBehaviour
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = (string)Status[ItemStatusList[i].name];
             }
         }
-        //ar.DescContent.GetComponent<TMP_Text>().text = ItemList[int.Parse(Id) - 1][3];
-        // check if enough timeless shard
-        if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
+        // check if have enough Timeless shard
+        Debug.Log(int.Parse((string)ItemPrice["Timeless"]));
+        if (int.Parse(Fac.PShard) < int.Parse((string)ItemPrice["Timeless"]))
         {
             ShardColor = "red";
-            ar.EnoughPrice = false;
+            Fac.EnoughPrice = false;
         }
         else
-        {
-            if (int.Parse(ar.PShard) == 0)
-            {
-                ar.EnoughPrice = false;
+        {         
+            if (int.Parse(Fac.PShard) == 0)
+            {                
+                Fac.EnoughPrice = false;
                 ShardColor = "red";
             }
             else
             {
                 ShardColor = "green";
-                ar.EnoughPrice = true;
+                Fac.EnoughPrice = true;
             }
         }
-        if (ar.IsInSession)
+        if (Fac.IsInSession)
         {
             // check if have enough cash
-            if (int.Parse(ar.PCash) < int.Parse(ItemList[int.Parse(Id) - 1][5]))
+            if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
             {
                 CashColor = "red";
-                ar.EnoughPrice = false;
+                Fac.EnoughPrice = false;
             }
             else
             {
                 CashColor = "green";
-                ar.EnoughPrice = true;
+                Fac.EnoughPrice = true;
             }
-        }
-        else
+        } else
         {
             CashColor = "red";
         }
-        //check rank required
-        if ((int)ar.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
+        // check rank required
+        if ((int)Fac.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
         {
             RankColor = "red";
-            ar.RankRequired = false;
-        }
-        else
+            Fac.RankRequired = false;
+        } else
         {
             RankColor = "green";
-            ar.RankRequired = true;
+            Fac.RankRequired = true;
         }
-        ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
-        ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
-        ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3]));
+        
+        Fac.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + (string)ItemPrice["Timeless"] + "</color>";
+        Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + (string)ItemPrice["Cash"] + "</color>";
+        Fac.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][2]));
+
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
         if (LockedItem)
         {
             c.a = 0.5f;
-        }
-        else
+        } else
         {
             c.a = 1f;
         }
@@ -174,12 +158,12 @@ public class ArsenalItem : MonoBehaviour
     #endregion
     #region Text animation
     private IEnumerator TextRunning(string text)
-    {
-        ar.DescContent.GetComponent<TMP_Text>().text = "";
+    {     
+        Fac.DescContent.GetComponent<TMP_Text>().text = "";
         gameObject.GetComponent<Collider2D>().enabled = false;
         for (int i = 0; i < text.Length; i++)
         {
-            ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
+            Fac.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
         }
         gameObject.GetComponent<Collider2D>().enabled = true;

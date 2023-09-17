@@ -12,6 +12,8 @@ public class UECMainMenuController : MonoBehaviour
     public GameObject MainCamera;
     public UECController controller;
     public GameObject[] DisableUponActive;
+    public Factory FactoryController;
+    public Arsenal ArsenalController;
     #endregion
     #region NormalVariables
     public int PlayerId;
@@ -41,6 +43,8 @@ public class UECMainMenuController : MonoBehaviour
         if (ListData!=null)
         {
             controller.SetDataToView(ListData);
+            FactoryController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
+            ArsenalController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,

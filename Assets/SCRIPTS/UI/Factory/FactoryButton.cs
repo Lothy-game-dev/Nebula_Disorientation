@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArsenalBuyAction : MonoBehaviour
+public class FactoryButton : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -12,19 +12,19 @@ public class ArsenalBuyAction : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject ArsenalItem;
+    public GameObject Factory;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private Arsenal Ar;
+    private Factory FactoryController;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        Ar = ArsenalItem.GetComponent<Arsenal>();
+        FactoryController = Factory.GetComponent<Factory>();
     }
 
     // Update is called once per frame
@@ -37,35 +37,31 @@ public class ArsenalBuyAction : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        if (Ar.EnoughPrice && Ar.RankRequired)
+        if (FactoryController.EnoughPrice && FactoryController.RankRequired)
         {
-            FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;
-            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Do you wanna buy?");
-            
-        }
-        else
+            FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyFighterModel;
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Do you wanna buy?");
+        } else
         {
-            if (!Ar.EnoughPrice)
+            if (!FactoryController.EnoughPrice)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "You dont have enough money!", 5f);
-            }
-            else
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "You dont have enough money!", 5f);
+            } else
             {
-                if (!Ar.RankRequired)
+                if (!FactoryController.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Please try to get a higher rank!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Please try to get a higher rank!", 5f);
                 }
             }
         }
+    }
 
-
+    private void BuyFighterModel()
+    {
+        Debug.Log(FactoryController.ItemId);
     }
     #endregion
     #region Function group ...
     // Group all function that serve the same algorithm
-    public void BuyArsenalItem()
-    {
-        Debug.Log(Ar.ItemId + "|" + Ar.ItemType);
-    }
     #endregion
 }
