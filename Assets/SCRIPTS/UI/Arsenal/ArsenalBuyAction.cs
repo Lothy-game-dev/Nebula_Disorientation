@@ -37,6 +37,7 @@ public class ArsenalBuyAction : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        // check the conditions before buying 
         if (Ar.EnoughPrice && Ar.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;

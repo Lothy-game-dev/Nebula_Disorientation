@@ -45,7 +45,7 @@ public class EncycButton : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Show the information of the item for each type
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
@@ -104,7 +104,7 @@ public class EncycButton : MonoBehaviour
         }
     }
     #endregion
-    #region Function group ...
+    #region Show item's information
     // Group all function that serve the same algorithm
     private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale)
     {
@@ -128,7 +128,7 @@ public class EncycButton : MonoBehaviour
  
     }
     #endregion
-    #region
+    #region Change the color when choosen
     public void ChangeColorWhenChoosen(string Id)
     {
         Debug.Log(Id);
