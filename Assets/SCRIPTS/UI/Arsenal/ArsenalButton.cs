@@ -45,13 +45,14 @@ public class ArsenalButton : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Generate item list 
     private void OnMouseDown()
     {
 
         if ("Weapon" == gameObject.name)
         {
             DeleteAllChild();
+            //Start animation
             if (ArsenalController.CurrentTab != "Weapon")
             {
                 ArsenalController.CurrentTab = "Weapon";
@@ -60,6 +61,7 @@ public class ArsenalButton : MonoBehaviour
             StatusContent.SetActive(true);
             OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
             gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+            //Generate item
             for (int i = 0; i < ArsenalController.WeaponList.Count; i++)
             {
                 GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
@@ -87,7 +89,9 @@ public class ArsenalButton : MonoBehaviour
                     }
                 }
                 g.SetActive(true);
+                ArsenalController.LockItem(g, ArsenalController.WeaponList[i][8]);
             }
+            ArsenalController.FirstItemChoosen(ArsenalController.WeaponList, WeaponStatus, "Weapon", Content);
 
 
         }
@@ -96,6 +100,7 @@ public class ArsenalButton : MonoBehaviour
             if ("Power" == gameObject.name)
             {
                 DeleteAllChild();
+                //Start animation
                 if (ArsenalController.CurrentTab != "Power")
                 {
                     ArsenalController.CurrentTab = "Power";
@@ -105,6 +110,7 @@ public class ArsenalButton : MonoBehaviour
                 StatusContent.SetActive(true);
                 OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
                 gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+                //Generate item
                 for (int i = 0; i < ArsenalController.PowerList.Count; i++)
                 {
                     GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
@@ -118,12 +124,15 @@ public class ArsenalButton : MonoBehaviour
                     g.GetComponent<ArsenalItem>().Content = Content;
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
                     g.SetActive(true);
+                    ArsenalController.LockItem(g, ArsenalController.PowerList[i][8]);
                 }
+                ArsenalController.FirstItemChoosen(ArsenalController.PowerList, PowerStatus, "Power", Content);
+
             }
         }
     }
     #endregion
-    #region Function group ...
+    #region Delete all item before generating a new list
     // Group all function that serve the same algorithm
     public void DeleteAllChild()
     {

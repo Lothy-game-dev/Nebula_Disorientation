@@ -736,5 +736,18 @@ public class GlobalFunctionController : MonoBehaviour
         output.Add("Stock", ((int)datas["StockPerDay"]).ToString());
         return output;
     }
+
+    public Dictionary<string, object> ConvertModelPriceIntoTwoTypePrice(string Price)
+    {
+        Dictionary<string, object> ModelPrice = new Dictionary<string, object>();
+        if (Price != null)
+        {
+            Price = Price.Replace(" ", "");
+            string[] NewPrice = Price.Split("|");
+            ModelPrice.Add("Cash", NewPrice[0]);
+            ModelPrice.Add("Timeless", NewPrice[1]);
+        }
+        return ModelPrice;
+    }
     #endregion
 }

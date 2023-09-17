@@ -191,6 +191,7 @@ public class AccessDatabase : MonoBehaviour
                 check = true;
                 values.Add("ID", dataReader.GetInt32(0));
                 values.Add("Name", dataReader.GetString(1));
+                values.Add("RankId", dataReader.GetInt32(2));
                 if (dataReader.IsDBNull(2))
                 {
                     values.Add("Rank", "Unranked");
