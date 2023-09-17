@@ -61,7 +61,9 @@ public class FactoryItem : MonoBehaviour
     // Group all function that serve the same algorithm
     private void FighterInformation(List<List<string>> ItemList)
     {
+        //convert the price x | y => Cash = x, Shard = y
         ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(ItemList[int.Parse(Id) - 1][4]);
+        // Check rank, if rank = null => auto rank 1 
         if (ItemList[int.Parse(Id) - 1][5] == "N/A")
         {
             RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(1);
@@ -70,7 +72,10 @@ public class FactoryItem : MonoBehaviour
         {
             RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(Id) - 1][5]));
         }
+        //convert Fighter model stat => dictionary
         Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(ItemList[int.Parse(Id) - 1][3]);
+
+        //show stat info for each stat
         for (int i = 0; i < ItemStatusList.Count; i++)
         {
             if (!Status.ContainsKey(ItemStatusList[i].name))
@@ -100,24 +105,18 @@ public class FactoryItem : MonoBehaviour
                 ShardColor = "green";
                 Fac.EnoughPrice = true;
             }
-        }
-        if (Fac.IsInSession)
-        {
-            // check if have enough cash
-            if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
-            {
-                CashColor = "red";
-                Fac.EnoughPrice = false;
-            }
-            else
-            {
-                CashColor = "green";
-                Fac.EnoughPrice = true;
-            }
-        } else
+        }     
+        // check if have enough cash
+        if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
         {
             CashColor = "red";
+            Fac.EnoughPrice = false;
         }
+        else
+        {
+            CashColor = "green";
+            Fac.EnoughPrice = true;
+        }       
         // check rank required
         if ((int)Fac.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
         {
@@ -129,6 +128,7 @@ public class FactoryItem : MonoBehaviour
             Fac.RankRequired = true;
         }
         
+        //set information like item shard, cash, rank
         Fac.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + (string)ItemPrice["Timeless"] + "</color>";
         Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + (string)ItemPrice["Cash"] + "</color>";
         Fac.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
@@ -149,6 +149,7 @@ public class FactoryItem : MonoBehaviour
     #region Check current item on mouse down
     private void CheckCurrentItem(string id)
     {
+        // the item becomes green when we choose
         for (int i = 0; i < Content.transform.childCount; i++)
         {
             Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
@@ -159,6 +160,7 @@ public class FactoryItem : MonoBehaviour
     #region Text animation
     private IEnumerator TextRunning(string text)
     {     
+        //Use substring to take each word in the text and put it back
         Fac.DescContent.GetComponent<TMP_Text>().text = "";
         gameObject.GetComponent<Collider2D>().enabled = false;
         for (int i = 0; i < text.Length; i++)

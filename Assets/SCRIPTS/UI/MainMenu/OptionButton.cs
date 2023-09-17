@@ -44,7 +44,7 @@ public class OptionButton : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Change the setting when click
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
@@ -114,6 +114,7 @@ public class OptionButton : MonoBehaviour
     {
         alreadySelect = false;
     }
+    //Highlight the button when the mouse over
     private void OnMouseOver()
     {
         if ("SaveButton".Equals(gameObject.name))
@@ -138,6 +139,7 @@ public class OptionButton : MonoBehaviour
             }
         }
     }
+    //Opposite to the above function
     private void OnMouseExit()
     {
         if (!alreadySelect && "SaveButton".Equals(gameObject.name))

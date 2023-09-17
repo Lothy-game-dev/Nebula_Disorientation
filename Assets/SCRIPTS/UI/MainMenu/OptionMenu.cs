@@ -61,13 +61,14 @@ public class OptionMenu : MainMenuSceneShared
     // Update is called once per frame
     void Update()
     {
+        // change the value if we click the left or right button
         if (IsClicked)
         {
             FPSText.GetComponent<TextMeshPro>().text = FpsCounter;
             ResolText.GetComponent<TextMeshPro>().text = Resol;
             IsClicked = false;
-            Debug.Log(Application.targetFrameRate);
         }
+        // Save the setting and apply to the application
         if (IsSaved)
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
@@ -90,7 +91,7 @@ public class OptionMenu : MainMenuSceneShared
         }
     }
     #endregion
-    #region
+    #region Set the value if the slider has changed
     // Group all function that serve the same algorithm
     public void ValueChangeCheck()
     {

@@ -105,9 +105,10 @@ public class Arsenal : MonoBehaviour
         }
     }
     #endregion
-    #region First item choosen
+    #region First item choosen and set the information to the UI
     public void FirstItemChoosen(List<List<string>> ItemList, List<GameObject> StatusList, string Type, GameObject ContentType)
     {
+        // convert stat to dictionary depend on type like weapon or power
         if (Type == "Weapon")
         {
             Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[0][4]);

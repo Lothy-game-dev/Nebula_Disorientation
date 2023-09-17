@@ -64,6 +64,7 @@ public class TutorialButton : MonoBehaviour
     {
         alreadySelect = false;
     }
+    // Highlight the button when the mouse over
     private void OnMouseOver()
     {       
         if ("BackButton".Equals(gameObject.name))
@@ -88,6 +89,7 @@ public class TutorialButton : MonoBehaviour
             }
         }       
     }
+    // Unhighlight the button when the mouse exit
     private void OnMouseExit()
     {
         if (!alreadySelect && "BackButton".Equals(gameObject.name))
