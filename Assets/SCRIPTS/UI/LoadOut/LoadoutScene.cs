@@ -73,6 +73,7 @@ public class LoadoutScene : UECMenuShared
     #region On Enable Get Data
     private void GetData()
     {
+        // Set Data
         ModelBoard.GetComponent<LoadOutModelBoard>().SetItems(
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName()),
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName())[0]);
@@ -108,6 +109,7 @@ public class LoadoutScene : UECMenuShared
 
     public string SetDataToDb()
     {
+        // WIP
         string check = "Model:" + Model
             + ",Left Weapon:" + LeftWeapon
             + ",Right Weapon:" + RightWeapon

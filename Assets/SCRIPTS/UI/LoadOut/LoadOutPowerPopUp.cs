@@ -54,7 +54,10 @@ public class LoadOutPowerPopUp : MonoBehaviour
     #region Animation
     public void OpenPopUp(List<string> ListPower, string chosenPower)
     {
+        // Open popup
+        // Calculate Width of each box
         BoxWidth = Mathf.Abs(Left.transform.position.x - Right.transform.position.x);
+        // Clear old list power
         if (ListPowerIcon!=null)
         {
             ListPowerIcon.Clear();
@@ -65,9 +68,11 @@ public class LoadOutPowerPopUp : MonoBehaviour
             PowerIconAfterGenerate.Clear();
         }
         else PowerIconAfterGenerate = new List<GameObject>();
+        // Set Transparency at start
         Color c = GetComponent<SpriteRenderer>().color;
         c.a = 0;
         GetComponent<SpriteRenderer>().color = c;
+        // Disable collider in the bakcground
         foreach (var col in DisabledCollider)
         {
             if (col.GetComponent<Collider2D>()!=null)
@@ -83,6 +88,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
 
     private IEnumerator StartAnimation(List<string> ListPower, string chosenPower)
     {
+        // Increase collider and scale by time
         for (int i=0;i<19;i++)
         {
             Color c = GetComponent<SpriteRenderer>().color;
@@ -93,6 +99,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
         }
         Background.SetActive(true);
         Background.GetComponent<SpriteRenderer>().sortingOrder = 18;
+        // Disable scroll until data are loaded
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
         SetData(ListPower, chosenPower);
     }
@@ -153,6 +160,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
                 return;
             }
         }
+        // Check if list data has sprite in list sprite
         for (int i=0;i<ListPower.Count;i++)
         {
             for (int j=0;j<PowerList.transform.childCount;j++)

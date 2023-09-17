@@ -67,8 +67,10 @@ public class CursorController : MonoBehaviour
     #region Check Border
     private void CalculateBorder()
     {
+        // Half Cam Height/Width
         HalfCamHeight = cam.orthographicSize;
         HalfCamWidth = cam.orthographicSize * cam.aspect;
+        // Border Top Bottom Left Right Position
         TopBorderY = transform.position.y + HalfCamHeight;
         BottomBorderY = transform.position.y - HalfCamHeight;
         LeftBorderX = transform.position.x - HalfCamWidth;
