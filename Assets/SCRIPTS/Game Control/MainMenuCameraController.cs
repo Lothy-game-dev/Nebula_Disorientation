@@ -40,12 +40,12 @@ public class MainMenuCameraController : MonoBehaviour
             if (PlayerPrefs.GetInt("ToOption") == 1)
             {
                 PlayerPrefs.SetInt("ToOption", 0);
-                ChangeToScene(gameObject, OptionScene);
+                ChangeToScene(StartScene, OptionScene);
                 CurrentScene = OptionScene;
             } else if (PlayerPrefs.GetInt("ToEncyclopedia") == 1)
             {
                 PlayerPrefs.SetInt("ToEncyclopedia", 0);
-                ChangeToScene(gameObject, EncyclopediaScene);
+                ChangeToScene(StartScene, EncyclopediaScene);
                 CurrentScene = EncyclopediaScene;
             }
             GenerateLoadingScene(PlayerPrefs.GetFloat("CreateLoading"));
