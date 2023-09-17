@@ -13,6 +13,7 @@ public class UECMainMenuController : MonoBehaviour
     public UECController controller;
     public GameObject[] DisableUponActive;
     public Factory FactoryController;
+    public Arsenal ArsenalController;
     #endregion
     #region NormalVariables
     public int PlayerId;
@@ -43,6 +44,7 @@ public class UECMainMenuController : MonoBehaviour
         {
             controller.SetDataToView(ListData);
             FactoryController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
+            ArsenalController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
