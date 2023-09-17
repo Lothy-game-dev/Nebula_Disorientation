@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Arsenal : MonoBehaviour
+public class Arsenal : UECMenuShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -161,6 +161,19 @@ public class Arsenal : MonoBehaviour
         PShard = Shard;
         PlayerCash.GetComponent<TextMeshPro>().text = PCash;
         PlayerShard.GetComponent<TextMeshPro>().text = PShard;
+    }
+    #endregion
+    #region Start animation when enter or exit the scene 
+    public override void OnEnterAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = true;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+    }
+
+    public override void OnExitAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
     }
     #endregion
 }
