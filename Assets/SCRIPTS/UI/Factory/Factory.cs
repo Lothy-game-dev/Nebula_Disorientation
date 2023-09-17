@@ -36,6 +36,7 @@ public class Factory : MonoBehaviour
     public bool RankRequired;
     public bool Locked;
     public int ItemId;
+    public string ItemName;
     private Dictionary<string, object> Status;
     private Dictionary<string, object> RankSys;
     private Dictionary<string, object> ItemPrice;

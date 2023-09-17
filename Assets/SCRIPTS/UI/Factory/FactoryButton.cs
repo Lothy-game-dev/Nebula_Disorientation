@@ -51,7 +51,7 @@ public class FactoryButton : MonoBehaviour
             {
                 if (!FactoryController.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Please try to get a higher rank!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement unmet!", 5f);
                 }
             }
         }
