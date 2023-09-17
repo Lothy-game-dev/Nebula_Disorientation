@@ -51,6 +51,7 @@ public class SpaceShopScene : UECMenuShared
     #region Data
     public void SetData()
     {
+        // Set Data to items in UI
         Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
             .GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
         CurrentCash = (int)ListData["Cash"];

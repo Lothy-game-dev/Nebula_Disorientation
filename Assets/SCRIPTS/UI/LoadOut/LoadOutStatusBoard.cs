@@ -42,6 +42,8 @@ public class LoadOutStatusBoard : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        // On mouse down: Disable collider and rotate
+        // THen show data
         GetComponent<Collider2D>().enabled = false;
         NameText.SetActive(false);
         StatsText.SetActive(false);
@@ -52,6 +54,8 @@ public class LoadOutStatusBoard : MonoBehaviour
     #region Animation
     private IEnumerator RotateStatusBoard()
     {
+        // Rotate the board through y 
+        // Then show data
         for (int i=0;i<18;i++)
         {
             StatusBoardRotate.transform.Rotate(new Vector3(0, 10, 0));

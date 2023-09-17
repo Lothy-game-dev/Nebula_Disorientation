@@ -63,6 +63,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         }
         //Replace current Model
         ReplaceCurrentModel();
+        // Clone model
         ModelAfterGenerate = Instantiate(Model, new Vector3(Border.transform.position.x,
             Border.transform.position.y, Model.transform.position.z), Quaternion.identity);
         ModelAfterGenerate.transform.SetParent(Border.transform);
@@ -96,6 +97,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         {
             statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionary(stats);
         }
+        // power slot
         if (int.Parse((string)statsDict["SP"])>=1)
         {
             if (int.Parse((string)statsDict["SP"]) == 1 && currentNumberOfPower == 2)
@@ -123,8 +125,10 @@ public class LoadOutFighterDemo : MonoBehaviour
             }
         } else
         {
-            // error
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Cannot fetch fighter's power slot datas!\nPlease try again!", 5f);
         }
+        // Consumable slot
         if (int.Parse((string)statsDict["SC"]) >= 3)
         {
             if (int.Parse((string)statsDict["SC"]) == 3 && currentNumberOfCons == 4)
@@ -140,13 +144,18 @@ public class LoadOutFighterDemo : MonoBehaviour
         }
         else
         {
-            // error
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Cannot fetch fighter's power slot datas!\nPlease try again!", 5f);
         }
         DetailStatus.SetData(currentModel, statsDict);
         ModelAfterGenerate.SetActive(true);
     }
     public void FocusOnWeapon(bool isLeftWeapon)
     {
+        // Focus on weapon
+        // Simply move the fighter with the same vector
+        // from the weap to the center
+        // And zoom the fighter at the same time
         isFocusingWeapon = true;
         ModelAfterGenerate.transform.Rotate(new Vector3(0, 0, -currentSpinAngle));
         currentSpinAngle = 0;
@@ -162,6 +171,7 @@ public class LoadOutFighterDemo : MonoBehaviour
 
     public void StopFocusOnWeapon(bool isLeftWeapon)
     {
+        // Reverse from the aforementioned
         GetComponent<SpriteRenderer>().sortingOrder = 3;
         transform.GetChild(1).GetComponent<Canvas>().sortingOrder = 5;
         if (ModelAfterGenerate != null)
@@ -265,6 +275,7 @@ public class LoadOutFighterDemo : MonoBehaviour
 
     public void SetWeapon(bool isLeftWeapon, string WeaponName)
     {
+        // Set weapon to fighter
         for (int i=0; i < WeaponList.transform.childCount;i++)
         {
             if (WeaponList.transform.GetChild(i).name.Replace(" ","").ToLower()
@@ -294,6 +305,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         Destroy(ModelAfterGenerate);
     }
 
+    // Spin model
     private void SpinModel()
     {
         ModelAfterGenerate.transform.Rotate(new Vector3(0, 0, 1f));

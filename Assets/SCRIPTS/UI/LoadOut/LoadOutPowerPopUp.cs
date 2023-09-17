@@ -10,6 +10,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
     public GameObject bar;
     public List<GameObject> DisabledCollider;
     public GameObject PowerList;
@@ -106,6 +107,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
 
     public void ClosePopUp()
     {
+        // Remove all items
         int i = 0;
         while (i<PowerIconAfterGenerate.Count)
         {
@@ -119,6 +121,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
                 i++;
             }
         }
+        // Set content size to 0
         Content.GetComponent<RectTransform>().sizeDelta
             = new Vector2(0,0);
         StartCoroutine(CloseAnimation());
@@ -151,12 +154,12 @@ public class LoadOutPowerPopUp : MonoBehaviour
     public void SetData(List<string> ListPower, string chosenPower)
     {
         // Destroy all datas
-        //
         if (chosenPower!="")
         {
             if (!ListPower.Contains(chosenPower))
             {
-                // Error
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+               "Cannot fetch data for this power!\nPlease try again!", 5f);
                 return;
             }
         }

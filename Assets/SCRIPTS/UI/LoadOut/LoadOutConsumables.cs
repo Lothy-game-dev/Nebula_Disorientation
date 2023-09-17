@@ -57,6 +57,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     private Dictionary<string, int> GetListCurrentChosen()
     {
+        // Check the list currently chosen
         Dictionary<string, int> DataTemp = new Dictionary<string, int>();
         for (int i=0;i<CurrentItems.Count;i++)
         {
@@ -90,10 +91,13 @@ public class LoadOutConsumables : MonoBehaviour
 
     public int IncreaseItem(string ItemName)
     {
+        // If the item is not chosen before
         if (ItemSelected(ItemName)==0)
         {
+            // Check if there is slot for this item
             if (GetAvaiSlotForNewItem(ItemName) != 0)
             {
+                // If yes then check if model for this item is avai
                 for (int i = 0; i < ConsumeList.transform.childCount; i++)
                 {
                     if (ConsumeList.transform.GetChild(i).name.Replace(" ", "").ToLower()
@@ -106,7 +110,9 @@ public class LoadOutConsumables : MonoBehaviour
                 if (AddModel != null)
                 {
                     int n = GetAvaiSlotForNewItem(ItemName) -1;
+                    // get stack of the item
                     int k = FindObjectOfType<AccessDatabase>().GetStackLimitOfConsumableByName(ItemName);
+                    // Add item
                     if (k != -1)
                     {
                         CurrentItems[n] = AddModel;
@@ -131,11 +137,13 @@ public class LoadOutConsumables : MonoBehaviour
             }
         } else if (ItemSelected(ItemName) == -1)
         {
+            // If the item has already exist and cannot be added anymore
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                 "You have already add this item to its maximum stack!", 5f);
             return -1;
         } else
         {
+            // If the item has already exist and can still be add
             int n = ItemSelected(ItemName) - 1;
             CurrentItemCount[n]++;
             Consumables[n].transform.GetChild(1).GetComponent<TextMeshPro>().text = CurrentItemCount[n] + "/" + CurrentItemLimit[n];
@@ -145,6 +153,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     public int DecreaseItem(string ItemName)
     {
+        // Same as increase but reverse
         if (ItemSelectedDecrease(ItemName) == 0)
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
@@ -174,6 +183,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     private int GetAvaiSlotForNewItem(string ItemName)
     {
+        // Check if there are still slots for new item
         for (int i = 0; i < CurrentItems.Count;i++)
         {
             if (CurrentItems[i] == null)
@@ -219,6 +229,7 @@ public class LoadOutConsumables : MonoBehaviour
 
     public void ResetNumberOfConsumable(int n)
     {
+        // For case fighters has 3 and 4 slots
         if (n==3 && CurrentItems.Count==4)
         {
             if (Scene.GetComponent<LoadoutScene>().Consumables!=null &&

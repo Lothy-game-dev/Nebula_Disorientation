@@ -73,7 +73,7 @@ public class LoadoutScene : UECMenuShared
     #region On Enable Get Data
     private void GetData()
     {
-        // Set Data
+        // Set Data to board/bar
         ModelBoard.GetComponent<LoadOutModelBoard>().SetItems(
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName()),
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName())[0]);
@@ -83,6 +83,7 @@ public class LoadoutScene : UECMenuShared
             ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllPowerName()),"");
         ConsumableBar.GetComponent<LoadOutConsumables>().SetInitData(
             FindObjectOfType<AccessDatabase>().GetAllDictionarySpaceShopCons());
+        // Set data to fuel cell bar
         Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
             .GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
         CurrentFuelCells = (int)ListData["FuelCell"];
@@ -90,6 +91,7 @@ public class LoadoutScene : UECMenuShared
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = CurrentFuelCells;
     }
 
+    // Replace " " in string
     private List<string> ListReplaceSpace(List<string> inList)
     {
         for (int i=0;i<inList.Count;i++) {
@@ -98,6 +100,7 @@ public class LoadoutScene : UECMenuShared
         return inList;
     }
 
+    // Replace "-" in string
     private List<string> ListReplaceDash(List<string> inList)
     {
         for (int i = 0; i < inList.Count; i++)

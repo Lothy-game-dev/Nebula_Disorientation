@@ -37,17 +37,22 @@ public class MainMenuCameraController : MonoBehaviour
         // Check teleport to scene: Use when back from UEC
         if (PlayerPrefs.GetFloat("CreateLoading") > 0f)
         {
+            // Case from UEC to Option menu
             if (PlayerPrefs.GetInt("ToOption") == 1)
             {
+                // Reset data for playerprefs
                 PlayerPrefs.SetInt("ToOption", 0);
                 ChangeToScene(StartScene, OptionScene);
                 CurrentScene = OptionScene;
-            } else if (PlayerPrefs.GetInt("ToEncyclopedia") == 1)
+            }
+            // Case from UEC to Encyc menu
+            else if (PlayerPrefs.GetInt("ToEncyclopedia") == 1)
             {
                 PlayerPrefs.SetInt("ToEncyclopedia", 0);
                 ChangeToScene(StartScene, EncyclopediaScene);
                 CurrentScene = EncyclopediaScene;
             }
+            // Loading
             GenerateLoadingScene(PlayerPrefs.GetFloat("CreateLoading"));
             PlayerPrefs.SetFloat("CreateLoading", 0f);
         }

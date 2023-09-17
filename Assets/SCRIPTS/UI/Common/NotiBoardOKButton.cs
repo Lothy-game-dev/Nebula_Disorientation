@@ -28,6 +28,8 @@ public class NotiBoardOKButton : MonoBehaviour
     {
         // Call function and timer only if possible
         currentTimer += Time.deltaTime;
+        // Check if there are any collider on mouse
+        // If there is this collider, disable the background
         RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         bool check = false;
         foreach (var hit in hits)
@@ -52,6 +54,7 @@ public class NotiBoardOKButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        // Cases
         if ("OKButton".Equals(name) || "CancelButton".Equals(name))
         {
             Destroy(NotiBoard);

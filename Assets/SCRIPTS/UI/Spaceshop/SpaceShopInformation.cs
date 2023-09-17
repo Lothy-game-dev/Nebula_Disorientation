@@ -51,6 +51,7 @@ public class SpaceShopInformation : MonoBehaviour
     #region Show Info
     public void ShowInformationOfItem(string name)
     {
+        // Get data and show it to the UI
         DataDictionary = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(name);
         OutputData = FindObjectOfType<GlobalFunctionController>().ConvertDictionaryDataToOutputCons(DataDictionary);
         for (int i=0;i<ConsumableList.transform.childCount;i++)
@@ -79,6 +80,7 @@ public class SpaceShopInformation : MonoBehaviour
 
     private void ShowBuySellInfo()
     {
+        // Show buy sell money
         if (!BuyButton.GetComponent<Collider2D>().enabled)
         {
             BuyButton.GetComponent<Collider2D>().enabled = true;
@@ -90,6 +92,7 @@ public class SpaceShopInformation : MonoBehaviour
         BuyButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
         BuyButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
+        // Fuel cell cant sell
         if (!"fuelcell".Equals(((string)DataDictionary["Name"]).Replace(" ","").ToLower()))
         {
             SellButton.SetActive(true);
@@ -114,8 +117,10 @@ public class SpaceShopInformation : MonoBehaviour
     private void CheckInput()
     {
         Regex Regex = new Regex(@"^\d+$");
+        // Check if input is integer and >=1
         if (Regex.Match(InputField.text).Success && int.Parse(InputField.text)>=1)
         {
+            // If item has unlimited stock -> check limit 100
             if (MaxStock == 0)
             {
                 if (int.Parse(InputField.text) > 100)
@@ -123,7 +128,9 @@ public class SpaceShopInformation : MonoBehaviour
                     InputField.text = "100";
                 }
                 ShowBuySellInfo();
-            } else
+            } 
+            // If not -> check limit to item's max stock
+            else
             {
                 if (int.Parse(InputField.text)>MaxStock)
                 {

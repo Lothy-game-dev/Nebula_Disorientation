@@ -2,17 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CursorUnallowed : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+// This script is only made to check getcomponent<> so that cursor's image will be changed
+// to unallowed if gameobject has this as a component
+// Further update will be add later on
+public class CursorUnallowed : MonoBehaviour{}

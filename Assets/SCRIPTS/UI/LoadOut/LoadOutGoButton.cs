@@ -36,6 +36,7 @@ public class LoadOutGoButton : MonoBehaviour
 
     private void OnMouseOver()
     {
+        // Rotate circles
         Inner.transform.Rotate(new Vector3(0, 0, 1));
         Outer.transform.Rotate(new Vector3(0, 0, -1));
     }
@@ -54,6 +55,7 @@ public class LoadOutGoButton : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
                     "Will these items be your final decision for this session?");
             //Transfer
+            // WIP
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,

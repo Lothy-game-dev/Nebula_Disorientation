@@ -48,11 +48,13 @@ public class UECButtons : MonoBehaviour
     {
         if ("Quit".Equals(name))
         {
+            // Back to main menu
             PlayerPrefs.SetFloat("CreateLoading", 1f);
             SceneManager.UnloadSceneAsync("UECMainMenu");
             SceneManager.LoadSceneAsync("MainMenu");
         } else if ("Options".Equals(name))
         {
+            // Back to main menu and go to option
             PlayerPrefs.SetFloat("CreateLoading", 1f);
             PlayerPrefs.SetInt("ToOption", 1);
             PlayerPrefs.SetInt("BackToUEC", 1);
@@ -60,6 +62,7 @@ public class UECButtons : MonoBehaviour
             SceneManager.LoadSceneAsync("MainMenu");
         } else if ("Encyclopedia".Equals(name))
         {
+            // Back to main menu and go to encyc
             PlayerPrefs.SetFloat("CreateLoading", 1f);
             PlayerPrefs.SetInt("ToEncyclopedia", 1);
             PlayerPrefs.SetInt("BackToUEC", 1);
