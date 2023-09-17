@@ -41,8 +41,10 @@ public class FactoryButton : MonoBehaviour
         if (FactoryController.EnoughPrice && FactoryController.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyFighterModel;
-            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Do you wanna buy?");
-        } else
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Are you sure you wanna buy " + FactoryController.ItemName + " for " + FactoryController.ItemPriceCash + " cash or " + FactoryController.ItemPriceShard + " shard?");
+
+        }
+        else
         {
             if (!FactoryController.EnoughPrice)
             {

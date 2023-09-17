@@ -37,6 +37,8 @@ public class Factory : MonoBehaviour
     public bool Locked;
     public int ItemId;
     public string ItemName;
+    public string ItemPriceCash;
+    public string ItemPriceShard;
     private Dictionary<string, object> Status;
     private Dictionary<string, object> RankSys;
     private Dictionary<string, object> ItemPrice;
@@ -128,7 +130,9 @@ public class Factory : MonoBehaviour
         DescContent.GetComponent<TMP_Text>().text = FighterList[0][2];
         ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + (string)ItemPrice["Cash"] + "</color>";
         Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-
+        ItemName = FighterList[0][1];
+        ItemPriceCash = (string)ItemPrice["Cash"];
+        ItemPriceShard = (string)ItemPrice["Timeless"];
     }
     #endregion
     #region Lock item
