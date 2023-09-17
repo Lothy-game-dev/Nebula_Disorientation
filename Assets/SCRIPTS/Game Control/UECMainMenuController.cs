@@ -41,6 +41,7 @@ public class UECMainMenuController : MonoBehaviour
         if (ListData!=null)
         {
             controller.SetDataToView(ListData);
+            FindAnyObjectByType<Factory>().SetData((string)ListData["Cash"], (string)ListData["TimelessShard"]);
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,

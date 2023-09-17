@@ -33,22 +33,26 @@ public class Factory : MonoBehaviour
     private int PlayerId;
     public bool EnoughPrice;
     public bool RankRequired;
+    public bool Locked;
     public int ItemId;
     private Dictionary<string, object> Status;
     private Dictionary<string, object> RankSys;
     private Dictionary<string, object> ItemPrice;
+    public string PCash;
+    public string PShard;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
-
         // Initialize variables
         FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
-        PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
-        PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
+        PCash = PlayerInformation["Cash"].ToString();
+        PShard = PlayerInformation["TimelessShard"].ToString();
+        PlayerCash.GetComponent<TextMeshPro>().text = PCash;
+        PlayerShard.GetComponent<TextMeshPro>().text = PShard;
         FirstContent();
     }
 
@@ -88,6 +92,7 @@ public class Factory : MonoBehaviour
                     g.transform.GetChild(0).GetComponent<Image>().sprite = FighterImage[FighterImage.FindIndex(item => FighterList[i][1].ToLower().Contains(item.name.ToLower()))].sprite;
                 }
             }
+            LockItem(g, FighterList[i][5]);
             g.SetActive(true);
         }
 
@@ -124,7 +129,28 @@ public class Factory : MonoBehaviour
 
     }
     #endregion
-    #region Function group ...
+    #region Lock item
     // Group all function that serve the same algorithm
+    public void LockItem(GameObject Game, string RankId)
+    {
+        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(PlayerId);
+        if (RankId != "N/A")
+        {
+            if ((int.Parse((string)RankSys["RankId"]) < int.Parse(RankId)))
+            {
+                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.GetComponent<FactoryItem>().LockedItem = true;
+            }     
+        }
+    }
     #endregion
+    #region Set data (money,....)
+    public void SetData(string Cash, string Shard)
+    {
+        PCash = Cash;
+        PShard = Shard;
+        PlayerCash.GetComponent<TextMeshPro>().text = PCash;
+        PlayerShard.GetComponent<TextMeshPro>().text = PShard;
+    }
+    #endregion 
 }

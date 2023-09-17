@@ -15,6 +15,7 @@ public class ArsenalItem : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject Arsenal;
+    public GameObject BuyButton;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -28,6 +29,8 @@ public class ArsenalItem : MonoBehaviour
     private string RankColor;
     public List<GameObject> ItemStatusList;
     public GameObject Content;
+    public bool LockedItem;
+
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -43,7 +46,7 @@ public class ArsenalItem : MonoBehaviour
         
     }
     #endregion
-    #region Function group 1
+    #region Show information when click item
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
@@ -94,14 +97,14 @@ public class ArsenalItem : MonoBehaviour
         }
         //ar.DescContent.GetComponent<TMP_Text>().text = ItemList[int.Parse(Id) - 1][3];
         // check if enough timeless shard
-        if ((int)ar.PlayerInformation["TimelessShard"] < int.Parse(ItemList[int.Parse(Id) - 1][6]))
+        if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
         {
             PriceColor = "red";
             ar.EnoughPrice = false;
         }
         else
         {
-            if ((int)ar.PlayerInformation["TimelessShard"] == 0)
+            if (int.Parse(ar.PShard) == 0)
             {
                 ar.EnoughPrice = false;
                 PriceColor = "red";
@@ -113,7 +116,7 @@ public class ArsenalItem : MonoBehaviour
             }
         }
         // check if enough cash
-        if ((int)ar.PlayerInformation["Cash"] < int.Parse(ItemList[int.Parse(Id) - 1][5]))
+        if (int.Parse(ar.PCash) < int.Parse(ItemList[int.Parse(Id) - 1][5]))
         {
             PriceColor = "red";
             ar.EnoughPrice = false;
@@ -138,6 +141,17 @@ public class ArsenalItem : MonoBehaviour
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3]));
+        //change the color of buy button if item is locked
+        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        if (LockedItem)
+        {
+            c.a = 0.5f;
+        }
+        else
+        {
+            c.a = 1f;
+        }
+        BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
     }
     #endregion
     #region Check current item on mouse down

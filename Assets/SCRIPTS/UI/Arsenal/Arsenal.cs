@@ -40,6 +40,10 @@ public class Arsenal : MonoBehaviour
     public string CurrentTab;
     public int ItemId;
     public string ItemType;
+    private Dictionary<string, object> Status;
+    private Dictionary<string, object> RankSys;
+    public string PCash;
+    public string PShard;
     #endregion
     #region Start & Update
 
@@ -50,11 +54,10 @@ public class Arsenal : MonoBehaviour
         PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
-        if (gameObject.name == "Arsenal")
-        {
-            PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
-            PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
-        }
+        PCash = PlayerInformation["Cash"].ToString();
+        PShard = PlayerInformation["TimelessShard"].ToString();
+        PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
+        PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();        
         CurrentTab = "Weapon";
         FirstContent();
     } 
@@ -65,7 +68,7 @@ public class Arsenal : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region
+    #region Generate first weapon category
     private void FirstContent()
     {
         for (int i = 0; i < WeaponList.Count; i++)
@@ -95,7 +98,68 @@ public class Arsenal : MonoBehaviour
                 }
             }
             g.SetActive(true);
+            // First item choosen
+            FirstItemChoosen(WeaponList, WeaponStatus, "Weapon", Content);
+            LockItem(g, WeaponList[i][8]);
         }
+    }
+    #endregion
+    #region First item choosen
+    public void FirstItemChoosen(List<List<string>> ItemList, List<GameObject> StatusList, string Type, GameObject ContentType)
+    {
+        if (Type == "Weapon")
+        {
+            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[0][4]);
+        }
+        else
+        {
+            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[0][4]);
+
+        }
+        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[0][8]));
+        ContentType.transform.GetChild(0).GetComponent<Image>().color = Color.green;
+        for (int i = 0; i < StatusList.Count; i++)
+        {
+            if (!Status.ContainsKey(StatusList[i].name))
+            {
+                StatusList[i].GetComponent<TextMeshPro>().text = "N/A";
+            }
+            else
+            {
+                StatusList[i].GetComponent<TextMeshPro>().text = (string)Status[StatusList[i].name];
+            }
+        }
+        EnoughPrice = true;
+        RankRequired = true;
+        ItemId = int.Parse(ItemList[0][0]);
+        ItemType = Type;
+        ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][6] + "</color>";
+        DescContent.GetComponent<TMP_Text>().text = ItemList[0][3];
+        ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][5] + "</color>";
+        Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+    }
+    #endregion
+    #region Locked item will be gray-ed
+    public void LockItem(GameObject Game, string RankId)
+    {
+        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(PlayerId);
+        if (RankId != "N/A")
+        {
+            if ((int.Parse((string)RankSys["RankId"]) < int.Parse(RankId)))
+            {
+                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.GetComponent<ArsenalItem>().LockedItem = true;
+            }     
+        }
+    }
+    #endregion
+    #region Set data (money,....)
+    public void SetData(string Cash, string Shard)
+    {
+        PCash = Cash;
+        PShard = Shard;
+        PlayerCash.GetComponent<TextMeshPro>().text = PCash;
+        PlayerShard.GetComponent<TextMeshPro>().text = PShard;
     }
     #endregion
 }

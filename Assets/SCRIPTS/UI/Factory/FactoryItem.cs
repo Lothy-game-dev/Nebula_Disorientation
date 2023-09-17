@@ -15,12 +15,12 @@ public class FactoryItem : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject Factory;
+    public GameObject BuyButton;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string Id;
-    public string Type;
     private Factory Fac;
     private Dictionary<string, object> Status;
     private Dictionary<string, object> ItemPrice;
@@ -29,6 +29,7 @@ public class FactoryItem : MonoBehaviour
     private string RankColor;
     public List<GameObject> ItemStatusList;
     public GameObject Content;
+    public bool LockedItem;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -80,14 +81,14 @@ public class FactoryItem : MonoBehaviour
             }
         }
         // check if have enough Timeless shard
-        if ((int)Fac.PlayerInformation["TimelessShard"] < int.Parse((string)ItemPrice["Timeless"]))
+        if (int.Parse(Fac.PShard) < int.Parse((string)ItemPrice["Timeless"]))
         {
             PriceColor = "red";
             Fac.EnoughPrice = false;
         }
         else
         {         
-            if ((int)Fac.PlayerInformation["TimelessShard"] == 0)
+            if (int.Parse(Fac.PShard) == 0)
             {                
                 Fac.EnoughPrice = false;
                 PriceColor = "red";
@@ -99,7 +100,7 @@ public class FactoryItem : MonoBehaviour
             }
         }
         // check if have enough cash
-        if ((int)Fac.PlayerInformation["Cash"] < int.Parse((string)ItemPrice["Cash"]))
+        if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
         {
             PriceColor = "red";
             Fac.EnoughPrice = false;
@@ -124,6 +125,17 @@ public class FactoryItem : MonoBehaviour
         Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + (string)ItemPrice["Cash"] + "</color>";
         Fac.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][2]));
+
+        //change the color of buy button if item is locked
+        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        if (LockedItem)
+        {
+            c.a = 0.5f;
+        } else
+        {
+            c.a = 1f;
+        }
+        BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
     }
     #endregion
     #region Check current item on mouse down
