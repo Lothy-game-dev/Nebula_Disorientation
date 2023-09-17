@@ -24,6 +24,7 @@ public class Factory : MonoBehaviour
     public GameObject Rank;
     public GameObject PlayerCash;
     public GameObject PlayerShard;
+    public bool IsInSession;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -63,7 +64,7 @@ public class Factory : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Generate fighter list and choose the first one
     private void FirstContent()
     {
         // clone the template and set image of model
@@ -133,10 +134,9 @@ public class Factory : MonoBehaviour
     // Group all function that serve the same algorithm
     public void LockItem(GameObject Game, string RankId)
     {
-        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(PlayerId);
         if (RankId != "N/A")
         {
-            if ((int.Parse((string)RankSys["RankId"]) < int.Parse(RankId)))
+            if ((int)PlayerInformation["RankId"] < int.Parse(RankId))
             {
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<FactoryItem>().LockedItem = true;

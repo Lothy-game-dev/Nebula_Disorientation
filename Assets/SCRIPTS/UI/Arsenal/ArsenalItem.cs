@@ -25,7 +25,8 @@ public class ArsenalItem : MonoBehaviour
     private Arsenal ar;
     private Dictionary<string, object> Status;
     private Dictionary<string, object> RankSys;
-    private string PriceColor;
+    private string CashColor;
+    private string ShardColor;
     private string RankColor;
     public List<GameObject> ItemStatusList;
     public GameObject Content;
@@ -99,7 +100,7 @@ public class ArsenalItem : MonoBehaviour
         // check if enough timeless shard
         if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
         {
-            PriceColor = "red";
+            ShardColor = "red";
             ar.EnoughPrice = false;
         }
         else
@@ -107,38 +108,45 @@ public class ArsenalItem : MonoBehaviour
             if (int.Parse(ar.PShard) == 0)
             {
                 ar.EnoughPrice = false;
-                PriceColor = "red";
+                ShardColor = "red";
             }
             else
             {
-                PriceColor = "green";
+                ShardColor = "green";
                 ar.EnoughPrice = true;
             }
         }
-        // check if enough cash
-        if (int.Parse(ar.PCash) < int.Parse(ItemList[int.Parse(Id) - 1][5]))
+        if (ar.IsInSession)
         {
-            PriceColor = "red";
-            ar.EnoughPrice = false;
+            // check if have enough cash
+            if (int.Parse(ar.PCash) < int.Parse(ItemList[int.Parse(Id) - 1][5]))
+            {
+                CashColor = "red";
+                ar.EnoughPrice = false;
+            }
+            else
+            {
+                CashColor = "green";
+                ar.EnoughPrice = true;
+            }
         }
         else
         {
-            PriceColor = "green";
-            ar.EnoughPrice = true;
+            CashColor = "red";
         }
         //check rank required
-        if ((string)ar.PlayerInformation["Rank"] == (string)RankSys["RankName"])
-        {
-            RankColor = "green";
-            ar.RankRequired = true;
-        }
-        else
+        if ((int)ar.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
         {
             RankColor = "red";
             ar.RankRequired = false;
         }
-        ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
-        ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
+        else
+        {
+            RankColor = "green";
+            ar.RankRequired = true;
+        }
+        ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
+        ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3]));
         //change the color of buy button if item is locked
@@ -164,7 +172,7 @@ public class ArsenalItem : MonoBehaviour
         Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
     }
     #endregion
-    #region
+    #region Text animation
     private IEnumerator TextRunning(string text)
     {
         ar.DescContent.GetComponent<TMP_Text>().text = "";

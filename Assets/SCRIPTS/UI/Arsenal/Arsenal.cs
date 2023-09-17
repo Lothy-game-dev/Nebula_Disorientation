@@ -27,6 +27,7 @@ public class Arsenal : MonoBehaviour
     public GameObject Rank;
     public GameObject PlayerCash;
     public GameObject PlayerShard;
+    public bool IsInSession;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -142,10 +143,9 @@ public class Arsenal : MonoBehaviour
     #region Locked item will be gray-ed
     public void LockItem(GameObject Game, string RankId)
     {
-        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(PlayerId);
         if (RankId != "N/A")
         {
-            if ((int.Parse((string)RankSys["RankId"]) < int.Parse(RankId)))
+            if ((int)PlayerInformation["RankId"] < int.Parse(RankId))
             {
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<ArsenalItem>().LockedItem = true;

@@ -33,7 +33,7 @@ public class FactoryButton : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Buy Action
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
@@ -45,12 +45,12 @@ public class FactoryButton : MonoBehaviour
         {
             if (!FactoryController.EnoughPrice)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "You have not enough money!", 2f);
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "You dont have enough money!", 5f);
             } else
             {
                 if (!FactoryController.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "You dont reach the rank required. Please try get a higher rank!", 2f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Please try to get a higher rank!", 5f);
                 }
             }
         }

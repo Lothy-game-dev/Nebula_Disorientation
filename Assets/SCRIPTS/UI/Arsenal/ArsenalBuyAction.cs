@@ -33,7 +33,7 @@ public class ArsenalBuyAction : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Buy Action
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
@@ -43,6 +43,22 @@ public class ArsenalBuyAction : MonoBehaviour
             FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Do you wanna buy?");
             
         }
+        else
+        {
+            if (!Ar.EnoughPrice)
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "You dont have enough money!", 5f);
+            }
+            else
+            {
+                if (!Ar.RankRequired)
+                {
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Please try to get a higher rank!", 5f);
+                }
+            }
+        }
+
+
     }
     #endregion
     #region Function group ...

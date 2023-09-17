@@ -25,7 +25,8 @@ public class FactoryItem : MonoBehaviour
     private Dictionary<string, object> Status;
     private Dictionary<string, object> ItemPrice;
     private Dictionary<string, object> RankSys;
-    private string PriceColor;
+    private string CashColor;
+    private string ShardColor;
     private string RankColor;
     public List<GameObject> ItemStatusList;
     public GameObject Content;
@@ -46,7 +47,7 @@ public class FactoryItem : MonoBehaviour
 
     }
     #endregion
-    #region Function group 1
+    #region Show information when choose item
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
@@ -81,9 +82,10 @@ public class FactoryItem : MonoBehaviour
             }
         }
         // check if have enough Timeless shard
+        Debug.Log(int.Parse((string)ItemPrice["Timeless"]));
         if (int.Parse(Fac.PShard) < int.Parse((string)ItemPrice["Timeless"]))
         {
-            PriceColor = "red";
+            ShardColor = "red";
             Fac.EnoughPrice = false;
         }
         else
@@ -91,38 +93,44 @@ public class FactoryItem : MonoBehaviour
             if (int.Parse(Fac.PShard) == 0)
             {                
                 Fac.EnoughPrice = false;
-                PriceColor = "red";
+                ShardColor = "red";
             }
             else
             {
-                PriceColor = "green";
+                ShardColor = "green";
                 Fac.EnoughPrice = true;
             }
         }
-        // check if have enough cash
-        if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
+        if (Fac.IsInSession)
         {
-            PriceColor = "red";
-            Fac.EnoughPrice = false;
-        }
-        else
+            // check if have enough cash
+            if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
+            {
+                CashColor = "red";
+                Fac.EnoughPrice = false;
+            }
+            else
+            {
+                CashColor = "green";
+                Fac.EnoughPrice = true;
+            }
+        } else
         {
-            PriceColor = "green";
-            Fac.EnoughPrice = true;
+            CashColor = "red";
         }
         // check rank required
-        if ((string)Fac.PlayerInformation["Rank"] == (string)RankSys["RankName"])
-        {
-            RankColor = "green";     
-            Fac.RankRequired = true;
-        }
-        else
+        if ((int)Fac.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
         {
             RankColor = "red";
             Fac.RankRequired = false;
+        } else
+        {
+            RankColor = "green";
+            Fac.RankRequired = true;
         }
-        Fac.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + (string)ItemPrice["Timeless"] + "</color>";
-        Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + PriceColor + ">" + (string)ItemPrice["Cash"] + "</color>";
+        
+        Fac.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + (string)ItemPrice["Timeless"] + "</color>";
+        Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + (string)ItemPrice["Cash"] + "</color>";
         Fac.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][2]));
 
@@ -148,7 +156,7 @@ public class FactoryItem : MonoBehaviour
         Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
     }
     #endregion
-    #region
+    #region Text animation
     private IEnumerator TextRunning(string text)
     {     
         Fac.DescContent.GetComponent<TMP_Text>().text = "";
