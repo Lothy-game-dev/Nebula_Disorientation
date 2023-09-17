@@ -86,7 +86,7 @@ public class MainMenuSpinBoard : MonoBehaviour
                 new Vector3(currentSpinModel.transform.localScale.x + initScaleX / 40,
                 currentSpinModel.transform.localScale.y + initScaleY / 40,
                 currentSpinModel.transform.localScale.z + initScaleZ / 40);
-            yield return new WaitForSeconds(0.025f);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 

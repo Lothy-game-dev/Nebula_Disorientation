@@ -932,7 +932,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ItemName, ItemDescription, ItemEffect, EffectDuration, MaxStack, TierColor FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace(" ", "").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT ItemName, ItemDescription, StockPerDays, ItemEffect, EffectDuration, MaxStack, ItemPrice, Cooldown, TierColor FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
@@ -940,10 +940,26 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             datas.Add("Name", dataReader.GetString(0));
             datas.Add("Description", dataReader.GetString(1));
-            datas.Add("Effect", dataReader.GetString(2));
-            datas.Add("Duration", dataReader.GetInt32(3));
-            datas.Add("Stack", dataReader.GetInt32(4));
-            datas.Add("Color", dataReader.GetString(5));
+            if (dataReader.IsDBNull(2))
+            {
+                datas.Add("StockPerDay", 0);
+            } else
+            {
+                datas.Add("StockPerDay", dataReader.GetInt32(2));
+            }
+            datas.Add("Effect", dataReader.GetString(3));
+            datas.Add("Duration", dataReader.GetInt32(4));
+            datas.Add("Stack", dataReader.GetInt32(5));
+            datas.Add("Price", dataReader.GetInt32(6));
+            if (dataReader.IsDBNull(7))
+            {
+                datas.Add("Cooldown", 0);
+            }
+            else
+            {
+                datas.Add("Cooldown", dataReader.GetInt32(7));
+            }
+            datas.Add("Color", dataReader.GetString(8));
         }
         dbConnection.Close();
         if (!check)
@@ -974,6 +990,37 @@ public class AccessDatabase : MonoBehaviour
         {
             return -1;
         } else
+        {
+            return n;
+        }
+    }
+
+    public int GetStocksPerDayOfConsumable(string itemName)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT StockPerDays FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        int n = 0;
+        while (dataReader.Read())
+        {
+            check = true;
+            if (dataReader.IsDBNull(0))
+            {
+                n = 0;
+            } else
+            n = dataReader.GetInt32(0);
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return -1;
+        }
+        else
         {
             return n;
         }

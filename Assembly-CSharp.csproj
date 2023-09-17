@@ -98,9 +98,11 @@
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumableMinusButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\OverheatBar.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInputButton.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\PlayerPrefModifyController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
-    <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopItem.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInformation.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContractButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECEnterSession.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopBuySellButton.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Database\AccessDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopLoading.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalButton.cs" />
+    <Compile Include="Assets\SCRIPTS\Common\CursorUnallowed.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionMenu.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECController.cs" />
@@ -148,7 +152,6 @@
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycMenu.cs" />
-    <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryItem.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />

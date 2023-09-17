@@ -11,6 +11,7 @@ public class SpaceShopListItem : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
     public GameObject Template;
     public GameObject ConsumableList;
     public GameObject Top;
@@ -154,10 +155,15 @@ public class SpaceShopListItem : MonoBehaviour
                 go.name = SpriteList[i].name;
                 go.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ListName[i];
                 go.transform.localScale = Template.transform.localScale;
+                int n = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable(go.name);
+                if (n!=0)
+                {
+                    go.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = n.ToString();
+                }
                 if (i==0)
                 {
                     go.GetComponent<Image>().color = Color.green;
-                    // Data
+                    ChooseItem(go);
                 }
                 go.SetActive(true);
                 pos = new Vector2(pos.x, pos.y - BoxSize);
@@ -172,6 +178,23 @@ public class SpaceShopListItem : MonoBehaviour
         {
             AlreadyGetPosYContent = true;
             InitPosYContent = Content.transform.position.y;
+        }
+    }
+
+    public void ChooseItem(GameObject go)
+    {
+        if (ItemAfterGen.Contains(go))
+        {
+            foreach (var item in ItemAfterGen)
+            {
+                item.GetComponent<Image>().color = Color.white;
+            }
+            go.GetComponent<Image>().color = Color.green;
+            Information.GetComponent<SpaceShopInformation>().ShowInformationOfItem(go.name);
+        } else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Cannot fetch data for this item! Please contact to our email or try again!", 5f);
         }
     }
     #endregion

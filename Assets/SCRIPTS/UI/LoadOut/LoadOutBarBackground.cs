@@ -49,6 +49,7 @@ public class LoadOutBarBackground : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        // If click on background close the bar
         if (!alreadyClick)
         {
             alreadyClick = true;

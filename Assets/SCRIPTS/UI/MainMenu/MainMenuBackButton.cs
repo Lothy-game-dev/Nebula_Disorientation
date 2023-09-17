@@ -39,6 +39,11 @@ public class MainMenuBackButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        if (PlayerPrefs.GetInt("BackToUEC") == 1)
+        {
+            PlayerPrefs.SetInt("BackToUEC", 0);
+            FindObjectOfType<MainMenuCameraController>().MoveToUEC();
+        } else
         if (BackScene != null && BackScene.name != "MainMenuScene")
         {
             FindObjectOfType<MainMenuCameraController>().ChangeToScene(BackScene);

@@ -58,6 +58,13 @@ public class UECButtons : MonoBehaviour
             PlayerPrefs.SetInt("BackToUEC", 1);
             SceneManager.UnloadSceneAsync("UECMainMenu");
             SceneManager.LoadSceneAsync("MainMenu");
+        } else if ("Encyclopedia".Equals(name))
+        {
+            PlayerPrefs.SetFloat("CreateLoading", 1f);
+            PlayerPrefs.SetInt("ToEncyclopedia", 1);
+            PlayerPrefs.SetInt("BackToUEC", 1);
+            SceneManager.UnloadSceneAsync("UECMainMenu");
+            SceneManager.LoadSceneAsync("MainMenu");
         }
     }
     #endregion
