@@ -153,5 +153,7 @@ public class Factory : MonoBehaviour
         PlayerCash.GetComponent<TextMeshPro>().text = PCash;
         PlayerShard.GetComponent<TextMeshPro>().text = PShard;
     }
-    #endregion 
+
+    #endregion
+
 }
