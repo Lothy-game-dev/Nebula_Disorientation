@@ -108,15 +108,6 @@ public class OptionButton : MonoBehaviour
                                     Mathf.RoundToInt(float.Parse(OptionMenu.Music)), Mathf.RoundToInt(float.Parse(OptionMenu.Sound)), Mathf.RoundToInt(float.Parse(OptionMenu.FpsCounter)), OptionMenu.Resol);
             OptionMenu.IsSaved = true;
         }
-        if ("BackButton".Equals(gameObject.name))
-        {
-            if (PlayerPrefs.GetInt("BackToUEC") == 1)
-            {
-                PlayerPrefs.SetInt("BackToUEC", 0);
-                FindObjectOfType<MainMenuCameraController>().MoveToUEC();
-            }
-            else FindAnyObjectByType<MainMenuCameraController>().BackToMainMenu();
-        }
     }
     #endregion
     private void OnMouseEnter()
@@ -125,7 +116,7 @@ public class OptionButton : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if ("BackButton".Equals(gameObject.name) || "SaveButton".Equals(gameObject.name))
+        if ("SaveButton".Equals(gameObject.name))
         {
             Color c = GetComponent<SpriteRenderer>().color;
             c.r -= 0.01f;
@@ -149,7 +140,7 @@ public class OptionButton : MonoBehaviour
     }
     private void OnMouseExit()
     {
-        if (!alreadySelect && ("BackButton".Equals(gameObject.name) || "SaveButton".Equals(gameObject.name)))
+        if (!alreadySelect && "SaveButton".Equals(gameObject.name))
         {
             Color c = GetComponent<SpriteRenderer>().color;
             c.r = 1;

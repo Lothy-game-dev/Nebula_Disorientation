@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMenuTutorialScene : MainMenuSceneShared
+public class MainMenuScene : MainMenuSceneShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -30,11 +30,7 @@ public class MainMenuTutorialScene : MainMenuSceneShared
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
-    // Group all function that serve the same algorithm
-    #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
+    #region Animation
     public override void StartAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;

@@ -50,6 +50,8 @@ public class NewStoryScene : MainMenuSceneShared
     // Group all function that serve the same algorithm
     public override void StartAnimation()
     {
+        GetComponent<BackgroundBrieflyMoving>().enabled = true;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         foreach (var go2 in StartAnimOff)
         {
             go2.SetActive(false);
@@ -66,6 +68,12 @@ public class NewStoryScene : MainMenuSceneShared
             go.SetActive(true);
         }
         NameField.text = "";
+    }
+
+    public override void EndAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
     }
     #endregion
 }

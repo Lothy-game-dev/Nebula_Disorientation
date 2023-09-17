@@ -129,7 +129,7 @@ public class MainMenuButtons : MonoBehaviour
             Text.GetComponent<SpriteRenderer>().color = c2;
             yield return new WaitForSeconds(0.1f);
         }
-        FindObjectOfType<MainMenuCameraController>().ChangeToScene(AfterMenuSelectPosition);
+        FindObjectOfType<MainMenuCameraController>().ChangeToScene(gameObject.transform.parent.gameObject, AfterMenuSelectPosition);
     }
 
     public void EnterView()

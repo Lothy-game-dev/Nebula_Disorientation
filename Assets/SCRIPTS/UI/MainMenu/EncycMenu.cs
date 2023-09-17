@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EncycMenu : MonoBehaviour
+public class EncycMenu : MainMenuSceneShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -155,6 +155,19 @@ public class EncycMenu : MonoBehaviour
                 CategoryContent.transform.GetChild(i).GetComponent<Image>().color = Color.green;
             }
         }
+    }
+    #endregion
+    #region Animation
+    public override void StartAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = true;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+    }
+
+    public override void EndAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
     }
     #endregion
 }

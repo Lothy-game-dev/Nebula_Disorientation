@@ -90,6 +90,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECCurrencyBar.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\StatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycButton.cs" />

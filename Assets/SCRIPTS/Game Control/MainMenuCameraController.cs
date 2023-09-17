@@ -40,12 +40,12 @@ public class MainMenuCameraController : MonoBehaviour
             if (PlayerPrefs.GetInt("ToOption") == 1)
             {
                 PlayerPrefs.SetInt("ToOption", 0);
-                ChangeToScene(OptionScene);
+                ChangeToScene(StartScene, OptionScene);
                 CurrentScene = OptionScene;
             } else if (PlayerPrefs.GetInt("ToEncyclopedia") == 1)
             {
                 PlayerPrefs.SetInt("ToEncyclopedia", 0);
-                ChangeToScene(EncyclopediaScene);
+                ChangeToScene(StartScene, EncyclopediaScene);
                 CurrentScene = EncyclopediaScene;
             }
             GenerateLoadingScene(PlayerPrefs.GetFloat("CreateLoading"));
@@ -58,8 +58,13 @@ public class MainMenuCameraController : MonoBehaviour
     }
     #endregion
     #region Scene Control
-    public void ChangeToScene(GameObject SceneGO)
+    public void ChangeToScene(GameObject FromScene, GameObject SceneGO)
     {
+        MainMenuSceneShared m = FromScene.GetComponent<MainMenuSceneShared>();
+        if (m != null)
+        {
+            m.EndAnimation();
+        }
         if (SceneGO!=null)
         {
             CurrentScene = SceneGO;
@@ -68,17 +73,27 @@ public class MainMenuCameraController : MonoBehaviour
             CurrentScene = StartScene;
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y,transform.position.z);
-        MainMenuSceneShared m = SceneGO.GetComponent<MainMenuSceneShared>();
-        if (m != null)
+        MainMenuSceneShared m2 = SceneGO.GetComponent<MainMenuSceneShared>();
+        if (m2 != null)
         {
-            m.StartAnimation(); 
+            m2.StartAnimation(); 
         }
     }
-    public void BackToMainMenu()
+    public void BackToMainMenu(GameObject FromScene)
     {
+        MainMenuSceneShared m = FromScene.GetComponent<MainMenuSceneShared>();
+        if (m != null)
+        {
+            m.EndAnimation();
+        }
         if (CurrentScene!=StartScene)
         {
             CurrentScene = StartScene;
+        }
+        MainMenuSceneShared m2 = CurrentScene.GetComponent<MainMenuSceneShared>();
+        if (m2 != null)
+        {
+            m2.StartAnimation();
         }
         transform.position = new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y, transform.position.z);
         foreach (var but in MainMenuButtons)
