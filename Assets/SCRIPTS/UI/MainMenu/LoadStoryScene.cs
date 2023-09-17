@@ -49,7 +49,15 @@ public class LoadStoryScene : MainMenuSceneShared
     #region Anim
     public override void StartAnimation()
     {
+        GetComponent<BackgroundBrieflyMoving>().enabled = true;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         GetData();
+    }
+
+    public override void EndAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
     }
     #endregion
     #region Get Data

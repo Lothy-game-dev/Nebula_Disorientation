@@ -51,11 +51,7 @@ public class TutorialButton : MonoBehaviour
             TutorialMenu.SectionDesc.SetActive(false);
             TutorialMenu.SectionName.SetActive(false);
         }
-        if ("BackButton".Equals(gameObject.name))
-        {
-            FindObjectOfType<MainMenuCameraController>().BackToMainMenu();
-        }
-        else
+        if (!"BackButton".Equals(gameObject.name))
         {
             TutorialMenu.SectionDesc = SectionDesc;
             TutorialMenu.SectionName = SectionName;

@@ -12,6 +12,7 @@ public class MainMenuBackButton : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public GameObject CurrentScene;
     public GameObject BackScene;
     #endregion
     #region NormalVariables
@@ -46,10 +47,10 @@ public class MainMenuBackButton : MonoBehaviour
         } else
         if (BackScene != null && BackScene.name != "MainMenuScene")
         {
-            FindObjectOfType<MainMenuCameraController>().ChangeToScene(BackScene);
+            FindObjectOfType<MainMenuCameraController>().ChangeToScene(CurrentScene, BackScene);
         } else
         {
-            FindObjectOfType<MainMenuCameraController>().BackToMainMenu();
+            FindObjectOfType<MainMenuCameraController>().BackToMainMenu(CurrentScene);
         }
     }
     #endregion

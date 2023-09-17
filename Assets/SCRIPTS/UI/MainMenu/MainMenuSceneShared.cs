@@ -5,6 +5,6 @@ using UnityEngine;
 public abstract class MainMenuSceneShared : MonoBehaviour
 {
     public abstract void StartAnimation();
-    
-    
+
+    public abstract void EndAnimation();
 }

@@ -107,7 +107,14 @@ public class OptionMenu : MainMenuSceneShared
     // Group all function that serve the same algorithm
     public override void StartAnimation()
     {
-        Debug.Log("A");
+        GetComponent<BackgroundBrieflyMoving>().enabled = true;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+    }
+
+    public override void EndAnimation()
+    {
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
     }
     #endregion
 }
