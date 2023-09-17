@@ -39,6 +39,7 @@ public class LoadOutDetailStatus : MonoBehaviour
     #region Set Data
     public void SetData(string name, Dictionary<string, object> data)
     {
+        // Set data to UI
         transform.GetChild(0).GetComponent<TextMeshPro>().text = name;
         Health.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = (string)data["HP"];
         Speed.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = (string)data["SPD"];

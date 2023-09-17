@@ -31,6 +31,8 @@ public class NotificationBoard : MonoBehaviour
     }
     private void LateUpdate()
     {
+        // Call in late update after all has updated: if there is any other objects
+        // call it to disable -> disable
         if (DisableCollider == 0)
         {
             GetComponent<Collider2D>().enabled = false;

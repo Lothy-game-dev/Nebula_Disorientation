@@ -31,6 +31,8 @@ public class SpaceShopInputButton : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        // Plus and Minus button
+        // Ceck if collider is hit
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         bool check = false;
         if (hit.collider != null)
@@ -42,6 +44,7 @@ public class SpaceShopInputButton : MonoBehaviour
         }
         if (check)
         {
+            // If mouse down when collider hit -> increase/decrease the input by 1 each time
             if (Input.GetMouseButton(0))
             {
                 if (inputDelay<=0f)
@@ -53,6 +56,7 @@ public class SpaceShopInputButton : MonoBehaviour
                 {
                     inputDelay -= Time.deltaTime;
                 }
+                // If hold the button more than 2 seconds, enter fast input mode, increase by 10 each time
                 if (InputScale<10) fastInputTimer+=Time.deltaTime;
                 if (fastInputTimer>2f)
                 {

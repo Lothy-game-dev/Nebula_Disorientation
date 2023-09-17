@@ -35,32 +35,36 @@ public class CursorController : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        // Check if mouse inside game window
         if (IsMouseInsideWindow())
         {
+            // Raycast to check if mouse is over any collider
             RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             string check = "Normal";
             foreach (var hit in hits)
             {
                 if (hit.collider != null)
                 {
-                    /*if (hit.collider.gameObject.GetComponent<CursorUnallowed>()!=null)
+                    // If contain cursor unallow > show unallowed
+                    if (hit.collider.gameObject.GetComponent<CursorUnallowed>()!=null)
                     {
                         check = "Unallowed";
-                    } else */
+                    } else 
                     check = "Click";
                     break;
                 }
             }
+            // Change cursor image based on result
             if ("Click".Equals(check))
             {
                 Cursor.SetCursor(ClickCursor, Vector2.zero, CursorMode.ForceSoftware);
             } else if ("Normal".Equals(check))
             {
                 Cursor.SetCursor(MainCursor, Vector2.zero, CursorMode.ForceSoftware);
-            } /*else if ("Unallowed".Equals(check))
+            } else if ("Unallowed".Equals(check))
             {
                 Cursor.SetCursor(UnallowedCursor, Vector2.zero, CursorMode.ForceSoftware);
-            }*/
+            }
         }
     }
     #endregion
@@ -80,6 +84,7 @@ public class CursorController : MonoBehaviour
     public bool IsMouseInsideWindow()
     {
         CalculateBorder();
+        // Check if mouse inside window
         if (Camera.main.ScreenToWorldPoint(Input.mousePosition).y > TopBorderY ||
             Camera.main.ScreenToWorldPoint(Input.mousePosition).y < BottomBorderY ||
             Camera.main.ScreenToWorldPoint(Input.mousePosition).x < LeftBorderX ||

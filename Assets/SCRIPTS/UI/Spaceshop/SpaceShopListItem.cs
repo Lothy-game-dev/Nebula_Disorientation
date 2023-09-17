@@ -95,6 +95,7 @@ public class SpaceShopListItem : MonoBehaviour
     }
     #endregion
     #region Set Item
+    // Same as bars in Load out
     public void SetItem(List<string> Item)
     {
         Scroll.GetComponent<ScrollRect>().vertical = false;
@@ -117,6 +118,7 @@ public class SpaceShopListItem : MonoBehaviour
         StartCoroutine(GenerateItems());
     }
 
+    // Stop generating and destroy all items
     private void RemoveAllItem()
     {
         ContinueGenerating = false;
@@ -139,6 +141,7 @@ public class SpaceShopListItem : MonoBehaviour
 
     private IEnumerator GenerateItems()
     {
+        // Generate Items: Same as other bars
         Vector2 pos = FirstPos.transform.position;
         maximumHeight = BoxSize * SpriteList.Count * 0.78f;
         Content.GetComponent<RectTransform>().sizeDelta
@@ -183,6 +186,7 @@ public class SpaceShopListItem : MonoBehaviour
 
     public void ChooseItem(GameObject go)
     {
+        // When choose an item, all other change color to normal, the chosen change to green
         if (ItemAfterGen.Contains(go))
         {
             foreach (var item in ItemAfterGen)
@@ -196,6 +200,12 @@ public class SpaceShopListItem : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                 "Cannot fetch data for this item! Please contact to our email or try again!", 5f);
         }
+    }
+
+    // When disabled, remove all items
+    private void OnDisable()
+    {
+        RemoveAllItem();
     }
     #endregion
 }

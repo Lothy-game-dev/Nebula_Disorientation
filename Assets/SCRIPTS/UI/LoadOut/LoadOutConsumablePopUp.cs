@@ -74,16 +74,21 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     #region Set Data
     public void OpenPopup(Dictionary<string, int> ListConsumes, Dictionary<string, int> ChosenConsumes)
     {
+        // Set trans
         Color c = GetComponent<SpriteRenderer>().color;
         currentTransparency = 180 / 255f;
         c.a = 0f;
         GetComponent<SpriteRenderer>().color = c;
+        // Calculate each item size
         BoxSize = Mathf.Abs(BoxLeft.transform.position.x - BoxRight.transform.position.x);
+        // Reset data
         Models = new List<GameObject>();
         IconAfterGen = new List<GameObject>();
         ChosenGO = new List<GameObject>();
         ChosenName = new List<string>();
+        // Disable scroll
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
+        // Disable text
         ClickText.SetActive(false);
         Details.SetActive(false);
         Details.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
@@ -136,6 +141,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
                 i++;
             }
         }
+        // Reset size of content
         Content.GetComponent<RectTransform>().sizeDelta
             = new Vector2(0, 0);
         foreach (var line in Lines)
@@ -176,6 +182,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         ListIconCount = new List<int>(DictConsumes.Values);
         List<string> ChosenConsumes = new List<string>(DictChosenConsumes.Keys);
         ListIconSelectedCount = new List<int>(DictChosenConsumes.Values);
+        // Same check model as other bars
         foreach (string cons in ChosenConsumes)
         {
             if (!ListConsumes.Contains(cons))
@@ -206,6 +213,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
 
     private IEnumerator GenerateItems()
     {
+        // Same generate item as other bars
         Vector2 pos = FirstPos.transform.position;
         maximumWidth = BoxSize * (Models.Count) * 0.9f - ScrollRect.GetComponent<RectTransform>().sizeDelta.x;
         if (maximumWidth > 0f)

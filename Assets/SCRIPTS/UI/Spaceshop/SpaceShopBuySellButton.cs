@@ -32,6 +32,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        // When mouse down, check condition
         if ("Buy".Equals(name))
         {
             if (Scene.GetComponent<SpaceShopScene>().CheckEnoughMoney(CurrentValue))
@@ -52,6 +53,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
         }
     }
 
+    // If confirm board is click, run this code
     public void PerformBuySell()
     {
         Debug.Log(name + " - " + Quantity + " " + name + ":" + CurrentValue);

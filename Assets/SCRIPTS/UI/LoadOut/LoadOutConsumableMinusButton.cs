@@ -25,6 +25,7 @@ public class LoadOutConsumableMinusButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If check this collider, disable the bar's collider
         RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         bool check = false;
         foreach (var hit in hits)
@@ -55,6 +56,7 @@ public class LoadOutConsumableMinusButton : MonoBehaviour
     }
     private void OnDisable()
     {
+        // If this gameobject is disable, enable the parent's collider
         transform.parent.GetComponent<Collider2D>().enabled = true;
     }
     #endregion

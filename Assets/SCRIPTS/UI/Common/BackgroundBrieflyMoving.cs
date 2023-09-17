@@ -47,6 +47,8 @@ public class BackgroundBrieflyMoving : MonoBehaviour
     {
         float x = 0;
         float y = 0;
+        // If top border inside camera -> reset moving speed to the way out from the camera
+        // Other cases use the same algo
         if (TopBorder.transform.position.y <= mainCamera.transform.position.y + HalfCamHeight)
         {
             y = Random.Range(0, BGMovingSpeed);
@@ -63,6 +65,7 @@ public class BackgroundBrieflyMoving : MonoBehaviour
         {
             x = Random.Range(0, BGMovingSpeed);
         }
+        // If both x and y =0 -> all cases passed -> no change
         if (x != 0 && y == 0)
         {
             BGveloc = new Vector2(x, BGveloc.y);

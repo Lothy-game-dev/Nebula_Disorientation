@@ -50,9 +50,11 @@ public class LoadOutModelBoard : MonoBehaviour
         ListOfModelAfterGen = new List<GameObject>();
         if (!listModel.Contains(currentModel))
         {
-            // Error MSG
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+               "Cannot fetch data for this model!\nPlease try again!", 5f);
             return;
         }
+        // Check if model list contains the model for all items
         ListModelName = listModel;
         for (int i=0;i<listModel.Count;i++)
         {
@@ -65,6 +67,7 @@ public class LoadOutModelBoard : MonoBehaviour
                 }
             }
         }
+        // Chosen model
         foreach (var model in ListOfModel)
         {
             if (model.name.Replace(" ", "").ToLower().Equals(currentModel.Replace(" ", "").ToLower())) {
@@ -82,6 +85,7 @@ public class LoadOutModelBoard : MonoBehaviour
 
     private IEnumerator GenerateItems(string currentModel)
     {
+        // Generate item same as other bars/board
         Vector2 currentPosLeft = StartPos.transform.position;
         for (int i=0;i< ListOfModel.Count;i++)
         {
@@ -110,7 +114,8 @@ public class LoadOutModelBoard : MonoBehaviour
     {
         if (!ListModelName.Contains(ModelName))
         {
-            // Error MSG
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Cannot fetch data for this model!\nPlease try again!", 5f);
             return;
         }
         foreach (var model in ListOfModelAfterGen)

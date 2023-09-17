@@ -35,6 +35,7 @@ public class SpaceShopLoading : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Spin 36 degree x 10 time per second -> 360 degree
         if (SpinTimer<=0f)
         {
             SpinTimer = 0.1f;

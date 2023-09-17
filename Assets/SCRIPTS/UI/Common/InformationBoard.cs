@@ -35,6 +35,9 @@ public class InformationBoard : MonoBehaviour
     #region Set Position
     public void SetPosition(GameObject GO)
     {
+        // set position based on camera:
+        // If the position from gameobject to the top border is not enough for this board
+        // then it will show below
         HalfCameraHeight = camera.orthographicSize;
         Vector2 Position = GO.transform.position;
         transform.SetParent(GO.transform);

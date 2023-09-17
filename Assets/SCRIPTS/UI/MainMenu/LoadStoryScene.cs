@@ -178,6 +178,7 @@ public class LoadStoryScene : MainMenuSceneShared
     #region Button Activate
     public void CheckBeforeDelete()
     {
+        // Check if able to delete
         if (CurrentPressPilot != null)
         {
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = DeleteSelected;
@@ -228,6 +229,7 @@ public class LoadStoryScene : MainMenuSceneShared
 
     public void CheckOnward()
     {
+        // Check if able to onward
         if (CurrentPressPilot != null)
         {
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = OnwardSeleted;
