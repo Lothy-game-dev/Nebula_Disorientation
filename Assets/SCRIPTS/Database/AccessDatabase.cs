@@ -710,7 +710,7 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return list;
-    } 
+    }
     public Dictionary<string, object> GetWeaponDataByName(string name)
     {
         Dictionary<string, object> list = new Dictionary<string, object>();
@@ -883,7 +883,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
-    public Dictionary<string,object> GetPowerDataByName(string name)
+    public Dictionary<string, object> GetPowerDataByName(string name)
     {
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Open DB
@@ -891,7 +891,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ","").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
@@ -908,7 +908,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 Type = "Movement";
             }
-            datas.Add("Type",Type);
+            datas.Add("Type", Type);
             datas.Add("Name", dataReader.GetString(1));
             datas.Add("Description", dataReader.GetString(2));
             datas.Add("Stats", dataReader.GetString(3));
@@ -966,8 +966,8 @@ public class AccessDatabase : MonoBehaviour
         if (!check)
         {
             return null;
-        } else 
-        return datas;
+        } else
+            return datas;
     }
 
     public int GetStackLimitOfConsumableByName(string itemName)
@@ -1014,7 +1014,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 n = 0;
             } else
-            n = dataReader.GetInt32(0);
+                n = dataReader.GetInt32(0);
         }
         dbConnection.Close();
         if (!check)
@@ -1028,7 +1028,7 @@ public class AccessDatabase : MonoBehaviour
     }
 
     //temp
-    public Dictionary<string,int> GetAllDictionarySpaceShopCons()
+    public Dictionary<string, int> GetAllDictionarySpaceShopCons()
     {
         Dictionary<string, int> data = new Dictionary<string, int>();
         // Open DB
@@ -1040,7 +1040,7 @@ public class AccessDatabase : MonoBehaviour
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
-            data.Add(dataReader.GetString(0).Replace("-","").Replace(" ",""), 10);
+            data.Add(dataReader.GetString(0).Replace("-", "").Replace(" ", ""), 10);
         }
         dbConnection.Close();
         return data;
@@ -1054,12 +1054,58 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','') LIKE '%" + name.Replace(" ","").Replace("-","").ToLower() + "%'";
+        dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','') LIKE '%" + name.Replace(" ", "").Replace("-", "").ToLower() + "%'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
+        dbConnection.Close();
+        return list;
+    }
+    public List<List<string>> GetAllConsumable()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> ConsuList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from SpaceShop";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            ConsuList = new List<string>();
+            check = true;
+            ConsuList.Add(dataReader.GetInt32(0).ToString());
+            ConsuList.Add(dataReader.GetString(1));
+            ConsuList.Add(dataReader.GetString(2));
+            if (dataReader.IsDBNull(3))
+            {
+                ConsuList.Add("N/A");
+            } else
+            {
+                ConsuList.Add(dataReader.GetInt32(3).ToString());
+            }
+            ConsuList.Add(dataReader.GetString(4));
+            ConsuList.Add(dataReader.GetInt32(5).ToString());
+            ConsuList.Add(dataReader.GetString(6));
+            ConsuList.Add(dataReader.GetInt32(7).ToString());
+            ConsuList.Add(dataReader.GetInt32(8).ToString());      
+            if (dataReader.IsDBNull(9))
+            {
+                ConsuList.Add("N/A");
+            }
+            else
+            {
+                ConsuList.Add(dataReader.GetInt32(9).ToString());
+            }
+            ConsuList.Add(dataReader.GetString(10));
+            list.Add(ConsuList);
+        }
+        if (!check) return null;
         dbConnection.Close();
         return list;
     }
@@ -1089,5 +1135,67 @@ public class AccessDatabase : MonoBehaviour
         return rank;
      }
 
+    #endregion
+    #region Access Enemy
+    public List<List<string>> GetAllEnemy()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> EnemyList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Enemies";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            EnemyList = new List<string>();
+            check = true;
+            EnemyList.Add(dataReader.GetInt32(0).ToString());
+            EnemyList.Add(dataReader.GetString(1));
+            EnemyList.Add(dataReader.GetString(2));
+            list.Add(EnemyList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
+    }
+    #endregion
+    #region Access Warship
+    public List<List<string>> GetAllWarship()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> WarshipList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Warship";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            WarshipList = new List<string>();
+            check = true;
+            WarshipList.Add(dataReader.GetInt32(0).ToString());
+            WarshipList.Add(dataReader.GetString(1));
+            if (dataReader.IsDBNull(2))
+            {
+                WarshipList.Add("N/A");
+            } else
+            {
+                WarshipList.Add(dataReader.GetString(2));
+            }
+            WarshipList.Add(dataReader.GetString(3));
+            WarshipList.Add(dataReader.GetString(4));
+            list.Add(WarshipList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
+    }
     #endregion
 }

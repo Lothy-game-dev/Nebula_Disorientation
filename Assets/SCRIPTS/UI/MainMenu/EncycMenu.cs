@@ -31,6 +31,10 @@ public class EncycMenu : MainMenuSceneShared
     public List<List<string>> FighterList;
     public List<List<string>> PowerList;
     private List<GameObject> OthersCategory;
+    public List<List<string>> EnemyList;
+    public List<List<string>> ConsumList;
+    public List<List<string>> WarshipList;
+    public List<List<string>> SStationList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -40,6 +44,9 @@ public class EncycMenu : MainMenuSceneShared
         WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
         FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
         PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
+        EnemyList = FindAnyObjectByType<AccessDatabase>().GetAllEnemy();
+        ConsumList = FindAnyObjectByType<AccessDatabase>().GetAllConsumable();
+        WarshipList = FindAnyObjectByType<AccessDatabase>().GetAllWarship();
 
         for (int i = 0; i < Category.Length; i++)
         {
@@ -75,6 +82,7 @@ public class EncycMenu : MainMenuSceneShared
                 game.transform.GetChild(0).GetComponent<TMP_Text>().text = WeaponList[i][2];
                 game.GetComponent<EncycButton>().Type = "Weapon";
                 game.GetComponent<EncycButton>().Id = int.Parse(WeaponList[i][0]);
+                game.name = WeaponList[i][2];
                 game.SetActive(true);
             }
         } else
@@ -83,14 +91,25 @@ public class EncycMenu : MainMenuSceneShared
             {
                 DeleteAllChild();
                 ChangeColorWhenChoosen("Fighter");
-                for (int i = 0; i < FighterList.Count; i++)
+                for (int i = 0; i < FighterList.Count + EnemyList.Count; i++)
                 {
                     GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
                     game.transform.SetParent(Content.transform);
                     game.transform.localScale = new Vector3(2, 7, 0);
-                    game.transform.GetChild(0).GetComponent<TMP_Text>().text = FighterList[i][1];
-                    game.GetComponent<EncycButton>().Type = "Fighter";
-                    game.GetComponent<EncycButton>().Id = int.Parse(FighterList[i][0]);
+                    if (i < FighterList.Count)
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = FighterList[i][1];
+                        game.GetComponent<EncycButton>().Type = "Fighter";
+                        game.GetComponent<EncycButton>().Id = int.Parse(FighterList[i][0]);
+                        game.name = FighterList[i][1];
+                    } else
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = EnemyList[i - FighterList.Count][1];
+                        game.GetComponent<EncycButton>().Type = "Enemy";
+                        game.GetComponent<EncycButton>().Id = int.Parse(EnemyList[i - FighterList.Count][0]);
+                        game.name = EnemyList[i - FighterList.Count][1];
+
+                    }
                     game.SetActive(true);
                 }
             } else
@@ -99,6 +118,27 @@ public class EncycMenu : MainMenuSceneShared
                 {
                     DeleteAllChild();
                     ChangeColorWhenChoosen("WS & SS");
+                    for (int i = 0; i < WarshipList.Count; i++)
+                    {
+                        GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                        game.transform.SetParent(Content.transform);
+                        game.transform.localScale = new Vector3(2, 7, 0);
+                        if (i < WarshipList.Count)
+                        {
+                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = WarshipList[i][1];
+                            game.GetComponent<EncycButton>().Type = "Warship";
+                            game.GetComponent<EncycButton>().Id = int.Parse(WarshipList[i][0]);
+                            game.name = WarshipList[i][1];
+
+                        }
+                        /*else
+                        {
+                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = ConsumList[i - PowerList.Count][1];
+                            game.GetComponent<EncycButton>().Type = "Consumable";
+                            game.GetComponent<EncycButton>().Id = int.Parse(ConsumList[i - PowerList.Count][0]);
+                        }*/
+                        game.SetActive(true);
+                    }
 
                 } else
                 {
@@ -106,14 +146,25 @@ public class EncycMenu : MainMenuSceneShared
                     {
                         DeleteAllChild();
                         ChangeColorWhenChoosen("Power & Consumable");
-                        for (int i = 0; i < PowerList.Count; i++)
+                        for (int i = 0; i < PowerList.Count + ConsumList.Count; i++)
                         {
                             GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
                             game.transform.SetParent(Content.transform);
                             game.transform.localScale = new Vector3(2, 7, 0);
-                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = PowerList[i][2];
-                            game.GetComponent<EncycButton>().Type = "Power";
-                            game.GetComponent<EncycButton>().Id = int.Parse(PowerList[i][0]);
+                            if (i < PowerList.Count)
+                            {
+                                game.transform.GetChild(0).GetComponent<TMP_Text>().text = PowerList[i][2];
+                                game.GetComponent<EncycButton>().Type = "Power";
+                                game.GetComponent<EncycButton>().Id = int.Parse(PowerList[i][0]);
+                                game.name = PowerList[i][2];
+
+                            } else
+                            {
+                                game.transform.GetChild(0).GetComponent<TMP_Text>().text = ConsumList[i - PowerList.Count][1];
+                                game.GetComponent<EncycButton>().Type = "Consumable";
+                                game.GetComponent<EncycButton>().Id = int.Parse(ConsumList[i - PowerList.Count][0]);
+                                game.name = ConsumList[i - PowerList.Count][1];
+                            }
                             game.SetActive(true);
                         }
                     }
