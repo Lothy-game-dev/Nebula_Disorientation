@@ -80,8 +80,10 @@ public class ArsenalItem : MonoBehaviour
             Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
 
         }
+        Debug.Log(Status.Count);
         for (int i = 0; i < ItemStatusList.Count; i++)
-        {    
+        {
+            Debug.Log("abcd");           
             if (!Status.ContainsKey(ItemStatusList[i].name))
             {
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = "N/A";

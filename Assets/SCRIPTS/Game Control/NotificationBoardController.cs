@@ -116,10 +116,13 @@ public class NotificationBoardController : MonoBehaviour
 
     public void CreateNormalInformationBoard(GameObject go, string text)
     {
-        GameObject infoBoard = Instantiate(InformationBoard, new Vector3(go.transform.position.x, go.transform.position.y, InformationBoard.transform.position.z), Quaternion.identity);
-        infoBoard.transform.GetChild(1).GetComponent<TextMeshPro>().text = text;
-        infoBoard.GetComponent<InformationBoard>().SetPosition(go);
-        currentInfoBoard = infoBoard;
+        if (text!="")
+        {
+            GameObject infoBoard = Instantiate(InformationBoard, new Vector3(go.transform.position.x, go.transform.position.y, InformationBoard.transform.position.z), Quaternion.identity);
+            infoBoard.transform.GetChild(1).GetComponent<TextMeshPro>().text = text;
+            infoBoard.GetComponent<InformationBoard>().SetPosition(go);
+            currentInfoBoard = infoBoard;
+        }
     }
 
     public void DestroyCurrentInfoBoard()

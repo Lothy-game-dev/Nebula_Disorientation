@@ -106,6 +106,7 @@ public class UECDailyMissions : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        // Animation
         if (!BGGoingTo)
         {
             BGGoingTo = true;

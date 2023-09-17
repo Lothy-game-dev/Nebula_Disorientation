@@ -693,17 +693,48 @@ public class GlobalFunctionController : MonoBehaviour
         return final;
     }
 
-    public Dictionary<string, object> ConvertModelPriceIntoTwoTypePrice(string Price)
+    public Dictionary<string,string> ConvertDictionaryDataToOutputCons(Dictionary<string,object> datas)
     {
-        Dictionary<string, object> ModelPrice = new Dictionary<string, object>();
-        if (Price != null)
+        Dictionary<string,string> output = new Dictionary<string,string>();
+        output.Add("Name", "<color=" + (string)datas["Color"] + ">" + (string)datas["Name"] + "</color>");
+        output.Add("Rarity", "<color=" + (string)datas["Color"] + ">"
+            + (((string)datas["Color"]).Equals("#36b37e") ? "Common" : 
+            ((string)datas["Color"]).Equals("#4c9aff") ? "Uncommon" : "Rare") + "</color>");
+        output.Add("Description", (string)datas["Description"]);
+        string final = "";
+        string Effect = (string)datas["Effect"];
+        if (Effect.Contains("RED-"))
         {
-            Price = Price.Replace(" ", "");
-            string[] NewPrice = Price.Split("|");
-            ModelPrice.Add("Cash", NewPrice[0]);
-            ModelPrice.Add("Timeless", NewPrice[1]);
+            Effect = Effect.Replace("RED-", "");
+            final = "Reduce Damage received of <color=\"blue\"><b>Barrier</b></color> by " + Effect + "%";
         }
-        return ModelPrice;
+        else if (Effect.Contains("AER-"))
+        {
+            Effect = Effect.Replace("AER-", "");
+            string count = Effect == "2" ? "Double" : Effect == "3" ? "Triple" : "";
+            final = count + " the <color=\"blue\"><b>AE Regen Speed</b></color>";
+        }
+        else if (Effect.Contains("RMH-"))
+        {
+            Effect = Effect.Replace("RMH-", "");
+            final = "Repair " + Effect + "% <color=\"green\"><b>Max Health</b></color> in total.";
+        }
+        else if (Effect.Contains("INV"))
+        {
+            final = "Render the <color=\"black\"><b>Fighter</b></color> invisible. (Cannot be targeted)";
+        }
+        else if (Effect.Contains("FC"))
+        {
+            final = "Instantly gain 1 <color=\"green\"><b>Fuel Core</b></color>. Can be purchased even when Fuel Core is full.";
+        }
+        output.Add("Effect", "Effect: " + final);
+        output.Add("Duration", "Duration: " + (int)datas["Duration"] + " seconds.");
+        output.Add("Stack", "Max Stack: " + (int)datas["Stack"] + " Per Session.");
+        output.Add("Price", ((int)datas["Price"]).ToString());
+        output.Add("Cooldown", "Cooldown: " + ((int)datas["Cooldown"]==0? "No cooldown." : 
+            (int)datas["Cooldown"]) + " seconds.");
+        output.Add("Stock", ((int)datas["StockPerDay"]).ToString());
+        return output;
     }
     #endregion
 }
