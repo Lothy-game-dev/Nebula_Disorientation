@@ -75,7 +75,9 @@ public class ArsenalItem : MonoBehaviour
     // Group all function that serve the same algorithm
     private void ArsenalInformation(List<List<string>> ItemList)
     {
+        // get the item rank 
         RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(Id) - 1][8]));
+        // convert stat to dictionary depend on type like weapon or power
         if (Type == "Weapon")
         {
             Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
@@ -84,19 +86,18 @@ public class ArsenalItem : MonoBehaviour
             Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
 
         }
-        Debug.Log(Status.Count);
+        //show stat info for each stat
         for (int i = 0; i < ItemStatusList.Count; i++)
         {
-            Debug.Log("abcd");           
             if (!Status.ContainsKey(ItemStatusList[i].name))
             {
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = "N/A";
-            } else
+            }
+            else
             {
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = (string)Status[ItemStatusList[i].name];
             }
         }
-        //ar.DescContent.GetComponent<TMP_Text>().text = ItemList[int.Parse(Id) - 1][3];
         // check if enough timeless shard
         if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
         {
@@ -116,6 +117,7 @@ public class ArsenalItem : MonoBehaviour
                 ar.EnoughPrice = true;
             }
         }
+        // check if we r in session to buy item by cash
         if (ar.IsInSession)
         {
             // check if have enough cash
@@ -175,6 +177,7 @@ public class ArsenalItem : MonoBehaviour
     #region Text animation
     private IEnumerator TextRunning(string text)
     {
+        //Use substring to take each word in the text and put it back
         ar.DescContent.GetComponent<TMP_Text>().text = "";
         gameObject.GetComponent<Collider2D>().enabled = false;
         for (int i = 0; i < text.Length; i++)

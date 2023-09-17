@@ -59,7 +59,7 @@ public class EncycMenu : MainMenuSceneShared
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Generate list for each category
     private void OnMouseDown()
     {
     
@@ -122,13 +122,12 @@ public class EncycMenu : MainMenuSceneShared
         }
     }
     #endregion
-    #region Function group ...
+    #region Delete the item before generating a new list
     // Group all function that serve the same algorithm
     public void DeleteAllChild()
     {
         if (Content.transform.childCount > 0)
         {
-            Debug.Log("a");
             for (int i = 0; i < Content.transform.childCount; i++)
             {
                 Destroy(Content.transform.GetChild(i).gameObject);
@@ -140,7 +139,7 @@ public class EncycMenu : MainMenuSceneShared
         }
     }
     #endregion
-    #region
+    #region Change color when choosen
     public void ChangeColorWhenChoosen(string ObjectName)
     {
 

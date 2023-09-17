@@ -136,6 +136,7 @@ public class ArsenalButton : MonoBehaviour
     // Group all function that serve the same algorithm
     public void DeleteAllChild()
     {
+        // check it is existed before deleting
         if (OtherContent.transform.childCount > 0)
         {
             for (int i = 0; i < OtherContent.transform.childCount; i++)
@@ -150,6 +151,8 @@ public class ArsenalButton : MonoBehaviour
                 Destroy(Content.transform.GetChild(i).gameObject);
             }
         }
+
+        //reset the information
         ArsenalController.DescContent.GetComponent<TMP_Text>().text = "";
         ArsenalController.ItemCash.GetComponentInChildren<TextMeshPro>().text = "";
         ArsenalController.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "";
@@ -165,6 +168,7 @@ public class ArsenalButton : MonoBehaviour
     #region Animation
     private IEnumerator StartAnimation()
     {
+        // get the color of the object
         GameObject game = Content.transform.parent.parent.parent.parent.gameObject;
         GameObject otherGame = OtherContent.transform.parent.parent.parent.parent.gameObject;
         Color c = game.GetComponent<SpriteRenderer>().color;
@@ -176,6 +180,8 @@ public class ArsenalButton : MonoBehaviour
         gameObject.GetComponent<Collider2D>().enabled = false;
         OtherButton.GetComponent<Collider2D>().enabled = false;
         otherGame.AddComponent<Rigidbody2D>();
+
+        // this loop will increase or decrease the transparency
         for (int i = 0; i < 10; i++)
         {
 
@@ -193,19 +199,23 @@ public class ArsenalButton : MonoBehaviour
             gameObject.GetComponentInChildren<TextMeshPro>().color = y;
             OtherButton.GetComponentInChildren<TextMeshPro>().color = y1;
             
+   
             if (i<5)
             {
+                // the weapon tab will move to left to let the power tab shows up
                 if (ArsenalController.CurrentTab == "Weapon")
                 {
                     otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
                     OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
                 } else
+                // the power tab is opposite to the weapon tab
                 {
                     otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
                     OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
                 }
             } else
             {
+                // and move back to the original pos after the power/weapon tab shows up
                 if (ArsenalController.CurrentTab == "Weapon")
                 {
                     otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
@@ -213,11 +223,13 @@ public class ArsenalButton : MonoBehaviour
                 }
                 else
                 {
+                    // same
                     otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
                     OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
                 }
             }
 
+            // setting the sortingorder
             game.GetComponent<SpriteRenderer>().sortingOrder = 3;
             otherGame.GetComponent<SpriteRenderer>().sortingOrder = 2;
             gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
@@ -229,9 +241,12 @@ public class ArsenalButton : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
         }
+        // delete the component to prevent the bug
         Destroy(otherGame.GetComponent<Rigidbody2D>());
+        //set the velocity = 0
         otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+        // and enable the col of the object
         gameObject.GetComponent<Collider2D>().enabled = true;
         OtherButton.GetComponent<Collider2D>().enabled = true;
     }

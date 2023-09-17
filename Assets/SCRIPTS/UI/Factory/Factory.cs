@@ -97,7 +97,7 @@ public class Factory : MonoBehaviour
             g.SetActive(true);
         }
 
-        // First item choosen
+        // First item choosen and set the information 
         Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(FighterList[0][3]);
         if (FighterList[0][5] == "N/A")
         {
@@ -136,6 +136,7 @@ public class Factory : MonoBehaviour
     {
         if (RankId != "N/A")
         {
+            // lock item if you dont meet the required rank
             if ((int)PlayerInformation["RankId"] < int.Parse(RankId))
             {
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
