@@ -213,8 +213,8 @@ MonoBehaviour:
     y: 0
     width: 332.8
     height: 483.2
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -294,8 +294,8 @@ MonoBehaviour:
     y: 0
     width: 365.59998
     height: 730.8
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -370,7 +370,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -438,21 +438,21 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 0}
+      scrollPos: {x: 0, y: 70.79999}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: f683ffffdc84ffffa49dffff28fbffff186200008e620000fa640000346500003a65000094650000f46500002c660000b46600001e67000074670000f27701000c7801004078010020790100e6790100
+      m_ExpandedIDs: 8afaffff147200003472000098760000e4790000fa7c0000167e0000467e00007083000056840000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 'EncyclopdiaBackground '
-        m_OriginalName: 'EncyclopdiaBackground '
+        m_Name: ItemInformation
+        m_OriginalName: ItemInformation
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 26484
+        m_UserData: 31204
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
         m_OriginalEventType: 0
@@ -783,9 +783,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 2.870064, y: 5.0760756, z: -6.3619275}
+    m_Target: {x: 4.0624795, y: 97.0217, z: 0.023213191}
     speed: 2
-    m_Value: {x: 2.870064, y: 5.0760756, z: -6.3619275}
+    m_Value: {x: 4.0624795, y: 97.0217, z: 0.023213191}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -835,9 +835,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 18.003708
+    m_Target: 3.3112173
     speed: 2
-    m_Value: 18.003708
+    m_Value: 3.3112173
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1151,7 +1151,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/SCRIPTS/UI/MainMenu
+    - Assets/SCRIPTS/UI/Spaceshop
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1159,16 +1159,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/SCRIPTS/UI/MainMenu
+  - Assets/SCRIPTS/UI/Spaceshop
   m_LastFoldersGridSize: 96
   m_LastProjectPath: E:\Nebula_Disorientation\Nebula_Disorientation
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 297.3778}
-    m_SelectedIDs: 726c0000
-    m_LastClickedID: 27762
-    m_ExpandedIDs: 000000003a6c00003c6c00003e6c0000406c0000426c0000446c000000ca9a3b
+    m_SelectedIDs: 066d0000
+    m_LastClickedID: 27910
+    m_ExpandedIDs: 00000000d06c0000d26c0000d46c0000d66c0000d86c0000da6c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1196,7 +1196,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003a6c00003c6c00003e6c0000406c0000426c0000446c0000
+    m_ExpandedIDs: 00000000d06c0000d26c0000d46c0000d66c0000d86c0000da6c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
