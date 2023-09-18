@@ -219,7 +219,7 @@ public class Arsenal : UECMenuShared
         //reset the information
         if (CurrentTab == "Power")
         {
-             if (PowerStatus[0].transform.parent.gameObject.activeSelf)
+             if (PowerStatus[0].transform.parent.parent.gameObject.activeSelf)
              {
                 PowerStatus[0].transform.parent.parent.parent.gameObject.SetActive(false);
                 WeaponStatus[0].transform.parent.parent.parent.gameObject.SetActive(true);
