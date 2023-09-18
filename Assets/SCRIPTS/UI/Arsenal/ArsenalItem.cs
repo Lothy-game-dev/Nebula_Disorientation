@@ -197,6 +197,7 @@ public class ArsenalItem : MonoBehaviour
         {      
             ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
+            
         }
         
     }
