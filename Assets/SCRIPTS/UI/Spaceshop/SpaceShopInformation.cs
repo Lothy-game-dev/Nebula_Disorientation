@@ -124,7 +124,6 @@ public class SpaceShopInformation : MonoBehaviour
             PurchaseInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(Currently Owned: "
             + FindObjectOfType<AccessDatabase>().GetCurrentOwnedNumberOfConsumableByName(
             FindObjectOfType<UECMainMenuController>().PlayerId, currentItemName).ToString() + " items)";
-            Debug.Log((string)DataDictionary["Name"]);
             MaxStock = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable((string)DataDictionary["Name"]);
             if (MaxStock==0)
             {

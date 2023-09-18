@@ -171,8 +171,7 @@ public class SpaceShopListItem : MonoBehaviour
                 }
                 if (n==0)
                 {
-                    // Black fade
-                    Debug.Log("Black Fade For " + go.name);
+                    go.transform.GetChild(5).gameObject.SetActive(true);
                 }
                 go.SetActive(true);
                 pos = new Vector2(pos.x, pos.y - BoxSize);
@@ -217,6 +216,10 @@ public class SpaceShopListItem : MonoBehaviour
             if (n != -1)
             {
                 CurrentChosenGO.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = n.ToString();
+            }
+            if (n==0)
+            {
+                CurrentChosenGO.transform.GetChild(5).gameObject.SetActive(true);
             }
         }
     }
