@@ -137,16 +137,31 @@ public class Arsenal : UECMenuShared
         ItemType = Type;
         ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][6] + "</color>";
         DescContent.GetComponent<TMP_Text>().text = ItemList[0][3];
-        ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][5] + "</color>";
+        if (IsInSession)
+        {
+            ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][5] + "</color>";
+        } else
+        {
+            ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=grey>" + ItemList[0][5] + "</color>";
+        }
+        
         Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
     }
     #endregion
     #region Locked item will be gray-ed
     public void LockItem(GameObject Game, string RankId)
     {
+        int rankId = 0;
         if (RankId != "N/A")
         {
-            if ((int)PlayerInformation["RankId"] < int.Parse(RankId))
+            if ((string)PlayerInformation["Rank"] == "Unranked")
+            {
+                rankId = 1;
+            } else
+            {
+                rankId = (int)PlayerInformation["RankId"];
+            }
+            if (rankId < int.Parse(RankId))
             {
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<ArsenalItem>().LockedItem = true;

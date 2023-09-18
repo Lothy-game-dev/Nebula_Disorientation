@@ -191,12 +191,12 @@ public class AccessDatabase : MonoBehaviour
                 check = true;
                 values.Add("ID", dataReader.GetInt32(0));
                 values.Add("Name", dataReader.GetString(1));
-                values.Add("RankId", dataReader.GetInt32(2));
                 if (dataReader.IsDBNull(2))
                 {
                     values.Add("Rank", "Unranked");
                 } else
                 {
+                    values.Add("RankId", dataReader.GetInt32(2));
                     IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
                     dbCheckCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankId=" + dataReader.GetInt32(2);
                     IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
