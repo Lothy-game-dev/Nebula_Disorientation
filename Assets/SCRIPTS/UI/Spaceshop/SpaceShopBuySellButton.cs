@@ -14,6 +14,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
     #region NormalVariables
     public int CurrentValue;
     public string ItemName;
+    public string ItemNameNoColor;
     public int Quantity;
     #endregion
     #region Start & Update
@@ -56,7 +57,50 @@ public class SpaceShopBuySellButton : MonoBehaviour
     // If confirm board is click, run this code
     public void PerformBuySell()
     {
-        Debug.Log(name + " - " + Quantity + " " + name + ":" + CurrentValue);
+        if ("Buy".Equals(name))
+        {
+            // Check case for adding ownership
+            Debug.Log(FindObjectOfType<UECMainMenuController>().PlayerId + "," + ItemNameNoColor + "," + Quantity);
+            string check = FindObjectOfType<AccessDatabase>().AddOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                ItemNameNoColor, "Consumable", Quantity);
+            if ("Not Found".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Can not find information about this item.\nplease contact our email.", 5f);
+            } else if ("Fail".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Transaction failed.\nPlease try again.", 5f);
+            } else if ("Success".Equals(check))
+            {
+                // If adding ownership successfully, reduce currency
+                string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuy(FindObjectOfType<UECMainMenuController>().PlayerId, CurrentValue, 0);
+                switch (check2)
+                {
+                    case "Not Exist":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Can not fetch data about your pilot.\nplease contact our email.", 5f);
+                        break;
+                    case "Not Enough Cash":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "You don't have enough cash!\nPlease get some more.", 5f);
+                        break;
+                    case "Not Enough Shard":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "You don't have enough timeless shard!\nPlease get some more.", 5f);
+                        break;
+                    case "Fail":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Purchase Failed.\nPlease contact our email.", 5f);
+                        break;
+                    case "Success":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Purchase Successfully.\n(Auto closed in 5 seconds)", 5f);
+                        Scene.GetComponent<SpaceShopScene>().SetData();
+                        break;
+                }
+            }
+        }
     }
     #endregion
 }

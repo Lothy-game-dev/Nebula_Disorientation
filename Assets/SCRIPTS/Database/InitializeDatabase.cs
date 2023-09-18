@@ -33,23 +33,23 @@ public class InitializeDatabase : MonoBehaviour
     {
         // Initialize Tables
         string TableInitialize =
-            // PlayerArsenalWeapons
-            "CREATE TABLE IF NOT EXISTS PlayerArsenalWeapons" +
+            // Purchase History
+            "CREATE TABLE IF NOT EXISTS PurchaseHistory" +
                 "(ID INTEGER, " +
                 "PlayerID INTEGER, " +
-                "WeaponID INTEGER, " +
-                "IsEquipped TEXT NOT NULL, " +
-                "FOREIGN KEY(WeaponID) REFERENCES ArsenalWeapon(WeaponID), " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "PurchaseDate TEXT, " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // PlayerArsenalPower
-            "CREATE TABLE IF NOT EXISTS PlayerArsenalPower" +
+            // Player Ownership
+            "CREATE TABLE IF NOT EXISTS PlayerOwnership" +
                 "(ID INTEGER, " +
                 "PlayerID INTEGER, " +
-                "PowerID INTEGER, " +
-                "IsEquipped TEXT NOT NULL, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "FOREIGN KEY(PowerID) REFERENCES ArsenalPower(PowerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
             // EnemyMoveset
             "CREATE TABLE IF NOT EXISTS EnemyMoveset" +
@@ -67,15 +67,6 @@ public class InitializeDatabase : MonoBehaviour
                 "SpawnPosition TEXT NOT NULL, " +
                 "FOREIGN KEY(StageID) REFERENCES Stages(StageID), " +
                 "FOREIGN KEY(EnemyID) REFERENCES Enemies(EnemyID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // PlayerSpaceShopItem
-            "CREATE TABLE IF NOT EXISTS PlayerSpaceShopItem" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER NOT NULL, " +
-                "FOREIGN KEY(ItemID) REFERENCES SpaceShop(ItemID), " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
             // PlayerDailyMission
             "CREATE TABLE IF NOT EXISTS PlayerDailyMission" +
@@ -113,16 +104,6 @@ public class InitializeDatabase : MonoBehaviour
                 "AlreadyApplied TEXT NOT NULL, " +
                 "FOREIGN KEY(CardID) REFERENCES LuckOfTheWandererCards(CardID), " +
                 "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // PlayerModelOwnership
-            "CREATE TABLE IF NOT EXISTS PlayerModelOwnership" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "ModelID INTEGER, " +
-                "BuyDate REAL NOT NULL, " +
-                "IsUsing TEXT NOT NULL, " +
-                "FOREIGN KEY(ModelID) REFERENCES FactoryModel(ModelID), " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
             // ArsenalPower
             "CREATE TABLE IF NOT EXISTS ArsenalPower" +
@@ -223,7 +204,7 @@ public class InitializeDatabase : MonoBehaviour
                 "Privilege TEXT, " +
                 "TierColor TEXT NOT NULL, " +
                 "PRIMARY KEY(RankID AUTOINCREMENT) ); " +
-            // Session
+            // Session need change
             "CREATE TABLE IF NOT EXISTS Session" +
                 "(SessionID INTEGER, " +
                 "PlayedTime REAL NOT NULL, " +
@@ -387,7 +368,7 @@ public class InitializeDatabase : MonoBehaviour
             "(9, 'Superior Auto-Repair Module', 'A module that can repair your Fighter efficiently during battle.', 15, 'RMH-10', 5, 'T', 3, 1800, 60, '#4c9aff')," +
             "(10, 'Nano-Reflective Coat', 'A Nano-tech Coat that grant Invisibility to your Fighter for a few seconds after using.', 5, 'INV', 5, 'T', 2, 5000, 120, '#bf2600')," +
             "(11, 'Emergency Auto-Repair Module', 'An emergency module that quickly repair your Fighter during battle. ', 5, 'RMH-20', 3, 'T', 2, 5000, 120, '#bf2600')," +
-            "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though…', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600');";
+            "(12, 'Fuel Cell', 'Fuel Cell for sale! Quite expensive though…', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600');";
         // LOTWCards
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
             "(1, 'Gun Extension I', 'ENH-2', 10, 3, 'Yes', '#36b37e')," +

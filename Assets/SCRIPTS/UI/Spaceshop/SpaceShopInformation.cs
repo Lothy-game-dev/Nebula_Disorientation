@@ -91,6 +91,7 @@ public class SpaceShopInformation : MonoBehaviour
             "Buy (" + (Price * int.Parse(InputField.text)).ToString() + " <sprite index='0'>)";
         BuyButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
+        BuyButton.GetComponent<SpaceShopBuySellButton>().ItemNameNoColor = (string)DataDictionary["Name"];
         BuyButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
         // Fuel cell cant sell
         if (!"fuelcell".Equals(((string)DataDictionary["Name"]).Replace(" ","").ToLower()))
@@ -106,6 +107,7 @@ public class SpaceShopInformation : MonoBehaviour
                 "Sell (" + (Price * int.Parse(InputField.text) / 2).ToString() + " <sprite index='0'>)";
             SellButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text) / 2;
             SellButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
+            SellButton.GetComponent<SpaceShopBuySellButton>().ItemNameNoColor = (string)DataDictionary["Name"];
             SellButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
         } else
         {
