@@ -279,7 +279,24 @@ public class InitializeDatabase : MonoBehaviour
                 "MusicVolume INTEGER," +
                 "SoundFx INTEGER," +
                 "Fps INTEGER," +
-                "Resolution TEXT);";
+                "Resolution TEXT);" +
+            // Table for Warship
+            "CREATE TABLE IF NOT EXISTS Warship" +
+                "(WSId INTEGER," +
+                "WSName TEXT," +
+                "WSDescription TEXT," +
+                "WSStat TEXT," +
+                "TierColor TEXT," +
+                "PRIMARY KEY(WSId AUTOINCREMENT) );" +
+            // Table for SpaceStation
+            "CREATE TABLE IF NOT EXISTS SpaceStation" +
+                "(SSId INTEGER," +
+                "SSName TEXT," +
+                "SSDescription TEXT," +
+                "SSStat  TEXT," +
+                "TierColor TEXT," +
+                "PRIMARY KEY(SSId AUTOINCREMENT) );";
+
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +

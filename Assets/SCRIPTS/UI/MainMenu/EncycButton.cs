@@ -18,6 +18,9 @@ public class EncycButton : MonoBehaviour
     public List<SpriteRenderer> WeapImage;
     public List<SpriteRenderer> FighterImage;
     public List<SpriteRenderer> PowerImage;
+    public List<SpriteRenderer> EnemyImage;
+    public List<SpriteRenderer> ConsumableImage;
+    public List<SpriteRenderer> WarshipImage;
     public GameObject Content;
     #endregion
     #region NormalVariables
@@ -99,6 +102,32 @@ public class EncycButton : MonoBehaviour
                     ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.6f, 0.6f, 0f));
                     ChangeColorWhenChoosen(Id.ToString());
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = PowerImage[PowerImage.FindIndex(item => wlist[2].Replace(" ", "").ToLower() == item.name.ToLower())].sprite;                                          
+                } else
+                {
+                    //Enemy
+                    if (Type == "Enemy")
+                    {
+                       
+                        ShowInforOfItem(Menu.EnemyList, 1, 0, new Vector3(0.5f, 0.5f, 0f));
+                        ChangeColorWhenChoosen((Id + Menu.FighterList.Count).ToString());
+                        Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = EnemyImage[EnemyImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
+                    } else
+                    {
+                        if (Type == "Consumable")
+                        {
+                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.5f, 0.5f, 0f));
+                            ChangeColorWhenChoosen((Id + Menu.PowerList.Count).ToString());
+                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = ConsumableImage[ConsumableImage.FindIndex(item => wlist[1].Replace(" ", "").Replace("-","").ToLower().Contains(item.name.ToLower()))].sprite;
+                        } else
+                        {
+                            if (Type == "Warship")
+                            {
+                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.2f, 0.2f));
+                                ChangeColorWhenChoosen(Id.ToString());
+                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WarshipImage[WarshipImage.FindIndex(item => wlist[1].Replace("Zat-", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -110,7 +139,8 @@ public class EncycButton : MonoBehaviour
     {
         Menu.ItemImage.transform.localScale = ImageScale;
         wlist = list[Id - 1];
-        
+        Debug.Log(wlist[TierIndex]);
+
         Menu.ItemName.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] +">"  + wlist[NameIndex] + "</color>";
 
         switch(wlist[TierIndex])
@@ -124,6 +154,8 @@ public class EncycButton : MonoBehaviour
             default: Tier = "Special"; break;
         }
         Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";
+
+        
 
  
     }
