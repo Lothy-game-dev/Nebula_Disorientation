@@ -28,6 +28,9 @@ public class Arsenal : UECMenuShared
     public GameObject PlayerCash;
     public GameObject PlayerShard;
     public bool IsInSession;
+    public GameObject OtherContent;
+    public GameObject PowerButton;
+    public GameObject WeaponButton;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -45,6 +48,9 @@ public class Arsenal : UECMenuShared
     private Dictionary<string, object> RankSys;
     public string PCash;
     public string PShard;
+    public Coroutine OldCoroutine;
+    private Color WeaponBoxColor;
+    private Color PowerBoxColor;
     #endregion
     #region Start & Update
 
@@ -59,8 +65,8 @@ public class Arsenal : UECMenuShared
         PShard = PlayerInformation["TimelessShard"].ToString();
         PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
         PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();        
-        CurrentTab = "Weapon";
-        FirstContent();
+        WeaponBoxColor = Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
+        PowerBoxColor = OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
     } 
 
     // Update is called once per frame
@@ -169,7 +175,7 @@ public class Arsenal : UECMenuShared
         }
     }
     #endregion
-    #region Set data (money,....)
+    #region Set data (money,....) /Reset data after exiting
     public void SetData(string Cash, string Shard)
     {
         PCash = Cash;
@@ -177,18 +183,76 @@ public class Arsenal : UECMenuShared
         PlayerCash.GetComponent<TextMeshPro>().text = PCash;
         PlayerShard.GetComponent<TextMeshPro>().text = PShard;
     }
+    public void ResetData()
+    {
+        // reset all properties of the box (color, sortingOrder)
+        Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color = WeaponBoxColor;
+        OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color = PowerBoxColor;
+        Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 3;
+        OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 2;
+
+        WeaponButton.GetComponent<SpriteRenderer>().sortingOrder = 4;
+        PowerButton.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        WeaponButton.GetComponent<SpriteRenderer>().color = WeaponBoxColor;
+        PowerButton.GetComponent<SpriteRenderer>().color = PowerBoxColor;
+
+        WeaponButton.GetComponentInChildren<TextMeshPro>().sortingOrder = 5;
+        PowerButton.GetComponentInChildren<TextMeshPro>().sortingOrder = 3;
+        WeaponButton.GetComponentInChildren<TextMeshPro>().color = WeaponBoxColor;
+        PowerButton.GetComponentInChildren<TextMeshPro>().color = PowerBoxColor;
+        // check it is existed before deleting
+        if (OtherContent.transform.childCount > 0)
+        {
+            for (int i = 0; i < OtherContent.transform.childCount; i++)
+            {
+                Destroy(OtherContent.transform.GetChild(i).gameObject);
+            }
+        }
+        if (Content.transform.childCount > 0)
+        {
+            for (int i = 0; i < Content.transform.childCount; i++)
+            {
+                Destroy(Content.transform.GetChild(i).gameObject);
+            }
+        }
+
+        //reset the information
+        if (CurrentTab == "Power")
+        {
+             if (PowerStatus[0].transform.parent.parent.gameObject.activeSelf)
+             {
+                PowerStatus[0].transform.parent.parent.parent.gameObject.SetActive(false);
+                WeaponStatus[0].transform.parent.parent.parent.gameObject.SetActive(true);
+
+                for (int i = 0; i < PowerStatus.Count; i++)
+                {
+                    PowerStatus[i].GetComponent<TextMeshPro>().text = "";
+                }
+            }
+        } else
+        {
+            for (int i = 0; i < WeaponStatus.Count; i++)
+            {
+                WeaponStatus[i].GetComponent<TextMeshPro>().text = "";
+            }
+        }
+    }
     #endregion
     #region Start animation when enter or exit the scene 
     public override void OnEnterAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
+        FirstContent();
+        CurrentTab = "Weapon";
     }
 
     public override void OnExitAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        ResetData();
     }
     #endregion
 }
