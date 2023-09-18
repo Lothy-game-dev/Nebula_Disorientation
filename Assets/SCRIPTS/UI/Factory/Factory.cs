@@ -139,14 +139,22 @@ public class Factory : MonoBehaviour
     // Group all function that serve the same algorithm
     public void LockItem(GameObject Game, string RankId)
     {
+        int rankId = 0;
         if (RankId != "N/A")
         {
-            // lock item if you dont meet the required rank
-            if ((int)PlayerInformation["RankId"] < int.Parse(RankId))
+            if ((string)PlayerInformation["Rank"] == "Unranked")
+            {
+                rankId = 1;
+            }
+            else
+            {
+                rankId = (int)PlayerInformation["RankId"];
+            }
+            if (rankId < int.Parse(RankId))
             {
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<FactoryItem>().LockedItem = true;
-            }     
+            }
         }
     }
     #endregion
