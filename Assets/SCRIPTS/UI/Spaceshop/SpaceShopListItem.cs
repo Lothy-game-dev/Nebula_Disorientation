@@ -36,6 +36,7 @@ public class SpaceShopListItem : MonoBehaviour
     private float maximumHeight;
     private float InitPosYContent;
     private bool AlreadyGetPosYContent;
+    private GameObject CurrentChosenGO;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -158,15 +159,19 @@ public class SpaceShopListItem : MonoBehaviour
                 go.name = SpriteList[i].name;
                 go.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ListName[i];
                 go.transform.localScale = Template.transform.localScale;
-                int n = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable(go.name);
-                if (n!=0)
-                {
-                    go.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = n.ToString();
-                }
-                if (i==0)
+                if (i == 0)
                 {
                     go.GetComponent<Image>().color = Color.green;
                     ChooseItem(go);
+                }
+                int n = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable(go.name);
+                if (n!=-1)
+                {
+                    go.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = n.ToString();
+                }
+                if (n==0)
+                {
+                    go.transform.GetChild(5).gameObject.SetActive(true);
                 }
                 go.SetActive(true);
                 pos = new Vector2(pos.x, pos.y - BoxSize);
@@ -187,11 +192,12 @@ public class SpaceShopListItem : MonoBehaviour
     public void ChooseItem(GameObject go)
     {
         // When choose an item, all other change color to normal, the chosen change to green
+        CurrentChosenGO = go;
         if (ItemAfterGen.Contains(go))
         {
             foreach (var item in ItemAfterGen)
             {
-                item.GetComponent<Image>().color = Color.white;
+                item.GetComponent<Image>().color = new Color(1,1,1,205/255f);
             }
             go.GetComponent<Image>().color = Color.green;
             Information.GetComponent<SpaceShopInformation>().ShowInformationOfItem(go.name);
@@ -202,10 +208,31 @@ public class SpaceShopListItem : MonoBehaviour
         }
     }
 
+    public void UpdateItemStocks()
+    {
+        if (CurrentChosenGO!=null)
+        {
+            int n = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable(CurrentChosenGO.name);
+            if (n != -1)
+            {
+                CurrentChosenGO.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = n.ToString();
+            }
+            if (n==0)
+            {
+                CurrentChosenGO.transform.GetChild(5).gameObject.SetActive(true);
+            }
+        }
+    }
+
     // When disabled, remove all items
     private void OnDisable()
     {
         RemoveAllItem();
+        if (AlreadyGetPosYContent)
+        {
+            Content.transform.position = new Vector3(Content.transform.position.x,
+                InitPosYContent, Content.transform.position.z);
+        }
     }
     #endregion
 }

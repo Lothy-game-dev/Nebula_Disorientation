@@ -26,6 +26,7 @@ public class SpaceShopInformation : MonoBehaviour
     private int Price;
     private string PreviousInput;
     private int MaxStock;
+    private string currentItemName;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -52,6 +53,7 @@ public class SpaceShopInformation : MonoBehaviour
     public void ShowInformationOfItem(string name)
     {
         // Get data and show it to the UI
+        currentItemName = name;
         DataDictionary = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(name);
         OutputData = FindObjectOfType<GlobalFunctionController>().ConvertDictionaryDataToOutputCons(DataDictionary);
         for (int i=0;i<ConsumableList.transform.childCount;i++)
@@ -71,8 +73,8 @@ public class SpaceShopInformation : MonoBehaviour
         Effect.transform.GetChild(2).GetComponent<TextMeshPro>().text = OutputData["Duration"];
         CDAndStack.transform.GetChild(1).GetComponent<TextMeshPro>().text = OutputData["Cooldown"];
         CDAndStack.transform.GetChild(2).GetComponent<TextMeshPro>().text = OutputData["Stack"];
+        SetInfoForStockAndOwned();
         InputField.text = "1";
-        MaxStock = int.Parse(OutputData["Stock"]);
         Price = int.Parse(OutputData["Price"]);
         ShowBuySellInfo();
         // Currently Own: WIP
@@ -86,7 +88,6 @@ public class SpaceShopInformation : MonoBehaviour
             BuyButton.GetComponent<Collider2D>().enabled = true;
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
-        BuyButton.GetComponent<SpriteRenderer>().color = Color.white;
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().text =
             "Buy (" + (Price * int.Parse(InputField.text)).ToString() + " <sprite index='0'>)";
         BuyButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
@@ -116,30 +117,43 @@ public class SpaceShopInformation : MonoBehaviour
         
     }
 
+    public void SetInfoForStockAndOwned()
+    {
+        if (currentItemName!=null)
+        {
+            PurchaseInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(Currently Owned: "
+            + FindObjectOfType<AccessDatabase>().GetCurrentOwnedNumberOfConsumableByName(
+            FindObjectOfType<UECMainMenuController>().PlayerId, currentItemName).ToString() + " items)";
+            MaxStock = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable((string)DataDictionary["Name"]);
+            if (MaxStock==0)
+            {
+                if (BuyButton.GetComponent<CursorUnallowed>()==null)
+                {
+                    BuyButton.AddComponent<CursorUnallowed>();
+                    BuyButton.GetComponent<SpriteRenderer>().color = Color.red;
+                }
+            } else
+            {
+                if (BuyButton.GetComponent<CursorUnallowed>() != null)
+                {
+                    Destroy(BuyButton.GetComponent<CursorUnallowed>());
+                    BuyButton.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+            }
+        }
+    }
     private void CheckInput()
     {
         Regex Regex = new Regex(@"^\d+$");
         // Check if input is integer and >=1
         if (Regex.Match(InputField.text).Success && int.Parse(InputField.text)>=1)
         {
-            // If item has unlimited stock -> check limit 100
-            if (MaxStock == 0)
+            // check limit 100 per transaction
+            if (int.Parse(InputField.text) > 100)
             {
-                if (int.Parse(InputField.text) > 100)
-                {
-                    InputField.text = "100";
-                }
-                ShowBuySellInfo();
-            } 
-            // If not -> check limit to item's max stock
-            else
-            {
-                if (int.Parse(InputField.text)>MaxStock)
-                {
-                    InputField.text = MaxStock.ToString();
-                }
-                ShowBuySellInfo();
+                InputField.text = "100";
             }
+            ShowBuySellInfo();
         } else
         {
             InputField.text = "1";

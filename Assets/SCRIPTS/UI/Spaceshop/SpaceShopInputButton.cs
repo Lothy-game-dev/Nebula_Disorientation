@@ -52,9 +52,6 @@ public class SpaceShopInputButton : MonoBehaviour
                     InputField.text = (int.Parse(InputField.text) + (name=="Decrease"?-1:1)
                          * InputScale).ToString();
                     inputDelay = 0.2f;
-                } else
-                {
-                    inputDelay -= Time.deltaTime;
                 }
                 // If hold the button more than 2 seconds, enter fast input mode, increase by 10 each time
                 if (InputScale<10) fastInputTimer+=Time.deltaTime;
@@ -73,6 +70,7 @@ public class SpaceShopInputButton : MonoBehaviour
             InputScale = 1;
             fastInputTimer = 0f;
         }
+        inputDelay -= Time.deltaTime;
     }
     #endregion
     #region Function group 1

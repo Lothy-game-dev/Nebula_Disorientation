@@ -444,6 +444,44 @@ public class AccessDatabase : MonoBehaviour
             return "Success";
         }
     }
+
+    public string IncreaseCurrencyAfterSell(int PlayerId, int Cash, int TimelessShard)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Cash, TimelessShard FROM PlayerProfile WHERE " +
+            "PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int cashOwn = -1;
+        int timelessShardOwn = -1;
+        while (dataReader.Read())
+        {
+            cashOwn = dataReader.GetInt32(0);
+            timelessShardOwn = dataReader.GetInt32(1);
+        }
+        if (cashOwn == -1 || timelessShardOwn == -1)
+        {
+            dbConnection.Close();
+            return "Not Exist";
+        }
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
+            + ", TimelessShard = TimelessShard + " + TimelessShard + " WHERE PlayerID=" + PlayerId;
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        if (n != 1)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            dbConnection.Close();
+            return "Success";
+        }
+    }
     #endregion
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
@@ -1015,27 +1053,33 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT StockPerDays FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace(" ", "").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT ItemID, StockPerDays FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         int n = 0;
+        int id = -2;
         while (dataReader.Read())
         {
             check = true;
-            if (dataReader.IsDBNull(0))
+            id = dataReader.GetInt32(0);
+            if (dataReader.IsDBNull(1))
             {
-                n = 0;
+                n = -1;
             } else
-                n = dataReader.GetInt32(0);
+                n = dataReader.GetInt32(1);
         }
         dbConnection.Close();
         if (!check)
         {
-            return -1;
+            return -2;
         }
         else
         {
-            return n;
+            if (n==-1)
+            {
+                return n;
+            } else
+            return n - GetTotalBuyOfItemToday(GetCurrentSessionPlayerId(), id, "Consumable"); ;
         }
     }
 
@@ -1218,7 +1262,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
-        dbCheckCommand1.CommandText = "SELECT ItemID FROM SpaceShop WHERE ItemName='" + itemName + "'";
+        dbCheckCommand1.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),'-',''),' ','')='" + itemName.Replace("-","").Replace(" ","").ToLower() + "'";
         IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         int n = 0;
         while (dataReader1.Read())
@@ -1229,7 +1273,7 @@ public class AccessDatabase : MonoBehaviour
         {
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE " +
-                "PlayerID=" + PlayerID + " AND ItemID=" + n;
+                "PlayerID=" + PlayerID + " AND ItemID=" + n + " AND ItemType='Consumable'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             int quan = 0;
             while (dataReader.Read())
@@ -1241,7 +1285,7 @@ public class AccessDatabase : MonoBehaviour
         } else
         {
             dbConnection.Close();
-            return -1;
+            return 0;
         }
     }
     /// <summary>
@@ -1297,19 +1341,202 @@ public class AccessDatabase : MonoBehaviour
             return "Not Found";
         } else
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = "INSERT INTO PlayerOwnership (PlayerID,ItemType,ItemID,Quantity) VALUES" +
-                "("+ PlayerId + ",'"+ Type +"'," + id + "," + Quantity + ")";
-            int n = dbCommand.ExecuteNonQuery();
-            dbConnection.Close();
-            if (n!=1)
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE" +
+                " PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            int quantity = -1;
+            while (dataReader.Read())
             {
-                return "Fail";
-            } else
+                quantity = dataReader.GetInt32(0);
+            }
+            if (quantity != -1)
             {
-                return "Success";
+                IDbCommand dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = "UPDATE PlayerOwnership SET Quantity = Quantity + " + Quantity
+                        + " WHERE PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
+                int n = dbCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (n != 1)
+                {
+                    return "Fail";
+                }
+                else
+                {
+                    string check = AddPurchaseHistory(PlayerId, id, Type, Quantity, true);
+                    return check;
+                }
+            } 
+            else
+            {
+                IDbCommand dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = "INSERT INTO PlayerOwnership (PlayerID,ItemType,ItemID,Quantity) VALUES" +
+                    "(" + PlayerId + ",'" + Type + "'," + id + "," + Quantity + ")";
+                int n = dbCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (n != 1)
+                {
+                    return "Fail";
+                }
+                else
+                {
+                    string check = AddPurchaseHistory(PlayerId, id, Type, Quantity, true);
+                    return check;
+                }
+            }
+
+        }
+    }
+    public string DecreaseOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        int id = 0;
+        // Queries
+        if ("Weapon".Equals(Type))
+        {
+            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
+            while (dataReaderWeapon.Read())
+            {
+                id = dataReaderWeapon.GetInt32(0);
+                break;
             }
         }
+        else if ("Power".Equals(Type))
+        {
+            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
+            while (dataReaderPower.Read())
+            {
+                id = dataReaderPower.GetInt32(0);
+                break;
+            }
+        }
+        else if ("Consumable".Equals(Type))
+        {
+            IDbCommand dbCheckCons = dbConnection.CreateCommand();
+            dbCheckCons.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
+            IDataReader dataReaderCons = dbCheckCons.ExecuteReader();
+            while (dataReaderCons.Read())
+            {
+                id = dataReaderCons.GetInt32(0);
+                break;
+            }
+        }
+        if (id == 0)
+        {
+            dbConnection.Close();
+            return "Not Enough Item";
+        }
+        else
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE" +
+                " PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type +"'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            int quantity = -1;
+            while (dataReader.Read())
+            {
+                quantity = dataReader.GetInt32(0);
+            }
+            if (quantity!=-1)
+            {
+                if (quantity > Quantity)
+                {
+                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    dbCommand.CommandText = "UPDATE PlayerOwnership SET Quantity = Quantity - " + Quantity
+                        + " WHERE PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
+                    int n = dbCommand.ExecuteNonQuery();
+                    dbConnection.Close();
+                    if (n != 1)
+                    {
+                        return "Fail";
+                    }
+                    else
+                    {
+                        string check = AddPurchaseHistory(PlayerId, id, Type, Quantity, false);
+                        return check;
+                    }
+                } else if (quantity == Quantity)
+                {
+                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    dbCommand.CommandText = "DELETE FROM PlayerOwnership WHERE PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'"; ;
+                    int n = dbCommand.ExecuteNonQuery();
+                    dbConnection.Close();
+                    if (n != 1)
+                    {
+                        return "Fail";
+                    }
+                    else
+                    {
+                        string check = AddPurchaseHistory(PlayerId, id, Type, Quantity, false);
+                        return check;
+                    }
+                } else
+                {
+                    dbConnection.Close();
+                    return "Not Enough Item";
+                }
+            } else
+            {
+                dbConnection.Close();
+                return "Not Enough Item";
+            }
+        }
+    }
+    #endregion
+    #region Access Purchase History
+    public string AddPurchaseHistory(int PlayerID, int itemID, string Type, int Quantity, bool isBuy)
+    {
+        System.DateTime date = System.DateTime.Now;
+        string currentDate = date.ToString("yyyy-MM-dd");
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "INSERT INTO PurchaseHistory (PlayerID, ItemType, ItemID, Quantity, BuyOrSell, PurchaseDate) VALUES " +
+            "(" + PlayerID + ",'" + Type + "'," + itemID + "," + Quantity + ",'" + (isBuy ? "Buy" : "Sell") + "','" + currentDate + "')";
+        int n = dbCommand.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n!=1)
+        {
+            return "Fail";
+        } else
+        {
+            return "Success";
+        }
+    }
+
+    public int GetTotalBuyOfItemToday(int PlayerID, int ItemID, string Type)
+    {
+        System.DateTime date = System.DateTime.Now;
+        string currentDate = date.ToString("yyyy-MM-dd");
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT sum(Quantity) from PurchaseHistory where PlayerId =" + PlayerID + " and ItemID=" + ItemID + 
+            " and ItemType='" + Type + "' and BuyOrSell='Buy'";
+        IDataReader dataReader = dbCommand.ExecuteReader();
+        int sum = -1;
+        while (dataReader.Read())
+        {
+            if (dataReader.IsDBNull(0))
+            {
+                sum = 0;
+            } else
+            {
+                sum = dataReader.GetInt32(0);
+            }
+        }
+        dbConnection.Close();
+        return sum;
     }
     #endregion
 }
