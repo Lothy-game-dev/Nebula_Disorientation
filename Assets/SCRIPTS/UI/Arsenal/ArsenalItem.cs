@@ -32,7 +32,8 @@ public class ArsenalItem : MonoBehaviour
     public GameObject Content;
     public bool LockedItem;
     private int RankId;
-    private string CurrentId;
+    private bool IsClicked;
+    private Coroutine currentCoroutine;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -159,7 +160,10 @@ public class ArsenalItem : MonoBehaviour
         ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3], Id));
+        StartTextRunning(ItemList[int.Parse(Id) - 1][3]);
+
+
+
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
         if (LockedItem)
@@ -171,6 +175,7 @@ public class ArsenalItem : MonoBehaviour
             c.a = 1f;
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+   
     }
     #endregion
     #region Check current item on mouse down
@@ -189,16 +194,32 @@ public class ArsenalItem : MonoBehaviour
     }
     #endregion
     #region Text animation
-    private IEnumerator TextRunning(string text, string id)
+    private IEnumerator TextRunning(string text)
     {
-        //Use substring to take each word in the text and put it back
         ar.DescContent.GetComponent<TMP_Text>().text = "";
+        //Use substring to take each word in the text and put it back
         for (int i = 0; i < text.Length; i++)
-        {      
+        {
             ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
-            
         }
+        
+    }
+    public void StartTextRunning(string text)
+    {
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }  
+        if (ar.OldCoroutine != null)
+        {
+            Debug.Log("Old");
+            StopCoroutine(ar.OldCoroutine);
+        }
+        
+        currentCoroutine = StartCoroutine(TextRunning(text));
+        ar.OldCoroutine = currentCoroutine;
+        
         
     }
     #endregion
