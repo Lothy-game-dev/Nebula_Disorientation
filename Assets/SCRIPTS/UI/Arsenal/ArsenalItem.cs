@@ -32,6 +32,7 @@ public class ArsenalItem : MonoBehaviour
     public GameObject Content;
     public bool LockedItem;
     private int RankId;
+    private string CurrentId;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -158,7 +159,7 @@ public class ArsenalItem : MonoBehaviour
         ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3]));
+        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][3], Id));
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
         if (LockedItem)
@@ -177,23 +178,27 @@ public class ArsenalItem : MonoBehaviour
     {
         for (int i = 0; i < Content.transform.childCount; i++)
         {
-            Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+            Color c = Content.transform.GetChild(i).GetComponent<Image>().color;
+            c.r = 1f;
+            c.g = 1f;
+            c.b = 1f;
+            c.a = 0.58f;
+            Content.transform.GetChild(i).GetComponent<Image>().color = c;
         }
         Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
     }
     #endregion
     #region Text animation
-    private IEnumerator TextRunning(string text)
+    private IEnumerator TextRunning(string text, string id)
     {
         //Use substring to take each word in the text and put it back
         ar.DescContent.GetComponent<TMP_Text>().text = "";
-        gameObject.GetComponent<Collider2D>().enabled = false;
         for (int i = 0; i < text.Length; i++)
-        {
+        {      
             ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
         }
-        gameObject.GetComponent<Collider2D>().enabled = true;
+        
     }
     #endregion
 }

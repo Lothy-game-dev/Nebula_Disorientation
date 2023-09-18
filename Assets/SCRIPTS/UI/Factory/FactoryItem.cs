@@ -155,7 +155,12 @@ public class FactoryItem : MonoBehaviour
         // the item becomes green when we choose
         for (int i = 0; i < Content.transform.childCount; i++)
         {
-            Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+            Color c = Content.transform.GetChild(i).GetComponent<Image>().color;
+            c.r = 1f;
+            c.g = 1f;
+            c.b = 1f;
+            c.a = 0.58f;
+            Content.transform.GetChild(i).GetComponent<Image>().color = c;
         }
         Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
     }
