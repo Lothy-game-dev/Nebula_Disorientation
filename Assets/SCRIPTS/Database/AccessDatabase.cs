@@ -6,43 +6,7 @@ using System.Data;
 
 public class AccessDatabase : MonoBehaviour
 {
-    #region ComponentVariables
-    // Variables used for calling componenets attached to the game object only
-    // Can be public or private
-    #endregion
-    #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
-
-    IDbConnection dbConnection;
-    #endregion
-    #region NormalVariables
-    // All other variables apart from the two aforementioned types
-    // Can be public or private, prioritize private if possible
-    #endregion
-    #region Function group 1
-    // Group all function that serve the same algorithm
-
-    public int ArsenalWeaponCount()
-    {
-        int count = 0;
-        // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        // Queries
-        // Create Table Query
-        IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "Select count(*) from ArsenalWeapon";
-        IDataReader reader = dbCommand.ExecuteReader();
-        while (reader.Read())
-        {
-            count = reader.GetInt32(0);
-        }
-        dbConnection.Close();
-        return count;
-    }
-    #endregion
+    private IDbConnection dbConnection;
     #region Access Player Profile
     public string CreateNewPlayerProfile(string name)
     {
@@ -191,12 +155,13 @@ public class AccessDatabase : MonoBehaviour
                 check = true;
                 values.Add("ID", dataReader.GetInt32(0));
                 values.Add("Name", dataReader.GetString(1));
-                values.Add("RankId", dataReader.GetInt32(2));
                 if (dataReader.IsDBNull(2))
                 {
                     values.Add("Rank", "Unranked");
+                    values.Add("RankId", 0);
                 } else
                 {
+                    values.Add("RankId", dataReader.GetInt32(2));
                     IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
                     dbCheckCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankId=" + dataReader.GetInt32(2);
                     IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
@@ -432,8 +397,55 @@ public class AccessDatabase : MonoBehaviour
             }
         }
     }
+
+    public string DecreaseCurrencyAfterBuy(int PlayerId, int Cash, int TimelessShard)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Cash, TimelessShard FROM PlayerProfile WHERE " +
+            "PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int cashOwn = -1;
+        int timelessShardOwn = -1;
+        while (dataReader.Read())
+        {
+            cashOwn = dataReader.GetInt32(0);
+            timelessShardOwn = dataReader.GetInt32(1);
+        }
+        if (cashOwn == -1 || timelessShardOwn == -1)
+        {
+            dbConnection.Close();
+            return "Not Exist";
+        }
+        if (cashOwn < Cash)
+        {
+            dbConnection.Close();
+            return "Not Enough Cash";
+        }
+        if (timelessShardOwn < TimelessShard)
+        {
+            dbConnection.Close();
+            return "Not Enough Shard";
+        }
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash - " + Cash
+            + ", TimelessShard = TimelessShard - " + TimelessShard + " WHERE PlayerID=" + PlayerId;
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        if (n!=1)
+        {
+            dbConnection.Close();
+            return "Fail";
+        } else
+        {
+            dbConnection.Close();
+            return "Success";
+        }
+    }
     #endregion
-    #region Access To Current Play Session
+    #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
     {
         // Open DB
@@ -485,7 +497,7 @@ public class AccessDatabase : MonoBehaviour
         return id;
     }
     #endregion
-    #region DailyMission
+    #region Access Daily Mission
     public int NumberOfDailyMissionById(int PlayerId)
     {
         System.DateTime date = System.DateTime.Now;
@@ -648,7 +660,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
     }
     #endregion
-    #region Get Weapon List
+    #region Access Arsenal Weapon
     public List<List<string>> GetAllArsenalWeapon()
     {
         List<List<string>> list = new List<List<string>>();
@@ -742,7 +754,7 @@ public class AccessDatabase : MonoBehaviour
         }
     }
     #endregion
-    #region Get Fighter List
+    #region Access Factory Fighter/Model
     public List<List<string>> GetAllFighter()
     {
         List<List<string>> list = new List<List<string>>();
@@ -1196,6 +1208,108 @@ public class AccessDatabase : MonoBehaviour
         if (!check) return null;
         dbConnection.Close();
         return list;
+    }
+    #endregion
+    #region Access Ownership
+    public int GetCurrentOwnedNumberOfConsumableByName(int PlayerID, string itemName)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = "SELECT ItemID FROM SpaceShop WHERE ItemName='" + itemName + "'";
+        IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
+        int n = 0;
+        while (dataReader1.Read())
+        {
+            n = dataReader1.GetInt32(0);
+        }
+        if (n!=0)
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE " +
+                "PlayerID=" + PlayerID + " AND ItemID=" + n;
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            int quan = 0;
+            while (dataReader.Read())
+            {
+                quan = dataReader.GetInt32(0);
+            }
+            dbConnection.Close();
+            return quan;
+        } else
+        {
+            dbConnection.Close();
+            return -1;
+        }
+    }
+    /// <summary>
+    /// Use this fuction to add permanent ownership to any item
+    /// </summary>
+    /// <param name="PlayerId">Id of player</param>
+    /// <param name="itemName">Name of item</param>
+    /// <param name="Type">Weapon/Power/Consumable</param>
+    /// <param name="Quantity">Count</param>
+    public string AddOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        int id = 0;
+        // Queries
+        if ("Weapon".Equals(Type))
+        {
+            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ","").ToLower() + "'";
+            IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
+            while (dataReaderWeapon.Read())
+            {
+                id = dataReaderWeapon.GetInt32(0);
+                break;
+            }
+        } 
+        else if ("Power".Equals(Type))
+        {
+            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ","").ToLower() + "'";
+            IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
+            while (dataReaderPower.Read())
+            {
+                id = dataReaderPower.GetInt32(0);
+                break;
+            }
+        }
+        else if ("Consumable".Equals(Type))
+        {
+            IDbCommand dbCheckCons = dbConnection.CreateCommand();
+            dbCheckCons.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + itemName.Replace(" ","").Replace("-","").ToLower() + "'";
+            IDataReader dataReaderCons = dbCheckCons.ExecuteReader();
+            while (dataReaderCons.Read())
+            {
+                id = dataReaderCons.GetInt32(0);
+                break;
+            }
+        }
+        if (id==0)
+        {
+            dbConnection.Close();
+            return "Not Found";
+        } else
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "INSERT INTO PlayerOwnership (PlayerID,ItemType,ItemID,Quantity) VALUES" +
+                "("+ PlayerId + ",'"+ Type +"'," + id + "," + Quantity + ")";
+            int n = dbCommand.ExecuteNonQuery();
+            dbConnection.Close();
+            if (n!=1)
+            {
+                return "Fail";
+            } else
+            {
+                return "Success";
+            }
+        }
     }
     #endregion
 }
