@@ -45,6 +45,8 @@ public class UECMainMenuController : MonoBehaviour
             controller.SetDataToView(ListData);
             FactoryController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
             ArsenalController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
+            // Temp
+            FindObjectOfType<SpaceShopScene>().SetData();
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,

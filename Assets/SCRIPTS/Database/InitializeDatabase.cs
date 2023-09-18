@@ -39,6 +39,8 @@ public class InitializeDatabase : MonoBehaviour
                 "PlayerID INTEGER, " +
                 "ItemType TEXT, " +
                 "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "BuyOrSell TEXT, " +
                 "PurchaseDate TEXT, " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +

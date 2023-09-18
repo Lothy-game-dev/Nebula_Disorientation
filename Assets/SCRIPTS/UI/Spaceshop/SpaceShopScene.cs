@@ -21,7 +21,6 @@ public class SpaceShopScene : UECMenuShared
     void Start()
     {
         // Initialize variables
-        SetData();
     }
 
     // Update is called once per frame
@@ -56,6 +55,8 @@ public class SpaceShopScene : UECMenuShared
             .GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
         CurrentCash = (int)ListData["Cash"];
         Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = CurrentCash.ToString();
+        transform.GetChild(2).GetComponent<SpaceShopInformation>().SetInfoForStockAndOwned();
+        ListItem.GetComponent<SpaceShopListItem>().UpdateItemStocks();
     }
 
     public bool CheckEnoughMoney(int cash)
