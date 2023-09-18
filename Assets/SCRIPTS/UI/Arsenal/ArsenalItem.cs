@@ -31,7 +31,7 @@ public class ArsenalItem : MonoBehaviour
     public List<GameObject> ItemStatusList;
     public GameObject Content;
     public bool LockedItem;
-
+    private int RankId;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -98,25 +98,7 @@ public class ArsenalItem : MonoBehaviour
                 ItemStatusList[i].GetComponent<TextMeshPro>().text = (string)Status[ItemStatusList[i].name];
             }
         }
-        // check if enough timeless shard
-        if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
-        {
-            ShardColor = "red";
-            ar.EnoughPrice = false;
-        }
-        else
-        {
-            if (int.Parse(ar.PShard) == 0)
-            {
-                ar.EnoughPrice = false;
-                ShardColor = "red";
-            }
-            else
-            {
-                ShardColor = "green";
-                ar.EnoughPrice = true;
-            }
-        }
+        
         // check if we r in session to buy item by cash
         if (ar.IsInSession)
         {
@@ -134,10 +116,36 @@ public class ArsenalItem : MonoBehaviour
         }
         else
         {
-            CashColor = "red";
+            CashColor = "grey";
+            // check if enough timeless shard
+            if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
+            {
+                ShardColor = "red";
+                ar.EnoughPrice = false;
+            }
+            else
+            {
+                if (int.Parse(ar.PShard) == 0)
+                {
+                    ar.EnoughPrice = false;
+                    ShardColor = "red";
+                }
+                else
+                {
+                    ShardColor = "green";
+                    ar.EnoughPrice = true;
+                }
+            }
         }
         //check rank required
-        if ((int)ar.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
+        if ((string)ar.PlayerInformation["Rank"] == "Unranked")
+        {
+            RankId = 1;
+        } else
+        {
+            RankId = (int)ar.PlayerInformation["RankId"];
+        }
+        if (RankId < int.Parse((string)RankSys["RankId"]))
         {
             RankColor = "red";
             ar.RankRequired = false;
