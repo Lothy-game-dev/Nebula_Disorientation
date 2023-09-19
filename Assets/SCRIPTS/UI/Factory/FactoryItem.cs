@@ -60,7 +60,7 @@ public class FactoryItem : MonoBehaviour
     #endregion
     #region Show Fighter information
     // Group all function that serve the same algorithm
-    private void FighterInformation(List<List<string>> ItemList)
+    public void FighterInformation(List<List<string>> ItemList)
     {
         //convert the price x | y => Cash = x, Shard = y
         ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(ItemList[int.Parse(Id) - 1][4]);

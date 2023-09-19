@@ -97,6 +97,7 @@ public class Factory : MonoBehaviour
                 }
             }
             LockItem(g, FighterList[i][5]);
+            
             g.SetActive(true);
         }
 
