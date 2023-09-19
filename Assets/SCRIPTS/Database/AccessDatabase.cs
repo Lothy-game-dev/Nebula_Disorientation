@@ -1297,12 +1297,72 @@ public class AccessDatabase : MonoBehaviour
             return 0;
         }
     }
+
+    public int GetCurrentOwnershipWeaponPowerModelByName(int PlayerID, string itemName, string Type)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        int id = -1;
+        // Queries
+        if ("Weapon".Equals(Type))
+        {
+            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
+            while (dataReaderWeapon.Read())
+            {
+                id = dataReaderWeapon.GetInt32(0);
+                break;
+            }
+        }
+        else if ("Power".Equals(Type))
+        {
+            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
+            while (dataReaderPower.Read())
+            {
+                id = dataReaderPower.GetInt32(0);
+                break;
+            }
+        } else if ("Model".Equals(Type))
+        {
+            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-","").ToLower() + "'";
+            IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
+            while (dataReaderModel.Read())
+            {
+                id = dataReaderModel.GetInt32(0);
+                break;
+            }
+        }
+        if (id!=-1)
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE " +
+                "PlayerID=" + PlayerID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            int quan = 0;
+            while (dataReader.Read())
+            {
+                quan = dataReader.GetInt32(0);
+            }
+            dbConnection.Close();
+            return quan;
+        }
+        else
+        {
+            dbConnection.Close();
+            return -1;
+        }
+    }
     /// <summary>
     /// Use this fuction to add permanent ownership to any item
     /// </summary>
     /// <param name="PlayerId">Id of player</param>
     /// <param name="itemName">Name of item</param>
-    /// <param name="Type">Weapon/Power/Consumable</param>
+    /// <param name="Type">Weapon/Power/Consumable/Model</param>
     /// <param name="Quantity">Count</param>
     public string AddOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
     {
@@ -1341,6 +1401,17 @@ public class AccessDatabase : MonoBehaviour
             while (dataReaderCons.Read())
             {
                 id = dataReaderCons.GetInt32(0);
+                break;
+            }
+        }
+        else if ("Model".Equals(Type))
+        {
+            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(WeaponName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
+            IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
+            while (dataReaderModel.Read())
+            {
+                id = dataReaderModel.GetInt32(0);
                 break;
             }
         }
@@ -1433,6 +1504,17 @@ public class AccessDatabase : MonoBehaviour
             while (dataReaderCons.Read())
             {
                 id = dataReaderCons.GetInt32(0);
+                break;
+            }
+        }
+        else if ("Model".Equals(Type))
+        {
+            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(WeaponName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
+            IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
+            while (dataReaderModel.Read())
+            {
+                id = dataReaderModel.GetInt32(0);
                 break;
             }
         }
