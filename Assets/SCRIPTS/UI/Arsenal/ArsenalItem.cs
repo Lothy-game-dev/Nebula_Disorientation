@@ -142,7 +142,7 @@ public class ArsenalItem : MonoBehaviour
         //check rank required
         if ((string)ar.PlayerInformation["Rank"] == "Unranked")
         {
-            RankId = 1;
+            RankId = 0;
         } else
         {
             RankId = (int)ar.PlayerInformation["RankId"];
@@ -162,8 +162,6 @@ public class ArsenalItem : MonoBehaviour
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartTextRunning(ItemList[int.Parse(Id) - 1][3]);
 
-
-
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
         if (LockedItem)
@@ -175,7 +173,11 @@ public class ArsenalItem : MonoBehaviour
             c.a = 1f;
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
-   
+
+        ar.ItemName = ItemList[int.Parse(Id) - 1][2];
+        ar.RequiredCash = ItemList[int.Parse(Id) - 1][5];
+        ar.RequiredShard = ItemList[int.Parse(Id) - 1][6];
+
     }
     #endregion
     #region Check current item on mouse down

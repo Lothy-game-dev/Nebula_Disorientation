@@ -42,12 +42,14 @@ public class FactoryScene : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
+        FactoryController.FirstContent();
     }
 
     public override void OnExitAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        FactoryController.ResetData();
     }
     #endregion
 }

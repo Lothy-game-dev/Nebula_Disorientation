@@ -1178,13 +1178,22 @@ public class AccessDatabase : MonoBehaviour
         dbCheckCommand.CommandText = "SELECT * FROM RankSystem WHERE RankId=" + id + "";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check1 = false;
-        while (dataReader.Read())
+        if (id == 0)
         {
             check1 = true;
-            rank.Add("RankId", dataReader.GetInt32(0).ToString());
-            rank.Add("RankName", dataReader.GetString(1));
-            rank.Add("RankTier", dataReader.GetString(7));
-        }   
+            rank.Add("RankId", "0");
+            rank.Add("RankName", "N/A");
+            rank.Add("RankTier", "#FFFFFF");
+        } else
+        {
+            while (dataReader.Read())
+            {
+                check1 = true;
+                rank.Add("RankId", dataReader.GetInt32(0).ToString());
+                rank.Add("RankName", dataReader.GetString(1));
+                rank.Add("RankTier", dataReader.GetString(7));
+            }   
+        }
         if (!check1) return null;
         dbConnection.Close();
  
