@@ -41,7 +41,13 @@ public class ArsenalBuyAction : MonoBehaviour
         if (Ar.EnoughPrice && Ar.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;
-            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Do you wanna buy?");
+            if (!Ar.IsInSession)
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for "+  Ar.RequiredShard + " shard?");
+            } else
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for " + Ar.RequiredCash + " cash?");
+            }
             
         }
         else
@@ -54,7 +60,7 @@ public class ArsenalBuyAction : MonoBehaviour
             {
                 if (!Ar.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Please try to get a higher rank!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Rank requirement unmet!", 5f);
                 }
             }
         }

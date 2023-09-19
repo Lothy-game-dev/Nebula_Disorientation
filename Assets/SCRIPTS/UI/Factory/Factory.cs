@@ -58,7 +58,6 @@ public class Factory : MonoBehaviour
         PShard = PlayerInformation["TimelessShard"].ToString();
         PlayerCash.GetComponent<TextMeshPro>().text = PCash;
         PlayerShard.GetComponent<TextMeshPro>().text = PShard;
-        FirstContent();
     }
 
     // Update is called once per frame
@@ -69,7 +68,7 @@ public class Factory : MonoBehaviour
     }
     #endregion
     #region Generate fighter list and choose the first one
-    private void FirstContent()
+    public void FirstContent()
     {
         // clone the template and set image of model
         for (int i = 0; i < FighterList.Count; i++)
@@ -130,7 +129,7 @@ public class Factory : MonoBehaviour
         ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + (string)ItemPrice["Timeless"] + "</color>";
         DescContent.GetComponent<TMP_Text>().text = FighterList[0][2];
         ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + (string)ItemPrice["Cash"] + "</color>";
-        Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">N/A</color>";
         ItemName = FighterList[0][1];
         ItemPriceCash = (string)ItemPrice["Cash"];
         ItemPriceShard = (string)ItemPrice["Timeless"];
@@ -185,7 +184,13 @@ public class Factory : MonoBehaviour
     #region Reset data when clicking back button
     public void ResetData()
     {
-
+        if (Content.transform.childCount > 0)
+        {
+            for (int i = 0; i < Content.transform.childCount; i++)
+            {
+                Destroy(Content.transform.GetChild(i).gameObject);
+            }
+        }
     }
     #endregion
 
