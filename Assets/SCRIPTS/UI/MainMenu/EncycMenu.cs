@@ -19,6 +19,7 @@ public class EncycMenu : MainMenuSceneShared
     public GameObject ItemImage;
     public GameObject ItemName;
     public GameObject ItemTier;
+    public GameObject ItemDesc;
     public string[] Category;
     public GameObject CategoryContent;
     public GameObject CateTemplate;
@@ -47,7 +48,7 @@ public class EncycMenu : MainMenuSceneShared
         EnemyList = FindAnyObjectByType<AccessDatabase>().GetAllEnemy();
         ConsumList = FindAnyObjectByType<AccessDatabase>().GetAllConsumable();
         WarshipList = FindAnyObjectByType<AccessDatabase>().GetAllWarship();
-
+        Debug.Log(FighterList.Count);
         for (int i = 0; i < Category.Length; i++)
         {
             GameObject g = Instantiate(CateTemplate, CateTemplate.transform.position, Quaternion.identity);

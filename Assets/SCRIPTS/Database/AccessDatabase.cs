@@ -1220,7 +1220,8 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             EnemyList.Add(dataReader.GetInt32(0).ToString());
             EnemyList.Add(dataReader.GetString(1));
-            EnemyList.Add(dataReader.GetString(2));
+            EnemyList.Add(dataReader.GetString(6));
+            EnemyList.Add(dataReader.GetString(7));
             list.Add(EnemyList);
         }
         if (!check) return null;
@@ -1254,7 +1255,15 @@ public class AccessDatabase : MonoBehaviour
             {
                 WarshipList.Add(dataReader.GetString(2));
             }
-            WarshipList.Add(dataReader.GetString(3));
+            if (dataReader.IsDBNull(3))
+            {
+                WarshipList.Add("N/A");
+            }
+            else
+            {
+                WarshipList.Add(dataReader.GetString(3));
+            }
+            
             WarshipList.Add(dataReader.GetString(4));
             list.Add(WarshipList);
         }
@@ -1628,6 +1637,36 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return sum;
+    }
+    #endregion
+    #region Access Tutorial
+    public List<List<string>> GetAllTutorial() 
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> TList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM Tutorial";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            TList = new List<string>();
+            TList.Add(dataReader.GetInt32(0).ToString());
+            TList.Add(dataReader.GetString(1));
+            TList.Add(dataReader.GetString(2));
+            TList.Add(dataReader.GetString(3));
+            
+            list.Add(TList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
+        
     }
     #endregion
 }

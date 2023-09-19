@@ -55,7 +55,7 @@ public class EncycButton : MonoBehaviour
         
         if (Type == "Weapon")
         {
-            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2.3f, 2.3f, 0f));
+            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2.3f, 2.3f, 0f), 0);
             ChangeColorWhenChoosen(Id.ToString());
             if (wlist[2] == "Star Blaster")
             {
@@ -77,7 +77,7 @@ public class EncycButton : MonoBehaviour
             //Fighter
             if (Type == "Fighter")
             {
-                ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f));
+                ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f), 0);
                 ChangeColorWhenChoosen(Id.ToString());
                 if (wlist[1] == "SSS-MKL")
                 {
@@ -99,7 +99,7 @@ public class EncycButton : MonoBehaviour
                 //Power
                 if (Type == "Power")
                 {
-                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.6f, 0.6f, 0f));
+                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.6f, 0.6f, 0f), 0);
                     ChangeColorWhenChoosen(Id.ToString());
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = PowerImage[PowerImage.FindIndex(item => wlist[2].Replace(" ", "").ToLower() == item.name.ToLower())].sprite;                                          
                 } else
@@ -108,21 +108,21 @@ public class EncycButton : MonoBehaviour
                     if (Type == "Enemy")
                     {
                        
-                        ShowInforOfItem(Menu.EnemyList, 1, 0, new Vector3(0.5f, 0.5f, 0f));
+                        ShowInforOfItem(Menu.EnemyList, 1, 0, new Vector3(0.5f, 0.5f, 0f), 0);
                         ChangeColorWhenChoosen((Id + Menu.FighterList.Count).ToString());
                         Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = EnemyImage[EnemyImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
                     } else
                     {
                         if (Type == "Consumable")
                         {
-                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.5f, 0.5f, 0f));
+                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.5f, 0.5f, 0f), 0);
                             ChangeColorWhenChoosen((Id + Menu.PowerList.Count).ToString());
                             Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = ConsumableImage[ConsumableImage.FindIndex(item => wlist[1].Replace(" ", "").Replace("-","").ToLower().Contains(item.name.ToLower()))].sprite;
                         } else
                         {
                             if (Type == "Warship")
                             {
-                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.2f, 0.2f));
+                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.2f, 0.2f), 2);
                                 ChangeColorWhenChoosen(Id.ToString());
                                 Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WarshipImage[WarshipImage.FindIndex(item => wlist[1].Replace("Zat-", "").ToLower().Contains(item.name.ToLower()))].sprite;
                             }
@@ -135,12 +135,13 @@ public class EncycButton : MonoBehaviour
     #endregion
     #region Show item's information
     // Group all function that serve the same algorithm
-    private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale)
+    private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale, int DescIndex)
     {
         Menu.ItemImage.transform.localScale = ImageScale;
         wlist = list[Id - 1];
         Debug.Log(wlist[TierIndex]);
 
+        Menu.ItemDesc.GetComponent<TMP_Text>().text = wlist[DescIndex];
         Menu.ItemName.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] +">"  + wlist[NameIndex] + "</color>";
 
         switch(wlist[TierIndex])
