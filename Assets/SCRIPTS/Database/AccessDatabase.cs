@@ -761,6 +761,25 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public List<string> GetAllOwnedWeapon(int PlayerID)
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ArsenalWeapon.WeaponName FROM ArsenalWeapon " +
+            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Weapon' AND ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY ArsenalWeapon.WeaponID ASC";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
+        }
+        dbConnection.Close();
+        return list;
+    }
     public Dictionary<string, object> GetWeaponDataByName(string name)
     {
         Dictionary<string, object> list = new Dictionary<string, object>();
@@ -836,6 +855,25 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
         dbCheckCommand.CommandText = "SELECT ModelName FROM FactoryModel WHERE 1=1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
+        }
+        dbConnection.Close();
+        return list;
+    }
+
+    public List<string> GetAllOwnedModel(int PlayerID)
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT FactoryModel.ModelName FROM FactoryModel " +
+            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Model' AND FactoryModel.ModelID = PlayerOwnership.ItemID  ORDER BY FactoryModel.ModelID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
@@ -933,6 +971,26 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public List<string> GetAllOwnedPower(int PlayerID)
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ArsenalPower.PowerName FROM ArsenalPower " +
+            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Power' AND ArsenalPower.PowerID = PlayerOwnership.ItemID ORDER BY ArsenalPower.PowerID ASC";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetString(0));
+        }
+        dbConnection.Close();
+        return list;
+    }
+
     public Dictionary<string, object> GetPowerDataByName(string name)
     {
         Dictionary<string, object> datas = new Dictionary<string, object>();
@@ -1083,8 +1141,7 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
-    //temp
-    public Dictionary<string, int> GetAllDictionarySpaceShopCons()
+    public Dictionary<string, int> GetOwnedConsumables(int PlayerID)
     {
         Dictionary<string, int> data = new Dictionary<string, int>();
         // Open DB
@@ -1092,11 +1149,13 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE 1=1";
+        dbCheckCommand.CommandText = "SELECT SpaceShop.ItemName,PlayerOwnership.Quantity" +
+            " FROM SpaceShop inner join PlayerOwnership WHERE PlayerID=" + PlayerID +
+            " AND ItemType='Consumable' AND SpaceShop.ItemID=PlayerOwnership.ItemID ORDER BY SpaceShop.ItemID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
-            data.Add(dataReader.GetString(0).Replace("-", "").Replace(" ", ""), 10);
+            data.Add(dataReader.GetString(0).Replace("-", "").Replace(" ", ""), dataReader.GetInt32(1));
         }
         dbConnection.Close();
         return data;

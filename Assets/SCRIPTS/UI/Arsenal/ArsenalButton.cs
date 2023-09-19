@@ -89,6 +89,19 @@ public class ArsenalButton : MonoBehaviour
                         g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => ArsenalController.WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                     }
                 }
+                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                g.name, "Weapon");
+                if (n != -1)
+                {
+                    if (n >= 2)
+                    {
+                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "2/2";
+                    }
+                    else if (n >= 0)
+                    {
+                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
+                    }
+                }
                 ArsenalController.LockItem(g, ArsenalController.WeaponList[i][8]);
                 g.SetActive(true);
                 if (i == 0) 
@@ -98,9 +111,6 @@ public class ArsenalButton : MonoBehaviour
                 }              
 
             }
-            
-
-
         }
         else
         {
@@ -132,6 +142,7 @@ public class ArsenalButton : MonoBehaviour
                     g.GetComponent<ArsenalItem>().Content = Content;
                     g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.PowerList;
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                    g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
                     ArsenalController.LockItem(g, ArsenalController.PowerList[i][8]);
                     if (i == 0)

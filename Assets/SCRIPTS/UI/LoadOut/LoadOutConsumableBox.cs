@@ -13,6 +13,7 @@ public class LoadOutConsumableBox : MonoBehaviour
     public GameObject StackText;
     public GameObject SelectedText;
     public GameObject MinusButton;
+    public GameObject Scene;
     #endregion
     #region NormalVariables
     public GameObject PopUp;
@@ -33,8 +34,16 @@ public class LoadOutConsumableBox : MonoBehaviour
     #region mouse check
     private void OnMouseDown()
     {
-        PopUp.GetComponent<LoadOutConsumablePopUp>().ShowClickItem(gameObject);
-        PopUp.GetComponent<LoadOutConsumablePopUp>().CheckIncreaseClickItem(gameObject);
+        if (int.Parse(SelectedText.GetComponent<TextMeshProUGUI>().text)
+            < int.Parse(StackText.GetComponent<TextMeshProUGUI>().text))
+        {
+            PopUp.GetComponent<LoadOutConsumablePopUp>().ShowClickItem(gameObject);
+            PopUp.GetComponent<LoadOutConsumablePopUp>().CheckIncreaseClickItem(gameObject);
+        } else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "You have run out of this items!\nPlease get some more!", 5f);
+        }
     }
 
     public void SetStackText(int n)
@@ -66,7 +75,7 @@ public class LoadOutConsumableBox : MonoBehaviour
             {
                 SelectedText.SetActive(false);
             }
-            SelectedText.GetComponent<TextMeshProUGUI>().text = "";
+            SelectedText.GetComponent<TextMeshProUGUI>().text = "0";
         }
     }
     #endregion

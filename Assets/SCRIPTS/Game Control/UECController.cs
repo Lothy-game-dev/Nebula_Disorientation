@@ -175,12 +175,14 @@ public class UECController : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        isPlanetMoving = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
     }
     public override void OnExitAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        isPlanetMoving = false;
     }
     #endregion
 }

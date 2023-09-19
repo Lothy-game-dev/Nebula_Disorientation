@@ -18,6 +18,8 @@ public class LoadoutScene : UECMenuShared
     public GameObject ConsumableBar;
     public GameObject FighterDemo;
     public GameObject FuelCell;
+
+    public GameObject Factory;
     #endregion
     #region NormalVariables
     public string LeftWeapon;
@@ -74,15 +76,18 @@ public class LoadoutScene : UECMenuShared
     private void GetData()
     {
         // Set Data to board/bar
-        ModelBoard.GetComponent<LoadOutModelBoard>().SetItems(
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName()),
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllModelName())[0]);
-        Power1Bar.GetComponent<LoadOutPowerBar>().SetItems(
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllPowerName()),"");
-        Power2Bar.GetComponent<LoadOutPowerBar>().SetItems(
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllPowerName()),"");
+        List<string> ListOwnedModel = FindObjectOfType<AccessDatabase>().GetAllOwnedModel(FindObjectOfType<UECMainMenuController>().PlayerId);
+        if (ListOwnedModel.Count>0)
+        {
+            ModelBoard.GetComponent<LoadOutModelBoard>().SetItems(
+            ListReplaceSpace(ListOwnedModel),
+            ListReplaceSpace(ListOwnedModel)[0]);
+        } else
+        {
+            // Do you want to move to factory
+        }
         ConsumableBar.GetComponent<LoadOutConsumables>().SetInitData(
-            FindObjectOfType<AccessDatabase>().GetAllDictionarySpaceShopCons());
+            FindObjectOfType<AccessDatabase>().GetOwnedConsumables(FindObjectOfType<UECMainMenuController>().PlayerId));
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
             .GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
@@ -108,6 +113,11 @@ public class LoadoutScene : UECMenuShared
             inList[i] = inList[i].Replace("-", "");
         }
         return inList;
+    }
+
+    public void BuyFighter()
+    {
+        FindObjectOfType<UECMainMenuController>().TeleportToScene(gameObject, Factory);
     }
 
     public string SetDataToDb()

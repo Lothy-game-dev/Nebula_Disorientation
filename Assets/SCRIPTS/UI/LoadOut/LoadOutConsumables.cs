@@ -30,6 +30,10 @@ public class LoadOutConsumables : MonoBehaviour
         CurrentItems = new List<GameObject>(new GameObject[4]);
         CurrentItemCount = new List<int>(new int[4]);
         CurrentItemLimit = new List<int>(new int[4]);
+        if (PopUp.activeSelf)
+        {
+            PopUp.GetComponent<LoadOutConsumablePopUp>().ClosePopup();
+        }
     }
 
     // Update is called once per frame
