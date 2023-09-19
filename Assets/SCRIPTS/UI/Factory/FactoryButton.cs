@@ -38,6 +38,12 @@ public class FactoryButton : MonoBehaviour
     private void OnMouseDown()
     {
         // check the conditions before buying 
+        if (GetComponent<CursorUnallowed>() != null)
+        {
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+                "You are not allowed to buy this fighter!", 5f);
+        }
+        else
         if (FactoryController.EnoughPrice && FactoryController.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyFighterModel;
@@ -75,7 +81,7 @@ public class FactoryButton : MonoBehaviour
         {
             // Check case for adding ownership
             string check = FindObjectOfType<AccessDatabase>().AddOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
-                FactoryController.ItemName, "Consumable", 1);
+                FactoryController.ItemName, "Model", 1);
             if ("Not Found".Equals(check))
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
