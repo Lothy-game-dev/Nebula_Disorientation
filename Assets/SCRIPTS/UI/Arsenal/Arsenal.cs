@@ -31,6 +31,7 @@ public class Arsenal : UECMenuShared
     public GameObject OtherContent;
     public GameObject PowerButton;
     public GameObject WeaponButton;
+    public GameObject BuyButton;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -141,7 +142,7 @@ public class Arsenal : UECMenuShared
             }
         }
         EnoughPrice = true;
-        RankRequired = true;
+        
         ItemId = int.Parse(ItemList[0][0]);
         ItemType = Type;
         ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][6] + "</color>";
@@ -153,14 +154,22 @@ public class Arsenal : UECMenuShared
         {
             ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=grey>" + ItemList[0][5] + "</color>";
         }
-        
+
+        //change the color of buy button if item is locked
+        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        // check rank
         if ((string)PlayerInformation["Rank"] == "Unranked")
         {
             Rank.GetComponentInChildren<TextMeshPro>().text = "<color=red>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+            RankRequired = false;
+            c.a = 0.5f;
         } else
         {
             Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+            RankRequired = true;
+            c.a = 1f;
         }
+         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
     }
     #endregion
     #region Locked item will be gray-ed
