@@ -44,6 +44,7 @@ public class Factory : MonoBehaviour
     private Dictionary<string, object> ItemPrice;
     public string PCash;
     public string PShard;
+    public Coroutine OldCoroutine;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -180,6 +181,12 @@ public class Factory : MonoBehaviour
         PlayerShard.GetComponent<TextMeshPro>().text = PShard;
     }
 
+    #endregion
+    #region Reset data when clicking back button
+    public void ResetData()
+    {
+
+    }
     #endregion
 
 }

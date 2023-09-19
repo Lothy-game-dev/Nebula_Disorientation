@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FactoryScene : UECMenuShared
 {
-    
+
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
@@ -13,6 +13,7 @@ public class FactoryScene : UECMenuShared
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public Factory FactoryController;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -38,9 +39,9 @@ public class FactoryScene : UECMenuShared
     // Group all function that serve the same algorithm
     public override void OnEnterAnimation()
     {
-        Debug.Log("hi");
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
     }
 
     public override void OnExitAnimation()
