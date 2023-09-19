@@ -169,5 +169,11 @@ public class Factory : MonoBehaviour
     }
 
     #endregion
+    #region Reset data when clicking back button
+    public void ResetData()
+    {
+
+    }
+    #endregion
 
 }
