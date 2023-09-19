@@ -44,6 +44,7 @@ public class Factory : MonoBehaviour
     private Dictionary<string, object> ItemPrice;
     public string PCash;
     public string PShard;
+    public Coroutine OldCoroutine;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
