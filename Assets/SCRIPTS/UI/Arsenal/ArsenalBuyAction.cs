@@ -72,7 +72,88 @@ public class ArsenalBuyAction : MonoBehaviour
     // Group all function that serve the same algorithm
     public void BuyArsenalItem()
     {
-        Debug.Log(Ar.ItemId + "|" + Ar.ItemType);
+        Debug.Log(Ar.ItemId + "|" + Ar.ItemName + "|" + Ar.ItemType);
+        int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                Ar.ItemName, Ar.ItemType);
+        bool checkcase = false;
+        if (Ar.ItemType == "Weapon")
+        {
+            if (n >= 2)
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                "You have already bought this item!\nPlease contanct our email!", 5f);
+            }
+            else if (n == -1)
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Cannot fetch data for " + Ar.ItemName + "!\nPlease try again!", 5f);
+            }
+            else if (n >= 0) checkcase = true;
+        }
+        else if (Ar.ItemType == "Power")
+        {
+            if (n >= 1)
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                "You have already bought this item!\nPlease contanct our email!", 5f);
+            }
+            else if (n == -1)
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Cannot fetch data for " + Ar.ItemName + "!\nPlease try again!", 5f);
+            }
+            else if (n == 0) checkcase = true;
+        }
+        if (checkcase)
+        {
+            // Check case for adding ownership
+            string check = FindObjectOfType<AccessDatabase>().AddOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                Ar.ItemName, Ar.ItemType, 1);
+            if ("Not Found".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Can not find information about this item.\nplease contact our email.", 5f);
+            }
+            else if ("Fail".Equals(check))
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Transaction failed.\nPlease try again.", 5f);
+            }
+            else if ("Success".Equals(check))
+            {
+                // If adding ownership successfully, reduce currency
+                string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuy(FindObjectOfType<UECMainMenuController>().PlayerId, 
+                    0, int.Parse(Ar.RequiredShard));
+                switch (check2)
+                {
+                    case "Not Exist":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Can not fetch data about your pilot.\nplease contact our email.", 5f);
+                        break;
+                    case "Not Enough Cash":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "You don't have enough cash!\nPlease get some more.", 5f);
+                        break;
+                    case "Not Enough Shard":
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "You don't have enough timeless shard!\nPlease get some more.", 5f);
+                        break;
+                    case "Fail":
+                        // if reduce currency fail, reduce ownership
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Purchase Failed.\nPlease contact our email.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            Ar.ItemName, Ar.ItemType, 1);
+                        break;
+                    case "Success":
+                        // if success, reload data to UI
+                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "Purchase Successfully.\n(Auto closed in 5 seconds)", 5f);
+                        FindObjectOfType<UECMainMenuController>().GetData();
+                        break;
+                }
+            }
+        }
     }
     #endregion
 }

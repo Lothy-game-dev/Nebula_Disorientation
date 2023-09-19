@@ -176,6 +176,7 @@ public class Arsenal : UECMenuShared
     public void LockItem(GameObject Game, string RankId)
     {
         int rankId = 0;
+        bool isLocked = false;
         if (RankId != "N/A")
         {
             if ((string)PlayerInformation["Rank"] == "Unranked")
@@ -187,9 +188,20 @@ public class Arsenal : UECMenuShared
             }
             if (rankId < int.Parse(RankId))
             {
+                isLocked = true;
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<ArsenalItem>().LockedItem = true;
             }     
+        }
+        if (!isLocked)
+        {
+            int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                ItemName, ItemType);
+            if (n>=2)
+            {
+                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.GetComponent<ArsenalItem>().LockedItem = true;
+            }
         }
     }
     #endregion

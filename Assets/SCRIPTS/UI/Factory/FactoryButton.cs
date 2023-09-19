@@ -116,7 +116,7 @@ public class FactoryButton : MonoBehaviour
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
                     "Purchase Failed.\nPlease contact our email.", 5f);
                         FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
-                            FactoryController.ItemName, "Consumable", 1);
+                            FactoryController.ItemName, "Model", 1);
                         break;
                     case "Success":
                         // if success, reload data to UI
