@@ -68,7 +68,7 @@ public class ArsenalBuyAction : MonoBehaviour
 
     }
     #endregion
-    #region Function group ...
+    #region Buy function
     // Group all function that serve the same algorithm
     public void BuyArsenalItem()
     {

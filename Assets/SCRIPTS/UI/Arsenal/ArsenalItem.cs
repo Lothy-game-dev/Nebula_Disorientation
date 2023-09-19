@@ -34,6 +34,8 @@ public class ArsenalItem : MonoBehaviour
     private int RankId;
     private Coroutine currentCoroutine;
     public List<List<string>> ArItemList;
+    private bool GeneratingText;
+    private string TextGenerated;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -207,23 +209,15 @@ public class ArsenalItem : MonoBehaviour
             ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
         }
-        
+
     }
     public void StartTextRunning(string text)
     {
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-        }  
         if (ar.OldCoroutine != null)
         {
             StopCoroutine(ar.OldCoroutine);
         }
-        
-        currentCoroutine = StartCoroutine(TextRunning(text));
-        ar.OldCoroutine = currentCoroutine;
-        
-        
+        ar.OldCoroutine = StartCoroutine(TextRunning(text));
     }
     #endregion
 }

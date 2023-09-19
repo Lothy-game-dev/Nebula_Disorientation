@@ -73,6 +73,7 @@ public class Arsenal : UECMenuShared
     #region Generate first weapon category
     private void FirstContent()
     {
+        ItemType = "Weapon";
         for (int i = 0; i < WeaponList.Count; i++)
         {
             GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
@@ -100,6 +101,18 @@ public class Arsenal : UECMenuShared
                     g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                 }
             }
+            int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                g.name, "Weapon");
+            if (n!=-1)
+            {
+                if (n>=2)
+                {
+                    g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "2/2";
+                } else if (n>=0)
+                {
+                    g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
+                }
+            } 
             g.SetActive(true);
             // First item choosen
             if (i == 0)
@@ -127,17 +140,17 @@ public class Arsenal : UECMenuShared
             if (rankId < int.Parse(RankId))
             {
                 isLocked = true;
-                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<ArsenalItem>().LockedItem = true;
             }     
         }
         if (!isLocked)
         {
             int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
-                ItemName, ItemType);
+                Game.name, ItemType);
             if (n>=2)
             {
-                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<ArsenalItem>().LockedItem = true;
             }
         }
