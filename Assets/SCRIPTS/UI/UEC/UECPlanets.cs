@@ -22,6 +22,7 @@ public class UECPlanets : MonoBehaviour
     private bool alreadySetVeloc;
     private float initScale;
     private float initCameraSize;
+    private bool alreadyZoom;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -90,6 +91,7 @@ public class UECPlanets : MonoBehaviour
     #region Mouse check
     private void OnMouseEnter()
     {
+        alreadyZoom = false;
         transform.localScale = new Vector2(transform.localScale.x * 1.2f, transform.localScale.y * 1.2f);
         FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
     }
@@ -100,9 +102,13 @@ public class UECPlanets : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        Controller.isPlanetMoving = false;
-        rb.velocity = new Vector2(0,0);
-        StartCoroutine(ZoomOutWhenClick());
+        if (!alreadyZoom)
+        {
+            alreadyZoom = true;
+            Controller.isPlanetMoving = false;
+            rb.velocity = new Vector2(0, 0);
+            StartCoroutine(ZoomOutWhenClick());
+        }
     }
     private IEnumerator ZoomOutWhenClick()
     {

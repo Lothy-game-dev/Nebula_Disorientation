@@ -61,7 +61,20 @@ public class FactoryButton : MonoBehaviour
 
     private void BuyFighterModel()
     {
-        Debug.Log(FactoryController.ItemId);
+        int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                FactoryController.ItemName, "Model");
+        if (n > 0)
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+                "You have already bought this item!\nPlease contanct our email!", 5f);
+        } else if (n==-1)
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+                "Cannot fetch data for " + FactoryController.ItemName + "!\nPlease try again!", 5f);
+        } else if (n==0)
+        {
+
+        }
     }
     #endregion
     #region Function group ...

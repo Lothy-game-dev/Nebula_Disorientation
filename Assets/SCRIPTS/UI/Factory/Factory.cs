@@ -140,6 +140,7 @@ public class Factory : MonoBehaviour
     public void LockItem(GameObject Game, string RankId)
     {
         int rankId = 0;
+        bool isLocked = false;
         if (RankId != "N/A")
         {
             if ((string)PlayerInformation["Rank"] == "Unranked")
@@ -152,6 +153,18 @@ public class Factory : MonoBehaviour
             }
             if (rankId < int.Parse(RankId))
             {
+                isLocked = true;
+                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.GetComponent<FactoryItem>().LockedItem = true;
+            }
+        }
+        if (!isLocked)
+        {
+            int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                Game.name, "Model");
+            if (n>0)
+            {
+                isLocked = true;
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<FactoryItem>().LockedItem = true;
             }
