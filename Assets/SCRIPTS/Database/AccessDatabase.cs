@@ -1522,7 +1522,7 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "SELECT sum(Quantity) from PurchaseHistory where PlayerId =" + PlayerID + " and ItemID=" + ItemID + 
-            " and ItemType='" + Type + "' and BuyOrSell='Buy'";
+            " and ItemType='" + Type + "' and BuyOrSell='Buy' and PurchaseDate='" + currentDate +"'";
         IDataReader dataReader = dbCommand.ExecuteReader();
         int sum = -1;
         while (dataReader.Read())

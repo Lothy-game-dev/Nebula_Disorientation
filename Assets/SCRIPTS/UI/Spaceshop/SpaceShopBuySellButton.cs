@@ -71,7 +71,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                     "Can not buy this item anymore today!\nPlease come back tommorrow!", 5f);
                 return;
-            } else if (currentStocks < Quantity)
+            } else if (currentStocks < Quantity && currentStocks!=-1)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                     "Can not buy more than stocks in shop!\nPlease re-input!", 5f);

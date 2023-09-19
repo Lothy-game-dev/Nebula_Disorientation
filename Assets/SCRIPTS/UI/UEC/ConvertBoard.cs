@@ -36,6 +36,10 @@ public class ConvertBoard : MonoBehaviour
         {
             if (TextInput.text!="")
             {
+                if (int.Parse(TextInput.text)>100000)
+                {
+                    TextInput.text = "100000";
+                }
                 TextOutput.text = ((int)(int.Parse(TextInput.text) * ConvertRate)).ToString();
             } else
             {
