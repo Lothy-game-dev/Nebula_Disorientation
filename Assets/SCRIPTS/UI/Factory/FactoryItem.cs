@@ -31,6 +31,7 @@ public class FactoryItem : MonoBehaviour
     public List<GameObject> ItemStatusList;
     public GameObject Content;
     public bool LockedItem;
+    private Coroutine currentCoroutine;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -167,16 +168,33 @@ public class FactoryItem : MonoBehaviour
     #endregion
     #region Text animation
     private IEnumerator TextRunning(string text)
-    {     
-        //Use substring to take each word in the text and put it back
+    {
         Fac.DescContent.GetComponent<TMP_Text>().text = "";
-        gameObject.GetComponent<Collider2D>().enabled = false;
+        //Use substring to take each word in the text and put it back
         for (int i = 0; i < text.Length; i++)
         {
             Fac.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
         }
-        gameObject.GetComponent<Collider2D>().enabled = true;
+
+    }
+    public void StartTextRunning(string text)
+    {
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
+        if (Fac.OldCoroutine != null)
+        {
+            Debug.Log("Old");
+            StopCoroutine(Fac.OldCoroutine);
+        }
+
+        currentCoroutine = StartCoroutine(TextRunning(text));
+        Fac.OldCoroutine = currentCoroutine;
+
+
     }
     #endregion
 }
+    

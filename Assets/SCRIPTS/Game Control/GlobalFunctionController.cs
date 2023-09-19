@@ -202,14 +202,14 @@ public class GlobalFunctionController : MonoBehaviour
         if (R.Contains("R"))
         {
             R = R.Replace("R-", "");
-            string[] ranges = R.Split("-");
+            string[] ranges = R.Split(",");
             if (ranges.Length == 1)
             {
                 finalString.Add("R", ranges[0]);
             }
             else if (ranges.Length == 2)
             {
-                finalString.Add("R", ranges[0] + "-" + ranges[1]);
+                finalString.Add("R", ranges[0] + "---" + ranges[1]);
             }
             else
             {
