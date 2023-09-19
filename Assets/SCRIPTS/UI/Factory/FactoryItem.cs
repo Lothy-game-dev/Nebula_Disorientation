@@ -64,10 +64,10 @@ public class FactoryItem : MonoBehaviour
     {
         //convert the price x | y => Cash = x, Shard = y
         ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(ItemList[int.Parse(Id) - 1][4]);
-        // Check rank, if rank = null => auto rank 1 
+        // Check rank, if rank = null => that item can buy without rank
         if (ItemList[int.Parse(Id) - 1][5] == "N/A")
         {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(1);
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(0);
         }
         else
         {
@@ -88,7 +88,6 @@ public class FactoryItem : MonoBehaviour
             }
         }
         // check if have enough Timeless shard
-        Debug.Log(int.Parse((string)ItemPrice["Timeless"]));
         if (int.Parse(Fac.PShard) < int.Parse((string)ItemPrice["Timeless"]))
         {
             ShardColor = "red";
@@ -125,6 +124,7 @@ public class FactoryItem : MonoBehaviour
             Fac.RankRequired = false;
         } else
         {
+
             RankColor = "green";
             Fac.RankRequired = true;
         }
@@ -137,6 +137,7 @@ public class FactoryItem : MonoBehaviour
         Fac.ItemName = ItemList[int.Parse(Id) - 1][1];
         Fac.ItemPriceCash = (string)ItemPrice["Cash"];
         Fac.ItemPriceShard = (string)ItemPrice["Timeless"];
+        Fac.ItemId = int.Parse(ItemList[int.Parse(Id) - 1][0]);
 
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;

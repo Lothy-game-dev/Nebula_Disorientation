@@ -51,6 +51,9 @@ public class Arsenal : UECMenuShared
     public Coroutine OldCoroutine;
     private Color WeaponBoxColor;
     private Color PowerBoxColor;
+    public string ItemName;
+    public string RequiredShard;
+    public string RequiredCash;
     #endregion
     #region Start & Update
 
@@ -151,7 +154,13 @@ public class Arsenal : UECMenuShared
             ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=grey>" + ItemList[0][5] + "</color>";
         }
         
-        Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        if ((string)PlayerInformation["Rank"] == "Unranked")
+        {
+            Rank.GetComponentInChildren<TextMeshPro>().text = "<color=red>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        } else
+        {
+            Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        }
     }
     #endregion
     #region Locked item will be gray-ed
@@ -162,7 +171,7 @@ public class Arsenal : UECMenuShared
         {
             if ((string)PlayerInformation["Rank"] == "Unranked")
             {
-                rankId = 1;
+                rankId = 0;
             } else
             {
                 rankId = (int)PlayerInformation["RankId"];
