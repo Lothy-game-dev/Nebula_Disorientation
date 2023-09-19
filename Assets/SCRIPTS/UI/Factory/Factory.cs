@@ -104,7 +104,7 @@ public class Factory : MonoBehaviour
         Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(FighterList[0][3]);
         if (FighterList[0][5] == "N/A")
         {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(1);
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(0);
         }
         else
         {
