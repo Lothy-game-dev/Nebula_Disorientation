@@ -61,16 +61,7 @@ public class Arsenal : UECMenuShared
     // Start is called before the first frame update
     void Start()
     {
-        WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
-        PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
-        PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
-        PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
-        PCash = PlayerInformation["Cash"].ToString();
-        PShard = PlayerInformation["TimelessShard"].ToString();
-        PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
-        PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();        
-        WeaponBoxColor = Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
-        PowerBoxColor = OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
+        
     } 
 
     // Update is called once per frame
@@ -93,6 +84,7 @@ public class Arsenal : UECMenuShared
             g.GetComponent<ArsenalItem>().Type = "Weapon";
             g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
             g.GetComponent<ArsenalItem>().Content = Content;
+            g.GetComponent<ArsenalItem>().ArItemList = WeaponList;
             if (WeaponList[i][2] == "Star Blaster")
             {
                 g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
@@ -110,66 +102,12 @@ public class Arsenal : UECMenuShared
             }
             g.SetActive(true);
             // First item choosen
-            FirstItemChoosen(WeaponList, WeaponStatus, "Weapon", Content);
+            if (i == 0)
+            {
+                g.GetComponent<ArsenalItem>().ArsenalInformation(WeaponList, "1");
+            }
             LockItem(g, WeaponList[i][8]);
         }
-    }
-    #endregion
-    #region First item choosen and set the information to the UI
-    public void FirstItemChoosen(List<List<string>> ItemList, List<GameObject> StatusList, string Type, GameObject ContentType)
-    {
-        // convert stat to dictionary depend on type like weapon or power
-        if (Type == "Weapon")
-        {
-            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[0][4]);
-        }
-        else
-        {
-            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[0][4]);
-
-        }
-        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[0][8]));
-        ContentType.transform.GetChild(0).GetComponent<Image>().color = Color.green;
-        for (int i = 0; i < StatusList.Count; i++)
-        {
-            if (!Status.ContainsKey(StatusList[i].name))
-            {
-                StatusList[i].GetComponent<TextMeshPro>().text = "N/A";
-            }
-            else
-            {
-                StatusList[i].GetComponent<TextMeshPro>().text = (string)Status[StatusList[i].name];
-            }
-        }
-        EnoughPrice = true;
-        
-        ItemId = int.Parse(ItemList[0][0]);
-        ItemType = Type;
-        ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][6] + "</color>";
-        DescContent.GetComponent<TMP_Text>().text = ItemList[0][3];
-        if (IsInSession)
-        {
-            ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + ItemList[0][5] + "</color>";
-        } else
-        {
-            ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=grey>" + ItemList[0][5] + "</color>";
-        }
-
-        //change the color of buy button if item is locked
-        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
-        // check rank
-        if ((string)PlayerInformation["Rank"] == "Unranked")
-        {
-            Rank.GetComponentInChildren<TextMeshPro>().text = "<color=red>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-            RankRequired = false;
-            c.a = 0.5f;
-        } else
-        {
-            Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-            RankRequired = true;
-            c.a = 1f;
-        }
-         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
     }
     #endregion
     #region Locked item will be gray-ed
@@ -255,6 +193,21 @@ public class Arsenal : UECMenuShared
             }
         }
     }
+    public void SetFirstData()
+    {
+        WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
+        PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
+        PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
+        PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
+        PCash = PlayerInformation["Cash"].ToString();
+        PShard = PlayerInformation["TimelessShard"].ToString();
+        PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
+        PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
+        WeaponBoxColor = Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
+        PowerBoxColor = OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
+        FirstContent();
+        CurrentTab = "Weapon";
+    }
     #endregion
     #region Start animation when enter or exit the scene 
     public override void OnEnterAnimation()
@@ -262,8 +215,7 @@ public class Arsenal : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
-        FirstContent();
-        CurrentTab = "Weapon";
+        SetFirstData();
     }
 
     public override void OnExitAnimation()

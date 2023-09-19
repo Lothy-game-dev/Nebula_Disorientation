@@ -32,13 +32,15 @@ public class FactoryItem : MonoBehaviour
     public GameObject Content;
     public bool LockedItem;
     private Coroutine currentCoroutine;
+    public List<List<string>> FacItemList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        Fac = Factory.GetComponent<Factory>();
+       
+       
     }
 
     // Update is called once per frame
@@ -53,28 +55,29 @@ public class FactoryItem : MonoBehaviour
     private void OnMouseDown()
     {
         CheckCurrentItem(Id);
-        FighterInformation(Fac.FighterList);
+        FighterInformation(FacItemList, Id);
     }
 
 
     #endregion
     #region Show Fighter information
     // Group all function that serve the same algorithm
-    private void FighterInformation(List<List<string>> ItemList)
+    public void FighterInformation(List<List<string>> ItemList, string ItemID)
     {
+        Fac = Factory.GetComponent<Factory>();
         //convert the price x | y => Cash = x, Shard = y
-        ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(ItemList[int.Parse(Id) - 1][4]);
+        ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(ItemList[int.Parse(ItemID) - 1][4]);
         // Check rank, if rank = null => that item can buy without rank
-        if (ItemList[int.Parse(Id) - 1][5] == "N/A")
+        if (ItemList[int.Parse(ItemID) - 1][5] == "N/A")
         {
             RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(0);
         }
         else
         {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(Id) - 1][5]));
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(ItemID) - 1][5]));
         }
         //convert Fighter model stat => dictionary
-        Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(ItemList[int.Parse(Id) - 1][3]);
+        Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(ItemList[int.Parse(ItemID) - 1][3]);
 
         //show stat info for each stat
         for (int i = 0; i < ItemStatusList.Count; i++)
@@ -133,11 +136,11 @@ public class FactoryItem : MonoBehaviour
         Fac.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + (string)ItemPrice["Timeless"] + "</color>";
         Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + (string)ItemPrice["Cash"] + "</color>";
         Fac.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-        StartCoroutine(TextRunning(ItemList[int.Parse(Id) - 1][2]));
-        Fac.ItemName = ItemList[int.Parse(Id) - 1][1];
+        
+        Fac.ItemName = ItemList[int.Parse(ItemID) - 1][1];
         Fac.ItemPriceCash = (string)ItemPrice["Cash"];
         Fac.ItemPriceShard = (string)ItemPrice["Timeless"];
-        Fac.ItemId = int.Parse(ItemList[int.Parse(Id) - 1][0]);
+        Fac.ItemId = int.Parse(ItemList[int.Parse(ItemID) - 1][0]);
 
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;

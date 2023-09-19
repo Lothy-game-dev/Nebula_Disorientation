@@ -32,15 +32,15 @@ public class ArsenalItem : MonoBehaviour
     public GameObject Content;
     public bool LockedItem;
     private int RankId;
-    private bool IsClicked;
     private Coroutine currentCoroutine;
+    public List<List<string>> ArItemList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        ar = Arsenal.GetComponent<Arsenal>();
+        
     }
 
     // Update is called once per frame
@@ -56,16 +56,16 @@ public class ArsenalItem : MonoBehaviour
         
         if (Type == "Weapon")
         {
-            CheckCurrentItem(Id);
-            ArsenalInformation(ar.WeaponList);
+            
+            ArsenalInformation(ArItemList, Id);
             ar.ItemId = int.Parse(Id);
             ar.ItemType = Type;
         } else
         {
             if (Type == "Power")
             {
-                CheckCurrentItem(Id);
-                ArsenalInformation(ar.PowerList);
+                
+                ArsenalInformation(ArItemList, Id);
                 ar.ItemId = int.Parse(Id);
                 ar.ItemType = Type;
             }
@@ -75,17 +75,19 @@ public class ArsenalItem : MonoBehaviour
     #endregion
     #region Show Arsenal (weapon,power) information
     // Group all function that serve the same algorithm
-    private void ArsenalInformation(List<List<string>> ItemList)
+    public void ArsenalInformation(List<List<string>> ItemList, string ItemID)
     {
+        ar = Arsenal.GetComponent<Arsenal>();
+        CheckCurrentItem(ItemID);
         // get the item rank 
-        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(Id) - 1][8]));
+        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(ItemID) - 1][8]));
         // convert stat to dictionary depend on type like weapon or power
         if (Type == "Weapon")
         {
-            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
+            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertWeaponStatsToDictionary(ItemList[int.Parse(ItemID) - 1][4]);
         } else
         {
-            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[int.Parse(Id) - 1][4]);
+            Status = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(ItemList[int.Parse(ItemID) - 1][4]);
 
         }
         //show stat info for each stat
@@ -105,7 +107,7 @@ public class ArsenalItem : MonoBehaviour
         if (ar.IsInSession)
         {
             // check if have enough cash
-            if (int.Parse(ar.PCash) < int.Parse(ItemList[int.Parse(Id) - 1][5]))
+            if (int.Parse(ar.PCash) < int.Parse(ItemList[int.Parse(ItemID) - 1][5]))
             {
                 CashColor = "red";
                 ar.EnoughPrice = false;
@@ -120,7 +122,7 @@ public class ArsenalItem : MonoBehaviour
         {
             CashColor = "grey";
             // check if enough timeless shard
-            if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(Id) - 1][6]))
+            if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(ItemID) - 1][6]))
             {
                 ShardColor = "red";
                 ar.EnoughPrice = false;
@@ -160,7 +162,7 @@ public class ArsenalItem : MonoBehaviour
         ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
-        StartTextRunning(ItemList[int.Parse(Id) - 1][3]);
+        StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
 
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
@@ -174,14 +176,14 @@ public class ArsenalItem : MonoBehaviour
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
 
-        ar.ItemName = ItemList[int.Parse(Id) - 1][2];
-        ar.RequiredCash = ItemList[int.Parse(Id) - 1][5];
-        ar.RequiredShard = ItemList[int.Parse(Id) - 1][6];
+        ar.ItemName = ItemList[int.Parse(ItemID) - 1][2];
+        ar.RequiredCash = ItemList[int.Parse(ItemID) - 1][5];
+        ar.RequiredShard = ItemList[int.Parse(ItemID) - 1][6];
 
     }
     #endregion
     #region Check current item on mouse down
-    private void CheckCurrentItem(string id)
+    public void CheckCurrentItem(string id)
     {
         for (int i = 0; i < Content.transform.childCount; i++)
         {
@@ -192,7 +194,7 @@ public class ArsenalItem : MonoBehaviour
             c.a = 0.58f;
             Content.transform.GetChild(i).GetComponent<Image>().color = c;
         }
-        Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
+        Content.transform.GetChild(int.Parse(id) - 1).GetComponent<Image>().color = Color.green;
     }
     #endregion
     #region Text animation
@@ -215,7 +217,6 @@ public class ArsenalItem : MonoBehaviour
         }  
         if (ar.OldCoroutine != null)
         {
-            Debug.Log("Old");
             StopCoroutine(ar.OldCoroutine);
         }
         
