@@ -73,6 +73,7 @@ public class ArsenalButton : MonoBehaviour
                 g.GetComponent<ArsenalItem>().Type = "Weapon";
                 g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
                 g.GetComponent<ArsenalItem>().Content = Content;
+                g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.WeaponList;
                 if (ArsenalController.WeaponList[i][2] == "Star Blaster")
                 {
                     g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
@@ -88,10 +89,16 @@ public class ArsenalButton : MonoBehaviour
                         g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => ArsenalController.WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                     }
                 }
-                g.SetActive(true);
                 ArsenalController.LockItem(g, ArsenalController.WeaponList[i][8]);
+                g.SetActive(true);
+                if (i == 0) 
+                {
+                    g.GetComponent<ArsenalItem>().ArsenalInformation(ArsenalController.WeaponList, "1");
+
+                }              
+
             }
-            ArsenalController.FirstItemChoosen(ArsenalController.WeaponList, WeaponStatus, "Weapon", Content);
+            
 
 
         }
@@ -122,11 +129,15 @@ public class ArsenalButton : MonoBehaviour
                     g.GetComponent<ArsenalItem>().Type = "Power";
                     g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
                     g.GetComponent<ArsenalItem>().Content = Content;
+                    g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.PowerList;
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
                     g.SetActive(true);
                     ArsenalController.LockItem(g, ArsenalController.PowerList[i][8]);
+                    if (i == 0)
+                    {
+                        g.GetComponent<ArsenalItem>().ArsenalInformation(ArsenalController.PowerList, "1");
+                    }
                 }
-                ArsenalController.FirstItemChoosen(ArsenalController.PowerList, PowerStatus, "Power", Content);
 
             }
         }

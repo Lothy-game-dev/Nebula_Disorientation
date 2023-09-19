@@ -52,13 +52,6 @@ public class Factory : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
-        PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
-        PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
-        PCash = PlayerInformation["Cash"].ToString();
-        PShard = PlayerInformation["TimelessShard"].ToString();
-        PlayerCash.GetComponent<TextMeshPro>().text = PCash;
-        PlayerShard.GetComponent<TextMeshPro>().text = PShard;
     }
 
     // Update is called once per frame
@@ -82,6 +75,7 @@ public class Factory : MonoBehaviour
             g.GetComponent<FactoryItem>().Id = FighterList[i][0];
             g.GetComponent<FactoryItem>().ItemStatusList = FighterStatus;
             g.GetComponent<FactoryItem>().Content = Content;
+            g.GetComponent<FactoryItem>().FacItemList = FighterList;
             if (FighterList[i][1] == "SSS-MKL")
             {
                 g.transform.GetChild(0).GetComponent<Image>().sprite = FighterImage[FighterImage.FindIndex(item => item.name == "SSSL")].sprite;
@@ -98,42 +92,14 @@ public class Factory : MonoBehaviour
                 }
             }
             LockItem(g, FighterList[i][5]);
+            if (i == 0)
+            {
+                g.GetComponent<FactoryItem>().FighterInformation(FighterList, "1");
+            }
             g.SetActive(true);
         }
 
-        // First item choosen and set the information 
-        Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(FighterList[0][3]);
-        if (FighterList[0][5] == "N/A")
-        {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(0);
-        }
-        else
-        {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(FighterList[0][5]));
-        }
-        ItemPrice = FindAnyObjectByType<GlobalFunctionController>().ConvertModelPriceIntoTwoTypePrice(FighterList[0][4]);
-        Content.transform.GetChild(0).GetComponent<Image>().color = Color.green;
-        for (int i = 0; i < FighterStatus.Count; i++)
-        {
-            if (!Status.ContainsKey(FighterStatus[i].name))
-            {
-                FighterStatus[i].GetComponent<TextMeshPro>().text = "N/A";
-            }
-            else
-            {
-                FighterStatus[i].GetComponent<TextMeshPro>().text = (string)Status[FighterStatus[i].name];
-            }
-        }
-        EnoughPrice = true;
-        RankRequired = true;
-        ItemId = int.Parse(FighterList[0][0]);
-        ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + (string)ItemPrice["Timeless"] + "</color>";
-        DescContent.GetComponent<TMP_Text>().text = FighterList[0][2];
-        ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=green>" + (string)ItemPrice["Cash"] + "</color>";
-        Rank.GetComponentInChildren<TextMeshPro>().text = "<color=green>Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">N/A</color>";
-        ItemName = FighterList[0][1];
-        ItemPriceCash = (string)ItemPrice["Cash"];
-        ItemPriceShard = (string)ItemPrice["Timeless"];
+       
     }
     #endregion
     #region Lock item
@@ -186,6 +152,18 @@ public class Factory : MonoBehaviour
             CurrentChosen.GetComponent<FactoryItem>().LockCurrentItem();
         }
     }
+    public void SetFirstData()
+    {
+        FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
+        PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
+        PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
+        PCash = PlayerInformation["Cash"].ToString();
+        PShard = PlayerInformation["TimelessShard"].ToString();
+        PlayerCash.GetComponent<TextMeshPro>().text = PCash;
+        PlayerShard.GetComponent<TextMeshPro>().text = PShard;
+        FirstContent();
+    }
+
 
     #endregion
     #region Reset data when clicking back button
