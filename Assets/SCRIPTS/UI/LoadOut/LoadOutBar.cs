@@ -28,6 +28,7 @@ public class LoadOutBar : MonoBehaviour
     public GameObject ScrollLimitBottom;
     public GameObject ScrollLimitLeft;
     public GameObject ScrollLimitRight;
+    public string WeaponNumber;
     #endregion
     #region NormalVariables
     public GameObject CurrentItem;
@@ -62,9 +63,13 @@ public class LoadOutBar : MonoBehaviour
         AllowScroll = false;
         // Preset data
         AfterGenerateList = new List<GameObject>();
-        SetItem(
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllWeaponName()),
-            ListReplaceSpace(FindObjectOfType<AccessDatabase>().GetAllWeaponName())[0]);
+        List<string> ListWeapon = FindObjectOfType<AccessDatabase>().GetAllOwnedWeapon(FindObjectOfType<UECMainMenuController>().PlayerId);
+        if (ListWeapon.Count>0)
+        {
+            SetItem(
+            ListReplaceSpace(ListWeapon),
+            ListReplaceSpace(ListWeapon)[0]);
+        }
     }
 
     // Update is called once per frame

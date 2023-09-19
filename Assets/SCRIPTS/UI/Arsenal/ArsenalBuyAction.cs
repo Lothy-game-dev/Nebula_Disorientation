@@ -72,11 +72,10 @@ public class ArsenalBuyAction : MonoBehaviour
     // Group all function that serve the same algorithm
     public void BuyArsenalItem()
     {
-        Debug.Log(Ar.ItemId + "|" + Ar.ItemName + "|" + Ar.ItemType);
         int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
-                Ar.ItemName, Ar.ItemType);
+                Ar.ItemName, Ar.CurrentTab);
         bool checkcase = false;
-        if (Ar.ItemType == "Weapon")
+        if (Ar.CurrentTab == "Weapon")
         {
             if (n >= 2)
             {
@@ -90,7 +89,7 @@ public class ArsenalBuyAction : MonoBehaviour
             }
             else if (n >= 0) checkcase = true;
         }
-        else if (Ar.ItemType == "Power")
+        else if (Ar.CurrentTab == "Power")
         {
             if (n >= 1)
             {
@@ -108,7 +107,7 @@ public class ArsenalBuyAction : MonoBehaviour
         {
             // Check case for adding ownership
             string check = FindObjectOfType<AccessDatabase>().AddOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
-                Ar.ItemName, Ar.ItemType, 1);
+                Ar.ItemName, Ar.CurrentTab, 1);
             if ("Not Found".Equals(check))
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
@@ -143,7 +142,7 @@ public class ArsenalBuyAction : MonoBehaviour
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchase Failed.\nPlease contact our email.", 5f);
                         FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
-                            Ar.ItemName, Ar.ItemType, 1);
+                            Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Success":
                         // if success, reload data to UI

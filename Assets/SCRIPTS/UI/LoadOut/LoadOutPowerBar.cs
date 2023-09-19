@@ -28,6 +28,10 @@ public class LoadOutPowerBar : MonoBehaviour
         PopUpInitScale = PopUp.transform.localScale.x;
         currentChosen = "";
         StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(currentChosen);
+        if (PopUp.activeSelf)
+        {
+            PopUp.GetComponent<LoadOutPowerPopUp>().ClosePopUp();
+        }
     }
 
     // Update is called once per frame
@@ -42,13 +46,8 @@ public class LoadOutPowerBar : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = 20;
         transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 21;
         PopUp.transform.localScale = new Vector2(PopUpInitScale, PopUp.transform.localScale.y);
+        data = FindObjectOfType<AccessDatabase>().GetAllOwnedPower(FindObjectOfType<UECMainMenuController>().PlayerId);
         PopUp.GetComponent<LoadOutPowerPopUp>().OpenPopUp(data, currentChosen);
-    }
-
-    public void SetItems(List<string> datas, string Chosen)
-    {
-        data = datas;
-        currentChosen = Chosen;
     }
 
     public void OnBackgroundMouseDown()

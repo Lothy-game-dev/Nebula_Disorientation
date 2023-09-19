@@ -29,6 +29,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     public GameObject Background;
     public GameObject ClickText;
     public GameObject Details;
+    public GameObject NoItemText;
     #endregion
     #region NormalVariables
     public GameObject CurrentClickItem;
@@ -182,6 +183,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         ListIconCount = new List<int>(DictConsumes.Values);
         List<string> ChosenConsumes = new List<string>(DictChosenConsumes.Keys);
         ListIconSelectedCount = new List<int>(DictChosenConsumes.Values);
+        NoItemText.SetActive(ListConsumes.Count == 0);
         // Same check model as other bars
         foreach (string cons in ChosenConsumes)
         {
