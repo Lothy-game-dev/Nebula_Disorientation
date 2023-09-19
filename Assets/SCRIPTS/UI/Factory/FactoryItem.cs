@@ -144,9 +144,17 @@ public class FactoryItem : MonoBehaviour
         if (LockedItem)
         {
             c.a = 0.5f;
+            if (BuyButton.GetComponent<CursorUnallowed>()==null)
+            {
+                BuyButton.AddComponent<CursorUnallowed>();
+            }
         } else
         {
             c.a = 1f;
+            if (BuyButton.GetComponent<CursorUnallowed>() != null)
+            {
+                Destroy(BuyButton.GetComponent<CursorUnallowed>());
+            }
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
     }
@@ -165,6 +173,20 @@ public class FactoryItem : MonoBehaviour
             Content.transform.GetChild(i).GetComponent<Image>().color = c;
         }
         Content.transform.GetChild(int.Parse(Id) - 1).GetComponent<Image>().color = Color.green;
+        Factory.GetComponent<Factory>().CurrentChosen = gameObject;
+    }
+
+    public void LockCurrentItem()
+    {
+        LockedItem = true;
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        c.a = 0.5f;
+        if (BuyButton.GetComponent<CursorUnallowed>() == null)
+        {
+            BuyButton.AddComponent<CursorUnallowed>();
+        }
+        BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
     }
     #endregion
     #region Text animation

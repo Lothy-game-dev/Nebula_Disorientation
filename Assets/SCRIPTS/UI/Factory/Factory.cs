@@ -45,6 +45,7 @@ public class Factory : MonoBehaviour
     public string PCash;
     public string PShard;
     public Coroutine OldCoroutine;
+    public GameObject CurrentChosen;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -179,6 +180,12 @@ public class Factory : MonoBehaviour
         PShard = Shard;
         PlayerCash.GetComponent<TextMeshPro>().text = PCash;
         PlayerShard.GetComponent<TextMeshPro>().text = PShard;
+        int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                ItemName, "Model");
+        if (n>0)
+        {
+            CurrentChosen.GetComponent<FactoryItem>().LockCurrentItem();
+        }
     }
 
     #endregion
