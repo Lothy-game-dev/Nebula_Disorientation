@@ -95,7 +95,7 @@ public class FactoryButton : MonoBehaviour
             else if ("Success".Equals(check))
             {
                 // If adding ownership successfully, reduce currency
-                string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuy(FindObjectOfType<UECMainMenuController>().PlayerId, 0, 
+                string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuy(FindObjectOfType<UECMainMenuController>().PlayerId, int.Parse(FactoryController.ItemPriceCash), 
                     int.Parse(FactoryController.ItemPriceShard));
                 switch (check2)
                 {
