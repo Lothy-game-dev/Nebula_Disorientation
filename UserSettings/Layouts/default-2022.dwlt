@@ -213,8 +213,8 @@ MonoBehaviour:
     y: 0
     width: 321.6
     height: 483.2
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -267,8 +267,8 @@ MonoBehaviour:
     y: 483.2
     width: 1170.4
     height: 247.59998
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 17}
@@ -294,8 +294,8 @@ MonoBehaviour:
     y: 0
     width: 365.59998
     height: 730.8
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -438,10 +438,10 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 761d0000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 
+      scrollPos: {x: 0, y: 80.64867}
+      m_SelectedIDs: d6740000
+      m_LastClickedID: 29910
+      m_ExpandedIDs: 10fbffffd8640000d67400007c780000f8780000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1168,7 +1168,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 150.42825}
     m_SelectedIDs: a87f0000
     m_LastClickedID: 32680
-    m_ExpandedIDs: 00000000827f0000847f0000867f0000887f00008a7f00008c7f000000ca9a3b
+    m_ExpandedIDs: 00000000867f0000887f00008a7f00008c7f00008e7f0000907f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1196,7 +1196,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000827f0000847f0000867f0000887f00008a7f00008c7f0000
+    m_ExpandedIDs: 00000000867f0000887f00008a7f00008c7f00008e7f0000907f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1372,4 +1372,4 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 596410
+  m_LastSelectedObjectID: 29910
