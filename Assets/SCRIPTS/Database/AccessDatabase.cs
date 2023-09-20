@@ -738,6 +738,7 @@ public class AccessDatabase : MonoBehaviour
             weaplist.Add(dataReader.GetInt32(8).ToString());
             weaplist.Add(dataReader.GetString(9));
             weaplist.Add(dataReader.GetString(10));
+            weaplist.Add(dataReader.GetString(11));
             list.Add(weaplist);
         }
         dbConnection.Close();

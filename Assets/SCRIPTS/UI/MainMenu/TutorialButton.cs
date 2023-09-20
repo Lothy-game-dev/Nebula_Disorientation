@@ -42,6 +42,7 @@ public class TutorialButton : MonoBehaviour
     #region Check mouse
     private void OnMouseDown()
     {
+        TutorialMenu.CheckItem(ItemID);
         ShowInfo();
     }
     private void OnMouseEnter()

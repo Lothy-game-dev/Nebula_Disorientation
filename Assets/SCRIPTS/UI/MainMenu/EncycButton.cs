@@ -22,6 +22,7 @@ public class EncycButton : MonoBehaviour
     public List<SpriteRenderer> ConsumableImage;
     public List<SpriteRenderer> WarshipImage;
     public List<SpriteRenderer> SpaceStationImage;
+    public List<GameObject> AttributeImage;
     public GameObject Content;
     #endregion
     #region NormalVariables
@@ -56,7 +57,7 @@ public class EncycButton : MonoBehaviour
         
         if (Type == "Weapon")
         {
-            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2.3f, 2.3f, 0f), 0);
+            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2f, 2f, 0f), 11);
             ChangeColorWhenChoosen(Id.ToString());
             if (wlist[2] == "Star Blaster")
             {
@@ -100,7 +101,7 @@ public class EncycButton : MonoBehaviour
                 //Power
                 if (Type == "Power")
                 {
-                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.6f, 0.6f, 0f), 10);
+                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.7f, 0.7f, 0f), 10);
                     ChangeColorWhenChoosen(Id.ToString());
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = PowerImage[PowerImage.FindIndex(item => wlist[2].Replace(" ", "").ToLower() == item.name.ToLower())].sprite;                                          
                 } else
@@ -155,6 +156,26 @@ public class EncycButton : MonoBehaviour
                                     {
                                         ShowInforOfItem(Menu.DmgElementList, 1, 0, new Vector2(0.2f, 0.2f), 2);
                                         ChangeColorWhenChoosen((Id).ToString());
+                                    } else
+                                    {
+                                        if (Menu.ItemImage.transform.parent.childCount > 1)
+                                        {
+                                            Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
+                                        }
+                                        ShowInforOfItem(Menu.AttributeList, 1, 0, new Vector2(0.5f, 0.5f), 2);
+                                        ChangeColorWhenChoosen((Id).ToString());
+                                        if (wlist[1].Contains("Slot") | wlist[1].Contains("PoE") | wlist[1].Contains("(AE)"))
+                                        {
+                                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = null;
+                                        } else
+                                        {                                           
+                                            GameObject g = AttributeImage[AttributeImage.FindIndex(item => wlist[1].Replace(" ", "").ToLower().Contains(item.name.ToLower()))];
+                                            GameObject clone = Instantiate(g, Menu.ItemImage.transform.position, Quaternion.identity);
+                                            clone.GetComponent<SpriteRenderer>().sortingOrder = 3;
+                                            clone.transform.SetParent(Menu.ItemImage.transform.parent);
+                                             
+                                        }
+                                        
                                     }
                                 }
                             }

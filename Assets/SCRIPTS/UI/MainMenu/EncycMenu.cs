@@ -53,15 +53,6 @@ public class EncycMenu : MainMenuSceneShared
         SStationList = FindAnyObjectByType<AccessDatabase>().GetAllSpaceStation();
         DmgElementList = FindAnyObjectByType<AccessDatabase>().GetAllDMGElement();
         AttributeList = FindAnyObjectByType<AccessDatabase>().GetAllAttribute();
-        for (int i = 0; i < Category.Length; i++)
-        {
-            GameObject g = Instantiate(CateTemplate, CateTemplate.transform.position, Quaternion.identity);
-            g.transform.SetParent(CategoryContent.transform);
-            g.transform.GetChild(0).GetComponent<TMP_Text>().text = Category[i];
-            g.SetActive(true);
-            
-
-        }
 
     }
 
@@ -190,6 +181,24 @@ public class EncycMenu : MainMenuSceneShared
                                 game.name = DmgElementList[i][1];
                                 game.SetActive(true);
                             }
+                        } else
+                        {
+                            if ("Attribute".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
+                            {
+                                ResetAll();
+                                ChangeColorWhenChoosen("Attribute");
+                                for (int i = 0; i < AttributeList.Count; i++)
+                                {
+                                    GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                                    game.transform.SetParent(Content.transform);
+                                    game.transform.localScale = new Vector3(2, 7, 0);
+                                    game.transform.GetChild(0).GetComponent<TMP_Text>().text = AttributeList[i][1];
+                                    game.GetComponent<EncycButton>().Type = "ATT";
+                                    game.GetComponent<EncycButton>().Id = int.Parse(AttributeList[i][0]);
+                                    game.name = AttributeList[i][1];
+                                    game.SetActive(true);
+                                }
+                            }
                         }
                     }
                 }
@@ -209,7 +218,13 @@ public class EncycMenu : MainMenuSceneShared
             }
             ItemName.GetComponent<TMP_Text>().text = "";
             ItemTier.GetComponent<TMP_Text>().text = "";
-            ItemImage.GetComponent<SpriteRenderer>().sprite = null;
+            if (ItemImage.transform.parent.childCount > 1)
+            {
+                Destroy(ItemImage.transform.parent.GetChild(1).gameObject);
+            } else
+            {
+                ItemImage.GetComponent<SpriteRenderer>().sprite = null;
+            }
             ItemDesc.GetComponent<TMP_Text>().text = "";
 
 
@@ -238,12 +253,38 @@ public class EncycMenu : MainMenuSceneShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        GetData();
     }
 
     public override void EndAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        ResetData();
+    }
+    #endregion
+    #region ResetData and GetData
+    public void GetData()
+    {
+        for (int i = 0; i < Category.Length; i++)
+        {
+            GameObject g = Instantiate(CateTemplate, CateTemplate.transform.position, Quaternion.identity);
+            g.transform.SetParent(CategoryContent.transform);
+            g.transform.GetChild(0).GetComponent<TMP_Text>().text = Category[i];
+            g.SetActive(true);
+        }
+        Debug.Log(EnemyList.Count);
+    }
+    public void ResetData()
+    {
+        if (CategoryContent.transform.childCount > 0)
+        {
+            for (int i = 1; i < CategoryContent.transform.childCount; i++)
+            {
+                Destroy(CategoryContent.transform.GetChild(i).gameObject);
+            }
+        }
+        ResetAll();
     }
     #endregion
 }
