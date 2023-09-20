@@ -48,7 +48,7 @@ public class FactoryButton : MonoBehaviour
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                "You are not allowed to buy this fighter!\nPlease contact to our email!", 5f);
+                "You are not allowed to buy this fighter!", 5f);
             }
         }
         else
