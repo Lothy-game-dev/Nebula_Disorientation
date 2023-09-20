@@ -80,7 +80,10 @@ public class LoadOutModelBoard : MonoBehaviour
             maximumHeight);
         // Add data to scene controller
         Scene.GetComponent<LoadoutScene>().Model = currentModel;
-        StartCoroutine(GenerateItems(currentModel));
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine(GenerateItems(currentModel));
+        }
     }
 
     private IEnumerator GenerateItems(string currentModel)
