@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialMenu : MonoBehaviour
 {
@@ -17,17 +18,22 @@ public class TutorialMenu : MonoBehaviour
     public GameObject SectionName;
     public GameObject MainCam;
     public GameObject MainCamBeforeMove;
+    public GameObject Template;
+    public GameObject Content;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string ItemChoosen;
     public bool isChoose;
+    public List<List<string>> TutorialList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
+        TutorialList = FindAnyObjectByType<AccessDatabase>().GetAllTutorial();
+        GetData();
     }
 
     // Update is called once per frame
@@ -42,7 +48,7 @@ public class TutorialMenu : MonoBehaviour
     }
     #endregion
 
-    #region
+    #region Animaiton
 
     public void WordFade()
     {
@@ -59,5 +65,38 @@ public class TutorialMenu : MonoBehaviour
         }      
     }
     #endregion
+    #region Generate Data
+    public void GetData()
+    {
+        for (int i = 0; i < TutorialList.Count; i++)
+        {
+            GameObject g = Instantiate(Template, Template.transform.position, Quaternion.identity);
+            g.transform.SetParent(Content.transform);
+            g.name = TutorialList[i][1];
+            g.transform.localScale = new Vector2(2f, 5.5f);
+            g.GetComponentInChildren<TMP_Text>().text = TutorialList[i][1];
+            g.GetComponent<TutorialButton>().ItemID = int.Parse(TutorialList[i][0]);
+            g.SetActive(true);
+        }
+    }
+    #endregion
+    #region Reset data
+    public void ResetData()
+    {
+        SectionDesc.GetComponent<TMP_Text>().text = "";
+        SectionName.GetComponent<TMP_Text>().text = "";
+    }
+    #endregion
+    #region Check current item
+    public void CheckItem(int id)
+    {      
+        for (int i = 1; i < Content.transform.childCount; i++)
+        {               
+            Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+        }
+        Content.transform.GetChild(id).GetComponent<Image>().color = Color.green;
+                
+    }
+    #endregion 
 
 }

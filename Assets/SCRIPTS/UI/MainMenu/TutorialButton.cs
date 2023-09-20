@@ -16,14 +16,13 @@ public class TutorialButton : MonoBehaviour
     public GameObject ItemType;
     public GameObject TutorialBoard;
     public GameObject Text;
-    public GameObject SectionDesc;
-    public GameObject SectionName;
     #endregion
     #region NormalVariables
     private TutorialMenu TutorialMenu;
     private Vector3 InitScale;
     private float ExpectedScale;
     private bool alreadySelect;
+    public int ItemID;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -43,22 +42,8 @@ public class TutorialButton : MonoBehaviour
     #region Check mouse
     private void OnMouseDown()
     {
-        if (TutorialMenu.SectionDesc != null && TutorialMenu.SectionName != null)
-        {
-            Color c = TutorialMenu.SectionDesc.GetComponent<TMP_Text>().color;
-            c.a = 0f;
-            TutorialMenu.SectionDesc.GetComponent<TMP_Text>().color = c;
-            TutorialMenu.SectionDesc.SetActive(false);
-            TutorialMenu.SectionName.SetActive(false);
-        }
-        if (!"BackButton".Equals(gameObject.name))
-        {
-            TutorialMenu.SectionDesc = SectionDesc;
-            TutorialMenu.SectionName = SectionName;
-            TutorialMenu.ItemChoosen = gameObject.name;
-            TutorialMenu.isChoose = true;
-            TutorialMenu.WordFade();
-        }
+        TutorialMenu.CheckItem(ItemID);
+        ShowInfo();
     }
     private void OnMouseEnter()
     {
@@ -109,7 +94,11 @@ public class TutorialButton : MonoBehaviour
         }
     }
     #endregion
-    #region Function group ...
-    
+    #region Show Information When Clicking Down
+    public void ShowInfo()
+    {
+        TutorialMenu.SectionDesc.GetComponent<TMP_Text>().text = TutorialMenu.TutorialList[ItemID - 1][3];
+        TutorialMenu.SectionName.GetComponent<TMP_Text>().text = TutorialMenu.TutorialList[ItemID - 1][2];
+    }
     #endregion
 }
