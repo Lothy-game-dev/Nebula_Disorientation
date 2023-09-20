@@ -149,7 +149,10 @@ public class Factory : MonoBehaviour
                 ItemName, "Model");
         if (n>0)
         {
-            CurrentChosen.GetComponent<FactoryItem>().LockCurrentItem();
+            if (CurrentChosen!=null && CurrentChosen.GetComponent<FactoryItem>()!=null)
+            {
+                CurrentChosen.GetComponent<FactoryItem>().LockCurrentItem();
+            }
         }
     }
     public void SetFirstData()
