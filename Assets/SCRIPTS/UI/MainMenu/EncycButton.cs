@@ -21,6 +21,8 @@ public class EncycButton : MonoBehaviour
     public List<SpriteRenderer> EnemyImage;
     public List<SpriteRenderer> ConsumableImage;
     public List<SpriteRenderer> WarshipImage;
+    public List<SpriteRenderer> SpaceStationImage;
+    public List<GameObject> AttributeImage;
     public GameObject Content;
     #endregion
     #region NormalVariables
@@ -55,7 +57,7 @@ public class EncycButton : MonoBehaviour
         
         if (Type == "Weapon")
         {
-            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2.3f, 2.3f, 0f));
+            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2f, 2f, 0f), 11);
             ChangeColorWhenChoosen(Id.ToString());
             if (wlist[2] == "Star Blaster")
             {
@@ -77,7 +79,7 @@ public class EncycButton : MonoBehaviour
             //Fighter
             if (Type == "Fighter")
             {
-                ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f));
+                ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f), 7);
                 ChangeColorWhenChoosen(Id.ToString());
                 if (wlist[1] == "SSS-MKL")
                 {
@@ -99,7 +101,7 @@ public class EncycButton : MonoBehaviour
                 //Power
                 if (Type == "Power")
                 {
-                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.6f, 0.6f, 0f));
+                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.7f, 0.7f, 0f), 10);
                     ChangeColorWhenChoosen(Id.ToString());
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = PowerImage[PowerImage.FindIndex(item => wlist[2].Replace(" ", "").ToLower() == item.name.ToLower())].sprite;                                          
                 } else
@@ -108,23 +110,74 @@ public class EncycButton : MonoBehaviour
                     if (Type == "Enemy")
                     {
                        
-                        ShowInforOfItem(Menu.EnemyList, 1, 0, new Vector3(0.5f, 0.5f, 0f));
+                        ShowInforOfItem(Menu.EnemyList, 1, 7, new Vector3(0.5f, 0.5f, 0f), 6);
                         ChangeColorWhenChoosen((Id + Menu.FighterList.Count).ToString());
-                        Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = EnemyImage[EnemyImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
+                        if (wlist[1] == "ZatWR-MKL")
+                        {
+                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = EnemyImage[EnemyImage.FindIndex(item => item.name == "ZatWRL")].sprite;
+                        }
+                        else
+                        {
+                            if (wlist[1].Contains("KazaT-MKL"))
+                            {
+                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = EnemyImage[EnemyImage.FindIndex(item => item.name == "KazaTL")].sprite;
+                            }
+                            else
+                            {
+                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = EnemyImage[EnemyImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
+                            }
+                        }
+                        
                     } else
                     {
                         if (Type == "Consumable")
                         {
-                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.5f, 0.5f, 0f));
+                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.7f, 0.7f, 0f), 11);
                             ChangeColorWhenChoosen((Id + Menu.PowerList.Count).ToString());
                             Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = ConsumableImage[ConsumableImage.FindIndex(item => wlist[1].Replace(" ", "").Replace("-","").ToLower().Contains(item.name.ToLower()))].sprite;
                         } else
                         {
                             if (Type == "Warship")
                             {
-                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.2f, 0.2f));
+                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.2f, 0.2f), 2);
                                 ChangeColorWhenChoosen(Id.ToString());
                                 Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WarshipImage[WarshipImage.FindIndex(item => wlist[1].Replace("Zat-", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                            }
+                            else
+                            {
+                                if (Type == "SpaceStation")
+                                {
+                                    ShowInforOfItem(Menu.SStationList, 1, 4, new Vector2(0.2f, 0.2f), 2);
+                                    ChangeColorWhenChoosen((Id + Menu.WarshipList.Count).ToString());
+                                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = SpaceStationImage[SpaceStationImage.FindIndex(item => wlist[1].Replace("UEC-", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                                } else
+                                {
+                                    if (Type == "DMG")
+                                    {
+                                        ShowInforOfItem(Menu.DmgElementList, 1, 0, new Vector2(0.2f, 0.2f), 2);
+                                        ChangeColorWhenChoosen((Id).ToString());
+                                    } else
+                                    {
+                                        if (Menu.ItemImage.transform.parent.childCount > 1)
+                                        {
+                                            Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
+                                        }
+                                        ShowInforOfItem(Menu.AttributeList, 1, 0, new Vector2(0.5f, 0.5f), 2);
+                                        ChangeColorWhenChoosen((Id).ToString());
+                                        if (wlist[1].Contains("Slot") | wlist[1].Contains("PoE") | wlist[1].Contains("(AE)"))
+                                        {
+                                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = null;
+                                        } else
+                                        {                                           
+                                            GameObject g = AttributeImage[AttributeImage.FindIndex(item => wlist[1].Replace(" ", "").ToLower().Contains(item.name.ToLower()))];
+                                            GameObject clone = Instantiate(g, Menu.ItemImage.transform.position, Quaternion.identity);
+                                            clone.GetComponent<SpriteRenderer>().sortingOrder = 3;
+                                            clone.transform.SetParent(Menu.ItemImage.transform.parent);
+                                             
+                                        }
+                                        
+                                    }
+                                }
                             }
                         }
                     }
@@ -135,29 +188,30 @@ public class EncycButton : MonoBehaviour
     #endregion
     #region Show item's information
     // Group all function that serve the same algorithm
-    private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale)
+    private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale, int DescIndex)
     {
         Menu.ItemImage.transform.localScale = ImageScale;
         wlist = list[Id - 1];
-        Debug.Log(wlist[TierIndex]);
-
+        if (TierIndex > 0)
+        {
+            switch(wlist[TierIndex])
+            {
+                case "#36b37e": Tier = "Tier III";
+                                break;
+                case "#4c9aff": Tier = "Tier II";
+                                break;
+                case "#bf2600": Tier = "Tier I";
+                                break;
+                default: Tier = "Special"; break;
+            }
+            Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";           
+        } else
+        {
+            wlist[TierIndex] = "white";
+        }
+        Menu.ItemDesc.GetComponent<TMP_Text>().text = wlist[DescIndex];
         Menu.ItemName.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] +">"  + wlist[NameIndex] + "</color>";
 
-        switch(wlist[TierIndex])
-        {
-            case "#36b37e": Tier = "Tier III";
-                            break;
-            case "#4c9aff": Tier = "Tier II";
-                            break;
-            case "#bf2600": Tier = "Tier I";
-                            break;
-            default: Tier = "Special"; break;
-        }
-        Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";
-
-        
-
- 
     }
     #endregion
     #region Change the color when choosen

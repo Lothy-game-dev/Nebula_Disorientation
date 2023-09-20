@@ -135,6 +135,7 @@ public class ArsenalButton : MonoBehaviour
                     g.transform.SetParent(Content.transform);
                     g.transform.localScale = new Vector3(1, 1, 0);
                     g.transform.GetChild(1).GetComponent<TMP_Text>().text = ArsenalController.PowerList[i][2];
+                    g.transform.GetChild(2).gameObject.SetActive(false);
                     g.GetComponent<ArsenalItem>().Id = ArsenalController.PowerList[i][0];
                     g.GetComponent<ArsenalItem>().Type = "Power";
                     g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
