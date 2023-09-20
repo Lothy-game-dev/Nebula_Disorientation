@@ -28,7 +28,7 @@ public class LoadOutBar : MonoBehaviour
     public GameObject ScrollLimitBottom;
     public GameObject ScrollLimitLeft;
     public GameObject ScrollLimitRight;
-    public string WeaponNumber;
+    public string WeaponPosition;
     #endregion
     #region NormalVariables
     public GameObject CurrentItem;
@@ -36,6 +36,7 @@ public class LoadOutBar : MonoBehaviour
     private List<string> ItemsFromStart;
     private string ChosenItemStart;
     public List<GameObject> ListItem;
+    private List<string> ListName;
     private float DistanceBetweenEach;
     private List<GameObject> AfterGenerateList;
     private GameObject AfterGenerateCurrentItem;
@@ -44,6 +45,8 @@ public class LoadOutBar : MonoBehaviour
     private bool isScrollingLeft;
     private int IsLeft;
     private GameObject TempForFourItem;
+    private string CurrentItemName;
+    private string CurrentItemNameFull;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -67,8 +70,8 @@ public class LoadOutBar : MonoBehaviour
         if (ListWeapon.Count>0)
         {
             SetItem(
-            ListReplaceSpace(ListWeapon),
-            ListReplaceSpace(ListWeapon)[0]);
+            ListWeapon,
+            ListWeapon[0],true);
         }
     }
 
@@ -107,6 +110,11 @@ public class LoadOutBar : MonoBehaviour
     // Check on mouse down
     private void OnMouseDown()
     {
+        SetItem(
+            FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId,
+            WeaponPosition == "Left" ? Scene.GetComponent<LoadoutScene>().RightWeapon : Scene.GetComponent<LoadoutScene>().LeftWeapon),
+            CurrentItemName==null || CurrentItemName == "" ? FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId,
+            WeaponPosition == "Left" ? Scene.GetComponent<LoadoutScene>().RightWeapon : Scene.GetComponent<LoadoutScene>().LeftWeapon)[0] : CurrentItemName, false);
         // Animation
         anim.ResetTrigger("End");
         anim.SetTrigger("Start");
@@ -193,11 +201,11 @@ public class LoadOutBar : MonoBehaviour
         Background.SetActive(false);
         // Destroy and remove current item
         GameObject temp2 = CurrentItem;
-        string name = CurrentItem.name.Replace("(Clone)", "").Replace(" ", "");
+        CurrentItemName = CurrentItem.name.Replace("(Clone)", "").Replace(" ", "");
         Destroy(temp2,0.5f);
         AfterGenerateList.RemoveAt(0);
         // Set item back from start
-        SetItem(ItemsFromStart, name);
+        SetItem(ItemsFromStart, CurrentItemName, true);
         yield return new WaitForSeconds(1f);
         // Set collider to enabled
         GetComponent<Collider2D>().enabled = true;
@@ -305,17 +313,19 @@ public class LoadOutBar : MonoBehaviour
         Background.GetComponent<Collider2D>().enabled = true;
         Background.GetComponent<LoadOutBarBackground>().enabled = true;
     }
-    public void SetItem(List<string> Items, string cItem)
+    public void SetItem(List<string> Items, string cItem, bool ShowStats)
     {
-        if (!Items.Contains(cItem))
+        cItem = cItem.Replace(" ", "");
+        if (!ListReplaceSpace(Items).Contains(cItem))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.parent.position,
                 "Unable to fetch owned weapons.\nPlease try again!", 5f);
             return;
         }
         // Set items for next time click usage
-        ItemsFromStart = Items;
+        ItemsFromStart = ListReplaceSpace(Items);
         ListItem = new List<GameObject>();
+        ListName = new List<string>();
         AllowScroll = false;
         // Preset data
         AfterGenerateList = new List<GameObject>();
@@ -328,6 +338,7 @@ public class LoadOutBar : MonoBehaviour
                 if (ListSprite.transform.GetChild(j).name.ToLower().Equals(Items[i].Replace(" ", "").ToLower()))
                 {
                     ListItem.Add(ListSprite.transform.GetChild(j).gameObject);
+                    ListName.Add(Items[i]);
                     break;
                 }
                 else
@@ -357,8 +368,11 @@ public class LoadOutBar : MonoBehaviour
             Scene.GetComponent<LoadoutScene>().RightWeapon = cItem;
             FighterDemo.GetComponent<LoadOutFighterDemo>().SetWeapon(false, cItem);
         }
-        // Set item to status board
-        StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(cItem);
+        if (ShowStats)
+        {
+            // Set item to status board
+            StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(cItem);
+        }
         GenerateItems();
     }
     
@@ -377,6 +391,7 @@ public class LoadOutBar : MonoBehaviour
         Item.transform.SetParent(Contents.transform);
         Item.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
         Item.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+        Item.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = CurrentItem.name.Replace("(Clone)", "");
         Item.transform.GetChild(0).GetComponent<LoadOutBox>().detectMouse = false;
         transform.GetChild(1).GetComponent<Canvas>().sortingOrder = 10;
         AfterGenerateCurrentItem = Item;
@@ -401,6 +416,7 @@ public class LoadOutBar : MonoBehaviour
                 ItemTemp.transform.SetParent(Contents.transform);
                 ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
                 ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+                ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = ListName[i];
             }
         } 
         // If list >= 4 items: allow scroll.
@@ -429,6 +445,7 @@ public class LoadOutBar : MonoBehaviour
                 ItemTemp2.transform.SetParent(Contents.transform);
                 ItemTemp2.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
                 ItemTemp2.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+                ItemTemp2.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = ListName[CurrentIndex - 1];
                 AfterGenerateList.Add(Item);
                 currentPosX = Item.transform.position.x;
                 for (int i = CurrentIndex + 1; i < ListItem.Count; i++)
@@ -444,6 +461,7 @@ public class LoadOutBar : MonoBehaviour
                     ItemTemp.transform.SetParent(Contents.transform);
                     ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
                     ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+                    ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = ListName[i];
                 }
                 for (int i = 0; i < CurrentIndex - 1; i++)
                 {
@@ -458,6 +476,7 @@ public class LoadOutBar : MonoBehaviour
                     ItemTemp.transform.SetParent(Contents.transform);
                     ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
                     ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+                    ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = ListName[i];
                 }
             }
             // Case current item is the first item of the list:
@@ -475,6 +494,7 @@ public class LoadOutBar : MonoBehaviour
                 ItemTemp2.transform.SetParent(Contents.transform);
                 ItemTemp2.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
                 ItemTemp2.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+                ItemTemp2.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = ListName[ListItem.Count - 1];
                 AfterGenerateList.Add(Item);
                 currentPosX = Item.transform.position.x;
                 for (int i = 1; i < ListItem.Count - 1; i++)
@@ -490,6 +510,7 @@ public class LoadOutBar : MonoBehaviour
                     ItemTemp.transform.SetParent(Contents.transform);
                     ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().bar = gameObject;
                     ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().background = Background;
+                    ItemTemp.transform.GetChild(0).GetComponent<LoadOutBox>().WeaponName = ListName[i];
                 }
                 
             }

@@ -59,7 +59,7 @@ public class LoadOutStatusBoard : MonoBehaviour
         for (int i=0;i<18;i++)
         {
             StatusBoardRotate.transform.Rotate(new Vector3(0, 10, 0));
-            yield return new WaitForSeconds(1/18f);
+            yield return new WaitForSeconds(0.5f/18f);
         }
         GetComponent<Collider2D>().enabled = true;
         if (isShowingDes)

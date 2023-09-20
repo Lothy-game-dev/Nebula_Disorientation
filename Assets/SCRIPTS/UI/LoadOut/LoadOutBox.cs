@@ -14,6 +14,7 @@ public class LoadOutBox : MonoBehaviour
     #region NormalVariables
     public GameObject bar;
     public GameObject background;
+    public string WeaponName;
     public bool detectMouse;
     #endregion
     #region Start & Update
@@ -29,6 +30,14 @@ public class LoadOutBox : MonoBehaviour
     }
     #endregion
     #region Check Mouse
+    private void OnMouseEnter()
+    {
+        if (WeaponName!=null && WeaponName!="")
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject,
+                FindObjectOfType<AccessDatabase>().GetWeaponRealName(WeaponName));
+        }
+    }
     private void OnMouseDown()
     {
         // Mouse down set select
@@ -51,6 +60,13 @@ public class LoadOutBox : MonoBehaviour
             {
                 bar.GetComponent<LoadOutBar>().SetWeaponToFighterDemo(transform.parent.name.Replace("(Clone)", "").Replace(" ", ""));
             }
+        }
+    }
+    private void OnMouseExit()
+    {
+        if (WeaponName != null && WeaponName != "")
+        {
+            FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
         }
     }
     #endregion

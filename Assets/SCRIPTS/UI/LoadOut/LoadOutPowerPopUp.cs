@@ -160,6 +160,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
         {
             if (!ListPower.Contains(chosenPower))
             {
+                Debug.Log(chosenPower);
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                "Cannot fetch data for this power!\nPlease try again!", 5f);
                 return;
