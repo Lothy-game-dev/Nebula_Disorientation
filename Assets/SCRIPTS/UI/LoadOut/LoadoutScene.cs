@@ -50,6 +50,11 @@ public class LoadoutScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        LeftWeapon = "";
+        RightWeapon = "";
+        Model = "";
+        FirstPower = "";
+        SecondPower = "";
         Weapon1Bar.SetActive(true);
         Weapon2Bar.SetActive(true);
         ModelBoard.SetActive(true);

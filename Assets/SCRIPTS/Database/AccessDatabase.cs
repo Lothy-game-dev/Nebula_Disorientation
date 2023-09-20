@@ -893,7 +893,52 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public string GetWeaponRealName(string WeaponName)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT WeaponName, TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + WeaponName.Replace(" ","").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        string str = "";
+        while (dataReader.Read())
+        {
+            str = "<color=" + dataReader.GetString(1) + ">" + dataReader.GetString(0) + "</color>";
+        }
+        return str;
+    }
     
+    public List<string> GetOwnedWeaponExceptForName(int PlayerID, string WeaponName)
+    {
+        Dictionary<string, int> DictOwned = new Dictionary<string, int>();
+        Dictionary<string, string> NameConversion = new Dictionary<string, string>();
+        string checkName = WeaponName.Replace(" ", "").ToLower();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ArsenalWeapon.WeaponName, Quantity FROM ArsenalWeapon " +
+            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Weapon' AND ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY ArsenalWeapon.WeaponID ASC";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            DictOwned.Add(dataReader.GetString(0), dataReader.GetInt32(1));
+            NameConversion.Add(dataReader.GetString(0).Replace(" ", "").ToLower(), dataReader.GetString(0));
+        }
+        if (NameConversion.ContainsKey(checkName))
+        {
+            DictOwned[NameConversion[checkName]] = DictOwned[NameConversion[checkName]] - 1;
+            if (DictOwned[NameConversion[checkName]] ==0)
+            {
+                DictOwned.Remove(NameConversion[checkName]);
+            }
+        }
+        return new List<string>(DictOwned.Keys);
+    }
     public string AddStarterGiftWeapons(int PlayerID)
     {
         // Open DB
@@ -1153,6 +1198,27 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
 
+    public List<string> GetAllOwnedPowerExceptForName(int PlayerID, string Name)
+    {
+        List<string> list = new List<string>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT ArsenalPower.PowerName FROM ArsenalPower " +
+            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Power' AND ArsenalPower.PowerID = PlayerOwnership.ItemID ORDER BY ArsenalPower.PowerID ASC";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            if (!dataReader.GetString(0).Replace(" ","").ToLower().Equals(Name.Replace(" ","").ToLower()))
+            {
+                list.Add(dataReader.GetString(0).Replace(" ",""));
+            }
+        }
+        dbConnection.Close();
+        return list;
+    }
     public Dictionary<string, object> GetPowerDataByName(string name)
     {
         Dictionary<string, object> datas = new Dictionary<string, object>();

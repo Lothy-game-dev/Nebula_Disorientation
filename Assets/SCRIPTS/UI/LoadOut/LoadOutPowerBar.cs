@@ -14,6 +14,7 @@ public class LoadOutPowerBar : MonoBehaviour
     public GameObject PopUp;
     public GameObject PowerList;
     public GameObject StatusBoard;
+    public string PowerNo;
     #endregion
     #region NormalVariables
     public string currentChosen;
@@ -46,7 +47,9 @@ public class LoadOutPowerBar : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = 20;
         transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 21;
         PopUp.transform.localScale = new Vector2(PopUpInitScale, PopUp.transform.localScale.y);
-        data = FindObjectOfType<AccessDatabase>().GetAllOwnedPower(FindObjectOfType<UECMainMenuController>().PlayerId);
+        data = FindObjectOfType<AccessDatabase>().
+            GetAllOwnedPowerExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId,
+            PowerNo == "1" ? Scene.GetComponent<LoadoutScene>().SecondPower : Scene.GetComponent<LoadoutScene>().FirstPower);
         PopUp.GetComponent<LoadOutPowerPopUp>().OpenPopUp(data, currentChosen);
     }
 
