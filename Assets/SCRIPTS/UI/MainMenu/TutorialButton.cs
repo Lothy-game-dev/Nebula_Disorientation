@@ -23,6 +23,7 @@ public class TutorialButton : MonoBehaviour
     private float ExpectedScale;
     private bool alreadySelect;
     public int ItemID;
+    public List<List<string>> TutorialList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,7 +31,7 @@ public class TutorialButton : MonoBehaviour
     {
         InitScale = transform.localScale;
         ExpectedScale = transform.localScale.x * 1.1f;
-        TutorialMenu = TutorialBoard.GetComponent<TutorialMenu>();
+       
     }
 
     // Update is called once per frame
@@ -42,8 +43,7 @@ public class TutorialButton : MonoBehaviour
     #region Check mouse
     private void OnMouseDown()
     {
-        TutorialMenu.CheckItem(ItemID);
-        ShowInfo();
+        ShowInfo(ItemID);
     }
     private void OnMouseEnter()
     {
@@ -95,10 +95,12 @@ public class TutorialButton : MonoBehaviour
     }
     #endregion
     #region Show Information When Clicking Down
-    public void ShowInfo()
+    public void ShowInfo(int id)
     {
-        TutorialMenu.SectionDesc.GetComponent<TMP_Text>().text = TutorialMenu.TutorialList[ItemID - 1][3];
-        TutorialMenu.SectionName.GetComponent<TMP_Text>().text = TutorialMenu.TutorialList[ItemID - 1][2];
+        TutorialMenu = TutorialBoard.GetComponent<TutorialMenu>();
+        TutorialMenu.CheckItem(ItemID);
+        TutorialMenu.SectionDesc.GetComponent<TMP_Text>().text = TutorialList[id - 1][3];
+        TutorialMenu.SectionName.GetComponent<TMP_Text>().text = TutorialList[id - 1][2];
     }
     #endregion
 }
