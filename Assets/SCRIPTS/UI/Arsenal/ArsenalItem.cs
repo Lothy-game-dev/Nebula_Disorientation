@@ -39,6 +39,7 @@ public class ArsenalItem : MonoBehaviour
     private bool GeneratingText;
     private string TextGenerated;
     public string ItemPreReq;
+    public bool IsRanked;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -227,6 +228,7 @@ public class ArsenalItem : MonoBehaviour
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
         BuyButton.GetComponent<ArsenalBuyAction>().PreReqName = ItemPreReq;
+        BuyButton.GetComponent<ArsenalBuyAction>().isRanked = IsRanked;
     }
     public void StartTextRunning(string text)
     {

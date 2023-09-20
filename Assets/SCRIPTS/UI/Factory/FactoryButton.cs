@@ -18,6 +18,7 @@ public class FactoryButton : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     private Factory FactoryController;
+    public bool AlreadyPurchased;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -40,8 +41,15 @@ public class FactoryButton : MonoBehaviour
         // check the conditions before buying 
         if (GetComponent<CursorUnallowed>() != null)
         {
-            FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+            if (AlreadyPurchased)
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+                "You have already bought this fighter!", 5f);
+            } else
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
                 "You are not allowed to buy this fighter!", 5f);
+            }
         }
         else
         if (FactoryController.EnoughPrice && FactoryController.RankRequired)

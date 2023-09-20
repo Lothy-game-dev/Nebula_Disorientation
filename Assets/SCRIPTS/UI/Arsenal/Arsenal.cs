@@ -146,12 +146,14 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
+                    Game.GetComponent<ArsenalItem>().IsRanked = true;
                 }
                 else if (CurrentTab == "Power")
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
+                    Game.GetComponent<ArsenalItem>().IsRanked = true;
                 }
 
             }
@@ -172,6 +174,7 @@ public class Arsenal : UECMenuShared
                 }
                 Game.GetComponent<ArsenalItem>().LockedItem = true;
                 Game.GetComponent<ArsenalItem>().ItemPreReq = n;
+                Game.GetComponent<ArsenalItem>().IsRanked = false;
             } 
         }
         // Already bought
@@ -186,6 +189,7 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
+                    Game.GetComponent<ArsenalItem>().IsRanked = false;
                 }
             } else if (CurrentTab == "Power")
             {
@@ -196,6 +200,7 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
+                    Game.GetComponent<ArsenalItem>().IsRanked = false;
                 }
             }
         }

@@ -123,6 +123,7 @@ public class Factory : MonoBehaviour
                 isLocked = true;
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<FactoryItem>().LockedItem = true;
+                Game.GetComponent<FactoryItem>().AlreadyPurchased = false;
             }
         }
         if (!isLocked)
@@ -134,6 +135,7 @@ public class Factory : MonoBehaviour
                 isLocked = true;
                 Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                 Game.GetComponent<FactoryItem>().LockedItem = true;
+                Game.GetComponent<FactoryItem>().AlreadyPurchased = true;
             }
         }
     }

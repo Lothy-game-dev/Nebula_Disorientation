@@ -21,6 +21,7 @@ public class FactoryItem : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string Id;
+    public bool AlreadyPurchased;
     private Factory Fac;
     private Dictionary<string, object> Status;
     private Dictionary<string, object> ItemPrice;
@@ -160,6 +161,7 @@ public class FactoryItem : MonoBehaviour
             }
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+        BuyButton.GetComponent<FactoryButton>().AlreadyPurchased = AlreadyPurchased;
     }
     #endregion
     #region Check current item on mouse down
@@ -190,6 +192,7 @@ public class FactoryItem : MonoBehaviour
             BuyButton.AddComponent<CursorUnallowed>();
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+        BuyButton.GetComponent<FactoryButton>().AlreadyPurchased = AlreadyPurchased;
     }
     #endregion
     #region Text animation
