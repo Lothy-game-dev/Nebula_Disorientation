@@ -79,7 +79,7 @@ public class TutorialMenu : MonoBehaviour
             g.GetComponent<TutorialButton>().TutorialList = TutorialList;
             if (i == 0)
             {
-                g.GetComponent<TutorialButton>().ShowInfo(int.Parse(TutorialList[1][0]));
+                g.GetComponent<TutorialButton>().ShowInfo(int.Parse(TutorialList[0][0]));
             } 
             g.SetActive(true);
         }

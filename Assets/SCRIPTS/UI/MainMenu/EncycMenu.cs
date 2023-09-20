@@ -273,6 +273,33 @@ public class EncycMenu : MainMenuSceneShared
             g.transform.GetChild(0).GetComponent<TMP_Text>().text = Category[i];
             g.SetActive(true);
         }
+        ChangeColorWhenChoosen("Fighter");
+        for (int i = 0; i < FighterList.Count + EnemyList.Count; i++)
+        {
+            GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
+            game.transform.SetParent(Content.transform);
+            game.transform.localScale = new Vector3(2, 7, 0);
+            if (i < FighterList.Count)
+            {
+                game.transform.GetChild(0).GetComponent<TMP_Text>().text = FighterList[i][1];
+                game.GetComponent<EncycButton>().Type = "Fighter";
+                game.GetComponent<EncycButton>().Id = int.Parse(FighterList[i][0]);
+                game.name = FighterList[i][1];
+                if (i == 0)
+                {
+                    game.GetComponent<EncycButton>().ShowTheCurrentItem("Fighter");
+                }
+            }
+            else
+            {
+                game.transform.GetChild(0).GetComponent<TMP_Text>().text = EnemyList[i - FighterList.Count][1];
+                game.GetComponent<EncycButton>().Type = "Enemy";
+                game.GetComponent<EncycButton>().Id = int.Parse(EnemyList[i - FighterList.Count][0]);
+                game.name = EnemyList[i - FighterList.Count][1];
+
+            }
+            game.SetActive(true);
+        }
         Debug.Log(EnemyList.Count);
     }
     public void ResetData()
