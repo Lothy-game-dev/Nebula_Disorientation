@@ -18,6 +18,7 @@ public class ArsenalBuyAction : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string PreReqName;
+    public bool isRanked;
     private Arsenal Ar;
     #endregion
     #region Start & Update
@@ -40,7 +41,12 @@ public class ArsenalBuyAction : MonoBehaviour
     {
         if (GetComponent<CursorUnallowed>() != null)
         {
-            if (PreReqName != null && PreReqName != "")
+            if (isRanked)
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+            }
+            else if (PreReqName != null && PreReqName != "")
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You need to own " + PreReqName + " in order to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
@@ -48,7 +54,7 @@ public class ArsenalBuyAction : MonoBehaviour
             else
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+                    "You have purchased this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
             }
         } else
         // check the conditions before buying 
