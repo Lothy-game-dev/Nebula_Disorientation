@@ -145,15 +145,29 @@ public class Arsenal : UECMenuShared
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
                 else if (CurrentTab == "Power")
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
-                
-            }     
+
+            }
         }
+        // Preq Req
+        if (!isLocked)
+        {
+            string n = FindObjectOfType<AccessDatabase>().CheckWeaponPrereqWeapon(FindObjectOfType<UECMainMenuController>().PlayerId, Game.name);
+            if (n!="No Prereq" && n!="Pass")
+            {
+                Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                Game.GetComponent<ArsenalItem>().LockedItem = true;
+                Game.GetComponent<ArsenalItem>().ItemPreReq = n;
+            } 
+        }
+        // Already bought
         if (!isLocked)
         {
             if (CurrentTab == "Weapon")
@@ -164,6 +178,7 @@ public class Arsenal : UECMenuShared
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
             } else if (CurrentTab == "Power")
             {
@@ -173,6 +188,7 @@ public class Arsenal : UECMenuShared
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
             }
         }

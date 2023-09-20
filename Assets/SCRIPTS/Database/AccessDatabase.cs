@@ -744,6 +744,60 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
 
+    public string CheckWeaponPrereqWeapon(int PlayerID, string WeaponName)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT PrereqWeapon FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + WeaponName.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int n = -1;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (n==-1)
+        {
+            dbConnection.Close();
+            return "No Prereq";
+        } else
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE ItemID=" + n + " AND ItemType='Weapon' AND PlayerID=" + PlayerID;
+            IDataReader dataReader2 = dbCommand.ExecuteReader();
+            int k = 0;
+            while (dataReader.Read())
+            {
+                if (!dataReader2.IsDBNull(0))
+                {
+                    k = dataReader2.GetInt32(0);
+                }
+            }
+            if (k > 0)
+            {
+                dbConnection.Close();
+                return "Pass";
+            } else
+            {
+                IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                dbCheckCommand2.CommandText = "SELECT WeaponName FROM ArsenalWeapon WHERE WeaponID=" + n;
+                IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
+                string name = "";
+                while (dataReader3.Read())
+                {
+                    name = dataReader3.GetString(0);
+                }
+                dbConnection.Close();
+                return name;
+            }
+        }
+    }
+
     public List<string> GetAllWeaponName()
     {
         List<string> list = new List<string>();

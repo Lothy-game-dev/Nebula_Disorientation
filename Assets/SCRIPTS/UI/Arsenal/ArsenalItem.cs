@@ -38,6 +38,7 @@ public class ArsenalItem : MonoBehaviour
     public List<List<string>> ArItemList;
     private bool GeneratingText;
     private string TextGenerated;
+    public string ItemPreReq;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -168,17 +169,7 @@ public class ArsenalItem : MonoBehaviour
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
 
-        //change the color of buy button if item is locked
-        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
-        if (LockedItem)
-        {
-            c.a = 0.5f;
-        }
-        else
-        {
-            c.a = 1f;
-        }
-        BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+        
 
         ar.ItemName = ItemList[int.Parse(ItemID) - 1][2];
         ar.RequiredCash = ItemList[int.Parse(ItemID) - 1][5];
@@ -212,6 +203,30 @@ public class ArsenalItem : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
+    }
+
+    public void LockItem()
+    {
+        //change the color of buy button if item is locked
+        Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        if (LockedItem)
+        {
+            c.a = 0.5f;
+            if (BuyButton.GetComponent<CursorUnallowed>()==null)
+            {
+                BuyButton.AddComponent<CursorUnallowed>();
+            }
+        }
+        else
+        {
+            c.a = 1f;
+            if (BuyButton.GetComponent<CursorUnallowed>() != null)
+            {
+                Destroy(BuyButton.GetComponent<CursorUnallowed>());
+            }
+        }
+        BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+        BuyButton.GetComponent<ArsenalBuyAction>().PreReqName = ItemPreReq;
     }
     public void StartTextRunning(string text)
     {
