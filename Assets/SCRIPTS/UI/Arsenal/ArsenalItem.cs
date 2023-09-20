@@ -169,7 +169,7 @@ public class ArsenalItem : MonoBehaviour
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
 
-        
+        LockItem();
 
         ar.ItemName = ItemList[int.Parse(ItemID) - 1][2];
         ar.RequiredCash = ItemList[int.Parse(ItemID) - 1][5];

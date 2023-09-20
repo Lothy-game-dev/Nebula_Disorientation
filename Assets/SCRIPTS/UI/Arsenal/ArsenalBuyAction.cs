@@ -43,12 +43,12 @@ public class ArsenalBuyAction : MonoBehaviour
             if (PreReqName != null && PreReqName != "")
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "You need to own " + PreReqName + " in order to buy this weapon!", 5f);
+                    "You need to own " + PreReqName + " in order to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
             }
             else
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "You are not allowed to buy this weapon!", 5f);
+                    "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
             }
         } else
         // check the conditions before buying 
