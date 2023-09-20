@@ -11,6 +11,7 @@ public class UECEnterSession : MonoBehaviour
     public string InfoText;
     public GameObject UECScene;
     public GameObject LoadoutScene;
+    public GameObject FactoryScene;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -40,8 +41,17 @@ public class UECEnterSession : MonoBehaviour
 
     private void OnMouseDown()
     {
-        FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, LoadoutScene);
-        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(LoadoutScene.transform.position, 1f);
+        List<string> check = FindObjectOfType<AccessDatabase>().GetAllOwnedModel(FindObjectOfType<UECMainMenuController>().PlayerId);
+        if (check.Count > 0)
+        {
+            FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, LoadoutScene);
+            FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(LoadoutScene.transform.position, 1f);
+        } else
+        {
+            FindObjectOfType<NotificationBoardController>().VoidReturnFunction = MoveToFactory;
+            FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(UECScene.transform.position,
+                "You don't own a fighter yet. Get you first one in the Factory!");
+        }
     }
 
     private void OnMouseExit()
@@ -49,6 +59,11 @@ public class UECEnterSession : MonoBehaviour
         anim.ResetTrigger("Move");
         anim.SetTrigger("Stop");
         FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
+    }
+
+    public void MoveToFactory()
+    {
+        FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, FactoryScene);
     }
     #endregion
 }

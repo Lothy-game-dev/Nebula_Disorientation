@@ -17,6 +17,7 @@ public class ArsenalBuyAction : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    public string PreReqName;
     private Arsenal Ar;
     #endregion
     #region Start & Update
@@ -37,18 +38,32 @@ public class ArsenalBuyAction : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        if (GetComponent<CursorUnallowed>() != null)
+        {
+            if (PreReqName != null && PreReqName != "")
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "You need to own " + PreReqName + " in order to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+            }
+            else
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                    "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+            }
+        } else
         // check the conditions before buying 
         if (Ar.EnoughPrice && Ar.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;
             if (!Ar.IsInSession)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for "+  Ar.RequiredShard + " shard?");
-            } else
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for " + Ar.RequiredShard + " shard?");
+            }
+            else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for " + Ar.RequiredCash + " cash?");
             }
-            
+
         }
         else
         {
@@ -64,8 +79,6 @@ public class ArsenalBuyAction : MonoBehaviour
                 }
             }
         }
-
-
     }
     #endregion
     #region Buy function

@@ -120,8 +120,21 @@ public class FactoryButton : MonoBehaviour
                         break;
                     case "Success":
                         // if success, reload data to UI
-                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                    "Purchase Successfully.\n(Auto closed in 5 seconds)", 5f);
+
+                        List<string> checkList = FindObjectOfType<AccessDatabase>().GetAllOwnedModel(FindObjectOfType<UECMainMenuController>().PlayerId);
+                        if (checkList.Count==1)
+                        {
+                            string checkStr = FindObjectOfType<AccessDatabase>().AddStarterGiftWeapons(FindObjectOfType<UECMainMenuController>().PlayerId);
+                            if (checkStr!="Fail")
+                            {
+                                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+                                "Congrats!\nYou received <color=#36b37e>Pulse Cannon</color> x" + checkStr + " as starter gift!", 5f);
+                            }
+                        } else
+                        {
+                            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
+                            "Purchase Successfully.\n(Auto closed in 5 seconds)", 5f);
+                        }
                         FindObjectOfType<UECMainMenuController>().GetData();
                         break;
                 }

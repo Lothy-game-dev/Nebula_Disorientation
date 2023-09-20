@@ -744,6 +744,119 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
 
+    public string CheckWeaponPowerPrereq(int PlayerID, string ItemName, string Type)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        if (Type == "Weapon")
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT PrereqWeapon FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + ItemName.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            int n = -1;
+            while (dataReader.Read())
+            {
+                if (!dataReader.IsDBNull(0))
+                {
+                    n = dataReader.GetInt32(0);
+                }
+            }
+            if (n == -1)
+            {
+                dbConnection.Close();
+                return "No Prereq";
+            }
+            else
+            {
+                IDbCommand dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE ItemID=" + n + " AND ItemType='Weapon' AND PlayerID=" + PlayerID;
+                IDataReader dataReader2 = dbCommand.ExecuteReader();
+                int k = 0;
+                while (dataReader2.Read())
+                {
+                    if (!dataReader2.IsDBNull(0))
+                    {
+                        k = dataReader2.GetInt32(0);
+                    }
+                }
+                if (k > 0)
+                {
+                    dbConnection.Close();
+                    return "Pass";
+                }
+                else
+                {
+                    IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                    dbCheckCommand2.CommandText = "SELECT WeaponName, TierColor FROM ArsenalWeapon WHERE WeaponID=" + n;
+                    IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
+                    string name = "";
+                    while (dataReader3.Read())
+                    {
+                        name = "<color=" + dataReader3.GetString(1) + ">" + dataReader3.GetString(0) + "</color>";
+                    }
+                    dbConnection.Close();
+                    return name;
+                }
+            }
+        }
+        else if (Type == "Power")
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT PrereqItem FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + ItemName.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            int n = -1;
+            while (dataReader.Read())
+            {
+                if (!dataReader.IsDBNull(0))
+                {
+                    n = dataReader.GetInt32(0);
+                }
+            }
+            if (n == -1)
+            {
+                dbConnection.Close();
+                return "No Prereq";
+            }
+            else
+            {
+                IDbCommand dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE ItemID=" + n + " AND ItemType='Power' AND PlayerID=" + PlayerID;
+                IDataReader dataReader2 = dbCommand.ExecuteReader();
+                int k = 0;
+                while (dataReader2.Read())
+                {
+                    if (!dataReader2.IsDBNull(0))
+                    {
+                        k = dataReader2.GetInt32(0);
+                    }
+                }
+                if (k > 0)
+                {
+                    dbConnection.Close();
+                    return "Pass";
+                }
+                else
+                {
+                    IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                    dbCheckCommand2.CommandText = "SELECT PowerName, TierColor FROM ArsenalPower WHERE PowerID=" + n;
+                    IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
+                    string name = "";
+                    while (dataReader3.Read())
+                    {
+                        name = "<color=" + dataReader3.GetString(1) + ">" + dataReader3.GetString(0) + "</color>";
+                    }
+                    dbConnection.Close();
+                    return name;
+                }
+            }
+        }
+        else return "Unidentified";
+
+    }
+
     public List<string> GetAllWeaponName()
     {
         List<string> list = new List<string>();
@@ -779,6 +892,55 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return list;
+    }
+    
+    public string AddStarterGiftWeapons(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Weapon' AND ItemID=1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int n = 0;
+        while (dataReader.Read())
+        {
+            if (dataReader.IsDBNull(0))
+            {
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (n==0)
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "INSERT INTO PlayerOwnership (PlayerID,ItemType,ItemID,Quantity) VALUES " +
+                "(" + PlayerID + ",'Weapon',1,2)";
+            int check = dbCommand.ExecuteNonQuery();
+            dbConnection.Close();
+            if (check==1)
+            {
+                return "2";
+            } else
+            {
+                return "Fail";
+            }
+        } else if (n==1)
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "UPDATE PlayerOwnership SET Quantity = 2 WHERE " +
+                "PlayerId=" + PlayerID + " AND ItemID=1 AND ItemType='Weapon'";
+            int check = dbCommand.ExecuteNonQuery();
+            dbConnection.Close();
+            if (check==1)
+            {
+                return "1";
+            } else
+            {
+                return "Fail";
+            }
+        } else
+        return "Fail";
     }
     public Dictionary<string, object> GetWeaponDataByName(string name)
     {

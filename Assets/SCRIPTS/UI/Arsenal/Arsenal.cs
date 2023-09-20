@@ -145,15 +145,36 @@ public class Arsenal : UECMenuShared
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
                 else if (CurrentTab == "Power")
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
-                
-            }     
+
+            }
         }
+        // Preq Req
+        if (!isLocked)
+        {
+            string n = FindObjectOfType<AccessDatabase>().CheckWeaponPowerPrereq(FindObjectOfType<UECMainMenuController>().PlayerId, Game.name, CurrentTab);
+            if (n!="No Prereq" && n!="Pass")
+            {
+                isLocked = true;
+                if (CurrentTab=="Weapon")
+                {
+                    Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                } else if (CurrentTab=="Power")
+                {
+                    Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
+                }
+                Game.GetComponent<ArsenalItem>().LockedItem = true;
+                Game.GetComponent<ArsenalItem>().ItemPreReq = n;
+            } 
+        }
+        // Already bought
         if (!isLocked)
         {
             if (CurrentTab == "Weapon")
@@ -164,6 +185,7 @@ public class Arsenal : UECMenuShared
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
             } else if (CurrentTab == "Power")
             {
@@ -173,6 +195,7 @@ public class Arsenal : UECMenuShared
                 {
                     Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                 }
             }
         }
@@ -213,6 +236,7 @@ public class Arsenal : UECMenuShared
                 }
             }
         }
+        ResetDataAfterBuy();
     }
     public void ResetData()
     {
@@ -298,6 +322,115 @@ public class Arsenal : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
         ResetData();
+    }
+    #endregion
+    #region Reset Data After Buy
+    public void ResetDataAfterBuy()
+    {
+        if ("Weapon" == CurrentTab)
+        {
+            DeleteAllChild();
+            //Generate item
+            for (int i = 0; i < WeaponList.Count; i++)
+            {
+                GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                g.name = WeaponList[i][2];
+                g.transform.SetParent(Content.transform);
+                g.transform.localScale = new Vector3(1, 1, 0);
+                g.transform.GetChild(1).GetComponent<TMP_Text>().text = WeaponList[i][2];
+                g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
+                g.GetComponent<ArsenalItem>().Type = "Weapon";
+                g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
+                g.GetComponent<ArsenalItem>().Content = Content;
+                g.GetComponent<ArsenalItem>().ArItemList = WeaponList;
+                if (WeaponList[i][2] == "Star Blaster")
+                {
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
+                }
+                else
+                {
+                    if (WeaponList[i][2].Contains("Nano Flame Thrower"))
+                    {
+                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
+                    }
+                    else
+                    {
+                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
+                    }
+                }
+                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                g.name, "Weapon");
+                if (n != -1)
+                {
+                    if (n >= 2)
+                    {
+                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "2/2";
+                    }
+                    else if (n >= 0)
+                    {
+                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
+                    }
+                }
+                LockItem(g, WeaponList[i][8]);
+                g.SetActive(true);
+                if (i == 0)
+                {
+                    g.GetComponent<ArsenalItem>().ArsenalInformation(WeaponList, "1");
+
+                }
+
+            }
+        }
+        else
+        {
+            if ("Power" == CurrentTab)
+            {
+                DeleteAllChild();
+                //Generate item
+                for (int i = 0; i < PowerList.Count; i++)
+                {
+                    GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                    g.name = PowerList[i][2];
+                    g.transform.SetParent(OtherContent.transform);
+                    g.transform.localScale = new Vector3(1, 1, 0);
+                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = PowerList[i][2];
+                    g.GetComponent<ArsenalItem>().Id = PowerList[i][0];
+                    g.GetComponent<ArsenalItem>().Type = "Power";
+                    g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
+                    g.GetComponent<ArsenalItem>().Content = OtherContent;
+                    g.GetComponent<ArsenalItem>().ArItemList = PowerList;
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerButton.GetComponent<ArsenalButton>()
+                        .PowerImage[PowerButton.GetComponent<ArsenalButton>().PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                    g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                    g.SetActive(true);
+                    LockItem(g, PowerList[i][8]);
+                    if (i == 0)
+                    {
+                        g.GetComponent<ArsenalItem>().ArsenalInformation(PowerList, "1");
+                    }
+                }
+
+            }
+        }
+    }
+
+    public void DeleteAllChild()
+    {
+        // check it is existed before deleting
+        if (OtherContent.transform.childCount > 0)
+        {
+            for (int i = 0; i < OtherContent.transform.childCount; i++)
+            {
+                Destroy(OtherContent.transform.GetChild(i).gameObject);
+            }
+        }
+        if (Content.transform.childCount > 0)
+        {
+            for (int i = 0; i < Content.transform.childCount; i++)
+            {
+                Destroy(Content.transform.GetChild(i).gameObject);
+            }
+        }
     }
     #endregion
 }
