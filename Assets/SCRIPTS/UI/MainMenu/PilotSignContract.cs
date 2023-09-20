@@ -118,7 +118,7 @@ public class PilotSignContract : MonoBehaviour
                 if ("Success".Equals(check2))
                 {
                     FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(ScenePos.transform.position,
-                    "Contract signed successfully!\nEnjoy your adventure in Nebula Disorientation!\n(Auto close in 5 seconds)", 5f);
+                    "CONTRACT SIGNED SUCCESSFULLY.\nMOVING TO THE UEC MAIN HALL IN 5 SECONDS...", 5f);
                 } else if ("No Exist".Equals(check2))
                 {
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
