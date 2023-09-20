@@ -841,6 +841,7 @@ public class AccessDatabase : MonoBehaviour
                 fighterlist.Add(dataReader.GetInt32(5).ToString());
             }
             fighterlist.Add(dataReader.GetString(6));
+            fighterlist.Add(dataReader.GetString(7));
             list.Add(fighterlist);
         }
         dbConnection.Close();
@@ -948,6 +949,7 @@ public class AccessDatabase : MonoBehaviour
             }
             weaplist.Add(dataReader.GetInt32(8).ToString());
             weaplist.Add(dataReader.GetString(9));
+            weaplist.Add(dataReader.GetString(10));
             list.Add(weaplist);
         }
         dbConnection.Close();
@@ -1218,6 +1220,7 @@ public class AccessDatabase : MonoBehaviour
                 ConsuList.Add(dataReader.GetInt32(9).ToString());
             }
             ConsuList.Add(dataReader.GetString(10));
+            ConsuList.Add(dataReader.GetString(11));
             list.Add(ConsuList);
         }
         if (!check) return null;
@@ -1279,6 +1282,16 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             EnemyList.Add(dataReader.GetInt32(0).ToString());
             EnemyList.Add(dataReader.GetString(1));
+            EnemyList.Add(dataReader.GetString(2));
+            EnemyList.Add(dataReader.GetString(3));
+            EnemyList.Add(dataReader.GetString(4));
+            if (dataReader.IsDBNull(5))
+            {
+                EnemyList.Add("N/A");
+            } else
+            {
+                EnemyList.Add(dataReader.GetString(5));
+            }
             EnemyList.Add(dataReader.GetString(6));
             EnemyList.Add(dataReader.GetString(7));
             list.Add(EnemyList);
@@ -1726,6 +1739,104 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
         
+    }
+    #endregion
+    #region Access SpaceStation
+    public List<List<string>> GetAllSpaceStation()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> SpaceStationList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from SpaceStation";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            SpaceStationList = new List<string>();
+            check = true;
+            SpaceStationList.Add(dataReader.GetInt32(0).ToString());
+            SpaceStationList.Add(dataReader.GetString(1));
+            if (dataReader.IsDBNull(2))
+            {
+                SpaceStationList.Add("N/A");
+            }
+            else
+            {
+                SpaceStationList.Add(dataReader.GetString(2));
+            }
+            if (dataReader.IsDBNull(3))
+            {
+                SpaceStationList.Add("N/A");
+            }
+            else
+            {
+                SpaceStationList.Add(dataReader.GetString(3));
+            }
+
+            SpaceStationList.Add(dataReader.GetString(4));
+            list.Add(SpaceStationList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
+    }
+    #endregion
+    #region Access Damage Element
+    public List<List<string>> GetAllDMGElement()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> DMGElementList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from DamageElement";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            DMGElementList = new List<string>();
+            check = true;
+            DMGElementList.Add(dataReader.GetInt32(0).ToString());
+            DMGElementList.Add(dataReader.GetString(1));
+            DMGElementList.Add(dataReader.GetString(2));
+            list.Add(DMGElementList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
+    }
+    #endregion
+    #region Access Attribute
+    public List<List<string>> GetAllAttribute()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> DMGElementList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Attribute";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            DMGElementList = new List<string>();
+            check = true;
+            DMGElementList.Add(dataReader.GetInt32(0).ToString());
+            DMGElementList.Add(dataReader.GetString(1));
+            DMGElementList.Add(dataReader.GetString(2));
+            list.Add(DMGElementList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
     }
     #endregion
 }

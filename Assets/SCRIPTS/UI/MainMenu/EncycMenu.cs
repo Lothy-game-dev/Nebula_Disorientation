@@ -36,6 +36,8 @@ public class EncycMenu : MainMenuSceneShared
     public List<List<string>> ConsumList;
     public List<List<string>> WarshipList;
     public List<List<string>> SStationList;
+    public List<List<string>> DmgElementList;
+    public List<List<string>> AttributeList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -48,7 +50,9 @@ public class EncycMenu : MainMenuSceneShared
         EnemyList = FindAnyObjectByType<AccessDatabase>().GetAllEnemy();
         ConsumList = FindAnyObjectByType<AccessDatabase>().GetAllConsumable();
         WarshipList = FindAnyObjectByType<AccessDatabase>().GetAllWarship();
-        Debug.Log(FighterList.Count);
+        SStationList = FindAnyObjectByType<AccessDatabase>().GetAllSpaceStation();
+        DmgElementList = FindAnyObjectByType<AccessDatabase>().GetAllDMGElement();
+        AttributeList = FindAnyObjectByType<AccessDatabase>().GetAllAttribute();
         for (int i = 0; i < Category.Length; i++)
         {
             GameObject g = Instantiate(CateTemplate, CateTemplate.transform.position, Quaternion.identity);
@@ -73,7 +77,7 @@ public class EncycMenu : MainMenuSceneShared
     
         if ("Weapon".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
         {
-            DeleteAllChild();
+            ResetAll();
             ChangeColorWhenChoosen("Weapon");
             for (int i = 0; i < WeaponList.Count; i++)
             {
@@ -90,7 +94,7 @@ public class EncycMenu : MainMenuSceneShared
         {
             if ("Fighter".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
             {
-                DeleteAllChild();
+                ResetAll();
                 ChangeColorWhenChoosen("Fighter");
                 for (int i = 0; i < FighterList.Count + EnemyList.Count; i++)
                 {
@@ -117,9 +121,9 @@ public class EncycMenu : MainMenuSceneShared
             {
                 if ("WS & SS".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
                 {
-                    DeleteAllChild();
+                    ResetAll();
                     ChangeColorWhenChoosen("WS & SS");
-                    for (int i = 0; i < WarshipList.Count; i++)
+                    for (int i = 0; i < WarshipList.Count + SStationList.Count; i++)
                     {
                         GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
                         game.transform.SetParent(Content.transform);
@@ -132,12 +136,13 @@ public class EncycMenu : MainMenuSceneShared
                             game.name = WarshipList[i][1];
 
                         }
-                        /*else
+                        else
                         {
-                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = ConsumList[i - PowerList.Count][1];
-                            game.GetComponent<EncycButton>().Type = "Consumable";
-                            game.GetComponent<EncycButton>().Id = int.Parse(ConsumList[i - PowerList.Count][0]);
-                        }*/
+                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = SStationList[i - WarshipList.Count][1];
+                            game.GetComponent<EncycButton>().Type = "SpaceStation";
+                            game.GetComponent<EncycButton>().Id = int.Parse(SStationList[i - WarshipList.Count][0]);
+                            game.name = SStationList[i - WarshipList.Count][1];
+                        }
                         game.SetActive(true);
                     }
 
@@ -145,7 +150,7 @@ public class EncycMenu : MainMenuSceneShared
                 {
                     if ("Power & Consumable".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
                     {
-                        DeleteAllChild();
+                        ResetAll();
                         ChangeColorWhenChoosen("Power & Consumable");
                         for (int i = 0; i < PowerList.Count + ConsumList.Count; i++)
                         {
@@ -167,6 +172,24 @@ public class EncycMenu : MainMenuSceneShared
                                 game.name = ConsumList[i - PowerList.Count][1];
                             }
                             game.SetActive(true);
+                        } 
+                    } else
+                    {
+                        if ("Damage Element".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
+                        {
+                            ResetAll();
+                            ChangeColorWhenChoosen("Damage Element");
+                            for (int i = 0; i < DmgElementList.Count; i++)
+                            {
+                                GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                                game.transform.SetParent(Content.transform);
+                                game.transform.localScale = new Vector3(2, 7, 0);
+                                game.transform.GetChild(0).GetComponent<TMP_Text>().text = DmgElementList[i][1];
+                                game.GetComponent<EncycButton>().Type = "DMG";
+                                game.GetComponent<EncycButton>().Id = int.Parse(DmgElementList[i][0]);
+                                game.name = DmgElementList[i][1];
+                                game.SetActive(true);
+                            }
                         }
                     }
                 }
@@ -176,7 +199,7 @@ public class EncycMenu : MainMenuSceneShared
     #endregion
     #region Delete the item before generating a new list
     // Group all function that serve the same algorithm
-    public void DeleteAllChild()
+    public void ResetAll()
     {
         if (Content.transform.childCount > 0)
         {
@@ -187,7 +210,9 @@ public class EncycMenu : MainMenuSceneShared
             ItemName.GetComponent<TMP_Text>().text = "";
             ItemTier.GetComponent<TMP_Text>().text = "";
             ItemImage.GetComponent<SpriteRenderer>().sprite = null;
-           
+            ItemDesc.GetComponent<TMP_Text>().text = "";
+
+
         }
     }
     #endregion
