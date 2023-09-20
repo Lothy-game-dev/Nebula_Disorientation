@@ -40,12 +40,14 @@ public class MainMenuTutorialScene : MainMenuSceneShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        Tutorial.GetData();
     }
 
     public override void EndAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        Tutorial.ResetData();
     }
     #endregion
 }

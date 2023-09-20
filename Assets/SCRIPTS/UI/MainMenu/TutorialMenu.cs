@@ -32,8 +32,7 @@ public class TutorialMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TutorialList = FindAnyObjectByType<AccessDatabase>().GetAllTutorial();
-        GetData();
+        
     }
 
     // Update is called once per frame
@@ -68,6 +67,7 @@ public class TutorialMenu : MonoBehaviour
     #region Generate Data
     public void GetData()
     {
+        TutorialList = FindAnyObjectByType<AccessDatabase>().GetAllTutorial();
         for (int i = 0; i < TutorialList.Count; i++)
         {
             GameObject g = Instantiate(Template, Template.transform.position, Quaternion.identity);
@@ -76,6 +76,11 @@ public class TutorialMenu : MonoBehaviour
             g.transform.localScale = new Vector2(2f, 5.5f);
             g.GetComponentInChildren<TMP_Text>().text = TutorialList[i][1];
             g.GetComponent<TutorialButton>().ItemID = int.Parse(TutorialList[i][0]);
+            g.GetComponent<TutorialButton>().TutorialList = TutorialList;
+            if (i == 0)
+            {
+                g.GetComponent<TutorialButton>().ShowInfo(int.Parse(TutorialList[0][0]));
+            } 
             g.SetActive(true);
         }
     }
@@ -83,6 +88,10 @@ public class TutorialMenu : MonoBehaviour
     #region Reset data
     public void ResetData()
     {
+        for (int i = 1; i < Content.transform.childCount; i++)
+        {
+            Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+        }
         SectionDesc.GetComponent<TMP_Text>().text = "";
         SectionName.GetComponent<TMP_Text>().text = "";
     }
