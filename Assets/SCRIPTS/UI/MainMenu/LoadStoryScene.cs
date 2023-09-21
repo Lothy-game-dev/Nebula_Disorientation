@@ -241,7 +241,7 @@ public class LoadStoryScene : MainMenuSceneShared
                 name = pn.PilotName;
                 rank = pn.PilotRank;
             }
-            string confirmText = "Continue " + rank + " - " + name + "'s contract onward?";
+            string confirmText = rank + "\n" + name + "\nonward?";
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(transform.position,
                 confirmText);
         }
@@ -260,7 +260,7 @@ public class LoadStoryScene : MainMenuSceneShared
             if ("Success".Equals(check2))
             {
                 FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(transform.position,
-                        "Welcome back to Nebula Disorientation, " + pn.PilotName + "!\n(Auto close in 5 seconds)", 5f);
+                        "The people of UEC await you, " + pn.PilotName + ".", 5f);
                 CurrentPressPilot = null;
             }
             else if ("No Exist".Equals(check2))

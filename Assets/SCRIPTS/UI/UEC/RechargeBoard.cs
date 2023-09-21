@@ -53,8 +53,8 @@ public class RechargeBoard : MonoBehaviour
                 "Cannot fetch Pilot's Data!\nPlease log-in again.", 5f);
         } else if ("Success".Equals(check)) {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                "Recharge " + CurrentShardRecharging.ToString() +  " Timeless Shard Successfully!!!" +
-                "\nEnjoy your timeless shard!", 5f);
+                CurrentShardRecharging.ToString() +  "\nTimeless Shards\nSuccessfully Recharged." +
+                "\nEnjoy!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
             Destroy(transform.parent.gameObject);
         }

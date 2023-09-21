@@ -137,7 +137,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                     case "Success":
                                         // if success, reload data to UI
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                                    "Purchase Successfully.\n(Auto closed in 5 seconds)", 5f);
+                                    "Purchase Successfully.\n", 5f);
                                         FindObjectOfType<UECMainMenuController>().GetData();
                                         break;
                                 }
@@ -192,7 +192,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                             case "Success":
                                 // if success, reload data to UI
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "Purchase Successfully.\n(Auto closed in 5 seconds)", 5f);
+                            "Purchase Successfully.\n", 5f);
                                 FindObjectOfType<UECMainMenuController>().GetData();
                                 break;
                         }
@@ -234,7 +234,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                     case "Success":
                         // if success, reload data to UI
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Sold Successfully.\n(Auto closed in 5 seconds)", 5f);
+                    "Sold Successfully.\n", 5f);
                         FindObjectOfType<UECMainMenuController>().GetData();
                         break;
                 }
