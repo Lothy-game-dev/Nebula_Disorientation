@@ -45,6 +45,7 @@ public class LoadOutConsumables : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        GetComponent<Collider2D>().enabled = false;
         for (int i=0;i<Consumables.Length; i++)
         {
             Consumables[i].GetComponent<SpriteRenderer>().sortingOrder = 21;
@@ -250,6 +251,8 @@ public class LoadOutConsumables : MonoBehaviour
                 Consumables[2].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                         = null;
                 Consumables[2].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[2].transform.GetChild(2).gameObject.SetActive(false);
+                Consumables[2].transform.GetChild(3).gameObject.SetActive(true);
                 Consumables[2].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
                 Consumables[2].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
             } else if (CurrentItems.Count == 4)
@@ -266,6 +269,8 @@ public class LoadOutConsumables : MonoBehaviour
                 Consumables[2].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                         = null;
                 Consumables[2].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[2].transform.GetChild(2).gameObject.SetActive(false);
+                Consumables[2].transform.GetChild(3).gameObject.SetActive(true);
                 Consumables[2].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
                 Consumables[2].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
                 if (Scene.GetComponent<LoadoutScene>().Consumables != null &&
@@ -280,6 +285,8 @@ public class LoadOutConsumables : MonoBehaviour
                 Consumables[3].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                         = null;
                 Consumables[3].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[3].transform.GetChild(2).gameObject.SetActive(false);
+                Consumables[3].transform.GetChild(3).gameObject.SetActive(true);
                 Consumables[3].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
                 Consumables[3].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
             }
@@ -292,6 +299,8 @@ public class LoadOutConsumables : MonoBehaviour
                 CurrentItemLimit.Add(1);
                 CurrentItemCount.Add(0);
                 Consumables[2].GetComponent<SpriteRenderer>().color = Color.white;
+                Consumables[2].transform.GetChild(2).gameObject.SetActive(true);
+                Consumables[2].transform.GetChild(3).gameObject.SetActive(false);
             } else if (CurrentItems.Count == 4)
             {
                 if (Scene.GetComponent<LoadoutScene>().Consumables != null &&
@@ -306,6 +315,8 @@ public class LoadOutConsumables : MonoBehaviour
                 Consumables[3].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                         = null;
                 Consumables[3].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[3].transform.GetChild(2).gameObject.SetActive(false);
+                Consumables[3].transform.GetChild(3).gameObject.SetActive(true);
                 Consumables[3].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
                 Consumables[3].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
             }
@@ -317,16 +328,22 @@ public class LoadOutConsumables : MonoBehaviour
                 CurrentItemLimit.Add(1);
                 CurrentItemCount.Add(0);
                 Consumables[2].GetComponent<SpriteRenderer>().color = Color.white;
+                Consumables[2].transform.GetChild(2).gameObject.SetActive(true);
+                Consumables[2].transform.GetChild(3).gameObject.SetActive(false);
                 CurrentItems.Add(null);
                 CurrentItemLimit.Add(1);
                 CurrentItemCount.Add(0);
                 Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+                Consumables[3].transform.GetChild(2).gameObject.SetActive(true);
+                Consumables[3].transform.GetChild(3).gameObject.SetActive(false);
             } else if (CurrentItems.Count == 3)
             {
                 CurrentItems.Add(null);
                 CurrentItemLimit.Add(1);
                 CurrentItemCount.Add(0);
                 Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+                Consumables[3].transform.GetChild(2).gameObject.SetActive(true);
+                Consumables[3].transform.GetChild(3).gameObject.SetActive(false);
             }
         }
     }

@@ -27,7 +27,7 @@ public class LoadOutFighterDemo : MonoBehaviour
     private bool isFocusingWeapon;
     private float initScaleModel;
     private Vector2 ModelInitPos;
-    private int currentNumberOfPower;
+    public int currentNumberOfPower;
     public int currentNumberOfCons;
     #endregion
     #region Start & Update
@@ -109,6 +109,7 @@ public class LoadOutFighterDemo : MonoBehaviour
                 SecondPower.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
                 SecondPower.transform.GetChild(3).GetComponent<LoadOutStatusBoard>().SetData("");
                 SecondPower.transform.GetChild(3).gameObject.SetActive(false);
+                SecondPower.transform.GetChild(4).gameObject.SetActive(true);
                 SecondPower.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 // Chain
                 SecondPower.GetComponent<SpriteRenderer>().color = new Color(125/255f, 125/255f, 125/255f);
@@ -120,6 +121,7 @@ public class LoadOutFighterDemo : MonoBehaviour
                 SecondPower.GetComponent<Collider2D>().enabled = true;
                 SecondPower.GetComponent<LoadOutPowerBar>().SetItem("");
                 SecondPower.transform.GetChild(3).gameObject.SetActive(true);
+                SecondPower.transform.GetChild(4).gameObject.SetActive(false);
                 // Chain
                 SecondPower.GetComponent<SpriteRenderer>().color = Color.white;
             }
