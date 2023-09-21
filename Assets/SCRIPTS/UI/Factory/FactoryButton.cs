@@ -48,7 +48,7 @@ public class FactoryButton : MonoBehaviour
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                "You are not allowed to buy this fighter!", 5f);
+                "Rank requirement not unmet!", 5f);
             }
         }
         else
@@ -67,7 +67,7 @@ public class FactoryButton : MonoBehaviour
             {
                 if (!FactoryController.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement unmet!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement not unmet!", 5f);
                 }
             }
         }
