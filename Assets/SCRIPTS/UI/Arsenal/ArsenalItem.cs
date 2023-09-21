@@ -40,6 +40,7 @@ public class ArsenalItem : MonoBehaviour
     private string TextGenerated;
     public string ItemPreReq;
     public bool IsRanked;
+    public bool IsZeroShard;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -128,24 +129,32 @@ public class ArsenalItem : MonoBehaviour
         {
             CashColor = "grey";
             // check if enough timeless shard
-            if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(ItemID) - 1][6]))
+            if (ItemList[int.Parse(ItemID) - 1][6] == "N.A")
             {
-                ShardColor = "red";
+                ShardColor = "grey";
                 ar.EnoughPrice = false;
-            }
-            else
+            } else
             {
-                if (int.Parse(ar.PShard) == 0)
+                if (int.Parse(ar.PShard) < int.Parse(ItemList[int.Parse(ItemID) - 1][6]))
                 {
-                    ar.EnoughPrice = false;
                     ShardColor = "red";
+                    ar.EnoughPrice = false;
                 }
                 else
                 {
-                    ShardColor = "green";
-                    ar.EnoughPrice = true;
+                    if (int.Parse(ar.PShard) == 0)
+                    {
+                        ar.EnoughPrice = false;
+                        ShardColor = "red";
+                    }
+                    else
+                    {
+                        ShardColor = "green";
+                        ar.EnoughPrice = true;
+                    }
                 }
             }
+            
         }
         //check rank required
         if ((string)ar.PlayerInformation["Rank"] == "Unranked")
@@ -229,6 +238,7 @@ public class ArsenalItem : MonoBehaviour
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
         BuyButton.GetComponent<ArsenalBuyAction>().PreReqName = ItemPreReq;
         BuyButton.GetComponent<ArsenalBuyAction>().isRanked = IsRanked;
+        BuyButton.GetComponent<ArsenalBuyAction>().isZeroShard = IsZeroShard;
     }
     public void StartTextRunning(string text)
     {

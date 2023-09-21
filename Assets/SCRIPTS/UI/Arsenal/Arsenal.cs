@@ -120,12 +120,12 @@ public class Arsenal : UECMenuShared
             {
                 g.GetComponent<ArsenalItem>().ArsenalInformation(WeaponList, "1");
             }
-            LockItem(g, WeaponList[i][8]);
+            LockItem(g, WeaponList[i][8], WeaponList[i][0]);
         }
     }
     #endregion
     #region Locked item will be gray-ed
-    public void LockItem(GameObject Game, string RankId)
+    public void LockItem(GameObject Game, string RankId, string Id)
     {
         int rankId = 0;
         bool isLocked = false;
@@ -158,6 +158,34 @@ public class Arsenal : UECMenuShared
 
             }
         }
+        //If item doesnt have shard value, it cant be buy permanently
+        if (!isLocked)
+        {
+            isLocked = true;
+            if (CurrentTab == "Weapon")
+            {
+                if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
+                {
+                    Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                    Game.GetComponent<ArsenalItem>().LockedItem = true;
+                    Game.GetComponent<ArsenalItem>().IsRanked = false;
+                    Game.GetComponent<ArsenalItem>().IsZeroShard = true;
+                } 
+            }
+            else
+            {
+                if (CurrentTab == "Power")
+                {
+                    if (PowerList[int.Parse(Id) - 1][6] == "N.A")
+                    {
+                        Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                        Game.GetComponent<ArsenalItem>().LockedItem = true;
+                        Game.GetComponent<ArsenalItem>().IsRanked = false;
+                        Game.GetComponent<ArsenalItem>().IsZeroShard = true;
+                    }
+                }
+            }
+        }
         // Preq Req
         if (!isLocked)
         {
@@ -175,6 +203,7 @@ public class Arsenal : UECMenuShared
                 Game.GetComponent<ArsenalItem>().LockedItem = true;
                 Game.GetComponent<ArsenalItem>().ItemPreReq = n;
                 Game.GetComponent<ArsenalItem>().IsRanked = false;
+                Game.GetComponent<ArsenalItem>().IsZeroShard = false;
             } 
         }
         // Already bought
@@ -190,6 +219,7 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
+                    Game.GetComponent<ArsenalItem>().IsZeroShard = false;
                 }
             } else if (CurrentTab == "Power")
             {
@@ -201,6 +231,7 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
+                    Game.GetComponent<ArsenalItem>().IsZeroShard = false;
                 }
             }
         }
@@ -376,7 +407,7 @@ public class Arsenal : UECMenuShared
                         g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
                     }
                 }
-                LockItem(g, WeaponList[i][8]);
+                LockItem(g, WeaponList[i][8], WeaponList[i][0]);
                 g.SetActive(true);
                 if (i == 0)
                 {
@@ -408,7 +439,7 @@ public class Arsenal : UECMenuShared
                         .PowerImage[PowerButton.GetComponent<ArsenalButton>().PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
                     g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
-                    LockItem(g, PowerList[i][8]);
+                    LockItem(g, PowerList[i][8], PowerList[i][0]);
                     if (i == 0)
                     {
                         g.GetComponent<ArsenalItem>().ArsenalInformation(PowerList, "1");
