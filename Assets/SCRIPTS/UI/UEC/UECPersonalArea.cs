@@ -46,5 +46,9 @@ public class UECPersonalArea : MonoBehaviour
         transform.localScale = new Vector3(initScale, initScale, initScale);
         FindObjectOfType<NotificationBoardController>().DestroyCurrentInfoBoard();
     }
+    private void OnMouseDown()
+    {
+        
+    }
     #endregion
 }
