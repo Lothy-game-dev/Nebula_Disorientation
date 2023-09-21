@@ -133,7 +133,7 @@ public class Factory : MonoBehaviour
             if (n>0)
             {
                 isLocked = true;
-                Game.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                Game.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
                 Game.GetComponent<FactoryItem>().LockedItem = true;
                 Game.GetComponent<FactoryItem>().AlreadyPurchased = true;
             }

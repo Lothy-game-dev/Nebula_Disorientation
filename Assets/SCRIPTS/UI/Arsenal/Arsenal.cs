@@ -216,7 +216,7 @@ public class Arsenal : UECMenuShared
                 Game.name, CurrentTab);
                 if (n >= 2)
                 {
-                    Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                    Game.GetComponent<ArsenalItem>().transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
@@ -228,7 +228,7 @@ public class Arsenal : UECMenuShared
                 Game.name, CurrentTab);
                 if (n >= 1)
                 {
-                    Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
+                    Game.GetComponent<ArsenalItem>().transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
