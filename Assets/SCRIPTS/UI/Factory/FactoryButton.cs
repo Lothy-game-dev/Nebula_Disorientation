@@ -62,7 +62,7 @@ public class FactoryButton : MonoBehaviour
         {
             if (!FactoryController.EnoughPrice)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "You dont have enough money!", 5f);
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "insufficient money.", 5f);
             } else
             {
                 if (!FactoryController.RankRequired)
