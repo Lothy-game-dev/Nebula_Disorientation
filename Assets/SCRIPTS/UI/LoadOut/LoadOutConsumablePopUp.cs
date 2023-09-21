@@ -132,6 +132,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
             line.SetActive(true);
         }
         BGWaitTimer = 1f;
+        Background.GetComponent<Collider2D>().enabled = false;
         Background.SetActive(true);
         SetData(ListConsumes, ChosenConsumes);
     }
