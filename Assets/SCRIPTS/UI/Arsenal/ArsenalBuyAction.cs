@@ -83,7 +83,7 @@ public class ArsenalBuyAction : MonoBehaviour
         {
             if (!Ar.EnoughPrice)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "You dont have enough money!", 5f);
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "insufficient money.", 5f);
             }
             else
             {
