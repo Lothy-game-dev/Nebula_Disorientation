@@ -151,10 +151,11 @@ public class FactoryItem : MonoBehaviour
         Fac.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + (string)ItemPrice["Cash"] + "</color>";
         Fac.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         
-        Fac.ItemName = "<color="+ ItemList[int.Parse(ItemID) - 1][6] + ">" + ItemList[int.Parse(ItemID) - 1][1] + "</color>";
+        Fac.ItemName = ItemList[int.Parse(ItemID) - 1][1];
         Fac.ItemPriceCash = (string)ItemPrice["Cash"];
         Fac.ItemPriceShard = (string)ItemPrice["Timeless"];
         Fac.ItemId = int.Parse(ItemList[int.Parse(ItemID) - 1][0]);
+        Fac.ItemTierColor = ItemList[int.Parse(ItemID) - 1][6];
 
         //change the color of buy button if item is locked
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;

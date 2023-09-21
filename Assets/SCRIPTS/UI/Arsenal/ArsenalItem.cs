@@ -181,9 +181,10 @@ public class ArsenalItem : MonoBehaviour
 
         LockItem();
 
-        ar.ItemName = "<color=" + ItemList[int.Parse(ItemID) - 1][9] + ">" + ItemList[int.Parse(ItemID) - 1][2] + "</color>";
+        ar.ItemName = ItemList[int.Parse(ItemID) - 1][2];
         ar.RequiredCash = ItemList[int.Parse(ItemID) - 1][5];
         ar.RequiredShard = ItemList[int.Parse(ItemID) - 1][6];
+        ar.ItemTierColor = ItemList[int.Parse(ItemID) - 1][9];
 
     }
     #endregion

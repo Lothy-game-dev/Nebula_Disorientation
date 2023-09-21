@@ -46,6 +46,7 @@ public class Factory : MonoBehaviour
     public string PShard;
     public Coroutine OldCoroutine;
     public GameObject CurrentChosen;
+    public string ItemTierColor;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
