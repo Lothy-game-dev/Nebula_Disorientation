@@ -109,18 +109,31 @@ public class FactoryItem : MonoBehaviour
                 ShardColor = "green";
                 Fac.EnoughPrice = true;
             }
-        }     
-        // check if have enough cash
-        if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
-        {
-            CashColor = "red";
-            Fac.EnoughPrice = false;
         }
-        else
+        // check if have enough cash
+        if (Fac.EnoughPrice)
         {
-            CashColor = "green";
-            Fac.EnoughPrice = true;
-        }       
+            if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
+            {
+                CashColor = "red";
+                Fac.EnoughPrice = false;
+            }
+            else
+            {
+                CashColor = "green";
+                Fac.EnoughPrice = true;
+            }
+        } else
+        {
+            if (int.Parse(Fac.PCash) < int.Parse((string)ItemPrice["Cash"]))
+            {
+                CashColor = "red";
+            }
+            else
+            {
+                CashColor = "green";
+            }
+        }
         // check rank required
         if ((int)Fac.PlayerInformation["RankId"] < int.Parse((string)RankSys["RankId"]))
         {
