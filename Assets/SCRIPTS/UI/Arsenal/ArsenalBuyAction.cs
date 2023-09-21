@@ -51,7 +51,7 @@ public class ArsenalBuyAction : MonoBehaviour
                 if (isRanked)
                 {
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                        "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+                        "Rank requirement not unmet!", 5f);
                 }
                 else if (PreReqName != null && PreReqName != "")
                 {
@@ -89,7 +89,7 @@ public class ArsenalBuyAction : MonoBehaviour
             {
                 if (!Ar.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Rank requirement unmet!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Rank requirement not unmet!", 5f);
                 }
             }
         }
