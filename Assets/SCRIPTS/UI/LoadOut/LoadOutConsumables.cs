@@ -233,31 +233,101 @@ public class LoadOutConsumables : MonoBehaviour
 
     public void ResetNumberOfConsumable(int n)
     {
-        // For case fighters has 3 and 4 slots
-        if (n==3 && CurrentItems.Count==4)
+        // For case fighters has 2, 3 and 4 slots
+        if (n==2)
         {
-            if (Scene.GetComponent<LoadoutScene>().Consumables!=null &&
-                CurrentItems[3]!=null &&
-                Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[3].name))
+            if (CurrentItems.Count==3)
             {
-                Scene.GetComponent<LoadoutScene>().Consumables.Remove(CurrentItems[3].name);
+                if (Scene.GetComponent<LoadoutScene>().Consumables != null &&
+                CurrentItems[2] != null &&
+                Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[2].name))
+                {
+                    Scene.GetComponent<LoadoutScene>().Consumables.Remove(CurrentItems[2].name);
+                }
+                CurrentItems.RemoveAt(2);
+                CurrentItemLimit.RemoveAt(2);
+                CurrentItemCount.RemoveAt(2);
+                Consumables[2].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                        = null;
+                Consumables[2].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[2].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+                Consumables[2].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
+            } else if (CurrentItems.Count == 4)
+            {
+                if (Scene.GetComponent<LoadoutScene>().Consumables != null &&
+                CurrentItems[2] != null &&
+                Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[2].name))
+                {
+                    Scene.GetComponent<LoadoutScene>().Consumables.Remove(CurrentItems[2].name);
+                }
+                CurrentItems.RemoveAt(2);
+                CurrentItemLimit.RemoveAt(2);
+                CurrentItemCount.RemoveAt(2);
+                Consumables[2].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                        = null;
+                Consumables[2].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[2].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+                Consumables[2].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
+                if (Scene.GetComponent<LoadoutScene>().Consumables != null &&
+                CurrentItems[2] != null &&
+                Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[2].name))
+                {
+                    Scene.GetComponent<LoadoutScene>().Consumables.Remove(CurrentItems[2].name);
+                }
+                CurrentItems.RemoveAt(2);
+                CurrentItemLimit.RemoveAt(2);
+                CurrentItemCount.RemoveAt(2);
+                Consumables[3].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                        = null;
+                Consumables[3].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[3].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+                Consumables[3].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
             }
-            CurrentItems.RemoveAt(3);
-            CurrentItemLimit.RemoveAt(3);
-            CurrentItemCount.RemoveAt(3);
-            Consumables[3].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-                    = null;
-            Consumables[3].transform.GetChild(1).gameObject.SetActive(false);
-            Consumables[3].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
-            // Chain
-            Consumables[3].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
-        } else if (n==4 && CurrentItems.Count == 3)
+        }
+        else if (n==3)
         {
-            CurrentItems.Add(null);
-            CurrentItemLimit.Add(1);
-            CurrentItemCount.Add(0);
-            //Chain
-            Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+            if (CurrentItems.Count==2)
+            {
+                CurrentItems.Add(null);
+                CurrentItemLimit.Add(1);
+                CurrentItemCount.Add(0);
+                Consumables[2].GetComponent<SpriteRenderer>().color = Color.white;
+            } else if (CurrentItems.Count == 4)
+            {
+                if (Scene.GetComponent<LoadoutScene>().Consumables != null &&
+                CurrentItems[3] != null &&
+                Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[3].name))
+                {
+                    Scene.GetComponent<LoadoutScene>().Consumables.Remove(CurrentItems[3].name);
+                }
+                CurrentItems.RemoveAt(3);
+                CurrentItemLimit.RemoveAt(3);
+                CurrentItemCount.RemoveAt(3);
+                Consumables[3].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                        = null;
+                Consumables[3].transform.GetChild(1).gameObject.SetActive(false);
+                Consumables[3].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+                Consumables[3].GetComponent<SpriteRenderer>().color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
+            }
+        } else if (n==4)
+        {
+            if (CurrentItems.Count==2)
+            {
+                CurrentItems.Add(null);
+                CurrentItemLimit.Add(1);
+                CurrentItemCount.Add(0);
+                Consumables[2].GetComponent<SpriteRenderer>().color = Color.white;
+                CurrentItems.Add(null);
+                CurrentItemLimit.Add(1);
+                CurrentItemCount.Add(0);
+                Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+            } else if (CurrentItems.Count == 3)
+            {
+                CurrentItems.Add(null);
+                CurrentItemLimit.Add(1);
+                CurrentItemCount.Add(0);
+                Consumables[3].GetComponent<SpriteRenderer>().color = Color.white;
+            }
         }
     }
 

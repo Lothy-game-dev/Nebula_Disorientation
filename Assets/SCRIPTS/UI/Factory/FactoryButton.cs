@@ -110,14 +110,20 @@ public class FactoryButton : MonoBehaviour
                     case "Not Exist":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
                     "Can not fetch data about your pilot.\nplease contact our email.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            FactoryController.ItemName, "Model", 1);
                         break;
                     case "Not Enough Cash":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
                     "You don't have enough cash!\nPlease get some more.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            FactoryController.ItemName, "Model", 1);
                         break;
                     case "Not Enough Shard":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
                     "You don't have enough timeless shard!\nPlease get some more.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            FactoryController.ItemName, "Model", 1);
                         break;
                     case "Fail":
                         // if reduce currency fail, reduce ownership

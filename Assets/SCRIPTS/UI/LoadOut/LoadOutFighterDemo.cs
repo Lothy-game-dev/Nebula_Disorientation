@@ -100,7 +100,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         // power slot
         if (int.Parse((string)statsDict["SP"])>=1)
         {
-            if (int.Parse((string)statsDict["SP"]) == 1 && currentNumberOfPower == 2)
+            if (int.Parse((string)statsDict["SP"]) == 1 && currentNumberOfPower !=1)
             {
                 Scene.GetComponent<LoadoutScene>().SecondPower = "";
                 currentNumberOfPower = 1;
@@ -113,7 +113,7 @@ public class LoadOutFighterDemo : MonoBehaviour
                 // Chain
                 SecondPower.GetComponent<SpriteRenderer>().color = new Color(125/255f, 125/255f, 125/255f);
             }
-            else if (int.Parse((string)statsDict["SP"]) == 2 && currentNumberOfPower == 1)
+            else if (int.Parse((string)statsDict["SP"]) == 2 && currentNumberOfPower !=2)
             {
                 currentNumberOfPower = 2;
                 SecondPower.GetComponent<LoadOutPowerBar>().enabled = true;
@@ -129,14 +129,19 @@ public class LoadOutFighterDemo : MonoBehaviour
                 "Cannot fetch fighter's power slot datas!\nPlease try again!", 5f);
         }
         // Consumable slot
-        if (int.Parse((string)statsDict["SC"]) >= 3)
+        if (int.Parse((string)statsDict["SC"]) >= 2)
         {
-            if (int.Parse((string)statsDict["SC"]) == 3 && currentNumberOfCons == 4)
+            if (int.Parse((string)statsDict["SC"]) == 2 && currentNumberOfCons != 2)
+            {
+                currentNumberOfCons = 2;
+                Consumable.GetComponent<LoadOutConsumables>().ResetNumberOfConsumable(2);
+            }
+            else if (int.Parse((string)statsDict["SC"]) == 3 && currentNumberOfCons !=3)
             {
                 currentNumberOfCons = 3;
                 Consumable.GetComponent<LoadOutConsumables>().ResetNumberOfConsumable(3);
             }
-            else if (int.Parse((string)statsDict["SC"]) == 4 && currentNumberOfCons == 3)
+            else if (int.Parse((string)statsDict["SC"]) == 4 && currentNumberOfCons !=4)
             {
                 currentNumberOfCons = 4;
                 Consumable.GetComponent<LoadOutConsumables>().ResetNumberOfConsumable(4);

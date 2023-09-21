@@ -84,7 +84,10 @@ public class NotificationBoardController : MonoBehaviour
         }
         if (autoCloseTimer>0)
         {
-            Destroy(go.transform.parent.gameObject, autoCloseTimer);
+            if (go.transform.parent.gameObject!=null)
+            {
+                Destroy(go.transform.parent.gameObject, autoCloseTimer);
+            }
         }
     }
 

@@ -155,14 +155,20 @@ public class ArsenalBuyAction : MonoBehaviour
                     case "Not Exist":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Can not fetch data about your pilot.\nplease contact our email.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Not Enough Cash":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You don't have enough cash!\nPlease get some more.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Not Enough Shard":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You don't have enough timeless shard!\nPlease get some more.", 5f);
+                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Fail":
                         // if reduce currency fail, reduce ownership
