@@ -147,7 +147,7 @@ public class FactoryButton : MonoBehaviour
                         } else
                         {
                             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                            "Purchase Successfully.", 5f);
+                            "Purchased Successfully.", 5f);
                         }
                         FindObjectOfType<UECMainMenuController>().GetData();
                         break;
