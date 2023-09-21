@@ -48,14 +48,14 @@ public class FactoryButton : MonoBehaviour
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                "You are not allowed to buy this fighter!", 5f);
+                "Rank requirement not unmet!", 5f);
             }
         }
         else
         if (FactoryController.EnoughPrice && FactoryController.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyFighterModel;
-            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Are you sure you wanna buy " + FactoryController.ItemName + " for " + FactoryController.ItemPriceCash + " cash and " + FactoryController.ItemPriceShard + " shard?");
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Purchase\n" + FactoryController.ItemName + "\nfor \n" + FactoryController.ItemPriceCash + " <sprite index='3'> & " + FactoryController.ItemPriceShard + " <sprite index='0'> ?");
 
         }
         else
@@ -67,7 +67,7 @@ public class FactoryButton : MonoBehaviour
             {
                 if (!FactoryController.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement unmet!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement not unmet!", 5f);
                 }
             }
         }

@@ -70,7 +70,7 @@ public class Factory : MonoBehaviour
             GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
             g.name = FighterList[i][1];
             g.transform.SetParent(Content.transform);
-            g.transform.GetChild(1).GetComponent<TMP_Text>().text = FighterList[i][1];
+            g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + FighterList[i][6].ToUpper() + ">" + FighterList[i][1] + "</color>";
             g.transform.localScale = new Vector2(1, 1);
             g.GetComponent<FactoryItem>().Id = FighterList[i][0];
             g.GetComponent<FactoryItem>().ItemStatusList = FighterStatus;

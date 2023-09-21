@@ -81,7 +81,7 @@ public class Arsenal : UECMenuShared
             g.name = WeaponList[i][2];
             g.transform.SetParent(Content.transform);
             g.transform.localScale = new Vector3(1, 1, Item.transform.position.z);
-            g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + WeaponList[i][9].ToUpper() + ">" + WeaponList[i][2] + "</color>";
+            g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + WeaponList[i][9].ToUpper()+ ">" + WeaponList[i][2] + "</color>";
             g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
             g.GetComponent<ArsenalItem>().Type = "Weapon";
             g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
