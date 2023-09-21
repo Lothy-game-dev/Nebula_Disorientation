@@ -1512,7 +1512,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT * FROM RankSystem WHERE RankId=" + id + "";
+        dbCheckCommand.CommandText = "SELECT * FROM RankSystem WHERE RankId=" + id;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check1 = false;
         if (id == 0)
