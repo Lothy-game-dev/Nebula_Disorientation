@@ -68,7 +68,7 @@ public class ArsenalButton : MonoBehaviour
                 g.name = ArsenalController.WeaponList[i][2];
                 g.transform.SetParent(Content.transform);
                 g.transform.localScale = new Vector3(1, 1, 0);
-                g.transform.GetChild(1).GetComponent<TMP_Text>().text = ArsenalController.WeaponList[i][2];
+                g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + ArsenalController.WeaponList[i][9].ToUpper() + ">" + ArsenalController.WeaponList[i][2] + "</color>";
                 g.GetComponent<ArsenalItem>().Id = ArsenalController.WeaponList[i][0];
                 g.GetComponent<ArsenalItem>().Type = "Weapon";
                 g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
@@ -134,13 +134,13 @@ public class ArsenalButton : MonoBehaviour
                     g.name = ArsenalController.PowerList[i][2];
                     g.transform.SetParent(Content.transform);
                     g.transform.localScale = new Vector3(1, 1, 0);
-                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = ArsenalController.PowerList[i][2];
+                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + ArsenalController.PowerList[i][9].ToUpper() + ">" + ArsenalController.PowerList[i][2] + "</color>";
                     g.GetComponent<ArsenalItem>().Id = ArsenalController.PowerList[i][0];
                     g.GetComponent<ArsenalItem>().Type = "Power";
                     g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
                     g.GetComponent<ArsenalItem>().Content = Content;
                     g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.PowerList;
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower() == (item.name.ToLower()))].sprite;
                     g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
                     ArsenalController.LockItem(g, ArsenalController.PowerList[i][8], ArsenalController.PowerList[i][0]);

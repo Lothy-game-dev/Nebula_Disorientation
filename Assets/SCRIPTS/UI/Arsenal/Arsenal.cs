@@ -81,7 +81,7 @@ public class Arsenal : UECMenuShared
             g.name = WeaponList[i][2];
             g.transform.SetParent(Content.transform);
             g.transform.localScale = new Vector3(1, 1, Item.transform.position.z);
-            g.transform.GetChild(1).GetComponent<TMP_Text>().text = WeaponList[i][2];
+            g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + WeaponList[i][9].ToUpper() + ">" + WeaponList[i][2] + "</color>";
             g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
             g.GetComponent<ArsenalItem>().Type = "Weapon";
             g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
@@ -161,11 +161,11 @@ public class Arsenal : UECMenuShared
         //If item doesnt have shard value, it cant be buy permanently
         if (!isLocked)
         {
-            isLocked = true;
             if (CurrentTab == "Weapon")
             {
                 if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
                 {
+                    isLocked = true;
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
@@ -178,6 +178,7 @@ public class Arsenal : UECMenuShared
                 {
                     if (PowerList[int.Parse(Id) - 1][6] == "N.A")
                     {
+                        isLocked = true;
                         Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                         Game.GetComponent<ArsenalItem>().LockedItem = true;
                         Game.GetComponent<ArsenalItem>().IsRanked = false;
@@ -373,7 +374,7 @@ public class Arsenal : UECMenuShared
                 g.name = WeaponList[i][2];
                 g.transform.SetParent(Content.transform);
                 g.transform.localScale = new Vector3(1, 1, 0);
-                g.transform.GetChild(1).GetComponent<TMP_Text>().text = WeaponList[i][2];
+                g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + WeaponList[i][9].ToUpper() + ">" + WeaponList[i][2] + "</color>";
                 g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
                 g.GetComponent<ArsenalItem>().Type = "Weapon";
                 g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
@@ -429,14 +430,14 @@ public class Arsenal : UECMenuShared
                     g.name = PowerList[i][2];
                     g.transform.SetParent(OtherContent.transform);
                     g.transform.localScale = new Vector3(1, 1, 0);
-                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = PowerList[i][2];
+                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + PowerList[i][9].ToUpper() + ">" + PowerList[i][2] + "</color>";
                     g.GetComponent<ArsenalItem>().Id = PowerList[i][0];
                     g.GetComponent<ArsenalItem>().Type = "Power";
                     g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
                     g.GetComponent<ArsenalItem>().Content = OtherContent;
                     g.GetComponent<ArsenalItem>().ArItemList = PowerList;
                     g.transform.GetChild(0).GetComponent<Image>().sprite = PowerButton.GetComponent<ArsenalButton>()
-                        .PowerImage[PowerButton.GetComponent<ArsenalButton>().PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                        .PowerImage[PowerButton.GetComponent<ArsenalButton>().PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower() == (item.name.ToLower()))].sprite;
                     g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
                     LockItem(g, PowerList[i][8], PowerList[i][0]);
