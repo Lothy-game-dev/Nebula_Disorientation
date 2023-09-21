@@ -45,7 +45,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
             {
                 FindObjectOfType<NotificationBoardController>().VoidReturnFunction = PerformBuySell;
                 FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
-                    "Do you want to buy " + Quantity + " " + ItemName + " For " + CurrentValue + " Cash?");
+                    "Buy " + Quantity + " " + ItemName + "\nFor " + CurrentValue + " Cash?");
             } else
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
@@ -55,7 +55,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
         {
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = PerformBuySell;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
-                "Do you want to sell " + Quantity + " " + ItemName + " For " + CurrentValue + " Cash?");
+                "sell " + Quantity + "\n" + ItemName + "\nFor " + CurrentValue + " Cash?");
         }
     }
 

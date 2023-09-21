@@ -71,11 +71,11 @@ public class ArsenalBuyAction : MonoBehaviour
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;
             if (!Ar.IsInSession)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for " + Ar.RequiredShard + " shard?");
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "purchase\n" + Ar.ItemName + "\nfor\n " + Ar.RequiredShard + " shard?");
             }
             else
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "Are you sure you wanna buy " + Ar.ItemName + " for " + Ar.RequiredCash + " cash?");
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "purchase\n" + Ar.ItemName + "\nfor\n " + Ar.RequiredCash + " cash?");
             }
 
         }
