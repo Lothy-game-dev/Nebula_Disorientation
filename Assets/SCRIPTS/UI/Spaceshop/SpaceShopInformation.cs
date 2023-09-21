@@ -89,7 +89,7 @@ public class SpaceShopInformation : MonoBehaviour
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().text =
-            "Buy (" + (Price * int.Parse(InputField.text)).ToString() + " <sprite index='0'>)";
+            "Buy (" + (Price * int.Parse(InputField.text)).ToString() + " <sprite index='3'>)";
         BuyButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemNameNoColor = (string)DataDictionary["Name"];
@@ -105,7 +105,7 @@ public class SpaceShopInformation : MonoBehaviour
             SellButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
             SellButton.GetComponent<SpriteRenderer>().color = Color.green;
             SellButton.transform.GetChild(0).GetComponent<TextMeshPro>().text =
-                "Sell (" + (Price * int.Parse(InputField.text) / 2).ToString() + " <sprite index='0'>)";
+                "Sell (" + (Price * int.Parse(InputField.text) / 2).ToString() + " <sprite index='3'>)";
             SellButton.GetComponent<SpaceShopBuySellButton>().CurrentValue = Price * int.Parse(InputField.text) / 2;
             SellButton.GetComponent<SpaceShopBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
             SellButton.GetComponent<SpaceShopBuySellButton>().ItemNameNoColor = (string)DataDictionary["Name"];
