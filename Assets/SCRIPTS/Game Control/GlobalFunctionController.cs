@@ -44,11 +44,11 @@ public class GlobalFunctionController : MonoBehaviour
         {
             OH = OH.Replace("OH-", "");
             string[] listOH = OH.Split(",");
-            if (listOH.Length==3)
+            if (listOH.Length == 3)
             {
                 finalString += "<b>Overheat:  </b><i>" + listOH[0] + " | " + listOH[1] + " | " + listOH[2] + "</i>\n";
             }
-            else if (listOH.Length==1)
+            else if (listOH.Length == 1)
             {
                 finalString += "<b>Overheat:  </b><i>" + listOH[0] + "</i>\n";
             } else
@@ -109,10 +109,10 @@ public class GlobalFunctionController : MonoBehaviour
         {
             R = R.Replace("R-", "");
             string[] ranges = R.Split("-");
-            if (ranges.Length==1)
+            if (ranges.Length == 1)
             {
                 finalString += "<b>Range:  </b><i>" + ranges[0] + "</i>\n";
-            } else if (ranges.Length==2)
+            } else if (ranges.Length == 2)
             {
                 finalString += "<b>Range:  </b><i>" + ranges[0] + "-" + ranges[1] + "</i>\n";
             } else
@@ -129,7 +129,7 @@ public class GlobalFunctionController : MonoBehaviour
     public Dictionary<string, object> ConvertWeaponStatsToDictionary(string stats)
     {
         string[] StatList = stats.Split("|");
-        Dictionary<string,object> finalString = new Dictionary<string, object>();
+        Dictionary<string, object> finalString = new Dictionary<string, object>();
         //Overheat
         string OH = StatList[0];
         if (OH.Contains("OH"))
@@ -231,7 +231,7 @@ public class GlobalFunctionController : MonoBehaviour
     {
         string[] StatList = stats.Split("|");
         string finalString = "";
-        if (StatList.Length==3)
+        if (StatList.Length == 3)
         {
             if (StatList[0].Contains("BR-"))
             {
@@ -253,17 +253,17 @@ public class GlobalFunctionController : MonoBehaviour
             {
                 string DC = StatList[2].Replace("DC-", "");
                 string[] DCstats = DC.Split(",");
-                if (DCstats[0]=="0")
+                if (DCstats[0] == "0")
                 {
                     finalString += "Cooldown: " + DCstats[1] + "s\n";
                 } else
-                finalString += "Duration: " + DCstats[0] + "s\nCooldown: " + DCstats[1] + "s\n";
+                    finalString += "Duration: " + DCstats[0] + "s\nCooldown: " + DCstats[1] + "s\n";
             }
             else
             {
                 finalString += StatList[2];
             }
-        } else if (StatList.Length==2)
+        } else if (StatList.Length == 2)
         {
             // BR
             if (StatList[0].Contains("BR-x"))
@@ -296,7 +296,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[0].Contains("DPH-"))
             {
                 string DPH = StatList[0].Replace("DPH-", "");
-                if (DPH!="null")
+                if (DPH != "null")
                 {
                     finalString += "Damage Per Hit: " + DPH + "\n";
                 }
@@ -309,7 +309,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[1].Contains("AoH-"))
             {
                 string AoH = StatList[1].Replace("AoH-", "");
-                if (AoH!="null")
+                if (AoH != "null")
                 {
                     finalString += "Amount Of Hit: " + AoH + "\n";
                 }
@@ -322,7 +322,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[2].Contains("AoE-"))
             {
                 string AoE = StatList[2].Replace("AoE-", "");
-                if (AoE!="null")
+                if (AoE != "null")
                 {
                     finalString += "Area of Effect: " + AoE + "\n";
                 }
@@ -335,7 +335,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[3].Contains("V-"))
             {
                 string V = StatList[3].Replace("V-", "");
-                if (V!="null")
+                if (V != "null")
                 {
                     finalString += "Velocity: " + V + "\n";
                 }
@@ -348,7 +348,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[4].Contains("R-"))
             {
                 string R = StatList[4].Replace("R-", "");
-                if (R!="null")
+                if (R != "null")
                 {
                     finalString += "Range: " + R + "\n";
                 }
@@ -380,7 +380,7 @@ public class GlobalFunctionController : MonoBehaviour
     public Dictionary<string, object> ConvertPowerStatsToDictionary(string stats)
     {
         string[] StatList = stats.Split("|");
-        Dictionary<string,object> finalString = new Dictionary<string, object>();
+        Dictionary<string, object> finalString = new Dictionary<string, object>();
         if (StatList.Length == 3)
         {
             if (StatList[0].Contains("BR-"))
@@ -405,7 +405,7 @@ public class GlobalFunctionController : MonoBehaviour
                 string[] DCstats = DC.Split(",");
                 if (DCstats[0] == "0")
                 {
-                    
+
                     finalString.Add("CD", DCstats[1] + "s");
                 }
                 else
@@ -414,7 +414,7 @@ public class GlobalFunctionController : MonoBehaviour
                     finalString.Add("CD", DCstats[1] + "s");
 
                 }
-                    
+
             }
             else
             {
@@ -532,10 +532,10 @@ public class GlobalFunctionController : MonoBehaviour
                 }
                 else
                 {
-                finalString.Add("Dur", DCstats[0] + "s");
-                finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("Dur", DCstats[0] + "s");
+                    finalString.Add("CD", DCstats[1] + "s");
                 }
-                    
+
             }
             else
             {
@@ -580,7 +580,7 @@ public class GlobalFunctionController : MonoBehaviour
         if (ROT.Contains("ROT-"))
         {
             ROT = ROT.Replace("ROT-", "");
-            StatsDictionary.Add("ROT", (float.Parse(ROT)*120).ToString());
+            StatsDictionary.Add("ROT", (float.Parse(ROT) * 120).ToString());
         }
         else
         {
@@ -666,10 +666,10 @@ public class GlobalFunctionController : MonoBehaviour
         string final = "";
         if (Effect.Contains("RED-"))
         {
-            Effect = Effect.Replace("RED-","");
+            Effect = Effect.Replace("RED-", "");
             final = "Reduce Damage received of <color=\"blue\"><b>Barrier</b></color> by " + Effect
                 + "% for " + Duration.ToString() + " seconds.";
-        } 
+        }
         else if (Effect.Contains("AER-"))
         {
             Effect = Effect.Replace("AER-", "");
@@ -693,12 +693,12 @@ public class GlobalFunctionController : MonoBehaviour
         return final;
     }
 
-    public Dictionary<string,string> ConvertDictionaryDataToOutputCons(Dictionary<string,object> datas)
+    public Dictionary<string, string> ConvertDictionaryDataToOutputCons(Dictionary<string, object> datas)
     {
-        Dictionary<string,string> output = new Dictionary<string,string>();
+        Dictionary<string, string> output = new Dictionary<string, string>();
         output.Add("Name", "<color=" + (string)datas["Color"] + ">" + (string)datas["Name"] + "</color>");
         output.Add("Rarity", "<color=" + (string)datas["Color"] + ">"
-            + (((string)datas["Color"]).Equals("#36b37e") ? "Common" : 
+            + (((string)datas["Color"]).Equals("#36b37e") ? "Common" :
             ((string)datas["Color"]).Equals("#4c9aff") ? "Uncommon" : "Rare") + "</color>");
         output.Add("Description", (string)datas["Description"]);
         string final = "";
@@ -731,7 +731,7 @@ public class GlobalFunctionController : MonoBehaviour
         output.Add("Duration", "Duration: " + (int)datas["Duration"] + " seconds.");
         output.Add("Stack", "Max Stack: " + (int)datas["Stack"] + " Per Session.");
         output.Add("Price", ((int)datas["Price"]).ToString());
-        output.Add("Cooldown", "Cooldown: " + ((int)datas["Cooldown"]==0? "No cooldown." : 
+        output.Add("Cooldown", "Cooldown: " + ((int)datas["Cooldown"] == 0 ? "No cooldown." :
             (int)datas["Cooldown"]) + " seconds.");
         output.Add("Stock", ((int)datas["StockPerDay"]).ToString());
         return output;
@@ -748,6 +748,31 @@ public class GlobalFunctionController : MonoBehaviour
             ModelPrice.Add("Timeless", NewPrice[1]);
         }
         return ModelPrice;
+    }
+    #endregion
+    #region Convert Currency To Icons
+    public string ConvertToIcon(string Currency)
+    {
+        if ("timelessshard".Equals(Currency.Replace(" ", "").ToLower())
+            || "shard".Equals(Currency.Replace(" ", "").ToLower()))
+        {
+            return "<sprite index='0'>";
+        }
+        else if ("fuelenergy".Equals(Currency.Replace(" ", "").ToLower()))
+        {
+            return "<sprite index='1'>";
+        }
+        else if ("fuelcell".Equals(Currency.Replace(" ", "").ToLower())
+            || "cell".Equals(Currency.Replace(" ", "").ToLower())
+            || "fuel".Equals(Currency.Replace(" ", "").ToLower()))
+        {
+            return "<sprite index='2'>";
+        }
+        else if ("cash".Equals(Currency.Replace(" ", "").ToLower()))
+        {
+            return "<sprite index='3'>";
+        }
+        else return Currency;
     }
     #endregion
 }

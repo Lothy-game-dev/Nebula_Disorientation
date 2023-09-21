@@ -49,7 +49,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
             } else
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Not enough cash for this transaction!\nPlease get some more!", 5f);
+                    "Not enough <sprite index='3'> for this transaction!\nPlease get some more!", 5f);
             }
         } else if ("Sell".Equals(name))
         {
@@ -92,7 +92,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                         else if ("Full".Equals(checkCell))
                         {
                             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "Your Fuel Capacity is maxed out.\nCan't purchase another Cell.", 5f);
+                            "Your <sprite index='2'> Capacity is maxed out.\nCan't purchase another <sprite index='2'>.", 5f);
                         }
                         else if ("Fail".Equals(checkCell))
                         {
@@ -121,11 +121,11 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                         break;
                                     case "Not Enough Cash":
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                                    "You don't have enough cash!\nPlease get some more.", 5f);
+                                    "You don't have enough <sprite index='3'>!\nPlease get some more.", 5f);
                                         break;
                                     case "Not Enough Shard":
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                                    "You don't have enough timeless shard!\nPlease get some more.", 5f);
+                                    "You don't have enough <sprite index='0'>!\nPlease get some more.", 5f);
                                         break;
                                     case "Fail":
                                         // if reduce currency fail, reduce ownership
@@ -137,7 +137,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                     case "Success":
                                         // if success, reload data to UI
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                                    "Purchase Successfully.\n", 5f);
+                                    "Purchased Successfully.\n", 5f);
                                         FindObjectOfType<UECMainMenuController>().GetData();
                                         break;
                                 }
@@ -146,7 +146,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                     } else
                     {
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "Your Fuel Capacity is maxed out.\nCan't purchase another Cell.", 5f);
+                            "Your Fuel Capacity is maxed out.\nCan't purchase another <sprite index='2'>.", 5f);
                     }
                 }
                 else
@@ -176,11 +176,11 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                 break;
                             case "Not Enough Cash":
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "You don't have enough cash!\nPlease get some more.", 5f);
+                            "You don't have enough <sprite index='3'>!\nPlease get some more.", 5f);
                                 break;
                             case "Not Enough Shard":
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "You don't have enough timeless shard!\nPlease get some more.", 5f);
+                            "You don't have enough <sprite index='0'>!\nPlease get some more.", 5f);
                                 break;
                             case "Fail":
                                 // if reduce currency fail, reduce ownership
@@ -192,7 +192,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                             case "Success":
                                 // if success, reload data to UI
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "Purchase Successfully.\n", 5f);
+                            "Purchased Successfully.\n", 5f);
                                 FindObjectOfType<UECMainMenuController>().GetData();
                                 break;
                         }

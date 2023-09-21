@@ -144,7 +144,7 @@ public class LoadOutConsumables : MonoBehaviour
         {
             // If the item has already exist and cannot be added anymore
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "You have already add this item to its maximum stack!", 5f);
+                "Cannot bring anymore of this item!", 5f);
             return -1;
         } else
         {

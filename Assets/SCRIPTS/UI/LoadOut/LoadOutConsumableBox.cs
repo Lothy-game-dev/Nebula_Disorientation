@@ -42,7 +42,7 @@ public class LoadOutConsumableBox : MonoBehaviour
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "You have run out of this items!\nPlease get some more!", 5f);
+                "Item ran out!\nVisit the space shop to get some more!", 5f);
         }
     }
 
