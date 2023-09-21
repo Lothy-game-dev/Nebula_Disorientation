@@ -49,9 +49,9 @@ public class CursorController : MonoBehaviour
                     if (hit.collider.gameObject.GetComponent<CursorUnallowed>()!=null)
                     {
                         check = "Unallowed";
+                        break;
                     } else 
                     check = "Click";
-                    break;
                 }
             }
             // Change cursor image based on result

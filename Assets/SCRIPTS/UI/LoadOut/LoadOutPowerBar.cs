@@ -26,13 +26,17 @@ public class LoadOutPowerBar : MonoBehaviour
     void OnEnable()
     {
         // Initialize variables
-        PopUpInitScale = PopUp.transform.localScale.x;
         currentChosen = "";
         StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(currentChosen);
         if (PopUp.activeSelf)
         {
             PopUp.GetComponent<LoadOutPowerPopUp>().ClosePopUp();
         }
+    }
+
+    private void Awake()
+    {
+        PopUpInitScale = PopUp.transform.localScale.x;
     }
 
     // Update is called once per frame

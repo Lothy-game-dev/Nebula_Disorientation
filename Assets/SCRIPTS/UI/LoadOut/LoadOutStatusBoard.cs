@@ -85,8 +85,8 @@ public class LoadOutStatusBoard : MonoBehaviour
         else
         {
             ItemName = "!!!ERROR!!!";
-            ItemDescription = "404! Can not found Data related to this " + Type + "!";
-            ItemStats = "404! Can not found Data related to this " + Type + "!";
+            ItemDescription = "NO INFO YET!";
+            ItemStats = "404!!! CANNOT FETCH DATA ABOUT THIS ITEM!";
         }
         // Retrieve Data
         if (Type.Equals("Weapon"))
@@ -100,12 +100,15 @@ public class LoadOutStatusBoard : MonoBehaviour
             }
         } else if (Type.Equals("Power"))
         {
-            Dictionary<string, object> listData = ad.GetPowerDataByName(Item);
-            if (listData != null)
+            if (Item!=null)
             {
-                ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>\n" + (string)listData["Type"];
-                ItemDescription = (string)listData["Description"];
-                ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertPowerStatsToString((string)listData["Stats"]);
+                Dictionary<string, object> listData = ad.GetPowerDataByName(Item);
+                if (listData != null)
+                {
+                    ItemName = "<color=" + (string)listData["Color"] + ">" + (string)listData["Name"] + "</color>\n" + (string)listData["Type"];
+                    ItemDescription = (string)listData["Description"];
+                    ItemStats = FindObjectOfType<GlobalFunctionController>().ConvertPowerStatsToString((string)listData["Stats"]);
+                }
             }
         }
         NameText.GetComponent<TextMeshPro>().text = ItemName;

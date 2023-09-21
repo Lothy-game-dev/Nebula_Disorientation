@@ -27,7 +27,7 @@ public class LoadOutFighterDemo : MonoBehaviour
     private bool isFocusingWeapon;
     private float initScaleModel;
     private Vector2 ModelInitPos;
-    private int currentNumberOfPower;
+    public int currentNumberOfPower;
     public int currentNumberOfCons;
     #endregion
     #region Start & Update
@@ -100,7 +100,7 @@ public class LoadOutFighterDemo : MonoBehaviour
         // power slot
         if (int.Parse((string)statsDict["SP"])>=1)
         {
-            if (int.Parse((string)statsDict["SP"]) == 1 && currentNumberOfPower == 2)
+            if (int.Parse((string)statsDict["SP"]) == 1 && currentNumberOfPower !=1)
             {
                 Scene.GetComponent<LoadoutScene>().SecondPower = "";
                 currentNumberOfPower = 1;
@@ -109,17 +109,19 @@ public class LoadOutFighterDemo : MonoBehaviour
                 SecondPower.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
                 SecondPower.transform.GetChild(3).GetComponent<LoadOutStatusBoard>().SetData("");
                 SecondPower.transform.GetChild(3).gameObject.SetActive(false);
+                SecondPower.transform.GetChild(4).gameObject.SetActive(true);
                 SecondPower.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 // Chain
                 SecondPower.GetComponent<SpriteRenderer>().color = new Color(125/255f, 125/255f, 125/255f);
             }
-            else if (int.Parse((string)statsDict["SP"]) == 2 && currentNumberOfPower == 1)
+            else if (int.Parse((string)statsDict["SP"]) == 2 && currentNumberOfPower !=2)
             {
                 currentNumberOfPower = 2;
                 SecondPower.GetComponent<LoadOutPowerBar>().enabled = true;
                 SecondPower.GetComponent<Collider2D>().enabled = true;
                 SecondPower.GetComponent<LoadOutPowerBar>().SetItem("");
                 SecondPower.transform.GetChild(3).gameObject.SetActive(true);
+                SecondPower.transform.GetChild(4).gameObject.SetActive(false);
                 // Chain
                 SecondPower.GetComponent<SpriteRenderer>().color = Color.white;
             }
@@ -129,14 +131,19 @@ public class LoadOutFighterDemo : MonoBehaviour
                 "Cannot fetch fighter's power slot datas!\nPlease try again!", 5f);
         }
         // Consumable slot
-        if (int.Parse((string)statsDict["SC"]) >= 3)
+        if (int.Parse((string)statsDict["SC"]) >= 2)
         {
-            if (int.Parse((string)statsDict["SC"]) == 3 && currentNumberOfCons == 4)
+            if (int.Parse((string)statsDict["SC"]) == 2 && currentNumberOfCons != 2)
+            {
+                currentNumberOfCons = 2;
+                Consumable.GetComponent<LoadOutConsumables>().ResetNumberOfConsumable(2);
+            }
+            else if (int.Parse((string)statsDict["SC"]) == 3 && currentNumberOfCons !=3)
             {
                 currentNumberOfCons = 3;
                 Consumable.GetComponent<LoadOutConsumables>().ResetNumberOfConsumable(3);
             }
-            else if (int.Parse((string)statsDict["SC"]) == 4 && currentNumberOfCons == 3)
+            else if (int.Parse((string)statsDict["SC"]) == 4 && currentNumberOfCons !=4)
             {
                 currentNumberOfCons = 4;
                 Consumable.GetComponent<LoadOutConsumables>().ResetNumberOfConsumable(4);

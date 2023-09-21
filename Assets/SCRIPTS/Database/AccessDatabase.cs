@@ -1866,7 +1866,7 @@ public class AccessDatabase : MonoBehaviour
         else if ("Model".Equals(Type))
         {
             IDbCommand dbCheckModel = dbConnection.CreateCommand();
-            dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(WeaponName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
+            dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
             {

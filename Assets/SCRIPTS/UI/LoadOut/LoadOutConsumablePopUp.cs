@@ -43,6 +43,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     private float currentTransparency;
     private float BoxSize;
     private float maximumWidth;
+    private float BGWaitTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -55,8 +56,15 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (!isMouseOutsideRange())
+        if (BGWaitTimer<=0f)
         {
+            if (!isMouseOutsideRange())
+            {
+                Background.GetComponent<LoadOutBarBackground>().DisableCollider *= 0;
+            }
+        } else
+        {
+            BGWaitTimer -= Time.deltaTime;
             Background.GetComponent<LoadOutBarBackground>().DisableCollider *= 0;
         }
     }
@@ -123,6 +131,8 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         {
             line.SetActive(true);
         }
+        BGWaitTimer = 1f;
+        Background.GetComponent<Collider2D>().enabled = false;
         Background.SetActive(true);
         SetData(ListConsumes, ChosenConsumes);
     }
@@ -171,10 +181,18 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         {
             if (col.GetComponent<Collider2D>() != null)
             {
+                if (col.name=="2ndPower")
+                {
+                    if (FindObjectOfType<LoadOutFighterDemo>().currentNumberOfPower == 1)
+                        col.GetComponent<Collider2D>().enabled = false;
+                    else if (FindObjectOfType<LoadOutFighterDemo>().currentNumberOfPower == 2)
+                        col.GetComponent<Collider2D>().enabled = true;
+                } else
                 col.GetComponent<Collider2D>().enabled = true;
             }
         }
         gameObject.SetActive(false);
+        ConsumeMain.GetComponent<Collider2D>().enabled = true;
     }
 
     private void SetData(Dictionary<string, int> DictConsumes, Dictionary<string, int> DictChosenConsumes)
