@@ -49,7 +49,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
             } else
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Not enough <sprite index='3'> for this transaction!\nPlease get some more!", 5f);
+                    "Insufficient money", 5f);
             }
         } else if ("Sell".Equals(name))
         {
