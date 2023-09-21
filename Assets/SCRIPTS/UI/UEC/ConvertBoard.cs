@@ -126,7 +126,7 @@ public class ConvertBoard : MonoBehaviour
         else if ("Success".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Convert successfully!!!\nYou received " + TextOutput.text + " " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "!", 5f);
+            "Converted successfully!!!\nYou received " + TextOutput.text + " " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
             Destroy(gameObject.transform.parent.gameObject);
         }
