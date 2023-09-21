@@ -102,14 +102,9 @@ public class SpaceShopBuySellButton : MonoBehaviour
                         else if ("Success".Equals(checkCell))
                         {
                             // Check case for adding ownership
-                            string check = FindObjectOfType<AccessDatabase>().AddOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
-                            ItemNameNoColor, "Consumable", Quantity);
-                            if ("Not Found".Equals(check))
-                            {
-                                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                                    "Can not find information about this item.\nplease contact our email.", 5f);
-                            }
-                            else if ("Fail".Equals(check))
+                            string check = FindObjectOfType<AccessDatabase>().AddPurchaseHistory(FindObjectOfType<UECMainMenuController>().PlayerId,
+                            12, "Consumable", Quantity, true);
+                            if ("Fail".Equals(check))
                             {
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                                     "Transaction failed.\nPlease try again.", 5f);

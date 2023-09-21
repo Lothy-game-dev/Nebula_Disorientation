@@ -161,11 +161,11 @@ public class Arsenal : UECMenuShared
         //If item doesnt have shard value, it cant be buy permanently
         if (!isLocked)
         {
-            isLocked = true;
             if (CurrentTab == "Weapon")
             {
                 if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
                 {
+                    isLocked = true;
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
@@ -178,6 +178,7 @@ public class Arsenal : UECMenuShared
                 {
                     if (PowerList[int.Parse(Id) - 1][6] == "N.A")
                     {
+                        isLocked = true;
                         Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                         Game.GetComponent<ArsenalItem>().LockedItem = true;
                         Game.GetComponent<ArsenalItem>().IsRanked = false;

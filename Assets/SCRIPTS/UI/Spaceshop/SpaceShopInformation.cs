@@ -121,9 +121,18 @@ public class SpaceShopInformation : MonoBehaviour
     {
         if (currentItemName!=null)
         {
-            PurchaseInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(Currently Owned: "
+            if ("fuelcell".Equals(currentItemName.Replace(" ", "").ToLower()))
+            {
+                PurchaseInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(Currently have: "
+            + ((int)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(
+            FindObjectOfType<UECMainMenuController>().PlayerId)["FuelCell"]).ToString() + " cells)";
+            }
+            else
+            {
+                PurchaseInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(Currently Owned: "
             + FindObjectOfType<AccessDatabase>().GetCurrentOwnedNumberOfConsumableByName(
             FindObjectOfType<UECMainMenuController>().PlayerId, currentItemName).ToString() + " items)";
+            }
             MaxStock = FindObjectOfType<AccessDatabase>().GetStocksPerDayOfConsumable((string)DataDictionary["Name"]);
             if (MaxStock==0)
             {
