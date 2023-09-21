@@ -19,6 +19,7 @@ public class ArsenalBuyAction : MonoBehaviour
     // Can be public or private, prioritize private if possible
     public string PreReqName;
     public bool isRanked;
+    public bool isZeroShard;
     private Arsenal Ar;
     #endregion
     #region Start & Update
@@ -41,21 +42,28 @@ public class ArsenalBuyAction : MonoBehaviour
     {
         if (GetComponent<CursorUnallowed>() != null)
         {
-            if (isRanked)
+            if (isZeroShard)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
-            }
-            else if (PreReqName != null && PreReqName != "")
+                        "You can only buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + " during a session.", 5f);
+            } else
             {
-                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "You need to own " + PreReqName + " in order to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
-            }
-            else
-            {
-                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "You have purchased this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
-            }
+                if (isRanked)
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                        "You are not allowed to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+                }
+                else if (PreReqName != null && PreReqName != "")
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                        "You need to own " + PreReqName + " in order to buy this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+                }
+                else
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
+                        "You have purchased this " + ArsenalItem.GetComponent<Arsenal>().CurrentTab + "!", 5f);
+                }
+            }           
         } else
         // check the conditions before buying 
         if (Ar.EnoughPrice && Ar.RankRequired)
