@@ -56,7 +56,7 @@ public class ConvertBoard : MonoBehaviour
         To = ConvertTo;
         ItemRight.ShowItem(ConvertTo);
         ConvertRate = Rate;
-        Text.text = "Convert " + From + " to " + To + "?";
+        Text.text = "Convert " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(From) + " to " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "?";
     }
 
     public void Convert()
@@ -78,7 +78,7 @@ public class ConvertBoard : MonoBehaviour
         else if ("Over Limit".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            To + "'s quantity after converted is over its limit!\n Please try again.", 5f);
+            FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "'s quantity after converted is over its limit!\n Please try again.", 5f);
             TextInput.text = "0";
             TextOutput.text = "0";
             ItemLeft.ShowItem(From);
@@ -86,7 +86,7 @@ public class ConvertBoard : MonoBehaviour
         else if ("Not Enough".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Your " + From + " is not enough for this conversion!\n Please try again.", 5f);
+            "Your " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(From) + " is not enough for this conversion!\n Please try again.", 5f);
             TextInput.text = "0";
             TextOutput.text = "0";
             ItemLeft.ShowItem(From);
@@ -126,7 +126,7 @@ public class ConvertBoard : MonoBehaviour
         else if ("Success".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Convert successfully!!!\nYou received " + TextOutput.text + " " + To + "!", 5f);
+            "Convert successfully!!!\nYou received " + TextOutput.text + " " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
             Destroy(gameObject.transform.parent.gameObject);
         }
