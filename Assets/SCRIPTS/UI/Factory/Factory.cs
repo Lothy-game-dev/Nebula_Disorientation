@@ -46,6 +46,7 @@ public class Factory : MonoBehaviour
     public string PShard;
     public Coroutine OldCoroutine;
     public GameObject CurrentChosen;
+    public string ItemTierColor;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -91,12 +92,12 @@ public class Factory : MonoBehaviour
                     g.transform.GetChild(0).GetComponent<Image>().sprite = FighterImage[FighterImage.FindIndex(item => FighterList[i][1].ToLower().Contains(item.name.ToLower()))].sprite;
                 }
             }
+            g.SetActive(true);
             LockItem(g, FighterList[i][5]);
             if (i == 0)
             {
                 g.GetComponent<FactoryItem>().FighterInformation(FighterList, "1");
             }
-            g.SetActive(true);
         }
 
        

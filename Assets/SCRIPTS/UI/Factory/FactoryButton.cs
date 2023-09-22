@@ -48,26 +48,26 @@ public class FactoryButton : MonoBehaviour
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                "Rank requirement not unmet!", 5f);
+                "Rank requirement unmet.", 5f);
             }
         }
         else
         if (FactoryController.EnoughPrice && FactoryController.RankRequired)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyFighterModel;
-            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Purchase\n" + FactoryController.ItemName + "\nfor \n" + FactoryController.ItemPriceCash + " <sprite index='3'> & " + FactoryController.ItemPriceShard + " <sprite index='0'> ?");
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(Factory.transform.position, "Purchase\n<color="+FactoryController.ItemTierColor+">" + FactoryController.ItemName + "</color>\nfor \n" + FactoryController.ItemPriceCash + " <sprite index='3'> & " + FactoryController.ItemPriceShard + " <sprite index='0'> ?");
 
         }
         else
         {
             if (!FactoryController.EnoughPrice)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "You dont have enough money!", 5f);
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "insufficient money.", 5f);
             } else
             {
                 if (!FactoryController.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement not unmet!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "Rank requirement unmet.", 5f);
                 }
             }
         }

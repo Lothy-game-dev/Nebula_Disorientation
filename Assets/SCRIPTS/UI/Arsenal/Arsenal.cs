@@ -56,6 +56,7 @@ public class Arsenal : UECMenuShared
     public string RequiredShard;
     public string RequiredCash;
     public GameObject CurrentItem;
+    public string ItemTierColor;
     #endregion
     #region Start & Update
 

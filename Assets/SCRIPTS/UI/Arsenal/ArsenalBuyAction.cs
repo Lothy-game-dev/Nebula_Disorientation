@@ -51,7 +51,7 @@ public class ArsenalBuyAction : MonoBehaviour
                 if (isRanked)
                 {
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                        "Rank requirement not unmet!", 5f);
+                        "Rank requirement unmet.", 5f);
                 }
                 else if (PreReqName != null && PreReqName != "")
                 {
@@ -71,11 +71,11 @@ public class ArsenalBuyAction : MonoBehaviour
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;
             if (!Ar.IsInSession)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "purchase\n" + Ar.ItemName + "\nfor\n " + Ar.RequiredShard + " <sprite index='0'> ?");
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "purchase\n<color="+Ar.ItemTierColor+">" + Ar.ItemName + "</color>\nfor\n " + Ar.RequiredShard + " <sprite index='0'> ?");
             }
             else
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "purchase\n" + Ar.ItemName + "\nfor\n " + Ar.RequiredCash + " <sprite index='3'> ?");
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalConfirmBoard(ArsenalItem.transform.position, "purchase\n<color="+Ar.ItemTierColor+">" + Ar.ItemName + "</color>\nfor\n " + Ar.RequiredCash + " <sprite index='3'> ?");
             }
 
         }
@@ -83,13 +83,13 @@ public class ArsenalBuyAction : MonoBehaviour
         {
             if (!Ar.EnoughPrice)
             {
-                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "You dont have enough money!", 5f);
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "insufficient money.", 5f);
             }
             else
             {
                 if (!Ar.RankRequired)
                 {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Rank requirement not unmet!", 5f);
+                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Rank requirement unmet.", 5f);
                 }
             }
         }
