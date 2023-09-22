@@ -82,15 +82,15 @@ public class BulletShared : MonoBehaviour
     // Laser Special Accel: Increasing in both speed and size 
     public IEnumerator AccelerateLaser(float time, float initScale)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (Mathf.Abs(RealVelocity.x) < Mathf.Abs(Velocity.x) && Mathf.Abs(RealVelocity.y) < Mathf.Abs(Velocity.y))
             {
-                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 10, RealVelocity.y + Velocity.y / 10);
+                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 5, RealVelocity.y + Velocity.y / 5);
             }
             CalculateVelocity(RealVelocity);
-            transform.localScale = new Vector3(initScale*i/10,initScale*i/10,transform.localScale.z);
-            yield return new WaitForSeconds(time / 10f);
+            transform.localScale = new Vector3(initScale*i/5,initScale*i/5,transform.localScale.z);
+            yield return new WaitForSeconds(time / 5f);
         }
     }
 

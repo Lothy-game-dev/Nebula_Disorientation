@@ -15,7 +15,9 @@ public class ReactToZoomShared : MonoBehaviour
     #endregion
     #region NormalVariables
     private GameController controller;
-    private float InitScale;
+    private float InitScaleX;
+    private float InitScaleY;
+    private Vector2 StartPos;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -24,7 +26,9 @@ public class ReactToZoomShared : MonoBehaviour
         // Initialize variables
         if (FindObjectOfType<GameController>()!=null)
             controller = FindObjectOfType<GameController>();
-        InitScale = transform.localScale.x;
+        InitScaleX = transform.localScale.x;
+        InitScaleY = transform.localScale.y;
+        StartPos = new Vector2(transform.position.x, transform.position.y);
     }
 
     // Update is called once per frame
@@ -43,14 +47,14 @@ public class ReactToZoomShared : MonoBehaviour
         if (controller.IsClose)
         {
             // If close -> All range and scale is half
-            transform.localScale = new Vector3(InitScale / 2, InitScale / 2, InitScale / 2);
-            transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
+            transform.localScale = new Vector3(InitScaleX / 2, InitScaleY / 2, transform.localScale.z);
+            transform.position = new Vector3(StartPos.x/2, StartPos.y/2, transform.position.z);
         }
         else
         {
             // If zoom out -> All range and scale is back to normal
-            transform.localScale = new Vector3(InitScale, InitScale, InitScale);
-            transform.position = new Vector3(ZoomOutPosition.transform.position.x, ZoomOutPosition.transform.position.y, transform.position.z);
+            transform.localScale = new Vector3(InitScaleX, InitScaleY, transform.localScale.z);
+            transform.position = new Vector3(StartPos.x, StartPos.y, transform.position.z);
         }
     }
     #endregion
