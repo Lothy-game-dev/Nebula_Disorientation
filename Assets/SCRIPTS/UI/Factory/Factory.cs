@@ -154,6 +154,7 @@ public class Factory : MonoBehaviour
         {
             if (CurrentChosen!=null && CurrentChosen.GetComponent<FactoryItem>()!=null)
             {
+                Debug.Log(CurrentChosen.GetComponent<FactoryItem>().AlreadyPurchased);
                 CurrentChosen.GetComponent<FactoryItem>().LockCurrentItem();
             }
         }

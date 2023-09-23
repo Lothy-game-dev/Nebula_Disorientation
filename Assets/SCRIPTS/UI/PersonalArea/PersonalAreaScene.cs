@@ -42,7 +42,8 @@ public class PersonalAreaScene : UECMenuShared
 
     public override void OnExitAnimation()
     {
-        
+        GetComponent<BackgroundBrieflyMoving>().enabled = false;
+        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
     }
     #endregion
     #region Function group ...
