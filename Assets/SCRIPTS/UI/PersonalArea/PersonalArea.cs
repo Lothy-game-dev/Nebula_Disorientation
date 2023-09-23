@@ -22,6 +22,7 @@ public class PersonalArea : MonoBehaviour
     public GameObject CurrentSalary;
     public GameObject PlayerName;
     public GameObject PlayerRank;
+    public GameObject TimeRemaining;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -29,18 +30,39 @@ public class PersonalArea : MonoBehaviour
     public List<List<string>> RankList;
     public Dictionary<string, object> PlayerInformation;
     public int PlayerId;
+    public DateTime ResetDateTime;
+    public DateTime CollectedTime;
+    private string formattedTime;
+    public bool IsCollected;
+    private TimeSpan timeRemaining;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        CollectedTime = new DateTime(2023, 9, 23, 15, 55, 0);
     }
 
-    // Update is called once per frame
+    // Update is called once per framenew 
     void Update()
     {
         // Call function and timer only if possible
+        /*TimeSpan timeRemaining = CollectedTime - DateTime.Now;
+        Debug.Log(timeRemaining);
+        formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
+        TimeRemaining.GetComponent<TextMeshPro>().text = formattedTime;*/
+        if (IsCollected)
+        {
+            TimeRemaining.SetActive(true);
+            SetTimer();
+            if (timeRemaining <= TimeSpan.Zero)
+            {
+                TimeRemaining.SetActive(false);
+                IsCollected = false;
+            } 
+        }
+
     }
     #endregion
     #region Generate new list
@@ -66,9 +88,11 @@ public class PersonalArea : MonoBehaviour
             }
             LockItem(game, RankList[i][0]);
         }
-        DateTime currentTime = System.DateTime.Now;
-        DateTime time = currentTime.Date + new TimeSpan(10, 30, 0);
-        Debug.Log("Current time: " + (currentTime - time));
+        if ((string)PlayerInformation["DailyIncomeReceived"] == "N")
+        {
+            IsCollected = false;
+        }
+        
     }
     #endregion
     #region Show rank's information (Daily income, condition to rank up,...)
@@ -99,6 +123,17 @@ public class PersonalArea : MonoBehaviour
         {
             game.transform.GetChild(1).gameObject.SetActive(true);
         }
+    }
+    #endregion
+    #region Set a timer after collecting
+    // Group all function that serve the same algorithm
+    public void SetTimer()
+    {
+        CollectedTime = DateTime.Now;
+        ResetDateTime = CollectedTime.AddDays(1).Date + new TimeSpan(6, 0, 0);
+        timeRemaining = ResetDateTime - CollectedTime;
+        formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
+        TimeRemaining.GetComponent<TextMeshPro>().text = formattedTime;
     }
     #endregion
 }
