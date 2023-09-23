@@ -107,7 +107,7 @@ public class ArsenalBuyAction : MonoBehaviour
             if (n >= 2)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                "You have already bought this item!\nPlease contanct our email!", 5f);
+                "You have already bought this item!\nPlease contact our email!", 5f);
             }
             else if (n == -1)
             {
@@ -121,7 +121,7 @@ public class ArsenalBuyAction : MonoBehaviour
             if (n >= 1)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                "You have already bought this item!\nPlease contanct our email!", 5f);
+                "You have already bought this item!\nPlease contact our email!", 5f);
             }
             else if (n == -1)
             {
