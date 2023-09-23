@@ -225,6 +225,7 @@ public class ArsenalItem : MonoBehaviour
             c.a = 0.5f;
             if (BuyButton.GetComponent<CursorUnallowed>()==null)
             {
+                Debug.Log(BuyButton);
                 BuyButton.AddComponent<CursorUnallowed>();
             }
         }

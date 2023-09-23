@@ -157,6 +157,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBar.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaCollectButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryItem.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />

@@ -116,12 +116,13 @@ public class Arsenal : UECMenuShared
                 }
             } 
             g.SetActive(true);
+            LockItem(g, WeaponList[i][8], WeaponList[i][0]);
             // First item choosen
             if (i == 0)
             {
                 g.GetComponent<ArsenalItem>().ArsenalInformation(WeaponList, "1");
+                g.GetComponent<ArsenalItem>().LockItem();
             }
-            LockItem(g, WeaponList[i][8], WeaponList[i][0]);
         }
     }
     #endregion
