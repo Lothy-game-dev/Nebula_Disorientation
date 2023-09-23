@@ -15,12 +15,14 @@ public class NotificationBoardController : MonoBehaviour
     public GameObject ConvertBoard;
     public GameObject RechargeBoard;
     public GameObject InformationBoard;
+    public GameObject SmallHUDInfoBoard;
     #endregion
     #region NormalVariables
     public delegate void VoidFunctionPass();
     public VoidFunctionPass VoidReturnFunction;
     private float InitScale;
     private GameObject currentInfoBoard;
+    private List<GameObject> currentHUDSmallBoard;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -28,7 +30,7 @@ public class NotificationBoardController : MonoBehaviour
     {
         // Initialize variables
         InitScale = NotificationBoard.transform.GetChild(0).localScale.x;
-
+        currentHUDSmallBoard = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -128,9 +130,29 @@ public class NotificationBoardController : MonoBehaviour
         }
     }
 
+    public void CreateHUDSmallInfoBoard(Vector2 position, string text, string LeftRightTopBottom)
+    {
+        if (text!="")
+        {
+            GameObject smallHUDBoard = Instantiate(SmallHUDInfoBoard,
+                new Vector3(position.x, position.y, SmallHUDInfoBoard.transform.position.z), Quaternion.identity);
+            smallHUDBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = text;
+            smallHUDBoard.GetComponent<HUDSmallBoard>().SetPosition(position, LeftRightTopBottom);
+            currentHUDSmallBoard.Add(smallHUDBoard);
+        }
+    }
+
     public void DestroyCurrentInfoBoard()
     {
         currentInfoBoard.GetComponent<InformationBoard>().Close();
+    }
+
+    public void DestroyAllCurrentHUDSmallBoard()
+    {
+        foreach (var board in currentHUDSmallBoard)
+        {
+            Destroy(board);
+        }
     }
 
     public void ConfirmOnConfirmationBoard()

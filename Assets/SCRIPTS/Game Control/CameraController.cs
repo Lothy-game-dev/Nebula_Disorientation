@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
     #region NormalVariables
     public GameObject FollowObject;
     public bool CameraTracking;
-    private bool isClose;
+    public bool isClose;
     private float CameraHeight;
     private float CameraWidth;
     private float TopYPosition;
@@ -29,6 +29,7 @@ public class CameraController : MonoBehaviour
     private float RightXPosition;
     private float PosX;
     private float PosY;
+    private float zoomTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -46,26 +47,31 @@ public class CameraController : MonoBehaviour
     {
         // Call function and timer only if possible
         // Change to close or zoom-out when press left shift
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        zoomTimer -= Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.LeftShift) && zoomTimer<=0f)
         {
             if (!isClose)
             {
-                // 975x675
-                cam.orthographicSize = CloseHeight / 2;
                 isClose = true;
                 GameController.GetComponent<GameController>().IsClose = true;
+                cam.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+                cam.orthographicSize = CloseHeight / 2;
+                zoomTimer = 0.5f;
             } else
             {
-                // 1950x1350
-                cam.orthographicSize = ZoomOutHeight / 2;
                 isClose = false;
                 GameController.GetComponent<GameController>().IsClose = false;
+                cam.gameObject.transform.localScale = new Vector3(1f, 1f, 1);
+                cam.orthographicSize = ZoomOutHeight / 2;
+                zoomTimer = 0.5f;
             }
+/*            StartCoroutine(Zoom());*/
         }
         // Calculate Height And Width
         CameraHeight = 2 * cam.orthographicSize;
         CameraWidth = CameraHeight * cam.aspect;
         SetCameraPosition();
+
     }
     #endregion
     #region Camera Position

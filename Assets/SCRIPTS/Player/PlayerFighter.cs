@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerFighter : FighterShared
@@ -8,6 +9,8 @@ public class PlayerFighter : FighterShared
     private AudioSource aus;
     #endregion
     #region InitializeVariables
+    public GameObject FighterTempColor;
+    public GameObject FighterTempText;
     public AudioClip MovingSound;
     public AudioClip DashSound;
     public AudioClip OverheatWarning;
@@ -34,21 +37,21 @@ public class PlayerFighter : FighterShared
         // Will be deleted
         if (testTimer <= 0f)
         {
-            if (Input.GetKeyDown(KeyCode.M))
+            if (Input.GetKey(KeyCode.M))
             {
                 ReceiveThermalDamage(false);
-                testTimer = 1f;
+                testTimer = 0.1f;
             }
-            else if (Input.GetKeyDown(KeyCode.N))
+            else if (Input.GetKey(KeyCode.N))
             {
                 ReceiveThermalDamage(true);
-                testTimer = 1f;
+                testTimer = 0.1f;
             }
         } else
         {
             testTimer -= Time.deltaTime;
         }
-        
+        ShowTemp();
     }
     #endregion
     #region Play Sound
@@ -74,6 +77,22 @@ public class PlayerFighter : FighterShared
         DashAudioSource.loop = false;
         DashAudioSource.volume = 0.75f;
         DashAudioSource.Play();
+    }
+    #endregion
+    #region Show Information To HUD
+    private void ShowTemp()
+    {
+        FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "°";
+        if (currentTemperature==50f)
+        {
+            FighterTempColor.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 90 / 255f);
+        } else if (currentTemperature>50f)
+        {
+            FighterTempColor.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(0,1,0,90/255f), new Color(1, 0, 0, 180 / 255f), (currentTemperature-50)/50f);
+        } else if (currentTemperature<50f)
+        {
+            FighterTempColor.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(0, 1, 1, 180 / 255f), new Color(0, 1, 0, 90 / 255f), (currentTemperature) / 50f);
+        }
     }
     #endregion
 }

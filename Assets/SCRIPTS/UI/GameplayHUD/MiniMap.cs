@@ -52,8 +52,6 @@ public class MiniMap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // React When Player Zoom out/ close
-        ReactWhenZoom();
         // Render All Objects With Renderable and Enemy Layers that have Collider Within Render Range Declared
         RenderAllWithCollider(RenderRange);
     }
@@ -222,28 +220,6 @@ public class MiniMap : MonoBehaviour
                     i++;
                 }
             }
-        }
-    }
-    #endregion
-    #region React When Zoom Out/Close
-    // React to zoom
-    private void ReactWhenZoom()
-    {
-        if (GameController.IsClose)
-        {
-            // If close -> All range and scale is half
-            MiniMapRange = InitRange / 2;
-            RenderRate = MiniMapRange / RenderRange;
-            transform.localScale = new Vector3(InitScale / 2, InitScale / 2, InitScale / 2);
-            transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
-        } 
-        else
-        {
-            // If zoom out -> All range and scale is back to normal
-            MiniMapRange = InitRange;
-            RenderRate = MiniMapRange / RenderRange;
-            transform.localScale = new Vector3(InitScale, InitScale, InitScale);
-            transform.position = new Vector3(ZoomOutPosition.transform.position.x, ZoomOutPosition.transform.position.y, transform.position.z);
         }
     }
     #endregion

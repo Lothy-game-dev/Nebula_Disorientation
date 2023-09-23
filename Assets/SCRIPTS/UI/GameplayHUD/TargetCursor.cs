@@ -44,14 +44,6 @@ public class TargetCursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Change size if cam is close
-        if (GameController.IsClose)
-        {
-            transform.localScale = new Vector3(InitScale / 2, InitScale / 2, InitScale / 2);
-        } else
-        {
-            transform.localScale = new Vector3(InitScale, InitScale, InitScale);
-        }
         // Change position of target to the same position as cursor
         MousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         MousePos.z = 0;
@@ -181,6 +173,19 @@ public class TargetCursor : MonoBehaviour
         if (RightDownTimer > 0f)
         {
             RightDownTimer -= Time.deltaTime;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        // Change size if cam is close
+        if (GameController.IsClose)
+        {
+            transform.localScale = new Vector3(InitScale / 2, InitScale / 2, InitScale / 2);
+        }
+        else
+        {
+            transform.localScale = new Vector3(InitScale, InitScale, InitScale);
         }
     }
     #endregion

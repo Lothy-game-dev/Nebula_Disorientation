@@ -19,8 +19,8 @@ public class FighterController : MonoBehaviour
     public GameObject RightOverheatBar;
     public GameObject LeftOverheatImage;
     public GameObject RightOverheatImage;
-    public Slider LeftReloadBar;
-    public Slider RightReloadBar;
+    public GameObject LeftReloadBar;
+    public GameObject RightReloadBar;
     #endregion
     #region NormalVariables
     public GameObject CurrentLeftWeapon;
@@ -76,24 +76,28 @@ public class FighterController : MonoBehaviour
         LeftWeaponIcon.SetActive(true);
         LeftWeaponIcon.GetComponent<Weapons>().enabled = false;
         LeftWeaponIcon.transform.localScale =
-            new Vector3(LeftWeaponIcon.transform.localScale.x * 12,
-            LeftWeaponIcon.transform.localScale.y * 12,
+            new Vector3(LeftWeaponIcon.transform.localScale.x * 20,
+            LeftWeaponIcon.transform.localScale.y * 20,
             LeftWeaponIcon.transform.localScale.z);
         LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
         Color lc = LeftWeaponIcon.GetComponent<SpriteRenderer>().color;
-        lc.a = 120 / 255f;
+        lc.a = 200 / 255f;
         LeftWeaponIcon.GetComponent<SpriteRenderer>().color = lc;
         LeftWeaponIcon.transform.SetParent(LeftOverheatImage.transform);
+        LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(CurrentLeftWeapon.name);
+        LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().TopBottomLeftRight.Add("Bottom");
         RightWeaponIcon.SetActive(true);
         RightWeaponIcon.GetComponent<Weapons>().enabled = false;
         RightWeaponIcon.transform.localScale =
-            new Vector3(RightWeaponIcon.transform.localScale.x * 12,
-            RightWeaponIcon.transform.localScale.y * 12,
+            new Vector3(RightWeaponIcon.transform.localScale.x * 20,
+            RightWeaponIcon.transform.localScale.y * 20,
             RightWeaponIcon.transform.localScale.z);
         RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
         RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);
+        RightOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(CurrentRightWeapon.name);
+        RightOverheatImage.GetComponent<HUDCreateInfoBoard>().TopBottomLeftRight.Add("Bottom");
         Color rc = RightWeaponIcon.GetComponent<SpriteRenderer>().color;
-        rc.a = 120 / 255f;
+        rc.a = 200 / 255f;
         RightWeaponIcon.GetComponent<SpriteRenderer>().color = rc;
         // Set Reload Bar
         LeftWeapon.GetComponent<Weapons>().ReloadBar = LeftReloadBar;
