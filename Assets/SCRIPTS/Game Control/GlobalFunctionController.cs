@@ -775,4 +775,59 @@ public class GlobalFunctionController : MonoBehaviour
         else return Currency;
     }
     #endregion
+    #region Convert Rankup Conditions
+    public string ConvertRankUpConditions(string ConditionSZ, string ConditionSZ2, string ConditionSZ2Number)
+    {
+        string FinalString = "";
+        // First condition
+        if (ConditionSZ == "0")
+        {
+            FinalString += "- Acquire a Fighter\n";
+        } else
+        {
+            FinalString += "- Reach Space Zone No." + ConditionSZ + "\n";
+        }
+        // Second condition
+        if (ConditionSZ2 == "N/A")
+        {
+            FinalString += "";
+        } else
+        {
+            // Compelete Daily Mission
+            if (ConditionSZ2.Contains("C"))
+            {
+                FinalString += "- Compelete Daily Mission " + ConditionSZ2Number + " times";
+            } else
+            {
+                // Defeat boss x times
+                if (ConditionSZ2.Contains("D-"))
+                {
+                    string boss = "";
+                    switch (ConditionSZ2.Split("-")[1])
+                    {
+                        case "I": boss = "Tier I Zaturi Fighter"; break;
+                        case "II": boss = "Tier II Zaturi Fighter"; break;
+                        case "WS": boss = "Zaturi Warship"; break;
+                    }
+                    FinalString += "- Defeat " + boss + ConditionSZ2Number + " times";
+                } else
+                {
+                    //Permanently acquire x Arsenal's Items
+                    if (ConditionSZ2.Contains("PA"))
+                    {
+                        FinalString += "- Permanently acquire " + ConditionSZ2Number + "+ Arsenal's Items";
+                    } else
+                    {
+                        // O - Own ? Fighters
+                        if (ConditionSZ2.Contains("O"))
+                        {
+                            FinalString += "- Own " + ConditionSZ2Number + " Fighters";
+                        }
+                    }
+                }
+            }
+        }
+        return FinalString;
+    }
+    #endregion
 }

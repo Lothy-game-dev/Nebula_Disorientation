@@ -139,6 +139,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContract.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalArea.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GlobalFunctionController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryItem.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialButton.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBarBackground.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECPlusButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaItem.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotSignContract.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopListItem.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECDailyMissions.cs" />
