@@ -198,6 +198,7 @@ public class FactoryItem : MonoBehaviour
     public void LockCurrentItem()
     {
         LockedItem = true;
+        AlreadyPurchased = true;
         transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
         Color c = BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color;
         c.a = 0.5f;
