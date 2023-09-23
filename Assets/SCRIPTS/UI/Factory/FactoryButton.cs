@@ -80,7 +80,7 @@ public class FactoryButton : MonoBehaviour
         if (n > 0)
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
-                "You have already bought this item!\nPlease contanct our email!", 5f);
+                "You have already bought this item!\nPlease contact our email!", 5f);
         } else if (n==-1)
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,

@@ -138,6 +138,7 @@ public class NotificationBoardController : MonoBehaviour
                 new Vector3(position.x, position.y, SmallHUDInfoBoard.transform.position.z), Quaternion.identity);
             smallHUDBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = text;
             smallHUDBoard.GetComponent<HUDSmallBoard>().SetPosition(position, LeftRightTopBottom);
+            smallHUDBoard.transform.SetParent(transform);
             currentHUDSmallBoard.Add(smallHUDBoard);
         }
     }
