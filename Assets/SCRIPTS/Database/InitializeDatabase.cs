@@ -368,17 +368,17 @@ public class InitializeDatabase : MonoBehaviour
             "(3, 'Gunman II', 15, null, 0, 1500, null, '#4c9aff')," +
             "(4, 'Gunman III', 25, null, 0, 2000, null, '#4c9aff')," +
             "(5, 'Warrior of the UEC', 30, 'C', 20, 3000, 'UA-2', '#0747a6')," +
-            "(6, 'Duelist I', 40, 'D-', 3, 4000, 'UF-3', '#00b8db')," +
-            "(7, 'Duelist II', 50, 'D-', 3, 5000, null, '#00b8db')," +
-            "(8, 'Duelist III', 60, 'D-', 3, 6000, null, '#00b8db')," +
+            "(6, 'Duelist I', 40, 'D-II', 3, 4000, 'UF-3', '#00b8db')," +
+            "(7, 'Duelist II', 50, 'D-II', 3, 5000, null, '#00b8db')," +
+            "(8, 'Duelist III', 60, 'D-II', 3, 6000, null, '#00b8db')," +
             "(9, 'Remakable Warrior of the UEC', 75, 'PA', 5, 8000, 'UA-1', '#00aad4')," +
-            "(10, 'Master Duelist I', 80, 'D-', 5, 10000, 'UF-2', '#ffc400')," +
-            "(11, 'Master Duelist II', 90, 'D-', 5, 12000, null, '#ffc401')," +
-            "(12, 'Master Duelist III', 100, 'D-', 5, 14000, null, '#ffc402')," +
+            "(10, 'Master Duelist I', 80, 'D-I', 5, 10000, 'UF-2', '#ffc400')," +
+            "(11, 'Master Duelist II', 90, 'D-I', 5, 12000, null, '#ffc401')," +
+            "(12, 'Master Duelist III', 100, 'D-I', 5, 14000, null, '#ffc402')," +
             "(13, 'Honored Warrior of the UEC', 115, 'O', 5, 18000, 'UF-1', '#ff991f')," +
-            "(14, 'Legendary Falcon I', 130, 'D-', 10, 22000, null, '#ff5631')," +
-            "(15, 'Legendary Falcon II', 150, 'D-', 10, 26000, null, '#ff5631')," +
-            "(16, 'Legendary Falcon III', 175, 'D-', 10, 30000, null, '#ff5632')," +
+            "(14, 'Legendary Falcon I', 130, 'D-WS', 10, 22000, null, '#ff5631')," +
+            "(15, 'Legendary Falcon II', 150, 'D-WS', 10, 26000, null, '#ff5631')," +
+            "(16, 'Legendary Falcon III', 175, 'D-WS', 10, 30000, null, '#ff5632')," +
             "(17, 'Supreme Warrior of the UEC', 200, 'PA', 15, 40000, 'UF-0', '#bf2600')," +
             "(18, 'Supreme Warrior of the UEC n', 225, null, 0, 45000, null, '#6554c0');";
         // SpaceShop

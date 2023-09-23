@@ -1537,6 +1537,51 @@ public class AccessDatabase : MonoBehaviour
         return rank;
      }
 
+    public List<List<string>> GetAllRank()
+    {
+        List<List<string>> list = new List<List<string>>();
+        List<string> RankList;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from RankSystem";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            RankList = new List<string>();
+            check = true;
+            RankList.Add(dataReader.GetInt32(0).ToString());
+            RankList.Add(dataReader.GetString(1));
+            RankList.Add(dataReader.GetInt32(2).ToString());
+            if (dataReader.IsDBNull(3))
+            {
+                RankList.Add("N/A");
+            }
+            else
+            {
+                RankList.Add(dataReader.GetString(3));
+            }           
+            RankList.Add(dataReader.GetInt32(4).ToString());        
+            RankList.Add(dataReader.GetInt32(5).ToString());
+            if (dataReader.IsDBNull(6))
+            {
+                RankList.Add("N/A");
+            }
+            else
+            {
+                RankList.Add(dataReader.GetString(6));
+            }           
+            RankList.Add(dataReader.GetString(7));
+            list.Add(RankList);
+        }
+        if (!check) return null;
+        dbConnection.Close();
+        return list;
+    }
+
     #endregion
     #region Access Enemy
     public List<List<string>> GetAllEnemy()

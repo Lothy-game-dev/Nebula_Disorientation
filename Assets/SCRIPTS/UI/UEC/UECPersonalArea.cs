@@ -12,6 +12,8 @@ public class UECPersonalArea : MonoBehaviour
     public GameObject Inner;
     public GameObject Outer;
     public string InfoText;
+    public GameObject UECScene;
+    public GameObject PersonalAreaScene;
     #endregion
     #region NormalVariables
     private float initScale;
@@ -48,7 +50,8 @@ public class UECPersonalArea : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        
+        FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, PersonalAreaScene);
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(PersonalAreaScene.transform.position, 1f);
     }
     #endregion
 }
