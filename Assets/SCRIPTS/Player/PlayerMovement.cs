@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     public GameObject BottomBorder;
     public GameObject LeftBorder;
     public GameObject RightBorder;
+    public Slider AESlider;
+    public GameObject AEText;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -35,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     private float BackFireInitScale;
     private Vector2 speedVector;
     private float LimitSpeedScale;
+    private float AEEnergy;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -46,11 +51,20 @@ public class PlayerMovement : MonoBehaviour
         Movable = true;
         CurrentRotateAngle = 0;
         BackFireInitScale = backFire.transform.localScale.x;
+        AESlider.maxValue = 100f;
+        AEEnergy = 100f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (AEEnergy<100f)
+        {
+            AEEnergy += 5f * Time.deltaTime;
+        } else
+        {
+            AEEnergy = 100f;
+        }
         if (pf.isFrozen)
         {
             Movable = false;
@@ -73,10 +87,11 @@ public class PlayerMovement : MonoBehaviour
             Dashing = false;
         }
         // Dashing conditions
-        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed)
+        if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed && AEEnergy>=100f)
         {
             Dashing = true;
             DashingTimer = DashingTime;
+            AEEnergy = 0f;
             Dash();
         }
         // Moving Front and Back
@@ -84,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         if (!Dashing && Movable) PlayerMoving();
         pf.CalculateVelocity(speedVector);
         CheckLimit();
+        ShowAE();
     }
     private void FixedUpdate()
     {
@@ -330,6 +346,13 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         transform.position = new Vector3(Position.x, Position.y, transform.position.z);
         CurrentSpeed = 0f;
+    }
+    #endregion
+    #region Show AE Energy
+    private void ShowAE()
+    {
+        AESlider.value = AEEnergy;
+        AEText.GetComponent<TextMeshPro>().text = (int)AEEnergy + "%";
     }
     #endregion
 }

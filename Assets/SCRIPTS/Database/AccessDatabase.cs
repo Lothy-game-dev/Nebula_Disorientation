@@ -232,7 +232,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 IDbCommand dbCheck = dbConnection.CreateCommand();
                 dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell + 1 " + 
-                    (cell == 9 ? "AND LastFuelCellUsedTime = '' " : "") + "WHERE PlayerId =" + PlayerID;
+                    (cell == 9 ? ", LastFuelCellUsedTime = '' " : "") + "WHERE PlayerId =" + PlayerID;
                 int n = dbCheck.ExecuteNonQuery();
                 dbConnection.Close();
                 if (n==1)

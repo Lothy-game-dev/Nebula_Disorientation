@@ -95,7 +95,7 @@ public class SpaceShopInformation : MonoBehaviour
         BuyButton.GetComponent<SpaceShopBuySellButton>().ItemNameNoColor = (string)DataDictionary["Name"];
         BuyButton.GetComponent<SpaceShopBuySellButton>().Quantity = int.Parse(InputField.text);
         // Fuel cell cant sell
-        if (!"fuelcell".Equals(((string)DataDictionary["Name"]).Replace(" ","").ToLower()))
+        if (!"fuelcore".Equals(((string)DataDictionary["Name"]).Replace(" ","").ToLower()))
         {
             SellButton.SetActive(true);
             if (!SellButton.GetComponent<Collider2D>().enabled)

@@ -79,7 +79,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
             } else
             {
                 // case fuel cell: Check total fuel cell 
-                if ("fuelcell".Equals(ItemNameNoColor.Replace(" ", "").Replace("-", "").ToLower()))
+                if ("fuelcore".Equals(ItemNameNoColor.Replace(" ", "").Replace("-", "").ToLower()))
                 {
                     if ((int)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId)["FuelCell"]<=9)
                     {
@@ -87,7 +87,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                         if ("No Data".Equals(checkCell))
                         {
                             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                            "Cannot fetch data about your Fuel Cell!\nPlease contact our email!", 5f);
+                            "Cannot fetch data about your Fuel Core!\nPlease contact our email!", 5f);
                         } 
                         else if ("Full".Equals(checkCell))
                         {

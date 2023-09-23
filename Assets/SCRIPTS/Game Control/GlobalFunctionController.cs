@@ -688,7 +688,7 @@ public class GlobalFunctionController : MonoBehaviour
         }
         else if (Effect.Contains("FC"))
         {
-            final = "Instantly gain 1 <color=\"green\"><b>Fuel Core</b></color>. Can be purchased even when Fuel Core is full.";
+            final = "Instantly gain 1 <sprite index='2'>. Can't be purchased if Fuel Core is full.";
         }
         return final;
     }
@@ -725,7 +725,7 @@ public class GlobalFunctionController : MonoBehaviour
         }
         else if (Effect.Contains("FC"))
         {
-            final = "Instantly gain 1 <color=\"green\"><b>Fuel Core</b></color>. Can be purchased even when Fuel Core is full.";
+            final = "Instantly gain 1 <sprite index='2'>. Can't be purchased if Fuel Core is full.";
         }
         output.Add("Effect", "Effect: " + final);
         output.Add("Duration", "Duration: " + (int)datas["Duration"] + " seconds.");
@@ -762,8 +762,8 @@ public class GlobalFunctionController : MonoBehaviour
         {
             return "<sprite index='1'>";
         }
-        else if ("fuelcell".Equals(Currency.Replace(" ", "").ToLower())
-            || "cell".Equals(Currency.Replace(" ", "").ToLower())
+        else if ("fuelcore".Equals(Currency.Replace(" ", "").ToLower())
+            || "core".Equals(Currency.Replace(" ", "").ToLower())
             || "fuel".Equals(Currency.Replace(" ", "").ToLower()))
         {
             return "<sprite index='2'>";
