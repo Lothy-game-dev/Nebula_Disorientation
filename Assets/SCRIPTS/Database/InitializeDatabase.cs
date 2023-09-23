@@ -394,7 +394,7 @@ public class InitializeDatabase : MonoBehaviour
             "(9, 'Superior Auto-Repair Module', 'A module that can repair your Fighter efficiently during battle.', 15, 'RMH-10', 5, 'T', 3, 1800, 60, '#4c9aff', 'A module that can repair your Fighter efficiently during battle.')," +
             "(10, 'Nano-Reflective Coat', 'A Nano-tech Coat that grant Invisibility to your Fighter for a few seconds after using.', 5, 'INV', 5, 'T', 2, 5000, 120, '#bf2600', 'A Nano-tech Coat that grant Invisibility to your Fighter for a few seconds after using.')," +
             "(11, 'Emergency Auto-Repair Module', 'An emergency module that quickly repair your Fighter during battle. ', 5, 'RMH-20', 3, 'T', 2, 5000, 120, '#bf2600', 'An emergency module that quickly repair your Fighter during battle. ')," +
-            "(12, 'Fuel Cell', 'Fuel Cell for sale! Quite expensive though…', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600', 'Fuel Core for sale… but only 1 in stock per day.');";
+            "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though…', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600', 'Fuel Core for sale… but only 1 in stock per day.');";
         // LOTWCards
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
             "(1, 'Gun Extension I', 'ENH-2', 10, 3, 'Yes', '#36b37e')," +
