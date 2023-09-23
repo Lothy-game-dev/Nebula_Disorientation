@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Unused
 public class ReactToZoomShared : MonoBehaviour
 {
 
@@ -14,7 +15,7 @@ public class ReactToZoomShared : MonoBehaviour
     public GameObject ClosePosition;
     #endregion
     #region NormalVariables
-    private GameController controller;
+    private CameraController controller;
     private float InitScaleX;
     private float InitScaleY;
     private Vector2 StartPos;
@@ -24,38 +25,39 @@ public class ReactToZoomShared : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        if (FindObjectOfType<GameController>()!=null)
-            controller = FindObjectOfType<GameController>();
+        controller = FindObjectOfType<CameraController>();
         InitScaleX = transform.localScale.x;
         InitScaleY = transform.localScale.y;
-        StartPos = new Vector2(transform.position.x, transform.position.y);
+        StartPos = new Vector2(transform.localPosition.x, transform.localPosition.y);
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         // Call function and timer only if possible
-        if (controller!=null)
+        /*if (controller != null && controller.ZoomAction)
         {
             ReactWhenZoom();
-        }
+        }*/
     }
     #endregion
     #region React To Zoom
     private void ReactWhenZoom()
     {
-        if (controller.IsClose)
+        gameObject.SetActive(false);
+        if (controller.isClose)
         {
             // If close -> All range and scale is half
             transform.localScale = new Vector3(InitScaleX / 2, InitScaleY / 2, transform.localScale.z);
-            transform.position = new Vector3(StartPos.x/2, StartPos.y/2, transform.position.z);
+            transform.localPosition = new Vector3(StartPos.x/2, StartPos.y/2, 10);
         }
         else
         {
             // If zoom out -> All range and scale is back to normal
             transform.localScale = new Vector3(InitScaleX, InitScaleY, transform.localScale.z);
-            transform.position = new Vector3(StartPos.x, StartPos.y, transform.position.z);
+            transform.localPosition = new Vector3(StartPos.x, StartPos.y, 10);
         }
+        gameObject.SetActive(true);
     }
     #endregion
 }

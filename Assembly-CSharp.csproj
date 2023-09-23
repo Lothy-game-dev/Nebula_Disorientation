@@ -142,6 +142,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GlobalFunctionController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\LoadingScene.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryItem.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDCreateInfoBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialButton.cs" />

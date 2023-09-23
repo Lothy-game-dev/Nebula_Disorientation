@@ -28,7 +28,7 @@ public class Weapons : MonoBehaviour
     public float OverheatTimer;
     public AudioClip WeaponShootSound;
     public bool IsOrbWeapon;
-    public Slider ReloadBar;
+    public GameObject ReloadBar;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -72,8 +72,6 @@ public class Weapons : MonoBehaviour
         }
         gameObject.AddComponent<AudioSource>();
         aus = GetComponent<AudioSource>();
-        ReloadBar.maxValue = 1/Time.fixedDeltaTime;
-        ReloadBar.value = ReloadBar.maxValue;
     }
 
     // Update is called once per frame
@@ -170,7 +168,7 @@ public class Weapons : MonoBehaviour
         {
             if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
             {
-                ReloadBar.value = 0;
+                ReloadBar.GetComponent<Image>().fillAmount = 1;
                 if (!IsThermalType)
                 {
                     FireBullet();
@@ -183,14 +181,15 @@ public class Weapons : MonoBehaviour
                 }
             }
         }
-        if (ReloadBar.value < ReloadBar.maxValue - RateOfFire)
+        ReloadBar.GetComponent<Image>().fillAmount -= RateOfFire*Time.fixedDeltaTime;
+/*        if (ReloadBar.value < ReloadBar.maxValue - RateOfFire)
         {
             ReloadBar.value += RateOfFire;
         }
         else
         {
             ReloadBar.value = ReloadBar.maxValue;
-        }
+        }*/
         FireTimer -= Time.deltaTime;
     }
     #endregion
@@ -445,8 +444,8 @@ public class Weapons : MonoBehaviour
             if (isOverheatted)
             {
                 isOverheatted = false;
-                ReloadBar.gameObject.SetActive(true);
-                ReloadBar.value = ReloadBar.maxValue;
+                ReloadBar.SetActive(true);
+                ReloadBar.GetComponent<Image>().fillAmount = 0;
                 isWarning = false;
                 EndSound();
                 currentOverheat = 0f;
