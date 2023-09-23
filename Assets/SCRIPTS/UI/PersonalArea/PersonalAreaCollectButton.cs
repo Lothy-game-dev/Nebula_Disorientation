@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PersonalAreaScene : UECMenuShared
+public class PersonalAreaCollectButton : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -12,11 +13,14 @@ public class PersonalAreaScene : UECMenuShared
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public PersonalArea PersonalAreaController;
+    public GameObject PersonalArea;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private PersonalArea PAController;
+    public DateTime ResetDateTime;
+    public DateTime CollectedTime;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -31,21 +35,16 @@ public class PersonalAreaScene : UECMenuShared
         // Call function and timer only if possible
     }
     #endregion
-    #region Enter/Exit Scene
+    #region Check mouse
     // Group all function that serve the same algorithm
-    public override void OnEnterAnimation()
-    {
-        GetComponent<BackgroundBrieflyMoving>().enabled = true;
-        transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
-        PersonalAreaController.GetData();
-    }
-
-    public override void OnExitAnimation()
-    {
-        
+    private void OnMouseDown()
+    {      
+        PAController = PersonalArea.GetComponent<PersonalArea>();
+        if (!PAController.IsCollected)
+        {
+            PAController.IsCollected = true;
+        }
     }
     #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
-    #endregion
+    
 }
