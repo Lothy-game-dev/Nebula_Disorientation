@@ -91,6 +91,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECCurrencyBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutTeleportButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\StatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
