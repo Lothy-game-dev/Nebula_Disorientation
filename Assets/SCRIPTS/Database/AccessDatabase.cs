@@ -29,8 +29,8 @@ public class AccessDatabase : MonoBehaviour
             return "Exist";
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime) " +
-            "VALUES ('" + name + "',null,null,10,0,500,5,500,'N',null)";
+        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime) " +
+            "VALUES ('" + name + "',null,null,10,0,500,5,500,'N',null,null)";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
