@@ -41,7 +41,7 @@ public class PersonalArea : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        CollectedTime = new DateTime(2023, 9, 23, 15, 55, 0);
+        
     }
 
     // Update is called once per framenew 
@@ -65,7 +65,7 @@ public class PersonalArea : MonoBehaviour
 
     }
     #endregion
-    #region Generate new list
+    #region Get data
     // Group all function that serve the same algorithm
     public void GetData()
     {
@@ -73,7 +73,10 @@ public class PersonalArea : MonoBehaviour
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
         PlayerName.GetComponent<TextMeshPro>().text = (string)PlayerInformation["Name"];
-        PlayerRank.GetComponent<TextMeshPro>().text = "<color="+(string)PlayerInformation["RankColor"]+">" + (string)PlayerInformation["Rank"] + "</color>";
+        if ((string)PlayerInformation["Rank"] != "Unranked")
+        {
+            PlayerRank.GetComponent<TextMeshPro>().text = "<color="+(string)PlayerInformation["RankColor"]+">" + (string)PlayerInformation["Rank"] + "</color>";
+        }
         for (int i = 0; i < RankList.Count; i++)
         {
             GameObject game = Instantiate(Template, Template.transform.position, Quaternion.identity);

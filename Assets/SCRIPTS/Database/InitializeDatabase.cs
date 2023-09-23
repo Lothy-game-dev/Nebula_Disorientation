@@ -197,6 +197,7 @@ public class InitializeDatabase : MonoBehaviour
                 "DailyIncome INTEGER NOT NULL, " +
                 "DailyIncomeReceived TEXT NOT NULL, " +
                 "LastFuelCellUsedTime TEXT," +
+                "CollectedSalaryTime TEXT," +
                 "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
                 "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +

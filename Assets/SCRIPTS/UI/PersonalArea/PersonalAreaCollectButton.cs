@@ -43,6 +43,10 @@ public class PersonalAreaCollectButton : MonoBehaviour
         if (!PAController.IsCollected)
         {
             PAController.IsCollected = true;
+        } else
+        {
+            FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
+                "You have already collected salary!", 5f);
         }
     }
     #endregion
