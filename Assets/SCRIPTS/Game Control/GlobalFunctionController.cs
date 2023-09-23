@@ -805,11 +805,11 @@ public class GlobalFunctionController : MonoBehaviour
                     string boss = "";
                     switch (ConditionSZ2.Split("-")[1])
                     {
-                        case "I": boss = "Tier I Zaturi Fighter"; break;
-                        case "II": boss = "Tier II Zaturi Fighter"; break;
-                        case "WS": boss = "Zaturi Warship"; break;
+                        case "I": boss = "<color=#FF0D11>Tier I Zaturi Fighter</color>"; break;
+                        case "II": boss = "<color=#4C9AFF>Tier II Zaturi Fighter</color>"; break;
+                        case "WS": boss = "<color=#FF0D11>Zaturi Warship</color>"; break;
                     }
-                    FinalString += "- Defeat " + boss + ConditionSZ2Number + " times";
+                    FinalString += "- Defeat " + boss + " " + ConditionSZ2Number + " times";
                 } else
                 {
                     //Permanently acquire x Arsenal's Items
