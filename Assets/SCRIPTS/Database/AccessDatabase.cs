@@ -528,6 +528,43 @@ public class AccessDatabase : MonoBehaviour
             return "Success";
         }
     }
+
+    public string CollectSalary(int PlayerId, int Cash)
+    {
+        int checkID = 0;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE " +
+           "PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            checkID = dataReader.GetInt32(0);           
+        }
+        if (checkID == 0) {
+            dbConnection.Close();
+            return "Not Exist";
+        }
+        System.DateTime date = System.DateTime.Now;
+        string collectedDate = date.ToString();
+        Debug.Log(collectedDate);
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
+            + ", CollectedSalaryTime = '" +collectedDate+ "', DailyIncomeReceived = 'Y' WHERE PlayerID=" + PlayerId;
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        } else
+        {
+            return "Success";
+        }
+       
+    } 
     #endregion
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)

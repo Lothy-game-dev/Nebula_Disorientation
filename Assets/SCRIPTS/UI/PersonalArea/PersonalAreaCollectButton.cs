@@ -43,6 +43,7 @@ public class PersonalAreaCollectButton : MonoBehaviour
         if (!PAController.IsCollected)
         {
             PAController.IsCollected = true;
+            CollectDailyIncome();
         } else
         {
             FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
@@ -50,5 +51,23 @@ public class PersonalAreaCollectButton : MonoBehaviour
         }
     }
     #endregion
-    
+    #region Collect salary
+    public void CollectDailyIncome()
+    {
+        string check = FindAnyObjectByType<AccessDatabase>().CollectSalary(FindObjectOfType<UECMainMenuController>().PlayerId, (int)PAController.PlayerInformation["DailyIncome"]);
+        switch (check)
+        {
+            case "Not Exist":
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
+                    "Can not fetch data about your pilot.\nplease contact our email.", 5f); break;
+            case "Fail":
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
+                    "Collect Failed.\nPlease try again later.", 5f); break;
+            case "Success":
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
+                    "Collect Successfully.\nSee you tomorrow!.", 5f); break;
+        }
+    }
+    #endregion
+
 }
