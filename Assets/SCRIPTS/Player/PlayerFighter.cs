@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerFighter : FighterShared
 {
@@ -11,6 +12,10 @@ public class PlayerFighter : FighterShared
     #region InitializeVariables
     public GameObject FighterTempColor;
     public GameObject FighterTempText;
+    public Slider HPSlider;
+    public GameObject HPText;
+    public Slider BRSlider;
+    public GameObject BRText;
     public AudioClip MovingSound;
     public AudioClip DashSound;
     public AudioClip OverheatWarning;
@@ -27,6 +32,7 @@ public class PlayerFighter : FighterShared
         // Initialize variables
         InitializeFighter();
         aus = GetComponent<AudioSource>();
+        HPSlider.maxValue = MaxHP;
     }
 
     // Update is called once per frame
@@ -51,7 +57,7 @@ public class PlayerFighter : FighterShared
         {
             testTimer -= Time.deltaTime;
         }
-        ShowTemp();
+        ShowInfo();
     }
     #endregion
     #region Play Sound
@@ -80,19 +86,24 @@ public class PlayerFighter : FighterShared
     }
     #endregion
     #region Show Information To HUD
-    private void ShowTemp()
+    private void ShowInfo()
     {
+        // Temp
         FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "°";
         if (currentTemperature==50f)
         {
-            FighterTempColor.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 90 / 255f);
+            FighterTempColor.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 158 / 255f);
         } else if (currentTemperature>50f)
         {
-            FighterTempColor.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(0,1,0,90/255f), new Color(1, 0, 0, 180 / 255f), (currentTemperature-50)/50f);
+            FighterTempColor.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(0,1,0, 158 / 255f), new Color(1, 0, 0, 200 / 255f), (currentTemperature-50)/50f);
         } else if (currentTemperature<50f)
         {
-            FighterTempColor.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(0, 1, 1, 180 / 255f), new Color(0, 1, 0, 90 / 255f), (currentTemperature) / 50f);
+            FighterTempColor.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(0, 1, 1, 200 / 255f), new Color(0, 1, 0, 158 / 255f), (currentTemperature) / 50f);
         }
+        // HP
+        HPSlider.value = CurrentHP;
+        HPText.GetComponent<TextMeshPro>().text = CurrentHP + " / " + MaxHP;
+        // BR
     }
     #endregion
 }
