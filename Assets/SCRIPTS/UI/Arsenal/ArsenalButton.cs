@@ -80,7 +80,7 @@ public class ArsenalButton : MonoBehaviour
                 }
                 else
                 {
-                    if (ArsenalController.WeaponList[i][2].Contains("Nano Flame Thrower"))
+                    if (ArsenalController.WeaponList[i][2].Contains("Nano Flame Thrower") || ArsenalController.WeaponList[i][2].Contains("Freezing Blaster"))
                     {
                         g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
                     }
@@ -89,6 +89,7 @@ public class ArsenalButton : MonoBehaviour
                         g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => ArsenalController.WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                     }
                 }
+                // check owned item
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
                 g.name, "Weapon");
                 if (n != -1)
