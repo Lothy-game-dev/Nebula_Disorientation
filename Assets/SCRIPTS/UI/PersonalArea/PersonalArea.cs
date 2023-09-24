@@ -23,6 +23,12 @@ public class PersonalArea : MonoBehaviour
     public GameObject PlayerName;
     public GameObject PlayerRank;
     public GameObject TimeRemaining;
+    public GameObject CollectButton;
+    public GameObject Cash;
+    public GameObject TimelessShard;
+    public GameObject FuelCell;
+    public GameObject FuelEnergy;
+
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -47,25 +53,18 @@ public class PersonalArea : MonoBehaviour
     // Update is called once per framenew 
     void Update()
     {
-        // Call function and timer only if possible
-        /*TimeSpan timeRemaining = CollectedTime - DateTime.Now;
-        Debug.Log(timeRemaining);
-        formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
-        TimeRemaining.GetComponent<TextMeshPro>().text = formattedTime;*/
+     
         if (IsCollected)
-        {
-            TimeRemaining.SetActive(true);
+        {          
             SetTimer();
             if (timeRemaining <= TimeSpan.Zero)
-            {
-                TimeRemaining.SetActive(false);
+            {              
                 IsCollected = false;
             } 
         }
-
     }
     #endregion
-    #region Get data
+    #region Get data / reset data
     // Group all function that serve the same algorithm
     public void GetData()
     {
@@ -73,6 +72,7 @@ public class PersonalArea : MonoBehaviour
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
         PlayerName.GetComponent<TextMeshPro>().text = (string)PlayerInformation["Name"];
+        SetData(PlayerInformation);
         if ((string)PlayerInformation["Rank"] != "Unranked")
         {
             PlayerRank.GetComponent<TextMeshPro>().text = "<color="+(string)PlayerInformation["RankColor"]+">" + (string)PlayerInformation["Rank"] + "</color>";
@@ -94,8 +94,43 @@ public class PersonalArea : MonoBehaviour
         if ((string)PlayerInformation["DailyIncomeReceived"] == "N")
         {
             IsCollected = false;
+            TimeRemaining.GetComponent<TextMeshPro>().text = "Your salary is here!";
+            if (CollectButton.GetComponent<CursorUnallowed>() != null)
+            {
+                Destroy(CollectButton.AddComponent<CursorUnallowed>());
+            }
+        } else
+        {
+            IsCollected = true;
+            CollectButton.transform.GetChild(1).gameObject.SetActive(true);
+            if (CollectButton.GetComponent<CursorUnallowed>() == null)
+            {
+                CollectButton.AddComponent<CursorUnallowed>();
+            }
         }
         
+    }
+    public void ResetData()
+    {
+       if (Content.transform.childCount > 1)
+        {
+            for (int i = 1; i < Content.transform.childCount; i++)
+            {
+                Destroy(Content.transform.GetChild(i).gameObject);
+            }
+        }
+    }
+    public void SetData(Dictionary<string, object> Data)
+    {
+        Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["Cash"]).ToString();
+        TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["TimelessShard"]).ToString();
+        FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["FuelEnergy"]).ToString();
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
+        if ((int)Data["FuelCell"] == 10)
+        {
+            FuelCell.transform.GetChild(2).gameObject.SetActive(false);
+        }
     }
     #endregion
     #region Show rank's information (Daily income, condition to rank up,...)
@@ -116,7 +151,7 @@ public class PersonalArea : MonoBehaviour
         {
             Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
         }
-        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.green;
+        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.yellow;
     }
     #endregion
     #region Lock item
