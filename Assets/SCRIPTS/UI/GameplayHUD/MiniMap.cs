@@ -31,6 +31,7 @@ public class MiniMap : MonoBehaviour
     private List<GameObject> icons;
     private float InitRange;
     private float InitScale;
+    private float IconScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -52,6 +53,8 @@ public class MiniMap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // React When Player Zoom out/ close
+        ReactWhenZoom();
         // Render All Objects With Renderable and Enemy Layers that have Collider Within Render Range Declared
         RenderAllWithCollider(RenderRange);
     }
@@ -81,9 +84,10 @@ public class MiniMap : MonoBehaviour
                     icon.transform.SetParent(transform);
                     // Set scale of icon based on minimap scale
                     icon.transform.localScale =
-                    new Vector3(icon.transform.localScale.x * transform.localScale.x / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x / InitScale); icon.SetActive(true);
+                    new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * transform.localScale.x / InitScale); 
+                    icon.SetActive(true);
                     // Set Icon name = object's name + " Icon"
                     icon.name = col.name + " Icon";
                     icons.Add(icon);
@@ -102,9 +106,10 @@ public class MiniMap : MonoBehaviour
                     GameObject icon = Instantiate(EliteEnemyIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
                     icon.transform.SetParent(transform);
                     icon.transform.localScale =
-                    new Vector3(icon.transform.localScale.x * transform.localScale.x / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x / InitScale); icon.SetActive(true);
+                    new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale); 
+                    icon.SetActive(true);
                     icon.name = col.name + " Icon";
                     icons.Add(icon);
                 }
@@ -122,9 +127,9 @@ public class MiniMap : MonoBehaviour
                     GameObject icon = Instantiate(BossEnemyIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
                     icon.transform.SetParent(transform);
                     icon.transform.localScale = 
-                        new Vector3(icon.transform.localScale.x * transform.localScale.x / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x / InitScale);
+                        new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale);
                     icon.SetActive(true);
                     icon.name = col.name + " Icon";
                     icons.Add(icon);
@@ -145,9 +150,9 @@ public class MiniMap : MonoBehaviour
                     float BHRange = col.GetComponent<BlackHole>().radius;
                     float iconBHRange = Mathf.Abs(icon.transform.position.y - icon.transform.GetChild(0).transform.position.y);
                     icon.transform.localScale =
-                        new Vector3(icon.transform.localScale.x * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale,
-                        icon.transform.localScale.x * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale);
+                        new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x * BHRange * RenderRate / iconBHRange / InitScale);
                     icon.SetActive(true);
                     icon.name = col.name + " Icon";
                     icons.Add(icon);
@@ -220,6 +225,28 @@ public class MiniMap : MonoBehaviour
                     i++;
                 }
             }
+        }
+    }
+    #endregion
+    #region React When Zoom Out/Close
+    // React to zoom
+    private void ReactWhenZoom()
+    {
+        if (GameController.IsClose)
+        {
+            // If close -> All range and scale is half
+            MiniMapRange = InitRange / 2;
+            RenderRate = MiniMapRange / RenderRange;
+            IconScale = 1 / 2f;
+            transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
+        }
+        else
+        {
+            // If zoom out -> All range and scale is back to normal
+            MiniMapRange = InitRange;
+            RenderRate = MiniMapRange / RenderRange;
+            IconScale = 1;
+            transform.position = new Vector3(ZoomOutPosition.transform.position.x, ZoomOutPosition.transform.position.y, transform.position.z);
         }
     }
     #endregion
