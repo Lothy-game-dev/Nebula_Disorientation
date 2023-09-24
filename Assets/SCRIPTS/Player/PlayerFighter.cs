@@ -10,6 +10,7 @@ public class PlayerFighter : FighterShared
     private AudioSource aus;
     #endregion
     #region InitializeVariables
+    public GameObject FighterInfoCircle;
     public GameObject FighterTempColor;
     public GameObject FighterTempText;
     public Slider HPSlider;
@@ -90,6 +91,7 @@ public class PlayerFighter : FighterShared
     {
         // Temp
         FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "°";
+        FighterInfoCircle.GetComponent<HUDFighterInfoEffects>().CurrentTemp = currentTemperature;
         if (currentTemperature==50f)
         {
             FighterTempColor.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 158 / 255f);
@@ -103,7 +105,7 @@ public class PlayerFighter : FighterShared
         // HP
         HPSlider.value = CurrentHP;
         HPText.GetComponent<TextMeshPro>().text = CurrentHP + " / " + MaxHP;
-        // BR
+        // BR Pending
     }
     #endregion
 }

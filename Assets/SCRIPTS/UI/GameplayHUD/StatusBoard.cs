@@ -16,11 +16,24 @@ public class StatusBoard : MonoBehaviour
     public GameObject ZoomOutPosition;
     public GameObject ClosePosition;
     //Status
-    public TMP_Text HealthText;
+    public GameObject NameBox;
+    public GameObject WeaponBox;
+    public GameObject PowerBox;
+    public GameObject StatusBox;
+    public TextMeshPro HealthText;
     public Slider HPSlider;
-    public TMP_Text TemperText;
+    public TextMeshPro BarrierText;
+    public Slider BarrierSlider;
+    public TextMeshPro TemperText;
     public Slider TemperSlider;
-
+    public GameObject HPBar;
+    public GameObject BarrierBar;
+    public GameObject TempBar;
+    // Check mouse
+    public GameObject Left;
+    public GameObject Right;
+    public GameObject Top;
+    public GameObject Bottom;
     //Image
     public GameObject EnemyImagePosition;
 
@@ -64,6 +77,10 @@ public class StatusBoard : MonoBehaviour
         
         // React When Player Zoom out/ close
         ReactWhenZoom();
+        if (!isMouseOutsideRange())
+        {
+            CheckOnDestroy();
+        }
         if (isShow)
         {
             UpdateStatus();
@@ -80,15 +97,31 @@ public class StatusBoard : MonoBehaviour
                 if (CloneEnemy != null)
                 {
                     Destroy(CloneEnemy);
+                    NameBox.SetActive(false);
+                    WeaponBox.SetActive(false);
+                    PowerBox.SetActive(false);
                     HealthText.gameObject.SetActive(false);
-                    HPSlider.gameObject.SetActive(false);
+                    HPBar.SetActive(false);
+                    BarrierText.gameObject.SetActive(false);
+                    BarrierBar.SetActive(false);
                     TemperText.gameObject.SetActive(false);
-                    TemperSlider.gameObject.SetActive(false);
+                    TempBar.SetActive(false);
                     alreadyDelete = true;
                 }
                 StartCoroutine(CloseBoard());
             }
         }
+    }
+    #endregion
+    #region Mouse Over Check
+    private bool isMouseOutsideRange()
+    {
+        if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > Right.transform.position.x ||
+            Camera.main.ScreenToWorldPoint(Input.mousePosition).x < Left.transform.position.x ||
+            Camera.main.ScreenToWorldPoint(Input.mousePosition).y > Top.transform.position.y ||
+            Camera.main.ScreenToWorldPoint(Input.mousePosition).y < Bottom.transform.position.y)
+            return true;
+        return false;
     }
     #endregion
     #region React When Zoom Out/Close
@@ -182,11 +215,14 @@ public class StatusBoard : MonoBehaviour
             CloneEnemyColl = CloneEnemy.GetComponent<Collider2D>();
             CloneEnemyColl.enabled = false;
         }
-
-        // WAit for 1s to show HP and temp bar
+        NameBox.SetActive(true);
+        // WAit time to show HP and temp bar
         yield return new WaitForSeconds(0.4f);
+        WeaponBox.SetActive(true);
+        PowerBox.SetActive(true);
+        /*StatusBox.SetActive(true);*/
         EnemyObject = Enemy.GetComponent<EnemyShared>();
-        HPSlider.gameObject.SetActive(true);
+        HPBar.SetActive(true);
         HPSlider.maxValue = EnemyObject.MaxHP;
         HPSlider.value = EnemyObject.CurrentHP;
 
@@ -194,8 +230,12 @@ public class StatusBoard : MonoBehaviour
         HealthText.gameObject.SetActive(true);
         HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
 
+        // Barrier undone
+        BarrierText.gameObject.SetActive(true);
+        BarrierBar.SetActive(true);
+
         //Setting slider base on current temperature
-        TemperSlider.gameObject.SetActive(true);
+        TempBar.SetActive(true);
         TemperSlider.maxValue = 100;
         TemperSlider.value = EnemyObject.currentTemperature;
 
@@ -295,9 +335,4 @@ public class StatusBoard : MonoBehaviour
         }
     }
     #endregion
-
-    private void OnMouseOver()
-    {
-        CheckOnDestroy();
-    }
 }
