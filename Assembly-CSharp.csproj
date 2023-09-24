@@ -60,10 +60,12 @@
   <ItemGroup>
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECBackButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSceneShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRename.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBox.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRenameButton.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
