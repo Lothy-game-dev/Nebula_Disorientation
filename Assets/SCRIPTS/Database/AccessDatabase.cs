@@ -565,6 +565,42 @@ public class AccessDatabase : MonoBehaviour
         }
        
     } 
+
+    public string UpdatePlayerProfileName(int PlayerId, string name)
+    {
+        int checkID = 0;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE " +
+           "PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            checkID = dataReader.GetInt32(0);
+        }
+        if (checkID == 0)
+        {
+            dbConnection.Close();
+            return "Not Exist";
+        }
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Name = '"+ name +"'" +
+            "" +
+            " WHERE PlayerID=" + PlayerId;
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
     #endregion
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
@@ -1794,6 +1830,26 @@ public class AccessDatabase : MonoBehaviour
             dbConnection.Close();
             return -1;
         }
+    }
+
+    public int GetCurrentOwnershipWeaponPowerModel(int PlayerID, string Type) 
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Sum(Quantity) FROM PlayerOwnership WHERE " +
+            "PlayerID=" + PlayerID + " AND ItemType='" + Type + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int quan = -1;
+        while (dataReader.Read())
+        {
+            quan = dataReader.GetInt32(0);
+        }
+        dbConnection.Close();
+        return quan;
+       
     }
     /// <summary>
     /// Use this fuction to add permanent ownership to any item

@@ -82,6 +82,16 @@ public class NotiBoardOKButton : MonoBehaviour
         } else if ("ReturnButton".Equals(name))
         {
             Destroy(NotiBoard);
+        } else
+        {
+            if ("RenameButton".Equals(name))
+            {
+                PersonalAreaRename rn = NotiBoard.transform.GetChild(0).GetComponent<PersonalAreaRename>();
+                if (rn != null)
+                {
+                    rn.RenameAction();
+                }
+            }
         }
     }
 
