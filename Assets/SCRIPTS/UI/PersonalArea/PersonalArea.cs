@@ -96,6 +96,7 @@ public class PersonalArea : MonoBehaviour
             {
                 ShowRankInfo(RankList[i][0]);
             }
+            
             LockItem(game, RankList[i][0]);
         }
         if ((string)PlayerInformation["DailyIncomeReceived"] == "N")
@@ -146,6 +147,7 @@ public class PersonalArea : MonoBehaviour
     public void ShowRankInfo(string Id)
     {
         CurrentItem(Id);
+        Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = Color.green + Color.red;
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
         RankDesc.GetComponent<TMP_Text>().text =  RankCondition;
         RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>";

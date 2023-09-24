@@ -166,28 +166,33 @@ public class Arsenal : UECMenuShared
         //If item doesnt have shard value, it cant be buy permanently
         if (!isLocked)
         {
-            if (CurrentTab == "Weapon")
+            if (!IsInSession)
             {
-                if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
+                if (CurrentTab == "Weapon")
                 {
-                    isLocked = true;
-                    Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
-                    Game.GetComponent<ArsenalItem>().LockedItem = true;
-                    Game.GetComponent<ArsenalItem>().IsRanked = false;
-                    Game.GetComponent<ArsenalItem>().IsZeroShard = true;
-                } 
-            }
-            else
-            {
-                if (CurrentTab == "Power")
-                {
-                    if (PowerList[int.Parse(Id) - 1][6] == "N.A")
+                    if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
                     {
                         isLocked = true;
                         Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                         Game.GetComponent<ArsenalItem>().LockedItem = true;
                         Game.GetComponent<ArsenalItem>().IsRanked = false;
                         Game.GetComponent<ArsenalItem>().IsZeroShard = true;
+                        Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                    } 
+                }
+                else
+                {
+                    if (CurrentTab == "Power")
+                    {
+                        if (PowerList[int.Parse(Id) - 1][6] == "N.A")
+                        {
+                            isLocked = true;
+                            Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
+                            Game.GetComponent<ArsenalItem>().LockedItem = true;
+                            Game.GetComponent<ArsenalItem>().IsRanked = false;
+                            Game.GetComponent<ArsenalItem>().IsZeroShard = true;
+                            Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                        }
                     }
                 }
             }
@@ -226,6 +231,7 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
                     Game.GetComponent<ArsenalItem>().IsZeroShard = false;
+                    
                 }
             } else if (CurrentTab == "Power")
             {
@@ -238,6 +244,7 @@ public class Arsenal : UECMenuShared
                     Game.GetComponent<ArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<ArsenalItem>().IsRanked = false;
                     Game.GetComponent<ArsenalItem>().IsZeroShard = false;
+
                 }
             }
         }
