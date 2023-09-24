@@ -14,6 +14,7 @@ public class UECMainMenuController : MonoBehaviour
     public GameObject[] DisableUponActive;
     public Factory FactoryController;
     public Arsenal ArsenalController;
+    public PersonalArea PAController;
     #endregion
     #region NormalVariables
     public int PlayerId;
@@ -45,6 +46,7 @@ public class UECMainMenuController : MonoBehaviour
             controller.SetDataToView(ListData);
             FactoryController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
             ArsenalController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
+            PAController.SetData(ListData);
             // Temp
             FindObjectOfType<SpaceShopScene>().SetData();
         } else

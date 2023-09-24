@@ -44,6 +44,7 @@ public class PersonalAreaScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        PersonalAreaController.ResetData();
     }
     #endregion
     #region Function group ...
