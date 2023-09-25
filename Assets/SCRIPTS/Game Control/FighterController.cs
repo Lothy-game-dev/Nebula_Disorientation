@@ -86,6 +86,12 @@ public class FighterController : MonoBehaviour
         LeftWeaponIcon.transform.SetParent(LeftOverheatImage.transform);
         LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(CurrentLeftWeapon.name);
         LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().TopBottomLeftRight.Add("Bottom");
+        LeftOverheatImage.GetComponent<HUDShowRange>().Range = CurrentLeftWeapon.GetComponent<Weapons>().
+            Bullet.GetComponent<BulletShared>().MaximumDistance > 0 ?
+            CurrentLeftWeapon.GetComponent<Weapons>().
+            Bullet.GetComponent<BulletShared>().MaximumDistance :
+            CurrentLeftWeapon.GetComponent<Weapons>().
+            Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
         RightWeaponIcon.SetActive(true);
         RightWeaponIcon.GetComponent<Weapons>().enabled = false;
         RightWeaponIcon.transform.localScale =
@@ -102,6 +108,12 @@ public class FighterController : MonoBehaviour
         // Set Reload Bar
         LeftWeapon.GetComponent<Weapons>().ReloadBar = LeftReloadBar;
         RightWeapon.GetComponent<Weapons>().ReloadBar = RightReloadBar;
+        RightOverheatImage.GetComponent<HUDShowRange>().Range = CurrentRightWeapon.GetComponent<Weapons>().
+            Bullet.GetComponent<BulletShared>().MaximumDistance > 0 ?
+            CurrentRightWeapon.GetComponent<Weapons>().
+            Bullet.GetComponent<BulletShared>().MaximumDistance :
+            CurrentRightWeapon.GetComponent<Weapons>().
+            Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
     }
     #endregion
 }

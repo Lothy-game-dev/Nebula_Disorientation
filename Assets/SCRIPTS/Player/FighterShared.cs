@@ -283,7 +283,7 @@ public class FighterShared : MonoBehaviour
                     currentTemperature = 50f;
                 } 
                 // If temp > 50, decrease to 50
-                else if (currentTemperature > 55f)
+                else if (currentTemperature >= (50 + 5 * RegenScale))
                 {
                     currentTemperature -= 5 * RegenScale;
                 } else if (currentTemperature < (50 + 5 * RegenScale) && currentTemperature > 50f)
