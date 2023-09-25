@@ -37,13 +37,15 @@ public class PersonalArea : MonoBehaviour
     public List<List<string>> RankList;
     public Dictionary<string, object> PlayerInformation;
     public int PlayerId;
-    public DateTime ResetDateTime;
-    public DateTime CollectedTime;
+    private DateTime ResetDateTime;
+    private DateTime CollectedTime;
+    private DateTime CurrentTime;
     private string formattedTime;
     public bool IsCollected;
     private TimeSpan timeRemaining;
     private int WeapOwned;
     private int ModelOwned;
+    public bool isUnranked;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -60,10 +62,7 @@ public class PersonalArea : MonoBehaviour
         if (IsCollected)
         {          
             SetTimer();
-            if (timeRemaining <= TimeSpan.Zero)
-            {              
-                IsCollected = false;
-            } 
+           
         }
     }
     #endregion
@@ -83,6 +82,9 @@ public class PersonalArea : MonoBehaviour
         if ((string)PlayerInformation["Rank"] != "Unranked")
         {
             PlayerRank.GetComponent<TextMeshPro>().text = "<color="+(string)PlayerInformation["RankColor"]+">" + (string)PlayerInformation["Rank"] + "</color>";
+        } else
+        {
+            isUnranked = true;
         }
         for (int i = 0; i < RankList.Count; i++)
         {
@@ -99,13 +101,14 @@ public class PersonalArea : MonoBehaviour
             
             LockItem(game, RankList[i][0]);
         }
+        // check daily
         if ((string)PlayerInformation["DailyIncomeReceived"] == "N")
         {
             IsCollected = false;
             TimeRemaining.GetComponent<TextMeshPro>().text = "Your salary is here!";
             if (CollectButton.GetComponent<CursorUnallowed>() != null)
             {
-                Destroy(CollectButton.AddComponent<CursorUnallowed>());
+                Destroy(CollectButton.GetComponent<CursorUnallowed>());
             }
         } else
         {
@@ -115,6 +118,19 @@ public class PersonalArea : MonoBehaviour
             {
                 CollectButton.AddComponent<CursorUnallowed>();
             }
+        }
+        // check if time system has changed to collect salary
+        if (FindAnyObjectByType<AccessDatabase>().CheckIfCollected(PlayerId, System.DateTime.Now.ToString("dd/MM/yyyy")) == 0)
+        {
+            IsCollected = false;
+        } else
+        {
+            CollectButton.transform.GetChild(1).gameObject.SetActive(true);
+            if (CollectButton.GetComponent<CursorUnallowed>() == null)
+            {
+                CollectButton.AddComponent<CursorUnallowed>();
+            }
+            IsCollected = true;
         }
         
     }
@@ -151,7 +167,10 @@ public class PersonalArea : MonoBehaviour
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
         RankDesc.GetComponent<TMP_Text>().text =  RankCondition;
         RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>";
-        CurrentSalary.GetComponent<TMP_Text>().text = PlayerInformation["DailyIncome"] + " <sprite index='3'>";
+        if (!isUnranked)
+        {
+            CurrentSalary.GetComponent<TMP_Text>().text = PlayerInformation["DailyIncome"] + " <sprite index='3'>";
+        }
     }
     #endregion
     #region Check current item
@@ -177,11 +196,30 @@ public class PersonalArea : MonoBehaviour
     // Group all function that serve the same algorithm
     public void SetTimer()
     {
+        int check = FindAnyObjectByType<AccessDatabase>().CheckIfCollected(PlayerId, System.DateTime.Now.ToString("dd/MM/yyyy"));
         CollectedTime = DateTime.Now;
         ResetDateTime = CollectedTime.AddDays(1).Date + new TimeSpan(6, 0, 0);
         timeRemaining = ResetDateTime - CollectedTime;
         formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         TimeRemaining.GetComponent<TextMeshPro>().text = formattedTime;
+        if (CollectedTime.Hour == 6 && CollectedTime.Minute == 0 && CollectedTime.Second == 0 && check == 0)
+        {
+            ResetDaily();
+            IsCollected = false;
+        }
+
+    }
+    #endregion
+    #region Reset daily income
+    public void ResetDaily()
+    {
+        FindAnyObjectByType<AccessDatabase>().ResetDailyIncome();
+        TimeRemaining.GetComponent<TextMeshPro>().text = "Your salary is here!";
+        if (CollectButton.GetComponent<CursorUnallowed>() != null)
+        {
+            Destroy(CollectButton.GetComponent<CursorUnallowed>());
+            CollectButton.transform.GetChild(1).gameObject.SetActive(false);
+        }
     }
     #endregion
 }
