@@ -16,6 +16,7 @@ public class NotificationBoardController : MonoBehaviour
     public GameObject RechargeBoard;
     public GameObject InformationBoard;
     public GameObject SmallHUDInfoBoard;
+    public GameObject RenameBoard;
     #endregion
     #region NormalVariables
     public delegate void VoidFunctionPass();
@@ -141,6 +142,14 @@ public class NotificationBoardController : MonoBehaviour
             smallHUDBoard.transform.SetParent(transform);
             currentHUDSmallBoard.Add(smallHUDBoard);
         }
+    }
+
+    public void CreateNormalRenameBoard(Vector2 Position, string NewName)
+    {
+        GameObject notiBoard = Instantiate(RenameBoard, new Vector3(Position.x, Position.y, RenameBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(0f, notiBoard.transform.GetChild(0).gameObject));
     }
 
     public void DestroyCurrentInfoBoard()

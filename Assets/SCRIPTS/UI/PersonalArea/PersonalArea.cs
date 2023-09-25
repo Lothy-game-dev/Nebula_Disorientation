@@ -28,7 +28,8 @@ public class PersonalArea : MonoBehaviour
     public GameObject TimelessShard;
     public GameObject FuelCell;
     public GameObject FuelEnergy;
-
+    public GameObject WeaponOwned;
+    public GameObject FighterOwned;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -41,6 +42,8 @@ public class PersonalArea : MonoBehaviour
     private string formattedTime;
     public bool IsCollected;
     private TimeSpan timeRemaining;
+    private int WeapOwned;
+    private int ModelOwned;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -71,7 +74,11 @@ public class PersonalArea : MonoBehaviour
         RankList = FindAnyObjectByType<AccessDatabase>().GetAllRank();
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerId);
+        WeapOwned = FindAnyObjectByType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModel(PlayerId, "Weapon");
+        ModelOwned = FindAnyObjectByType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModel(PlayerId, "Model");
         PlayerName.GetComponent<TextMeshPro>().text = (string)PlayerInformation["Name"];
+        WeaponOwned.GetComponent<TextMeshPro>().text = "Weapons Owned: "+ WeapOwned + "";
+        FighterOwned.GetComponent<TextMeshPro>().text = "Fighters Owned: " + ModelOwned + "";
         SetData(PlayerInformation);
         if ((string)PlayerInformation["Rank"] != "Unranked")
         {
@@ -89,6 +96,7 @@ public class PersonalArea : MonoBehaviour
             {
                 ShowRankInfo(RankList[i][0]);
             }
+            
             LockItem(game, RankList[i][0]);
         }
         if ((string)PlayerInformation["DailyIncomeReceived"] == "N")
@@ -122,6 +130,7 @@ public class PersonalArea : MonoBehaviour
     }
     public void SetData(Dictionary<string, object> Data)
     {
+        PlayerName.GetComponent<TextMeshPro>().text = (string)Data["Name"];
         Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["Cash"]).ToString();
         TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["TimelessShard"]).ToString();
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["FuelEnergy"]).ToString();
@@ -138,6 +147,7 @@ public class PersonalArea : MonoBehaviour
     public void ShowRankInfo(string Id)
     {
         CurrentItem(Id);
+        Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = Color.green + Color.red;
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
         RankDesc.GetComponent<TMP_Text>().text =  RankCondition;
         RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>";
