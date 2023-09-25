@@ -27,7 +27,7 @@ public class MiniMap : MonoBehaviour
     #endregion
     #region NormalVariables
     private float MiniMapRange;
-    private float RenderRate;
+    public float RenderRate;
     private List<GameObject> icons;
     private float InitRange;
     private float InitScale;

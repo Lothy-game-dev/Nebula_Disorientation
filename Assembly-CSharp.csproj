@@ -62,6 +62,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSceneShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRename.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerBar.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDShowRange.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBox.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />

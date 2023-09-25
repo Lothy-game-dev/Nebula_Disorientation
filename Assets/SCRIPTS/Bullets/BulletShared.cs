@@ -356,14 +356,14 @@ public class BulletShared : MonoBehaviour
                         enemy.ReceiveThermalDamage(false);
                         if (enemy.FrozenDuration > 0f)
                         {
-                            if (enemy.NanoEffectFrozenDurationIncrease < (6f - 1.5f * enemy.NanoTempScale))
+                            if (enemy.NanoEffectFrozenDurationIncrease < (3f - 1.5f * enemy.NanoTempScale))
                             {
                                 enemy.FrozenDuration += 1.5f * enemy.NanoTempScale;
                                 enemy.NanoEffectFrozenDurationIncrease += 1.5f * enemy.NanoTempScale;
                             } else
                             {
-                                enemy.FrozenDuration += 6f - enemy.NanoEffectFrozenDurationIncrease;
-                                enemy.NanoEffectFrozenDurationIncrease = 6f;
+                                enemy.FrozenDuration += 3f - enemy.NanoEffectFrozenDurationIncrease;
+                                enemy.NanoEffectFrozenDurationIncrease = 3f;
                             }
                         }
                     }
