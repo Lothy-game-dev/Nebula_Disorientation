@@ -17,6 +17,11 @@ public class PlayerFighter : FighterShared
     public GameObject HPText;
     public Slider BRSlider;
     public GameObject BRText;
+    public GameObject[] PowerAndConsCDImage;
+    public Slider[] PowerAndConsDurationSlider;
+    public GameObject[] PowerAndConsCDText;
+    public GameObject[] ChargeImage;
+    public GameObject[] ConsCountText;
     public AudioClip MovingSound;
     public AudioClip DashSound;
     public AudioClip OverheatWarning;
@@ -24,6 +29,15 @@ public class PlayerFighter : FighterShared
     public AudioSource DashAudioSource;
     #endregion
     #region NormalVariables
+    private float[] PowerAndConsCD;
+    private float[] PowerAndConsCDTimer;
+    private float[] PowerAndConsDuration;
+    private float[] PowerAndConsDurationTimer;
+    private bool[] PowerAndConsActivation;
+    private float[] ChargingPower;
+    private float[] ChargingPowerReq;
+    public int[] ConsCount;
+    public int NumberOfCons;
     private float testTimer;
     #endregion
     #region Start & Update
@@ -34,6 +48,16 @@ public class PlayerFighter : FighterShared
         InitializeFighter();
         aus = GetComponent<AudioSource>();
         HPSlider.maxValue = MaxHP;
+        // temp, will get real data later
+        PowerAndConsCD = new float[6] {5f, 5f, 5f, 5f, 5f, 5f};
+        PowerAndConsCDTimer = new float[6];
+        PowerAndConsDuration = new float[6] {3f, 0.5f, 3f, 3f, 3f, 3f};
+        PowerAndConsDurationTimer = new float[6];
+        PowerAndConsActivation = new bool[6];
+        ChargingPower = new float[2];
+        ChargingPowerReq = new float[2] { 3f, 3f };
+        ConsCount = new int[4] { 10, 5, 2, 1 };
+        SetConsumableCount();
     }
 
     // Update is called once per frame
@@ -57,6 +81,238 @@ public class PlayerFighter : FighterShared
         } else
         {
             testTimer -= Time.deltaTime;
+        }
+        // Power Usage
+        // 1st Power
+        if (PowerAndConsCDTimer[0] <= 0f)
+        {
+            // check if power does not need charge
+            //
+            if (1!=1)
+            {
+                PowerAndConsDurationSlider[0].fillRect.GetComponentInChildren<Image>().color =
+                    new Color(0, 95 / 255f, 1, 149 / 255f);
+                if (Input.GetKeyDown(KeyCode.Q) && !PowerAndConsActivation[0])
+                {
+                    Debug.Log("Activate 1st power");
+                    PowerAndConsActivation[0] = true;
+                    // void function to activate power
+                    PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
+                    PowerAndConsDurationSlider[0].maxValue = PowerAndConsDuration[0];
+                    PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
+                }
+            }
+            // if power need charge
+            //
+            else
+            {
+                if (Input.GetKey(KeyCode.Q) && !PowerAndConsActivation[0]) 
+                {
+                    PowerAndConsDurationSlider[0].maxValue = ChargingPowerReq[0];
+                    if (ChargingPower[0] < ChargingPowerReq[0])
+                    {
+                        ChargingPower[0] += Time.deltaTime;
+                        Color c = ChargeImage[0].GetComponent<SpriteRenderer>().color;
+                        c.a += 190 * Time.deltaTime / (255f * ChargingPowerReq[0]);
+                        ChargeImage[0].GetComponent<SpriteRenderer>().color = c;
+                    } else
+                    {
+                        Debug.Log("Activate 1st charging power");
+                        PowerAndConsActivation[0] = true;
+                        ChargingPower[0] = 0;
+                        Color c = ChargeImage[0].GetComponent<SpriteRenderer>().color;
+                        c.a = 0;
+                        ChargeImage[0].GetComponent<SpriteRenderer>().color = c;
+                        // Void function to activate power
+                        PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
+                        PowerAndConsDurationSlider[0].fillRect.GetComponentInChildren<Image>().color =
+                            new Color(0, 95 / 255f, 1, 149 / 255f);
+                        PowerAndConsDurationSlider[0].maxValue = PowerAndConsDuration[0];
+                        PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
+                    }
+                }
+                if (Input.GetKeyUp(KeyCode.Q) && !PowerAndConsActivation[0])
+                {
+                    ChargingPower[0] = 0;
+                    Color c = ChargeImage[0].GetComponent<SpriteRenderer>().color;
+                    c.a = 0;
+                    ChargeImage[0].GetComponent<SpriteRenderer>().color = c;
+                }
+            }
+        }
+        // 2nd Power
+        if (PowerAndConsCDTimer[1] <= 0f)
+        {
+            // check if power does not need charge
+            //
+            if (1 == 1)
+            {
+                PowerAndConsDurationSlider[1].fillRect.GetComponentInChildren<Image>().color =
+                    new Color(0, 95 / 255f, 1, 149 / 255f);
+                if (Input.GetKeyDown(KeyCode.E) && !PowerAndConsActivation[1])
+                {
+                    Debug.Log("Activate 2nd power");
+                    PowerAndConsActivation[1] = true;
+                    // void function to activate power
+                    PowerAndConsDurationTimer[1] = PowerAndConsDuration[1];
+                    PowerAndConsDurationSlider[1].maxValue = PowerAndConsDuration[1];
+                    PowerAndConsDurationSlider[1].value = PowerAndConsDuration[1];
+                }
+            }
+            // if power need charge
+            //
+            else
+            {
+                if (Input.GetKey(KeyCode.E) && !PowerAndConsActivation[1])
+                {
+                    PowerAndConsDurationSlider[1].maxValue = ChargingPowerReq[1];
+                    if (ChargingPower[1] < ChargingPowerReq[1])
+                    {
+                        ChargingPower[1] += Time.deltaTime;
+                        Color c = ChargeImage[1].GetComponent<SpriteRenderer>().color;
+                        c.a += 190 * Time.deltaTime / (255f * ChargingPowerReq[1]);
+                        ChargeImage[1].GetComponent<SpriteRenderer>().color = c;
+                    }
+                    else
+                    {
+                        Debug.Log("Activate 1st charging power");
+                        PowerAndConsActivation[1] = true;
+                        ChargingPower[1] = 0;
+                        Color c = ChargeImage[1].GetComponent<SpriteRenderer>().color;
+                        c.a = 0;
+                        ChargeImage[1].GetComponent<SpriteRenderer>().color = c;
+                        // Void function to activate power
+                        PowerAndConsDurationTimer[1] = PowerAndConsDuration[1];
+                        PowerAndConsDurationSlider[1].fillRect.GetComponentInChildren<Image>().color =
+                            new Color(0, 95 / 255f, 1, 149 / 255f);
+                        PowerAndConsDurationSlider[1].maxValue = PowerAndConsDuration[1];
+                        PowerAndConsDurationSlider[1].value = PowerAndConsDuration[1];
+                    }
+                }
+                if (Input.GetKeyUp(KeyCode.E) && !PowerAndConsActivation[1])
+                {
+                    ChargingPower[1] = 0;
+                    Color c = ChargeImage[1].GetComponent<SpriteRenderer>().color;
+                    c.a = 0;
+                    ChargeImage[1].GetComponent<SpriteRenderer>().color = c;
+                }
+            }
+        }
+        // Consumable Usage
+        // 1st Cons
+        if (PowerAndConsCDTimer[2] <= 0f && ConsCount[0] > 0)
+        {
+            PowerAndConsDurationSlider[2].fillRect.GetComponentInChildren<Image>().color =
+                    new Color(0, 95 / 255f, 1, 149 / 255f);
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !PowerAndConsActivation[2])
+            {
+                Debug.Log("Activate 1st Consumable");
+                PowerAndConsActivation[2] = true;
+                ConsCount[0] -= 1;
+                ConsCountText[0].GetComponent<TextMeshPro>().text = ConsCount[0].ToString();
+                // void function to activate power
+                PowerAndConsDurationTimer[2] = PowerAndConsDuration[2];
+                PowerAndConsDurationSlider[2].maxValue = PowerAndConsDuration[2];
+                PowerAndConsDurationSlider[2].value = PowerAndConsDuration[2];
+            }
+        }
+        // 2nd Cons
+        if (PowerAndConsCDTimer[3] <= 0f && ConsCount[1] > 0)
+        {
+            PowerAndConsDurationSlider[3].fillRect.GetComponentInChildren<Image>().color =
+                    new Color(0, 95 / 255f, 1, 149 / 255f);
+            if (Input.GetKeyDown(KeyCode.Alpha2) && !PowerAndConsActivation[3])
+            {
+                Debug.Log("Activate 1st Consumable");
+                PowerAndConsActivation[3] = true;
+                ConsCount[1] -= 1;
+                ConsCountText[1].GetComponent<TextMeshPro>().text = ConsCount[1].ToString();
+                // void function to activate power
+                PowerAndConsDurationTimer[3] = PowerAndConsDuration[3];
+                PowerAndConsDurationSlider[3].maxValue = PowerAndConsDuration[3];
+                PowerAndConsDurationSlider[3].value = PowerAndConsDuration[3];
+            }
+        }
+        // 3rd Cons
+        if (PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0)
+        {
+            PowerAndConsDurationSlider[4].fillRect.GetComponentInChildren<Image>().color =
+                    new Color(0, 95 / 255f, 1, 149 / 255f);
+            if (Input.GetKeyDown(KeyCode.Alpha3) && !PowerAndConsActivation[4])
+            {
+                Debug.Log("Activate 1st Consumable");
+                PowerAndConsActivation[4] = true;
+                ConsCount[2] -= 1;
+                ConsCountText[2].GetComponent<TextMeshPro>().text = ConsCount[2].ToString();
+                // void function to activate power
+                PowerAndConsDurationTimer[4] = PowerAndConsDuration[4];
+                PowerAndConsDurationSlider[4].maxValue = PowerAndConsDuration[4];
+                PowerAndConsDurationSlider[4].value = PowerAndConsDuration[4];
+            }
+        }
+        // 4th Cons
+        if (PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0)
+        {
+            PowerAndConsDurationSlider[5].fillRect.GetComponentInChildren<Image>().color =
+                    new Color(0, 95 / 255f, 1, 149 / 255f);
+            if (Input.GetKeyDown(KeyCode.Alpha4) && !PowerAndConsActivation[5])
+            {
+                Debug.Log("Activate 1st Consumable");
+                PowerAndConsActivation[5] = true;
+                ConsCount[3] -= 1;
+                ConsCountText[3].GetComponent<TextMeshPro>().text = ConsCount[3].ToString();
+                // void function to activate power
+                PowerAndConsDurationTimer[5] = PowerAndConsDuration[5];
+                PowerAndConsDurationSlider[5].maxValue = PowerAndConsDuration[5];
+                PowerAndConsDurationSlider[5].value = PowerAndConsDuration[5];
+            }
+        }
+        // Timer Decrease
+        for (int i=0;i<6;i++)
+        {
+            if (PowerAndConsDurationTimer[i]>0f)
+            {
+                PowerAndConsDurationTimer[i]-=Time.deltaTime;
+                PowerAndConsDurationSlider[i].value -= Time.deltaTime;
+            } else
+            {
+                if (PowerAndConsActivation[i])
+                {
+                    PowerAndConsActivation[i] = false;
+                    PowerAndConsCDTimer[i] = PowerAndConsCD[i];
+                    PowerAndConsCDImage[i].GetComponent<Image>().fillAmount = 1;
+                    PowerAndConsCDText[i].GetComponent<TextMeshPro>().text = PowerAndConsCDTimer[i].ToString();
+                    PowerAndConsCDText[i].SetActive(true);
+                }
+            }
+            if (PowerAndConsCDTimer[i]>0f)
+            {
+                if (i>=2)
+                {
+                    if (ConsCount[i-2]>0)
+                    {
+                        PowerAndConsCDTimer[i] -= Time.deltaTime;
+                        PowerAndConsCDText[i].GetComponent<TextMeshPro>().text = PowerAndConsCDTimer[i] >= 1 ?
+                            ((int)PowerAndConsCDTimer[i]).ToString() : (Mathf.Round(PowerAndConsCDTimer[i] * 10) / 10) > 0 ?
+                            (Mathf.Round(PowerAndConsCDTimer[i] * 10) / 10).ToString() : "";
+                        PowerAndConsCDImage[i].GetComponent<Image>().fillAmount -= Time.deltaTime / PowerAndConsCD[i];
+                    } else
+                    {
+                        PowerAndConsCDTimer[i] = 0f;
+                        PowerAndConsCDText[i].GetComponent<TextMeshPro>().text = "";
+                    }
+                } else
+                {
+                    PowerAndConsCDTimer[i] -= Time.deltaTime;
+                    PowerAndConsCDText[i].GetComponent<TextMeshPro>().text = PowerAndConsCDTimer[i] >= 1 ?
+                        ((int)PowerAndConsCDTimer[i]).ToString() : (Mathf.Round(PowerAndConsCDTimer[i] * 10) / 10) > 0 ?
+                        (Mathf.Round(PowerAndConsCDTimer[i] * 10) / 10).ToString() : "";
+                    PowerAndConsCDImage[i].GetComponent<Image>().fillAmount -= Time.deltaTime / PowerAndConsCD[i];
+                }
+            } else
+            {
+                PowerAndConsCDText[i].SetActive(false);
+            }
         }
         ShowInfo();
     }
@@ -106,6 +362,14 @@ public class PlayerFighter : FighterShared
         HPSlider.value = CurrentHP;
         HPText.GetComponent<TextMeshPro>().text = CurrentHP + " / " + MaxHP;
         // BR Pending
+    }
+
+    private void SetConsumableCount()
+    {
+        for (int i=0;i<4;i++)
+        {
+            ConsCountText[i].GetComponent<TextMeshPro>().text = ConsCount[i].ToString();
+        }
     }
     #endregion
 }
