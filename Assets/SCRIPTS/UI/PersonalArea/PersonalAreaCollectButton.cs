@@ -40,14 +40,22 @@ public class PersonalAreaCollectButton : MonoBehaviour
     private void OnMouseDown()
     {      
         PAController = PersonalArea.GetComponent<PersonalArea>();
-        if (!PAController.IsCollected)
-        {
-            PAController.IsCollected = true;
-            CollectDailyIncome();
-        } else
+        if (PAController.isUnranked)
         {
             FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
-                "You have already collected salary!", 5f);
+                "You are still unranked. Please try again later!", 5f);
+        } else
+        {
+            if (!PAController.IsCollected)
+            {
+                PAController.IsCollected = true;
+                CollectDailyIncome();
+            } else
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
+                        "You have already collected salary!", 5f);
+                
+            }
         }
     }
     #endregion
@@ -68,6 +76,7 @@ public class PersonalAreaCollectButton : MonoBehaviour
                     "Collect Successfully.\nSee you tomorrow!.", 5f);
                 FindObjectOfType<UECMainMenuController>().GetData();
                 gameObject.AddComponent<CursorUnallowed>();
+                FindAnyObjectByType<AccessDatabase>().SalaryCollected(FindObjectOfType<UECMainMenuController>().PlayerId);
                 gameObject.transform.GetChild(1).gameObject.SetActive(true);
                 break;
         }

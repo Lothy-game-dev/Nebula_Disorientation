@@ -189,6 +189,15 @@ public class AccessDatabase : MonoBehaviour
                 values.Add("TimelessShard", dataReader.GetInt32(7));
                 values.Add("DailyIncome", dataReader.GetInt32(8));
                 values.Add("DailyIncomeReceived", dataReader.GetString(9));
+                if (dataReader.IsDBNull(11))
+                {
+                    values.Add("CollectedSalaryTime", 0);
+                }
+                else
+                {
+                    values.Add("CollectedSalaryTime", dataReader.GetString(11));
+                }
+                
             }
             dbConnection.Close();
             if (!check)
@@ -529,42 +538,6 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
-    public string CollectSalary(int PlayerId, int Cash)
-    {
-        int checkID = 0;
-        // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE " +
-           "PlayerID=" + PlayerId;
-        IDataReader dataReader = dbCheckCommand.ExecuteReader();
-        while (dataReader.Read())
-        {
-            checkID = dataReader.GetInt32(0);           
-        }
-        if (checkID == 0) {
-            dbConnection.Close();
-            return "Not Exist";
-        }
-        System.DateTime date = System.DateTime.Now;
-        string collectedDate = date.ToString();
-        Debug.Log(collectedDate);
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
-        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
-            + ", CollectedSalaryTime = '" +collectedDate+ "', DailyIncomeReceived = 'Y' WHERE PlayerID=" + PlayerId;
-        int n = dbCheckCommand2.ExecuteNonQuery();
-        dbConnection.Close();
-        if (n != 1)
-        {
-            return "Fail";
-        } else
-        {
-            return "Success";
-        }
-       
-    } 
 
     public string UpdatePlayerProfileName(int PlayerId, string name)
     {
@@ -600,6 +573,63 @@ public class AccessDatabase : MonoBehaviour
         {
             return "Success";
         }
+    }
+    public string ResetDailyIncome()
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET DailyIncomeReceived = 'N' WHERE 1 = 1";
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
+    public string CollectSalary(int PlayerId, int Cash)
+    {
+        int checkID = 0;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE " +
+           "PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        while (dataReader.Read())
+        {
+            checkID = dataReader.GetInt32(0);
+        }
+        if (checkID == 0)
+        {
+            dbConnection.Close();
+            return "Not Exist";
+        }
+        System.DateTime date = System.DateTime.Now;
+        string collectedDate = date.ToString("dd/MM/yyyy");
+        Debug.Log(collectedDate);
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
+            + ", CollectedSalaryTime = '" + collectedDate + "', DailyIncomeReceived = 'Y' WHERE PlayerID=" + PlayerId;
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+
     }
     #endregion
     #region Access Current Play Session
@@ -1842,10 +1872,16 @@ public class AccessDatabase : MonoBehaviour
         dbCheckCommand.CommandText = "SELECT Sum(Quantity) FROM PlayerOwnership WHERE " +
             "PlayerID=" + PlayerID + " AND ItemType='" + Type + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
-        int quan = -1;
+        int quan = 0;
         while (dataReader.Read())
         {
-            quan = dataReader.GetInt32(0);
+            if (dataReader.IsDBNull(0))
+            {
+                quan = 0;
+            } else
+            {
+                quan = dataReader.GetInt32(0);
+            }
         }
         dbConnection.Close();
         return quan;
@@ -2251,5 +2287,46 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+    #endregion
+    #region Access Collect salary history
+    public string SalaryCollected(int PlayerId)
+    {
+        string date = System.DateTime.Now.ToString("dd/MM/yyyy");
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "INSERT INTO CollectSalaryHistory (PlayerId, CollectedTime) VALUES ( "+PlayerId+" , '"+ date +"')";
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
+    public int CheckIfCollected(int PlayerId, string date)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Count(*) FROM CollectSalaryHistory where PlayerId = "+ PlayerId +" and CollectedTime = '"+ date +"'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int quan = 0;
+        while (dataReader.Read())
+        {
+            quan = dataReader.GetInt32(0);
+        }
+        dbConnection.Close();
+        return quan;
+    }
+  
+
     #endregion
 }
