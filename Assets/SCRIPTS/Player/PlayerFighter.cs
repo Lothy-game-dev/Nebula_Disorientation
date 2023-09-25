@@ -36,8 +36,8 @@ public class PlayerFighter : FighterShared
     private bool[] PowerAndConsActivation;
     private float[] ChargingPower;
     private float[] ChargingPowerReq;
-    public int[] ConsCount;
-    public int NumberOfCons;
+    private int[] ConsCount;
+    private bool isPausing;
     private float testTimer;
     #endregion
     #region Start & Update
@@ -84,7 +84,7 @@ public class PlayerFighter : FighterShared
         }
         // Power Usage
         // 1st Power
-        if (PowerAndConsCDTimer[0] <= 0f)
+        if (PowerAndConsCDTimer[0] <= 0f && !isPausing)
         {
             // check if power does not need charge
             //
@@ -141,7 +141,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 2nd Power
-        if (PowerAndConsCDTimer[1] <= 0f)
+        if (PowerAndConsCDTimer[1] <= 0f && !isPausing)
         {
             // check if power does not need charge
             //
@@ -200,7 +200,7 @@ public class PlayerFighter : FighterShared
         }
         // Consumable Usage
         // 1st Cons
-        if (PowerAndConsCDTimer[2] <= 0f && ConsCount[0] > 0)
+        if (PowerAndConsCDTimer[2] <= 0f && ConsCount[0] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[2].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -217,7 +217,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 2nd Cons
-        if (PowerAndConsCDTimer[3] <= 0f && ConsCount[1] > 0)
+        if (PowerAndConsCDTimer[3] <= 0f && ConsCount[1] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[3].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -234,7 +234,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 3rd Cons
-        if (PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0)
+        if (PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[4].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -251,7 +251,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 4th Cons
-        if (PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0)
+        if (PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[5].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -313,6 +313,11 @@ public class PlayerFighter : FighterShared
             {
                 PowerAndConsCDText[i].SetActive(false);
             }
+        }
+        // Pause
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPausing = FindObjectOfType<CameraController>().PauseGame();
         }
         ShowInfo();
     }

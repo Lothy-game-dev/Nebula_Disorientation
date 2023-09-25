@@ -30,6 +30,7 @@ public class CameraController : MonoBehaviour
     private float PosX;
     private float PosY;
     private float zoomTimer;
+    private bool isPausing;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -110,6 +111,23 @@ public class CameraController : MonoBehaviour
         }
         // Set Position of Camera
         transform.position = new Vector3(PosX, PosY, transform.position.z);
+    }
+    #endregion
+    #region Main Gameplay Popup Screen
+    public bool PauseGame()
+    {
+        if (!isPausing)
+        {
+            Time.timeScale = 0;
+            isPausing = true;
+            Debug.Log("Pause");
+        } else
+        {
+            Time.timeScale = 1;
+            isPausing = false;
+            Debug.Log("Continue");
+        }
+        return isPausing;
     }
     #endregion
 }

@@ -236,11 +236,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (CurrentSpeed < MovingSpeed && SpeedUp == 1)
         {
-            CurrentSpeed += MovingSpeed / 300;
+            CurrentSpeed += MovingSpeed * Time.timeScale / 300;
         }
         else if (CurrentSpeed > MovingSpeed / 300 && SpeedUp == -1)
         {
-            CurrentSpeed -= MovingSpeed / 300;
+            CurrentSpeed -= MovingSpeed * Time.timeScale / 300;
         }
     }
     // Calculate Vector movement based on rotation
