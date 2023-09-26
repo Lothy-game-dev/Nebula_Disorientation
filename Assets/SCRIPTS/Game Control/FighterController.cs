@@ -71,13 +71,36 @@ public class FighterController : MonoBehaviour
         // Set left right weapon to overheat bar
         LeftOverheatBar.GetComponent<OverheatBar>().Weapon = LeftWeapon.GetComponent<Weapons>();
         RightOverheatBar.GetComponent<OverheatBar>().Weapon = RightWeapon.GetComponent<Weapons>();
-        GameObject LeftWeaponIcon = Instantiate(CurrentLeftWeapon, LeftOverheatImage.transform.position, Quaternion.identity);
-        GameObject RightWeaponIcon = Instantiate(CurrentRightWeapon, RightOverheatImage.transform.position, Quaternion.identity);
+        Vector2 ClonePosLeft = new Vector2();
+        float LeftClonseScale = 1;
+        float RightClonseScale = 1;
+        Vector2 ClonePosRight = new Vector2();
+        if (CurrentLeftWeapon.name.ToLower().Contains("blastcannon"))
+        {
+            ClonePosLeft = new Vector2(LeftOverheatImage.transform.position.x, LeftOverheatImage.transform.position.y - 10);
+            LeftClonseScale = 16f;
+        } else
+        {
+            ClonePosLeft = LeftOverheatImage.transform.position;
+            LeftClonseScale = 20f;
+        }
+        if (CurrentRightWeapon.name.ToLower().Contains("blastcannon"))
+        {
+            ClonePosRight = new Vector2(RightOverheatImage.transform.position.x, RightOverheatImage.transform.position.y - 10);
+            RightClonseScale = 16f;
+        }
+        else
+        {
+            ClonePosRight = RightOverheatImage.transform.position;
+            RightClonseScale = 20f;
+        }
+        GameObject LeftWeaponIcon = Instantiate(CurrentLeftWeapon, ClonePosLeft, Quaternion.identity);
+        GameObject RightWeaponIcon = Instantiate(CurrentRightWeapon, ClonePosRight, Quaternion.identity);
         LeftWeaponIcon.SetActive(true);
         LeftWeaponIcon.GetComponent<Weapons>().enabled = false;
         LeftWeaponIcon.transform.localScale =
-            new Vector3(LeftWeaponIcon.transform.localScale.x * 20,
-            LeftWeaponIcon.transform.localScale.y * 20,
+            new Vector3(LeftWeaponIcon.transform.localScale.x * LeftClonseScale,
+            LeftWeaponIcon.transform.localScale.y * LeftClonseScale,
             LeftWeaponIcon.transform.localScale.z);
         LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
         Color lc = LeftWeaponIcon.GetComponent<SpriteRenderer>().color;
@@ -95,8 +118,8 @@ public class FighterController : MonoBehaviour
         RightWeaponIcon.SetActive(true);
         RightWeaponIcon.GetComponent<Weapons>().enabled = false;
         RightWeaponIcon.transform.localScale =
-            new Vector3(RightWeaponIcon.transform.localScale.x * 20,
-            RightWeaponIcon.transform.localScale.y * 20,
+            new Vector3(RightWeaponIcon.transform.localScale.x * RightClonseScale,
+            RightWeaponIcon.transform.localScale.y * RightClonseScale,
             RightWeaponIcon.transform.localScale.z);
         RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
         RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);

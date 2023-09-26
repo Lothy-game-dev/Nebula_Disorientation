@@ -332,7 +332,7 @@ public class FighterShared : MonoBehaviour
                 veloc += v;
             }
         }
-        GetComponent<Rigidbody2D>().velocity = veloc * GravitationalSlowMultiplier;
+        GetComponent<Rigidbody2D>().velocity = veloc * GravitationalSlowMultiplier * SlowedMoveSpdScale;
     }
     #endregion
     #region Check Weapon Special Effects
