@@ -77,6 +77,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LuckOfTheWanderer\LOTWCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\Factory.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDCreateInfoBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LuckOfTheWanderer\LOTWScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialButton.cs" />

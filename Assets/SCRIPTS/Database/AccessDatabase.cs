@@ -2326,7 +2326,57 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return quan;
     }
-  
 
+
+    #endregion
+    #region Access LOTW
+    public List<int> GetListIDAllLOTW(int tier)
+    {
+        List<int> list = new List<int>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CardID From LuckOfTheWandererCards WHERE " + (tier > 0 && tier <= 3 ? "CardTier=" + tier : "1==1");
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        while (dataReader.Read())
+        {
+            list.Add(dataReader.GetInt32(0));
+        }
+        dbConnection.Close();
+        return list;
+    }
+
+    public Dictionary<string, object> GetLOTWInfoByID(int id)
+    {
+        Dictionary<string, object> dict = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT * From LuckOfTheWandererCards WHERE CardID=" + id;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            dict.Add("Name",dataReader.GetString(1));
+            dict.Add("Type", dataReader.GetString(2));
+            dict.Add("Effect", dataReader.GetString(3));
+            dict.Add("Tier", dataReader.GetInt32(4));
+            dict.Add("Duration", dataReader.GetInt32(5));
+            dict.Add("Stack", dataReader.GetString(6));
+            dict.Add("Repeat", dataReader.GetString(7));
+            dict.Add("Color", dataReader.GetString(8));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        } else
+        return dict;
+    }
     #endregion
 }
