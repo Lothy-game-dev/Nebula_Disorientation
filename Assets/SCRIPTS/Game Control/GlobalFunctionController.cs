@@ -749,6 +749,77 @@ public class GlobalFunctionController : MonoBehaviour
         }
         return ModelPrice;
     }
+
+    // Format: HP-n,MS-n,RD-n,AWD-n,TWD-n,BD-n,FD-n,PCD-n,R-n,HAZ,BS-n-n,CONS,C-n,WROF,C-xn
+    public string ConvertEffectStringToText(string str)
+    {
+        string result = "";
+        if (str.Contains("HP-"))
+        {
+            result = "Permanently increase max HP by " + str.Replace("HP-","") + "%";
+        }
+        else if (str.Contains("MS-"))
+        {
+            result = "Boost the moving speed by " + str.Replace("MS-", "") + "%";
+        }
+        else if (str.Contains("RD-"))
+        {
+            result = "-" + str.Replace("RD-", "") + "% Damage received from all weapons types";
+        }
+        else if (str.Contains("AWD-"))
+        {
+            result = "Enhance all weapons' damage by " + str.Replace("AWD-", "") + "%";
+        }
+        else if (str.Contains("TWD-"))
+        {
+            result = "Thermal weapon deal +" + str.Replace("TWD-","") + "% Damage to enemies with burned or freeze effect";
+        }
+        else if (str.Contains("BD-"))
+        {
+            result = "Deal +" + str.Replace("BD-", "") + "% Damage against Barriers";
+        }
+        else if (str.Contains("FD-"))
+        {
+            result = "Deal +" + str.Replace("FD-", "") + "% Damage against enemies 2000+ Space Units from you"; 
+        }
+        else if (str.Contains("PCD-"))
+        {
+            result = "Reduce the CD of all powers by " + str.Replace("PCD-", "") + "%";
+        }
+        else if (str.Contains("R-"))
+        {
+            result = "+" + str.Replace("R-", "") + "% all repairing effects that the Fighter receives";
+        }
+        else if (str.Equals("HAZ"))
+        {
+            result = "Your Fighter won’t be affected by any Hazardous Environment effects";
+        }
+        else if (str.Contains("BS-"))
+        {
+            result = "Deal +" + str.Replace("BS-", "").Split("-")[0] + "% Damage with Weapons and Powers. Take +" + str.Replace("BS-", "").Split("-")[1] + "% Damage from all sources";
+        }
+        else if (str.Equals("CONS"))
+        {
+            result = "Using consumables won’t cost any charges";
+        }
+        else if (str.Contains("C-") && !str.Contains("C-x"))
+        {
+            result = "+" + str.Replace("C-", "") + "% Cash received in the upcoming Space Zones";
+        }
+        else if (str.Contains("WROF-"))
+        {
+            result = "Enhance all weapons' rate of fire by " + str.Replace("WROF-", "") + "%";
+        }
+        else if (str.Contains("C-x"))
+        {
+            result = "Double the cash received by far in the session";
+        } 
+        else
+        {
+            result = str;
+        }
+        return result;
+    }
     #endregion
     #region Convert Currency To Icons
     public string ConvertToIcon(string Currency)

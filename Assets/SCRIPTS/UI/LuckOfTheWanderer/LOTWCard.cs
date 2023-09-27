@@ -11,6 +11,7 @@ public class LOTWCard : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
+    public GameObject Scene;
     public GameObject CardFontList;
     public GameObject CardIconList;
     public GameObject CardBack;
@@ -24,17 +25,20 @@ public class LOTWCard : MonoBehaviour
     public List<GameObject> OtherCards;
     public GameObject ToPos;
     public GameObject CenterPos;
-    private int CardTier;
-    private string CardType;
     public bool alreadyShowCard;
+    public bool NoRed;
+
+    private int CardTier;
+    private int CardId;
+    private string CardType;
     private Dictionary<string, object> DataDictionary;
     private float InitScaleX;
     private float InitScaleY;
-    public bool isShowing;
-    public bool NoRed;
     private float StopTimer;
     private GameObject Destination;
     private GameObject StartMovingPos;
+    private GameObject Icon;
+    private Color TierColor;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -85,13 +89,14 @@ public class LOTWCard : MonoBehaviour
     #region SetData
     public void SetData(int CardID)
     {
+        CardId = CardID;
         OtherCards = new List<GameObject>();
         DataDictionary = FindObjectOfType<AccessDatabase>().GetLOTWInfoByID(CardID);
         Name.GetComponent<TextMeshPro>().text = (string)DataDictionary["Name"];
         CardTier = (int)DataDictionary["Tier"];
-        Color NameColor;
-        ColorUtility.TryParseHtmlString((string)DataDictionary["Color"], out NameColor);
-        Name.GetComponent<TextMeshPro>().color = NameColor;
+        Effect.GetComponent<TextMeshPro>().text = FindObjectOfType<GlobalFunctionController>().ConvertEffectStringToText((string)DataDictionary["Effect"]);
+        ColorUtility.TryParseHtmlString((string)DataDictionary["Color"], out TierColor);
+        Name.GetComponent<TextMeshPro>().color = TierColor;
         GetComponent<SpriteRenderer>().sprite = CardFontList.transform.GetChild(
             3-(int)DataDictionary["Tier"]).GetComponent<SpriteRenderer>().sprite;
         if ((string)DataDictionary["Type"]=="OFF")
@@ -99,6 +104,7 @@ public class LOTWCard : MonoBehaviour
             GameObject icon = CardIconList.transform.GetChild(0).GetChild(3 - (int)DataDictionary["Tier"]).gameObject;
             GameObject IconIns = Instantiate(icon, IconPos.transform.position, Quaternion.identity);
             IconIns.transform.SetParent(transform);
+            Icon = IconIns;
             IconIns.SetActive(true);
         } 
         else if ((string)DataDictionary["Type"] == "DEF")
@@ -106,6 +112,7 @@ public class LOTWCard : MonoBehaviour
             GameObject icon = CardIconList.transform.GetChild(1).GetChild(3 - (int)DataDictionary["Tier"]).gameObject;
             GameObject IconIns = Instantiate(icon, IconPos.transform.position, Quaternion.identity);
             IconIns.transform.SetParent(transform);
+            Icon = IconIns;
             IconIns.SetActive(true);
         }
         else if ((string)DataDictionary["Type"] == "SPE")
@@ -113,52 +120,41 @@ public class LOTWCard : MonoBehaviour
             GameObject icon = CardIconList.transform.GetChild(2).GetChild(3 - (int)DataDictionary["Tier"]).gameObject;
             GameObject IconIns = Instantiate(icon, IconPos.transform.position, Quaternion.identity);
             IconIns.transform.SetParent(transform);
+            Icon = IconIns;
             IconIns.SetActive(true);
         }
     }
     #endregion
     #region Mouse Check
-    private void OnMouseEnter()
-    {
-        transform.localScale = new Vector3(InitScaleX*1.1f, InitScaleY*1.1f, transform.localScale.z);
-        foreach (var card in OtherCards)
-        {
-            card.transform.localScale = new Vector3(InitScaleX * 0.9f, InitScaleY * 0.9f, transform.localScale.z);
-        }
-    }
     private void OnMouseDown()
+    {
+        Selected();
+    }
+
+
+    public void PickCard()
     {
         if (!alreadyShowCard)
         {
             alreadyShowCard = true;
             StartCoroutine(ShowCard());
         }
-        else if (!isShowing)
+        else
         {
-            // Choose Card
-            Debug.Log("Choose");
-        }
-    }
-
-    private void OnMouseExit()
-    {
-        if (!isShowing)
-        {
-            transform.localScale = new Vector3(InitScaleX, InitScaleY, transform.localScale.z);
             foreach (var card in OtherCards)
             {
-                card.transform.localScale = new Vector3(InitScaleX, InitScaleY, transform.localScale.z);
+                card.GetComponent<Collider2D>().enabled = false;
             }
+            StartCoroutine(SelectMovement());
         }
     }
     private IEnumerator ShowCard()
     {
-        isShowing = true;
+        GetComponent<Collider2D>().enabled = false;
         foreach (var card in OtherCards)
         {
             card.GetComponent<Collider2D>().enabled = false;
             card.GetComponent<LOTWCard>().alreadyShowCard = true;
-            card.GetComponent<LOTWCard>().isShowing = false;
         }
         ShowEffect();
         for (int i=0;i<50;i++)
@@ -166,7 +162,10 @@ public class LOTWCard : MonoBehaviour
             CardBack.GetComponent<Image>().fillAmount -= 1 / 50f;
             yield return new WaitForSeconds(1 / 50f);
         }
-        Debug.Log("Choose");
+        foreach (var card in OtherCards)
+        {
+            card.GetComponent<LOTWCard>().ShowEffect();
+        }
         for (int i = 0; i < 50; i++)
         {
             foreach (var card in OtherCards)
@@ -175,12 +174,51 @@ public class LOTWCard : MonoBehaviour
             }
             yield return new WaitForSeconds(1 / 50f);
         }
-        isShowing = false;
+        StartCoroutine(SelectMovement());
+    }
+
+    private void Selected()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        transform.localScale = new Vector3(InitScaleX * 1.1f, InitScaleY * 1.1f, transform.localScale.z);
         foreach (var card in OtherCards)
         {
             card.GetComponent<Collider2D>().enabled = true;
-            card.GetComponent<LOTWCard>().ShowEffect();
+            card.transform.localScale = new Vector3(InitScaleX * 0.9f, InitScaleY * 0.9f, transform.localScale.z);
         }
+        Scene.GetComponent<LOTWScene>().CardSelected(CardId, gameObject);
+    }
+
+    private IEnumerator SelectMovement()
+    {
+        GetComponent<Rigidbody2D>().velocity = (CenterPos.transform.position - transform.position) * 1.4f;
+        Destination = CenterPos;
+        StartMovingPos = gameObject;
+        StopTimer = 1 / 1.4f;
+        List<float> ScaleX = new List<float>();
+        List<float> ScaleY = new List<float>();
+        foreach (var card in OtherCards)
+        {
+            card.GetComponent<LOTWCard>().HideEffect();
+            ScaleX.Add(card.transform.localScale.x);
+            ScaleY.Add(card.transform.localScale.y);
+        }
+        for (int i = 0; i < 50; i++)
+        {
+            for (int k=0;k<OtherCards.Count;k++)
+            {
+                GameObject card = OtherCards[k];
+                card.transform.localScale = new Vector2(card.transform.localScale.x - ScaleX[k] / 50,
+                    card.transform.localScale.y - ScaleY[k] / 50);
+            }
+            yield return new WaitForSeconds(0.2f / 50f);
+        }
+        foreach (var card in OtherCards)
+        {
+            Destroy(card);
+        }
+        yield return new WaitForSeconds(0.5f);
+        IconEffect();
     }
 
     private IEnumerator MoveToPos()
@@ -226,20 +264,20 @@ public class LOTWCard : MonoBehaviour
         for (int i = 0; i < 40; i++)
         {
             CardBack.GetComponent<Image>().fillAmount += 1 / 50f;
-            yield return new WaitForSeconds(0.5f / 50f);
+            yield return new WaitForSeconds(0.3f / 50f);
         }
-        GetComponent<Rigidbody2D>().velocity = (CenterPos.transform.position - transform.position)*1.5f;
+        GetComponent<Rigidbody2D>().velocity = (CenterPos.transform.position - transform.position)*4f;
         Destination = CenterPos;
         StartMovingPos = gameObject;
-        StopTimer = 1f/1.5f;
+        StopTimer = 1f/4f;
         for (int i = 0; i < 10; i++)
         {
             CardBack.GetComponent<Image>().fillAmount += 1 / 50f;
             yield return new WaitForSeconds(1f/ 50f);
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         StopTimer = 1f;
-        GetComponent<Rigidbody2D>().velocity = new Vector2(0, 10f);
+        GetComponent<Rigidbody2D>().velocity = new Vector2(0, 20f);
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
@@ -275,6 +313,40 @@ public class LOTWCard : MonoBehaviour
         {
             BlueEffect.SetActive(true);
         }
+    }
+
+    public void HideEffect()
+    {
+        if (CardTier == 1)
+        {
+            RedEffect.SetActive(false);
+        }
+        else if (CardTier == 2)
+        {
+            BlueEffect.SetActive(false);
+        }
+    }
+
+    public void IconEffect()
+    {
+        StartCoroutine(IconEffectAnim(Instantiate(Icon,Icon.transform.position,Quaternion.identity)));
+    }
+
+    private IEnumerator IconEffectAnim(GameObject go)
+    {
+        float scaleX = go.transform.localScale.x;
+        float scaleY = go.transform.localScale.y;
+        go.GetComponent<SpriteRenderer>().color = TierColor;
+        for (int i=0;i<=30;i++)
+        {
+            go.transform.localScale = new Vector2(go.transform.localScale.x + scaleX / 5,
+                go.transform.localScale.y + scaleY / 5);
+            Color c = go.GetComponent<SpriteRenderer>().color;
+            c.a -= 1 / 30f;
+            go.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.5f / 30f);
+        }
+        Destroy(go);
     }
     #endregion
 }
