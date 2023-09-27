@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class LOTWScene : MonoBehaviour
@@ -13,6 +14,9 @@ public class LOTWScene : MonoBehaviour
     public GameObject[] Position;
     public GameObject CardRegenerate;
     public GameObject RegenCardPos;
+    public GameObject RedCardAlert;
+    public GameObject PickButton;
+    public GameObject RerollButton;
     #endregion
     #region NormalVariables
     private List<int> ListAllLOTW;
@@ -22,6 +26,9 @@ public class LOTWScene : MonoBehaviour
     private bool ContainRed;
     private float RegenerateMovingTimer;
     private float StopRegenCardTimer;
+    private int RerollChance;
+    private int chosenId;
+    private GameObject chosenCard;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,10 +37,14 @@ public class LOTWScene : MonoBehaviour
         // Initialize variables
         // Get All Cards Data
         ListAllLOTW = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(0);
+        RerollChance = 3;
         // Get Owned Cards Data
 
         // Random to get 3 cards
         ListLOTWChosen = new List<int>();
+        // disable button reroll
+        RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+        RerollButton.GetComponent<Collider2D>().enabled = false;
         GetRandom3Cards();
     }
 
@@ -46,15 +57,14 @@ public class LOTWScene : MonoBehaviour
         {
             CardRegenerate.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            RegenerateCard();
-        }
     }
     #endregion
     #region LOTW Spawn
     private void GetRandom3Cards()
     {
+        // Disable button pick
+        PickButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+        PickButton.GetComponent<Collider2D>().enabled = false;
         ListLOTWChosen = new List<int>();
         ContainRed = false;
         for (int i=0;i<3;i++)
@@ -97,29 +107,65 @@ public class LOTWScene : MonoBehaviour
             List<GameObject> ListTemp = new List<GameObject>();
             ListTemp.AddRange(ListCard);
             ListTemp.RemoveAt(i);
-            Debug.Log(ListTemp.Count);
             ListCard[i].GetComponent<LOTWCard>().OtherCards.Add(ListTemp[0]);
             ListCard[i].GetComponent<LOTWCard>().OtherCards.Add(ListTemp[1]);
         }
+        RedCardAlert.SetActive(ContainRed);
+        StartCoroutine(EnableReroll());
     }
 
+    private IEnumerator EnableReroll()
+    {
+        yield return new WaitForSeconds(1.5f);
+        // enable button reroll
+        RerollButton.GetComponent<SpriteRenderer>().color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
+        RerollButton.GetComponent<Collider2D>().enabled = true;
+    }
     public void RegenerateCard()
     {
+        RerollButton.GetComponent<Collider2D>().enabled = false;
+        RerollChance--;
+        if (RerollChance == 0)
+        {
+            // disable button reroll
+            RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+            RerollButton.GetComponent<Collider2D>().enabled = false;
+            RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+        } else
+        RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(" + RerollChance + " time" + (RerollChance > 1 ? "s" : "") + " left)";
+        RedCardAlert.SetActive(false);
         foreach (var card in ListCard)
         {
+            if (card!=null)
             card.GetComponent<LOTWCard>().Regenerate();
         }
         StartCoroutine(RegenCardMove());
+
     }
 
     private IEnumerator RegenCardMove()
     {
         yield return new WaitForSeconds(1.5f);
-        CardRegenerate.GetComponent<Rigidbody2D>().velocity = Position[0].transform.position - RegenCardPos.transform.position;
-        StopRegenCardTimer = 1f;
-        yield return new WaitForSeconds(1f);
+        CardRegenerate.GetComponent<Rigidbody2D>().velocity = (Position[0].transform.position - RegenCardPos.transform.position)*2f;
+        StopRegenCardTimer = 0.5f;
+        yield return new WaitForSeconds(0.5f);
         CardRegenerate.transform.position = RegenCardPos.transform.position;
         GetRandom3Cards();
+    }
+
+    public void CardSelected(int CardId, GameObject go)
+    {
+        chosenId = CardId;
+        chosenCard = go;
+        // Enable button pick
+        PickButton.GetComponent<SpriteRenderer>().color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
+        PickButton.GetComponent<Collider2D>().enabled = true;
+    }
+
+    public void ConfirmSelect()
+    {
+        chosenCard.GetComponent<LOTWCard>().PickCard();
+        Debug.Log("Pick Card With Id = " + chosenId);
     }
     #endregion
 }
