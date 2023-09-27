@@ -133,67 +133,69 @@ public class Arsenal : UECMenuShared
     {
         int rankId = 0;
         bool isLocked = false;
-        if (RankId != "N/A")
+        //If item doesnt have shard value, it cant be buy permanently
+        if (!IsInSession)
         {
-            if ((string)PlayerInformation["Rank"] == "Unranked")
+            if (CurrentTab == "Weapon")
             {
-                rankId = 0;
-            } else
-            {
-                rankId = (int)PlayerInformation["RankId"];
-            }
-            // lock item if its rank requirement is higher than player's rank
-            if (rankId < int.Parse(RankId))
-            {
-                isLocked = true;
-                if (CurrentTab == "Weapon")
+                if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
                 {
+                    isLocked = true;
                     Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
                     Game.GetComponent<ArsenalItem>().LockedItem = true;
-                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
-                    Game.GetComponent<ArsenalItem>().IsRanked = true;
+                    Game.GetComponent<ArsenalItem>().IsRanked = false;
+                    Game.GetComponent<ArsenalItem>().IsZeroShard = true;
+                    Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
                 }
-                else if (CurrentTab == "Power")
-                {
-                    Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
-                    Game.GetComponent<ArsenalItem>().LockedItem = true;
-                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
-                    Game.GetComponent<ArsenalItem>().IsRanked = true;
-                }
-
             }
-        }
-        //If item doesnt have shard value, it cant be buy permanently
-        if (!isLocked)
-        {
-            if (!IsInSession)
+            else
             {
-                if (CurrentTab == "Weapon")
+                if (CurrentTab == "Power")
                 {
-                    if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
+                    if (PowerList[int.Parse(Id) - 1][6] == "N.A")
                     {
                         isLocked = true;
-                        Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                        Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
                         Game.GetComponent<ArsenalItem>().LockedItem = true;
                         Game.GetComponent<ArsenalItem>().IsRanked = false;
                         Game.GetComponent<ArsenalItem>().IsZeroShard = true;
                         Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                    } 
+                    }
+                }
+            }
+        }       
+        // check rank req
+        if (!isLocked)
+        {
+            if (RankId != "N/A")
+            {
+                if ((string)PlayerInformation["Rank"] == "Unranked")
+                {
+                    rankId = 0;
                 }
                 else
                 {
-                    if (CurrentTab == "Power")
+                    rankId = (int)PlayerInformation["RankId"];
+                }
+                // lock item if its rank requirement is higher than player's rank
+                if (rankId < int.Parse(RankId))
+                {
+                    isLocked = true;
+                    if (CurrentTab == "Weapon")
                     {
-                        if (PowerList[int.Parse(Id) - 1][6] == "N.A")
-                        {
-                            isLocked = true;
-                            Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
-                            Game.GetComponent<ArsenalItem>().LockedItem = true;
-                            Game.GetComponent<ArsenalItem>().IsRanked = false;
-                            Game.GetComponent<ArsenalItem>().IsZeroShard = true;
-                            Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                        }
+                        Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                        Game.GetComponent<ArsenalItem>().LockedItem = true;
+                        Game.GetComponent<ArsenalItem>().ItemPreReq = "";
+                        Game.GetComponent<ArsenalItem>().IsRanked = true;
                     }
+                    else if (CurrentTab == "Power")
+                    {
+                        Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
+                        Game.GetComponent<ArsenalItem>().LockedItem = true;
+                        Game.GetComponent<ArsenalItem>().ItemPreReq = "";
+                        Game.GetComponent<ArsenalItem>().IsRanked = true;
+                    }
+
                 }
             }
         }
