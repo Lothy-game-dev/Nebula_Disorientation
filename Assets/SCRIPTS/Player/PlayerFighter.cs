@@ -84,7 +84,7 @@ public class PlayerFighter : FighterShared
         }
         // Power Usage
         // 1st Power
-        if (PowerAndConsCDTimer[0] <= 0f && !isPausing)
+        if (PowerAndConsCDTimer[0] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
         {
             // check if power does not need charge
             //
@@ -141,7 +141,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 2nd Power
-        if (PowerAndConsCDTimer[1] <= 0f && !isPausing)
+        if (PowerAndConsCDTimer[1] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
         {
             // check if power does not need charge
             //

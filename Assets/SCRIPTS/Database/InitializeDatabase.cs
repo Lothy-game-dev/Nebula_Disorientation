@@ -178,9 +178,11 @@ public class InitializeDatabase : MonoBehaviour
             "CREATE TABLE IF NOT EXISTS LuckOfTheWandererCards" +
                 "(CardID INTEGER, " +
                 "CardName TEXT NOT NULL, " +
+                "CardType TEXT NOT NULL, " +
                 "CardEffect TEXT NOT NULL, " +
-                "CardChance INTEGER NOT NULL, " +
+                "CardTier INTEGER NOT NULL, " +
                 "CardDuration INTEGER, " +
+                "CardStackable TEXT NOT NULL, " +
                 "CardRepeatable TEXT NOT NULL, " +
                 "TierColor TEXT NOT NULL, " +
                 "PRIMARY KEY(CardID AUTOINCREMENT) ); " +
@@ -402,21 +404,41 @@ public class InitializeDatabase : MonoBehaviour
             "(10, 'Nano-Reflective Coat', 'A Nano-tech Coat that grant Invisibility to your Fighter for a few seconds after using.', 5, 'INV', 5, 'T', 2, 5000, 120, '#bf2600', 'A Nano-tech Coat that grant Invisibility to your Fighter for a few seconds after using.')," +
             "(11, 'Emergency Auto-Repair Module', 'An emergency module that quickly repair your Fighter during battle. ', 5, 'RMH-20', 3, 'T', 2, 5000, 120, '#bf2600', 'An emergency module that quickly repair your Fighter during battle. ')," +
             "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though…', 1, 'FC', 3, 'T', 1, 20000, null, '#bf2600', 'Fuel Core for sale… but only 1 in stock per day.');";
-        // LOTWCards
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
-            "(1, 'Gun Extension I', 'ENH-2', 10, 3, 'Yes', '#36b37e')," +
-            "(2, 'Gun Extension II', 'ENH-5', 10, 3, 'Yes', '#36b37e')," +
-            "(3, 'Engine Booster I', 'BOO-5', 10, 3, 'Yes', '#36b37e')," +
-            "(4, 'Engine Booster II', 'BOO-10', 10, 3, 'Yes', '#36b37e')," +
-            "(5, 'Power Cooler I', 'RCD-5', 10, 3, 'Yes', '#36b37e')," +
-            "(6, 'Power Cooler II', 'RCD-10', 10, 3, 'Yes', '#36b37e')," +
-            "(7, 'Gun Extension III', 'ENH-10', 8.125, 3, 'Yes', '#4c9aff')," +
-            "(8, 'Engine Booster III', 'BOO-20', 8.125, 3, 'Yes', '#4c9aff')," +
-            "(9, 'Power Cooler III', 'RCD-20', 8.125, 3, 'Yes', '#4c9aff')," +
-            "(10, 'Foreign Fund', 'DC-2', 8.125, 3, 'Yes', '#4c9aff')," +
-            "(11, 'Reformation', 'DAP-2', 2.5, 1, 'Yes', '#bf2600')," +
-            "(12, 'Supercharging', 'EAE-25', 2.5, 1, 'Yes', '#bf2600')," +
-            "(13, 'Franklin Effect', 'DS-2', 2.5, null, 'No', '#bf2600');";
+            "(1, 'Structural Upgrader I', 'DEF', 'HP-3', 3, -1, 'Y', 'Y', '#36b37e')," +
+            "(2, 'Structural Upgrader II', 'DEF', 'HP-5', 3, -1, 'Y', 'Y', '#36b37e')," +
+            "(3, 'Structural Upgrader III', 'DEF', 'HP-7', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(4, 'Engine Booster I', 'DEF', 'MS-5', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(5, 'Engine Booster II', 'DEF', 'MS-10', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(6, 'Engine Booster III', 'DEF', 'MS-5', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(7, 'Multi-layer Barrier I', 'DEF', 'RD-5', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(8, 'Engine Booster II', 'DEF', 'RD-10', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(9, 'Engine Booster III', 'DEF', 'RD-5', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(10, 'Gun Extension I', 'OFF', 'AWD-2', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(11, 'Gun Extension II', 'OFF', 'AWD-5', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(12, 'Gun Extension III', 'OFF', 'AWD-2', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(13, 'Gun Heater I', 'OFF', 'TWD-5', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(14, 'Gun Heater II', 'OFF', 'TWD-10', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(15, 'Gun Heater III', 'OFF', 'TWD-5', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(16, 'Gun AP Module I', 'OFF', 'BD-10', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(17, 'Gun AP Module II', 'OFF', 'BD-20', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(18, 'Gun AP Module III', 'OFF', 'BD-10', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(19, 'Gun Accelerator I', 'OFF', 'FD-5', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(20, 'Gun Accelerator II', 'OFF', 'FD-10', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(21, 'Gun Accelerator III', 'OFF', 'FD-5', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(22, 'Power Cooler I', 'SPE', 'PCD-5', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(23, 'Power Cooler II', 'SPE', 'PCD-10', 3, 3, 'N', 'Y', '#36b37e')," +
+            "(24, 'Power Cooler III', 'SPE', 'PCD-5', 2, -1, 'Y', 'Y', '#4c9aff')," +
+            "(25, 'Reformation Structure', 'DEF', 'R-100', 2, 3, 'Y', 'Y', '#4c9aff')," +
+            "(26, 'Hazard Protection Coat', 'DEF', 'HAZ', 2, 3, 'Y', 'Y', '#4c9aff')," +
+            "(27, 'Berserk Enchantment', 'OFF', 'BS-10-25', 2, 3, 'Y', 'Y', '#4c9aff')," +
+            "(28, 'Consumable Cloner', 'SPE', 'CONS', 2, 3, 'Y', 'Y', '#4c9aff')," +
+            "(29, 'Foreign Fund', 'SPE', 'C-100', 2, 3, 'Y', 'Y', '#4c9aff')," +
+            "(30, 'Power Supercharger', 'SPE', 'PCD-30', 1, 3, 'N', 'Y', '#bf2600')," +
+            "(31, 'Power Enchanter', 'SPE', 'PCD-10', 1, -1, 'Y', 'Y', '#bf2600')," +
+            "(32, 'Weapon Supercharger', 'OFF', 'WROF-15', 1, 3, 'N', 'Y', '#bf2600')," +
+            "(33, 'Weapon Enchanter', 'OFF', 'AWD-5', 1, -1, 'Y', 'Y', '#bf2600')," +
+            "(34, 'Franklin Effect', 'SPE', 'C-x2', 1, -1, 'N', 'N', '#bf2600');";
         // Daily Missions
         string DailyMissions = "INSERT INTO DailyMissions VALUES " +
             "(1, 'KE', 20)," +
