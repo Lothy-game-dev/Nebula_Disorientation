@@ -21,12 +21,16 @@ public class FighterController : MonoBehaviour
     public GameObject RightOverheatImage;
     public GameObject LeftReloadBar;
     public GameObject RightReloadBar;
+    public GameObject FirstPowerImage;
+    public GameObject SecondPowerImage;
     #endregion
     #region NormalVariables
     public GameObject CurrentLeftWeapon;
     public GameObject CurrentRightWeapon;
     public GameObject RightWeaponPosition;
     public GameObject LeftWeaponPosition;
+    public GameObject CurrentFirstPower;
+    public GameObject CurrentSecondPower;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -137,6 +141,21 @@ public class FighterController : MonoBehaviour
             Bullet.GetComponent<BulletShared>().MaximumDistance :
             CurrentRightWeapon.GetComponent<Weapons>().
             Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
+
+
+        // set power 
+        GameObject FirstPower = Instantiate(CurrentFirstPower, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
+        GameObject SecondPower = Instantiate(CurrentSecondPower, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
+        FirstPower.SetActive(true);
+        SecondPower.SetActive(true);
+        FirstPower.transform.SetParent(FirstPowerImage.transform);
+        SecondPower.transform.SetParent(SecondPowerImage.transform);
+        FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
+        SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
+        FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
+        PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
     }
     #endregion
 }

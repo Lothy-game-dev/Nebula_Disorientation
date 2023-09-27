@@ -1,0 +1,1073 @@
+fileFormatVersion: 2
+guid: 46189b8b69c136040b57261d4d604719
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: hyperjump_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1055.4546
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a7fd3af4f5ab1647b1f4f8f1be6436c
+      internalID: -443963869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_1
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1055.4546
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ae6069fb3e8fba48a776b7987249bff
+      internalID: 1013592006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_2
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 1055.4546
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c861c8ad3a6e45e42b4aa59ff0cba009
+      internalID: 413419778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_3
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 1055.4546
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a5cd1c763395a947aec433895421be6
+      internalID: 502940860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 950.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 504ef4f9b0ed51649b4bd01effa2152a
+      internalID: 165712320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_5
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 950.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 372699ec787ff2e4ebd80c7c20ae5665
+      internalID: -675042988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_6
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 950.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff8e5198007d3f044ae4fcfccab0c076
+      internalID: 1013222267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_7
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 950.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4983d31198f1ba449772810b4a3ee0a
+      internalID: 1243961768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 845.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80258fd1b44e64c4da9c20ba2e12836f
+      internalID: 1889066496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_9
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 845.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7f1ba6cd604549489fd966155c0230e
+      internalID: 1507984868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_10
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 845.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a91e8abe1e57434daace60c76dc05b8
+      internalID: 770317935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_11
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 845.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12356a35e61329e41a1bc982c361b70f
+      internalID: -111992398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 740.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f85e52e406f86a6459b52326f55c766f
+      internalID: -1506296715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_13
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 740.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19ccfcc7927eed14497ae324cfca3775
+      internalID: -876955956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_14
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 740.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1205a429a65805f4886854ae5d95d0ce
+      internalID: -1582445534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_15
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 740.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39c67b227ae8fc4468b5fa5c7f9a720a
+      internalID: -1257804951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 635.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d05502e81e18c1b40a635333ed4f0e48
+      internalID: 185854518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_17
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 635.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a01e62239701907489d51d2f20a627e3
+      internalID: -1195162375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_18
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 635.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c7acc73618e23a44baab34981a39de5
+      internalID: 2143619181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_19
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 635.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ca52ae954e973c4091069edf5c31208
+      internalID: 1664024460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 530.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 203dd7e0408a3a148ae92fa89fde136d
+      internalID: 226064559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_21
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 530.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9f47934dfb67714a916203cd6bfcf01
+      internalID: 1420133260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_22
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 530.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41e6d66c15e2f2b4ab3cd5e9074647f4
+      internalID: 657766047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_23
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 530.4545
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb2cd2f2c987c5c4e85e846e47e8a27a
+      internalID: 464576641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 425.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0117648453610c4f9a7a1d15c4d64ae
+      internalID: -122659509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_25
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 425.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bbf5819127712341b6de9ede52245e1
+      internalID: 775152735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_26
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 425.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5effdb3969f233049a32468a8294c4bf
+      internalID: 30889938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_27
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 425.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c90ead8c0cb8474ea3233b7ea8d57ba
+      internalID: -1611231004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2257a23b13e4fba48a85f09630e24997
+      internalID: -1204491144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_29
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 320.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a7a65f2bd716164a8f62513167aac89
+      internalID: -693517191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_30
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 320.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 671cdcc5f2f53ba4bbe61a4d837a3799
+      internalID: 1490133078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_31
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 320.45453
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90f24a1660b4dfa4c89500d1c4499dbe
+      internalID: -1890683053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 215.45454
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a42df47d4eb7d6749956a12bb2c9540f
+      internalID: -546270048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_33
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 215.45454
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 235c90e495789ee49a9215fab0b397c7
+      internalID: -1759380211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_34
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 215.45454
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a12fd6498a4a88479789eb576e95e89
+      internalID: 1682038069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_35
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 215.45454
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0848e8b42dd21948b197dd26f830d2c
+      internalID: 612411542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 110.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60d02e86dba88d449b80b8e96b78e9ef
+      internalID: 2026120480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_37
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 110.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc449066cb5a8b4184c1c059ae10a77
+      internalID: -1948749795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_38
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 110.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 291646dec1b047c4c8e666797c911aad
+      internalID: 1680358669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_39
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 110.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a526e8f3b4e8494bb6f321a43c6a8b8
+      internalID: 567737445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09c2c0bfd0c85d84183512be7ee226be
+      internalID: -2102801473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_41
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 5.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4feb841eb5c56448b9fb152cc434e48
+      internalID: 109617889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hyperjump_42
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 5.454544
+        width: 167
+        height: 105.545456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e448d3ae34dbb2142868f287c8917bd0
+      internalID: -1864056933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      hyperjump_0: -443963869
+      hyperjump_1: 1013592006
+      hyperjump_10: 770317935
+      hyperjump_11: -111992398
+      hyperjump_12: -1506296715
+      hyperjump_13: -876955956
+      hyperjump_14: -1582445534
+      hyperjump_15: -1257804951
+      hyperjump_16: 185854518
+      hyperjump_17: -1195162375
+      hyperjump_18: 2143619181
+      hyperjump_19: 1664024460
+      hyperjump_2: 413419778
+      hyperjump_20: 226064559
+      hyperjump_21: 1420133260
+      hyperjump_22: 657766047
+      hyperjump_23: 464576641
+      hyperjump_24: -122659509
+      hyperjump_25: 775152735
+      hyperjump_26: 30889938
+      hyperjump_27: -1611231004
+      hyperjump_28: -1204491144
+      hyperjump_29: -693517191
+      hyperjump_3: 502940860
+      hyperjump_30: 1490133078
+      hyperjump_31: -1890683053
+      hyperjump_32: -546270048
+      hyperjump_33: -1759380211
+      hyperjump_34: 1682038069
+      hyperjump_35: 612411542
+      hyperjump_36: 2026120480
+      hyperjump_37: -1948749795
+      hyperjump_38: 1680358669
+      hyperjump_39: 567737445
+      hyperjump_4: 165712320
+      hyperjump_40: -2102801473
+      hyperjump_41: 109617889
+      hyperjump_42: -1864056933
+      hyperjump_5: -675042988
+      hyperjump_6: 1013222267
+      hyperjump_7: 1243961768
+      hyperjump_8: 1889066496
+      hyperjump_9: 1507984868
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

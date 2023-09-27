@@ -386,13 +386,13 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[0].Contains("BR-"))
             {
                 string BR = StatList[0].Replace("BR-", "");
-                finalString.Add("BR", BR + "%HP (P)");
+                finalString.Add("BR", BR);
             }
             // BR
             if (StatList[1].Contains("BR-x"))
             {
                 string BR = StatList[1].Replace("BR-x", "");
-                finalString["BR"] += " x" + BR;
+                finalString.Add("BRx", BR);
             }
             else
             {
@@ -406,12 +406,12 @@ public class GlobalFunctionController : MonoBehaviour
                 if (DCstats[0] == "0")
                 {
 
-                    finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("CD", DCstats[1]);
                 }
                 else
                 {
-                    finalString.Add("Dur", DCstats[0] + "s");
-                    finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("Dur", DCstats[0]);
+                    finalString.Add("CD", DCstats[1]);
 
                 }
 
@@ -427,7 +427,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[0].Contains("BR-x"))
             {
                 string BR = StatList[0].Replace("BR-x", "");
-                finalString.Add("BR", "x" + BR);
+                finalString.Add("BR", BR);
             }
             else
             {
@@ -440,12 +440,12 @@ public class GlobalFunctionController : MonoBehaviour
                 string[] DCstats = DC.Split(",");
                 if (DCstats[0] == "0")
                 {
-                    finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("CD", DCstats[1]);
                 }
                 else
                 {
-                    finalString.Add("Dur", DCstats[0] + "s");
-                    finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("Dur", DCstats[0]);
+                    finalString.Add("CD", DCstats[1]);
 
                 }
             }
@@ -528,12 +528,12 @@ public class GlobalFunctionController : MonoBehaviour
                 string[] DCstats = DC.Split(",");
                 if (DCstats[0] == "0")
                 {
-                    finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("CD", DCstats[1]);
                 }
                 else
                 {
-                    finalString.Add("Dur", DCstats[0] + "s");
-                    finalString.Add("CD", DCstats[1] + "s");
+                    finalString.Add("Dur", DCstats[0]);
+                    finalString.Add("CD", DCstats[1]);
                 }
 
             }
