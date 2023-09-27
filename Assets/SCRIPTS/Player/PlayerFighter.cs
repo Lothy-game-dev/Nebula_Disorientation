@@ -39,6 +39,8 @@ public class PlayerFighter : FighterShared
     private int[] ConsCount;
     private bool isPausing;
     private float testTimer;
+    public GameObject FirstPower;
+    public GameObject SecondPower;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -49,7 +51,7 @@ public class PlayerFighter : FighterShared
         aus = GetComponent<AudioSource>();
         HPSlider.maxValue = MaxHP;
         // temp, will get real data later
-        PowerAndConsCD = new float[6] {5f, 5f, 5f, 5f, 5f, 5f};
+        PowerAndConsCD = new float[6] {5f, 1f, 5f, 5f, 5f, 5f};
         PowerAndConsCDTimer = new float[6];
         PowerAndConsDuration = new float[6] {3f, 0.5f, 3f, 3f, 3f, 3f};
         PowerAndConsDurationTimer = new float[6];
@@ -97,6 +99,7 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st power");
                     PowerAndConsActivation[0] = true;
                     // void function to activate power
+
                     PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
                     PowerAndConsDurationSlider[0].maxValue = PowerAndConsDuration[0];
                     PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
@@ -154,6 +157,8 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 2nd power");
                     PowerAndConsActivation[1] = true;
                     // void function to activate power
+                    SecondPower.GetComponent<Powers>().Fighter = gameObject;
+                    SecondPower.GetComponent<Powers>().ActivatePower(SecondPower.name.Replace("(clone)", ""));
                     PowerAndConsDurationTimer[1] = PowerAndConsDuration[1];
                     PowerAndConsDurationSlider[1].maxValue = PowerAndConsDuration[1];
                     PowerAndConsDurationSlider[1].value = PowerAndConsDuration[1];

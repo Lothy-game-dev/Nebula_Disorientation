@@ -64,6 +64,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDShowRange.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBox.cs" />
+    <Compile Include="Assets\SCRIPTS\PowerEffect\Wormhole.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRenameButton.cs" />
@@ -171,8 +172,10 @@
     <Compile Include="Assets\SCRIPTS\UI\LuckOfTheWanderer\LOTWScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\PowerController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotNameBar.cs" />
+    <Compile Include="Assets\SCRIPTS\PowerEffect\Powers.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuBackButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBarBackground.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
