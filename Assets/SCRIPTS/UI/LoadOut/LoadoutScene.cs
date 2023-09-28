@@ -127,18 +127,17 @@ public class LoadoutScene : UECMenuShared
 
     public string SetDataToDb()
     {
-        // WIP
-        string check = "Model:" + Model
-            + ",Left Weapon:" + LeftWeapon
-            + ",Right Weapon:" + RightWeapon
-            + ",First Power:" + FirstPower
-            + ",Second Power:" + SecondPower;
+        string ConsText = "";
         foreach (var item in Consumables)
         {
-            check += ",Consumable:" + item.Key + " - " + item.Value;
+            ConsText += item.Key + "-" + item.Value + "|";
         }
-        Debug.Log(check);
-        return "Success";
+        if (ConsText.Length>0)
+        {
+            ConsText = ConsText.Substring(0, ConsText.Length - 1);
+        }
+        return FindObjectOfType<AccessDatabase>().AddNewSession(FindObjectOfType<UECMainMenuController>().PlayerId,
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
     }
     #endregion
 }
