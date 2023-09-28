@@ -43,11 +43,18 @@ public class LOTWButtons : MonoBehaviour
         }
         else if (Type == "ShowOwn")
         {
-
+            Scene.GetComponent<LOTWScene>().OpenAllCardsOwnedPopup();
         }
         else if (Type == "ShowAll")
         {
-
+            Scene.GetComponent<LOTWScene>().OpenAllCardsPopup();
+        } else if (Type== "ShowAllBack")
+        {
+            Scene.GetComponent<LOTWScene>().CloseAllCardsPopup();
+        }
+        else if (Type == "ShowOwnBack")
+        {
+            Scene.GetComponent<LOTWScene>().CloseAllCardsOwnedPopup();
         }
     }
     #endregion

@@ -103,7 +103,8 @@ public class InitializeDatabase : MonoBehaviour
                 "(ID INTEGER, " +
                 "SessionID INTEGER, " +
                 "CardID INTEGER, " +
-                "AlreadyApplied TEXT NOT NULL, " +
+                "Duration INTEGER, " +
+                "Stack INTEGER, " +
                 "FOREIGN KEY(CardID) REFERENCES LuckOfTheWandererCards(CardID), " +
                 "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
@@ -214,19 +215,23 @@ public class InitializeDatabase : MonoBehaviour
                 "Privilege TEXT, " +
                 "TierColor TEXT NOT NULL, " +
                 "PRIMARY KEY(RankID AUTOINCREMENT) ); " +
-            // Session need change
+            // Session
             "CREATE TABLE IF NOT EXISTS Session" +
                 "(SessionID INTEGER, " +
-                "PlayedTime REAL NOT NULL, " +
+                "TotalPlayedTime INTEGER, " +
                 "CurrentStage INTEGER, " +
                 "CreatedDate REAL NOT NULL, " +
                 "LastUpdate REAL NOT NULL, " +
-                "IsDone TEXT NOT NULL, " +
+                "IsCompleted TEXT NOT NULL, " +
                 "SessionCash INTEGER NOT NULL, " +
                 "SessionTimelessShard INTEGER NOT NULL, " +
                 "SessionFuelEnergy INTEGER NOT NULL, " +
-                "StatsIncreasePercent TEXT NOT NULL, " +
-                "StatsIncreaseFlat TEXT NOT NULL, " +
+                "Model TEXT, " +
+                "LeftWeapon TEXT, " +
+                "RightWeapon TEXT, " +
+                "FirstPower TEXT, " +
+                "SecondPower TEXT, " +
+                "Consumables TEXT, " +
                 "FOREIGN KEY(CurrentStage) REFERENCES Stages(StageID), " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
             // SpaceShop
@@ -438,7 +443,7 @@ public class InitializeDatabase : MonoBehaviour
             "(31, 'Power Enchanter', 'SPE', 'PCD-10', 1, -1, 'Y', 'Y', '#bf2600')," +
             "(32, 'Weapon Supercharger', 'OFF', 'WROF-15', 1, 3, 'N', 'Y', '#bf2600')," +
             "(33, 'Weapon Enchanter', 'OFF', 'AWD-5', 1, -1, 'Y', 'Y', '#bf2600')," +
-            "(34, 'Franklin Effect', 'SPE', 'C-x2', 1, -1, 'N', 'N', '#bf2600');";
+            "(34, 'Franklin Effect', 'SPE', 'C-x2', 1, -2, 'N', 'N', '#bf2600');";
         // Daily Missions
         string DailyMissions = "INSERT INTO DailyMissions VALUES " +
             "(1, 'KE', 20)," +

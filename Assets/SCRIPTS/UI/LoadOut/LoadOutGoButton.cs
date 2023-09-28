@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadOutGoButton : MonoBehaviour
 {
@@ -54,8 +55,6 @@ public class LoadOutGoButton : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = SetDataToScene;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
                     "Will these items be your final decision for this session?");
-            //Transfer
-            // WIP
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
@@ -71,6 +70,17 @@ public class LoadOutGoButton : MonoBehaviour
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                 "Load out successfully!\nYour session will start soon!",3f);
+            PlayerPrefs.SetInt("PlayerID", FindObjectOfType<UECMainMenuController>().PlayerId);
+            SceneManager.LoadSceneAsync("GameplayExterior");
+            SceneManager.UnloadSceneAsync("UECMainMenu");
+        } else if ("Fail".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Cannot create session!\nPlease contact to our email!", 3f);
+        } else if ("No Exist".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Cannot fetch data for this pilot!\nPlease try again!", 3f);
         }
     }
     #endregion

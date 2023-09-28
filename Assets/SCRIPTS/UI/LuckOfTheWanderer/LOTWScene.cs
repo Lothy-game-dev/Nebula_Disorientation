@@ -17,6 +17,11 @@ public class LOTWScene : MonoBehaviour
     public GameObject RedCardAlert;
     public GameObject PickButton;
     public GameObject RerollButton;
+    public GameObject AllCardPopup;
+    public GameObject AllCardButton;
+    public GameObject CardOwnedPopup;
+    public GameObject CardOwnedButton;
+    public GameObject PopupBG;
     #endregion
     #region NormalVariables
     private List<int> ListAllLOTW;
@@ -165,7 +170,61 @@ public class LOTWScene : MonoBehaviour
     public void ConfirmSelect()
     {
         chosenCard.GetComponent<LOTWCard>().PickCard();
-        Debug.Log("Pick Card With Id = " + chosenId);
+        string check = FindObjectOfType<AccessDatabase>().AddCardToCurrentSession(PlayerPrefs.GetInt("PlayerID"), chosenId);
+        if (check=="Fail")
+        {
+            Debug.Log("Fail");
+        }
+    }
+
+    public void OpenAllCardsPopup()
+    {
+        PopupBG.SetActive(true);
+        float InitScaleX = AllCardPopup.transform.localScale.x;
+        AllCardPopup.transform.localScale = new Vector3(InitScaleX / 10f, InitScaleX / 10f, AllCardPopup.transform.localScale.z);
+        AllCardPopup.SetActive(true);
+        StartCoroutine(PopupAllCard(InitScaleX));
+    }
+
+    private IEnumerator PopupAllCard(float scale)
+    {
+        for (int i=0;i<45;i++)
+        {
+            AllCardPopup.transform.localScale = new Vector3(AllCardPopup.transform.localScale.x + scale / 50f, AllCardPopup.transform.localScale.x + scale / 50f, AllCardPopup.transform.localScale.z);
+            yield return new WaitForSeconds(0.5f / 45);
+        }
+        AllCardPopup.GetComponent<LOTWAllCardPopup>().Open();
+    }
+
+    public void CloseAllCardsPopup()
+    {
+        AllCardPopup.GetComponent<LOTWAllCardPopup>().Close();
+        PopupBG.SetActive(false);
+    }
+
+    public void OpenAllCardsOwnedPopup()
+    {
+        PopupBG.SetActive(true);
+        float InitScaleX = CardOwnedPopup.transform.localScale.x;
+        CardOwnedPopup.transform.localScale = new Vector3(InitScaleX / 10f, InitScaleX / 10f, CardOwnedPopup.transform.localScale.z);
+        CardOwnedPopup.SetActive(true);
+        StartCoroutine(PopupAllCardOwned(InitScaleX));
+    }
+
+    private IEnumerator PopupAllCardOwned(float scale)
+    {
+        for (int i = 0; i < 45; i++)
+        {
+            CardOwnedPopup.transform.localScale = new Vector3(CardOwnedPopup.transform.localScale.x + scale / 50f, CardOwnedPopup.transform.localScale.x + scale / 50f, CardOwnedPopup.transform.localScale.z);
+            yield return new WaitForSeconds(0.5f / 45);
+        }
+        CardOwnedPopup.GetComponent<LOTWAllOwnedPopup>().Open();
+    }
+
+    public void CloseAllCardsOwnedPopup()
+    {
+        CardOwnedPopup.GetComponent<LOTWAllOwnedPopup>().Close();
+        PopupBG.SetActive(false);
     }
     #endregion
 }

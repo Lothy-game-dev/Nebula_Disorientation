@@ -39,6 +39,7 @@ public class UECMainMenuController : MonoBehaviour
     #region Retrieve Data
     public void GetData()
     {
+        PlayerPrefs.SetInt("PlayerID", 0);
         PlayerId = ad.GetCurrentSessionPlayerId();
         Dictionary<string,object> ListData = ad.GetPlayerInformationById(PlayerId);
         if (ListData!=null)
