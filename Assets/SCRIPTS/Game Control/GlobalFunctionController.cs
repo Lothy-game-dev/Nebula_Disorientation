@@ -475,12 +475,18 @@ public class GlobalFunctionController : MonoBehaviour
                 string AoH = StatList[1].Replace("AoH-", "");
                 if (AoH != "null")
                 {
-                    finalString.Add("AOH", AoH);
+                    if (AoH.Contains("/s"))
+                    {
+                        finalString.Add("AOH", AoH.Replace("/s", ""));
+                    } else
+                    {
+                        finalString.Add("AOH", AoH);
+                    }
                 }
             }
             else
             {
-                finalString.Add("DPH", StatList[1]);
+                finalString.Add("AOH", StatList[1]);
             }
             //AoE
             if (StatList[2].Contains("AoE-"))

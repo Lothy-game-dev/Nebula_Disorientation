@@ -51,9 +51,9 @@ public class PlayerFighter : FighterShared
         aus = GetComponent<AudioSource>();
         HPSlider.maxValue = MaxHP;
         // temp, will get real data later
-        PowerAndConsCD = new float[6] {5f, 1f, 5f, 5f, 5f, 5f};
+        PowerAndConsCD = new float[6] {1f, 1f, 5f, 5f, 5f, 5f};
         PowerAndConsCDTimer = new float[6];
-        PowerAndConsDuration = new float[6] {3f, 0.5f, 3f, 3f, 3f, 3f};
+        PowerAndConsDuration = new float[6] {1f, 0.5f, 3f, 3f, 3f, 3f};
         PowerAndConsDurationTimer = new float[6];
         PowerAndConsActivation = new bool[6];
         ChargingPower = new float[2];
@@ -90,7 +90,8 @@ public class PlayerFighter : FighterShared
         {
             // check if power does not need charge
             //
-            if (1!=1)
+            FirstPower.GetComponent<Powers>().Fighter = gameObject;
+            if (-1==1)
             {
                 PowerAndConsDurationSlider[0].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -99,7 +100,7 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st power");
                     PowerAndConsActivation[0] = true;
                     // void function to activate power
-
+                   
                     PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
                     PowerAndConsDurationSlider[0].maxValue = PowerAndConsDuration[0];
                     PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
@@ -111,13 +112,19 @@ public class PlayerFighter : FighterShared
             {
                 if (Input.GetKey(KeyCode.Q) && !PowerAndConsActivation[0]) 
                 {
+                    
                     PowerAndConsDurationSlider[0].maxValue = ChargingPowerReq[0];
                     if (ChargingPower[0] < ChargingPowerReq[0])
                     {
+                        if (ChargingPower[0] == 0)
+                        {
+                            FirstPower.GetComponent<Powers>().BeforeActivating();
+                        }
                         ChargingPower[0] += Time.deltaTime;
                         Color c = ChargeImage[0].GetComponent<SpriteRenderer>().color;
                         c.a += 190 * Time.deltaTime / (255f * ChargingPowerReq[0]);
                         ChargeImage[0].GetComponent<SpriteRenderer>().color = c;
+                        
                     } else
                     {
                         Debug.Log("Activate 1st charging power");
@@ -127,6 +134,9 @@ public class PlayerFighter : FighterShared
                         c.a = 0;
                         ChargeImage[0].GetComponent<SpriteRenderer>().color = c;
                         // Void function to activate power
+                        
+                        FirstPower.GetComponent<Powers>().ActivatePower(FirstPower.name.Replace("(clone)", ""));
+
                         PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
                         PowerAndConsDurationSlider[0].fillRect.GetComponentInChildren<Image>().color =
                             new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -159,9 +169,22 @@ public class PlayerFighter : FighterShared
                     // void function to activate power
                     SecondPower.GetComponent<Powers>().Fighter = gameObject;
                     SecondPower.GetComponent<Powers>().ActivatePower(SecondPower.name.Replace("(clone)", ""));
+
+                    //Duration
+                    if (SecondPower.GetComponent<Powers>().Duration == 0)
+                    {
+                        PowerAndConsDuration[1] = 0.5f;
+                    } else
+                    {
+                        PowerAndConsDuration[1] = SecondPower.GetComponent<Powers>().Duration;
+                    }
                     PowerAndConsDurationTimer[1] = PowerAndConsDuration[1];
                     PowerAndConsDurationSlider[1].maxValue = PowerAndConsDuration[1];
                     PowerAndConsDurationSlider[1].value = PowerAndConsDuration[1];
+
+                    //Cooldown
+                    PowerAndConsCD[1] = SecondPower.GetComponent<Powers>().CD;
+                    PowerAndConsCDTimer[1] = PowerAndConsCD[1];
                 }
             }
             // if power need charge
