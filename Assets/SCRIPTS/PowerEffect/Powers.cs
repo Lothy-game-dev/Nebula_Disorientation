@@ -8,6 +8,7 @@ public class Powers : MonoBehaviour
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
     #endregion
+    private AudioSource sound;
     #region InitializeVariables
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
@@ -28,6 +29,7 @@ public class Powers : MonoBehaviour
     public float CD;
     public float BR;
     public float BRx;
+    public AudioClip SoundEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -41,6 +43,8 @@ public class Powers : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+       
+
     }
     #endregion
     #region Init Data
@@ -81,12 +85,70 @@ public class Powers : MonoBehaviour
     // Group all function that serve the same algorithm
     public void ActivatePower(string name)
     {
+        gameObject.AddComponent<AudioSource>();
+        sound = GetComponent<AudioSource>();
         InitData(name);
         if (name.Contains("Wormhole"))
-        {
+        {          
             gameObject.GetComponent<Wormhole>().GenerateWormhole();
-        }
-        
+        } else
+        {
+            if (name.Contains("LaserBeam"))
+            {
+                gameObject.GetComponent<LaserBeam>().isFire = true;
+            }
+        }      
+    }
+
+    public void BeforeActivating()
+    {
+        gameObject.GetComponent<LaserBeam>().Charging();
     }
     #endregion
+    #region Sound Effect
+    public void WormholeSound()
+    {
+        sound.clip = SoundEffect;
+        sound.loop = false;
+        sound.Play();
+        sound.volume = 1f;
+    }
+    public void EndSound()
+    {
+        sound.clip = null;
+    }
+    #endregion
+    #region Calculate pos
+    public Vector2 CalculatePos(float range)
+    {
+        float angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
+        float x = 0, y = 0;
+        if (angle < 0) angle = angle % 360 + 360;
+        if (angle >= 360) angle = angle % 360;
+        Debug.Log(angle);
+        if (angle >= 0 && angle <= 90)
+        {
+            x = Mathf.Abs(Mathf.Sin(angle * Mathf.Deg2Rad) * range);
+            y = Mathf.Abs(Mathf.Cos(angle * Mathf.Deg2Rad) * range);
+        }
+        else if (angle > 90 && angle <= 180)
+        {
+            x = Mathf.Abs(Mathf.Sin((180 - angle) * Mathf.Deg2Rad) * range);
+            y = -Mathf.Abs(Mathf.Cos((180 - angle) * Mathf.Deg2Rad) * range);
+        }
+        else if (angle > 180 && angle <= 270)
+        {
+            x = -Mathf.Abs(Mathf.Sin((angle - 180) * Mathf.Deg2Rad) * range);
+            y = -Mathf.Abs(Mathf.Cos((angle - 180) * Mathf.Deg2Rad) * range);
+        }
+        else if (angle > 270 && angle < 360)
+        {
+            x = -Mathf.Abs(Mathf.Sin((360 - angle) * Mathf.Deg2Rad) * range);
+            y = Mathf.Abs(Mathf.Cos((360 - angle) * Mathf.Deg2Rad) * range);
+        }
+        return new Vector2(x, y);
+
+    }
+    #endregion
+    
 }
