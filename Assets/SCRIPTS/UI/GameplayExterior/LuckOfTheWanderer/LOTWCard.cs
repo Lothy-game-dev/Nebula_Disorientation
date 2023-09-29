@@ -193,7 +193,7 @@ public class LOTWCard : MonoBehaviour
     private void Selected()
     {
         GetComponent<Collider2D>().enabled = false;
-        transform.localScale = new Vector3(InitScaleX * 1.1f, InitScaleY * 1.1f, transform.localScale.z);
+        transform.localScale = new Vector3(InitScaleX * 1.05f, InitScaleY * 1.05f, transform.localScale.z);
         foreach (var card in OtherCards)
         {
             card.GetComponent<Collider2D>().enabled = true;
@@ -360,6 +360,7 @@ public class LOTWCard : MonoBehaviour
             yield return new WaitForSeconds(0.5f / 30f);
         }
         Destroy(go);
+        Scene.GetComponent<LOTWScene>().EnterGameplay();
     }
     #endregion
 }

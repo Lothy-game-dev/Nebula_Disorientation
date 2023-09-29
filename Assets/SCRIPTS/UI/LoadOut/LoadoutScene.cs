@@ -141,8 +141,6 @@ public class LoadoutScene : UECMenuShared
             Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
         if ("Success".Equals(check))
         {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                "Load out successfully!\nYour session will start soon!", 2f);
             StartCoroutine(MoveToLOTW());
         }
         else if ("Fail".Equals(check))
@@ -159,7 +157,6 @@ public class LoadoutScene : UECMenuShared
 
     private IEnumerator MoveToLOTW()
     {
-        yield return new WaitForSeconds(2f);
         for (int i=0;i<50;i++)
         {
             Color c = BlackFade.GetComponent<SpriteRenderer>().color;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LOTWScene : MonoBehaviour
 {
@@ -134,7 +135,7 @@ public class LOTWScene : MonoBehaviour
             // enable button reroll
             RerollButton.GetComponent<SpriteRenderer>().color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
             RerollButton.GetComponent<Collider2D>().enabled = true;
-        } else if (currentShard < ShardCostReroll[3 - RerollChance])
+        } else if (RerollChance<=0 || currentShard < ShardCostReroll[3 - RerollChance])
         {
             RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
             RerollButton.GetComponent<Collider2D>().enabled = false;
@@ -207,6 +208,25 @@ public class LOTWScene : MonoBehaviour
         {
             Debug.Log("Fail");
         }
+        // Enable button pick
+        PickButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+        PickButton.GetComponent<Collider2D>().enabled = false;
+        // disable button reroll
+        RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+        RerollButton.GetComponent<Collider2D>().enabled = false;
+    }
+
+    public void EnterGameplay()
+    {
+        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f);
+        StartCoroutine(WaitTeleport());
+    }
+
+    private IEnumerator WaitTeleport()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadSceneAsync("GameplayInterior");
+        SceneManager.UnloadSceneAsync("GameplayExterior");
     }
 
     public void OpenAllCardsPopup()
