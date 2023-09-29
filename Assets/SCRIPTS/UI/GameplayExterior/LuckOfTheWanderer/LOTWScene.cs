@@ -22,27 +22,34 @@ public class LOTWScene : MonoBehaviour
     public GameObject CardOwnedPopup;
     public GameObject CardOwnedButton;
     public GameObject PopupBG;
+    public GameObject LOTWNoText;
+    public GameObject SessionShardText;
     #endregion
     #region NormalVariables
     private List<int> ListAllLOTW;
     private List<int> ListAllLOTWOwn;
     private List<int> ListLOTWChosen;
+    private int[] ShardCostReroll;
     private List<GameObject> ListCard;
     private bool ContainRed;
     private float RegenerateMovingTimer;
     private float StopRegenCardTimer;
     private int RerollChance;
     private int chosenId;
+    private int currentShard;
+    private int SessionId;
     private GameObject chosenCard;
+    private Dictionary<string, object> datas;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        // Get Stage Info
+        SetStageInfoData();
         // Get All Cards Data
         ListAllLOTW = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(0);
-        RerollChance = 3;
         // Get Owned Cards Data
 
         // Random to get 3 cards
@@ -122,30 +129,55 @@ public class LOTWScene : MonoBehaviour
     private IEnumerator EnableReroll()
     {
         yield return new WaitForSeconds(1.5f);
-        // enable button reroll
-        RerollButton.GetComponent<SpriteRenderer>().color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
-        RerollButton.GetComponent<Collider2D>().enabled = true;
+        if (RerollChance>0 && currentShard >= ShardCostReroll[3-RerollChance])
+        {
+            // enable button reroll
+            RerollButton.GetComponent<SpriteRenderer>().color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
+            RerollButton.GetComponent<Collider2D>().enabled = true;
+        } else if (currentShard < ShardCostReroll[3 - RerollChance])
+        {
+            RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+            RerollButton.GetComponent<Collider2D>().enabled = false;
+        }
     }
     public void RegenerateCard()
     {
         RerollButton.GetComponent<Collider2D>().enabled = false;
-        RerollChance--;
-        if (RerollChance == 0)
+        // Update DB
+        string check = FindObjectOfType<AccessDatabase>().UpdateSessionShard(SessionId, false, ShardCostReroll[3 - RerollChance]);
+        if (check=="Success")
         {
-            // disable button reroll
-            RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
-            RerollButton.GetComponent<Collider2D>().enabled = false;
-            RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
-        } else
-        RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(" + RerollChance + " time" + (RerollChance > 1 ? "s" : "") + " left)";
-        RedCardAlert.SetActive(false);
-        foreach (var card in ListCard)
-        {
-            if (card!=null)
-            card.GetComponent<LOTWCard>().Regenerate();
-        }
-        StartCoroutine(RegenCardMove());
+            ResetShardInfo();
+            RerollChance--;
+            if (RerollChance == 0)
+            {
+                // disable button reroll
+                RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+                RerollButton.GetComponent<Collider2D>().enabled = false;
+                RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
+                RerollButton.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Reroll";
+            }
+            else
+            {
+                RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(" + RerollChance + " time" + (RerollChance > 1 ? "s" : "") + " left)";
+                RerollButton.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Reroll\n(" + ShardCostReroll[3 - RerollChance] + " <sprite index='0'>)";
+            }
 
+            RedCardAlert.SetActive(false);
+            if (RerollChance > -1)
+            {
+                foreach (var card in ListCard)
+                {
+                    if (card != null)
+                        card.GetComponent<LOTWCard>().Regenerate();
+                }
+                StartCoroutine(RegenCardMove());
+            }
+        } else if (check=="Fail")
+        {
+            Debug.Log("Fail");
+        }
+        
     }
 
     private IEnumerator RegenCardMove()
@@ -225,6 +257,30 @@ public class LOTWScene : MonoBehaviour
     {
         CardOwnedPopup.GetComponent<LOTWAllOwnedPopup>().Close();
         PopupBG.SetActive(false);
+    }
+    #endregion
+    #region Set Data
+    private void SetStageInfoData()
+    {
+        RerollChance = 3;
+        ShardCostReroll = new int[] { 1, 2, 3 };
+        datas = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        LOTWNoText.GetComponent<TextMeshPro>().text = "Luck of the wanderer\nNo. " + (int)datas["CurrentStage"];
+        SessionShardText.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["SessionTimelessShard"]).ToString();
+        currentShard = (int)datas["SessionTimelessShard"];
+        SessionId = (int)datas["SessionID"];
+        if (currentShard < ShardCostReroll[3-RerollChance])
+        {
+            RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+            RerollButton.GetComponent<Collider2D>().enabled = false;
+        }
+    }
+
+    private void ResetShardInfo()
+    {
+        datas = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        SessionShardText.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["SessionTimelessShard"]).ToString();
+        currentShard = (int)datas["SessionTimelessShard"];
     }
     #endregion
 }

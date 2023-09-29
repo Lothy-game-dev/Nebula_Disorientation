@@ -2651,5 +2651,73 @@ public class AccessDatabase : MonoBehaviour
             }
         }
     }
+
+    public Dictionary<string, object> GetSessionInfoByPlayerId(int PlayerId)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return null;
+        }
+        else
+        {
+            Dictionary<string, object> datas = new Dictionary<string, object>();
+            // Queries
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            dbCheckCommand3.CommandText = "SELECT * From Session WHERE SessionId=" + n;
+            IDataReader dataReader2 = dbCheckCommand3.ExecuteReader();
+            while (dataReader2.Read())
+            {
+                datas.Add("SessionID", dataReader2.GetInt32(0));
+                datas.Add("TotalPlayedTime", dataReader2.GetInt32(1));
+                datas.Add("CurrentStage", dataReader2.GetInt32(2));
+                datas.Add("CreatedDate", dataReader2.GetString(3));
+                datas.Add("LastUpdate", dataReader2.GetString(4));
+                datas.Add("IsCompleted", dataReader2.GetString(5));
+                datas.Add("SessionCash", dataReader2.GetInt32(6));
+                datas.Add("SessionTimelessShard", dataReader2.GetInt32(7));
+                datas.Add("SessionFuelEnergy", dataReader2.GetInt32(8));
+            }
+            dbConnection.Close();
+            return datas;
+        }
+    }
+
+    public string UpdateSessionShard(int SessionId, bool IsIncrease, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n!=1)
+        {
+            return "Fail";
+        } else
+        {
+            return "Success";
+        }
+    }
     #endregion
 }

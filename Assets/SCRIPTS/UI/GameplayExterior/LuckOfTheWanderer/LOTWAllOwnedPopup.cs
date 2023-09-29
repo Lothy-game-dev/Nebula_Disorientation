@@ -19,6 +19,7 @@ public class LOTWAllOwnedPopup : MonoBehaviour
     public GameObject TemplateCard;
     public GameObject Content;
     public GameObject ScrollRect;
+    public GameObject NoCardText;
     #endregion
     #region NormalVariables
     private List<Dictionary<string, object>> ListDataAllCard;
@@ -31,6 +32,7 @@ public class LOTWAllOwnedPopup : MonoBehaviour
     {
         // Initialize variables
         ListDataAllCard = new List<Dictionary<string, object>>();
+        NoCardText.SetActive(false);
         GetAllCardsData();
     }
 
@@ -76,7 +78,10 @@ public class LOTWAllOwnedPopup : MonoBehaviour
 
     private IEnumerator GenerateAllCards()
     {
-
+        if (ListDataAllCard.Count==0)
+        {
+            NoCardText.SetActive(true);
+        }
         Vector2 Pos = new Vector2(FirstPos.transform.position.x, FirstPos.transform.position.y);
         for (int i = 0; i < ListDataAllCard.Count; i++)
         {

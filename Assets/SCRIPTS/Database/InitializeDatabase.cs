@@ -220,8 +220,8 @@ public class InitializeDatabase : MonoBehaviour
                 "(SessionID INTEGER, " +
                 "TotalPlayedTime INTEGER, " +
                 "CurrentStage INTEGER, " +
-                "CreatedDate REAL NOT NULL, " +
-                "LastUpdate REAL NOT NULL, " +
+                "CreatedDate TEXT NOT NULL, " +
+                "LastUpdate TEXT NOT NULL, " +
                 "IsCompleted TEXT NOT NULL, " +
                 "SessionCash INTEGER NOT NULL, " +
                 "SessionTimelessShard INTEGER NOT NULL, " +

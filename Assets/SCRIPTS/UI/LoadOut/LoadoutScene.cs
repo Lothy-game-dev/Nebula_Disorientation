@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoadoutScene : UECMenuShared
@@ -18,8 +19,8 @@ public class LoadoutScene : UECMenuShared
     public GameObject ConsumableBar;
     public GameObject FighterDemo;
     public GameObject FuelCell;
-
     public GameObject Factory;
+    public GameObject BlackFade;
     #endregion
     #region NormalVariables
     public string LeftWeapon;
@@ -125,7 +126,7 @@ public class LoadoutScene : UECMenuShared
         FindObjectOfType<UECMainMenuController>().TeleportToScene(gameObject, Factory);
     }
 
-    public string SetDataToDb()
+    public void SetDataToDb()
     {
         string ConsText = "";
         foreach (var item in Consumables)
@@ -136,8 +137,39 @@ public class LoadoutScene : UECMenuShared
         {
             ConsText = ConsText.Substring(0, ConsText.Length - 1);
         }
-        return FindObjectOfType<AccessDatabase>().AddNewSession(FindObjectOfType<UECMainMenuController>().PlayerId,
+        string check = FindObjectOfType<AccessDatabase>().AddNewSession(FindObjectOfType<UECMainMenuController>().PlayerId,
             Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
+        if ("Success".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Load out successfully!\nYour session will start soon!", 2f);
+            StartCoroutine(MoveToLOTW());
+        }
+        else if ("Fail".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Cannot create session!\nPlease contact to our email!", 5f);
+        }
+        else if ("No Exist".Equals(check))
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Cannot fetch data for this pilot!\nPlease try again!", 5f);
+        }
+    }
+
+    private IEnumerator MoveToLOTW()
+    {
+        yield return new WaitForSeconds(2f);
+        for (int i=0;i<50;i++)
+        {
+            Color c = BlackFade.GetComponent<SpriteRenderer>().color;
+            c.a += 1 / 50f;
+            BlackFade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(2 / 50f);
+        }
+        PlayerPrefs.SetInt("PlayerID", FindObjectOfType<UECMainMenuController>().PlayerId);
+        SceneManager.LoadSceneAsync("GameplayExterior");
+        SceneManager.UnloadSceneAsync("UECMainMenu");
     }
     #endregion
 }
