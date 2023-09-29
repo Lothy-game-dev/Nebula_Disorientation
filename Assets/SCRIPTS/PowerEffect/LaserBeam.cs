@@ -12,7 +12,6 @@ public class LaserBeam : Powers
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject Effect;
     public GameObject ChargingEffect;
     #endregion
     #region NormalVariables
@@ -22,11 +21,14 @@ public class LaserBeam : Powers
     public GameObject RightWeapon;
     public bool isFire;
     private float DurationTimer;
-    public LayerMask EnemyLayer;
+    
     private bool isStart;
     private GameObject CharingClone;
     private GameObject CharingClone2;
     private Vector2 Spd;
+    private float BeamTimer;
+    public bool onHit;
+    private float resetHitTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -44,18 +46,28 @@ public class LaserBeam : Powers
         {
             ChangeAnimationPos();
         }
-        
+        resetHitTimer -= Time.deltaTime;
+        if (resetHitTimer <= 0)
+        {
+            onHit = false;
+            resetHitTimer = 0.1f;
+        }
     }
     private void FixedUpdate()
     {
+        BeamTimer -= Time.fixedDeltaTime;
         if (isFire)
         {
-            GenerateLaserBeam();
+            if (BeamTimer <= 0)
+            {
+                BeamTimer = 1 / 60f;
+                GenerateLaserBeam();
+            }
             if (DurationTimer == 0)
             {
                 LaserBeamSound();
             }
-            DurationTimer += Time.deltaTime;
+            DurationTimer += Time.fixedDeltaTime;
 
             if (DurationTimer >= Duration)
             {
@@ -63,6 +75,7 @@ public class LaserBeam : Powers
                 DurationTimer = 0f;
                 EndSound();
                 FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<Rigidbody2D>().velocity = Spd;
+                FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 1;
             }
         }
         
@@ -75,32 +88,61 @@ public class LaserBeam : Powers
         Vector2 pos = CalculatePos(Range);
         LeftWeapon = FindAnyObjectByType<FighterController>().LeftWeaponPosition;
         RightWeapon = FindAnyObjectByType<FighterController>().RightWeaponPosition;
-        for (int i = 0; i < 14; i++)
+        int n = 10;
+        int m = 4;
+        for (int i = 0; i < n; i++)
         {
-            Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (8 - i)*pos/(Range*0.55f);
-            Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (8 - i) * pos / (Range * 0.55f);
+            Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (n/2 + 1 - i)*pos/(Range*0.15f);
+            Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (n / 2 + 1 - i) * pos / (Range * 0.15f);
             GameObject game = Instantiate(Effect, new Vector3(posBullet.x, posBullet.y, LeftWeapon.transform.position.z), Quaternion.identity);
             GameObject game2 = Instantiate(Effect, new Vector3(posBullet2.x, posBullet2.y, RightWeapon.transform.position.z), Quaternion.identity);
-            game.GetComponent<Rigidbody2D>().velocity = pos*2;
             game.GetComponent<Beam>().Distance = Range;
             game.GetComponent<Beam>().Damage = DPH;
             game.GetComponent<Beam>().Layer = EnemyLayer;
-            game.GetComponent<Beam>().InitScale = game.transform.localScale;
-            game2.GetComponent<Rigidbody2D>().velocity = pos*2;
+            game.transform.localScale = game.transform.localScale * (i > m ? (float)(n-i)/(n-m) : 1);
+            if (i>m)
+            {
+                Color c = game.GetComponent<SpriteRenderer>().color;
+                c.r = (i > m ? (float)(n - i) / (n - m) : 1);
+                c.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                game.GetComponent<SpriteRenderer>().color = c;
+                Color c2 = game.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
+                c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                game.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
+            }
+            game.GetComponent<Beam>().Laser = this;
             game2.GetComponent<Beam>().Distance = Range;
             game2.GetComponent<Beam>().Damage = DPH;
             game2.GetComponent<Beam>().Layer = EnemyLayer;
-            game2.GetComponent<Beam>().InitScale = game2.transform.localScale;
+            game2.transform.localScale = game2.transform.localScale * (i > m ? (float)(n - i) / (n - m) : 1);
+            game2.GetComponent<Beam>().Laser = this;
+            if (i >m)
+            {
+                Color c = game2.GetComponent<SpriteRenderer>().color;
+                c.r = (i > m ? (float)(n - i) / (n - m) : 1);
+                c.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                game2.GetComponent<SpriteRenderer>().color = c;
+                Color c2 = game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
+                c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
+            }
+            game.SetActive(true);
+            game2.SetActive(true);
+            game.GetComponent<Rigidbody2D>().velocity = pos*2;
+            game2.GetComponent<Rigidbody2D>().velocity = pos*2;
+
 
         }
         //slow down when firing
         FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<Rigidbody2D>().velocity *= 0.5f;
+        FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
 
     }
     #endregion
     #region Generate charging animation
     // Group all function that serve the same algorithm
     public void Charging()
+
     {
         isStart = true;
         LeftWeapon = FindAnyObjectByType<FighterController>().LeftWeaponPosition;

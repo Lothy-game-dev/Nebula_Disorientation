@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 speedVector;
     private float LimitSpeedScale;
     private float AEEnergy;
+    public float ExteriorROTSpeed;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -52,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
         CurrentRotateAngle = 0;
         BackFireInitScale = backFire.transform.localScale.x;
         AESlider.maxValue = 100f;
+        ExteriorROTSpeed = 1;
         AEEnergy = 100f;
     }
 
@@ -156,11 +158,11 @@ public class PlayerMovement : MonoBehaviour
     void PlayerRotate()
     {
         float RotateScale = 2;
-        transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
-        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale;
+        transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
+        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed;
         if (PlayerIcon!=null)
         {
-            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale));
+            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
         }
     }
     // Detect Player's Input Cases for W and S
