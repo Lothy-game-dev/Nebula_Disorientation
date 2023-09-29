@@ -22,6 +22,8 @@ public class Beam : MonoBehaviour
     public float DistanceTravel;
     public float Dur;
     public Vector2 InitScale;
+    public LayerMask Layer;
+    private bool isAlreadyHit;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -38,6 +40,7 @@ public class Beam : MonoBehaviour
         // Call function and timer only if possible
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel();
+        DealDamage();
     }
     #endregion
     #region Function group 1
@@ -67,7 +70,24 @@ public class Beam : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = veloc;
     }
     #endregion
-    #region
-    // Acceleration for the first time second
+    #region Calculate damage
+    public void DealDamage()
+    {
+        // Detect enemy
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, Layer);
+        foreach (var col in cols)
+        {
+            if (!isAlreadyHit)
+            {
+                isAlreadyHit = true;
+                EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+                if (enemy != null)
+                {
+                    enemy.CurrentHP -= Damage;
+                }
+                Destroy(gameObject);
+            }
+        }
+    }
     #endregion
 }

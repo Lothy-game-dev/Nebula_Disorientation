@@ -113,6 +113,13 @@ public class Powers : MonoBehaviour
         sound.Play();
         sound.volume = 1f;
     }
+    public void LaserBeamSound()
+    {
+        sound.clip = SoundEffect;
+        sound.loop = true;
+        sound.Play();
+        sound.volume = 1f;
+    }
     public void EndSound()
     {
         sound.clip = null;
@@ -125,7 +132,6 @@ public class Powers : MonoBehaviour
         float x = 0, y = 0;
         if (angle < 0) angle = angle % 360 + 360;
         if (angle >= 360) angle = angle % 360;
-        Debug.Log(angle);
         if (angle >= 0 && angle <= 90)
         {
             x = Mathf.Abs(Mathf.Sin(angle * Mathf.Deg2Rad) * range);
