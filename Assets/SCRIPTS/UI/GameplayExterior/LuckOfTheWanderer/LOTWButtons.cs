@@ -13,8 +13,7 @@ public class LOTWButtons : MonoBehaviour
     public string Type;
     #endregion
     #region NormalVariables
-    // All other variables apart from the two aforementioned types
-    // Can be public or private, prioritize private if possible
+    public string Noti;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -34,8 +33,15 @@ public class LOTWButtons : MonoBehaviour
     {
         if (Type=="Reroll")
         {
-            GetComponent<BoxCollider2D>().enabled = false;
-            Scene.GetComponent<LOTWScene>().RegenerateCard();
+            if (Noti!=null && Noti!="")
+            {
+                FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    Noti, 5f);
+            } else
+            {
+                GetComponent<BoxCollider2D>().enabled = false;
+                Scene.GetComponent<LOTWScene>().RegenerateCard();
+            }
         } 
         else if (Type=="Pick")
         {

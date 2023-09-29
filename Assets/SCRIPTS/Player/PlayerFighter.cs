@@ -50,6 +50,7 @@ public class PlayerFighter : FighterShared
         InitializeFighter();
         aus = GetComponent<AudioSource>();
         HPSlider.maxValue = MaxHP;
+        BRSlider.maxValue = MaxBarrier;
         // temp, will get real data later
         PowerAndConsCD = new float[6] {1f, 1f, 5f, 5f, 5f, 5f};
         PowerAndConsCDTimer = new float[6];

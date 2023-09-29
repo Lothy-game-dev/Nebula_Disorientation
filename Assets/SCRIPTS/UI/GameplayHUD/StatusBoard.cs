@@ -271,11 +271,15 @@ public class StatusBoard : MonoBehaviour
     public void UpdateStatus()
     {
         EnemyObject = Enemy.GetComponent<EnemyShared>();
-        HPSlider.maxValue = EnemyObject.MaxHP;
         HPSlider.value = EnemyObject.CurrentHP;
 
         //Set HP to show how much current HP
         HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
+
+        // Barrier
+        BarrierSlider.value = EnemyObject.CurrentBarrier;
+
+        BarrierText.text = Mathf.Round(EnemyObject.CurrentBarrier) + "/" + EnemyObject.MaxBarrier;
 
         //Setting slider base on current temperature
         TemperSlider.value = EnemyObject.currentTemperature;

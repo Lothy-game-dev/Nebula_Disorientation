@@ -130,15 +130,20 @@ public class LOTWScene : MonoBehaviour
     private IEnumerator EnableReroll()
     {
         yield return new WaitForSeconds(1.5f);
-        if (RerollChance>0 && currentShard >= ShardCostReroll[3-RerollChance])
+        if (RerollChance > 0 && currentShard >= ShardCostReroll[3 - RerollChance])
         {
             // enable button reroll
             RerollButton.GetComponent<SpriteRenderer>().color = new Color(200 / 255f, 200 / 255f, 200 / 255f);
             RerollButton.GetComponent<Collider2D>().enabled = true;
-        } else if (RerollChance<=0 || currentShard < ShardCostReroll[3 - RerollChance])
+        } else if (RerollChance <= 0) {
+            RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+            RerollButton.GetComponent<Collider2D>().enabled = true;
+            RerollButton.GetComponent<LOTWButtons>().Noti = "Run out of reroll chances.";
+        } else if (currentShard < ShardCostReroll[3 - RerollChance])
         {
             RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
-            RerollButton.GetComponent<Collider2D>().enabled = false;
+            RerollButton.GetComponent<Collider2D>().enabled = true; 
+            RerollButton.GetComponent<LOTWButtons>().Noti = "Not enough shard.";
         }
     }
     public void RegenerateCard()
@@ -154,7 +159,7 @@ public class LOTWScene : MonoBehaviour
             {
                 // disable button reroll
                 RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
-                RerollButton.GetComponent<Collider2D>().enabled = false;
+                RerollButton.GetComponent<LOTWButtons>().Noti = "Run out of reroll chances.";
                 RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
                 RerollButton.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Reroll";
             }
@@ -176,7 +181,8 @@ public class LOTWScene : MonoBehaviour
             }
         } else if (check=="Fail")
         {
-            Debug.Log("Fail");
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Cannot add card to current session!", 3f);
         }
         
     }
@@ -206,7 +212,8 @@ public class LOTWScene : MonoBehaviour
         string check = FindObjectOfType<AccessDatabase>().AddCardToCurrentSession(PlayerPrefs.GetInt("PlayerID"), chosenId);
         if (check=="Fail")
         {
-            Debug.Log("Fail");
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Cannot add card to current session!", 3f);
         }
         // Enable button pick
         PickButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
@@ -292,7 +299,7 @@ public class LOTWScene : MonoBehaviour
         if (currentShard < ShardCostReroll[3-RerollChance])
         {
             RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
-            RerollButton.GetComponent<Collider2D>().enabled = false;
+            RerollButton.GetComponent<LOTWButtons>().Noti = "Not enough shard.";
         }
     }
 
