@@ -153,6 +153,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LuckOfTheWanderer\LOTWOwnedCard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\LoadingScene.cs" />

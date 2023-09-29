@@ -94,6 +94,9 @@ public class LOTWAllOwnedPopup : MonoBehaviour
             Card.transform.GetChild(0).GetChild(2).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(0).GetChild(3).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(0).GetChild(4).GetComponent<Image>().color = TierColor;
+            Card.transform.GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>().text =
+                FindObjectOfType<GlobalFunctionController>().ConvertEffectStringToText((string)dataDict["Effect"]);
+            Card.transform.GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>().color = TierColor;
             Card.transform.GetChild(1).GetComponent<Image>().color = TierColor;
             Color c2 = Card.transform.GetChild(1).GetComponent<Image>().color;
             c2.a = 30 / 255f;
@@ -110,11 +113,11 @@ public class LOTWAllOwnedPopup : MonoBehaviour
             Card.transform.GetChild(2).GetChild(2).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(2).GetChild(3).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(2).GetChild(4).GetComponent<Image>().color = TierColor;
-            if ((int)dataDict["Duration"] > 0)
+            if ((int)dataDict["Duration"] > 0 && (int)dataDict["Duration"] < 1000)
             {
                 Card.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((int)dataDict["Duration"]).ToString();
             }
-            else if ((int)dataDict["Duration"] == -1)
+            else if ((int)dataDict["Duration"] == 1000)
             {
                 Card.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = "Infinite";
             }

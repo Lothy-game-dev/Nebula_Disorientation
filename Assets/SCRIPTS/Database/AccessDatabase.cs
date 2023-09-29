@@ -2410,8 +2410,10 @@ public class AccessDatabase : MonoBehaviour
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
             dbCheckCommand.CommandText = "SELECT LuckOfTheWandererCards.CardID, LuckOfTheWandererCards.CardName, " +
                 "LuckOfTheWandererCards.CardEffect, SessionLOTWCards.Duration, SessionLOTWCards.Stack, LuckOfTheWandererCards.CardStackable, " +
-                "LuckOfTheWandererCards.TierColor From SessionLOTWCards INNER JOIN LuckOfTheWandererCards" +
-                " WHERE SessionID=" + sessionId + " AND LuckOfTheWandererCards.CardID = SessionLOTWCards.CardID";
+                "LuckOfTheWandererCards.TierColor From SessionLOTWCards INNER JOIN LuckOfTheWandererCards " +
+                "WHERE SessionID=" + sessionId + " AND LuckOfTheWandererCards.CardID = SessionLOTWCards.CardID " +
+                "ORDER BY LuckOfTheWandererCards.CardTier ASC, SessionLOTWCards.Duration DESC, LuckOfTheWandererCards.CardID ASC";
+            Debug.Log(dbCheckCommand.CommandText);
             IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
             while (dataReader2.Read())
             {
@@ -2496,26 +2498,89 @@ public class AccessDatabase : MonoBehaviour
         {
             // Queries
             IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
-            dbCheckCommand1.CommandText = "SELECT CardDuration From LuckOfTheWandererCards WHERE CardID=" + CardID;
+            dbCheckCommand1.CommandText = "SELECT CardDuration, CardStackable From LuckOfTheWandererCards WHERE CardID=" + CardID;
             IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
             int duration = 0;
+            string stack = "";
             while (dataReader1.Read())
             {
                 if (!dataReader1.IsDBNull(0))
                 {
                     duration = dataReader1.GetInt32(0);
                 }
+                stack = dataReader1.GetString(1);
             }
-            // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
-            int n = dbCheckCommand.ExecuteNonQuery();
-            dbConnection.Close();
-            if (n != 1)
+            if (stack=="N")
             {
-                return "Fail";
-            } else
-            return "Success";
+                // Queries
+                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                dbCheckCommand.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
+                int n = dbCheckCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (n != 1)
+                {
+                    return "Fail";
+                }
+                else
+                    return "Success";
+            } else 
+            {
+                // Queries
+                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                dbCheckCommand.CommandText = "SELECT ID FROM SessionLOTWCards WHERE CardID=" + CardID + " AND SessionID=" + sessionId;
+                IDataReader reader = dbCheckCommand.ExecuteReader();
+                int n = 0;
+                while (reader.Read())
+                {
+                    n = reader.GetInt32(0);
+                }
+                if (n!=0)
+                {
+                    if (duration == 1000)
+                    {
+                        // Queries
+                        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+                        dbCheckCommand3.CommandText = "UPDATE SessionLOTWCards SET Stack = Stack + 1 WHERE ID=" + n;
+                        int m = dbCheckCommand3.ExecuteNonQuery();
+                        dbConnection.Close();
+                        if (m!=1)
+                        {
+                            return "Fail";
+                        } else
+                        {
+                            return "Success";
+                        }
+                    } else
+                    {
+                        // Queries
+                        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+                        dbCheckCommand3.CommandText = "UPDATE SessionLOTWCards SET Stack = Stack + 1, Duration = Duration + " + duration + " WHERE ID=" + n;
+                        int m = dbCheckCommand3.ExecuteNonQuery();
+                        dbConnection.Close();
+                        if (m != 1)
+                        {
+                            return "Fail";
+                        }
+                        else
+                        {
+                            return "Success";
+                        }
+                    }
+                } else
+                {
+                    // Queries
+                    IDbCommand dbCheckCommand4 = dbConnection.CreateCommand();
+                    dbCheckCommand4.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
+                    int n2 = dbCheckCommand4.ExecuteNonQuery();
+                    dbConnection.Close();
+                    if (n2 != 1)
+                    {
+                        return "Fail";
+                    }
+                    else
+                        return "Success";
+                }
+            }
         }
     }
     #endregion

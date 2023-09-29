@@ -20,6 +20,7 @@ public class LOTWCard : MonoBehaviour
     public GameObject Name;
     public GameObject RedEffect;
     public GameObject BlueEffect;
+    public GameObject Duration;
     #endregion
     #region NormalVariables
     public List<GameObject> OtherCards;
@@ -122,6 +123,18 @@ public class LOTWCard : MonoBehaviour
             IconIns.transform.SetParent(transform);
             Icon = IconIns;
             IconIns.SetActive(true);
+        }
+        if ((int)DataDictionary["Duration"] > 0 && (int)DataDictionary["Duration"] < 1000)
+        {
+            Duration.GetComponent<TextMeshPro>().text = "Duration:\n" + (int)DataDictionary["Duration"] + " Stages";
+        }
+        else if ((int)DataDictionary["Duration"] == 1000)
+        {
+            Duration.GetComponent<TextMeshPro>().text = "Duration:\nInfinite";
+        }
+        else
+        {
+            Duration.SetActive(false);
         }
     }
     #endregion

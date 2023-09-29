@@ -115,10 +115,10 @@ public class LOTWAllCardPopup : MonoBehaviour
                 {
                     Card.transform.GetChild(0).GetComponent<Image>().sprite = Icon.transform.GetChild(2).GetChild(3 - (int)dataDict["Tier"]).GetComponent<SpriteRenderer>().sprite;
                 }
-                if ((int)dataDict["Duration"]>0)
+                if ((int)dataDict["Duration"]>0 && (int)dataDict["Duration"] < 1000)
                 {
                     Card.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Duration:\n" + (int)dataDict["Duration"] + " Stages";
-                } else if ((int)dataDict["Duration"] == -1)
+                } else if ((int)dataDict["Duration"] == 1000)
                 {
                     Card.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Duration:\nInfinite";
                 } else
