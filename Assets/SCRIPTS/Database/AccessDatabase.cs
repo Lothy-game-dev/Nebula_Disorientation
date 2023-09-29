@@ -2410,8 +2410,10 @@ public class AccessDatabase : MonoBehaviour
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
             dbCheckCommand.CommandText = "SELECT LuckOfTheWandererCards.CardID, LuckOfTheWandererCards.CardName, " +
                 "LuckOfTheWandererCards.CardEffect, SessionLOTWCards.Duration, SessionLOTWCards.Stack, LuckOfTheWandererCards.CardStackable, " +
-                "LuckOfTheWandererCards.TierColor From SessionLOTWCards INNER JOIN LuckOfTheWandererCards" +
-                " WHERE SessionID=" + sessionId + " AND LuckOfTheWandererCards.CardID = SessionLOTWCards.CardID";
+                "LuckOfTheWandererCards.TierColor From SessionLOTWCards INNER JOIN LuckOfTheWandererCards " +
+                "WHERE SessionID=" + sessionId + " AND LuckOfTheWandererCards.CardID = SessionLOTWCards.CardID " +
+                "ORDER BY LuckOfTheWandererCards.CardTier ASC, SessionLOTWCards.Duration DESC, LuckOfTheWandererCards.CardID ASC";
+            Debug.Log(dbCheckCommand.CommandText);
             IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
             while (dataReader2.Read())
             {
@@ -2496,26 +2498,89 @@ public class AccessDatabase : MonoBehaviour
         {
             // Queries
             IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
-            dbCheckCommand1.CommandText = "SELECT CardDuration From LuckOfTheWandererCards WHERE CardID=" + CardID;
+            dbCheckCommand1.CommandText = "SELECT CardDuration, CardStackable From LuckOfTheWandererCards WHERE CardID=" + CardID;
             IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
             int duration = 0;
+            string stack = "";
             while (dataReader1.Read())
             {
                 if (!dataReader1.IsDBNull(0))
                 {
                     duration = dataReader1.GetInt32(0);
                 }
+                stack = dataReader1.GetString(1);
             }
-            // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
-            int n = dbCheckCommand.ExecuteNonQuery();
-            dbConnection.Close();
-            if (n != 1)
+            if (stack=="N")
             {
-                return "Fail";
-            } else
-            return "Success";
+                // Queries
+                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                dbCheckCommand.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
+                int n = dbCheckCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (n != 1)
+                {
+                    return "Fail";
+                }
+                else
+                    return "Success";
+            } else 
+            {
+                // Queries
+                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                dbCheckCommand.CommandText = "SELECT ID FROM SessionLOTWCards WHERE CardID=" + CardID + " AND SessionID=" + sessionId;
+                IDataReader reader = dbCheckCommand.ExecuteReader();
+                int n = 0;
+                while (reader.Read())
+                {
+                    n = reader.GetInt32(0);
+                }
+                if (n!=0)
+                {
+                    if (duration == 1000)
+                    {
+                        // Queries
+                        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+                        dbCheckCommand3.CommandText = "UPDATE SessionLOTWCards SET Stack = Stack + 1 WHERE ID=" + n;
+                        int m = dbCheckCommand3.ExecuteNonQuery();
+                        dbConnection.Close();
+                        if (m!=1)
+                        {
+                            return "Fail";
+                        } else
+                        {
+                            return "Success";
+                        }
+                    } else
+                    {
+                        // Queries
+                        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+                        dbCheckCommand3.CommandText = "UPDATE SessionLOTWCards SET Stack = Stack + 1, Duration = Duration + " + duration + " WHERE ID=" + n;
+                        int m = dbCheckCommand3.ExecuteNonQuery();
+                        dbConnection.Close();
+                        if (m != 1)
+                        {
+                            return "Fail";
+                        }
+                        else
+                        {
+                            return "Success";
+                        }
+                    }
+                } else
+                {
+                    // Queries
+                    IDbCommand dbCheckCommand4 = dbConnection.CreateCommand();
+                    dbCheckCommand4.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
+                    int n2 = dbCheckCommand4.ExecuteNonQuery();
+                    dbConnection.Close();
+                    if (n2 != 1)
+                    {
+                        return "Fail";
+                    }
+                    else
+                        return "Success";
+                }
+            }
         }
     }
     #endregion
@@ -2584,6 +2649,74 @@ public class AccessDatabase : MonoBehaviour
                     return "Success";
                 }
             }
+        }
+    }
+
+    public Dictionary<string, object> GetSessionInfoByPlayerId(int PlayerId)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return null;
+        }
+        else
+        {
+            Dictionary<string, object> datas = new Dictionary<string, object>();
+            // Queries
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            dbCheckCommand3.CommandText = "SELECT * From Session WHERE SessionId=" + n;
+            IDataReader dataReader2 = dbCheckCommand3.ExecuteReader();
+            while (dataReader2.Read())
+            {
+                datas.Add("SessionID", dataReader2.GetInt32(0));
+                datas.Add("TotalPlayedTime", dataReader2.GetInt32(1));
+                datas.Add("CurrentStage", dataReader2.GetInt32(2));
+                datas.Add("CreatedDate", dataReader2.GetString(3));
+                datas.Add("LastUpdate", dataReader2.GetString(4));
+                datas.Add("IsCompleted", dataReader2.GetString(5));
+                datas.Add("SessionCash", dataReader2.GetInt32(6));
+                datas.Add("SessionTimelessShard", dataReader2.GetInt32(7));
+                datas.Add("SessionFuelEnergy", dataReader2.GetInt32(8));
+            }
+            dbConnection.Close();
+            return datas;
+        }
+    }
+
+    public string UpdateSessionShard(int SessionId, bool IsIncrease, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n!=1)
+        {
+            return "Fail";
+        } else
+        {
+            return "Success";
         }
     }
     #endregion

@@ -100,7 +100,7 @@ public class NotiBoardOKButton : MonoBehaviour
         if ("OKButton".Equals(name) && MoveToUEC)
         {
             FindObjectOfType<MainMenuCameraController>().MoveToUEC();
-        }   
+        }
     }
     #endregion
 }

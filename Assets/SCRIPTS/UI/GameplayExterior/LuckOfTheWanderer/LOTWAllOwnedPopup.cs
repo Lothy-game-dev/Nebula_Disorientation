@@ -19,6 +19,7 @@ public class LOTWAllOwnedPopup : MonoBehaviour
     public GameObject TemplateCard;
     public GameObject Content;
     public GameObject ScrollRect;
+    public GameObject NoCardText;
     #endregion
     #region NormalVariables
     private List<Dictionary<string, object>> ListDataAllCard;
@@ -31,6 +32,7 @@ public class LOTWAllOwnedPopup : MonoBehaviour
     {
         // Initialize variables
         ListDataAllCard = new List<Dictionary<string, object>>();
+        NoCardText.SetActive(false);
         GetAllCardsData();
     }
 
@@ -76,7 +78,10 @@ public class LOTWAllOwnedPopup : MonoBehaviour
 
     private IEnumerator GenerateAllCards()
     {
-
+        if (ListDataAllCard.Count==0)
+        {
+            NoCardText.SetActive(true);
+        }
         Vector2 Pos = new Vector2(FirstPos.transform.position.x, FirstPos.transform.position.y);
         for (int i = 0; i < ListDataAllCard.Count; i++)
         {
@@ -94,6 +99,9 @@ public class LOTWAllOwnedPopup : MonoBehaviour
             Card.transform.GetChild(0).GetChild(2).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(0).GetChild(3).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(0).GetChild(4).GetComponent<Image>().color = TierColor;
+            Card.transform.GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>().text =
+                FindObjectOfType<GlobalFunctionController>().ConvertEffectStringToText((string)dataDict["Effect"]);
+            Card.transform.GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>().color = TierColor;
             Card.transform.GetChild(1).GetComponent<Image>().color = TierColor;
             Color c2 = Card.transform.GetChild(1).GetComponent<Image>().color;
             c2.a = 30 / 255f;
@@ -110,11 +118,11 @@ public class LOTWAllOwnedPopup : MonoBehaviour
             Card.transform.GetChild(2).GetChild(2).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(2).GetChild(3).GetComponent<Image>().color = TierColor;
             Card.transform.GetChild(2).GetChild(4).GetComponent<Image>().color = TierColor;
-            if ((int)dataDict["Duration"] > 0)
+            if ((int)dataDict["Duration"] > 0 && (int)dataDict["Duration"] < 1000)
             {
                 Card.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((int)dataDict["Duration"]).ToString();
             }
-            else if ((int)dataDict["Duration"] == -1)
+            else if ((int)dataDict["Duration"] == 1000)
             {
                 Card.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = "Infinite";
             }

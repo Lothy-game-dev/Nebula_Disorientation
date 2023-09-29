@@ -65,23 +65,7 @@ public class LoadOutGoButton : MonoBehaviour
 
     public void SetDataToScene()
     {
-        string check = Scene.GetComponent<LoadoutScene>().SetDataToDb();
-        if ("Success".Equals(check))
-        {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "Load out successfully!\nYour session will start soon!",3f);
-            PlayerPrefs.SetInt("PlayerID", FindObjectOfType<UECMainMenuController>().PlayerId);
-            SceneManager.LoadSceneAsync("GameplayExterior");
-            SceneManager.UnloadSceneAsync("UECMainMenu");
-        } else if ("Fail".Equals(check))
-        {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "Cannot create session!\nPlease contact to our email!", 3f);
-        } else if ("No Exist".Equals(check))
-        {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "Cannot fetch data for this pilot!\nPlease try again!", 3f);
-        }
+        Scene.GetComponent<LoadoutScene>().SetDataToDb();
     }
     #endregion
 }
