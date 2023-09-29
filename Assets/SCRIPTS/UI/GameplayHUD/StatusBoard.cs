@@ -233,6 +233,10 @@ public class StatusBoard : MonoBehaviour
         // Barrier undone
         BarrierText.gameObject.SetActive(true);
         BarrierBar.SetActive(true);
+        BarrierSlider.maxValue = EnemyObject.MaxBarrier;
+        BarrierSlider.value = EnemyObject.CurrentBarrier;
+
+        BarrierText.text = Mathf.Round(EnemyObject.CurrentBarrier) + "/" + EnemyObject.MaxBarrier;
 
         //Setting slider base on current temperature
         TempBar.SetActive(true);

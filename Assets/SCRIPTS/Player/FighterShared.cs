@@ -8,6 +8,11 @@ public class FighterShared : MonoBehaviour
     // Stats
     public float CurrentHP;
     public float MaxHP;
+    public float CurrentBarrier;
+    public float MaxBarrier;
+    public float BarrierRegenTimer;
+    public float BarrierRegenAmount;
+    public float BarrierRegenDelay;
     // Thermal Stats
     public float currentTemperature;
     public bool isOverloadded;
@@ -51,6 +56,9 @@ public class FighterShared : MonoBehaviour
     {
         currentTemperature = 50;
         CurrentHP = MaxHP;
+        // Check Power Barrier
+        MaxBarrier = 5000;
+        CurrentBarrier = MaxBarrier;
         isRegenThermal = true;
         isImmuneFrozenSlow = false;
         RegenScale = 1f;
@@ -63,9 +71,32 @@ public class FighterShared : MonoBehaviour
     // Update For Fighter
     public void UpdateFighter()
     {
+        CheckBarrier();
         CheckThermal();
         CheckInsideBlackhole();
         CheckSpecialEffectStatus();
+    }
+    // Check Barrier
+    public void CheckBarrier()
+    {
+        BarrierRegenTimer -= Time.deltaTime;
+        BarrierRegenDelay -= Time.deltaTime;
+        if (BarrierRegenTimer<=0f)
+        {
+            if (BarrierRegenDelay<=0f && CurrentBarrier<MaxBarrier)
+            {
+                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
+                {
+                    CurrentBarrier += BarrierRegenAmount;
+                    BarrierRegenDelay = 1f;
+                } else
+                {
+                    CurrentBarrier = MaxBarrier;
+                    BarrierRegenDelay = 1f;
+                }
+            }
+
+        }
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
@@ -255,7 +286,7 @@ public class FighterShared : MonoBehaviour
     // Receive Burn Damage
     public void ReceiveBurnedDamage(float scale)
     {
-        CurrentHP -= MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100;
+        ReceiveDamage(MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100);
     }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
@@ -353,7 +384,7 @@ public class FighterShared : MonoBehaviour
                     LavaBurnedDamageTimer -= Time.deltaTime;
                 } else
                 {
-                    CurrentHP -= LavaBurnedDamage;
+                    ReceiveDamage(LavaBurnedDamage);
                     ReceiveThermalDamage(true);
                     LavaBurnedCount++;
                     LavaBurnedDamageTimer = 0.1f;
@@ -465,6 +496,29 @@ public class FighterShared : MonoBehaviour
                 NanoTempStacks++;
             }
             NanoTempTimer = 2f;
+        }
+    }
+    #endregion
+    #region Calculate Damage Received
+    public void ReceiveDamage(float damage)
+    {
+        if (CurrentBarrier>0)
+        {
+            if (CurrentBarrier>damage)
+            {
+                CurrentBarrier -= damage;
+                BarrierRegenTimer = 10f;
+                BarrierRegenAmount = 500f;
+            } else
+            {
+                CurrentBarrier = 0;
+                BarrierRegenTimer = 20f;
+                BarrierRegenAmount = 250f;
+                CurrentHP -= (damage - CurrentBarrier);
+            }
+        } else
+        {
+            CurrentHP -= damage;
         }
     }
     #endregion

@@ -111,7 +111,7 @@ public class BlackHole : MonoBehaviour
                     if (col.GetComponent<FighterShared>()!=null)
                     {
                         FighterShared fighter = col.GetComponent<FighterShared>();
-                        fighter.CurrentHP -= CalculateDamageDealt(fighter.gameObject);
+                        fighter.ReceiveDamage(CalculateDamageDealt(fighter.gameObject));
                     }
                 }
             }

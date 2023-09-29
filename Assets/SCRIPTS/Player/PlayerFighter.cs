@@ -393,8 +393,10 @@ public class PlayerFighter : FighterShared
         }
         // HP
         HPSlider.value = CurrentHP;
-        HPText.GetComponent<TextMeshPro>().text = CurrentHP + " / " + MaxHP;
-        // BR Pending
+        HPText.GetComponent<TextMeshPro>().text = Mathf.Round(CurrentHP) + " / " + MaxHP;
+        // BR
+        BRSlider.value = CurrentBarrier;
+        BRText.GetComponent<TextMeshPro>().text = Mathf.Round(CurrentBarrier) + " / " + MaxBarrier;
     }
 
     private void SetConsumableCount()
