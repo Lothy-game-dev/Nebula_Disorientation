@@ -41,9 +41,11 @@ public class Wormhole : Powers
         if (pos.x >= 5000f || pos.x <= -5000f || pos.y >= 5000f || pos.y <= -5000f)
         {           
             GameObject TpEffect = Instantiate(Effect, Fighter.transform.position, Quaternion.identity);
+            WormholeSound();
             TpEffect.SetActive(true);
             Fighter.transform.position = Fighter.transform.position;
             Destroy(TpEffect, 1f);
+            EndSound();
         } else
         {
             newPos = new Vector3(Fighter.transform.position.x + pos.x, Fighter.transform.position.y + pos.y, Fighter.transform.position.z);
