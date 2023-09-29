@@ -20,6 +20,7 @@ public class LOTWCard : MonoBehaviour
     public GameObject Name;
     public GameObject RedEffect;
     public GameObject BlueEffect;
+    public GameObject Duration;
     #endregion
     #region NormalVariables
     public List<GameObject> OtherCards;
@@ -123,6 +124,18 @@ public class LOTWCard : MonoBehaviour
             Icon = IconIns;
             IconIns.SetActive(true);
         }
+        if ((int)DataDictionary["Duration"] > 0 && (int)DataDictionary["Duration"] < 1000)
+        {
+            Duration.GetComponent<TextMeshPro>().text = "Duration:\n" + (int)DataDictionary["Duration"] + " Stages";
+        }
+        else if ((int)DataDictionary["Duration"] == 1000)
+        {
+            Duration.GetComponent<TextMeshPro>().text = "Duration:\nInfinite";
+        }
+        else
+        {
+            Duration.SetActive(false);
+        }
     }
     #endregion
     #region Mouse Check
@@ -180,7 +193,7 @@ public class LOTWCard : MonoBehaviour
     private void Selected()
     {
         GetComponent<Collider2D>().enabled = false;
-        transform.localScale = new Vector3(InitScaleX * 1.1f, InitScaleY * 1.1f, transform.localScale.z);
+        transform.localScale = new Vector3(InitScaleX * 1.05f, InitScaleY * 1.05f, transform.localScale.z);
         foreach (var card in OtherCards)
         {
             card.GetComponent<Collider2D>().enabled = true;
@@ -347,6 +360,7 @@ public class LOTWCard : MonoBehaviour
             yield return new WaitForSeconds(0.5f / 30f);
         }
         Destroy(go);
+        Scene.GetComponent<LOTWScene>().EnterGameplay();
     }
     #endregion
 }
