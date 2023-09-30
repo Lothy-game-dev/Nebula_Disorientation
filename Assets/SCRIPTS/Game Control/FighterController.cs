@@ -245,7 +245,7 @@ public class FighterController : MonoBehaviour
         string ModelStats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(DatabaseModel);
         if (ModelStats!="Fail")
         {
-            //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n|SP-n|SC-n
+            //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n
             Dictionary<string, object> statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(ModelStats);
             PlayerFighter.GetComponent<PlayerFighter>().MaxHP = int.Parse((string)statsDict["HP"]);
             PlayerFighter.GetComponent<PlayerMovement>().MovingSpeed = int.Parse((string)statsDict["SPD"]);
@@ -272,7 +272,6 @@ public class FighterController : MonoBehaviour
                 RightWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = 1;
             }
         }
-        Debug.Log("Start");
         PlayerFighter.SetActive(true);
     }
     #endregion

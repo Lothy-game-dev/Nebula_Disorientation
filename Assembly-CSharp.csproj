@@ -133,6 +133,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\LaserBeam.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\GameplayInteriorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumablePopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
