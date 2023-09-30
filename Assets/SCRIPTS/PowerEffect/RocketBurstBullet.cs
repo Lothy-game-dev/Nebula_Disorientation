@@ -14,6 +14,7 @@ public class RocketBurstBullet : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public GameObject AimEffect;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -24,7 +25,12 @@ public class RocketBurstBullet : MonoBehaviour
     private List<float> DistanceList;
     public float Distance;
     public float DistanceTravel;
-    private bool isFound;
+    private bool isUp;
+    private Vector3 MovingVector;
+    private GameObject target;
+    private Vector3 ToEnemy;
+    private Dictionary<float, GameObject> EnemyDictionary;
+    private GameObject AimGen;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -32,7 +38,6 @@ public class RocketBurstBullet : MonoBehaviour
     {
         // Initialize variables
         rb = GetComponent<Rigidbody2D>();
-        isFound = false;
     }
 
     // Update is called once per frame
@@ -40,12 +45,19 @@ public class RocketBurstBullet : MonoBehaviour
     {
         // Call function and timer only if possible
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-
         if (DistanceTravel > 100)
         {
-            CheckRange();
+            if (target == null)
+            {
+                CheckRange();
+            } else
+            {
+                MoveToTarget();
+            }
+
         }
         CheckDistanceTravel();
+        CalculateDamage();
         
     }
     #endregion
@@ -53,24 +65,36 @@ public class RocketBurstBullet : MonoBehaviour
     // Group all function that serve the same algorithm
     public void CheckRange()
     {
-        float distance = 0;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 300f, Layer);
+        if (AimGen!=null)
+        {
+            Destroy(AimGen);
+        }
+        DistanceList = new List<float>();
+        EnemyDictionary = new Dictionary<float, GameObject>();
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1000f, Layer);
         foreach (var col in cols)
         {
-            
-            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+            GameObject enemy = col.gameObject;
             if (enemy != null)
             {
-                distance = Vector3.Distance(transform.position, enemy.transform.position);
-                if (distance != 0 && !isFound)
+                if (gameObject.transform.GetChild(0).position.y > gameObject.transform.GetChild(1).position.y)
                 {
-                    Debug.Log("hihi");
-                    isFound = true;
-                    
+                    isUp = true;
+                } else
+                {
+                    isUp = false;
                 }
+                DistanceList.Add(Vector3.Distance(enemy.transform.position, transform.position));
+                EnemyDictionary.Add(Vector3.Distance(enemy.transform.position, transform.position), enemy);
+                float minDistance = DistanceList.Min();
+                GameObject nearestEnemy = EnemyDictionary[minDistance];
+                target = nearestEnemy;
+
             }          
            
         }
+        AimGen = Instantiate(AimEffect, target.transform.position, Quaternion.identity);
+        AimGen.SetActive(true);
     }
 
     #endregion
@@ -80,6 +104,37 @@ public class RocketBurstBullet : MonoBehaviour
     {
         if (DistanceTravel > Distance)
         {
+            Destroy(AimGen);
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+    #region 
+    public void MoveToTarget()
+    {
+        
+        MovingVector = gameObject.transform.GetChild(0).position - gameObject.transform.GetChild(1).position;
+        rb.velocity = MovingVector / MovingVector.magnitude * 500;
+        ToEnemy = target.transform.position - transform.position;
+        float angle = Vector3.Angle(ToEnemy, MovingVector);
+        
+        transform.Rotate(new Vector3(0, 0,(isUp ? 1 : -1)*angle/20));
+        
+    }
+    #endregion
+    #region Calculate damage
+    public void CalculateDamage()
+    {
+        // Detect enemy
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10f, Layer);
+        foreach (var col in cols)
+        {            
+            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+            if (enemy != null)
+            {
+                enemy.ReceiveDamage(Damage);
+            }
+            Destroy(AimGen);
             Destroy(gameObject);
         }
     }

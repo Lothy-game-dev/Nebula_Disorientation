@@ -32,6 +32,7 @@ public class Powers : MonoBehaviour
     public float BR;
     public float BRx;
     public AudioClip SoundEffect;
+    public AudioClip ChargingSoundEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -114,20 +115,13 @@ public class Powers : MonoBehaviour
     }
     #endregion
     #region Sound Effect
-    public void WormholeSound()
+    public void PlaySound(AudioClip sfx)
     {
-        sound.clip = SoundEffect;
+        sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 1f;
-    }
-    public void LaserBeamSound()
-    {
-        sound.clip = SoundEffect;
-        sound.loop = true;
-        sound.Play();
-        sound.volume = 1f;
-    }
+        sound.volume = 0.35f;
+    }  
     public void EndSound()
     {
         sound.clip = null;

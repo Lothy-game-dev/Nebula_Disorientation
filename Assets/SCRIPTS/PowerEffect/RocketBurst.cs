@@ -38,14 +38,16 @@ public class RocketBurst : Powers
     public void GenerateRocket()
     {
         VList = CalculateAngle(10);
-        for (int i = 0;  i < 1; i++)
+
+        for (int i = 0;  i < AoH; i++)
         {
-            GameObject game = Instantiate(Effect, VList[i], Quaternion.identity);
+            GameObject game = Instantiate(Effect, new Vector3(VList[i].x + Fighter.transform.position.x, VList[i].y + Fighter.transform.position.y, 0), Quaternion.identity);
             game.SetActive(true);
             game.transform.Rotate(0, 0, -AngleList[i]);
             game.GetComponent<Rigidbody2D>().velocity = VList[i]*10;
             game.GetComponent<RocketBurstBullet>().Distance = Range;
             game.GetComponent<RocketBurstBullet>().Damage = DPH;
+            PlaySound(SoundEffect);
         }
     }
     #endregion

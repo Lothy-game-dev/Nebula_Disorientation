@@ -15,7 +15,7 @@ public class TestDisk : EnemyShared
         changeDirTimer = 2.5f;
         test = false;
         check = new Vector2(0, 300);
-        StartEnemy(5000000f);
+        StartEnemy(500f);
         CalculateVelocity(!test ? check : -check);
         InitializeFighter();
     }
