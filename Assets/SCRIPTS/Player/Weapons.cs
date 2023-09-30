@@ -37,6 +37,9 @@ public class Weapons : MonoBehaviour
     public float HitCountResetTimer;
     public float OverheatSpeedIncreaseRate;
     public float currentOverheat;
+    public float FighterWeaponDamageMod;
+    public float FighterWeaponAoEMod;
+
     private bool isOverheatted;
     private float OverheatCDTimer;
     private float OverheatDecreaseTimer;
@@ -229,45 +232,93 @@ public class Weapons : MonoBehaviour
 
     public bool CheckIfAngle1BetweenAngle2And3(float angle1, float angle2, float angle3)
     {
-        if (0 <= angle1 && angle1 < 180)
+        if (RotateLimitPositive<=90)
         {
-            if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+            if (0 <= angle1 && angle1 < 180)
             {
-                if (angle1 <= angle3) return true;
+                if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+                {
+                    if (angle1 <= angle3) return true;
+                    else return false;
+                }
+                else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360) return false;
+                else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+                {
+                    if (angle1 >= angle2) return true;
+                    else return false;
+                }
+                else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180)
+                {
+                    if (angle2 <= angle1 && angle1 <= angle3) return true;
+                    else return false;
+                }
                 else return false;
             }
-            else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360) return false;
-            else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+            else if (180 <= angle1 && angle1 < 360)
             {
-                if (angle1 >= angle2) return true;
-                else return false;
-            }
-            else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180)
-            {
-                if (angle2 <= angle1 && angle1 <= angle3) return true;
+                if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+                {
+                    if (angle1 >= angle2) return true;
+                    else return false;
+                }
+                else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
+                {
+                    if (angle2 <= angle1 && angle1 <= angle3) return true;
+                    else return false;
+                }
+                else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+                {
+                    if (angle1 <= angle3) return true;
+                    else return false;
+                }
+                else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180) return false;
                 else return false;
             }
             else return false;
-        } else if (180 <= angle1 && angle1 < 360)
+        } else
         {
-            if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+            if (0 <= angle1 && angle1 < 180)
             {
-                if (angle1 >= angle2) return true;
+                if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+                {
+                    if (angle1 <= angle3) return true;
+                    else return false;
+                }
+                else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360) return true;
+                else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+                {
+                    if (angle1 >= angle2) return true;
+                    else return false;
+                }
+                else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180)
+                {
+                    if (angle1 >= angle2 || angle1 <= angle3) return true;
+                    else return false;
+                }
                 else return false;
             }
-            else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
+            else if (180 <= angle1 && angle1 < 360)
             {
-                if (angle2 <= angle1 && angle1 <= angle3) return true;
+                if (180 <= angle2 && angle2 < 360 && 0 <= angle3 && angle3 < 180)
+                {
+                    if (angle1 >= angle2) return true;
+                    else return false;
+                }
+                else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
+                {
+                    if (angle2 <= angle1 || angle1 >= angle3) return true;
+                    else return false;
+                }
+                else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
+                {
+                    if (angle1 <= angle3) return true;
+                    else return false;
+                }
+                else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180) return true;
                 else return false;
             }
-            else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
-            {
-                if (angle1 <= angle3) return true;
-                else return false;
-            }
-            else if (0 <= angle2 && angle2 < 180 && 0 <= angle3 && angle3 < 180) return false;
             else return false;
-        } else return false;
+        }
     }
 
     public float NearestPossibleAngle(float angle1, float angle2, float angle3)

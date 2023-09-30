@@ -29,7 +29,6 @@ public class EnemyShared : FighterShared
         if (CurrentHP <= 0f)
         {
             Status.StopShowing();
-            Destroy(gameObject);
         }
     }
 

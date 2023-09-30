@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public GameObject RightBorder;
     public Slider AESlider;
     public GameObject AEText;
+    public GameObject FireEffect;
+    public GameObject FreezeEffect;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -164,6 +166,9 @@ public class PlayerMovement : MonoBehaviour
         {
             PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
         }
+        // Fire and Freeze eff not rotate
+        FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
+        FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
     }
     // Detect Player's Input Cases for W and S
     void DetectWSButton()

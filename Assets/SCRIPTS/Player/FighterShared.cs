@@ -13,6 +13,9 @@ public class FighterShared : MonoBehaviour
     public float BarrierRegenTimer;
     public float BarrierRegenAmount;
     public float BarrierRegenDelay;
+    public GameObject Barrier;
+    public GameObject Explosion;
+    private float BarrierEffectDelay;
     // Thermal Stats
     public float currentTemperature;
     public bool isOverloadded;
@@ -72,16 +75,17 @@ public class FighterShared : MonoBehaviour
     // Update For Fighter
     public void UpdateFighter()
     {
-        CheckBarrier();
+        CheckBarrierAndHealth();
         CheckThermal();
         CheckInsideBlackhole();
         CheckSpecialEffectStatus();
     }
     // Check Barrier
-    public void CheckBarrier()
+    public void CheckBarrierAndHealth()
     {
         BarrierRegenTimer -= Time.deltaTime;
         BarrierRegenDelay -= Time.deltaTime;
+        BarrierEffectDelay -= Time.deltaTime;
         if (BarrierRegenTimer<=0f)
         {
             if (BarrierRegenDelay<=0f && CurrentBarrier<MaxBarrier)
@@ -98,6 +102,35 @@ public class FighterShared : MonoBehaviour
             }
 
         }
+        if (CurrentHP<0f)
+        {
+            StartCoroutine(DestroySelf());
+        }
+    }
+
+    private IEnumerator DestroySelf()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
+        expl.SetActive(true);
+        Destroy(expl, 0.3f);
+        yield return new WaitForSeconds(0.1f);
+        GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10,30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
+        expl2.SetActive(true);
+        Destroy(expl2, 0.3f);
+        yield return new WaitForSeconds(0.1f);
+        GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
+        expl3.SetActive(true);
+        Destroy(expl3, 0.3f);
+        yield return new WaitForSeconds(0.1f);
+        GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
+        expl4.SetActive(true);
+        Destroy(expl4, 0.3f);
+        yield return new WaitForSeconds(0.1f);
+        GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
+        expl5.SetActive(true);
+        Destroy(expl5, 0.3f);
+        Destroy(gameObject);
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
@@ -508,11 +541,27 @@ public class FighterShared : MonoBehaviour
             if (CurrentBarrier>damage)
             {
                 CurrentBarrier -= damage;
+                if (BarrierEffectDelay<=0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
                 BarrierRegenTimer = 10f;
                 BarrierRegenAmount = 500f;
             } else
             {
                 CurrentBarrier = 0;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
                 BarrierRegenTimer = 20f;
                 BarrierRegenAmount = 250f;
                 CurrentHP -= (damage - CurrentBarrier);
