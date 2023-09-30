@@ -28,6 +28,7 @@ public class FighterShared : MonoBehaviour
     public float RegenScale;
     public bool isImmuneFrozenSlow;
     public float ImmuneDuration;
+    // Special Weapon/ Environment Effects
     public bool isBHPulled;
     public List<Vector2> PulledVector;
     public LayerMask BlackHoleLayer;

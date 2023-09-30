@@ -159,6 +159,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GameplayExteriorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutStatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWAllOwnedPopup.cs" />
+    <Compile Include="Assets\SCRIPTS\Player\FighterModelShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\RechargeBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\NewStoryScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutFighterDemo.cs" />

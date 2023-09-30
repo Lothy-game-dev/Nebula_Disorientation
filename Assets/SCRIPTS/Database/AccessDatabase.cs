@@ -2694,6 +2694,12 @@ public class AccessDatabase : MonoBehaviour
                 datas.Add("SessionCash", dataReader2.GetInt32(6));
                 datas.Add("SessionTimelessShard", dataReader2.GetInt32(7));
                 datas.Add("SessionFuelEnergy", dataReader2.GetInt32(8));
+                datas.Add("Model", dataReader2.GetString(9));
+                datas.Add("LeftWeapon", dataReader2.GetString(10));
+                datas.Add("RightWeapon", dataReader2.GetString(11));
+                datas.Add("FirstPower", dataReader2.GetString(12));
+                datas.Add("SecondPower", dataReader2.GetString(13));
+                datas.Add("Consumables", dataReader2.GetString(14));
             }
             dbConnection.Close();
             return datas;

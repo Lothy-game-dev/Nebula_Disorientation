@@ -11,8 +11,7 @@ public class FighterController : MonoBehaviour
     // Can be public or private
     #endregion
     #region InitializeVariables
-    public GameObject[] Weapons;
-    public GameObject[] Bullets;
+    public GameObject Weapons;
     public GameObject PlayerFighter;
     public GameObject Aim;
     public GameObject LeftOverheatBar;
@@ -23,14 +22,23 @@ public class FighterController : MonoBehaviour
     public GameObject RightReloadBar;
     public GameObject FirstPowerImage;
     public GameObject SecondPowerImage;
+    public GameObject FighterModel;
     #endregion
     #region NormalVariables
+    public string DatabaseModel;
+    public string DatabaseLeftWeapon;
+    public string DatabaseRightWeapon;
+    public string DatabaseFirstPower;
+    public string DatabaseSecondPower;
+    public Dictionary<string, int> DatabaseConsumables;
+    public GameObject CurrentModel;
     public GameObject CurrentLeftWeapon;
     public GameObject CurrentRightWeapon;
     public GameObject RightWeaponPosition;
     public GameObject LeftWeaponPosition;
     public GameObject CurrentFirstPower;
     public GameObject CurrentSecondPower;
+    private Dictionary<string, object> dataDict;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -48,15 +56,80 @@ public class FighterController : MonoBehaviour
     }
     #endregion
     #region Initialize Datas
-    // Group all function that serve the same algorithm
+    private void SetDataFromDB()
+    {
+        dataDict = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        DatabaseModel = (string)dataDict["Model"];
+        DatabaseLeftWeapon = (string)dataDict["LeftWeapon"];
+        DatabaseRightWeapon = (string)dataDict["RightWeapon"];
+        DatabaseFirstPower = (string)dataDict["FirstPower"];
+        DatabaseSecondPower = (string)dataDict["SecondPower"];
+        string Consumables = (string)dataDict["Consumables"];
+        if (Consumables.Length>0)
+        {
+            string[] ListCons = Consumables.Split("|");
+            for (int i=1;i<=ListCons.Length;i++)
+            {
+                DatabaseConsumables.Add(ListCons[i].Split("-")[0], int.Parse(ListCons[i].Split("-")[1]));
+            }
+        }
+    }
     private void InitData()
     {
-        // set current weapons from DB
-        // clone and set Left Right weapon to aim
+        // Get Data from DB
+        SetDataFromDB();
+        // Get Model from model list
+        for (int i=0;i<FighterModel.transform.childCount;i++)
+        {
+            if (FighterModel.transform.GetChild(i).name.Equals(DatabaseModel))
+            {
+                CurrentModel = FighterModel.transform.GetChild(i).gameObject;
+                break;
+            }
+        }
+        // Change sprite on the model
+        PlayerFighter.GetComponent<SpriteRenderer>().sprite = CurrentModel.GetComponent<SpriteRenderer>().sprite;
+        // Calculate Weapon Pos based on Model
+        PlayerFighter.transform.GetChild(0).position =
+            new Vector3(PlayerFighter.transform.position.x + CurrentModel.GetComponent<FighterModelShared>().LeftWeaponPos.x * 30,
+            PlayerFighter.transform.position.y + CurrentModel.GetComponent<FighterModelShared>().LeftWeaponPos.y * 30,
+            PlayerFighter.transform.GetChild(0).position.z);
+        PlayerFighter.transform.GetChild(1).position =
+            new Vector3(PlayerFighter.transform.position.x + CurrentModel.GetComponent<FighterModelShared>().RightWeaponPos.x * 30,
+            PlayerFighter.transform.position.y + CurrentModel.GetComponent<FighterModelShared>().RightWeaponPos.y * 30,
+            PlayerFighter.transform.GetChild(1).position.z);
         LeftWeaponPosition = PlayerFighter.transform.GetChild(0).gameObject;
         RightWeaponPosition = PlayerFighter.transform.GetChild(1).gameObject;
+        // Change Back Fire Pos Based on model
+        PlayerFighter.transform.GetChild(2).position =
+            new Vector3(PlayerFighter.transform.position.x + CurrentModel.GetComponent<FighterModelShared>().BackfirePos.x * 30,
+            PlayerFighter.transform.position.y + (-0.4f + CurrentModel.GetComponent<FighterModelShared>().BackfirePos.y) * 30,
+            PlayerFighter.transform.GetChild(2).position.z);
+        // Get Current Weapon
+        bool alreadyLeft = false;
+        bool alreadyRight = false;
+        for (int i=0;i<Weapons.transform.childCount;i++)
+        {
+            if (alreadyLeft && alreadyRight)
+            {
+                break;  
+            }
+            if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ","").ToLower().Equals(DatabaseLeftWeapon.Replace(" ","").ToLower()))
+            {
+                alreadyLeft = true;
+                CurrentLeftWeapon = Weapons.transform.GetChild(i).gameObject;
+            }
+            if (!alreadyRight && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(DatabaseRightWeapon.Replace(" ", "").ToLower()))
+            {
+                alreadyRight = true;
+                CurrentRightWeapon = Weapons.transform.GetChild(i).gameObject;
+            }
+        }
+        // Instantiate Weapon and ready to aim
         GameObject LeftWeapon = Instantiate(CurrentLeftWeapon, LeftWeaponPosition.transform.position, Quaternion.identity);
         GameObject RightWeapon = Instantiate(CurrentRightWeapon, RightWeaponPosition.transform.position, Quaternion.identity);
+        LeftWeapon.transform.localScale = new Vector2(LeftWeapon.transform.localScale.x * 2f, LeftWeapon.transform.localScale.y * 2f);
+        RightWeapon.transform.localScale = new Vector2(RightWeapon.transform.localScale.x * 2f, RightWeapon.transform.localScale.y * 2f);
         LeftWeapon.SetActive(true);
         Weapons LW = LeftWeapon.GetComponent<Weapons>();
         LW.isLeftWeapon = true;
@@ -156,6 +229,11 @@ public class FighterController : MonoBehaviour
         SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 11;
         PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
         PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
+    }
+
+    private void SetStatsData()
+    {
+
     }
     #endregion
 }
