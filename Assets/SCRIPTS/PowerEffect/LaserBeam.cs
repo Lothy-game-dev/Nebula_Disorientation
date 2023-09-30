@@ -13,6 +13,7 @@ public class LaserBeam : Powers
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject ChargingEffect;
+    public GameObject Effect;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -92,6 +93,8 @@ public class LaserBeam : Powers
         int m = 4;
         for (int i = 0; i < n; i++)
         {
+
+            //Generate
             Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (n/2 + 1 - i)*pos/(Range*0.15f);
             Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (n / 2 + 1 - i) * pos / (Range * 0.15f);
             GameObject game = Instantiate(Effect, new Vector3(posBullet.x, posBullet.y, LeftWeapon.transform.position.z), Quaternion.identity);
@@ -99,6 +102,8 @@ public class LaserBeam : Powers
             game.GetComponent<Beam>().Distance = Range;
             game.GetComponent<Beam>().Damage = DPH;
             game.GetComponent<Beam>().Layer = EnemyLayer;
+
+            //Change the spirte of the bullet like a laser
             game.transform.localScale = game.transform.localScale * (i > m ? (float)(n-i)/(n-m) : 1);
             if (i>m)
             {
@@ -114,6 +119,8 @@ public class LaserBeam : Powers
             game2.GetComponent<Beam>().Distance = Range;
             game2.GetComponent<Beam>().Damage = DPH;
             game2.GetComponent<Beam>().Layer = EnemyLayer;
+
+            //Change the spirte of the bullet like a laser
             game2.transform.localScale = game2.transform.localScale * (i > m ? (float)(n - i) / (n - m) : 1);
             game2.GetComponent<Beam>().Laser = this;
             if (i >m)
@@ -133,7 +140,7 @@ public class LaserBeam : Powers
 
 
         }
-        //slow down when firing
+        //slow down Fighter when firing
         FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<Rigidbody2D>().velocity *= 0.5f;
         FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
 
