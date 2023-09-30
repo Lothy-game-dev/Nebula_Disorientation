@@ -101,15 +101,15 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st power");
                     PowerAndConsActivation[0] = true;
                     // void function to activate power
-                    FirstPower.GetComponent<Powers>().ActivatePower(SecondPower.name.Replace("(clone)", ""));
+                    FirstPower.GetComponent<Powers>().ActivatePower(FirstPower.name.Replace("(clone)", ""));
                     //Duration
                     if (FirstPower.GetComponent<Powers>().Duration == 0)
                     {
-                        PowerAndConsDuration[1] = 0.5f;
+                        PowerAndConsDuration[0] = 0.5f;
                     }
                     else
                     {
-                        PowerAndConsDuration[1] = FirstPower.GetComponent<Powers>().Duration;
+                        PowerAndConsDuration[0] = FirstPower.GetComponent<Powers>().Duration;
                     }
 
                     PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
@@ -117,8 +117,8 @@ public class PlayerFighter : FighterShared
                     PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
 
                     //Cooldown
-                    PowerAndConsCD[1] = FirstPower.GetComponent<Powers>().CD;
-                    PowerAndConsCDTimer[1] = PowerAndConsCD[1];
+                    PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
+                    PowerAndConsCDTimer[0] = PowerAndConsCD[1];
                 }
             }
             // if power need charge
@@ -155,11 +155,11 @@ public class PlayerFighter : FighterShared
                         //Duration
                         if (FirstPower.GetComponent<Powers>().Duration == 0)
                         {
-                            PowerAndConsDuration[1] = 0.5f;
+                            PowerAndConsDuration[0] = 0.5f;
                         }
                         else
                         {
-                            PowerAndConsDuration[1] = FirstPower.GetComponent<Powers>().Duration;
+                            PowerAndConsDuration[0] = FirstPower.GetComponent<Powers>().Duration;
                         }
 
                         PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
@@ -169,8 +169,8 @@ public class PlayerFighter : FighterShared
                         PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
 
                         //Cooldown
-                        PowerAndConsCD[1] = FirstPower.GetComponent<Powers>().CD;
-                        PowerAndConsCDTimer[1] = PowerAndConsCD[1];
+                        PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
+                        PowerAndConsCDTimer[0] = PowerAndConsCD[1];
                     }
                 }
                 if (Input.GetKeyUp(KeyCode.Q) && !PowerAndConsActivation[0])
@@ -239,7 +239,7 @@ public class PlayerFighter : FighterShared
                         c.a = 0;
                         ChargeImage[1].GetComponent<SpriteRenderer>().color = c;
                         // Void function to activate power
-
+                        SecondPower.GetComponent<Powers>().ActivatePower(SecondPower.name.Replace("(clone)", ""));
                         //Duration
                         if (SecondPower.GetComponent<Powers>().Duration == 0)
                         {

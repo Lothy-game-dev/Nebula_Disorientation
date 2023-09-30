@@ -12,7 +12,7 @@ public class RocketBurst : Powers
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject Effect;
+    
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types

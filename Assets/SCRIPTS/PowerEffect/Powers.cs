@@ -14,7 +14,7 @@ public class Powers : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public LayerMask EnemyLayer;
-    
+    public GameObject Effect;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -40,6 +40,7 @@ public class Powers : MonoBehaviour
     {
         // Initialize variables
         /*InitData();*/
+        
     }
 
     // Update is called once per frame
@@ -59,7 +60,10 @@ public class Powers : MonoBehaviour
         switch (Power["Type"].ToString())
         {
             case "Defensive":
-                BR = float.Parse(PowerStats["BR"].ToString());
+                if (PowerStats.ContainsKey("BR"))
+                {
+                    BR = float.Parse(PowerStats["BR"].ToString());
+                }              
                 Duration = float.Parse(PowerStats["Dur"].ToString());
                 CD = float.Parse(PowerStats["CD"].ToString());
                 if (PowerStats.ContainsKey("BRx"))
@@ -104,6 +108,12 @@ public class Powers : MonoBehaviour
                 if (name.Contains("RocketBurst"))
                 {
                     gameObject.GetComponent<RocketBurst>().GenerateRocket();
+                } else
+                {
+                    if (name.Contains("Barrier"))
+                    {
+                        gameObject.GetComponent<Barrier>().GenBarrier();
+                    }
                 }
             }
         }      
@@ -111,6 +121,8 @@ public class Powers : MonoBehaviour
 
     public void BeforeActivating()
     {
+        gameObject.AddComponent<AudioSource>();
+        sound = GetComponent<AudioSource>();
         gameObject.GetComponent<LaserBeam>().Charging();
     }
     #endregion
