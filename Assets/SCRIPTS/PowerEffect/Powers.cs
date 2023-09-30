@@ -23,7 +23,7 @@ public class Powers : MonoBehaviour
     private Dictionary<string, object> Power;
     private Dictionary<string, object> PowerStats;
     public float DPH;
-    public float AoH;
+    public int AoH;
     public float AoE;
     public float Velocity;
     public float Range;
@@ -67,7 +67,7 @@ public class Powers : MonoBehaviour
                 } break;
             case "Offensive":
                 DPH = float.Parse(PowerStats["DPH"].ToString());
-                AoH = float.Parse(PowerStats["AOH"].ToString());
+                AoH = int.Parse(PowerStats["AOH"].ToString());
                 AoE = float.Parse(PowerStats["AOE"].ToString());
                 Velocity = float.Parse(PowerStats["V"].ToString());
                 Range = float.Parse(PowerStats["R"].ToString());

@@ -18,6 +18,7 @@ public class RocketBurst : Powers
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     private List<Vector2> VList;
+    private List<float> AngleList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -36,12 +37,15 @@ public class RocketBurst : Powers
     // Group all function that serve the same algorithm
     public void GenerateRocket()
     {
-        VList = CalculateAngle(70);
-        for (int i = 0;  i < AoH; i++)
+        VList = CalculateAngle(10);
+        for (int i = 0;  i < 1; i++)
         {
             GameObject game = Instantiate(Effect, VList[i], Quaternion.identity);
             game.SetActive(true);
-
+            game.transform.Rotate(0, 0, -AngleList[i]);
+            game.GetComponent<Rigidbody2D>().velocity = VList[i]*10;
+            game.GetComponent<RocketBurstBullet>().Distance = Range;
+            game.GetComponent<RocketBurstBullet>().Damage = DPH;
         }
     }
     #endregion
@@ -51,9 +55,11 @@ public class RocketBurst : Powers
     {
         float angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
         List<Vector2> VList = new List<Vector2>();
+        AngleList = new List<float>();
         for (int i = 0; i < AoH; i++)
         {
             angle += 360 / AoH;
+            AngleList.Add(angle);
             float x = 0, y = 0;
             if (angle < 0) angle = angle % 360 + 360;
             if (angle >= 360) angle = angle % 360;

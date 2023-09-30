@@ -79,7 +79,7 @@ public class FighterController : MonoBehaviour
         // Get Data from DB
         SetDataFromDB();
         // Get Model from model list
-        for (int i=0;i<FighterModel.transform.childCount;i++)
+        for (int i = 0; i < FighterModel.transform.childCount; i++)
         {
             if (FighterModel.transform.GetChild(i).name.Equals(DatabaseModel))
             {
@@ -108,13 +108,13 @@ public class FighterController : MonoBehaviour
         // Get Current Weapon
         bool alreadyLeft = false;
         bool alreadyRight = false;
-        for (int i=0;i<Weapons.transform.childCount;i++)
+        for (int i = 0; i < Weapons.transform.childCount; i++)
         {
             if (alreadyLeft && alreadyRight)
             {
-                break;  
+                break;
             }
-            if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ","").ToLower().Equals(DatabaseLeftWeapon.Replace(" ","").ToLower()))
+            if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(DatabaseLeftWeapon.Replace(" ", "").ToLower()))
             {
                 alreadyLeft = true;
                 CurrentLeftWeapon = Weapons.transform.GetChild(i).gameObject;
@@ -231,9 +231,9 @@ public class FighterController : MonoBehaviour
         PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
     }
 
-    private void SetStatsData()
+    /*private void SetStatsData()
     {
 
-    }
+    }*/
     #endregion
 }
