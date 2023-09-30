@@ -13,6 +13,8 @@ public class FighterController : MonoBehaviour
     #region InitializeVariables
     public GameObject Weapons;
     public GameObject PlayerFighter;
+    public GameObject LeftWeaponGO;
+    public GameObject RightWeaponGO;
     public GameObject Aim;
     public GameObject LeftOverheatBar;
     public GameObject RightOverheatBar;
@@ -76,6 +78,7 @@ public class FighterController : MonoBehaviour
     }
     private void InitData()
     {
+        PlayerFighter.SetActive(false);
         // Get Data from DB
         SetDataFromDB();
         // Get Model from model list
@@ -130,6 +133,8 @@ public class FighterController : MonoBehaviour
         GameObject RightWeapon = Instantiate(CurrentRightWeapon, RightWeaponPosition.transform.position, Quaternion.identity);
         LeftWeapon.transform.localScale = new Vector2(LeftWeapon.transform.localScale.x * 2f, LeftWeapon.transform.localScale.y * 2f);
         RightWeapon.transform.localScale = new Vector2(RightWeapon.transform.localScale.x * 2f, RightWeapon.transform.localScale.y * 2f);
+        LeftWeaponGO = LeftWeapon;
+        RightWeaponGO = RightWeapon;
         LeftWeapon.SetActive(true);
         Weapons LW = LeftWeapon.GetComponent<Weapons>();
         LW.isLeftWeapon = true;
@@ -229,11 +234,46 @@ public class FighterController : MonoBehaviour
         SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 11;
         PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
         PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
+
+        // Set all stats data 
+        SetStatsData();
     }
 
     private void SetStatsData()
     {
-
+        // Model stats
+        string ModelStats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(DatabaseModel);
+        if (ModelStats!="Fail")
+        {
+            //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n|SP-n|SC-n
+            Dictionary<string, object> statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(ModelStats);
+            PlayerFighter.GetComponent<PlayerFighter>().MaxHP = int.Parse((string)statsDict["HP"]);
+            PlayerFighter.GetComponent<PlayerMovement>().MovingSpeed = int.Parse((string)statsDict["SPD"]);
+            PlayerFighter.GetComponent<PlayerMovement>().RotateSpeed = float.Parse((string)statsDict["ROT"]);
+            LeftWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
+            LeftWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
+            RightWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
+            RightWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
+            LeftWeaponGO.GetComponent<Weapons>().FighterWeaponDamageMod = float.Parse((string)statsDict["DM"]);
+            if (!LeftWeaponGO.GetComponent<Weapons>().IsThermalType)
+            {
+                LeftWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = float.Parse((string)statsDict["AM"]);
+            } else
+            {
+                LeftWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = 1;
+            }
+            RightWeaponGO.GetComponent<Weapons>().FighterWeaponDamageMod = float.Parse((string)statsDict["DM"]);
+            if (!RightWeaponGO.GetComponent<Weapons>().IsThermalType)
+            {
+                RightWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = float.Parse((string)statsDict["AM"]);
+            }
+            else
+            {
+                RightWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = 1;
+            }
+        }
+        Debug.Log("Start");
+        PlayerFighter.SetActive(true);
     }
     #endregion
 }

@@ -656,6 +656,115 @@ public class GlobalFunctionController : MonoBehaviour
         return StatsDictionary;
     }
 
+    //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n|SP-n|SC-n
+    public Dictionary<string, object> ConvertModelStatsToDictionaryForGameplay(string stats)
+    {
+        Dictionary<string, object> StatsDictionary = new Dictionary<string, object>();
+        string[] StatsList = stats.Split("|");
+        //HP
+        string HP = StatsList[0];
+        if (HP.Contains("HP-"))
+        {
+            HP = HP.Replace("HP-", "");
+            StatsDictionary.Add("HP", HP);
+        }
+        else
+        {
+            StatsDictionary.Add("HP", "0");
+        }
+        //SPD
+        string SPD = StatsList[1];
+        if (SPD.Contains("SPD-"))
+        {
+            SPD = SPD.Replace("SPD-", "");
+            StatsDictionary.Add("SPD", SPD);
+        }
+        else
+        {
+            StatsDictionary.Add("SPD", "0");
+        }
+        //ROT
+        string ROT = StatsList[2];
+        if (ROT.Contains("ROT-"))
+        {
+            ROT = ROT.Replace("ROT-", "");
+            StatsDictionary.Add("ROT", ROT);
+        }
+        else
+        {
+            StatsDictionary.Add("ROT", "0");
+        }
+        //AOF
+        string AOF = StatsList[3];
+        if (AOF.Contains("AOF-"))
+        {
+            AOF = AOF.Replace("AOF-", "");
+            StatsDictionary.Add("AOFNegative", "-" + AOF.Split(",")[0]);
+            StatsDictionary.Add("AOFPositive", AOF.Split(",")[1]);
+        }
+        else
+        {
+            StatsDictionary.Add("AOFNegative", "-90");
+            StatsDictionary.Add("AOFPositive", "90");
+        }
+        //DM
+        string DM = StatsList[4];
+        if (DM.Contains("DM-"))
+        {
+            DM = DM.Replace("DM-", "");
+            StatsDictionary.Add("DM", DM);
+        }
+        else
+        {
+            StatsDictionary.Add("DM", "0");
+        }
+        //AM
+        string AM = StatsList[5];
+        if (AM.Contains("AM-"))
+        {
+            AM = AM.Replace("AM-", "");
+            StatsDictionary.Add("AM", AM);
+        }
+        else
+        {
+            StatsDictionary.Add("AM", "0");
+        }
+        //PM
+        string PM = StatsList[6];
+        if (PM.Contains("PM-"))
+        {
+            PM = PM.Replace("PM-", "");
+            StatsDictionary.Add("PM", PM);
+        }
+        else
+        {
+            StatsDictionary.Add("PM", "0");
+        }
+        //SP
+        string SP = StatsList[7];
+        if (SP.Contains("SP-"))
+        {
+            SP = SP.Replace("SP-", "");
+            StatsDictionary.Add("SP", SP);
+        }
+        else
+        {
+            StatsDictionary.Add("SP", "0");
+        }
+        //SC
+        string SC = StatsList[8];
+        if (SC.Contains("SC-"))
+        {
+            SC = SC.Replace("SC-", "");
+            StatsDictionary.Add("SC", SC);
+        }
+        else
+        {
+            StatsDictionary.Add("SC", "0");
+        }
+        return StatsDictionary;
+    }
+
     // RED-
     // AER-
     // RMH-

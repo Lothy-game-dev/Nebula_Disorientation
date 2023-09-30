@@ -37,6 +37,9 @@ public class Weapons : MonoBehaviour
     public float HitCountResetTimer;
     public float OverheatSpeedIncreaseRate;
     public float currentOverheat;
+    public float FighterWeaponDamageMod;
+    public float FighterWeaponAoEMod;
+
     private bool isOverheatted;
     private float OverheatCDTimer;
     private float OverheatDecreaseTimer;

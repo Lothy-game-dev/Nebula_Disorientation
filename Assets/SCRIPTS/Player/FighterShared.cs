@@ -55,6 +55,7 @@ public class FighterShared : MonoBehaviour
     // Initialize
     public void InitializeFighter()
     {
+        Debug.Log("Init");
         currentTemperature = 50;
         CurrentHP = MaxHP;
         // Check Power Barrier

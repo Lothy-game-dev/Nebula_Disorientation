@@ -28,6 +28,8 @@ public class BulletShared : MonoBehaviour
     protected Vector2 RealVelocity;
     protected float DistanceTravel;
 
+    private float WeaponDamageModScale;
+    private float WeaponAoEModScale;
     private float RealDamage;
     private bool StartCounting;
     private bool isBHPulled;
@@ -47,11 +49,27 @@ public class BulletShared : MonoBehaviour
         PenetrateAlreadyDealDamge = new List<GameObject>();
         if (HitBoxRange!=null)
         HitBox = Mathf.Abs((HitBoxRange.transform.position - transform.position).magnitude);
+        CalculateWeaponStats();
     }
     public void UpdateBullet()
     {
         CheckInsideBlackhole();
         CalculateVelocity(RealVelocity);
+    }
+    // Calculate Weapon's Stats
+    private void CalculateWeaponStats()
+    {
+        WeaponDamageModScale = WeaponShoot.FighterWeaponDamageMod;
+        if (WeaponShoot.FighterWeaponAoEMod>1)
+        {
+            if (AoE==0)
+            {
+                AoE = 50 * WeaponShoot.FighterWeaponAoEMod;
+            } else
+            {
+                AoE *= WeaponShoot.FighterWeaponAoEMod;
+            }
+        }
     }
     // Calculate Velocity Required To Reach Destination
     public void CalculateVelocity()
@@ -118,7 +136,7 @@ public class BulletShared : MonoBehaviour
                         EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
                         if (enemy != null)
                         {
-                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false));
+                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy));
                             if (InflictGravitationalSlow)
                             {
                                 enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
@@ -132,7 +150,7 @@ public class BulletShared : MonoBehaviour
                     EnemyShared enemy = col.GetComponent<EnemyShared>();
                     if (enemy!=null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy));
                         if (InflictGravitationalSlow)
                         {
                             enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
@@ -171,7 +189,7 @@ public class BulletShared : MonoBehaviour
                         EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
                         if (enemy != null)
                         {
-                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true));
+                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
                             // Receive thermal Damage
                             if (WeaponShoot.CurrentHitCount < 1)
                             {
@@ -190,7 +208,7 @@ public class BulletShared : MonoBehaviour
                     EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
                     if (enemy != null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,true));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,true, enemy));
                         if (WeaponShoot.CurrentHitCount < 1)
                         {
                             if (WeaponShoot.CurrentHitCount == 0)
@@ -221,7 +239,7 @@ public class BulletShared : MonoBehaviour
                 EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
                 if (enemy != null)
                 {
-                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true));
+                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
                     float a = Random.Range(0, 100f);
                     if (a <= freezingChance)
                     {
@@ -262,7 +280,7 @@ public class BulletShared : MonoBehaviour
                         if (enemy != null)
                         {
                             Debug.Log(RealDamage);
-                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true));
+                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
                             // Inflict lava burned
                             enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
                         }
@@ -273,7 +291,7 @@ public class BulletShared : MonoBehaviour
                     EnemyShared enemy = col.GetComponent<EnemyShared>();
                     if (enemy != null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
                         enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
                     }
                 }
@@ -306,7 +324,7 @@ public class BulletShared : MonoBehaviour
                     EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
                     if (enemy != null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
                     }
                 }
             }
@@ -316,7 +334,7 @@ public class BulletShared : MonoBehaviour
                 EnemyShared enemy = col.GetComponent<EnemyShared>();
                 if (enemy!=null)
                 {
-                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, ApplyNanoEffect));
+                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, ApplyNanoEffect, enemy));
                 }
                 if (ApplyNanoEffect)
                 {
@@ -404,7 +422,7 @@ public class BulletShared : MonoBehaviour
             EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
             if (enemy != null)
             {
-                enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,false));
+                enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,false,enemy));
             }
         }
         BlackHole bhole = bh.GetComponent<BlackHole>();
@@ -568,10 +586,10 @@ public class BulletShared : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = veloc;
     }
 
-    private float CalculateFinalDamage(float InitDamage, bool isThermal)
+    private float CalculateFinalDamage(float InitDamage, bool isThermal, FighterShared enemy)
     {
         // Not Done, will be added with LOTW card later
-        return InitDamage;
+        return InitDamage * WeaponDamageModScale;
     }
     #endregion
 }
