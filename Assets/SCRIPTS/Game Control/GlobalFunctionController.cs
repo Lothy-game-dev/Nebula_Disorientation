@@ -406,7 +406,7 @@ public class GlobalFunctionController : MonoBehaviour
                 if (DCstats[0] == "0")
                 {
 
-                    finalString.Add("CD", DCstats[1]);
+                    finalString.Add("Dur", DCstats[1]);
                 }
                 else
                 {
@@ -440,7 +440,7 @@ public class GlobalFunctionController : MonoBehaviour
                 string[] DCstats = DC.Split(",");
                 if (DCstats[0] == "0")
                 {
-                    finalString.Add("CD", DCstats[1]);
+                    finalString.Add("Dur", DCstats[1]);
                 }
                 else
                 {
@@ -532,15 +532,9 @@ public class GlobalFunctionController : MonoBehaviour
             {
                 string DC = StatList[5].Replace("DC-", "");
                 string[] DCstats = DC.Split(",");
-                if (DCstats[0] == "0")
-                {
-                    finalString.Add("CD", DCstats[1]);
-                }
-                else
-                {
-                    finalString.Add("Dur", DCstats[0]);
-                    finalString.Add("CD", DCstats[1]);
-                }
+                finalString.Add("Dur", DCstats[0]);
+                finalString.Add("CD", DCstats[1]);
+                
 
             }
             else

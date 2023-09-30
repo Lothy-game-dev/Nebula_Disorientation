@@ -23,7 +23,7 @@ public class Beam : MonoBehaviour
     public float Dur;
     public Vector2 InitScale;
     public LayerMask Layer;
-    private bool isAlreadyHit;
+    public LaserBeam Laser;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class Beam : MonoBehaviour
     {
         // Initialize variables
         rb = GetComponent<Rigidbody2D>();
-        StartCoroutine(ChangeBulletScale());
+        //StartCoroutine(ChangeBulletScale());
     }
 
     // Update is called once per frame
@@ -61,6 +61,14 @@ public class Beam : MonoBehaviour
         if (DistanceTravel > Distance)
         {
             Destroy(gameObject);
+        } else
+        {
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a = DistanceTravel / Distance > 0.75f?(Distance - DistanceTravel)/(Distance*3/4):1;
+            GetComponent<SpriteRenderer>().color = c;
+            Color c2 = transform.GetChild(2).GetComponent<SpriteRenderer>().color;
+            c2.a = DistanceTravel / Distance > 0.75f ? (Distance - DistanceTravel) / (Distance * 3 / 4) : 1;
+            transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
         }
     }
     #endregion
@@ -74,19 +82,19 @@ public class Beam : MonoBehaviour
     public void DealDamage()
     {
         // Detect enemy
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 0.1f, Layer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10f, Layer);
         foreach (var col in cols)
         {
-            if (!isAlreadyHit)
+            if (!Laser.onHit)
             {
-                isAlreadyHit = true;
+                Laser.onHit = true;
                 EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
                 if (enemy != null)
                 {
-                    enemy.CurrentHP -= Damage;
+                    enemy.ReceiveDamage(Damage);
                 }
-                Destroy(gameObject);
             }
+            Destroy(gameObject);
         }
     }
     #endregion
