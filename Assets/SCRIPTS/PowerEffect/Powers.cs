@@ -23,7 +23,7 @@ public class Powers : MonoBehaviour
     private Dictionary<string, object> Power;
     private Dictionary<string, object> PowerStats;
     public float DPH;
-    public float AoH;
+    public int AoH;
     public float AoE;
     public float Velocity;
     public float Range;
@@ -32,6 +32,7 @@ public class Powers : MonoBehaviour
     public float BR;
     public float BRx;
     public AudioClip SoundEffect;
+    public AudioClip ChargingSoundEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -67,7 +68,7 @@ public class Powers : MonoBehaviour
                 } break;
             case "Offensive":
                 DPH = float.Parse(PowerStats["DPH"].ToString());
-                AoH = float.Parse(PowerStats["AOH"].ToString());
+                AoH = int.Parse(PowerStats["AOH"].ToString());
                 AoE = float.Parse(PowerStats["AOE"].ToString());
                 Velocity = float.Parse(PowerStats["V"].ToString());
                 Range = float.Parse(PowerStats["R"].ToString());
@@ -114,20 +115,13 @@ public class Powers : MonoBehaviour
     }
     #endregion
     #region Sound Effect
-    public void WormholeSound()
+    public void PlaySound(AudioClip sfx)
     {
-        sound.clip = SoundEffect;
+        sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 1f;
-    }
-    public void LaserBeamSound()
-    {
-        sound.clip = SoundEffect;
-        sound.loop = true;
-        sound.Play();
-        sound.volume = 1f;
-    }
+        sound.volume = 0.35f;
+    }  
     public void EndSound()
     {
         sound.clip = null;

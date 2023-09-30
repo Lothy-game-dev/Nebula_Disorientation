@@ -46,6 +46,7 @@ public class LaserBeam : Powers
         if (isStart)
         {
             ChangeAnimationPos();
+            PlaySound(ChargingSoundEffect);
         }
         resetHitTimer -= Time.deltaTime;
         if (resetHitTimer <= 0)
@@ -66,7 +67,7 @@ public class LaserBeam : Powers
             }
             if (DurationTimer == 0)
             {
-                LaserBeamSound();
+                PlaySound(SoundEffect);
             }
             DurationTimer += Time.fixedDeltaTime;
 
