@@ -19,7 +19,7 @@ public class TestDisk : EnemyShared
         changeDirTimer = 2.5f;
         test = false;
         check = new Vector2(0, 300);
-        StartEnemy(500f);
+        StartEnemy(50000f);
         CalculateVelocity(!test ? check : -check);
         InitializeFighter();
         TestDiskInit();
@@ -31,8 +31,8 @@ public class TestDisk : EnemyShared
         UpdateEnemy();
         if (!isFrozen && !isSFBFreeze)
         {
-            CalculateVelocity(!test ? check : -check);
-            /*CalculateVelocity(new Vector2(0, 0));*/
+            /*CalculateVelocity(!test ? check : -check);*/
+            CalculateVelocity(new Vector2(0, 0));
         }
         if (changeDirTimer > 0f)
         {

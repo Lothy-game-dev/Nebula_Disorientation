@@ -59,7 +59,7 @@ public class PlayerFighter : FighterShared
         PowerAndConsDurationTimer = new float[6];
         PowerAndConsActivation = new bool[6];
         ChargingPower = new float[2];
-        ChargingPowerReq = new float[2] { 3f, 3f };
+        ChargingPowerReq = new float[2] { 1.14f, 1.14f };
         ConsCount = new int[4] { 10, 5, 2, 1 };
         SetConsumableCount();
     }

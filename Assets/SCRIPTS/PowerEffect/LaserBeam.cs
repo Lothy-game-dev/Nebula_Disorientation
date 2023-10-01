@@ -101,37 +101,41 @@ public class LaserBeam : Powers
             game.GetComponent<Beam>().Distance = Range;
             game.GetComponent<Beam>().Damage = DPH;
             game.GetComponent<Beam>().Layer = EnemyLayer;
+            game.transform.localScale = game.transform.localScale * (i > m ? (float)(n-i)/(n-m) : 1);
 
             //Change the spirte of the bullet like a laser
-            game.transform.localScale = game.transform.localScale * (i > m ? (float)(n-i)/(n-m) : 1);
-            if (i>m)
-            {
-                Color c = game.GetComponent<SpriteRenderer>().color;
-                c.r = (i > m ? (float)(n - i) / (n - m) : 1);
-                c.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                game.GetComponent<SpriteRenderer>().color = c;
-                Color c2 = game.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
-                c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                game.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
+            if (!name.Contains("Superior")) {
+                if (i > m)
+                {
+                    Color c = game.GetComponent<SpriteRenderer>().color;
+                    c.r = (i > m ? (float)(n - i) / (n - m) : 1);
+                    c.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                    game.GetComponent<SpriteRenderer>().color = c;
+                    Color c2 = game.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
+                    c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                    game.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
+                }
+                if (i > m)
+                {
+                    Color c = game2.GetComponent<SpriteRenderer>().color;
+                    c.r = (i > m ? (float)(n - i) / (n - m) : 1);
+                    c.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                    game2.GetComponent<SpriteRenderer>().color = c;
+                    Color c2 = game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
+                    c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
+                    game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
+                }
             }
+           
             game.GetComponent<Beam>().Laser = this;
             game2.GetComponent<Beam>().Distance = Range;
             game2.GetComponent<Beam>().Damage = DPH;
             game2.GetComponent<Beam>().Layer = EnemyLayer;
 
-            //Change the spirte of the bullet like a laser
+            
             game2.transform.localScale = game2.transform.localScale * (i > m ? (float)(n - i) / (n - m) : 1);
             game2.GetComponent<Beam>().Laser = this;
-            if (i >m)
-            {
-                Color c = game2.GetComponent<SpriteRenderer>().color;
-                c.r = (i > m ? (float)(n - i) / (n - m) : 1);
-                c.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                game2.GetComponent<SpriteRenderer>().color = c;
-                Color c2 = game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
-                c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
-            }
+            
             game.SetActive(true);
             game2.SetActive(true);
             game.GetComponent<Rigidbody2D>().velocity = pos*2;
@@ -158,15 +162,15 @@ public class LaserBeam : Powers
         CharingClone2 = Instantiate(ChargingEffect, RightWeapon.transform.position, Quaternion.identity);
         CharingClone.SetActive(true);
         CharingClone2.SetActive(true);
-        Destroy(CharingClone, 3f);
-        Destroy(CharingClone2, 3f);
+        Destroy(CharingClone, 1.14f);
+        Destroy(CharingClone2, 1.14f);
     }
     public void ChangeAnimationPos()
     {
         if (CharingClone != null && CharingClone2 != null)
         {
-            CharingClone.transform.position = new Vector3(LeftWeapon.transform.position.x + CalculatePos(20).x, LeftWeapon.transform.position.y + CalculatePos(20).y, 0);
-            CharingClone2.transform.position = new Vector3(RightWeapon.transform.position.x + CalculatePos(20).x, RightWeapon.transform.position.y + CalculatePos(20).y, 0);
+            CharingClone.transform.position = new Vector3(LeftWeapon.transform.position.x + CalculatePos(10).x, LeftWeapon.transform.position.y + CalculatePos(10).y, 0);
+            CharingClone2.transform.position = new Vector3(RightWeapon.transform.position.x + CalculatePos(10).x, RightWeapon.transform.position.y + CalculatePos(10).y, 0);
         } else
         {
             isStart = false;
