@@ -427,7 +427,7 @@ public class GlobalFunctionController : MonoBehaviour
             if (StatList[0].Contains("BR-x"))
             {
                 string BR = StatList[0].Replace("BR-x", "");
-                finalString.Add("BR", BR);
+                finalString.Add("BRx", BR);
             }
             else
             {

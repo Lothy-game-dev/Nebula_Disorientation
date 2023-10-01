@@ -14,7 +14,7 @@ public class Powers : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public LayerMask EnemyLayer;
-    
+    public GameObject Effect;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -23,7 +23,7 @@ public class Powers : MonoBehaviour
     private Dictionary<string, object> Power;
     private Dictionary<string, object> PowerStats;
     public float DPH;
-    public float AoH;
+    public int AoH;
     public float AoE;
     public float Velocity;
     public float Range;
@@ -32,6 +32,7 @@ public class Powers : MonoBehaviour
     public float BR;
     public float BRx;
     public AudioClip SoundEffect;
+    public AudioClip ChargingSoundEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -39,6 +40,7 @@ public class Powers : MonoBehaviour
     {
         // Initialize variables
         /*InitData();*/
+        
     }
 
     // Update is called once per frame
@@ -58,7 +60,10 @@ public class Powers : MonoBehaviour
         switch (Power["Type"].ToString())
         {
             case "Defensive":
-                BR = float.Parse(PowerStats["BR"].ToString());
+                if (PowerStats.ContainsKey("BR"))
+                {
+                    BR = float.Parse(PowerStats["BR"].ToString());
+                }              
                 Duration = float.Parse(PowerStats["Dur"].ToString());
                 CD = float.Parse(PowerStats["CD"].ToString());
                 if (PowerStats.ContainsKey("BRx"))
@@ -67,7 +72,7 @@ public class Powers : MonoBehaviour
                 } break;
             case "Offensive":
                 DPH = float.Parse(PowerStats["DPH"].ToString());
-                AoH = float.Parse(PowerStats["AOH"].ToString());
+                AoH = int.Parse(PowerStats["AOH"].ToString());
                 AoE = float.Parse(PowerStats["AOE"].ToString());
                 Velocity = float.Parse(PowerStats["V"].ToString());
                 Range = float.Parse(PowerStats["R"].ToString());
@@ -103,6 +108,12 @@ public class Powers : MonoBehaviour
                 if (name.Contains("RocketBurst"))
                 {
                     gameObject.GetComponent<RocketBurst>().GenerateRocket();
+                } else
+                {
+                    if (name.Contains("Barrier"))
+                    {
+                        gameObject.GetComponent<Barrier>().GenBarrier();
+                    }
                 }
             }
         }      
@@ -110,24 +121,19 @@ public class Powers : MonoBehaviour
 
     public void BeforeActivating()
     {
+        gameObject.AddComponent<AudioSource>();
+        sound = GetComponent<AudioSource>();
         gameObject.GetComponent<LaserBeam>().Charging();
     }
     #endregion
     #region Sound Effect
-    public void WormholeSound()
+    public void PlaySound(AudioClip sfx)
     {
-        sound.clip = SoundEffect;
+        sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 1f;
-    }
-    public void LaserBeamSound()
-    {
-        sound.clip = SoundEffect;
-        sound.loop = true;
-        sound.Play();
-        sound.volume = 1f;
-    }
+        sound.volume = 0.35f;
+    }  
     public void EndSound()
     {
         sound.clip = null;

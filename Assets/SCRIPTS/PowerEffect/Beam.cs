@@ -54,7 +54,7 @@ public class Beam : MonoBehaviour
         }
     }
     #endregion
-    #region Function group ...
+    #region Check Distance Travel
     // Group all function that serve the same algorithm
     private void CheckDistanceTravel()
     {

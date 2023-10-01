@@ -13,7 +13,7 @@ public class LaserBeam : Powers
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject ChargingEffect;
-    public GameObject Effect;
+    
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -66,7 +66,7 @@ public class LaserBeam : Powers
             }
             if (DurationTimer == 0)
             {
-                LaserBeamSound();
+                PlaySound(SoundEffect);
             }
             DurationTimer += Time.fixedDeltaTime;
 
@@ -152,6 +152,7 @@ public class LaserBeam : Powers
 
     {
         isStart = true;
+        PlaySound(ChargingSoundEffect);
         LeftWeapon = FindAnyObjectByType<FighterController>().LeftWeaponPosition;
         RightWeapon = FindAnyObjectByType<FighterController>().RightWeaponPosition;
         CharingClone = Instantiate(ChargingEffect, LeftWeapon.transform.position, Quaternion.identity);
@@ -165,8 +166,8 @@ public class LaserBeam : Powers
     {
         if (CharingClone != null && CharingClone2 != null)
         {
-            CharingClone.transform.position = LeftWeapon.transform.position;
-            CharingClone2.transform.position = RightWeapon.transform.position;
+            CharingClone.transform.position = new Vector3(LeftWeapon.transform.position.x + CalculatePos(20).x, LeftWeapon.transform.position.y + CalculatePos(20).y, 0);
+            CharingClone2.transform.position = new Vector3(RightWeapon.transform.position.x + CalculatePos(20).x, RightWeapon.transform.position.y + CalculatePos(20).y, 0);
         } else
         {
             isStart = false;

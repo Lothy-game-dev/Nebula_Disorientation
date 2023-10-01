@@ -12,7 +12,7 @@ public class Wormhole : Powers
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject Effect;  
+   
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -41,7 +41,7 @@ public class Wormhole : Powers
         if (pos.x >= 5000f || pos.x <= -5000f || pos.y >= 5000f || pos.y <= -5000f)
         {           
             GameObject TpEffect = Instantiate(Effect, Fighter.transform.position, Quaternion.identity);
-            WormholeSound();
+            PlaySound(SoundEffect);
             TpEffect.SetActive(true);
             Fighter.transform.position = Fighter.transform.position;
             Destroy(TpEffect, 1f);
@@ -49,7 +49,7 @@ public class Wormhole : Powers
         } else
         {
             newPos = new Vector3(Fighter.transform.position.x + pos.x, Fighter.transform.position.y + pos.y, Fighter.transform.position.z);
-            WormholeSound();
+            PlaySound(SoundEffect);
             StartCoroutine(StartTeleport());
         }
     }
