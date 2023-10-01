@@ -11,6 +11,7 @@ public class TestDisk : EnemyShared
     private Vector2 check;
     private GameObject CurrentLeftWeapon;
     private GameObject CurrentRightWeapon;
+    private bool doneInitWeapon;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,17 +42,22 @@ public class TestDisk : EnemyShared
             changeDirTimer = 5f;
             test = !test;
         }
+        if (doneInitWeapon)
+        {
+            LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+            RightWeapon.GetComponent<Weapons>().AIShootBullet();
+        }
     }
 
     private void TestDiskInit()
     {
+        doneInitWeapon = false;
         FighterAttachedWeapon faw = gameObject.AddComponent<FighterAttachedWeapon>();
-        faw.enabled = false;
         faw.Fighter = gameObject;
         faw.FighterModel = gameObject;
         FighterModelShared fms = gameObject.AddComponent<FighterModelShared>();
-        fms.LeftWeaponPos = new Vector2(-10, 0);
-        fms.RightWeaponPos = new Vector2(10, 0);
+        fms.LeftWeaponPos = new Vector2(-0.2f, 0);
+        fms.RightWeaponPos = new Vector2(0.2f, 0);
         bool alreadyLeft = false;
         bool alreadyRight = false;
         for (int i = 0; i < Weapons.transform.childCount; i++)
@@ -60,34 +66,45 @@ public class TestDisk : EnemyShared
             {
                 break;
             }
-            if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals("pulsecannon"))
+            if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals("starblaster"))
             {
                 alreadyLeft = true;
-                LeftWeapon = Weapons.transform.GetChild(i).gameObject;
+                CurrentLeftWeapon = Weapons.transform.GetChild(i).gameObject;
             }
-            if (!alreadyRight && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals("pulsecannon"))
+            if (!alreadyRight && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals("starblaster"))
             {
                 alreadyRight = true;
-                RightWeapon = Weapons.transform.GetChild(i).gameObject;
+                CurrentRightWeapon = Weapons.transform.GetChild(i).gameObject;
             }
         }
-        CurrentLeftWeapon = Instantiate(LeftWeapon, transform.position, Quaternion.identity);
-        CurrentRightWeapon = Instantiate(RightWeapon, transform.position, Quaternion.identity);
-        CurrentLeftWeapon.transform.localScale = new Vector2(LeftWeapon.transform.localScale.x * 2f, LeftWeapon.transform.localScale.y * 2f);
-        CurrentRightWeapon.transform.localScale = new Vector2(RightWeapon.transform.localScale.x * 2f, RightWeapon.transform.localScale.y * 2f);
+        LeftWeapon = Instantiate(CurrentLeftWeapon, transform.position, Quaternion.identity);
+        RightWeapon = Instantiate(CurrentRightWeapon, transform.position, Quaternion.identity);
+        LeftWeapon.transform.localScale = new Vector2(CurrentLeftWeapon.transform.localScale.x * 2f, CurrentLeftWeapon.transform.localScale.y * 2f);
+        RightWeapon.transform.localScale = new Vector2(CurrentRightWeapon.transform.localScale.x * 2f, CurrentRightWeapon.transform.localScale.y * 2f);
         LeftWeapon.SetActive(true);
         Weapons LW = LeftWeapon.GetComponent<Weapons>();
         LW.isLeftWeapon = true;
         LW.Fighter = gameObject;
         LW.Aim = FindObjectOfType<GameController>().Player;
         LW.WeaponPosition = null;
+        LW.tracking = false;
+        LW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
         RightWeapon.SetActive(true);
         Weapons RW = RightWeapon.GetComponent<Weapons>();
         RW.Fighter = gameObject;
         RW.Aim = FindObjectOfType<GameController>().Player;
         RW.WeaponPosition = null;
-        faw.LeftWeapon = CurrentLeftWeapon;
-        faw.RightWeapon = CurrentRightWeapon;
-        faw.enabled = true;
+        RW.tracking = false;
+        RW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
+        faw.LeftWeapon = LeftWeapon;
+        faw.RightWeapon = RightWeapon;
+        faw.AttachWeapon();
+        StartCoroutine(WaitForDoneInit());
+    }
+
+    private IEnumerator WaitForDoneInit()
+    {
+        yield return new WaitForSeconds(5f);
+        doneInitWeapon = true;
     }
 }

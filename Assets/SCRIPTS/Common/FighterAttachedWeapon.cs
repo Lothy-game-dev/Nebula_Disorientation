@@ -22,7 +22,6 @@ public class FighterAttachedWeapon : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        AttachWeapon();
     }
 
     // Update is called once per frame
@@ -32,7 +31,7 @@ public class FighterAttachedWeapon : MonoBehaviour
     }
     #endregion
     #region Attach Weapon
-    private void AttachWeapon()
+    public void AttachWeapon()
     {
         // Call function and timer only if possible
         LeftWeaponPos = new Vector3(Fighter.transform.position.x + FighterModel.GetComponent<FighterModelShared>().LeftWeaponPos.x * Fighter.transform.localScale.x,

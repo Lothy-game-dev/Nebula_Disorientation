@@ -20,7 +20,7 @@ public class GameplayInteriorController : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        GenerateBlackFadeOpen(transform.position, 3f, 1f);
+        GenerateBlackFadeOpen(transform.position, 0f, 1f);
     }
 
     // Update is called once per frame

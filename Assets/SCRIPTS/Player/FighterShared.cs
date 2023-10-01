@@ -134,6 +134,8 @@ public class FighterShared : MonoBehaviour
         GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl5.SetActive(true);
         Destroy(expl5, 0.3f);
+        Destroy(LeftWeapon);
+        Destroy(RightWeapon);
         Destroy(gameObject);
     }
     // Check Thermal Status, must be called in Update()
@@ -580,7 +582,13 @@ public class FighterShared : MonoBehaviour
             }
         } else
         {
+            if (CurrentHP>damage) 
             CurrentHP -= damage;
+            else
+            {
+                CurrentHP = 0;
+                StartCoroutine(DestroySelf());
+            }
         }
     }
     #endregion

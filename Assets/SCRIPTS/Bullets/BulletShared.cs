@@ -59,7 +59,13 @@ public class BulletShared : MonoBehaviour
     // Calculate Weapon's Stats
     private void CalculateWeaponStats()
     {
-        WeaponDamageModScale = WeaponShoot.FighterWeaponDamageMod;
+        if (WeaponShoot.FighterWeaponDamageMod>1f)
+        {
+            WeaponDamageModScale = WeaponShoot.FighterWeaponDamageMod;
+        } else
+        {
+            WeaponDamageModScale = 1f;
+        }
         if (WeaponShoot.FighterWeaponAoEMod>1)
         {
             if (AoE==0)
@@ -133,7 +139,7 @@ public class BulletShared : MonoBehaviour
                     foreach (var col2 in cols2)
                     {
                         // Deal damage to all enemies in AoE range
-                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                         if (enemy != null)
                         {
                             enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy));
@@ -147,7 +153,7 @@ public class BulletShared : MonoBehaviour
                 // In case bullet does not have AoE: Deal dmg to the enemy detected only
                 else
                 {
-                    EnemyShared enemy = col.GetComponent<EnemyShared>();
+                    FighterShared enemy = col.GetComponent<FighterShared>();
                     if (enemy!=null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy));
@@ -186,7 +192,7 @@ public class BulletShared : MonoBehaviour
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
-                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                         if (enemy != null)
                         {
                             enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
@@ -205,7 +211,7 @@ public class BulletShared : MonoBehaviour
                     }
                 } else
                 {
-                    EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+                    FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
                     if (enemy != null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,true, enemy));
@@ -236,7 +242,7 @@ public class BulletShared : MonoBehaviour
             if (!AlreadyHit)
             {
                 AlreadyHit = true;
-                EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
+                FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
                 if (enemy != null)
                 {
                     enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
@@ -276,7 +282,7 @@ public class BulletShared : MonoBehaviour
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
-                        EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                        FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                         if (enemy != null)
                         {
                             Debug.Log(RealDamage);
@@ -288,7 +294,7 @@ public class BulletShared : MonoBehaviour
                 }
                 else
                 {
-                    EnemyShared enemy = col.GetComponent<EnemyShared>();
+                    FighterShared enemy = col.GetComponent<FighterShared>();
                     if (enemy != null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
@@ -321,7 +327,7 @@ public class BulletShared : MonoBehaviour
                 foreach (var col2 in cols2)
                 {
                     // Deal damage to all enemies in AoE range
-                    EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                    FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                     if (enemy != null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
@@ -331,7 +337,7 @@ public class BulletShared : MonoBehaviour
             if (!PenetrateAlreadyDealDamge.Contains(col.gameObject))
             {
                 PenetrateAlreadyDealDamge.Add(col.gameObject);
-                EnemyShared enemy = col.GetComponent<EnemyShared>();
+                FighterShared enemy = col.GetComponent<FighterShared>();
                 if (enemy!=null)
                 {
                     enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, ApplyNanoEffect, enemy));
@@ -419,7 +425,7 @@ public class BulletShared : MonoBehaviour
         foreach (var col2 in cols2)
         {
             // Deal damage to all enemies in AoE range
-            EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+            FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
             if (enemy != null)
             {
                 enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,false,enemy));
