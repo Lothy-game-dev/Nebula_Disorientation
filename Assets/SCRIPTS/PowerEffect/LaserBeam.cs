@@ -177,6 +177,7 @@ public class LaserBeam : Powers
     {
         if (CharingClone != null && CharingClone2 != null)
         {
+            EndSound();
             Destroy(CharingClone);
             Destroy(CharingClone2);
         }
