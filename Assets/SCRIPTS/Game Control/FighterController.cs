@@ -235,6 +235,8 @@ public class FighterController : MonoBehaviour
         PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
         PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
 
+        FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
+        SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
         // Set all stats data 
         SetStatsData();
     }

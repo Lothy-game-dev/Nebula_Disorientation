@@ -54,6 +54,8 @@ public class Powers : MonoBehaviour
     #region Init Data
     public void InitData(string name)
     {
+        gameObject.AddComponent<AudioSource>();
+        sound = GetComponent<AudioSource>();
         //Get power stat from DB
         Power = FindAnyObjectByType<AccessDatabase>().GetPowerDataByName(name.Replace("(Clone)", ""));
         PowerStats = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(Power["Stats"].ToString());
@@ -92,9 +94,7 @@ public class Powers : MonoBehaviour
     // Group all function that serve the same algorithm
     public void ActivatePower(string name)
     {
-        gameObject.AddComponent<AudioSource>();
-        sound = GetComponent<AudioSource>();
-        InitData(name);
+       
         if (name.Contains("Wormhole"))
         {          
             gameObject.GetComponent<Wormhole>().GenerateWormhole();
@@ -121,9 +121,12 @@ public class Powers : MonoBehaviour
 
     public void BeforeActivating()
     {
-        gameObject.AddComponent<AudioSource>();
-        sound = GetComponent<AudioSource>();
         gameObject.GetComponent<LaserBeam>().Charging();
+    }
+
+    public void DestroyChargingAnimation()
+    {
+        gameObject.GetComponent<LaserBeam>().DestroyChargingWhenNotHolding();
     }
     #endregion
     #region Sound Effect
