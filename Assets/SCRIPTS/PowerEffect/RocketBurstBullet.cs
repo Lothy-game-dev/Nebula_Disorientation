@@ -20,12 +20,13 @@ public class RocketBurstBullet : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public float RkAngle;
+    public float AoE;
     public LayerMask Layer;
     public float Damage;
     private List<float> DistanceList;
     public float Distance;
     public float DistanceTravel;
-    private bool isUp;
+    public int DirMov;
     private Vector3 MovingVector;
     private GameObject target;
     private Vector3 ToEnemy;
@@ -85,9 +86,10 @@ public class RocketBurstBullet : MonoBehaviour
             }          
            
         }
-        CheckIsUpOrDownMovement();
         AimGen = Instantiate(AimEffect, target.transform.position, Quaternion.identity);
+        AimGen.transform.SetParent(target.transform);
         AimGen.SetActive(true);
+        Destroy(AimGen, 10f);
     }
 
     #endregion
@@ -110,47 +112,127 @@ public class RocketBurstBullet : MonoBehaviour
         rb.velocity = MovingVector / MovingVector.magnitude * 500;
         ToEnemy = target.transform.position - transform.position;
         float angle = Vector3.Angle(ToEnemy, MovingVector);
-        transform.Rotate(new Vector3(0, 0, (isUp ? 1 : -1) * angle / 10));
+        float curScale = 1;
+        if (angle > 80 && angle < 100)
+        {
+            curScale = 1.5f;
+        }
+        CheckIsUpOrDownMovement();
+        transform.Rotate(new Vector3(0, 0, -DirMov * curScale * angle / 10));
     }
 
     private void CheckIsUpOrDownMovement()
     {
-        if (gameObject.transform.GetChild(0).position.y > gameObject.transform.GetChild(1).position.y)
+        Vector2 HeadToTarget = target.transform.position - gameObject.transform.GetChild(0).position;
+        Vector2 MovingVector = gameObject.transform.GetChild(0).position - gameObject.transform.GetChild(1).position;
+        float angle = Vector2.Angle(HeadToTarget, MovingVector);
+        float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
+        Vector2 TempPos = new Vector2(gameObject.transform.GetChild(1).position.x, gameObject.transform.GetChild(1).position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
+        Vector2 CheckPos = new Vector2(target.transform.position.x, target.transform.position.y) + (TempPos - new Vector2(target.transform.position.x, target.transform.position.y)) * 2;
+        if (gameObject.transform.GetChild(0).position.x == gameObject.transform.GetChild(1).position.x)
         {
-            if (target.transform.position.x < transform.position.x)
+            if (gameObject.transform.GetChild(0).position.y > gameObject.transform.GetChild(1).position.y)
             {
-                isUp = true;
+                if (target.transform.position.x < gameObject.transform.GetChild(0).position.x)
+                {
+                    DirMov = -1;
+                } else if (target.transform.position.x == gameObject.transform.GetChild(0).position.x)
+                {
+                    DirMov = 0;
+                } else
+                {
+                    DirMov = 1;
+                }
             } else
             {
-                isUp = false;
+                if (target.transform.position.x < gameObject.transform.GetChild(0).position.x)
+                {
+                    DirMov = 1;
+                }
+                else if (target.transform.position.x == gameObject.transform.GetChild(0).position.x)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = -1;
+                }
             }
-        } else
+        }
+        else if (gameObject.transform.GetChild(0).position.y == gameObject.transform.GetChild(1).position.y)
         {
-            if (target.transform.position.x < transform.position.x)
+            if (gameObject.transform.GetChild(0).position.x > gameObject.transform.GetChild(1).position.x)
             {
-                isUp = false;
+                if (target.transform.position.y > gameObject.transform.GetChild(0).position.y)
+                {
+                    DirMov -= 1;
+                } else if (target.transform.position.y == gameObject.transform.GetChild(0).position.y)
+                {
+                    DirMov = 0;
+                } else
+                {
+                    DirMov = 1;
+                }
+            } else
+            {
+                if (target.transform.position.y > gameObject.transform.GetChild(0).position.y)
+                {
+                    DirMov = 1;
+                }
+                else if (target.transform.position.y == gameObject.transform.GetChild(0).position.y)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov -= 1;
+                }
+            }
+        } 
+        else if (gameObject.transform.GetChild(0).position.x > gameObject.transform.GetChild(1).position.x)
+        {
+            if (CheckPos.y < target.transform.position.y)
+            {
+                DirMov = -1;
             }
             else
             {
-                isUp = true;
+                DirMov = 1;
+            }
+        } else
+        {
+            if (CheckPos.y < target.transform.position.y)
+            {
+                DirMov = 1;
+            }
+            else
+            {
+                DirMov = -1;
             }
         }
+
     }
     #endregion
     #region Calculate damage
     public void CalculateDamage()
     {
         // Detect enemy
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10f, Layer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.GetChild(0).position, 10f, Layer);
         foreach (var col in cols)
-        {            
-            EnemyShared enemy = col.gameObject.GetComponent<EnemyShared>();
-            if (enemy != null)
+        {
+            FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+            Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, Layer);
+            foreach (var col2 in cols2)
             {
-                enemy.ReceiveDamage(Damage);
+                EnemyShared enemy = col2.gameObject.GetComponent<EnemyShared>();
+                if (enemy != null)
+                {
+                    enemy.ReceiveDamage(Damage);
+                }
             }
             Destroy(AimGen);
             Destroy(gameObject);
+            break;
         }
     }
     #endregion

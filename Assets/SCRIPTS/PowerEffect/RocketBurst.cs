@@ -47,6 +47,7 @@ public class RocketBurst : Powers
             game.GetComponent<Rigidbody2D>().velocity = VList[i]*10;
             game.GetComponent<RocketBurstBullet>().Distance = Range;
             game.GetComponent<RocketBurstBullet>().Damage = DPH;
+            game.GetComponent<RocketBurstBullet>().AoE = AoE;
             PlaySound(SoundEffect);
         }
     }

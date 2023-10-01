@@ -46,7 +46,13 @@ public class Barrier : Powers
             {
                 if (BRx != 0)
                 {
-                    Fighter.GetComponent<FighterShared>().CurrentBarrier -= IncreaseCurrentBarrierAmount;
+                    if (Fighter.GetComponent<FighterShared>().CurrentBarrier>=IncreaseCurrentBarrierAmount)
+                    {
+                        Fighter.GetComponent<FighterShared>().CurrentBarrier -= IncreaseCurrentBarrierAmount;
+                    } else
+                    {
+                        Fighter.GetComponent<FighterShared>().CurrentBarrier = 0;
+                    }
                     Fighter.GetComponent<FighterShared>().MaxBarrier -= IncreaseMaxBarrierAmount;
                 }
                 Destroy(Shield);

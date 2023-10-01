@@ -135,6 +135,8 @@ public class FighterController : MonoBehaviour
         RightWeapon.transform.localScale = new Vector2(RightWeapon.transform.localScale.x * 2f, RightWeapon.transform.localScale.y * 2f);
         LeftWeaponGO = LeftWeapon;
         RightWeaponGO = RightWeapon;
+        PlayerFighter.GetComponent<PlayerFighter>().LeftWeapon = LeftWeaponGO;
+        PlayerFighter.GetComponent<PlayerFighter>().RightWeapon = RightWeaponGO;
         LeftWeapon.SetActive(true);
         Weapons LW = LeftWeapon.GetComponent<Weapons>();
         LW.isLeftWeapon = true;

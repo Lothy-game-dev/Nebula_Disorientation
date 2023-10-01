@@ -5,6 +5,9 @@ using UnityEngine;
 public class FighterShared : MonoBehaviour
 {
     #region Shared Variables
+    // Weapons
+    public GameObject LeftWeapon;
+    public GameObject RightWeapon;
     // Stats
     public float CurrentHP;
     public float MaxHP;
@@ -110,6 +113,7 @@ public class FighterShared : MonoBehaviour
 
     private IEnumerator DestroySelf()
     {
+        GetComponent<SpriteRenderer>().color = Color.black;
         GetComponent<Collider2D>().enabled = false;
         GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
         expl.SetActive(true);
@@ -237,6 +241,14 @@ public class FighterShared : MonoBehaviour
         }
         // Set Color
         GetComponent<SpriteRenderer>().color = c;
+        if (LeftWeapon!=null)
+        {
+            LeftWeapon.GetComponent<SpriteRenderer>().color = c;
+        }
+        if (RightWeapon!=null)
+        {
+            RightWeapon.GetComponent<SpriteRenderer>().color = c;
+        }
     }
     // Thermal Status
     public void ThermalStatus()
