@@ -52,17 +52,17 @@ public class GameplayExteriorController : MonoBehaviour
         Destroy(Fade);
     }
 
-    public void GenerateBlackFadeClose(float duration)
+    public void GenerateBlackFadeClose(float duration, float wait)
     {
         GameObject bf = Instantiate(BlackFade, new Vector3(transform.position.x, transform.position.y, BlackFade.transform.position.z), Quaternion.identity);
         Color c = bf.GetComponent<SpriteRenderer>().color;
         c.a = 0;
         bf.GetComponent<SpriteRenderer>().color = c;
         bf.SetActive(true);
-        StartCoroutine(BlackFadeClose(bf, duration));
+        StartCoroutine(BlackFadeClose(bf, duration, wait));
     }
 
-    private IEnumerator BlackFadeClose(GameObject Fade, float duration)
+    private IEnumerator BlackFadeClose(GameObject Fade, float duration, float wait)
     {
         for (int i = 0; i < 50; i++)
         {
@@ -71,6 +71,7 @@ public class GameplayExteriorController : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
+        yield return new WaitForSeconds(wait);
         Destroy(Fade);
     }
     #endregion

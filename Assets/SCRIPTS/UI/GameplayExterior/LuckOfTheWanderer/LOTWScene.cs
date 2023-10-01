@@ -225,13 +225,13 @@ public class LOTWScene : MonoBehaviour
 
     public void EnterGameplay()
     {
-        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f);
+        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 3f);
         StartCoroutine(WaitTeleport());
     }
 
     private IEnumerator WaitTeleport()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(4f);
         SceneManager.LoadSceneAsync("GameplayInterior");
         SceneManager.UnloadSceneAsync("GameplayExterior");
     }

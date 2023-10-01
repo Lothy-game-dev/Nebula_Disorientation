@@ -44,8 +44,8 @@ public class TestDisk : EnemyShared
         }
         if (doneInitWeapon)
         {
-            LeftWeapon.GetComponent<Weapons>().AIShootBullet();
-            RightWeapon.GetComponent<Weapons>().AIShootBullet();
+            /*LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+            RightWeapon.GetComponent<Weapons>().AIShootBullet();*/
         }
     }
 
