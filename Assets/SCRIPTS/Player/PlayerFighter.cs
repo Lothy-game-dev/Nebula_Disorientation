@@ -50,6 +50,7 @@ public class PlayerFighter : FighterShared
         InitializeFighter();
         aus = GetComponent<AudioSource>();
         HPSlider.maxValue = MaxHP;
+        ShieldPassive();
         BRSlider.maxValue = MaxBarrier;
         // temp, will get real data later
         PowerAndConsCD = new float[6] {1f, 1f, 5f, 5f, 5f, 5f};
@@ -179,6 +180,7 @@ public class PlayerFighter : FighterShared
                     Color c = ChargeImage[0].GetComponent<SpriteRenderer>().color;
                     c.a = 0;
                     ChargeImage[0].GetComponent<SpriteRenderer>().color = c;
+                    FirstPower.GetComponent<Powers>().DestroyChargingAnimation();
                 }
             }
         }
@@ -455,6 +457,25 @@ public class PlayerFighter : FighterShared
         {
             ConsCountText[i].GetComponent<TextMeshPro>().text = ConsCount[i].ToString();
         }
+    }
+    #endregion
+    #region Passive
+
+    public void ShieldPassive()
+    {
+        float br = 1;
+        if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
+        {
+            if (FirstPower.GetComponent<Powers>().BR > 0)
+            {
+                br = FirstPower.GetComponent<Powers>().BR;
+            } else
+            {
+                br = SecondPower.GetComponent<Powers>().BR;
+            }
+        MaxBarrier = MaxHP * br / 100;
+        CurrentBarrier = MaxBarrier;
+        }       
     }
     #endregion
 }

@@ -173,12 +173,6 @@ public class Powers : MonoBehaviour
 
     }
     #endregion
-    #region Passive
-
-    public void ShieldPassive()
-    {
-
-    }
-    #endregion
+   
 
 }

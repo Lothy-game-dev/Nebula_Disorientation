@@ -293,6 +293,7 @@ public class Arsenal : UECMenuShared
     public void ResetData()
     {
         // reset all properties of the box (color, sortingOrder)
+        CurrentTab = "Weapon";
         Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color = WeaponBoxColor;
         OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color = PowerBoxColor;
         Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 3;
