@@ -172,6 +172,15 @@ public class LaserBeam : Powers
             isStart = false;
         }
     }
+
+    public void DestroyChargingWhenNotHolding()
+    {
+        if (CharingClone != null && CharingClone2 != null)
+        {
+            Destroy(CharingClone);
+            Destroy(CharingClone2);
+        }
+    }
     #endregion
    
    
