@@ -12,6 +12,7 @@ public class Barrier : Powers
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public GameObject EndEffect;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -19,6 +20,7 @@ public class Barrier : Powers
     private GameObject Shield;
     private float Timer;
     private bool isStart;
+    private bool isEnding;
     private float IncreaseCurrentBarrierAmount;
     private float IncreaseMaxBarrierAmount;
     #endregion
@@ -28,6 +30,7 @@ public class Barrier : Powers
     {
         // Initialize variables
         Timer = 0f;
+        isEnding = true;
     }
 
     // Update is called once per frame
@@ -42,6 +45,12 @@ public class Barrier : Powers
         if (isStart)
         {
             Timer += Time.deltaTime;
+            if (Timer >= Duration * 3/4 && isEnding)
+            {
+                Destroy(Shield);
+                isEnding = false;
+                GenEndBarrier();
+            } 
             if (Timer >= Duration)
             {
                 if (BRx != 0)
@@ -85,6 +94,10 @@ public class Barrier : Powers
     }
     #endregion
     #region Function group ...
-    // Group all function that serve the same algorithm
+    public void GenEndBarrier()
+    {
+        Shield = Instantiate(EndEffect, Fighter.transform.position, Quaternion.identity);
+        Shield.SetActive(true);
+    }
     #endregion
 }
