@@ -79,6 +79,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\Allies\AlliesShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\Factory.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyShared.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECEnterSession.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopBuySellButton.cs" />
+    <Compile Include="Assets\SCRIPTS\Common\FighterAttachedWeapon.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Database\AccessDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
+    <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\LoadingScene.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\SpawnController.cs" />

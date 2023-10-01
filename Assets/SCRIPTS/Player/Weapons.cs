@@ -81,7 +81,10 @@ public class Weapons : MonoBehaviour
     void Update()
     {
         // Moving To Location On Player
-        transform.position = WeaponPosition.transform.position;
+        if (WeaponPosition!=null)
+        {
+            transform.position = WeaponPosition.transform.position;
+        }
         // Rotate the weapon around rotate point clockwise with angle calculated
         CalAngle = CalculateRotateAngle();
         CurrentAngle %= 360;
@@ -156,7 +159,7 @@ public class Weapons : MonoBehaviour
         CheckOverheatStatus();
         // Remove sound when stop holding for thermal weapon
         // Kinetic and other type unaffected
-        if (Input.GetMouseButtonUp(MouseInput))
+        if (Input.GetMouseButtonUp(MouseInput) && Fighter.GetComponent<PlayerFighter>()!=null)
         {
             if (!isOverheatted && IsThermalType)
             {
@@ -169,7 +172,7 @@ public class Weapons : MonoBehaviour
         // Fire Weapon's Bullet
         if (FireTimer <= 0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null)
             {
                 ReloadBar.GetComponent<Image>().fillAmount = 1;
                 if (!IsThermalType)
@@ -185,14 +188,6 @@ public class Weapons : MonoBehaviour
             }
         }
         ReloadBar.GetComponent<Image>().fillAmount -= RateOfFire*Time.fixedDeltaTime;
-/*        if (ReloadBar.value < ReloadBar.maxValue - RateOfFire)
-        {
-            ReloadBar.value += RateOfFire;
-        }
-        else
-        {
-            ReloadBar.value = ReloadBar.maxValue;
-        }*/
         FireTimer -= Time.deltaTime;
     }
     #endregion
@@ -377,6 +372,23 @@ public class Weapons : MonoBehaviour
     }
     #endregion
     #region Weapon Fire
+    public void AIShootBullet()
+    {
+        if (FireTimer <= 0f && Fireable)
+        {
+            if (!IsThermalType)
+            {
+                FireBullet();
+                FireTimer = 1 / RateOfFire;
+            }
+            else
+            {
+                FireFlamethrowerOrb();
+                FireTimer = 1 / RateOfFire;
+            }
+        }
+    }
+
     // Fire Kinetic/Laser/Orb Bullet
     void FireBullet()
     {
