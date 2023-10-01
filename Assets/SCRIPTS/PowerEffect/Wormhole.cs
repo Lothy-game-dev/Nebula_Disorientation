@@ -45,7 +45,6 @@ public class Wormhole : Powers
             TpEffect.SetActive(true);
             Fighter.transform.position = Fighter.transform.position;
             Destroy(TpEffect, 1f);
-            EndSound();
         } else
         {
             newPos = new Vector3(Fighter.transform.position.x + pos.x, Fighter.transform.position.y + pos.y, Fighter.transform.position.z);
@@ -74,8 +73,6 @@ public class Wormhole : Powers
         
         Fighter.transform.position = newPos;
         Destroy(TpEffectTo, 0.2f);
-        EndSound();
-        
     }
     #endregion
     #region Sound Eff
