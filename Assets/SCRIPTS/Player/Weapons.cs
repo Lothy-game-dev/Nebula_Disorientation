@@ -30,6 +30,7 @@ public class Weapons : MonoBehaviour
     public AudioClip WeaponShootSound;
     public bool IsOrbWeapon;
     public GameObject ReloadBar;
+    public GameObject Effect;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -420,6 +421,7 @@ public class Weapons : MonoBehaviour
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
         bulletFire.SetActive(true);
+        GenerateEffect();
         // Increase overheat bar for each shot, increasing with themral status overloadded
         currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
         // Set reset timer
@@ -446,12 +448,47 @@ public class Weapons : MonoBehaviour
             bul.WeaponShoot = this;
             bul.EnemyLayer = EnemyLayer;
             orbFire.SetActive(true);
+            GenerateEffect();
             // Sound
             if (!isOverheatted) ThermalSound();
             // Overheat
             currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
             OverheatDecreaseTimer = OverheatResetTimer;
         }
+    }
+
+    private void GenerateEffect()
+    {
+        if (Effect!=null)
+        {
+            GameObject Eff = Instantiate(Effect, ShootingPosition.transform.position, Quaternion.identity);
+            Eff.transform.localScale = Eff.transform.localScale * 30f;
+            Color c = Eff.transform.GetComponent<SpriteRenderer>().color;
+            c.a = 0f;
+            Eff.transform.GetComponent<SpriteRenderer>().color = c;
+            Eff.transform.SetParent(transform);
+            Eff.SetActive(true);
+            StartCoroutine(ShowEffect(Eff));
+        }
+    }
+
+    private IEnumerator ShowEffect(GameObject go)
+    {
+        for (int i=0;i<10;i++)
+        {
+            Color c = go.transform.GetComponent<SpriteRenderer>().color;
+            c.a += 0.1f;
+            go.transform.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.01f);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = go.transform.GetComponent<SpriteRenderer>().color;
+            c.a -= 0.1f;
+            go.transform.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.01f);
+        }
+        Destroy(go);
     }
 
     // Calculate Flamethrower type Orb
@@ -568,6 +605,10 @@ public class Weapons : MonoBehaviour
         aus.clip = WeaponShootSound;
         aus.loop = false;
         aus.Play();
+        if (name.Replace("(Clone)","")== "StarBlaster")
+        {
+            aus.volume = 0.25f;
+        } else
         aus.volume = 1f;
     }
     public void ThermalSound()

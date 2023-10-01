@@ -1353,8 +1353,25 @@ public class AccessDatabase : MonoBehaviour
     public List<string> GetAllOwnedPowerExceptForName(int PlayerID, string Name)
     {
         List<string> list = new List<string>();
-        // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
+        string check = "";
+        if (Name.Replace(" ", "").ToLower().Contains("barrier"))
+        {
+            check = "barrier";
+        } 
+        else if (Name.Replace(" ", "").ToLower().Contains("wormhole"))
+        {
+            check = "wormhole";
+        }
+        else if (Name.Replace(" ", "").ToLower().Contains("laser"))
+        {
+            check = "laser";
+        }
+        else if (Name.Replace(" ", "").ToLower().Contains("rocket"))
+        {
+            check = "rocket";
+        }
+            // Open DB
+            dbConnection = new SqliteConnection("URI=file:Database.db");
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
@@ -1363,9 +1380,15 @@ public class AccessDatabase : MonoBehaviour
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
-            if (!dataReader.GetString(0).Replace(" ","").ToLower().Equals(Name.Replace(" ","").ToLower()))
+            if (check!="") 
             {
-                list.Add(dataReader.GetString(0).Replace(" ",""));
+                if (!dataReader.GetString(0).Replace(" ", "").ToLower().Contains(check))
+                {
+                    list.Add(dataReader.GetString(0).Replace(" ", ""));
+                }
+            } else
+            {
+                list.Add(dataReader.GetString(0).Replace(" ", ""));
             }
         }
         dbConnection.Close();

@@ -36,6 +36,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
     private List<GameObject> PowerIconAfterGenerate;
     private float BoxWidth;
     private float InitScaleX;
+    private bool DisableBG;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -49,6 +50,10 @@ public class LoadOutPowerPopUp : MonoBehaviour
     {
         // Call function and timer only if possible
         if (!isMouseOutsideOfRange())
+        {
+            Background.GetComponent<LoadOutBarBackground>().DisableCollider *= 0;
+        }
+        if (DisableBG)
         {
             Background.GetComponent<LoadOutBarBackground>().DisableCollider *= 0;
         }
@@ -100,6 +105,8 @@ public class LoadOutPowerPopUp : MonoBehaviour
             transform.localScale = new Vector2(transform.localScale.x + InitScaleX / 20f, transform.localScale.y);
             yield return new WaitForSeconds(0.025f);
         }
+        DisableBG = true;
+        Background.GetComponent<Collider2D>().enabled = false;
         Background.SetActive(true);
         Background.GetComponent<SpriteRenderer>().sortingOrder = 18;
         // Disable scroll until data are loaded
@@ -123,6 +130,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
                 i++;
             }
         }
+            
         // Set content size to 0
         Content.GetComponent<RectTransform>().sizeDelta
             = new Vector2(0,0);
@@ -235,6 +243,7 @@ public class LoadOutPowerPopUp : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         ScrollRect.GetComponent<ScrollRect>().horizontal = true;
+        DisableBG = false;
     }
     #endregion
     #region Check Mouse
