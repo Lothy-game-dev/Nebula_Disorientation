@@ -93,7 +93,6 @@ public class LaserBeam : Powers
         int m = 4;
         for (int i = 0; i < n; i++)
         {
-
             //Generate
             Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (n/2 + 1 - i)*pos/(Range*0.15f);
             Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (n / 2 + 1 - i) * pos / (Range * 0.15f);

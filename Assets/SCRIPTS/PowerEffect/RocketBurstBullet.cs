@@ -47,7 +47,7 @@ public class RocketBurstBullet : MonoBehaviour
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         if (DistanceTravel > 100)
         {
-            if (target == null)
+            if (target == null || target.GetComponent<Collider2D>()==null || !target.GetComponent<Collider2D>().enabled)
             {
                 CheckRange();
             } else
@@ -77,22 +77,15 @@ public class RocketBurstBullet : MonoBehaviour
             GameObject enemy = col.gameObject;
             if (enemy != null)
             {
-                if (gameObject.transform.GetChild(0).position.y > gameObject.transform.GetChild(1).position.y)
-                {
-                    isUp = true;
-                } else
-                {
-                    isUp = false;
-                }
                 DistanceList.Add(Vector3.Distance(enemy.transform.position, transform.position));
                 EnemyDictionary.Add(Vector3.Distance(enemy.transform.position, transform.position), enemy);
                 float minDistance = DistanceList.Min();
                 GameObject nearestEnemy = EnemyDictionary[minDistance];
                 target = nearestEnemy;
-
             }          
            
         }
+        CheckIsUpOrDownMovement();
         AimGen = Instantiate(AimEffect, target.transform.position, Quaternion.identity);
         AimGen.SetActive(true);
     }
@@ -117,9 +110,31 @@ public class RocketBurstBullet : MonoBehaviour
         rb.velocity = MovingVector / MovingVector.magnitude * 500;
         ToEnemy = target.transform.position - transform.position;
         float angle = Vector3.Angle(ToEnemy, MovingVector);
-        
-        transform.Rotate(new Vector3(0, 0,(isUp ? 1 : -1)*angle/20));
-        
+        transform.Rotate(new Vector3(0, 0, (isUp ? 1 : -1) * angle / 10));
+    }
+
+    private void CheckIsUpOrDownMovement()
+    {
+        if (gameObject.transform.GetChild(0).position.y > gameObject.transform.GetChild(1).position.y)
+        {
+            if (target.transform.position.x < transform.position.x)
+            {
+                isUp = true;
+            } else
+            {
+                isUp = false;
+            }
+        } else
+        {
+            if (target.transform.position.x < transform.position.x)
+            {
+                isUp = false;
+            }
+            else
+            {
+                isUp = true;
+            }
+        }
     }
     #endregion
     #region Calculate damage

@@ -439,6 +439,7 @@ public class PlayerFighter : FighterShared
         HPSlider.value = CurrentHP;
         HPText.GetComponent<TextMeshPro>().text = Mathf.Round(CurrentHP) + " / " + MaxHP;
         // BR
+        BRSlider.maxValue = MaxBarrier;
         BRSlider.value = CurrentBarrier;
         BRText.GetComponent<TextMeshPro>().text = Mathf.Round(CurrentBarrier) + " / " + MaxBarrier;
     }
