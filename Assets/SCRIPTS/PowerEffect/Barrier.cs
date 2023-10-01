@@ -18,6 +18,9 @@ public class Barrier : Powers
     // Can be public or private, prioritize private if possible
     private GameObject Shield;
     private float Timer;
+    private bool isStart;
+    private float IncreaseCurrentBarrierAmount;
+    private float IncreaseMaxBarrierAmount;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -31,31 +34,44 @@ public class Barrier : Powers
     void Update()
     {
         // Call function and timer only if possible
-        Timer += Time.deltaTime;
+        
         if (Shield != null)
         {
             Shield.transform.position = Fighter.transform.position;
         }
-        if (Timer >= Duration)
+        if (isStart)
         {
-            if (BRx != 0)
+            Timer += Time.deltaTime;
+            if (Timer >= Duration)
             {
-                Fighter.GetComponent<FighterShared>().CurrentBarrier /= BRx;
-                Fighter.GetComponent<FighterShared>().MaxBarrier /= BRx;
+                if (BRx != 0)
+                {
+                    Fighter.GetComponent<FighterShared>().CurrentBarrier -= IncreaseCurrentBarrierAmount;
+                    Fighter.GetComponent<FighterShared>().MaxBarrier -= IncreaseMaxBarrierAmount;
+                }
+                Destroy(Shield);
+                Timer = 0f;
+                isStart = false;
+
             }
-            Destroy(Shield);
-            Timer = 0f;
         }
+        
     }
     #endregion
     #region Gen barrier
     // Group all function that serve the same algorithm
     public void GenBarrier()
     {
+        isStart = true;
         Shield = Instantiate(Effect, Fighter.transform.position, Quaternion.identity);
         Shield.SetActive(true);
         if (BRx != 0)
         {
+
+            //current amount / max amount will be added
+            IncreaseCurrentBarrierAmount = (Fighter.GetComponent<FighterShared>().CurrentBarrier * BRx) - Fighter.GetComponent<FighterShared>().CurrentBarrier;
+            IncreaseMaxBarrierAmount = (Fighter.GetComponent<FighterShared>().MaxBarrier * BRx) - Fighter.GetComponent<FighterShared>().MaxBarrier;
+
             Fighter.GetComponent<FighterShared>().CurrentBarrier *= BRx;
             Fighter.GetComponent<FighterShared>().MaxBarrier *= BRx;
         }

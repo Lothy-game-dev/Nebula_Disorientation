@@ -225,6 +225,10 @@ public class PlayerFighter : FighterShared
                     PowerAndConsDurationSlider[1].maxValue = ChargingPowerReq[1];
                     if (ChargingPower[1] < ChargingPowerReq[1])
                     {
+                        if (ChargingPower[1] == 0)
+                        {
+                            SecondPower.GetComponent<Powers>().BeforeActivating();
+                        }
                         ChargingPower[1] += Time.deltaTime;
                         Color c = ChargeImage[1].GetComponent<SpriteRenderer>().color;
                         c.a += 190 * Time.deltaTime / (255f * ChargingPowerReq[1]);
@@ -262,11 +266,12 @@ public class PlayerFighter : FighterShared
                     }
                 }
                 if (Input.GetKeyUp(KeyCode.E) && !PowerAndConsActivation[1])
-                {
+                {                  
                     ChargingPower[1] = 0;
                     Color c = ChargeImage[1].GetComponent<SpriteRenderer>().color;
                     c.a = 0;
                     ChargeImage[1].GetComponent<SpriteRenderer>().color = c;
+                    SecondPower.GetComponent<Powers>().DestroyChargingAnimation();
                 }
             }
         }
