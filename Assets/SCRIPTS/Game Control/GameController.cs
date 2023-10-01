@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     #region InitializeVariables
     public GameObject Camera;
     public GameObject Player;
+    public LayerMask PlayerLayer;
     #endregion
     #region NormalVariables
     public bool IsClose;

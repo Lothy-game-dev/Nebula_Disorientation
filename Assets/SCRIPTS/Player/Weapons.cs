@@ -15,6 +15,7 @@ public class Weapons : MonoBehaviour
     public GameObject WeaponPosition;
     public GameObject ShootingPosition;
     public GameObject OverHeatImage;
+    public LayerMask EnemyLayer;
     public bool isLeftWeapon;
     public GameObject Bullet;
     public float RotateLimitNegative;
@@ -81,7 +82,10 @@ public class Weapons : MonoBehaviour
     void Update()
     {
         // Moving To Location On Player
-        transform.position = WeaponPosition.transform.position;
+        if (WeaponPosition!=null)
+        {
+            transform.position = WeaponPosition.transform.position;
+        }
         // Rotate the weapon around rotate point clockwise with angle calculated
         CalAngle = CalculateRotateAngle();
         CurrentAngle %= 360;
@@ -153,10 +157,11 @@ public class Weapons : MonoBehaviour
             HitCountResetTimer = 1/RateOfHit;
         }
         // Check weapon overheat
+        if (Fighter.GetComponent<PlayerFighter>() != null)
         CheckOverheatStatus();
         // Remove sound when stop holding for thermal weapon
         // Kinetic and other type unaffected
-        if (Input.GetMouseButtonUp(MouseInput))
+        if (Input.GetMouseButtonUp(MouseInput) && Fighter.GetComponent<PlayerFighter>()!=null)
         {
             if (!isOverheatted && IsThermalType)
             {
@@ -169,7 +174,7 @@ public class Weapons : MonoBehaviour
         // Fire Weapon's Bullet
         if (FireTimer <= 0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted)
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null)
             {
                 ReloadBar.GetComponent<Image>().fillAmount = 1;
                 if (!IsThermalType)
@@ -184,15 +189,10 @@ public class Weapons : MonoBehaviour
                 }
             }
         }
-        ReloadBar.GetComponent<Image>().fillAmount -= RateOfFire*Time.fixedDeltaTime;
-/*        if (ReloadBar.value < ReloadBar.maxValue - RateOfFire)
+        if (ReloadBar!=null)
         {
-            ReloadBar.value += RateOfFire;
+            ReloadBar.GetComponent<Image>().fillAmount -= RateOfFire * Time.fixedDeltaTime;
         }
-        else
-        {
-            ReloadBar.value = ReloadBar.maxValue;
-        }*/
         FireTimer -= Time.deltaTime;
     }
     #endregion
@@ -203,12 +203,10 @@ public class Weapons : MonoBehaviour
         float x = transform.position.x - Aim.transform.position.x;
         float y = transform.position.y - Aim.transform.position.y;
         if (Mathf.Abs(x) < 0.5f && Mathf.Abs(y) < 0.5f) {
-            tracking = false;
             Fireable = false;
             return 0;
         } else
         {
-            tracking = true;
             Fireable = true;
         }
         if (x > 0 && y > 0)
@@ -377,6 +375,23 @@ public class Weapons : MonoBehaviour
     }
     #endregion
     #region Weapon Fire
+    public void AIShootBullet()
+    {
+        if (FireTimer <= 0f && Fireable)
+        {
+            if (!IsThermalType)
+            {
+                FireBullet();
+                FireTimer = 1 / RateOfFire;
+            }
+            else
+            {
+                FireFlamethrowerOrb();
+                FireTimer = 1 / RateOfFire;
+            }
+        }
+    }
+
     // Fire Kinetic/Laser/Orb Bullet
     void FireBullet()
     {
@@ -403,6 +418,7 @@ public class Weapons : MonoBehaviour
         // Set bullet's properties required
         bul.Destination = Aim.transform.position;
         bul.WeaponShoot = this;
+        bul.EnemyLayer = EnemyLayer;
         bulletFire.SetActive(true);
         // Increase overheat bar for each shot, increasing with themral status overloadded
         currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
@@ -428,6 +444,7 @@ public class Weapons : MonoBehaviour
             // For the fire shape
             bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
+            bul.EnemyLayer = EnemyLayer;
             orbFire.SetActive(true);
             // Sound
             if (!isOverheatted) ThermalSound();

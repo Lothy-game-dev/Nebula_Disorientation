@@ -25,6 +25,7 @@ public class FighterController : MonoBehaviour
     public GameObject FirstPowerImage;
     public GameObject SecondPowerImage;
     public GameObject FighterModel;
+    public LayerMask EnemyLayer;
     #endregion
     #region NormalVariables
     public string DatabaseModel;
@@ -143,11 +144,15 @@ public class FighterController : MonoBehaviour
         LW.Fighter = PlayerFighter;
         LW.Aim = Aim;
         LW.WeaponPosition = LeftWeaponPosition;
+        LW.tracking = true;
+        LW.EnemyLayer = EnemyLayer;
         RightWeapon.SetActive(true);
         Weapons RW = RightWeapon.GetComponent<Weapons>();
         RW.Fighter = PlayerFighter;
         RW.Aim = Aim;
         RW.WeaponPosition = RightWeaponPosition;
+        RW.tracking = true;
+        RW.EnemyLayer = EnemyLayer;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
         LeftWeapon.GetComponent<Weapons>().OverHeatImage = LeftOverheatImage;
@@ -186,7 +191,7 @@ public class FighterController : MonoBehaviour
             new Vector3(LeftWeaponIcon.transform.localScale.x * LeftClonseScale,
             LeftWeaponIcon.transform.localScale.y * LeftClonseScale,
             LeftWeaponIcon.transform.localScale.z);
-        LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 201;
         Color lc = LeftWeaponIcon.GetComponent<SpriteRenderer>().color;
         lc.a = 200 / 255f;
         LeftWeaponIcon.GetComponent<SpriteRenderer>().color = lc;
@@ -205,7 +210,7 @@ public class FighterController : MonoBehaviour
             new Vector3(RightWeaponIcon.transform.localScale.x * RightClonseScale,
             RightWeaponIcon.transform.localScale.y * RightClonseScale,
             RightWeaponIcon.transform.localScale.z);
-        RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 201;
         RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);
         RightOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(CurrentRightWeapon.name);
         RightOverheatImage.GetComponent<HUDCreateInfoBoard>().TopBottomLeftRight.Add("Bottom");
@@ -232,8 +237,8 @@ public class FighterController : MonoBehaviour
         SecondPower.transform.SetParent(SecondPowerImage.transform);
         FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
         SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
-        FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 11;
-        SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 11;
+        FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+        SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
         PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
         PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
         FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
