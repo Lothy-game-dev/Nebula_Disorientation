@@ -239,6 +239,9 @@ public class FighterController : MonoBehaviour
 
         FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
         SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
+
+        //Passive
+        
         // Set all stats data 
         SetStatsData();
     }

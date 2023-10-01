@@ -15,6 +15,7 @@ public class RocketBurstBullet : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject AimEffect;
+    public GameObject ExploEffect;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -86,10 +87,13 @@ public class RocketBurstBullet : MonoBehaviour
             }          
            
         }
-        AimGen = Instantiate(AimEffect, target.transform.position, Quaternion.identity);
-        AimGen.transform.SetParent(target.transform);
-        AimGen.SetActive(true);
-        Destroy(AimGen, 10f);
+        if (target != null)
+        {
+            AimGen = Instantiate(AimEffect, target.transform.position, Quaternion.identity);
+            AimGen.transform.SetParent(target.transform);
+            AimGen.SetActive(true);
+            Destroy(AimGen, 10f);
+        }
     }
 
     #endregion
@@ -99,7 +103,10 @@ public class RocketBurstBullet : MonoBehaviour
     {
         if (DistanceTravel > Distance)
         {
+            GameObject explo = Instantiate(ExploEffect, transform.position, Quaternion.identity);
+            explo.SetActive(true);
             Destroy(AimGen);
+            Destroy(explo, 0.2f);
             Destroy(gameObject);
         }
     }
