@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +29,7 @@ public class FighterController : MonoBehaviour
     public GameObject PowerModel;
     public GameObject ConsumableModel;
     public LayerMask EnemyLayer;
+    public List<GameObject> ConsumableImages;
     #endregion
     #region NormalVariables
     public string DatabaseModel;
@@ -63,6 +65,7 @@ public class FighterController : MonoBehaviour
     #region Initialize Datas
     private void SetDataFromDB()
     {
+        DatabaseConsumables = new Dictionary<string, int>();
         dataDict = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         DatabaseModel = (string)dataDict["Model"];
         DatabaseLeftWeapon = (string)dataDict["LeftWeapon"];
@@ -73,7 +76,7 @@ public class FighterController : MonoBehaviour
         if (Consumables.Length>0)
         {
             string[] ListCons = Consumables.Split("|");
-            for (int i=1;i<=ListCons.Length;i++)
+            for (int i=0;i<ListCons.Length;i++)
             {
                 DatabaseConsumables.Add(ListCons[i].Split("-")[0], int.Parse(ListCons[i].Split("-")[1]));
             }
@@ -230,28 +233,36 @@ public class FighterController : MonoBehaviour
             Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
 
 
-        // set power 
+        // set 1st power 
         for (int i = 0; i < PowerModel.transform.childCount; i++)
         {
            
-            if (PowerModel.transform.GetChild(i).name.Equals(DatabaseFirstPower))
+            if (DatabaseFirstPower != null)
             {
-                FirstPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
-                FirstPower.SetActive(true);
-                FirstPower.transform.SetParent(FirstPowerImage.transform);
-                FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
-                FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
-                PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
-                FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
-
-            }
-            if (DatabaseSecondPower == null)
-            {
-                break;
+                if (PowerModel.transform.GetChild(i).name.Equals(DatabaseFirstPower))
+                {
+                    FirstPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
+                    FirstPower.SetActive(true);
+                    FirstPower.transform.SetParent(FirstPowerImage.transform);
+                    FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
+                    FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                    PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
+                    FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
+                    break;
+                }
             } else
             {
+                break;
+            }           
+        }
+        //set 2nd power
+        for (int i = 0; i < PowerModel.transform.childCount; i++)
+        {
+
+            if (DatabaseSecondPower != null)
+            {
                 if (PowerModel.transform.GetChild(i).name.Equals(DatabaseSecondPower))
-                {                   
+                {
                     SecondPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
                     SecondPower.SetActive(true);
                     SecondPower.transform.SetParent(SecondPowerImage.transform);
@@ -260,10 +271,37 @@ public class FighterController : MonoBehaviour
                     PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
                     SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
                     break;
+
                 }
             }
+            else
+            {
+                break;
+            }
         }
-        
+
+        //set consumable
+        if (DatabaseConsumables.Count > 0)
+        {
+            int count = 0;
+            List<string> ConsumableName = new List<string>();
+            for (int i = 0; i < ConsumableModel.transform.childCount; i++)
+            {
+               if (DatabaseConsumables.ContainsKey(ConsumableModel.transform.GetChild(i).name)) 
+               {
+                    GameObject cons = Instantiate(ConsumableModel.transform.GetChild(i).gameObject, ConsumableImages[count].transform.GetChild(0).position, Quaternion.identity);
+                    cons.SetActive(true);
+                    cons.transform.SetParent(ConsumableImages[count].transform);
+                    cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
+                    cons.GetComponent<SpriteRenderer>().sortingOrder = 11;
+                    ConsumableName.Add(ConsumableModel.transform.GetChild(i).name);
+                    cons.GetComponent<Consumable>().InitData(ConsumableModel.transform.GetChild(i).name);
+                    count++;
+                }
+            }
+            PlayerFighter.GetComponent<PlayerFighter>().Consumables = DatabaseConsumables;
+            PlayerFighter.GetComponent<PlayerFighter>().ConsumableNames = ConsumableName;
+        }
        
         
        
