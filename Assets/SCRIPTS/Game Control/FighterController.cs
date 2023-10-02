@@ -25,6 +25,8 @@ public class FighterController : MonoBehaviour
     public GameObject FirstPowerImage;
     public GameObject SecondPowerImage;
     public GameObject FighterModel;
+    public GameObject PowerModel;
+    public GameObject ConsumableModel;
     public LayerMask EnemyLayer;
     #endregion
     #region NormalVariables
@@ -39,9 +41,9 @@ public class FighterController : MonoBehaviour
     public GameObject CurrentRightWeapon;
     public GameObject RightWeaponPosition;
     public GameObject LeftWeaponPosition;
-    public GameObject CurrentFirstPower;
-    public GameObject CurrentSecondPower;
     private Dictionary<string, object> dataDict;
+    private GameObject FirstPower;
+    private GameObject SecondPower;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -229,20 +231,41 @@ public class FighterController : MonoBehaviour
 
 
         // set power 
-        GameObject FirstPower = Instantiate(CurrentFirstPower, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
-        GameObject SecondPower = Instantiate(CurrentSecondPower, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
-        FirstPower.SetActive(true);
-        SecondPower.SetActive(true);
-        FirstPower.transform.SetParent(FirstPowerImage.transform);
-        SecondPower.transform.SetParent(SecondPowerImage.transform);
-        FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
-        SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
-        FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
-        SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
-        PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
-        PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
-        FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
-        SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
+        for (int i = 0; i < PowerModel.transform.childCount; i++)
+        {
+           
+            if (PowerModel.transform.GetChild(i).name.Equals(DatabaseFirstPower))
+            {
+                FirstPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
+                FirstPower.SetActive(true);
+                FirstPower.transform.SetParent(FirstPowerImage.transform);
+                FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
+                FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
+                FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
+
+            }
+            if (DatabaseSecondPower == null)
+            {
+                break;
+            } else
+            {
+                if (PowerModel.transform.GetChild(i).name.Equals(DatabaseSecondPower))
+                {                   
+                    SecondPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
+                    SecondPower.SetActive(true);
+                    SecondPower.transform.SetParent(SecondPowerImage.transform);
+                    SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
+                    SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                    PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
+                    SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
+                    break;
+                }
+            }
+        }
+        
+       
+        
        
         // Set all stats data 
         SetStatsData();
