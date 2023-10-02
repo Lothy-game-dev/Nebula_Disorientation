@@ -48,6 +48,7 @@ public class RocketBurst : Powers
             game.GetComponent<RocketBurstBullet>().Distance = Range;
             game.GetComponent<RocketBurstBullet>().Damage = DPH;
             game.GetComponent<RocketBurstBullet>().AoE = AoE;
+            game.GetComponent<RocketBurstBullet>().Layer = EnemyLayer;
             PlaySound(SoundEffect);
         }
     }
@@ -56,7 +57,15 @@ public class RocketBurst : Powers
     // Group all function that serve the same algorithm
     public List<Vector2> CalculateAngle(float range)
     {
-        float angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
+        float angle = 0;
+        if (Fighter.GetComponent<PlayerMovement>() != null)
+        {
+            angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
+        }
+        else
+        {
+            angle = Fighter.GetComponent<FighterMovement>().CurrentRotateAngle;
+        }
         List<Vector2> VList = new List<Vector2>();
         AngleList = new List<float>();
         for (int i = 0; i < AoH; i++)

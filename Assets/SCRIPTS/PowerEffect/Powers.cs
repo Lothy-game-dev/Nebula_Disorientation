@@ -145,7 +145,14 @@ public class Powers : MonoBehaviour
     #region Calculate pos
     public Vector2 CalculatePos(float range)
     {
-        float angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
+        float angle = 0;
+        if (Fighter.GetComponent<PlayerMovement>()!=null)
+        {
+            angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
+        } else
+        {
+            angle = Fighter.GetComponent<FighterMovement>().CurrentRotateAngle;
+        }
         float x = 0, y = 0;
         if (angle < 0) angle = angle % 360 + 360;
         if (angle >= 360) angle = angle % 360;

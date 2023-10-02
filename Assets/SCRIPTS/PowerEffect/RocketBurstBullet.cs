@@ -120,12 +120,12 @@ public class RocketBurstBullet : MonoBehaviour
         ToEnemy = target.transform.position - transform.position;
         float angle = Vector3.Angle(ToEnemy, MovingVector);
         float curScale = 1;
-        if (angle > 80 && angle < 100)
+        if (angle > 45 && angle < 135)
         {
             curScale = 1.5f;
         }
         CheckIsUpOrDownMovement();
-        transform.Rotate(new Vector3(0, 0, -DirMov * curScale * angle / 10));
+        transform.Rotate(new Vector3(0, 0, -DirMov * curScale * angle / 5));
     }
 
     private void CheckIsUpOrDownMovement()

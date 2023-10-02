@@ -56,14 +56,9 @@ public class LaserBeam : Powers
     }
     private void FixedUpdate()
     {
-        BeamTimer -= Time.fixedDeltaTime;
         if (isFire)
         {
-            if (BeamTimer <= 0)
-            {
-                BeamTimer = 1 / 60f;
-                GenerateLaserBeam();
-            }
+            GenerateLaserBeam();
             if (DurationTimer == 0)
             {
                 PlaySound(SoundEffect);
@@ -74,8 +69,17 @@ public class LaserBeam : Powers
             {                             
                 DurationTimer = 0f;               
                 isFire = false;
-                FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<Rigidbody2D>().velocity = Spd;
-                FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 1;
+                //slow down Fighter when firing
+                if (Fighter.GetComponent<PlayerMovement>() != null)
+                {
+                    Fighter.GetComponent<PlayerMovement>().LaserBeamSlowScale = 1f;
+                    Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 1;
+                }
+                else if (Fighter.GetComponent<FighterMovement>() != null)
+                {
+                    Fighter.GetComponent<FighterMovement>().LaserBeamSlowScale = 1;
+                    Fighter.GetComponent<FighterMovement>().ExteriorROTSpeed = 1;
+                }
             }
         }
         
@@ -86,15 +90,15 @@ public class LaserBeam : Powers
     public void GenerateLaserBeam()
     {
         Vector2 pos = CalculatePos(Range);
-        LeftWeapon = FindAnyObjectByType<FighterController>().LeftWeaponPosition;
-        RightWeapon = FindAnyObjectByType<FighterController>().RightWeaponPosition;
-        int n = 10;
-        int m = 4;
+        LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
+        RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
+        int n = 6;
+        int m = 2;
         for (int i = 0; i < n; i++)
         {
             //Generate
-            Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (n/2 + 1 - i)*pos/(Range*0.15f);
-            Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (n / 2 + 1 - i) * pos / (Range * 0.15f);
+            Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (n/2 + 1 - i)*pos/(Range*0.12f);
+            Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (n / 2 + 1 - i) * pos / (Range * 0.12f);
             GameObject game = Instantiate(Effect, new Vector3(posBullet.x, posBullet.y, LeftWeapon.transform.position.z), Quaternion.identity);
             GameObject game2 = Instantiate(Effect, new Vector3(posBullet2.x, posBullet2.y, RightWeapon.transform.position.z), Quaternion.identity);
             game.GetComponent<Beam>().Distance = Range;
@@ -131,7 +135,6 @@ public class LaserBeam : Powers
             game2.GetComponent<Beam>().Damage = DPH;
             game2.GetComponent<Beam>().Layer = EnemyLayer;
 
-            
             game2.transform.localScale = game2.transform.localScale * (i > m ? (float)(n - i) / (n - m) : 1);
             game2.GetComponent<Beam>().Laser = this;
             
@@ -143,9 +146,15 @@ public class LaserBeam : Powers
 
         }
         //slow down Fighter when firing
-        FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<Rigidbody2D>().velocity *= 0.5f;
-        FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
-
+        if (Fighter.GetComponent<PlayerMovement>()!=null)
+        {
+            Fighter.GetComponent<PlayerMovement>().LaserBeamSlowScale = 0.5f;
+            Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
+        } else if (Fighter.GetComponent<FighterMovement>() != null)
+        {
+            Fighter.GetComponent<FighterMovement>().LaserBeamSlowScale = 0.5f;
+            Fighter.GetComponent<FighterMovement>().ExteriorROTSpeed = 0.5f;
+        }
     }
     #endregion
     #region Generate charging animation
@@ -155,8 +164,8 @@ public class LaserBeam : Powers
     {
         isStart = true;
         PlaySound(ChargingSoundEffect);
-        LeftWeapon = FindAnyObjectByType<FighterController>().LeftWeaponPosition;
-        RightWeapon = FindAnyObjectByType<FighterController>().RightWeaponPosition;
+        LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
+        RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
         CharingClone = Instantiate(ChargingEffect, LeftWeapon.transform.position, Quaternion.identity);
         CharingClone2 = Instantiate(ChargingEffect, RightWeapon.transform.position, Quaternion.identity);
         CharingClone.SetActive(true);

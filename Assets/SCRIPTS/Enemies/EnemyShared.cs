@@ -13,14 +13,27 @@ public class EnemyShared : FighterShared
     public GameObject Weapons;
     public Rigidbody2D rb;
     public float changeDirTimer;
+    public GameObject PowerModel;
     private bool test;
     private Dictionary<string, object> StatsDataDict;
     private Vector2 check;
     private GameObject CurrentLeftWeapon;
     private GameObject CurrentRightWeapon;
+    private GameObject CurrentFirstPower;
+    private GameObject CurrentSecondPower;
     private bool doneInitWeapon;
     private string weaponName;
-    private string Power;
+    private string Power1;
+    private string Power2;
+    public float Power1CD;
+    private float Power1Charging;
+    private bool Power1Activation;
+    private bool Power1StartCharge;
+
+    public float Power2CD;
+    private float Power2Charging;    
+    private bool Power2Activation;
+    private bool Power2StartCharge;
     private float resetMovetimer;
     private int RandomMove;
     private int RandomRotate;
@@ -73,12 +86,43 @@ public class EnemyShared : FighterShared
             {
                 RightWeapon.GetComponent<Weapons>().AIShootBullet();
             }
+            if (Power1!="")
+            {
+                if (Power1CD <= 0f)
+                {
+                    UseFirstPower();
+                    if (Power1StartCharge)
+                    {
+                        CheckPower1Charging();
+                    }
+                }
+                else
+                {
+                    Power1CD -= Time.deltaTime;
+                }
+            }
+            if (Power2!="")
+            {
+                if (Power2CD <= 0f)
+                {
+                    UseSecondPower();
+                    if (Power2StartCharge)
+                    {
+                        CheckPower2Charging();
+                    }
+                }
+                else
+                {
+                    Power2CD -= Time.deltaTime;
+                }
+            }
         }
+        
         resetMovetimer -= Time.deltaTime;
         if (resetMovetimer<=0f)
         {
-            RandomMove = Random.Range(1, 3);
-            RandomRotate = Random.Range(1, 3);
+            RandomMove = Random.Range(1, 4);
+            RandomRotate = Random.Range(1, 4);
             resetMovetimer = 5f;
         }
         
@@ -120,7 +164,20 @@ public class EnemyShared : FighterShared
         fm.MovingSpeed = float.Parse((string)StatsDataDict["SPD"]);
         fm.RotateSpeed = float.Parse((string)StatsDataDict["ROT"]);
         doneInitWeapon = false;
-        weaponName = "";
+        string[] checkPowers = ((string)Data["Power"]).Split("|");
+        if (checkPowers.Length > 1)
+        {
+            Power1 = checkPowers[0];
+            Power2 = checkPowers[1];
+        } else if (checkPowers.Length == 1)
+        {
+            Power1 = checkPowers[0];
+            Power2 = "";
+        } else
+        {
+            Power1 = "";
+            Power2 = "";
+        }
         string[] checkWeapons = ((string)Data["Weapons"]).Split("|");
         if (checkWeapons.Length > 1)
         {
@@ -172,6 +229,13 @@ public class EnemyShared : FighterShared
             LW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
             LW.RotateLimitNegative = float.Parse((string)StatsDataDict["AOFNegative"]);
             LW.RotateLimitPositive = float.Parse((string)StatsDataDict["AOFPositive"]);
+            LW.FighterWeaponDamageMod = float.Parse((string)StatsDataDict["DM"]);
+            if (LW.IsThermalType)
+            {
+                LW.FighterWeaponAoEMod = 0;
+            }
+            else
+                LW.FighterWeaponAoEMod = float.Parse((string)StatsDataDict["AM"]);
             faw.LeftWeapon = LeftWeapon;
 
             // Right Weapon
@@ -186,16 +250,174 @@ public class EnemyShared : FighterShared
             RW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
             RW.RotateLimitNegative = float.Parse((string)StatsDataDict["AOFNegative"]);
             RW.RotateLimitPositive = float.Parse((string)StatsDataDict["AOFPositive"]);
+            RW.FighterWeaponDamageMod = float.Parse((string)StatsDataDict["DM"]);
+            if (RW.IsThermalType)
+            {
+                RW.FighterWeaponAoEMod = 0;
+            }
+            else
+                RW.FighterWeaponAoEMod = float.Parse((string)StatsDataDict["AM"]);
             faw.RightWeapon = RightWeapon;
 
-
             faw.AttachWeapon();
+
+            // Power
+            bool alreadyFirst = false;
+            bool alreadySecond = false;
+            for (int i = 0; i < PowerModel.transform.childCount; i++)
+            {
+                if (alreadyFirst && alreadySecond)
+                {
+                    break;
+                }
+                if (Power1 != "")
+                {
+                    if (PowerModel.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(Power1.Replace(" ", "").ToLower()))
+                    {
+                        alreadyFirst = true;
+                        CurrentFirstPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, transform.position, Quaternion.identity);
+                        CurrentFirstPower.SetActive(true);
+                        CurrentFirstPower.transform.SetParent(transform);
+                        CurrentFirstPower.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
+                        CurrentFirstPower.GetComponent<Powers>().InitData(Power1);
+                    }
+                } else
+                {
+                    alreadyFirst = true;
+                }
+
+                if (Power2 != "")
+                {
+                    if (PowerModel.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(Power2.Replace(" ", "").ToLower()))
+                    {
+                        alreadySecond = true;
+                        CurrentSecondPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, transform.position, Quaternion.identity);
+                        CurrentSecondPower.SetActive(true);
+                        CurrentSecondPower.transform.SetParent(transform);
+                        CurrentSecondPower.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
+                        CurrentSecondPower.GetComponent<Powers>().InitData(Power2);
+                    }
+                }
+                else
+                {
+                    alreadySecond = true;
+                }
+            }
         }
         
         gameObject.SetActive(true);
         StartCoroutine(WaitForDoneInit());
     }
 
+    private void UseFirstPower()
+    {
+        if (Power1CD <= 0f && !isFrozen && !isSFBFreeze)
+        {
+            CurrentFirstPower.GetComponent<Powers>().Fighter = gameObject;
+            CurrentFirstPower.GetComponent<Powers>().EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
+            // check if power does not need charge
+            //
+            if (!CurrentFirstPower.name.Contains("LaserBeam"))
+            {
+                if (!Power1Activation)
+                {
+                    Power1Activation = true;
+                    // void function to activate power
+                    CurrentFirstPower.GetComponent<Powers>().ActivatePower(CurrentFirstPower.name.Replace("(clone)", ""));
+
+                    //Cooldown
+                    Power1CD = CurrentFirstPower.GetComponent<Powers>().CD;
+                }
+            }
+            // if power need charge
+            //
+            else
+            {
+                if (!Power1Activation)
+                {
+                    Power1StartCharge = true;
+                }
+            }
+        }
+    }
+
+    private void CheckPower1Charging()
+    {
+        if (Power1Charging < 3f)
+        {
+            if (Power1Charging == 0)
+            {
+                CurrentFirstPower.GetComponent<Powers>().BeforeActivating();
+            }
+            Power1Charging += Time.deltaTime;
+        }
+        else
+        {
+            Power1StartCharge = false;
+            Power1Activation = true;
+            Power1Charging = 0;
+            // Void function to activate power
+            CurrentFirstPower.GetComponent<Powers>().ActivatePower(CurrentFirstPower.name.Replace("(clone)", ""));
+
+            //Cooldown
+            Power1CD = CurrentFirstPower.GetComponent<Powers>().CD;
+        }
+    }
+
+    private void UseSecondPower()
+    {
+        if (Power2CD <= 0f && !isFrozen && !isSFBFreeze)
+        {
+            CurrentSecondPower.GetComponent<Powers>().Fighter = gameObject;
+            CurrentSecondPower.GetComponent<Powers>().EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
+            // check if power does not need charge
+            //
+            if (!CurrentSecondPower.name.Contains("LaserBeam"))
+            {
+                if (!Power2Activation)
+                {
+                    Power2Activation = true;
+                    // void function to activate power
+                    CurrentSecondPower.GetComponent<Powers>().ActivatePower(CurrentSecondPower.name.Replace("(clone)", ""));
+
+                    //Cooldown
+                    Power2CD = CurrentSecondPower.GetComponent<Powers>().CD;
+                }
+            }
+            // if power need charge
+            //
+            else
+            {
+                if (!Power2Activation)
+                {
+                    Power2StartCharge = true;
+                }
+            }
+        }
+    }
+
+    private void CheckPower2Charging()
+    {
+        if (Power2Charging < 3f)
+        {
+            if (Power2Charging == 0)
+            {
+                CurrentSecondPower.GetComponent<Powers>().BeforeActivating();
+            }
+            Power2Charging += Time.deltaTime;
+        }
+        else
+        {
+            Power2StartCharge = false;
+            Power2Activation = true;
+            Power2Charging = 0;
+            // Void function to activate power
+            CurrentSecondPower.GetComponent<Powers>().ActivatePower(CurrentSecondPower.name.Replace("(clone)", ""));
+
+            //Cooldown
+            Power2CD = CurrentSecondPower.GetComponent<Powers>().CD;
+        }
+    }
     private IEnumerator WaitForDoneInit()
     {
         yield return new WaitForSeconds(5f);

@@ -27,6 +27,8 @@ public class FighterMovement : MonoBehaviour
     public float BackFireInitScale;
     public float LimitSpeedScale;
     public bool Movable;
+    public float LaserBeamSlowScale;
+    public float ExteriorROTSpeed;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -37,6 +39,8 @@ public class FighterMovement : MonoBehaviour
         BackFireInitScale = backFire.transform.localScale.x;
         Movable = true;
         CurrentRotateAngle = 0;
+        ExteriorROTSpeed = 1;
+        LaserBeamSlowScale = 1;
     }
 
     // Update is called once per frame
@@ -99,11 +103,11 @@ public class FighterMovement : MonoBehaviour
     private void FighterRotate()
     {
         float RotateScale = 2;
-        transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale));
-        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale;
+        transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
+        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed;
         // Fire and Freeze eff not rotate
-        FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale));
-        FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale));
+        FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
+        FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
     }
     private void FighterMoving()
     {
@@ -126,7 +130,7 @@ public class FighterMovement : MonoBehaviour
             backFire.SetActive(false);
         }
         AccelerateSpeed();
-        speedVector = movementVector * CurrentSpeed * fs.SlowedMoveSpdScale * LimitSpeedScale;
+        speedVector = movementVector * CurrentSpeed * fs.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale;
     }
     // Accelerate Players
     private void AccelerateSpeed()
@@ -196,19 +200,19 @@ public class FighterMovement : MonoBehaviour
         float LimitRightX = RightBorder.transform.position.x - 100;
         if (transform.position.x >= LimitRightX)
         {
-            LimitSpeedScale = (50 - (transform.position.x - LimitRightX)) / 50;
+            LimitSpeedScale = (50 - (transform.position.x - LimitRightX)) / 100;
         }
         else if (transform.position.x <= LimitLeftX)
         {
-            LimitSpeedScale = (50 - (LimitLeftX - transform.position.x)) / 50;
+            LimitSpeedScale = (50 - (LimitLeftX - transform.position.x)) / 100;
         }
         else if (transform.position.y >= LimitTopY)
         {
-            LimitSpeedScale = (50 - (transform.position.y - LimitTopY)) / 50;
+            LimitSpeedScale = (50 - (transform.position.y - LimitTopY)) / 100;
         }
         else if (transform.position.y <= LimitBottomY)
         {
-            LimitSpeedScale = (50 - (LimitBottomY - transform.position.y)) / 50;
+            LimitSpeedScale = (50 - (LimitBottomY - transform.position.y)) / 100;
         }
         else LimitSpeedScale = 1;
         if (LimitSpeedScale < 0f)

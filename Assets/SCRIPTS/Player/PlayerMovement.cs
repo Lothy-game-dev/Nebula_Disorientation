@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private float LimitSpeedScale;
     private float AEEnergy;
     public float ExteriorROTSpeed;
+    public float LaserBeamSlowScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -57,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
         AESlider.maxValue = 100f;
         ExteriorROTSpeed = 1;
         AEEnergy = 100f;
+        LaserBeamSlowScale = 1;
     }
 
     // Update is called once per frame
@@ -236,7 +238,7 @@ public class PlayerMovement : MonoBehaviour
             backFire.SetActive(false);
         }
         AccelerateSpeed();
-        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale;
+        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale;
     }
     // Accelerate Players
     void AccelerateSpeed()

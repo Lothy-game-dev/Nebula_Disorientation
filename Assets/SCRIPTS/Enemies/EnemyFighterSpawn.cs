@@ -25,12 +25,12 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        EnemySpawnID = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        EnemySpawnPosition = new Vector2[] { 
+        EnemySpawnID = new int[] { 12, 13, 12, 13/*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
+        EnemySpawnPosition = new Vector2[] {/* 
             new Vector2(100, 100), new Vector2(-100, 100), new Vector2(100, -100),
         new Vector2(-100, -100), new Vector2(200, 200), new Vector2(200, -200),
         new Vector2(-200, 200), new Vector2(-200, -200), new Vector2(300, 300),
-        new Vector2(300, -300), new Vector2(-300, 300), new Vector2(-300, -300),
+        new Vector2(300, -300), new Vector2(-300, 300), */new Vector2(-300, -300),
         new Vector2(400, 400), new Vector2(-400, 400), new Vector2(400, -400) };
         Enemies = new List<GameObject>();
         for (int i=0;i<EnemySpawnID.Length;i++)

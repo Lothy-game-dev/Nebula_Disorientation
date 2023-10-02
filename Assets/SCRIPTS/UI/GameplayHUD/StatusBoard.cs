@@ -198,7 +198,7 @@ public class StatusBoard : MonoBehaviour
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
-            c.a = 1f;
+            c.a = 0.8f;
             c.r = 1;
             c.g = 1;
             c.b = 1;
@@ -222,6 +222,7 @@ public class StatusBoard : MonoBehaviour
             CloneEnemyColl.enabled = false;
         }
         NameBox.SetActive(true);
+        if (EnemyObject!=null)
         NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
         // WAit time to show HP and temp bar
         yield return new WaitForSeconds(0.4f);
