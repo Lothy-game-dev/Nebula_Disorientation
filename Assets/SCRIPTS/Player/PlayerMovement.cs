@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private float LimitSpeedScale;
     private float AEEnergy;
     public float ExteriorROTSpeed;
+    public float AEIncreaseScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -57,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
         AESlider.maxValue = 100f;
         ExteriorROTSpeed = 1;
         AEEnergy = 100f;
+        AEIncreaseScale = 1f;
     }
 
     // Update is called once per frame
@@ -64,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (AEEnergy<100f)
         {
-            AEEnergy += 5f * Time.deltaTime;
+            AEEnergy += 5f * Time.deltaTime * AEIncreaseScale;
         } else
         {
             AEEnergy = 100f;

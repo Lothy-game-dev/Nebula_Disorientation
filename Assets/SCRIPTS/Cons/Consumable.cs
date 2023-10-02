@@ -19,6 +19,7 @@ public class Consumable : MonoBehaviour
     public float Cooldown;
     public float Duration;
     public string Effect;
+    public GameObject Fighter;
     private Dictionary<string, object> ConsDict;
     #endregion
     #region Start & Update
@@ -44,7 +45,18 @@ public class Consumable : MonoBehaviour
         Effect = (string)ConsDict["Effect"];
     }
     #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
+    #region Activate cons
+    // Group all function that serve the same algorithm?
+    public void ActivateConsumable()
+    {
+        switch (Effect.Split("-")[0])
+        {
+            case "RED": Debug.Log("ahihi"); break;
+            case "AER": gameObject.GetComponent<EngineBooster>().BoosterEffect(); break;
+            case "RHM": break;
+            case "INV": break;
+            case "FC": break;
+        }
+    }
     #endregion
 }
