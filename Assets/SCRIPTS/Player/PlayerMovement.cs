@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     private float AEEnergy;
     public float ExteriorROTSpeed;
     public float LaserBeamSlowScale;
+    public float AEIncreaseScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -59,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         ExteriorROTSpeed = 1;
         AEEnergy = 100f;
         LaserBeamSlowScale = 1;
+        AEIncreaseScale = 1f;
     }
 
     // Update is called once per frame
@@ -66,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (AEEnergy<100f)
         {
-            AEEnergy += 5f * Time.deltaTime;
+            AEEnergy += 5f * Time.deltaTime * AEIncreaseScale;
         } else
         {
             AEEnergy = 100f;
