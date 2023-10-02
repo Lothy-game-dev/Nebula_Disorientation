@@ -31,8 +31,9 @@ public class RocketBurstBullet : MonoBehaviour
     private Vector3 MovingVector;
     private GameObject target;
     private Vector3 ToEnemy;
-    private Dictionary<float, GameObject> EnemyDictionary;
+    private Dictionary<GameObject, float> EnemyDictionary;
     private GameObject AimGen;
+    private List<GameObject> EnemyList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -72,7 +73,7 @@ public class RocketBurstBullet : MonoBehaviour
             Destroy(AimGen);
         }
         DistanceList = new List<float>();
-        EnemyDictionary = new Dictionary<float, GameObject>();
+        EnemyList = new List<GameObject>();
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1000f, Layer);
         foreach (var col in cols)
         {
@@ -80,9 +81,10 @@ public class RocketBurstBullet : MonoBehaviour
             if (enemy != null)
             {
                 DistanceList.Add(Vector3.Distance(enemy.transform.position, transform.position));
-                EnemyDictionary.Add(Vector3.Distance(enemy.transform.position, transform.position), enemy);
+                EnemyList.Add(enemy);
                 float minDistance = DistanceList.Min();
-                GameObject nearestEnemy = EnemyDictionary[minDistance];
+                int index = DistanceList.IndexOf(minDistance);
+                GameObject nearestEnemy = EnemyList[index];
                 target = nearestEnemy;
             }          
            

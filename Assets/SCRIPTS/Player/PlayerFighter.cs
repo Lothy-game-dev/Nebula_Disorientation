@@ -466,7 +466,7 @@ public class PlayerFighter : FighterShared
             }
         }
 
-        if (Consumables.Count > 0)
+        if (Consumables != null && Consumables.Count > 0)
         {
             int index = 2;
             for (int i = 0; i < Consumables.Count; i++)

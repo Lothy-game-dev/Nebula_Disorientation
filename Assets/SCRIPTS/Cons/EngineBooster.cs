@@ -36,7 +36,7 @@ public class EngineBooster : Consumable
             if (Timer >= Duration)
             {
                 Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = 1;
-                isStart = false;
+                isStart = false;    
             }
         }
     }
