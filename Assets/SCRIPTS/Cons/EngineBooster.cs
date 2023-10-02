@@ -16,6 +16,8 @@ public class EngineBooster : Consumable
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private bool isStart;
+    private float Timer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -28,10 +30,24 @@ public class EngineBooster : Consumable
     void Update()
     {
         // Call function and timer only if possible
+        if (isStart)
+        {
+            Timer += Time.deltaTime;
+            if (Timer >= Duration)
+            {
+                Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = 1;
+                isStart = false;
+            }
+        }
     }
     #endregion
-    #region Function group 1
+    #region Activate
     // Group all function that serve the same algorithm
+    public void BoosterEffect()
+    {
+        isStart = true;
+        Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = int.Parse(Effect.Split("-")[1]);
+    }
     #endregion
     #region Function group ...
     // Group all function that serve the same algorithm

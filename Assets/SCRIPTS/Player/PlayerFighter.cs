@@ -42,7 +42,7 @@ public class PlayerFighter : FighterShared
     public GameObject FirstPower;
     public GameObject SecondPower;
     public Dictionary<string, int> Consumables;
-    public List<string> ConsumableNames;
+    public List<GameObject> ConsumableObject;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -247,7 +247,7 @@ public class PlayerFighter : FighterShared
         
         // Consumable Usage
         // 1st Cons
-        if (PowerAndConsCDTimer[2] <= 0f && ConsCount[0] > 0 && !isPausing)
+        if (ConsumableObject.Count > 0 && ConsumableObject[0] != null && PowerAndConsCDTimer[2] <= 0f && ConsCount[0] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[2].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -258,13 +258,15 @@ public class PlayerFighter : FighterShared
                 ConsCount[0] -= 1;
                 ConsCountText[0].GetComponent<TextMeshPro>().text = ConsCount[0].ToString();
                 // void function to activate power
+                ConsumableObject[0].GetComponent<Consumable>().ActivateConsumable();
+
                 PowerAndConsDurationTimer[2] = PowerAndConsDuration[2];
                 PowerAndConsDurationSlider[2].maxValue = PowerAndConsDuration[2];
                 PowerAndConsDurationSlider[2].value = PowerAndConsDuration[2];
             }
         }
         // 2nd Cons
-        if (PowerAndConsCDTimer[3] <= 0f && ConsCount[1] > 0 && !isPausing)
+        if (ConsumableObject.Count > 1 && ConsumableObject[1] != null && PowerAndConsCDTimer[3] <= 0f && ConsCount[1] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[3].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -275,13 +277,15 @@ public class PlayerFighter : FighterShared
                 ConsCount[1] -= 1;
                 ConsCountText[1].GetComponent<TextMeshPro>().text = ConsCount[1].ToString();
                 // void function to activate power
+                ConsumableObject[1].GetComponent<Consumable>().ActivateConsumable();
+
                 PowerAndConsDurationTimer[3] = PowerAndConsDuration[3];
                 PowerAndConsDurationSlider[3].maxValue = PowerAndConsDuration[3];
                 PowerAndConsDurationSlider[3].value = PowerAndConsDuration[3];
             }
         }
         // 3rd Cons
-        if (PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0 && !isPausing)
+        if (ConsumableObject.Count > 3 && ConsumableObject[2] != null && PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[4].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -292,13 +296,15 @@ public class PlayerFighter : FighterShared
                 ConsCount[2] -= 1;
                 ConsCountText[2].GetComponent<TextMeshPro>().text = ConsCount[2].ToString();
                 // void function to activate power
+                ConsumableObject[2].GetComponent<Consumable>().ActivateConsumable();
+
                 PowerAndConsDurationTimer[4] = PowerAndConsDuration[4];
                 PowerAndConsDurationSlider[4].maxValue = PowerAndConsDuration[4];
                 PowerAndConsDurationSlider[4].value = PowerAndConsDuration[4];
             }
         }
         // 4th Cons
-        if (PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0 && !isPausing)
+        if (ConsumableObject.Count == 4 && ConsumableObject[3] != null && PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[5].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -309,6 +315,8 @@ public class PlayerFighter : FighterShared
                 ConsCount[3] -= 1;
                 ConsCountText[3].GetComponent<TextMeshPro>().text = ConsCount[3].ToString();
                 // void function to activate power
+                ConsumableObject[3].GetComponent<Consumable>().ActivateConsumable();
+
                 PowerAndConsDurationTimer[5] = PowerAndConsDuration[5];
                 PowerAndConsDurationSlider[5].maxValue = PowerAndConsDuration[5];
                 PowerAndConsDurationSlider[5].value = PowerAndConsDuration[5];
@@ -421,9 +429,11 @@ public class PlayerFighter : FighterShared
 
     private void SetConsumableCount()
     {
-        for (int i=0;i< ConsumableNames.Count; i++)
+        for (int i=0;i< ConsumableObject.Count; i++)
         {
-            ConsCountText[i].GetComponent<TextMeshPro>().text = Consumables[ConsumableNames[i]].ToString();
+            ConsCountText[i].GetComponent<TextMeshPro>().text = Consumables[ConsumableObject[i].name.Replace("(Clone)","")].ToString();
+            ConsCount[i] = int.Parse(Consumables[ConsumableObject[i].name.Replace("(Clone)", "")].ToString());
+
         }
     }
 
@@ -456,15 +466,17 @@ public class PlayerFighter : FighterShared
             }
         }
 
-        /*if (Consumables.Count > 0)
+        if (Consumables.Count > 0)
         {
             int index = 2;
             for (int i = 0; i < Consumables.Count; i++)
             {
-                PowerAndConsCD[index] = Consumables[ConsumableNames[i]];
+                PowerAndConsCD[index] = ConsumableObject[i].GetComponent<Consumable>().Cooldown;
+                PowerAndConsDuration[index] = ConsumableObject[i].GetComponent<Consumable>().Duration;
+                ConsumableObject[i].GetComponent<Consumable>().Fighter = gameObject;
                 index++;
             }
-        }*/
+        }
     }
     #endregion
     #region Passive

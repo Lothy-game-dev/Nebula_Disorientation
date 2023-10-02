@@ -284,7 +284,7 @@ public class FighterController : MonoBehaviour
         if (DatabaseConsumables.Count > 0)
         {
             int count = 0;
-            List<string> ConsumableName = new List<string>();
+            List<GameObject> ConsumableName = new List<GameObject>();
             for (int i = 0; i < ConsumableModel.transform.childCount; i++)
             {
                if (DatabaseConsumables.ContainsKey(ConsumableModel.transform.GetChild(i).name)) 
@@ -294,13 +294,13 @@ public class FighterController : MonoBehaviour
                     cons.transform.SetParent(ConsumableImages[count].transform);
                     cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
                     cons.GetComponent<SpriteRenderer>().sortingOrder = 11;
-                    ConsumableName.Add(ConsumableModel.transform.GetChild(i).name);
                     cons.GetComponent<Consumable>().InitData(ConsumableModel.transform.GetChild(i).name);
+                    ConsumableName.Add(cons);
                     count++;
                 }
             }
             PlayerFighter.GetComponent<PlayerFighter>().Consumables = DatabaseConsumables;
-            PlayerFighter.GetComponent<PlayerFighter>().ConsumableNames = ConsumableName;
+            PlayerFighter.GetComponent<PlayerFighter>().ConsumableObject = ConsumableName;
         }
        
         
