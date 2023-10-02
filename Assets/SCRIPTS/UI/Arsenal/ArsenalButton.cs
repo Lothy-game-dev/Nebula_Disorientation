@@ -56,7 +56,7 @@ public class ArsenalButton : MonoBehaviour
             if (ArsenalController.CurrentTab != "Weapon")
             {
                 ArsenalController.CurrentTab = "Weapon";
-                StartCoroutine(StartAnimation());
+                ArsenalController.CurrentCoroutine = StartCoroutine(StartAnimation());
             }
             StatusContent.SetActive(true);
             OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
@@ -122,7 +122,7 @@ public class ArsenalButton : MonoBehaviour
                 if (ArsenalController.CurrentTab != "Power")
                 {
                     ArsenalController.CurrentTab = "Power";
-                    StartCoroutine(StartAnimation());
+                    ArsenalController.CurrentCoroutine = StartCoroutine(StartAnimation());
 
                 }
                 StatusContent.SetActive(true);
@@ -207,71 +207,72 @@ public class ArsenalButton : MonoBehaviour
         // this loop will increase or decrease the transparency
         for (int i = 0; i < 10; i++)
         {
-
-            c.a += 0.05f;
-            c1.a -= 0.05f;
-            x.a += 0.05f;
-            x1.a -= 0.05f;
-            y.a += 0.05f;
-            y1.a -= 0.05f;
-
-            game.GetComponent<SpriteRenderer>().color = c;
-            otherGame.GetComponent<SpriteRenderer>().color = c1;
-            gameObject.GetComponent<SpriteRenderer>().color = x;
-            OtherButton.GetComponent<SpriteRenderer>().color = x1;
-            gameObject.GetComponentInChildren<TextMeshPro>().color = y;
-            OtherButton.GetComponentInChildren<TextMeshPro>().color = y1;
             
-   
-            if (i<5)
-            {
-                // the weapon tab will move to left to let the power tab shows up
-                if (ArsenalController.CurrentTab == "Weapon")
+                c.a += 0.05f;
+                c1.a -= 0.05f;
+                x.a += 0.05f;
+                x1.a -= 0.05f;
+                y.a += 0.05f;
+                y1.a -= 0.05f;
+
+                game.GetComponent<SpriteRenderer>().color = c;
+                otherGame.GetComponent<SpriteRenderer>().color = c1;
+                gameObject.GetComponent<SpriteRenderer>().color = x;
+                OtherButton.GetComponent<SpriteRenderer>().color = x1;
+                gameObject.GetComponentInChildren<TextMeshPro>().color = y;
+                OtherButton.GetComponentInChildren<TextMeshPro>().color = y1;
+
+
+                if (i < 5)
                 {
-                    otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
-                    OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
-                } else
-                // the power tab is opposite to the weapon tab
-                {
-                    otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
-                    OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
-                }
-            } else
-            {
-                // and move back to the original pos after the power/weapon tab shows up
-                if (ArsenalController.CurrentTab == "Weapon")
-                {
-                    otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
-                    OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
+                    // the weapon tab will move to left to let the power tab shows up
+                    if (ArsenalController.CurrentTab == "Weapon")
+                    {
+                        otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
+                        OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
+                    }
+                    else
+                    // the power tab is opposite to the weapon tab
+                    {
+                        otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
+                        OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
+                    }
                 }
                 else
                 {
-                    // same
-                    otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
-                    OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
+                    // and move back to the original pos after the power/weapon tab shows up
+                    if (ArsenalController.CurrentTab == "Weapon")
+                    {
+                        otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
+                        OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(-1f, 0);
+                    }
+                    else
+                    {
+                        // same
+                        otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
+                        OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(1f, 0);
+                    }
                 }
-            }
 
-            // setting the sortingorder
-            game.GetComponent<SpriteRenderer>().sortingOrder = 3;
-            otherGame.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
-            OtherButton.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            gameObject.GetComponentInChildren<TextMeshPro>().sortingOrder = 5;
-            OtherButton.GetComponentInChildren<TextMeshPro>().sortingOrder = 3;
+                // setting the sortingorder
+                game.GetComponent<SpriteRenderer>().sortingOrder = 3;
+                otherGame.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
+                OtherButton.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                gameObject.GetComponentInChildren<TextMeshPro>().sortingOrder = 5;
+                OtherButton.GetComponentInChildren<TextMeshPro>().sortingOrder = 3;
 
-
-
+           
             yield return new WaitForSeconds(0.1f);
-        }
-        // delete the component to prevent the bug
-        Destroy(otherGame.GetComponent<Rigidbody2D>());
-        //set the velocity = 0
-        otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-        OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-        // and enable the col of the object
-        gameObject.GetComponent<Collider2D>().enabled = true;
-        OtherButton.GetComponent<Collider2D>().enabled = true;
+        }      
+            // delete the component to prevent the bug
+            Destroy(otherGame.GetComponent<Rigidbody2D>());
+            //set the velocity = 0
+            otherGame.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            OtherButton.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);       
+            // and enable the col of the object
+            gameObject.GetComponent<Collider2D>().enabled = true;
+            OtherButton.GetComponent<Collider2D>().enabled = true;
     }
     #endregion
 }

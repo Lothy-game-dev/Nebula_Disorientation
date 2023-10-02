@@ -430,7 +430,7 @@ public class PlayerFighter : FighterShared
     private void ShowInfo()
     {
         // Temp
-        FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "°";
+        FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "ï¿½";
         FighterInfoCircle.GetComponent<HUDFighterInfoEffects>().CurrentTemp = currentTemperature;
         if (currentTemperature==50f)
         {
@@ -464,18 +464,24 @@ public class PlayerFighter : FighterShared
     public void ShieldPassive()
     {
         float br = 1;
-        if ((FirstPower!=null && FirstPower.GetComponent<Powers>().BR > 0) || (SecondPower!=null && SecondPower.GetComponent<Powers>().BR > 0))
+        if (FirstPower.GetComponent<Powers>() != null || SecondPower.GetComponent<Powers>() != null)
         {
-            if (FirstPower.GetComponent<Powers>().BR > 0)
+            if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
             {
-                br = FirstPower.GetComponent<Powers>().BR;
-            } else
-            {
-                br = SecondPower.GetComponent<Powers>().BR;
-            }
-        MaxBarrier = MaxHP * br / 100;
-        CurrentBarrier = MaxBarrier;
-        }       
+                if (FirstPower.GetComponent<Powers>().BR > 0)
+                {
+                    br = FirstPower.GetComponent<Powers>().BR;
+                } else
+                {
+                    if (SecondPower.GetComponent<Powers>().BR > 0)
+                    {
+                        br = SecondPower.GetComponent<Powers>().BR;
+                    }                   
+                }
+            MaxBarrier = MaxHP * br / 100;
+            CurrentBarrier = MaxBarrier;
+            }       
+        }
     }
     #endregion
 }

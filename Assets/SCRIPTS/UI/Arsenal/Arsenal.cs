@@ -50,6 +50,7 @@ public class Arsenal : UECMenuShared
     public string PCash;
     public string PShard;
     public Coroutine OldCoroutine;
+    public Coroutine CurrentCoroutine;
     private Color WeaponBoxColor;
     private Color PowerBoxColor;
     public string ItemName;
@@ -57,6 +58,11 @@ public class Arsenal : UECMenuShared
     public string RequiredCash;
     public GameObject CurrentItem;
     public string ItemTierColor;
+    public bool isReset;
+    private Vector2 InitWeaponBoxPos;
+    private Vector2 InitPowerBoxPos;
+    private Vector2 InitWeaponBtnPos;
+    private Vector2 InitPowerBtnPos;
     #endregion
     #region Start & Update
 
@@ -292,12 +298,47 @@ public class Arsenal : UECMenuShared
     }
     public void ResetData()
     {
-        // reset all properties of the box (color, sortingOrder)
+      
+
+        if (CurrentCoroutine != null)
+        {
+            StopCoroutine(CurrentCoroutine);
+        }
+
+        if (Content.transform.parent.parent.parent.parent.GetComponent<Rigidbody2D>() != null)
+        {
+            Destroy(Content.transform.parent.parent.parent.parent.GetComponent<Rigidbody2D>());
+        }
+        if (OtherContent.transform.parent.parent.parent.parent.GetComponent<Rigidbody2D>() != null)
+        {
+            Destroy(OtherContent.transform.parent.parent.parent.parent.GetComponent<Rigidbody2D>());
+        }
+        if (WeaponButton.GetComponent<Rigidbody2D>() != null)
+        {
+            WeaponButton.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+        }
+        if (PowerButton.GetComponent<Rigidbody2D>() != null)
+        {
+            PowerButton.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+        }
+        PowerButton.GetComponent<Collider2D>().enabled = true;
+        WeaponButton.GetComponent<Collider2D>().enabled = true;
+        // reset all properties of the box (color, sortingOrder)     
         CurrentTab = "Weapon";
+        Content.transform.parent.parent.parent.parent.position = InitWeaponBoxPos;
+        OtherContent.transform.parent.parent.parent.parent.position = InitPowerBoxPos;
+        WeaponButton.transform.position = InitWeaponBtnPos;
+        PowerButton.transform.position = InitPowerBtnPos;
+
         Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color = WeaponBoxColor;
         OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color = PowerBoxColor;
         Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 3;
         OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 2;
+
+        
+
+
+        Debug.Log(Content.transform.parent.parent.parent.parent.position);
 
         WeaponButton.GetComponent<SpriteRenderer>().sortingOrder = 4;
         PowerButton.GetComponent<SpriteRenderer>().sortingOrder = 2;
@@ -344,9 +385,15 @@ public class Arsenal : UECMenuShared
                 WeaponStatus[i].GetComponent<TextMeshPro>().text = "";
             }
         }
+        
+
     }
     public void SetFirstData()
     {
+        Content.transform.parent.parent.parent.parent.gameObject.SetActive(true);
+        OtherContent.transform.parent.parent.parent.parent.gameObject.SetActive(true);
+        PowerButton.SetActive(true);
+        WeaponButton.SetActive(true);
         WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
         PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
         PlayerId = FindAnyObjectByType<AccessDatabase>().GetCurrentSessionPlayerId();
@@ -355,10 +402,16 @@ public class Arsenal : UECMenuShared
         PShard = PlayerInformation["TimelessShard"].ToString();
         PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
         PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
+        InitWeaponBoxPos = Content.transform.parent.parent.parent.parent.position;
+        Debug.Log(InitWeaponBoxPos);
+        InitPowerBoxPos = OtherContent.transform.parent.parent.parent.parent.position;
+        InitWeaponBtnPos = WeaponButton.transform.position;
+        InitPowerBtnPos = PowerButton.transform.position;
         WeaponBoxColor = Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
         PowerBoxColor = OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().color;
-        FirstContent();
+        
         CurrentTab = "Weapon";
+        FirstContent();
     }
     #endregion
     #region Start animation when enter or exit the scene 
