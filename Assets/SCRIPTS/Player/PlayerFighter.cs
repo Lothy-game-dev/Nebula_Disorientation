@@ -119,7 +119,7 @@ public class PlayerFighter : FighterShared
 
                     //Cooldown
                     PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
-                    PowerAndConsCDTimer[0] = PowerAndConsCD[1];
+                    PowerAndConsCDTimer[0] = PowerAndConsCD[0];
                 }
             }
             // if power need charge
@@ -464,18 +464,24 @@ public class PlayerFighter : FighterShared
     public void ShieldPassive()
     {
         float br = 1;
-        if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
+        if (FirstPower.GetComponent<Powers>() != null && SecondPower.GetComponent<Powers>() != null)
         {
-            if (FirstPower.GetComponent<Powers>().BR > 0)
+            if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
             {
-                br = FirstPower.GetComponent<Powers>().BR;
-            } else
-            {
-                br = SecondPower.GetComponent<Powers>().BR;
-            }
-        MaxBarrier = MaxHP * br / 100;
-        CurrentBarrier = MaxBarrier;
-        }       
+                if (FirstPower.GetComponent<Powers>().BR > 0)
+                {
+                    br = FirstPower.GetComponent<Powers>().BR;
+                } else
+                {
+                    if (SecondPower.GetComponent<Powers>().BR > 0)
+                    {
+                        br = SecondPower.GetComponent<Powers>().BR;
+                    }                   
+                }
+            MaxBarrier = MaxHP * br / 100;
+            CurrentBarrier = MaxBarrier;
+            }       
+        }
     }
     #endregion
 }
