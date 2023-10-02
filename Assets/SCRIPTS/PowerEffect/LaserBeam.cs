@@ -71,10 +71,9 @@ public class LaserBeam : Powers
             DurationTimer += Time.fixedDeltaTime;
 
             if (DurationTimer >= Duration)
-            {
+            {                             
+                DurationTimer = 0f;               
                 isFire = false;
-                DurationTimer = 0f;
-                EndSound();
                 FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<Rigidbody2D>().velocity = Spd;
                 FindAnyObjectByType<FighterController>().PlayerFighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 1;
             }
