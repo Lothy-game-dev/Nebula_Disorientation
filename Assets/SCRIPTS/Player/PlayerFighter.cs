@@ -171,7 +171,7 @@ public class PlayerFighter : FighterShared
 
                         //Cooldown
                         PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
-                        PowerAndConsCDTimer[0] = PowerAndConsCD[1];
+                        PowerAndConsCDTimer[0] = PowerAndConsCD[0];
                     }
                 }
                 if (Input.GetKeyUp(KeyCode.Q) && !PowerAndConsActivation[0])
@@ -464,7 +464,7 @@ public class PlayerFighter : FighterShared
     public void ShieldPassive()
     {
         float br = 1;
-        if (FirstPower.GetComponent<Powers>() != null && SecondPower.GetComponent<Powers>() != null)
+        if (FirstPower.GetComponent<Powers>() != null || SecondPower.GetComponent<Powers>() != null)
         {
             if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
             {
