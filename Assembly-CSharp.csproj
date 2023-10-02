@@ -114,6 +114,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\PlayerPrefModifyController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopItem.cs" />
+    <Compile Include="Assets\SCRIPTS\Common\FighterMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInformation.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContractButton.cs" />

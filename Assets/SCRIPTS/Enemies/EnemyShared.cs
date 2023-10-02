@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyShared : FighterShared
 {
     #region Shared Variables
+    private FighterMovement fm;
     public EnemyHealthBar HealthBar;
     public float ScaleOnStatusBoard;
     public GameObject EnemyStatus;
@@ -12,13 +13,17 @@ public class EnemyShared : FighterShared
     public GameObject Weapons;
     public Rigidbody2D rb;
     public float changeDirTimer;
-    public string Name;
     private bool test;
     private Dictionary<string, object> StatsDataDict;
     private Vector2 check;
     private GameObject CurrentLeftWeapon;
     private GameObject CurrentRightWeapon;
     private bool doneInitWeapon;
+    private string weaponName;
+    private string Power;
+    private float resetMovetimer;
+    private int RandomMove;
+    private int RandomRotate;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -51,32 +56,13 @@ public class EnemyShared : FighterShared
     #region Start & Update
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        changeDirTimer = 2.5f;
-        test = false;
-        check = new Vector2(0, 300);
         Status = EnemyStatus.GetComponent<StatusBoard>();
-        CalculateVelocity(!test ? check : -check);
         InitializeFighter();
     }
 
     private void Update()
     {
         UpdateEnemy();
-        if (!isFrozen && !isSFBFreeze)
-        {
-            CalculateVelocity(!test ? check : -check);
-            /*CalculateVelocity(new Vector2(0, 0));*/
-        }
-        if (changeDirTimer > 0f)
-        {
-            changeDirTimer -= Time.deltaTime;
-        }
-        else
-        {
-            changeDirTimer = 5f;
-            test = !test;
-        }
         if (doneInitWeapon)
         {
             if (LeftWeapon!=null)
@@ -88,18 +74,53 @@ public class EnemyShared : FighterShared
                 RightWeapon.GetComponent<Weapons>().AIShootBullet();
             }
         }
+        resetMovetimer -= Time.deltaTime;
+        if (resetMovetimer<=0f)
+        {
+            RandomMove = Random.Range(1, 3);
+            RandomRotate = Random.Range(1, 3);
+            resetMovetimer = 5f;
+        }
+        
+        if (RandomMove == 1)
+        {
+            fm.UpMove();
+        } 
+        else if (RandomMove == 2)
+        {
+            fm.DownMove();
+        } 
+        else if (RandomMove == 3)
+        {
+            fm.NoUpDownMove();
+        } 
+        if (RandomRotate == 1)
+        {
+            fm.LeftMove();
+        }
+        else if (RandomRotate == 2)
+        {
+            fm.RightMove();
+        }
+        else if (RandomRotate == 3)
+        {
+            fm.NoLeftRightMove();
+        }
     }
     #endregion
     #region Init Data
     public void InitData(Dictionary<string, object> Data, GameObject Model)
     {
         StatsDataDict = new Dictionary<string, object>();
-        Name = (string)Data["Name"];
+        fm = GetComponent<FighterMovement>();
+        FighterName = (string)Data["Name"];
         StatsDataDict = FindObjectOfType<GlobalFunctionController>().ConvertEnemyStatsToDictionary((string)Data["Stats"]);
         MaxHP = float.Parse((string)StatsDataDict["HP"]);
         // SPD, ROT
+        fm.MovingSpeed = float.Parse((string)StatsDataDict["SPD"]);
+        fm.RotateSpeed = float.Parse((string)StatsDataDict["ROT"]);
         doneInitWeapon = false;
-        string weaponName = "";
+        weaponName = "";
         string[] checkWeapons = ((string)Data["Weapons"]).Split("|");
         if (checkWeapons.Length > 1)
         {
@@ -147,7 +168,7 @@ public class EnemyShared : FighterShared
             LW.Fighter = gameObject;
             LW.Aim = FindObjectOfType<GameController>().Player;
             LW.WeaponPosition = null;
-            LW.tracking = false;
+            LW.tracking = true;
             LW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
             LW.RotateLimitNegative = float.Parse((string)StatsDataDict["AOFNegative"]);
             LW.RotateLimitPositive = float.Parse((string)StatsDataDict["AOFPositive"]);
@@ -161,7 +182,7 @@ public class EnemyShared : FighterShared
             RW.Fighter = gameObject;
             RW.Aim = FindObjectOfType<GameController>().Player;
             RW.WeaponPosition = null;
-            RW.tracking = false;
+            RW.tracking = true;
             RW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
             RW.RotateLimitNegative = float.Parse((string)StatsDataDict["AOFNegative"]);
             RW.RotateLimitPositive = float.Parse((string)StatsDataDict["AOFPositive"]);

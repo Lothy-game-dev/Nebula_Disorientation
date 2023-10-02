@@ -46,7 +46,7 @@ public class StatusBoard : MonoBehaviour
     public bool isShow;
     private float initScale;
     private GameObject CloneEnemy;
-    private EnemyShared EnemyObject;
+    private FighterShared EnemyObject;
     private EnemyShared CloneEnemyObject;
     private Rigidbody2D CloneEnemyRb2D;
     private Collider2D CloneEnemyColl;
@@ -56,6 +56,7 @@ public class StatusBoard : MonoBehaviour
     private bool startCounting;
     private bool OkToDestroy;
     private bool alreadyDelete;
+    private GameObject LastEnemy;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -192,6 +193,7 @@ public class StatusBoard : MonoBehaviour
         if (CloneEnemy == null)
         {
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            LastEnemy = Enemy;
             // set Sorting order
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
             // Set color and transparency
@@ -204,12 +206,15 @@ public class StatusBoard : MonoBehaviour
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
             // Destroy objects need to be destroyed so it wont interact
-            Destroy(CloneEnemy.transform.GetChild(0).gameObject);
-            Destroy(CloneEnemy.transform.GetChild(1).gameObject);
-            Destroy(CloneEnemy.transform.GetChild(2).gameObject);
+            for (int i=0;i<CloneEnemy.transform.childCount;i++)
+            {
+                Destroy(CloneEnemy.transform.GetChild(i).gameObject);
+            }
             // turn off scripts
             CloneEnemyObject = CloneEnemy.GetComponent<EnemyShared>();
             CloneEnemyObject.enabled = false;
+            FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
+            fm.enabled = false;
             // turn off component
             CloneEnemyRb2D = CloneEnemy.GetComponent<Rigidbody2D>();
             CloneEnemyRb2D.simulated = false;
@@ -217,6 +222,7 @@ public class StatusBoard : MonoBehaviour
             CloneEnemyColl.enabled = false;
         }
         NameBox.SetActive(true);
+        NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
         // WAit time to show HP and temp bar
         yield return new WaitForSeconds(0.4f);
         WeaponBox.SetActive(true);
@@ -271,7 +277,39 @@ public class StatusBoard : MonoBehaviour
 
     public void UpdateStatus()
     {
-        EnemyObject = Enemy.GetComponent<EnemyShared>();
+        if (Enemy!= LastEnemy)
+        {
+            Destroy(CloneEnemy);
+            CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            // set Sorting order
+            CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
+            // Set color and transparency
+            Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
+            c.a = 1f;
+            c.r = 1;
+            c.g = 1;
+            c.b = 1;
+            CloneEnemy.GetComponent<SpriteRenderer>().color = c;
+            // set Clone Enemy's parent as this board
+            CloneEnemy.transform.SetParent(transform);
+            // Destroy objects need to be destroyed so it wont interact
+            for (int i = 0; i < CloneEnemy.transform.childCount; i++)
+            {
+                Destroy(CloneEnemy.transform.GetChild(i).gameObject);
+            }
+            // turn off scripts
+            CloneEnemyObject = CloneEnemy.GetComponent<EnemyShared>();
+            CloneEnemyObject.enabled = false;
+            FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
+            fm.enabled = false;
+            // turn off component
+            CloneEnemyRb2D = CloneEnemy.GetComponent<Rigidbody2D>();
+            CloneEnemyRb2D.simulated = false;
+            CloneEnemyColl = CloneEnemy.GetComponent<Collider2D>();
+            CloneEnemyColl.enabled = false;
+        }
+        EnemyObject = Enemy.GetComponent<FighterShared>();
+        NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
         HPSlider.maxValue = EnemyObject.MaxHP;
         HPSlider.value = EnemyObject.CurrentHP;
 

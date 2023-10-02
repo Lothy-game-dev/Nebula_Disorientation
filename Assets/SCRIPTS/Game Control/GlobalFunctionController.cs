@@ -943,7 +943,7 @@ public class GlobalFunctionController : MonoBehaviour
             }
             if (dataStr[1].Contains("SPD-"))
             {
-                DataDict.Add("SPD", dataStr[1].Replace("SPD-", ""));
+                DataDict.Add("SPD", dataStr[1].Replace("SPD-",""));
             }
             if (dataStr[2].Contains("ROT-"))
             {

@@ -464,24 +464,20 @@ public class PlayerFighter : FighterShared
     public void ShieldPassive()
     {
         float br = 1;
-        if (FirstPower.GetComponent<Powers>() != null || SecondPower.GetComponent<Powers>() != null)
+        if (FirstPower != null && FirstPower.GetComponent<Powers>() != null && FirstPower.GetComponent<Powers>().BR > 0)
         {
-            if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
-            {
-                if (FirstPower.GetComponent<Powers>().BR > 0)
-                {
-                    br = FirstPower.GetComponent<Powers>().BR;
-                } else
-                {
-                    if (SecondPower.GetComponent<Powers>().BR > 0)
-                    {
-                        br = SecondPower.GetComponent<Powers>().BR;
-                    }                   
-                }
-            MaxBarrier = MaxHP * br / 100;
-            CurrentBarrier = MaxBarrier;
-            }       
+            br = FirstPower.GetComponent<Powers>().BR;
         }
+        if (SecondPower != null && SecondPower.GetComponent<Powers>() != null && SecondPower.GetComponent<Powers>().BR > 0)
+        {
+            br = FirstPower.GetComponent<Powers>().BR;
+        }
+        if (br==1)
+        {
+            MaxBarrier = 5000;
+        } else
+        MaxBarrier = MaxHP * br / 100;
+        CurrentBarrier = MaxBarrier;
     }
     #endregion
 }

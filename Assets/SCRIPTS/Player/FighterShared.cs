@@ -9,6 +9,7 @@ public class FighterShared : MonoBehaviour
     public GameObject LeftWeapon;
     public GameObject RightWeapon;
     // Stats
+    public string FighterName;
     public float CurrentHP;
     public float MaxHP;
     public float CurrentBarrier;

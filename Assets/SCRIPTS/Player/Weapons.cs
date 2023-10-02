@@ -49,6 +49,7 @@ public class Weapons : MonoBehaviour
 
     private float FireTimer;
     private PlayerMovement pm;
+    private FighterMovement fm;
     private float PrevAngle;
     private float CalAngle;
     private float CurrentAngle;
@@ -64,6 +65,7 @@ public class Weapons : MonoBehaviour
     void Start()
     {
         pm = Fighter.GetComponent<PlayerMovement>();
+        fm = Fighter.GetComponent<FighterMovement>();
         PrevAngle = 0;
         CalAngle = 0;
         CurrentAngle = 0;
@@ -91,7 +93,8 @@ public class Weapons : MonoBehaviour
         CalAngle = CalculateRotateAngle();
         CurrentAngle %= 360;
         PrevAngle %= 360;
-        if (tracking)
+        // Check rotate weapon for player
+        if (tracking && pm!=null)
         {
             // Calculate Angel and if they are <0 or >360 then set them to between 0 and 360
             ExpectedAngle = CurrentAngle + CalAngle - PrevAngle;
@@ -147,6 +150,68 @@ public class Weapons : MonoBehaviour
                     PrevAngle += NearestAngle;
                 }
             } 
+        }
+        // Check rotate Weapon for non-player
+        if (tracking && fm != null)
+        {
+            // Calculate Angel and if they are <0 or >360 then set them to between 0 and 360
+            ExpectedAngle = CurrentAngle + CalAngle - PrevAngle;
+            if (ExpectedAngle >= 360)
+            {
+                ExpectedAngle -= 360;
+            }
+            else if (ExpectedAngle < 0)
+            {
+                ExpectedAngle += 360;
+            }
+            LimitNegative = 360 + RotateLimitNegative + fm.CurrentRotateAngle % 360;
+            if (LimitNegative >= 360)
+            {
+
+                LimitNegative -= 360;
+            }
+            else if (LimitNegative < 0)
+            {
+                LimitNegative += 360;
+            }
+            LimitPositive = RotateLimitPositive + fm.CurrentRotateAngle % 360;
+            if (LimitPositive >= 360)
+            {
+                LimitPositive -= 360;
+            }
+            else if (LimitPositive < 0)
+            {
+                LimitPositive += 360;
+            }
+            // In case the mouse doesnt change position: Will not add the rotation
+            if (PrevAngle != CalAngle)
+            {
+                // If the mouse aim vector in shootable range -> set fireable = true
+                // And rotate the weapon to the mouse aim position
+                if (CheckIfAngle1BetweenAngle2And3(ExpectedAngle, LimitNegative, LimitPositive))
+                {
+                    Fireable = true;
+                    transform.RotateAround(RotatePoint.transform.position, Vector3.back, CalAngle - PrevAngle);
+                    CurrentAngle = ExpectedAngle;
+                    PrevAngle = CalAngle;
+                }
+                else
+                {
+                    // Else set fireable = false
+                    // And rotate the weapon to the nearest posible position to the mouse
+                    // also end weapon sound if there is sound
+                    // (only thermal weapon get this case since their sounds loop)
+                    Fireable = false;
+                    if (!isWarning && !isOverheatted && aus.clip != null && IsThermalType)
+                    {
+                        EndSound();
+                    }
+                    float NearestAngle = NearestPossibleAngle(CurrentAngle, LimitNegative, LimitPositive);
+                    transform.RotateAround(RotatePoint.transform.position, Vector3.back, NearestAngle);
+                    CurrentAngle += NearestAngle;
+                    PrevAngle += NearestAngle;
+                }
+            }
         }
         // Reset thermal hit count per 1/rate of hit second
         if (HitCountResetTimer > 0f)
