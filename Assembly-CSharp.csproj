@@ -74,6 +74,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSpinBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuTutorialScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWButtons.cs" />
+    <Compile Include="Assets\SCRIPTS\Cons\WingShield.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalItem.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GameplayExteriorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutStatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWAllOwnedPopup.cs" />
+    <Compile Include="Assets\SCRIPTS\Cons\EngineBooster.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterModelShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\RechargeBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\NewStoryScene.cs" />

@@ -41,6 +41,8 @@ public class PlayerFighter : FighterShared
     private float testTimer;
     public GameObject FirstPower;
     public GameObject SecondPower;
+    public Dictionary<string, int> Consumables;
+    public List<string> ConsumableNames;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -62,6 +64,7 @@ public class PlayerFighter : FighterShared
         ChargingPowerReq = new float[2] { 1.14f, 1.14f };
         ConsCount = new int[4] { 10, 5, 2, 1 };
         SetConsumableCount();
+        SetCDandDuration();
     }
 
     // Update is called once per frame
@@ -104,21 +107,11 @@ public class PlayerFighter : FighterShared
                     // void function to activate power
                     FirstPower.GetComponent<Powers>().ActivatePower(FirstPower.name.Replace("(clone)", ""));
                     //Duration
-                    if (FirstPower.GetComponent<Powers>().Duration == 0)
-                    {
-                        PowerAndConsDuration[0] = 0.5f;
-                    }
-                    else
-                    {
-                        PowerAndConsDuration[0] = FirstPower.GetComponent<Powers>().Duration;
-                    }
-
                     PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
                     PowerAndConsDurationSlider[0].maxValue = PowerAndConsDuration[0];
                     PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
 
                     //Cooldown
-                    PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
                     PowerAndConsCDTimer[0] = PowerAndConsCD[0];
                 }
             }
@@ -154,15 +147,6 @@ public class PlayerFighter : FighterShared
                         FirstPower.GetComponent<Powers>().ActivatePower(FirstPower.name.Replace("(clone)", ""));
 
                         //Duration
-                        if (FirstPower.GetComponent<Powers>().Duration == 0)
-                        {
-                            PowerAndConsDuration[0] = 0.5f;
-                        }
-                        else
-                        {
-                            PowerAndConsDuration[0] = FirstPower.GetComponent<Powers>().Duration;
-                        }
-
                         PowerAndConsDurationTimer[0] = PowerAndConsDuration[0];
                         PowerAndConsDurationSlider[0].fillRect.GetComponentInChildren<Image>().color =
                             new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -170,7 +154,6 @@ public class PlayerFighter : FighterShared
                         PowerAndConsDurationSlider[0].value = PowerAndConsDuration[0];
 
                         //Cooldown
-                        PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
                         PowerAndConsCDTimer[0] = PowerAndConsCD[0];
                     }
                 }
@@ -185,9 +168,8 @@ public class PlayerFighter : FighterShared
             }
         }
         // 2nd Power
-        if (SecondPower != null)
-        {
-            if (PowerAndConsCDTimer[1] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
+      
+            if (SecondPower != null && PowerAndConsCDTimer[1] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
             {
                 SecondPower.GetComponent<Powers>().Fighter = gameObject;
                 // check if power does not need charge
@@ -204,20 +186,11 @@ public class PlayerFighter : FighterShared
                         SecondPower.GetComponent<Powers>().ActivatePower(SecondPower.name.Replace("(clone)", ""));
 
                         //Duration
-                        if (SecondPower.GetComponent<Powers>().Duration == 0)
-                        {
-                            PowerAndConsDuration[1] = 0.5f;
-                        }
-                        else
-                        {
-                            PowerAndConsDuration[1] = SecondPower.GetComponent<Powers>().Duration;
-                        }
                         PowerAndConsDurationTimer[1] = PowerAndConsDuration[1];
                         PowerAndConsDurationSlider[1].maxValue = PowerAndConsDuration[1];
                         PowerAndConsDurationSlider[1].value = PowerAndConsDuration[1];
 
                         //Cooldown
-                        PowerAndConsCD[1] = SecondPower.GetComponent<Powers>().CD;
                         PowerAndConsCDTimer[1] = PowerAndConsCD[1];
                     }
                 }
@@ -250,15 +223,6 @@ public class PlayerFighter : FighterShared
                             // Void function to activate power
                             SecondPower.GetComponent<Powers>().ActivatePower(SecondPower.name.Replace("(clone)", ""));
                             //Duration
-                            if (SecondPower.GetComponent<Powers>().Duration == 0)
-                            {
-                                PowerAndConsDuration[1] = 0.5f;
-                            }
-                            else
-                            {
-                                PowerAndConsDuration[1] = SecondPower.GetComponent<Powers>().Duration;
-                            }
-
                             PowerAndConsDurationTimer[1] = PowerAndConsDuration[1];
                             PowerAndConsDurationSlider[1].fillRect.GetComponentInChildren<Image>().color =
                                 new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -266,7 +230,6 @@ public class PlayerFighter : FighterShared
                             PowerAndConsDurationSlider[1].value = PowerAndConsDuration[1];
 
                             //Cooldown
-                            PowerAndConsCD[1] = SecondPower.GetComponent<Powers>().CD;
                             PowerAndConsCDTimer[1] = PowerAndConsCD[1];
                         }
                     }
@@ -280,7 +243,7 @@ public class PlayerFighter : FighterShared
                     }
                 }
             }
-        }
+        
         
         // Consumable Usage
         // 1st Cons
@@ -458,17 +421,57 @@ public class PlayerFighter : FighterShared
 
     private void SetConsumableCount()
     {
-        for (int i=0;i<4;i++)
+        for (int i=0;i< ConsumableNames.Count; i++)
         {
-            ConsCountText[i].GetComponent<TextMeshPro>().text = ConsCount[i].ToString();
+            ConsCountText[i].GetComponent<TextMeshPro>().text = Consumables[ConsumableNames[i]].ToString();
         }
+    }
+
+    private void SetCDandDuration()
+    {
+        if (FirstPower != null )
+        {
+            PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
+
+            if (FirstPower.GetComponent<Powers>().Duration == 0)
+            {
+                PowerAndConsDuration[0] = 0.5f;
+            } else
+            {
+                PowerAndConsDuration[0] = FirstPower.GetComponent<Powers>().Duration;
+            }
+            
+        }
+        if (SecondPower != null)
+        {
+            PowerAndConsCD[1] = SecondPower.GetComponent<Powers>().CD;
+
+            if (SecondPower.GetComponent<Powers>().Duration == 0)
+            {
+                PowerAndConsDuration[1] = 0.5f;
+            }
+            else
+            {
+                PowerAndConsDuration[1] = SecondPower.GetComponent<Powers>().Duration;
+            }
+        }
+
+        /*if (Consumables.Count > 0)
+        {
+            int index = 2;
+            for (int i = 0; i < Consumables.Count; i++)
+            {
+                PowerAndConsCD[index] = Consumables[ConsumableNames[i]];
+                index++;
+            }
+        }*/
     }
     #endregion
     #region Passive
 
     public void ShieldPassive()
     {
-        float br = 100;
+        float br = 0;
         if (FirstPower != null)
         {
             if (FirstPower.GetComponent<Powers>().BR > 0)
@@ -483,7 +486,14 @@ public class PlayerFighter : FighterShared
                 br = SecondPower.GetComponent<Powers>().BR;
             }
         }
-        MaxBarrier = MaxHP * br / 100;
+        if (br == 0)
+        {
+            MaxBarrier = 5000;
+        } else
+        {
+            MaxBarrier = MaxHP * br / 100;
+        }
+        
         CurrentBarrier = MaxBarrier;
     }
     #endregion
