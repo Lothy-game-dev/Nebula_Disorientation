@@ -247,6 +247,7 @@ public class FighterController : MonoBehaviour
                     FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
                     FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
+                    FirstPower.GetComponent<Powers>().EnemyLayer = EnemyLayer;
                     FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
                     break;
                 }
@@ -269,6 +270,7 @@ public class FighterController : MonoBehaviour
                     SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
                     SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
+                    SecondPower.GetComponent<Powers>().EnemyLayer = EnemyLayer;
                     SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
                     break;
 

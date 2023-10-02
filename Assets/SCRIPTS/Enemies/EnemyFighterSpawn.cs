@@ -25,7 +25,7 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        EnemySpawnID = new int[] { 12, 13, 12, 13/*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
+        EnemySpawnID = new int[] { 12, 13, 14, 14/*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
         EnemySpawnPosition = new Vector2[] {/* 
             new Vector2(100, 100), new Vector2(-100, 100), new Vector2(100, -100),
         new Vector2(-100, -100), new Vector2(200, 200), new Vector2(200, -200),
