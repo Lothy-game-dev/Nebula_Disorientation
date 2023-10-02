@@ -51,7 +51,7 @@ public class LaserBeam : Powers
         if (resetHitTimer <= 0)
         {
             onHit = false;
-            resetHitTimer = 0.1f;
+            resetHitTimer = 1/15f;
         }
     }
     private void FixedUpdate()
