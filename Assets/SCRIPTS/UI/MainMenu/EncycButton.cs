@@ -146,7 +146,7 @@ public class EncycButton : MonoBehaviour
                     if (ItemType == "Enemy")
                     {
 
-                        ShowInforOfItem(Menu.EnemyList, 1, 7, new Vector3(0.5f, 0.5f, 0f), 6);
+                        ShowInforOfItem(Menu.EnemyList, 1, 8, new Vector3(0.5f, 0.5f, 0f), 7);
                         ChangeColorWhenChoosen((Id + Menu.FighterList.Count).ToString());
                         if (wlist[1] == "ZatWR-MKL")
                         {

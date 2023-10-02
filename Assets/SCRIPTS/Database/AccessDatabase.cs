@@ -1731,20 +1731,45 @@ public class AccessDatabase : MonoBehaviour
             EnemyList.Add(dataReader.GetString(2));
             EnemyList.Add(dataReader.GetString(3));
             EnemyList.Add(dataReader.GetString(4));
-            if (dataReader.IsDBNull(5))
-            {
-                EnemyList.Add("N/A");
-            } else
-            {
-                EnemyList.Add(dataReader.GetString(5));
-            }
+            EnemyList.Add(dataReader.GetString(5));
             EnemyList.Add(dataReader.GetString(6));
             EnemyList.Add(dataReader.GetString(7));
+            EnemyList.Add(dataReader.GetString(8));
             list.Add(EnemyList);
         }
         if (!check) return null;
         dbConnection.Close();
         return list;
+    }
+
+    public Dictionary<string,object> GetDataEnemyById(int enemyID)
+    {
+        Dictionary<string,object> data = new Dictionary<string,object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select EnemyName, MainTarget, EnemyWeapons, EnemyStats, EnemyPower, DefeatReward, EnemyTier from Enemies WHERE EnemyID=" + enemyID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("Name", dataReader.GetString(0));
+            data.Add("MainTarget", dataReader.GetString(1));
+            data.Add("Weapons", dataReader.GetString(2));
+            data.Add("Stats", dataReader.GetString(3));
+            data.Add("Power", dataReader.GetString(4));
+            data.Add("DefeatReward", dataReader.GetString(5));
+            data.Add("TierColor", dataReader.GetString(6));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        } else
+        return data;
     }
     #endregion
     #region Access Warship

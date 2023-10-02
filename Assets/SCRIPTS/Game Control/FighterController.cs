@@ -229,20 +229,27 @@ public class FighterController : MonoBehaviour
 
 
         // set power 
-        GameObject FirstPower = Instantiate(CurrentFirstPower, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
-        GameObject SecondPower = Instantiate(CurrentSecondPower, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
-        FirstPower.SetActive(true);
-        SecondPower.SetActive(true);
-        FirstPower.transform.SetParent(FirstPowerImage.transform);
-        SecondPower.transform.SetParent(SecondPowerImage.transform);
-        FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
-        SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
-        FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
-        SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
-        PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
-        PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
-        FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
-        SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
+        if (CurrentFirstPower!=null)
+        {
+            GameObject FirstPower = Instantiate(CurrentFirstPower, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
+            FirstPower.SetActive(true);
+            FirstPower.transform.SetParent(FirstPowerImage.transform);
+            FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
+            FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+            PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
+            FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
+        }
+        if (CurrentSecondPower!=null)
+        {
+            GameObject SecondPower = Instantiate(CurrentSecondPower, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
+            SecondPower.SetActive(true);
+            SecondPower.transform.SetParent(SecondPowerImage.transform);
+            SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
+            SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+            PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
+            SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
+        }
+
        
         // Set all stats data 
         SetStatsData();

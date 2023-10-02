@@ -54,7 +54,7 @@ public class PlayerFighter : FighterShared
         BRSlider.maxValue = MaxBarrier;
         // temp, will get real data later
         PowerAndConsCD = new float[6] {1f, 1f, 5f, 5f, 5f, 5f};
-        PowerAndConsCDTimer = new float[6];
+        PowerAndConsCDTimer = new float[6] {0f, 0f, 0f, 0f, 0f, 0f};
         PowerAndConsDuration = new float[6] {1f, 0.5f, 3f, 3f, 3f, 3f};
         PowerAndConsDurationTimer = new float[6];
         PowerAndConsActivation = new bool[6];
@@ -88,7 +88,7 @@ public class PlayerFighter : FighterShared
         }
         // Power Usage
         // 1st Power
-        if (PowerAndConsCDTimer[0] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
+        if (FirstPower!=null && PowerAndConsCDTimer[0] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
         {
             // check if power does not need charge
             //
@@ -119,7 +119,7 @@ public class PlayerFighter : FighterShared
 
                     //Cooldown
                     PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
-                    PowerAndConsCDTimer[0] = PowerAndConsCD[1];
+                    PowerAndConsCDTimer[0] = PowerAndConsCD[0];
                 }
             }
             // if power need charge
@@ -171,7 +171,7 @@ public class PlayerFighter : FighterShared
 
                         //Cooldown
                         PowerAndConsCD[0] = FirstPower.GetComponent<Powers>().CD;
-                        PowerAndConsCDTimer[0] = PowerAndConsCD[1];
+                        PowerAndConsCDTimer[0] = PowerAndConsCD[0];
                     }
                 }
                 if (Input.GetKeyUp(KeyCode.Q) && !PowerAndConsActivation[0])
@@ -185,7 +185,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 2nd Power
-        if (PowerAndConsCDTimer[1] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
+        if (SecondPower != null && PowerAndConsCDTimer[1] <= 0f && !isPausing && !isFrozen && !isSFBFreeze)
         {
             SecondPower.GetComponent<Powers>().Fighter = gameObject;
             // check if power does not need charge
@@ -464,7 +464,7 @@ public class PlayerFighter : FighterShared
     public void ShieldPassive()
     {
         float br = 1;
-        if (FirstPower.GetComponent<Powers>().BR > 0 || SecondPower.GetComponent<Powers>().BR > 0)
+        if ((FirstPower!=null && FirstPower.GetComponent<Powers>().BR > 0) || (SecondPower!=null && SecondPower.GetComponent<Powers>().BR > 0))
         {
             if (FirstPower.GetComponent<Powers>().BR > 0)
             {

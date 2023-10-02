@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestDisk : EnemyShared
 {
-    public GameObject Weapons;
+    /*public GameObject Weapons;
     public Rigidbody2D rb;
     public float changeDirTimer;
     private bool test;
@@ -31,7 +31,7 @@ public class TestDisk : EnemyShared
         UpdateEnemy();
         if (!isFrozen && !isSFBFreeze)
         {
-            /*CalculateVelocity(!test ? check : -check);*/
+            *//*CalculateVelocity(!test ? check : -check);*//*
             CalculateVelocity(new Vector2(0, 0));
         }
         if (changeDirTimer > 0f)
@@ -44,8 +44,8 @@ public class TestDisk : EnemyShared
         }
         if (doneInitWeapon)
         {
-            /*LeftWeapon.GetComponent<Weapons>().AIShootBullet();
-            RightWeapon.GetComponent<Weapons>().AIShootBullet();*/
+            *//*LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+            RightWeapon.GetComponent<Weapons>().AIShootBullet();*//*
         }
     }
 
@@ -106,5 +106,5 @@ public class TestDisk : EnemyShared
     {
         yield return new WaitForSeconds(5f);
         doneInitWeapon = true;
-    }
+    }*/
 }

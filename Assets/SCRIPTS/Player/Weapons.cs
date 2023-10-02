@@ -378,17 +378,23 @@ public class Weapons : MonoBehaviour
     #region Weapon Fire
     public void AIShootBullet()
     {
-        if (FireTimer <= 0f && Fireable)
+        if (Aim==null)
         {
-            if (!IsThermalType)
+            EndSound();
+        } else
+        {
+            if (FireTimer <= 0f && Fireable)
             {
-                FireBullet();
-                FireTimer = 1 / RateOfFire;
-            }
-            else
-            {
-                FireFlamethrowerOrb();
-                FireTimer = 1 / RateOfFire;
+                if (!IsThermalType)
+                {
+                    FireBullet();
+                    FireTimer = 1 / RateOfFire;
+                }
+                else
+                {
+                    FireFlamethrowerOrb();
+                    FireTimer = 1 / RateOfFire;
+                }
             }
         }
     }

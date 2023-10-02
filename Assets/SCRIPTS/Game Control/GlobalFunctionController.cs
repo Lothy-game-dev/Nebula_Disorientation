@@ -929,6 +929,55 @@ public class GlobalFunctionController : MonoBehaviour
         }
         return result;
     }
+
+    //HP-3000|SPD-700|ROT-0.75|AOF-0 or 90,90|DM-0|AM-0|PM-0
+    public Dictionary<string, object> ConvertEnemyStatsToDictionary(string stats)
+    {
+        Dictionary<string, object> DataDict = new Dictionary<string, object>();
+        string[] dataStr = stats.Split("|");
+        if (dataStr.Length > 0)
+        {
+            if (dataStr[0].Contains("HP-"))
+            {
+                DataDict.Add("HP", dataStr[0].Replace("HP-",""));
+            }
+            if (dataStr[1].Contains("SPD-"))
+            {
+                DataDict.Add("SPD", dataStr[1].Replace("SPD-", ""));
+            }
+            if (dataStr[2].Contains("ROT-"))
+            {
+                DataDict.Add("ROT", dataStr[2].Replace("ROT-", ""));
+            }
+            if (dataStr[3].Contains("AOF-"))
+            {
+                string[] AOF = dataStr[3].Replace("AOF-", "").Split(",");
+                if (AOF.Length==1)
+                {
+                    DataDict.Add("AOFNegative", "0");
+                    DataDict.Add("AOFPositive", "0");
+                }
+                else
+                {
+                    DataDict.Add("AOFNegative", "-" + AOF[0]);
+                    DataDict.Add("AOFPositive", AOF[1]);
+                }
+            }
+            if (dataStr[4].Contains("DM-"))
+            {
+                DataDict.Add("DM", dataStr[4].Replace("DM-", ""));
+            }
+            if (dataStr[5].Contains("AM-"))
+            {
+                DataDict.Add("AM", dataStr[5].Replace("AM-", ""));
+            }
+            if (dataStr[6].Contains("PM-"))
+            {
+                DataDict.Add("PM", dataStr[6].Replace("PM-", ""));
+            }
+        }
+        return DataDict;
+    }
     #endregion
     #region Convert Currency To Icons
     public string ConvertToIcon(string Currency)
