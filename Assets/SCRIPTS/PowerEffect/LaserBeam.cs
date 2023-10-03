@@ -59,6 +59,8 @@ public class LaserBeam : Powers
         if (isFire)
         {
             GenerateLaserBeam();
+            LeftWeapon.GetComponent<Weapons>().BeamActivating = true;
+            RightWeapon.GetComponent<Weapons>().BeamActivating = true;
             if (DurationTimer == 0)
             {
                 PlaySound(SoundEffect);
@@ -66,7 +68,9 @@ public class LaserBeam : Powers
             DurationTimer += Time.fixedDeltaTime;
 
             if (DurationTimer >= Duration)
-            {                             
+            {
+                LeftWeapon.GetComponent<Weapons>().BeamActivating = false;
+                RightWeapon.GetComponent<Weapons>().BeamActivating = false;
                 DurationTimer = 0f;               
                 isFire = false;
                 //slow down Fighter when firing

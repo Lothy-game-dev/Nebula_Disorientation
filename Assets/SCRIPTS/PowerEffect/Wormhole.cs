@@ -19,6 +19,8 @@ public class Wormhole : Powers
     // Can be public or private, prioritize private if possible
     private Vector2 pos;
     private Vector3 newPos;
+    private GameObject LeftWeapon;
+    private GameObject RightWeapon;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -37,6 +39,10 @@ public class Wormhole : Powers
     // Group all function that serve the same algorithm
     public void GenerateWormhole()
     {
+        LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
+        RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
+        LeftWeapon.GetComponent<Weapons>().isUsingWormhole = true;
+        RightWeapon.GetComponent<Weapons>().isUsingWormhole = true;
         pos = CalculatePos(Range);
         if (pos.x >= 5000f || pos.x <= -5000f || pos.y >= 5000f || pos.y <= -5000f)
         {           
@@ -52,8 +58,7 @@ public class Wormhole : Powers
             StartCoroutine(StartTeleport());
         }
     }
-    #endregion
-    
+    #endregion   
     #region Animation
     IEnumerator StartTeleport()
     {
@@ -72,6 +77,8 @@ public class Wormhole : Powers
         Destroy(TpEffectFrom, 0.2f);
         
         Fighter.transform.position = newPos;
+        LeftWeapon.GetComponent<Weapons>().isUsingWormhole = false;
+        RightWeapon.GetComponent<Weapons>().isUsingWormhole = false;
         Destroy(TpEffectTo, 0.2f);
     }
     #endregion

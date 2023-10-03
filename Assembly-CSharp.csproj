@@ -186,6 +186,7 @@
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDCreateInfoBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\Cons\AutoRepair.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWOwnedCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
