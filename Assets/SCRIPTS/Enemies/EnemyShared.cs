@@ -327,6 +327,7 @@ public class EnemyShared : FighterShared
 
                     //Cooldown
                     Power1CD = CurrentFirstPower.GetComponent<Powers>().CD;
+                    Power1Activation = false;
                 }
             }
             // if power need charge
@@ -361,6 +362,7 @@ public class EnemyShared : FighterShared
 
             //Cooldown
             Power1CD = CurrentFirstPower.GetComponent<Powers>().CD;
+            Power1Activation = false;
         }
     }
 
@@ -382,6 +384,7 @@ public class EnemyShared : FighterShared
 
                     //Cooldown
                     Power2CD = CurrentSecondPower.GetComponent<Powers>().CD;
+                    Power2Activation = false;
                 }
             }
             // if power need charge
@@ -416,6 +419,7 @@ public class EnemyShared : FighterShared
 
             //Cooldown
             Power2CD = CurrentSecondPower.GetComponent<Powers>().CD;
+            Power2Activation = false;
         }
     }
     private IEnumerator WaitForDoneInit()

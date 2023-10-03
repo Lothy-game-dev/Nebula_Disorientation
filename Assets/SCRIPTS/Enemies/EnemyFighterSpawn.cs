@@ -15,7 +15,7 @@ public class EnemyFighterSpawn : MonoBehaviour
     #region NormalVariables
     // will do delay later
     public List<GameObject> Enemies;
-    private float[] EnemySpawnDelay;
+    private Dictionary<int, float> EnemySpawnDelay;
     private Vector2[] EnemySpawnPosition;
     private int[] EnemySpawnID;
     private GameObject ChosenModel;
@@ -25,13 +25,18 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        EnemySpawnID = new int[] { 12, 13, 14, 14/*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
+        EnemySpawnID = new int[] { 8, 8/*, 12, 12*//*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
         EnemySpawnPosition = new Vector2[] {/* 
             new Vector2(100, 100), new Vector2(-100, 100), new Vector2(100, -100),
         new Vector2(-100, -100), new Vector2(200, 200), new Vector2(200, -200),
         new Vector2(-200, 200), new Vector2(-200, -200), new Vector2(300, 300),
         new Vector2(300, -300), new Vector2(-300, 300), */new Vector2(-300, -300),
         new Vector2(400, 400), new Vector2(-400, 400), new Vector2(400, -400) };
+        EnemySpawnDelay = new Dictionary<int, float>();
+        EnemySpawnDelay.Add(1, 5f);
+        EnemySpawnDelay.Add(2, 10f);
+        EnemySpawnDelay.Add(3, 5f);
+        EnemySpawnDelay.Add(4, 10f);
         Enemies = new List<GameObject>();
         for (int i=0;i<EnemySpawnID.Length;i++)
         {
@@ -59,9 +64,14 @@ public class EnemyFighterSpawn : MonoBehaviour
         }
         GameObject Enemy = Instantiate(EnemyTemplate, new Vector3(spawnPos.x, spawnPos.y, EnemyTemplate.transform.position.z), Quaternion.identity);
         Enemies.Add(Enemy);
-        Enemy.name = ChosenModel.name + " | " + spawnPos.x + " - " + spawnPos.y;
+        Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y;
         Enemy.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Enemy.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
+    }
+
+    public IEnumerator SpawnEnemy()
+    {
+        yield return null;
     }
     #endregion
 }

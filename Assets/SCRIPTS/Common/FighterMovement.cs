@@ -198,27 +198,7 @@ public class FighterMovement : MonoBehaviour
         float LimitBottomY = BottomBorder.transform.position.y + 100;
         float LimitLeftX = LeftBorder.transform.position.x + 100;
         float LimitRightX = RightBorder.transform.position.x - 100;
-        if (transform.position.x >= LimitRightX)
-        {
-            LimitSpeedScale = (50 - (transform.position.x - LimitRightX)) / 100;
-        }
-        else if (transform.position.x <= LimitLeftX)
-        {
-            LimitSpeedScale = (50 - (LimitLeftX - transform.position.x)) / 100;
-        }
-        else if (transform.position.y >= LimitTopY)
-        {
-            LimitSpeedScale = (50 - (transform.position.y - LimitTopY)) / 100;
-        }
-        else if (transform.position.y <= LimitBottomY)
-        {
-            LimitSpeedScale = (50 - (LimitBottomY - transform.position.y)) / 100;
-        }
-        else LimitSpeedScale = 1;
-        if (LimitSpeedScale < 0f)
-        {
-            LimitSpeedScale = 0f;
-        }
+        LimitSpeedScale = 1f;
         if (transform.position.x >= (LimitRightX + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
