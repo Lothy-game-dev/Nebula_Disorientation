@@ -15,6 +15,7 @@ public class MiniMap : MonoBehaviour
     public GameObject BossEnemyIcon;
     public GameObject PlayerIcon;
     public GameObject BlackholeIcon;
+    public GameObject NormalAllyIcon;
     // Render related
     public GameObject Player;
     public float RenderRange;
@@ -32,6 +33,7 @@ public class MiniMap : MonoBehaviour
     private float InitRange;
     private float InitScale;
     private float IconScale;
+    private Vector3 Position;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -63,8 +65,9 @@ public class MiniMap : MonoBehaviour
     // Render All Objects With Renderable and Enemy Layers that have Collider Within Render Range Declared
     public void RenderAllWithCollider(float range)
     {
+        Position = Player == null ? new Vector3(0, 0, 0) : Player.transform.position;
         // Get All Objects With Renderable and Enemy Layers that have Collider Within Render Range Declared
-        Collider2D[] cols = Physics2D.OverlapCircleAll(Player.transform.position, range, RenderLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(Position, range, RenderLayer);
         foreach (var col in cols)
         {
             // Check if Normal/Elite/Boss Enemy to create corresponding icon
@@ -159,6 +162,31 @@ public class MiniMap : MonoBehaviour
                 }
             }
             // Create Allies' Icons: WIP
+            if (col.tag == "AlliesFighter")
+            {
+                // Check exist -> if exist: Only move icon's position
+                // If not exist -> instantiate object to create new one and save to the list
+                GameObject iconCheck = IconExist(col.name);
+                if (iconCheck != null)
+                {
+                    iconCheck.transform.position = CalculateIconPosition(col.transform.position);
+                }
+                else
+                {
+                    GameObject icon = Instantiate(NormalAllyIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
+                    // Set Icon child of Minimap
+                    icon.transform.SetParent(transform);
+                    // Set scale of icon based on minimap scale
+                    icon.transform.localScale =
+                    new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * transform.localScale.x / InitScale);
+                    icon.SetActive(true);
+                    // Set Icon name = object's name + " Icon"
+                    icon.name = col.name + " Icon";
+                    icons.Add(icon);
+                }
+            }
         }
         // Check if object still renderable to choose whether to keep or delete the icon
         CheckIconStillAvailable();
@@ -167,7 +195,7 @@ public class MiniMap : MonoBehaviour
     public Vector2 CalculateIconPosition(Vector2 RealPosition)
     {
         // Calculate
-        Vector2 iconPos = (RealPosition - new Vector2(Player.transform.position.x, Player.transform.position.y)) * RenderRate;
+        Vector2 iconPos = (RealPosition - new Vector2(Position.x, Position.y)) * RenderRate;
         // Return position based on minimap's center position
         return new Vector2(transform.position.x , transform.position.y) + iconPos;
     }

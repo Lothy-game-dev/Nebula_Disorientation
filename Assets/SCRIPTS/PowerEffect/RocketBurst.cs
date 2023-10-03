@@ -44,10 +44,11 @@ public class RocketBurst : Powers
             GameObject game = Instantiate(Effect, new Vector3(VList[i].x + Fighter.transform.position.x, VList[i].y + Fighter.transform.position.y, 0), Quaternion.identity);
             game.SetActive(true);
             game.transform.Rotate(0, 0, -AngleList[i]);
-            game.GetComponent<Rigidbody2D>().velocity = VList[i]*10;
+            game.GetComponent<Rigidbody2D>().velocity = VList[i] * 10;
             game.GetComponent<RocketBurstBullet>().Distance = Range;
             game.GetComponent<RocketBurstBullet>().Damage = DPH;
             game.GetComponent<RocketBurstBullet>().AoE = AoE;
+            game.GetComponent<RocketBurstBullet>().Velocity = Velocity;
             game.GetComponent<RocketBurstBullet>().Layer = EnemyLayer;
             PlaySound(SoundEffect);
         }

@@ -9,19 +9,19 @@ public class AlliesHealthBar : MonoBehaviour
     public Slider slider;
     #endregion
     #region InitializeVariables
-    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
-    // Must be public
-    // All importants number related to how a game object behave will be declared in this part
+    public GameObject Position;
     #endregion
     #region NormalVariables
     private float CurrentValue;
     private float MaxValue;
+    private Vector2 PositionSlider;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        PositionSlider = Position.transform.position - transform.parent.position;
     }
 
     // Update is called once per frame
@@ -30,6 +30,7 @@ public class AlliesHealthBar : MonoBehaviour
         slider.gameObject.SetActive(CurrentValue < MaxValue);
         slider.value = CurrentValue;
         slider.maxValue = MaxValue;
+        slider.gameObject.transform.position = new Vector3(transform.parent.position.x + PositionSlider.x, transform.parent.position.y + PositionSlider.y, transform.position.z);
     }
     #endregion
     #region Public Set Value

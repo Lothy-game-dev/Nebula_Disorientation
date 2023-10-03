@@ -161,6 +161,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\Allies\SpawnAlliesFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
