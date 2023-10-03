@@ -285,7 +285,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 3rd Cons
-        if (ConsumableObject.Count > 3 && ConsumableObject[2] != null && PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0 && !isPausing)
+        if (ConsumableObject.Count > 2 && ConsumableObject[2] != null && PowerAndConsCDTimer[4] <= 0f && ConsCount[2] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[4].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);
@@ -304,7 +304,7 @@ public class PlayerFighter : FighterShared
             }
         }
         // 4th Cons
-        if (ConsumableObject.Count == 4 && ConsumableObject[3] != null && PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0 && !isPausing)
+        if (ConsumableObject.Count > 3 && ConsumableObject[3] != null && PowerAndConsCDTimer[5] <= 0f && ConsCount[3] > 0 && !isPausing)
         {
             PowerAndConsDurationSlider[5].fillRect.GetComponentInChildren<Image>().color =
                     new Color(0, 95 / 255f, 1, 149 / 255f);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoRepair : Consumable
+public class NanoCoat : Consumable
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -12,12 +12,12 @@ public class AutoRepair : Consumable
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public LayerMask EffectLayer;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private float PlayerCurrentHP;
-    private float PlayerMaxHP;
+    private LayerMask InitLayer;
     private bool isStart;
     private float Timer;
     #endregion
@@ -32,40 +32,26 @@ public class AutoRepair : Consumable
     void Update()
     {
         // Call function and timer only if possible
-        
-    }
-    private void FixedUpdate()
-    {
         if (isStart)
         {
-            
             if (Timer >= Duration)
             {
                 isStart = false;
-                Timer = 0f;
+                Timer = 0;
+                Fighter.layer = InitLayer;
             }
-            else
-            {
-                if (Fighter.GetComponent<PlayerFighter>().CurrentHP < PlayerMaxHP)
-                {
-                    Fighter.GetComponent<PlayerFighter>().CurrentHP += (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);
-                }
-                else
-                {
-                    Fighter.GetComponent<PlayerFighter>().CurrentHP = PlayerMaxHP;
-                }
-            }
-            Timer += Time.fixedDeltaTime;
+            Timer += Time.deltaTime;
         }
     }
     #endregion
     #region Activate cons
     // Group all function that serve the same algorithm
-    public void ActivateAutoRepair()
+    public void NanoCoatActivated()
     {
+        InitLayer = Fighter.layer;
         isStart = true;
-        PlayerCurrentHP = Fighter.GetComponent<PlayerFighter>().CurrentHP;
-        PlayerMaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
+        Fighter.layer = LayerMask.NameToLayer("Untargetable");
+
     }
     #endregion
     #region Function group ...

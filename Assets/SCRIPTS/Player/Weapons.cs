@@ -75,6 +75,8 @@ public class Weapons : MonoBehaviour
         if (isLeftWeapon) MouseInput = 0;
         else MouseInput = 1;
         Fireable = true;
+        isUsingWormhole = false;
+        BeamActivating = false;
         OverheatSpeedIncreaseRate = 1f;
         if (NoOverheat)
         {
