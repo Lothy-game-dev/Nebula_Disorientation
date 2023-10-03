@@ -15,6 +15,7 @@ public class AlliesShared : FighterShared
     public float changeDirTimer;
     public GameObject PowerModel;
     public LayerMask EnemyLayer;
+    public GameObject BackFire;
 
     private bool test;
     private Dictionary<string, object> StatsDataDict;
@@ -182,6 +183,9 @@ public class AlliesShared : FighterShared
         fm.MovingSpeed = float.Parse((string)StatsDataDict["SPD"]);
         fm.RotateSpeed = float.Parse((string)StatsDataDict["ROT"]);
         doneInitWeapon = false;
+        BackFire.transform.position = new Vector3(transform.position.x + Model.GetComponent<FighterModelShared>().BackfirePos.x * 30,
+            transform.position.y + (-0.4f + Model.GetComponent<FighterModelShared>().BackfirePos.y) * 30,
+            BackFire.transform.position.z);
         string[] checkPowers = ((string)Data["Power"]).Split("|");
         if (checkPowers.Length > 1)
         {

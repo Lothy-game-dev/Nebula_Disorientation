@@ -13,6 +13,8 @@ public class EnemyShared : FighterShared
     public GameObject Weapons;
     public Rigidbody2D rb;
     public float changeDirTimer;
+    public GameObject BackFire;
+
     public GameObject PowerModel;
     private bool test;
     private Dictionary<string, object> StatsDataDict;
@@ -178,6 +180,9 @@ public class EnemyShared : FighterShared
         fm.MovingSpeed = float.Parse((string)StatsDataDict["SPD"]);
         fm.RotateSpeed = float.Parse((string)StatsDataDict["ROT"]);
         doneInitWeapon = false;
+        BackFire.transform.position = new Vector3(transform.position.x + Model.GetComponent<FighterModelShared>().BackfirePos.x * 30,
+            transform.position.y + (-0.4f + Model.GetComponent<FighterModelShared>().BackfirePos.y) * 30,
+            BackFire.transform.position.z);
         string[] checkPowers = ((string)Data["Power"]).Split("|");
         if (checkPowers.Length > 1)
         {
