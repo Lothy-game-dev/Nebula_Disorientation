@@ -50,15 +50,21 @@ public class RocketBurstBullet : MonoBehaviour
         // Call function and timer only if possible
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         if (DistanceTravel > 100)
-        {
-            if (target == null || target.GetComponent<Collider2D>()==null || !target.GetComponent<Collider2D>().enabled)
+        {           
+            if (target == null || target.GetComponent<Collider2D>() == null || !target.GetComponent<Collider2D>().enabled)
             {
                 CheckRange();
-            } else
-            {
-                MoveToTarget();
             }
-
+            else
+            {
+                if (target.layer == 9)
+                {
+                    target = null;
+                } else
+                {
+                    MoveToTarget();
+                }
+            }           
         }
         CheckDistanceTravel();
         CalculateDamage();
