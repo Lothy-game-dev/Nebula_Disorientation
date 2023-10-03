@@ -24,10 +24,10 @@ public class EnemyShared : FighterShared
     private GameObject CurrentFirstPower;
     private GameObject CurrentSecondPower;
     private bool doneInitWeapon;
-    private string weaponName1;
-    private string weaponName2;
-    private string Power1;
-    private string Power2;
+    public string weaponName1;
+    public string weaponName2;
+    public string Power1;
+    public string Power2;
     public float Power1CD;
     private float Power1Charging;
     private bool Power1Activation;
@@ -55,7 +55,7 @@ public class EnemyShared : FighterShared
         UpdateFighter();
         if (CurrentHP <= 0f)
         {
-            Status.StopShowing();
+            Status.StopShowing(gameObject);
         }
     }
 

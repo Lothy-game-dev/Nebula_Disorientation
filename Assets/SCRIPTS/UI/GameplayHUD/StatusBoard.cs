@@ -17,8 +17,8 @@ public class StatusBoard : MonoBehaviour
     public GameObject ClosePosition;
     //Status
     public GameObject NameBox;
-    public GameObject WeaponBox;
-    public GameObject PowerBox;
+    public GameObject ItemBox1;
+    public GameObject ItemBox2;
     public GameObject StatusBox;
     public TextMeshPro HealthText;
     public Slider HPSlider;
@@ -36,7 +36,10 @@ public class StatusBoard : MonoBehaviour
     public GameObject Bottom;
     //Image
     public GameObject EnemyImagePosition;
-
+    public GameObject WeaponList;
+    public GameObject PowerList;
+    public Vector2 WeaponScale;
+    public Vector2 PowerScale;
     #endregion
     #region NormalVariables
     public GameObject Enemy;
@@ -44,6 +47,7 @@ public class StatusBoard : MonoBehaviour
     public float Timer;
     // Is hide or not 
     public bool isShow;
+    private bool AllowUpdate;
     private float initScale;
     private GameObject CloneEnemy;
     private FighterShared EnemyObject;
@@ -57,6 +61,16 @@ public class StatusBoard : MonoBehaviour
     private bool OkToDestroy;
     private bool alreadyDelete;
     private GameObject LastEnemy;
+    public float WeaponPowerSwitchTimer;
+    private bool isShowingWeapon;
+    private string LeftWeaponName;
+    private string RightWeaponName;
+    private string FirstPower;
+    private string SecondPower;
+    public GameObject ModelLeftWeapon;
+    public GameObject ModelRightWeapon;
+    public GameObject ModelFirstPower;
+    public GameObject ModelSecondPower;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -80,7 +94,16 @@ public class StatusBoard : MonoBehaviour
         ReactWhenZoom();
         if (!isMouseOutsideRange())
         {
+            WeaponPowerSwitchTimer -= Time.deltaTime;
             CheckOnDestroy();
+        } else
+        {
+            WeaponPowerSwitchTimer = 2.5f;
+        }
+        if (WeaponPowerSwitchTimer<=0f)
+        {
+            SwitchWeaponPowerInfo();
+            WeaponPowerSwitchTimer = 2.5f;
         }
         if (isShow)
         {
@@ -99,8 +122,8 @@ public class StatusBoard : MonoBehaviour
                 {
                     Destroy(CloneEnemy);
                     NameBox.SetActive(false);
-                    WeaponBox.SetActive(false);
-                    PowerBox.SetActive(false);
+                    ItemBox1.SetActive(false);
+                    ItemBox2.SetActive(false);
                     HealthText.gameObject.SetActive(false);
                     HPBar.SetActive(false);
                     BarrierText.gameObject.SetActive(false);
@@ -155,6 +178,7 @@ public class StatusBoard : MonoBehaviour
     // Start showing enemy
     public void StartShowing(GameObject enemy)
     {
+        WeaponPowerSwitchTimer = 2.5f;
         Enemy = enemy;
         isShow = false;
         startCounting = false;
@@ -188,14 +212,17 @@ public class StatusBoard : MonoBehaviour
 
     private IEnumerator DelayShow()
     {
+        LastEnemy = Enemy;
+        ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+        ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
         // Wait for animation 1s to show enemy
         yield return new WaitForSeconds(0.6f);
         if (CloneEnemy == null)
         {
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
-            LastEnemy = Enemy;
             // set Sorting order
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
+            CloneEnemy.SetActive(false);
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
             c.a = 0.8f;
@@ -224,10 +251,77 @@ public class StatusBoard : MonoBehaviour
         NameBox.SetActive(true);
         if (EnemyObject!=null)
         NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
+        LeftWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName1 : Enemy.GetComponent<AlliesShared>().weaponName1;
+        RightWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName2 : Enemy.GetComponent<AlliesShared>().weaponName2;
+        FirstPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power1 : Enemy.GetComponent<AlliesShared>().Power1;
+        SecondPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power2 : Enemy.GetComponent<AlliesShared>().Power2;
+
+        bool alreadyLeft = false;
+        bool alreadyRight = false;
+        for (int i=0;i<WeaponList.transform.childCount;i++)
+        {
+            if (alreadyLeft && alreadyRight)
+            {
+                break;
+            }
+            if (WeaponList.transform.GetChild(i).name.Replace(" ","").Replace("-","").ToLower().Equals(LeftWeaponName.Replace(" ","").Replace("-","").ToLower()))
+            {
+                alreadyLeft = true;
+                ModelLeftWeapon = WeaponList.transform.GetChild(i).gameObject;
+            }
+            if (WeaponList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(RightWeaponName.Replace(" ", "").Replace("-", "").ToLower()))
+            {
+                alreadyRight = true;
+                ModelRightWeapon = WeaponList.transform.GetChild(i).gameObject;
+            }
+        }
+
+        bool alreadyFirst = false;
+        bool alreadySecond = false;
+        for (int i = 0; i < PowerList.transform.childCount; i++)
+        {
+            if (alreadyFirst && alreadySecond)
+            {
+                break;
+            }
+            if (FirstPower != null && FirstPower != "")
+            {
+                if (PowerList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(FirstPower.Replace(" ", "").Replace("-", "").ToLower()))
+                {
+                    alreadyFirst = true;
+                    ModelFirstPower = PowerList.transform.GetChild(i).gameObject;
+                }
+            } else
+            {
+                alreadyFirst = true;
+            }
+            if (SecondPower != null && SecondPower != "")
+            {
+                if (PowerList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(SecondPower.Replace(" ", "").Replace("-", "").ToLower()))
+                {
+                    alreadySecond = true;
+                    ModelSecondPower = PowerList.transform.GetChild(i).gameObject;
+                }
+            }
+            else
+            {
+                alreadySecond = true;
+            }
+        }
+        isShowingWeapon = true;
+        ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+            = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
+        ItemBox1.transform.GetChild(0).localScale = WeaponScale;
+        ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = LeftWeaponName;
+        ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+            = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
+        ItemBox2.transform.GetChild(0).localScale = WeaponScale;
+        ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = RightWeaponName;
         // WAit time to show HP and temp bar
         yield return new WaitForSeconds(0.4f);
-        WeaponBox.SetActive(true);
-        PowerBox.SetActive(true);
+        CloneEnemy.SetActive(true);
+        ItemBox1.SetActive(true);
+        ItemBox2.SetActive(true);
         /*StatusBox.SetActive(true);*/
         EnemyObject = (Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>() : Enemy.GetComponent<AlliesShared>());
         HPBar.SetActive(true);
@@ -280,9 +374,12 @@ public class StatusBoard : MonoBehaviour
     {
         if (Enemy!= LastEnemy)
         {
+            ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+            ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             Destroy(CloneEnemy);
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
             // set Sorting order
+            LastEnemy = Enemy;
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
@@ -308,6 +405,102 @@ public class StatusBoard : MonoBehaviour
             CloneEnemyRb2D.simulated = false;
             CloneEnemyColl = CloneEnemy.GetComponent<Collider2D>();
             CloneEnemyColl.enabled = false;
+            LeftWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName1 : Enemy.GetComponent<AlliesShared>().weaponName1;
+            RightWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName2 : Enemy.GetComponent<AlliesShared>().weaponName2;
+            FirstPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power1 : Enemy.GetComponent<AlliesShared>().Power1;
+            SecondPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power2 : Enemy.GetComponent<AlliesShared>().Power2;
+
+            bool alreadyLeft = false;
+            bool alreadyRight = false;
+            for (int i = 0; i < WeaponList.transform.childCount; i++)
+            {
+                if (alreadyLeft && alreadyRight)
+                {
+                    break;
+                }
+                if (WeaponList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(LeftWeaponName.Replace(" ", "").Replace("-", "").ToLower()))
+                {
+                    alreadyLeft = true;
+                    ModelLeftWeapon = WeaponList.transform.GetChild(i).gameObject;
+                }
+                if (WeaponList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(RightWeaponName.Replace(" ", "").Replace("-", "").ToLower()))
+                {
+                    alreadyRight = true;
+                    ModelRightWeapon = WeaponList.transform.GetChild(i).gameObject;
+                }
+            }
+
+            bool alreadyFirst = false;
+            bool alreadySecond = false;
+            for (int i = 0; i < PowerList.transform.childCount; i++)
+            {
+                if (alreadyFirst && alreadySecond)
+                {
+                    break;
+                }
+                if (FirstPower != null && FirstPower != "")
+                {
+                    if (PowerList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(FirstPower.Replace(" ", "").Replace("-", "").ToLower()))
+                    {
+                        alreadyFirst = true;
+                        ModelFirstPower = PowerList.transform.GetChild(i).gameObject;
+                    }
+                }
+                else
+                {
+                    alreadyFirst = true;
+                }
+                if (SecondPower != null && SecondPower != "")
+                {
+                    if (PowerList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(SecondPower.Replace(" ", "").Replace("-", "").ToLower()))
+                    {
+                        alreadySecond = true;
+                        ModelSecondPower = PowerList.transform.GetChild(i).gameObject;
+                    }
+                }
+                else
+                {
+                    alreadySecond = true;
+                }
+            }
+            if (isShowingWeapon)
+            {
+                ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
+                ItemBox1.transform.GetChild(0).localScale = WeaponScale;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = LeftWeaponName;
+                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
+                ItemBox2.transform.GetChild(0).localScale = WeaponScale;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = RightWeaponName;
+            } else
+            {
+                if (ModelFirstPower!=null)
+                {
+                    ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = ModelFirstPower.GetComponent<SpriteRenderer>().sprite;
+                    ItemBox1.transform.GetChild(0).localScale = PowerScale;
+                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FirstPower;
+                } else
+                {
+                    ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "No First Power";
+                }
+                if (ModelSecondPower!=null)
+                {
+                    ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = ModelSecondPower.GetComponent<SpriteRenderer>().sprite;
+                    ItemBox2.transform.GetChild(0).localScale = PowerScale;
+                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = SecondPower;
+                } else
+                {
+                    ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "No Second Power";
+                }
+            }
+
         }
         EnemyObject = Enemy.GetComponent<FighterShared>();
         NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
@@ -343,10 +536,13 @@ public class StatusBoard : MonoBehaviour
     }
 
     // Stop showing board
-    public void StopShowing()
+    public void StopShowing(GameObject go)
     {
-        gameObject.SetActive(false);
-        Destroy(CloneEnemy);
+        if (LastEnemy==go)
+        {
+            gameObject.SetActive(false);
+            Destroy(CloneEnemy);
+        }
     }
 
     // Close board
@@ -382,6 +578,49 @@ public class StatusBoard : MonoBehaviour
             anim.SetTrigger("Start");
             // Show stats
             StartShowing(Enemy);
+        }
+    }
+
+    private void SwitchWeaponPowerInfo()
+    {
+        if (isShowingWeapon)
+        {
+            isShowingWeapon = false;
+            if (ModelFirstPower!=null)
+            {
+                ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = ModelFirstPower.GetComponent<SpriteRenderer>().sprite;
+                ItemBox1.transform.GetChild(0).localScale = PowerScale;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FirstPower;
+            } else
+            {
+                ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "No First Power";
+            }
+            if (ModelSecondPower!=null)
+            {
+                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = ModelSecondPower.GetComponent<SpriteRenderer>().sprite;
+                ItemBox2.transform.GetChild(0).localScale = PowerScale;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = SecondPower;
+            } else
+            {
+                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "No Second Power";
+            }
+        } else
+        {
+            isShowingWeapon = true;
+            ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
+            ItemBox1.transform.GetChild(0).localScale = WeaponScale;
+            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = LeftWeaponName;
+            ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
+            ItemBox2.transform.GetChild(0).localScale = WeaponScale;
+            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = RightWeaponName;
         }
     }
     #endregion
