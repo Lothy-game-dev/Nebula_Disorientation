@@ -57,6 +57,9 @@ public class FighterShared : MonoBehaviour
     public float NanoTempScale;
     public int NanoTempStacks;
     public float NanoTempTimer;
+    //Consumable effect
+    public bool isWingShield;
+    public float ShieldReducedScale;
     #endregion
     #region Shared Functions
     // Initialize
@@ -75,6 +78,7 @@ public class FighterShared : MonoBehaviour
         GravitationalSlowMultiplier = 1;
         NanoTempScale = 1;
         NanoTempStacks = 0;
+        ShieldReducedScale = 0;
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -555,7 +559,14 @@ public class FighterShared : MonoBehaviour
         {
             if (CurrentBarrier>damage)
             {
-                CurrentBarrier -= damage;
+                if (isWingShield)
+                {
+                    CurrentBarrier = CurrentBarrier -  (damage - damage * ShieldReducedScale/100);
+                    Debug.Log("CB" + CurrentBarrier);
+                } else
+                {
+                    CurrentBarrier -= damage;
+                }
                 if (BarrierEffectDelay<=0f)
                 {
                     BarrierEffectDelay = 0.25f;
