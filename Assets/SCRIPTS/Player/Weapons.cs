@@ -451,7 +451,7 @@ public class Weapons : MonoBehaviour
             EndSound();
         } else
         {
-            if (FireTimer <= 0f && Fireable && !BeamActivating && isUsingWormhole)
+            if (FireTimer <= 0f && Fireable && !BeamActivating && !isUsingWormhole)
             {
                 if (!IsThermalType)
                 {
