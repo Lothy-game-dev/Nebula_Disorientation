@@ -15,6 +15,7 @@ public class FighterMovement : MonoBehaviour
     public GameObject BottomBorder;
     public GameObject LeftBorder;
     public GameObject RightBorder;
+    public GameObject HealthBarSlider;
     #endregion
     #region NormalVariables
     public float RotateSpeed;
@@ -108,6 +109,7 @@ public class FighterMovement : MonoBehaviour
         // Fire and Freeze eff not rotate
         FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
+        HealthBarSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
     }
     private void FighterMoving()
     {

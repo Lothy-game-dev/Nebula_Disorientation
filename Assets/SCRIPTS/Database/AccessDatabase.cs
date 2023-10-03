@@ -2774,4 +2774,35 @@ public class AccessDatabase : MonoBehaviour
         }
     }
     #endregion
+    #region Access Allies
+    public Dictionary<string, object> GetDataAlliesById(int allyID)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select AllyName, MainTarget, AllyWeapons, AllyStats, AllyPower, AllyTier from Allies WHERE AllyID=" + allyID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("Name", dataReader.GetString(0));
+            data.Add("MainTarget", dataReader.GetString(1));
+            data.Add("Weapons", dataReader.GetString(2));
+            data.Add("Stats", dataReader.GetString(3));
+            data.Add("Power", dataReader.GetString(4));
+            data.Add("TierColor", dataReader.GetString(5));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
+    #endregion
 }

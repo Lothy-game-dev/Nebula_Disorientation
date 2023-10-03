@@ -37,6 +37,7 @@ public class EnemyShared : FighterShared
     private float resetMovetimer;
     private int RandomMove;
     private int RandomRotate;
+    public GameObject Target;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -121,7 +122,7 @@ public class EnemyShared : FighterShared
         resetMovetimer -= Time.deltaTime;
         if (resetMovetimer<=0f)
         {
-            RandomMove = Random.Range(1, 4);
+            RandomMove = Random.Range(1, 3);
             RandomRotate = Random.Range(1, 4);
             resetMovetimer = 5f;
         }
@@ -149,6 +150,18 @@ public class EnemyShared : FighterShared
         else if (RandomRotate == 3)
         {
             fm.NoLeftRightMove();
+        }
+        if (Target == null)
+        {
+            TargetNearestEnemy();
+            if (LeftWeapon != null)
+            {
+                LeftWeapon.GetComponent<Weapons>().Aim = Target;
+            }
+            if (RightWeapon != null)
+            {
+                RightWeapon.GetComponent<Weapons>().Aim = Target;
+            }
         }
     }
     #endregion
@@ -223,7 +236,7 @@ public class EnemyShared : FighterShared
             Weapons LW = LeftWeapon.GetComponent<Weapons>();
             LW.isLeftWeapon = true;
             LW.Fighter = gameObject;
-            LW.Aim = FindObjectOfType<GameController>().Player;
+            LW.Aim = Target;
             LW.WeaponPosition = null;
             LW.tracking = true;
             LW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
@@ -244,7 +257,7 @@ public class EnemyShared : FighterShared
             RightWeapon.SetActive(true);
             Weapons RW = RightWeapon.GetComponent<Weapons>();
             RW.Fighter = gameObject;
-            RW.Aim = FindObjectOfType<GameController>().Player;
+            RW.Aim = Target;
             RW.WeaponPosition = null;
             RW.tracking = true;
             RW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
@@ -424,8 +437,33 @@ public class EnemyShared : FighterShared
     }
     private IEnumerator WaitForDoneInit()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(Random.Range(1,10));
         doneInitWeapon = true;
+    }
+    private void TargetNearestEnemy()
+    {
+        AlliesShared[] objects = FindObjectsOfType<AlliesShared>();
+        List<GameObject> goList = new List<GameObject>();
+        foreach (var enemy in objects)
+        {
+            goList.Add(enemy.gameObject);
+        }
+        if (FindObjectOfType<GameController>().Player!=null)
+        {
+            goList.Add(FindObjectOfType<GameController>().Player);
+        }
+        GameObject Nearest = goList[0];
+        float distance = Mathf.Abs((objects[0].transform.position - transform.position).magnitude);
+        foreach (var enemy in goList)
+        {
+            float distanceTest = Mathf.Abs((enemy.transform.position - transform.position).magnitude);
+            if (distanceTest < distance)
+            {
+                distance = distanceTest;
+                Nearest = enemy.gameObject;
+            }
+        }
+        Target = Nearest;
     }
     #endregion
 }

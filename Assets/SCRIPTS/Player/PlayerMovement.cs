@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         {
             AEEnergy = 100f;
         }
-        if (pf.isFrozen)
+        if (pf.isFrozen || pf.isSFBFreeze)
         {
             Movable = false;
             speedVector = new Vector2(0, 0);

@@ -90,6 +90,7 @@ public class Weapons : MonoBehaviour
             transform.position = WeaponPosition.transform.position;
         }
         // Rotate the weapon around rotate point clockwise with angle calculated
+        if (Aim!=null)
         CalAngle = CalculateRotateAngle();
         CurrentAngle %= 360;
         PrevAngle %= 360;
@@ -240,7 +241,7 @@ public class Weapons : MonoBehaviour
         // Fire Weapon's Bullet
         if (FireTimer <= 0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null)
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null && !Fighter.GetComponent<PlayerFighter>().isFrozen && !Fighter.GetComponent<PlayerFighter>().isSFBFreeze)
             {
                 ReloadBar.GetComponent<Image>().fillAmount = 1;
                 if (!IsThermalType)
@@ -443,12 +444,14 @@ public class Weapons : MonoBehaviour
     #region Weapon Fire
     public void AIShootBullet()
     {
+        Debug.Log(Aim);
+        Debug.Log(Fireable);
         if (Aim==null)
         {
             EndSound();
         } else
         {
-            if (FireTimer <= 0f && Fireable)
+            if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze)
             {
                 if (!IsThermalType)
                 {

@@ -156,6 +156,16 @@ public class InitializeDatabase : MonoBehaviour
                 "EnemyEncyc TEXT NOT NULL, " +
                 "EnemyTier TEXT NOT NULL, " +
                 "PRIMARY KEY(EnemyID AUTOINCREMENT) ); " +
+            // Allies
+            "CREATE TABLE IF NOT EXISTS Allies" +
+                "(AllyID INTEGER, " +
+                "AllyName TEXT NOT NULL, " +
+                "MainTarget TEXT NOT NULL, " +
+                "AllyWeapons TEXT NOT NULL, " +
+                "AllyStats TEXT NOT NULL, " +
+                "AllyPower TEXT NOT NULL, " +
+                "AllyTier TEXT NOT NULL, " +
+                "PRIMARY KEY(AllyID AUTOINCREMENT) ); " +
             // EnemiesMoves
             "CREATE TABLE IF NOT EXISTS EnemiesMoves" +
                 "(MoveID INTEGER, " +
@@ -542,6 +552,24 @@ public class InitializeDatabase : MonoBehaviour
                          "(5, 'UEC-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', '1', '#4c9aff')," +
                          "(6, 'UEC-Dreadnaught', 'The United Earth Capital (UEC) has only two Dreadnaughts under command. Commanded by Field Generals, they have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', '1', '#bf2600')," +
                          "(7, 'UEC-FlagShip', 'The one and only UEC-FlagShip is the best Warship out there of the UEC. It is commanded by the Leader of the UEC. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', '1', '#bf2600');";
+
+        // Allies
+        string Allies = "INSERT INTO Allies VALUES " +
+            "(1, 'SSTP', '', 'Transport', 'HP-10000|SPD-300|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
+            "(2, 'SS29-MK1', '', 'AdvancedPulseCannon', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', '', '#36b37e')," +
+            "(3, 'SS29-MK2', '', 'AdvancedNanoFlameThrower', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', '', '#36b37e')," +
+            "(4, 'SS29-MK3', '', 'BlastCannon', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', '', '#36b37e')," +
+            "(5, 'SSS-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', '', '#4c9aff')," +
+            "(6, 'SSS-MK2', '', 'FreezingBlaster', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', '', '#4c9aff')," +
+            "(7, 'SSS-MK3', 'WSSS', 'GravitationalArtillery', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', '', '#4c9aff')," +
+            "(8, 'SSS-MKL', '', 'AdvancedLaserCannon|OrbofVaccumGenerator', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-0.8', '', '#4c9aff')," +
+            "(9, 'UEC29-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', '', '#4c9aff')," +
+            "(10, 'UEC29-MK2', '', 'FreezingBlaster', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', '', '#4c9aff')," +
+            "(11, 'UEC29-MK3', 'WSSS', 'GravitationalArtillery', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', '', '#4c9aff')," +
+            "(12, 'UEC29-MKL', '', 'AdvancedFreezingBlaster|OrbofLavaGenerator', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|AM-2.0|PM-0.8', '', '#4c9aff')," +
+            "(13, 'ND-Prot No.0', '', 'NanoCannon|SuperiorLaserCannon', 'HP-15000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5', '', '#bf2600')," +
+            "(14, 'ND-Zartillery', 'WSSS', 'GrandGravitationalArtillery', 'HP-5000|SPD-400|ROT-0.25|AOF-45,45|DM-1.2|AM-3.0|PM-1.0', '', '#bf2600')," +
+            "(15, 'ND-MKZ', '', 'SuperiorFreezingBlaster|Plasma Cannon', 'HP-20000|SPD-400|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8', '', '#bf2600');";
         // Initialize Data Success
         string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
@@ -556,7 +584,7 @@ public class InitializeDatabase : MonoBehaviour
         // Insert Data Query
         IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
         // Order: Rank > Other
-        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards + DailyMissions + Option + Tutorial + DElement + Attribute + Enemy + Warship + SpaceStation;
+        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards + DailyMissions + Option + Tutorial + DElement + Attribute + Enemy + Warship + SpaceStation + Allies;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable

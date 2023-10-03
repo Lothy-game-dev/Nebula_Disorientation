@@ -555,18 +555,12 @@ public class FighterShared : MonoBehaviour
     #region Calculate Damage Received
     public void ReceiveDamage(float damage)
     {
+        damage = damage * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) * 100 : 1);
         if (CurrentBarrier>0)
         {
             if (CurrentBarrier>damage)
             {
-                if (isWingShield)
-                {
-                    CurrentBarrier = CurrentBarrier -  (damage - damage * ShieldReducedScale/100);
-                    Debug.Log("CB" + CurrentBarrier);
-                } else
-                {
-                    CurrentBarrier -= damage;
-                }
+                CurrentBarrier -= damage;
                 if (BarrierEffectDelay<=0f)
                 {
                     BarrierEffectDelay = 0.25f;
