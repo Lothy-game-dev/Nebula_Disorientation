@@ -20,6 +20,7 @@ public class NanoCoat : Consumable
     private LayerMask InitLayer;
     private bool isStart;
     private float Timer;
+    private Color FighterColor;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -39,6 +40,7 @@ public class NanoCoat : Consumable
                 isStart = false;
                 Timer = 0;
                 Fighter.layer = InitLayer;
+                Fighter.GetComponent<SpriteRenderer>().color = FighterColor;
             }
             Timer += Time.deltaTime;
         }
@@ -48,10 +50,13 @@ public class NanoCoat : Consumable
     // Group all function that serve the same algorithm
     public void NanoCoatActivated()
     {
+        FighterColor = Fighter.GetComponent<SpriteRenderer>().color;
         InitLayer = Fighter.layer;
         isStart = true;
         Fighter.layer = LayerMask.NameToLayer("Untargetable");
-
+        Color c = Fighter.GetComponent<SpriteRenderer>().color;
+        c.a = 0.5f;
+        Fighter.GetComponent<SpriteRenderer>().color = c;
     }
     #endregion
     #region Function group ...
