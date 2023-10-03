@@ -53,8 +53,8 @@ public class Consumable : MonoBehaviour
         {
             case "RED": gameObject.GetComponent<WingShield>().WingmanShieldEffect(); break;
             case "AER": gameObject.GetComponent<EngineBooster>().BoosterEffect(); break;
-            case "RHM": gameObject.GetComponent<AutoRepair>().ActivateAutoRepair(); break;
-            case "INV": break;
+            case "RMH": gameObject.GetComponent<AutoRepair>().ActivateAutoRepair(); break;
+            case "INV": gameObject.GetComponent<NanoCoat>().NanoCoatActivated(); break;
             case "FC": break;
         }
     }

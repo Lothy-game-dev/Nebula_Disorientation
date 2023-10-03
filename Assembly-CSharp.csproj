@@ -104,6 +104,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\StatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualLaserBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycButton.cs" />
+    <Compile Include="Assets\SCRIPTS\Cons\NanoCoat.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\BackgroundBrieflyMoving.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
