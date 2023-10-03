@@ -25,13 +25,13 @@ public class SpawnAlliesFighter : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        AllySpawnID = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        AllySpawnID = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 14/*1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
         AllySpawnPosition = new Vector2[] {
-            new Vector2(100-500, 100), new Vector2(-100-500, 100), new Vector2(100-500, -100),
-        new Vector2(-100-500, -100), new Vector2(200-500, 200), new Vector2(200-500, -200),
-        new Vector2(-200-500, 200), new Vector2(-200-500, -200), new Vector2(300-500, 300),
-        new Vector2(300-500, -300), new Vector2(-300-500, 300), new Vector2(-300-500, -300),
-        new Vector2(400-500, 400), new Vector2(-400-500, 400), new Vector2(400-500, -400) };
+        new Vector2(-2500,0),
+        new Vector2(-1500,0), new Vector2(-3500,0), new Vector2(-2500,1000),new Vector2(-2500,-1000),
+        new Vector2(-1500,1000), new Vector2(-1500,-1000), new Vector2(-3500,1000),new Vector2(-3500,-1000),
+        new Vector2(-500,0), new Vector2(-4500,0), new Vector2(-2500,2000),new Vector2(-2500,-2000),
+        new Vector2(-4500,2000), new Vector2(-4500,-2000)};
         AllySpawnDelay = new Dictionary<int, float>();
         AllySpawnDelay.Add(1, 5f);
         AllySpawnDelay.Add(2, 10f);

@@ -28,6 +28,7 @@ public class RocketBurstBullet : MonoBehaviour
     public float Distance;
     public float DistanceTravel;
     public int DirMov;
+    public float Velocity;
     private Vector3 MovingVector;
     private GameObject target;
     private Vector3 ToEnemy;
@@ -118,7 +119,7 @@ public class RocketBurstBullet : MonoBehaviour
     {
         
         MovingVector = gameObject.transform.GetChild(0).position - gameObject.transform.GetChild(1).position;
-        rb.velocity = MovingVector / MovingVector.magnitude * 500;
+        rb.velocity = MovingVector / MovingVector.magnitude * Velocity;
         ToEnemy = target.transform.position - transform.position;
         float angle = Vector3.Angle(ToEnemy, MovingVector);
         float curScale = 1;

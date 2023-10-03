@@ -24,7 +24,8 @@ public class AlliesShared : FighterShared
     private GameObject CurrentFirstPower;
     private GameObject CurrentSecondPower;
     private bool doneInitWeapon;
-    private string weaponName;
+    private string weaponName1;
+    private string weaponName2;
     private string Power1;
     private string Power2;
     public float Power1CD;
@@ -58,7 +59,7 @@ public class AlliesShared : FighterShared
         }
     }
 
-    /*private void OnMouseOver()
+    private void OnMouseOver()
     {
         Status.Timer = 5f;
         Status.StartShowing(gameObject);
@@ -67,7 +68,7 @@ public class AlliesShared : FighterShared
     private void OnMouseExit()
     {
         Status.CheckOnDestroy();
-    }*/
+    }
     #endregion
     #region Start & Update
     private void Start()
@@ -126,9 +127,9 @@ public class AlliesShared : FighterShared
         resetMovetimer -= Time.deltaTime;
         if (resetMovetimer <= 0f)
         {
-            RandomMove = Random.Range(1, 3);
+            RandomMove = Random.Range(1, 2);
             RandomRotate = Random.Range(1, 4);
-            resetMovetimer = 5f;
+            resetMovetimer = 2f;
         }
 
         if (RandomMove == 1)
@@ -200,13 +201,15 @@ public class AlliesShared : FighterShared
         string[] checkWeapons = ((string)Data["Weapons"]).Split("|");
         if (checkWeapons.Length > 1)
         {
-            weaponName = checkWeapons[Random.Range(0, checkWeapons.Length)];
+            weaponName1 = checkWeapons[0];
+            weaponName2 = checkWeapons[1];
         }
         else
         {
-            weaponName = checkWeapons[0];
+            weaponName1 = checkWeapons[0];
+            weaponName2 = checkWeapons[0];
         }
-        if (weaponName == "Transport")
+        if (weaponName1 == "Transport")
         {
 
         }
@@ -227,12 +230,12 @@ public class AlliesShared : FighterShared
                 {
                     break;
                 }
-                if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(weaponName.Replace(" ", "").ToLower()))
+                if (!alreadyLeft && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(weaponName1.Replace(" ", "").ToLower()))
                 {
                     alreadyLeft = true;
                     CurrentLeftWeapon = Weapons.transform.GetChild(i).gameObject;
                 }
-                if (!alreadyRight && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(weaponName.Replace(" ", "").ToLower()))
+                if (!alreadyRight && Weapons.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(weaponName2.Replace(" ", "").ToLower()))
                 {
                     alreadyRight = true;
                     CurrentRightWeapon = Weapons.transform.GetChild(i).gameObject;

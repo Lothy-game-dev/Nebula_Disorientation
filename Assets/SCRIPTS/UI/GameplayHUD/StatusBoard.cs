@@ -47,7 +47,7 @@ public class StatusBoard : MonoBehaviour
     private float initScale;
     private GameObject CloneEnemy;
     private FighterShared EnemyObject;
-    private EnemyShared CloneEnemyObject;
+    private FighterShared CloneEnemyObject;
     private Rigidbody2D CloneEnemyRb2D;
     private Collider2D CloneEnemyColl;
     private float ImageInitScaleX;
@@ -66,8 +66,8 @@ public class StatusBoard : MonoBehaviour
         initScale = transform.localScale.x;
         if (Enemy != null)
         {
-            ImageInitScaleX = Enemy.transform.localScale.x * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
-            ImageInitScaleY = Enemy.transform.localScale.y * Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard / initScale;
+            ImageInitScaleX = Enemy.transform.localScale.x * (Enemy.GetComponent<EnemyShared>()!=null? Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard : Enemy.GetComponent<AlliesShared>().ScaleOnStatusBoard) / initScale;
+            ImageInitScaleY = Enemy.transform.localScale.y * (Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard : Enemy.GetComponent<AlliesShared>().ScaleOnStatusBoard) / initScale;
         }
         alreadyDelete = false;
     }
@@ -211,7 +211,7 @@ public class StatusBoard : MonoBehaviour
                 Destroy(CloneEnemy.transform.GetChild(i).gameObject);
             }
             // turn off scripts
-            CloneEnemyObject = CloneEnemy.GetComponent<EnemyShared>();
+            CloneEnemyObject = (CloneEnemy.GetComponent<EnemyShared>() != null ? CloneEnemy.GetComponent<EnemyShared>() : CloneEnemy.GetComponent<AlliesShared>());
             CloneEnemyObject.enabled = false;
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;
@@ -229,7 +229,7 @@ public class StatusBoard : MonoBehaviour
         WeaponBox.SetActive(true);
         PowerBox.SetActive(true);
         /*StatusBox.SetActive(true);*/
-        EnemyObject = Enemy.GetComponent<EnemyShared>();
+        EnemyObject = (Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>() : Enemy.GetComponent<AlliesShared>());
         HPBar.SetActive(true);
         HPSlider.maxValue = EnemyObject.MaxHP;
         HPSlider.value = EnemyObject.CurrentHP;
@@ -299,7 +299,7 @@ public class StatusBoard : MonoBehaviour
                 Destroy(CloneEnemy.transform.GetChild(i).gameObject);
             }
             // turn off scripts
-            CloneEnemyObject = CloneEnemy.GetComponent<EnemyShared>();
+            CloneEnemyObject = (CloneEnemy.GetComponent<EnemyShared>() != null ? CloneEnemy.GetComponent<EnemyShared>() : CloneEnemy.GetComponent<AlliesShared>());
             CloneEnemyObject.enabled = false;
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;

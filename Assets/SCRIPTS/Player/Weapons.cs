@@ -447,14 +447,12 @@ public class Weapons : MonoBehaviour
     #region Weapon Fire
     public void AIShootBullet()
     {
-        Debug.Log(Aim);
-        Debug.Log(Fireable);
         if (Aim==null)
         {
             EndSound();
         } else
         {
-            if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && isUsingWormhole)
+            if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
             {
                 if (!IsThermalType)
                 {
