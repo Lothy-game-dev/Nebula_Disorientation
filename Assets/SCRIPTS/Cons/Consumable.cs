@@ -51,7 +51,7 @@ public class Consumable : MonoBehaviour
     {
         switch (Effect.Split("-")[0])
         {
-            case "RED": Debug.Log("ahihi"); break;
+            case "RED": gameObject.GetComponent<WingShield>().WingmanShieldEffect(); break;
             case "AER": gameObject.GetComponent<EngineBooster>().BoosterEffect(); break;
             case "RHM": break;
             case "INV": break;
