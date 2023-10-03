@@ -69,6 +69,13 @@ public class Barrier : Powers
                 isStart = false;
 
             }
+            if (Fighter.GetComponent<FighterShared>().CurrentBarrier == 0)
+            {
+                if (Shield != null)
+                {
+                    Destroy(Shield);
+                }
+            }
         }
         
     }

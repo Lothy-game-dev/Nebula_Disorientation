@@ -59,6 +59,9 @@ public class Weapons : MonoBehaviour
     private int MouseInput;
     private GameObject bulletFire;
     private BulletShared bul;
+
+    public bool BeamActivating;
+    public bool isUsingWormhole;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -241,7 +244,7 @@ public class Weapons : MonoBehaviour
         // Fire Weapon's Bullet
         if (FireTimer <= 0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null && !Fighter.GetComponent<PlayerFighter>().isFrozen && !Fighter.GetComponent<PlayerFighter>().isSFBFreeze)
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null && !Fighter.GetComponent<PlayerFighter>().isFrozen && !Fighter.GetComponent<PlayerFighter>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
             {
                 ReloadBar.GetComponent<Image>().fillAmount = 1;
                 if (!IsThermalType)
@@ -451,7 +454,7 @@ public class Weapons : MonoBehaviour
             EndSound();
         } else
         {
-            if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze)
+            if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && isUsingWormhole)
             {
                 if (!IsThermalType)
                 {
