@@ -57,7 +57,13 @@ public class RocketBurstBullet : MonoBehaviour
             }
             else
             {
-                MoveToTarget();
+                if (target.layer == 9)
+                {
+                    target = null;
+                } else
+                {
+                    MoveToTarget();
+                }
             }           
         }
         CheckDistanceTravel();
