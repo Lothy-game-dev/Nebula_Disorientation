@@ -7,6 +7,63 @@ using System.Data;
 public class AccessDatabase : MonoBehaviour
 {
     private IDbConnection dbConnection;
+    #region Common
+    /// <summary>
+    /// Get Real name of an item from it no space no capitalize name
+    /// </summary>
+    /// <param name="name">Name</param>
+    /// <param name="Type">Weapon/Power/Model/Consumable</param>
+    /// <returns></returns>
+    public string GetItemRealName(string ItemName, string Type)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        string realName = "";
+        if (Type=="Weapon")
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT WeaponName FROM ArsenalWeapon WHERE replace(replace(lower(WeaponName),' ',''),'-','')='" + ItemName.Replace("-","").Replace(" ","").ToLower() + "'";
+            IDataReader reader = dbCheckCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                realName = reader.GetString(0);
+            }
+        } else if (Type=="Power")
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT PowerName FROM ArsenalPower WHERE replace(replace(lower(PowerName),' ',''),'-','')='" + ItemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
+            IDataReader reader = dbCheckCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                realName = reader.GetString(0);
+            }
+        } else if (Type=="Model")
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT ModelName FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + ItemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
+            IDataReader reader = dbCheckCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                realName = reader.GetString(0);
+            }
+        } else if (Type=="Consumable")
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + ItemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
+            IDataReader reader = dbCheckCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                realName = reader.GetString(0);
+            }
+        }
+        return realName;
+    }
+    #endregion
     #region Access Player Profile
     public string CreateNewPlayerProfile(string name)
     {

@@ -25,7 +25,7 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        EnemySpawnID = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 14/*1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
+        EnemySpawnID = new int[] { /*1, */2, 3, 4, 7/*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
         EnemySpawnPosition = new Vector2[] { 
         new Vector2(2500,0), 
         new Vector2(1500,0), new Vector2(3500,0), new Vector2(2500,1000),new Vector2(2500,-1000),
@@ -53,6 +53,7 @@ public class EnemyFighterSpawn : MonoBehaviour
     #region Spawn Enemy
     private void CreateEnemy(int id, Vector2 spawnPos)
     {
+        spawnPos = spawnPos / 5;
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
         // Get Model
         for (int i=0;i<EnemyModel.transform.childCount;i++)

@@ -24,7 +24,7 @@ public class UsualLaserBullet : BulletShared
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
-        StartCoroutine(AccelerateLaser(0.01f,transform.localScale.x));
+        StartCoroutine(AccelerateLaser(0.005f,transform.localScale.x));
         InitializeBullet();
     }
 
