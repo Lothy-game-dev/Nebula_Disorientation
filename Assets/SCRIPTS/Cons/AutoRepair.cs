@@ -16,16 +16,18 @@ public class AutoRepair : Consumable
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private float PlayerCurrentHP;
+    private float HealingAmount;
     private float PlayerMaxHP;
     private bool isStart;
     private float Timer;
+    private float CurrentHP;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        
     }
 
     // Update is called once per frame
@@ -38,9 +40,8 @@ public class AutoRepair : Consumable
     {
         if (isStart)
         {
-            
             if (Timer >= Duration)
-            {
+            {                             
                 isStart = false;
                 Timer = 0f;
             }
@@ -53,9 +54,9 @@ public class AutoRepair : Consumable
                 else
                 {
                     Fighter.GetComponent<PlayerFighter>().CurrentHP = PlayerMaxHP;
-                }
+                }         
             }
-            Timer += Time.fixedDeltaTime;
+            Timer += Time.fixedDeltaTime;           
         }
     }
     #endregion
@@ -64,8 +65,9 @@ public class AutoRepair : Consumable
     public void ActivateAutoRepair()
     {
         isStart = true;
-        PlayerCurrentHP = Fighter.GetComponent<PlayerFighter>().CurrentHP;
+        CurrentHP = Fighter.GetComponent<PlayerFighter>().CurrentHP;
         PlayerMaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
+        HealingAmount = CurrentHP + PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / 100;
     }
     #endregion
     #region Function group ...
