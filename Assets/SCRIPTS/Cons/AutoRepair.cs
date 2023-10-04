@@ -20,7 +20,7 @@ public class AutoRepair : Consumable
     private float PlayerMaxHP;
     private bool isStart;
     private float Timer;
-    private float CurrentHP;
+    private float TotalHeal;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -41,21 +41,44 @@ public class AutoRepair : Consumable
         if (isStart)
         {
             if (Timer >= Duration)
-            {                             
+            {
+                if (TotalHeal < HealingAmount)
+                {
+                    if (Fighter.GetComponent<PlayerFighter>().CurrentHP < Fighter.GetComponent<PlayerFighter>().MaxHP - (HealingAmount - TotalHeal))
+                    {
+                        Fighter.GetComponent<PlayerFighter>().CurrentHP += (HealingAmount - TotalHeal);
+                    } else
+                    {
+                        Fighter.GetComponent<PlayerFighter>().CurrentHP += PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP;
+                    }
+                }
                 isStart = false;
                 Timer = 0f;
             }
             else
             {
-                if (Fighter.GetComponent<PlayerFighter>().CurrentHP < PlayerMaxHP)
+                
+                if (Fighter.GetComponent<PlayerFighter>().CurrentHP < PlayerMaxHP - (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime))
                 {
-                    Fighter.GetComponent<PlayerFighter>().CurrentHP += (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);
+                    if (TotalHeal < HealingAmount - (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime))
+                    {                        
+                        Fighter.GetComponent<PlayerFighter>().CurrentHP += (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);
+                        TotalHeal += (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);                       
+                    } else
+                    {
+                        Fighter.GetComponent<PlayerFighter>().CurrentHP += HealingAmount - TotalHeal;
+                        TotalHeal = HealingAmount;
+                        Timer = Duration;
+                    }      
+                    
                 }
                 else
                 {
-                    Fighter.GetComponent<PlayerFighter>().CurrentHP = PlayerMaxHP;
+                    TotalHeal += PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP;
+                    Fighter.GetComponent<PlayerFighter>().CurrentHP += PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP ;
                 }         
             }
+            
             Timer += Time.fixedDeltaTime;           
         }
     }
@@ -65,9 +88,9 @@ public class AutoRepair : Consumable
     public void ActivateAutoRepair()
     {
         isStart = true;
-        CurrentHP = Fighter.GetComponent<PlayerFighter>().CurrentHP;
         PlayerMaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
-        HealingAmount = CurrentHP + PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / 100;
+        /*TotalHeal = Fighter.GetComponent<PlayerFighter>().CurrentHP + PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / 100;*/
+        HealingAmount = PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / 100;
     }
     #endregion
     #region Function group ...
