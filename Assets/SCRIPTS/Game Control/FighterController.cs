@@ -263,7 +263,7 @@ public class FighterController : MonoBehaviour
         for (int i = 0; i < PowerModel.transform.childCount; i++)
         {
 
-            if (DatabaseSecondPower != null)
+            if (DatabaseSecondPower != null && DatabaseSecondPower != "")
             {
                 if (PowerModel.transform.GetChild(i).name.Equals(DatabaseSecondPower))
                 {

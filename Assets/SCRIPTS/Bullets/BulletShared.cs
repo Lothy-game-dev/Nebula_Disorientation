@@ -92,14 +92,14 @@ public class BulletShared : MonoBehaviour
     // Acceleration for the first time second
     public IEnumerator Accelerate(float time)
     {
-        for (int i=0; i<10; i++)
+        for (int i=0; i<4; i++)
         {
             if (Mathf.Abs(RealVelocity.x) < Mathf.Abs(Velocity.x) && Mathf.Abs(RealVelocity.y) < Mathf.Abs(Velocity.y))
             {
-                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 10, RealVelocity.y + Velocity.y / 10);
+                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 4, RealVelocity.y + Velocity.y / 4);
             }
             CalculateVelocity(RealVelocity);
-            yield return new WaitForSeconds(time/10f);
+            yield return new WaitForSeconds(time/4f);
         }
     }
 

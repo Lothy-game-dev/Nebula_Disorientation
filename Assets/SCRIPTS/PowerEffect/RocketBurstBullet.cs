@@ -120,7 +120,7 @@ public class RocketBurstBullet : MonoBehaviour
         }
     }
     #endregion
-    #region
+    #region Homing to Target
     public void MoveToTarget()
     {
         
@@ -131,7 +131,7 @@ public class RocketBurstBullet : MonoBehaviour
         float curScale = 1;
         if (angle > 45 && angle < 135)
         {
-            curScale = 1.5f;
+            curScale = Velocity/500f *1.5f;
         }
         CheckIsUpOrDownMovement();
         transform.Rotate(new Vector3(0, 0, -DirMov * curScale * angle / 5));
