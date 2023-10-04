@@ -106,7 +106,13 @@ public class ArsenalItem : MonoBehaviour
             }
             else
             {
-                ItemStatusList[i].GetComponent<TextMeshPro>().text = (string)Status[ItemStatusList[i].name];
+                if (ItemStatusList[i].name == "BRx")
+                {
+                    ItemStatusList[i].GetComponent<TextMeshPro>().text = "X" + (string)Status[ItemStatusList[i].name];
+                } else
+                {
+                    ItemStatusList[i].GetComponent<TextMeshPro>().text = (string)Status[ItemStatusList[i].name];
+                }
             }
         }
         

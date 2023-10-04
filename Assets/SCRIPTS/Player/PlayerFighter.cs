@@ -27,6 +27,7 @@ public class PlayerFighter : FighterShared
     public AudioClip OverheatWarning;
     public AudioClip Overheated;
     public AudioSource DashAudioSource;
+    public float TotalHealing;
     #endregion
     #region NormalVariables
     private float[] PowerAndConsCD;

@@ -293,21 +293,25 @@ public class FighterController : MonoBehaviour
         {
             int count = 0;
             List<GameObject> ConsumableName = new List<GameObject>();
-            for (int i = 0; i < ConsumableModel.transform.childCount; i++)
+            foreach (var itemKey in DatabaseConsumables)
             {
-               if (DatabaseConsumables.ContainsKey(ConsumableModel.transform.GetChild(i).name)) 
-               {
-                    GameObject cons = Instantiate(ConsumableModel.transform.GetChild(i).gameObject, ConsumableImages[count].transform.GetChild(0).position, Quaternion.identity);
-                    cons.SetActive(true);
-                    cons.transform.SetParent(ConsumableImages[count].transform);
-                    ConsumableImages[count].GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(ConsumableModel.transform.GetChild(i).name, "Consumable");
-                    cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
-                    cons.GetComponent<SpriteRenderer>().sortingOrder = 201;
-                    cons.GetComponent<Consumable>().InitData(ConsumableModel.transform.GetChild(i).name);
-                    ConsumableName.Add(cons);
-                    count++;
+                for (int i = 0; i < ConsumableModel.transform.childCount; i++)
+                {                  
+                    if (itemKey.Key == (ConsumableModel.transform.GetChild(i).name))
+                    {
+                        GameObject cons = Instantiate(ConsumableModel.transform.GetChild(i).gameObject, ConsumableImages[count].transform.GetChild(0).position, Quaternion.identity);
+                        cons.SetActive(true);
+                        cons.transform.SetParent(ConsumableImages[count].transform);
+                        ConsumableImages[count].GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(ConsumableModel.transform.GetChild(i).name, "Consumable");
+                        cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
+                        cons.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                        cons.GetComponent<Consumable>().InitData(ConsumableModel.transform.GetChild(i).name);
+                        ConsumableName.Add(cons);
+                        count++;
+                    }
                 }
             }
+            
             PlayerFighter.GetComponent<PlayerFighter>().Consumables = DatabaseConsumables;
             PlayerFighter.GetComponent<PlayerFighter>().ConsumableObject = ConsumableName;
         }
