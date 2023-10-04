@@ -254,6 +254,7 @@ public class FighterController : MonoBehaviour
                 }
             } else
             {
+                Destroy(FirstPowerImage.GetComponent<HUDCreateInfoBoard>());
                 FirstPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
                 break;
             }           
@@ -281,6 +282,7 @@ public class FighterController : MonoBehaviour
             }
             else
             {
+                Destroy(SecondPowerImage.GetComponent<HUDCreateInfoBoard>());
                 SecondPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
                 break;
             }
