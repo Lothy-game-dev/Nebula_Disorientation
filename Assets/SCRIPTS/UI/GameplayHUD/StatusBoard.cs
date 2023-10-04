@@ -312,11 +312,11 @@ public class StatusBoard : MonoBehaviour
         ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
             = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
         ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-        ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = LeftWeaponName;
+        ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
         ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
             = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
         ItemBox2.transform.GetChild(0).localScale = WeaponScale;
-        ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = RightWeaponName;
+        ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
         // WAit time to show HP and temp bar
         yield return new WaitForSeconds(0.4f);
         CloneEnemy.SetActive(true);
@@ -468,11 +468,11 @@ public class StatusBoard : MonoBehaviour
                 ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
                 ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = LeftWeaponName;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
                 ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
                 ItemBox2.transform.GetChild(0).localScale = WeaponScale;
-                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = RightWeaponName;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
             } else
             {
                 if (ModelFirstPower!=null)
@@ -480,7 +480,7 @@ public class StatusBoard : MonoBehaviour
                     ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelFirstPower.GetComponent<SpriteRenderer>().sprite;
                     ItemBox1.transform.GetChild(0).localScale = PowerScale;
-                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FirstPower;
+                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(FirstPower, "Power");
                 } else
                 {
                     ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
@@ -492,7 +492,7 @@ public class StatusBoard : MonoBehaviour
                     ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelSecondPower.GetComponent<SpriteRenderer>().sprite;
                     ItemBox2.transform.GetChild(0).localScale = PowerScale;
-                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = SecondPower;
+                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(SecondPower, "Power");
                 } else
                 {
                     ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
@@ -591,7 +591,7 @@ public class StatusBoard : MonoBehaviour
                 ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelFirstPower.GetComponent<SpriteRenderer>().sprite;
                 ItemBox1.transform.GetChild(0).localScale = PowerScale;
-                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FirstPower;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(FirstPower, "Power");
             } else
             {
                 ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
@@ -603,7 +603,7 @@ public class StatusBoard : MonoBehaviour
                 ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelSecondPower.GetComponent<SpriteRenderer>().sprite;
                 ItemBox2.transform.GetChild(0).localScale = PowerScale;
-                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = SecondPower;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(SecondPower, "Power");
             } else
             {
                 ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
@@ -616,11 +616,11 @@ public class StatusBoard : MonoBehaviour
             ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                 = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
             ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = LeftWeaponName;
+            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
             ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                 = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
             ItemBox2.transform.GetChild(0).localScale = WeaponScale;
-            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = RightWeaponName;
+            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
         }
     }
     #endregion

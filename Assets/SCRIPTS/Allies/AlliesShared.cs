@@ -41,6 +41,9 @@ public class AlliesShared : FighterShared
     private float resetMovetimer;
     private int RandomMove;
     private int RandomRotate;
+    public float DelayBetween2Weap;
+    public float DelayTimer;
+    private bool LeftFire;
     public GameObject Target;
     #endregion
     #region Shared Functions
@@ -76,6 +79,7 @@ public class AlliesShared : FighterShared
     {
         Status = AllyStatus.GetComponent<StatusBoard>();
         InitializeFighter();
+        LeftFire = false;
     }
 
     private void Update()
@@ -83,13 +87,24 @@ public class AlliesShared : FighterShared
         UpdateAlly();
         if (doneInitWeapon)
         {
+            DelayTimer -= Time.deltaTime;
             if (LeftWeapon != null)
             {
-                LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+                if (DelayTimer < 0f && !LeftFire)
+                {
+                    LeftFire = true;
+                    LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+                    DelayTimer = DelayBetween2Weap;
+                }
             }
             if (RightWeapon != null)
             {
-                RightWeapon.GetComponent<Weapons>().AIShootBullet();
+                if (DelayTimer < 0f && LeftFire)
+                {
+                    LeftFire = false;
+                    RightWeapon.GetComponent<Weapons>().AIShootBullet();
+                    DelayTimer = DelayBetween2Weap;
+                }
             }
             if (Power1 != "")
             {
@@ -126,7 +141,7 @@ public class AlliesShared : FighterShared
         resetMovetimer -= Time.deltaTime;
         if (resetMovetimer <= 0f)
         {
-            RandomMove = Random.Range(1, 2);
+            RandomMove = Random.Range(1, 3);
             RandomRotate = Random.Range(1, 4);
             resetMovetimer = 2f;
         }
@@ -288,6 +303,11 @@ public class AlliesShared : FighterShared
 
             faw.AttachWeapon();
 
+            // Delay Weapon Fire Check Case
+            if (weaponName1 == weaponName2 && !LW.IsThermalType)
+            {
+                DelayBetween2Weap = (1 / LW.RateOfFire) / 2;
+            }
             // Power
             bool alreadyFirst = false;
             bool alreadySecond = false;

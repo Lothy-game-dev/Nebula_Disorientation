@@ -36,6 +36,7 @@ public class GameplayInteriorController : MonoBehaviour
         Color c = bf.GetComponent<SpriteRenderer>().color;
         c.a = 1;
         bf.GetComponent<SpriteRenderer>().color = c;
+        bf.transform.SetParent(transform);
         bf.SetActive(true);
         StartCoroutine(BlackFadeOpen(bf,delay, duration));
     }

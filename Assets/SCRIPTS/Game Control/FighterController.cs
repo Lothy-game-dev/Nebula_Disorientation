@@ -201,7 +201,7 @@ public class FighterController : MonoBehaviour
         lc.a = 200 / 255f;
         LeftWeaponIcon.GetComponent<SpriteRenderer>().color = lc;
         LeftWeaponIcon.transform.SetParent(LeftOverheatImage.transform);
-        LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(CurrentLeftWeapon.name);
+        LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(FindObjectOfType<AccessDatabase>().GetItemRealName(CurrentLeftWeapon.name, "Weapon"));
         LeftOverheatImage.GetComponent<HUDCreateInfoBoard>().TopBottomLeftRight.Add("Bottom");
         LeftOverheatImage.GetComponent<HUDShowRange>().Range = CurrentLeftWeapon.GetComponent<Weapons>().
             Bullet.GetComponent<BulletShared>().MaximumDistance > 0 ?
@@ -217,7 +217,7 @@ public class FighterController : MonoBehaviour
             RightWeaponIcon.transform.localScale.z);
         RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 201;
         RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);
-        RightOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(CurrentRightWeapon.name);
+        RightOverheatImage.GetComponent<HUDCreateInfoBoard>().Text.Add(FindObjectOfType<AccessDatabase>().GetItemRealName(CurrentRightWeapon.name, "Weapon"));
         RightOverheatImage.GetComponent<HUDCreateInfoBoard>().TopBottomLeftRight.Add("Bottom");
         Color rc = RightWeaponIcon.GetComponent<SpriteRenderer>().color;
         rc.a = 200 / 255f;
@@ -237,13 +237,14 @@ public class FighterController : MonoBehaviour
         for (int i = 0; i < PowerModel.transform.childCount; i++)
         {
            
-            if (DatabaseFirstPower != null)
+            if (DatabaseFirstPower != null && DatabaseFirstPower !="")
             {
                 if (PowerModel.transform.GetChild(i).name.Equals(DatabaseFirstPower))
                 {
                     FirstPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
                     FirstPower.SetActive(true);
                     FirstPower.transform.SetParent(FirstPowerImage.transform);
+                    FirstPowerImage.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(DatabaseFirstPower, "Power");
                     FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
                     FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
@@ -253,6 +254,7 @@ public class FighterController : MonoBehaviour
                 }
             } else
             {
+                FirstPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
                 break;
             }           
         }
@@ -267,6 +269,7 @@ public class FighterController : MonoBehaviour
                     SecondPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
                     SecondPower.SetActive(true);
                     SecondPower.transform.SetParent(SecondPowerImage.transform);
+                    SecondPowerImage.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(DatabaseSecondPower, "Power");
                     SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
                     SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
@@ -278,6 +281,7 @@ public class FighterController : MonoBehaviour
             }
             else
             {
+                SecondPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
                 break;
             }
         }
@@ -294,8 +298,9 @@ public class FighterController : MonoBehaviour
                     GameObject cons = Instantiate(ConsumableModel.transform.GetChild(i).gameObject, ConsumableImages[count].transform.GetChild(0).position, Quaternion.identity);
                     cons.SetActive(true);
                     cons.transform.SetParent(ConsumableImages[count].transform);
+                    ConsumableImages[count].GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(ConsumableModel.transform.GetChild(i).name, "Consumable");
                     cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
-                    cons.GetComponent<SpriteRenderer>().sortingOrder = 11;
+                    cons.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     cons.GetComponent<Consumable>().InitData(ConsumableModel.transform.GetChild(i).name);
                     ConsumableName.Add(cons);
                     count++;

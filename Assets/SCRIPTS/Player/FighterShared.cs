@@ -141,6 +141,10 @@ public class FighterShared : MonoBehaviour
         Destroy(expl5, 0.3f);
         Destroy(LeftWeapon);
         Destroy(RightWeapon);
+        if (name== "Player")
+        {
+            FindObjectOfType<CameraController>().GetComponent<AudioListener>().enabled = true;
+        }
         Destroy(gameObject);
     }
     // Check Thermal Status, must be called in Update()

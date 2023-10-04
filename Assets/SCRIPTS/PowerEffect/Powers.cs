@@ -33,6 +33,7 @@ public class Powers : MonoBehaviour
     public float BRx;
     public AudioClip SoundEffect;
     public AudioClip ChargingSoundEffect;
+    private float audioScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -56,6 +57,13 @@ public class Powers : MonoBehaviour
     {
         gameObject.AddComponent<AudioSource>();
         sound = GetComponent<AudioSource>();
+        sound.spatialBlend = 1;
+        sound.rolloffMode = AudioRolloffMode.Linear;
+        sound.maxDistance = 2000;
+        sound.minDistance = 1000;
+        sound.dopplerLevel = 0;
+        sound.priority = 256;
+        audioScale = 0.5f;
         //Get power stat from DB
         Power = FindAnyObjectByType<AccessDatabase>().GetPowerDataByName(name.Replace("(Clone)", ""));
         PowerStats = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(Power["Stats"].ToString());
@@ -135,7 +143,7 @@ public class Powers : MonoBehaviour
         sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 0.35f;
+        sound.volume = 0.35f* audioScale;
     }  
     public void EndSound()
     {

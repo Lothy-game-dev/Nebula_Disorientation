@@ -59,6 +59,7 @@ public class Weapons : MonoBehaviour
     private int MouseInput;
     private GameObject bulletFire;
     private BulletShared bul;
+    private float audioScale;
 
     public bool BeamActivating;
     public bool isUsingWormhole;
@@ -84,6 +85,14 @@ public class Weapons : MonoBehaviour
         }
         gameObject.AddComponent<AudioSource>();
         aus = GetComponent<AudioSource>();
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 2000;
+        aus.minDistance = 1000;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
+        audioScale = 0.5f;
     }
 
     // Update is called once per frame
@@ -684,9 +693,9 @@ public class Weapons : MonoBehaviour
         aus.Play();
         if (name.Replace("(Clone)","")== "StarBlaster")
         {
-            aus.volume = 0.25f;
+            aus.volume = 0.25f* audioScale;
         } else
-        aus.volume = 1f;
+        aus.volume = 1f* audioScale;
     }
     public void ThermalSound()
     {
@@ -695,8 +704,8 @@ public class Weapons : MonoBehaviour
             aus.clip = WeaponShootSound;
             aus.loop = true;
             aus.Play();
-            if (Bullet.GetComponent<UsualThermalOrb>()!=null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f;
-            else aus.volume = 0.2f;
+            if (Bullet.GetComponent<UsualThermalOrb>()!=null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale;
+            else aus.volume = 0.2f * audioScale;
         }
     }
 
@@ -727,7 +736,7 @@ public class Weapons : MonoBehaviour
         aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
         aus.loop = true;
         aus.Play();
-        aus.volume = 0.08f;
+        aus.volume = 0.08f * audioScale;
     }
     #endregion
 }

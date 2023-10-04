@@ -41,6 +41,9 @@ public class EnemyShared : FighterShared
     private int RandomMove;
     private int RandomRotate;
     public GameObject Target;
+    private float DelayBetween2Weap;
+    private float DelayTimer;
+    private bool LeftFire;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -82,13 +85,24 @@ public class EnemyShared : FighterShared
         UpdateEnemy();
         if (doneInitWeapon)
         {
+            DelayTimer -= Time.deltaTime;
             if (LeftWeapon!=null)
             {
-                LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+                if (DelayTimer<=0f && !LeftFire)
+                {
+                    LeftFire = true;
+                    LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+                    DelayTimer = DelayBetween2Weap;
+                }
             }
             if (RightWeapon!=null)
             {
-                RightWeapon.GetComponent<Weapons>().AIShootBullet();
+                if (DelayTimer <= 0f && LeftFire)
+                {
+                    LeftFire = false;
+                    RightWeapon.GetComponent<Weapons>().AIShootBullet();
+                    DelayTimer = DelayBetween2Weap;
+                }
             }
             if (Power1!="")
             {
@@ -125,7 +139,7 @@ public class EnemyShared : FighterShared
         resetMovetimer -= Time.deltaTime;
         if (resetMovetimer<=0f)
         {
-            RandomMove = Random.Range(1, 2);
+            RandomMove = Random.Range(1, 3);
             RandomRotate = Random.Range(1, 4);
             resetMovetimer = 2f;
         }
@@ -281,7 +295,11 @@ public class EnemyShared : FighterShared
             faw.RightWeapon = RightWeapon;
 
             faw.AttachWeapon();
-
+            // Delay Weapon Fire Check Case
+            if (weaponName1 == weaponName2 && !LW.IsThermalType)
+            {
+                DelayBetween2Weap = (1 / LW.RateOfFire) / 2;
+            }
             // Power
             bool alreadyFirst = false;
             bool alreadySecond = false;
@@ -461,7 +479,7 @@ public class EnemyShared : FighterShared
             goList.Add(FindObjectOfType<GameController>().Player);
         }
         GameObject Nearest = goList[0];
-        float distance = Mathf.Abs((objects[0].transform.position - transform.position).magnitude);
+        float distance = Mathf.Abs((goList[0].transform.position - transform.position).magnitude);
         foreach (var enemy in goList)
         {
             float distanceTest = Mathf.Abs((enemy.transform.position - transform.position).magnitude);
