@@ -254,6 +254,7 @@ public class FighterController : MonoBehaviour
                 }
             } else
             {
+                Destroy(FirstPowerImage.GetComponent<HUDCreateInfoBoard>());
                 FirstPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
                 break;
             }           
@@ -262,7 +263,7 @@ public class FighterController : MonoBehaviour
         for (int i = 0; i < PowerModel.transform.childCount; i++)
         {
 
-            if (DatabaseSecondPower != null)
+            if (DatabaseSecondPower != null && DatabaseSecondPower != "")
             {
                 if (PowerModel.transform.GetChild(i).name.Equals(DatabaseSecondPower))
                 {
@@ -281,6 +282,7 @@ public class FighterController : MonoBehaviour
             }
             else
             {
+                Destroy(SecondPowerImage.GetComponent<HUDCreateInfoBoard>());
                 SecondPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
                 break;
             }

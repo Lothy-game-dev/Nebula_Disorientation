@@ -40,7 +40,9 @@ public class EnemyShared : FighterShared
     private float resetMovetimer;
     private int RandomMove;
     private int RandomRotate;
-    public GameObject Target;
+    public GameObject LeftTarget;
+    public GameObject RightTarget;
+    private float TargetRange;
     private float DelayBetween2Weap;
     private float DelayTimer;
     private bool LeftFire;
@@ -168,16 +170,27 @@ public class EnemyShared : FighterShared
         {
             fm.NoLeftRightMove();
         }
-        if (Target == null)
+        CheckTargetEnemy();
+        if (LeftTarget == null)
         {
-            TargetNearestEnemy();
+            TargetLeftEnemy();
+        }
+        else
+        {
             if (LeftWeapon != null)
             {
-                LeftWeapon.GetComponent<Weapons>().Aim = Target;
+                LeftWeapon.GetComponent<Weapons>().Aim = LeftTarget;
             }
+        }
+        if (RightTarget == null)
+        {
+            TargetRightEnemy();
+        }
+        else
+        {
             if (RightWeapon != null)
             {
-                RightWeapon.GetComponent<Weapons>().Aim = Target;
+                RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
             }
         }
     }
@@ -258,7 +271,7 @@ public class EnemyShared : FighterShared
             Weapons LW = LeftWeapon.GetComponent<Weapons>();
             LW.isLeftWeapon = true;
             LW.Fighter = gameObject;
-            LW.Aim = Target;
+            LW.Aim = LeftTarget;
             LW.WeaponPosition = null;
             LW.tracking = true;
             LW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
@@ -279,7 +292,7 @@ public class EnemyShared : FighterShared
             RightWeapon.SetActive(true);
             Weapons RW = RightWeapon.GetComponent<Weapons>();
             RW.Fighter = gameObject;
-            RW.Aim = Target;
+            RW.Aim = RightTarget;
             RW.WeaponPosition = null;
             RW.tracking = true;
             RW.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
@@ -300,6 +313,10 @@ public class EnemyShared : FighterShared
             {
                 DelayBetween2Weap = (1 / LW.RateOfFire) / 2;
             }
+            // Set Target
+            TargetRange = LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance >= RW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance ? LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance : LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
+            TargetLeftEnemy();
+            TargetRightEnemy();
             // Power
             bool alreadyFirst = false;
             bool alreadySecond = false;
@@ -466,30 +483,58 @@ public class EnemyShared : FighterShared
         yield return new WaitForSeconds(Random.Range(1,10));
         doneInitWeapon = true;
     }
-    private void TargetNearestEnemy()
+    private void TargetLeftEnemy()
     {
-        AlliesShared[] objects = FindObjectsOfType<AlliesShared>();
-        List<GameObject> goList = new List<GameObject>();
-        foreach (var enemy in objects)
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
         {
-            goList.Add(enemy.gameObject);
-        }
-        if (FindObjectOfType<GameController>().Player!=null)
-        {
-            goList.Add(FindObjectOfType<GameController>().Player);
-        }
-        GameObject Nearest = goList[0];
-        float distance = Mathf.Abs((goList[0].transform.position - transform.position).magnitude);
-        foreach (var enemy in goList)
-        {
-            float distanceTest = Mathf.Abs((enemy.transform.position - transform.position).magnitude);
-            if (distanceTest < distance)
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var enemy in cols)
             {
-                distance = distanceTest;
-                Nearest = enemy.gameObject;
+                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                if (distanceTest < distance)
+                {
+                    distance = distanceTest;
+                    Nearest = enemy.gameObject;
+                }
             }
+            LeftTarget = Nearest;
         }
-        Target = Nearest;
+    }
+
+    private void TargetRightEnemy()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
+        {
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var enemy in cols)
+            {
+                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                if (distanceTest < distance)
+                {
+                    distance = distanceTest;
+                    Nearest = enemy.gameObject;
+                }
+            }
+            RightTarget = Nearest;
+        }
+    }
+
+    private void CheckTargetEnemy()
+    {
+        if (LeftTarget!=null && Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange)
+        {
+            LeftTarget = null;
+            LeftWeapon.GetComponent<Weapons>().Aim = null;
+        }
+        if (RightTarget!=null && Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange)
+        {
+            RightTarget = null;
+            RightWeapon.GetComponent<Weapons>().Aim = null;
+        }
     }
     #endregion
 }

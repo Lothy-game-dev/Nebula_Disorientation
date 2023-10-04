@@ -22,7 +22,7 @@ public class UsualThermalOrb : BulletShared
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
-        StartCoroutine(Accelerate(0.1f));
+        StartCoroutine(Accelerate(0.05f));
         InitializeBullet();
     }
 

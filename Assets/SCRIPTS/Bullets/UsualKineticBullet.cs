@@ -24,7 +24,7 @@ public class UsualKineticBullet : BulletShared
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
-        StartCoroutine(Accelerate(0.1f));
+        StartCoroutine(Accelerate(0.005f));
         InitializeBullet();
     }
 
