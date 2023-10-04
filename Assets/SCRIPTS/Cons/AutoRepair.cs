@@ -38,7 +38,10 @@ public class AutoRepair : Consumable
     {
         if (isStart)
         {
-            
+            if (gameObject.name.Contains("Emergency"))
+            {
+                Timer += Time.fixedDeltaTime;
+            }
             if (Timer >= Duration)
             {
                 isStart = false;
@@ -55,7 +58,10 @@ public class AutoRepair : Consumable
                     Fighter.GetComponent<PlayerFighter>().CurrentHP = PlayerMaxHP;
                 }
             }
-            Timer += Time.fixedDeltaTime;
+            if (!gameObject.name.Contains("Emergency")) 
+            {
+                Timer += Time.fixedDeltaTime;
+            }
         }
     }
     #endregion
