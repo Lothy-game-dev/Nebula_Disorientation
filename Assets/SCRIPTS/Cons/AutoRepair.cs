@@ -40,6 +40,7 @@ public class AutoRepair : Consumable
     {
         if (isStart)
         {
+            Debug.Log("hello");
             if (Timer >= Duration)
             {
                 if (TotalHeal < HealingAmount)
@@ -54,6 +55,7 @@ public class AutoRepair : Consumable
                 }
                 isStart = false;
                 Timer = 0f;
+                TotalHeal = 0f;
             }
             else
             {

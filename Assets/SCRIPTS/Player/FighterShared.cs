@@ -559,7 +559,7 @@ public class FighterShared : MonoBehaviour
     #region Calculate Damage Received
     public void ReceiveDamage(float damage)
     {
-        damage = damage * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) * 100 : 1);
+        damage = damage * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
         if (CurrentBarrier>0)
         {
             if (CurrentBarrier>damage)

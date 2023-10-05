@@ -978,6 +978,45 @@ public class GlobalFunctionController : MonoBehaviour
         }
         return DataDict;
     }
+    public Dictionary<string, object> ConvertWarshipStatToDictionary(string stat)
+    {
+        Dictionary<string, object> WSStat = new Dictionary<string, object>();
+        string[] splitstat = stat.Split("|");
+        //HP
+        string HP = splitstat[0];
+        if (HP.Contains("HP-"))
+        {
+            HP = HP.Replace("HP-", "");
+            WSStat.Add("HP", HP);
+        }
+        else
+        {
+            WSStat.Add("HP", "0");
+        }
+        //SPD
+        string SPD = splitstat[1];
+        if (SPD.Contains("SPD-"))
+        {
+            SPD = SPD.Replace("SPD-", "");
+            WSStat.Add("SPD", SPD);
+        }
+        else
+        {
+            WSStat.Add("SPD", "0");
+        }
+        //ROT
+        string ROT = splitstat[2];
+        if (ROT.Contains("ROT-"))
+        {
+            ROT = ROT.Replace("ROT-", "");
+            WSStat.Add("ROT", ROT);
+        }
+        else
+        {
+            WSStat.Add("ROT", "0");
+        }
+        return WSStat;
+    }
     #endregion
     #region Convert Currency To Icons
     public string ConvertToIcon(string Currency)
