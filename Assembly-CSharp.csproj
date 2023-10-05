@@ -95,6 +95,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotificationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\Warship\WSMovement.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECCurrencyBar.cs" />
