@@ -330,7 +330,51 @@ public class InitializeDatabase : MonoBehaviour
                 "(Id INTEGER," +
                 "PlayerId INTEGER," +
                 "CollectedTime TEXT," +
-                "PRIMARY KEY(Id AUTOINCREMENT) );";
+                "PRIMARY KEY(Id AUTOINCREMENT) );" +
+            // Table for FighterGroup
+            "CREATE TABLE IF NOT EXISTS FighterGroup" +
+                "(GroupId INTEGER," +
+                "GroupName TEXT NOT NULL," +
+                "AlliesFighterA TEXT NOT NULL," +
+                "AlliesFighterB TEXT NOT NULL," +
+                "AlliesFighterC TEXT NOT NULL," +
+                "EnemiesFighterA TEXT NOT NULL," +
+                "EnemiesFighterB TEXT NOT NULL," +
+                "EnemiesFighterC TEXT NOT NULL," +
+                "PRIMARY KEY(GroupId AUTOINCREMENT) );" +
+            // Table for SpaceZoneVariants
+            "CREATE TABLE IF NOT EXISTS SpaceZoneVariants" +
+                "(StageVariantID INTEGER," +
+                "StageValue INTEGER NOT NULL," +
+                "VariantCount INTEGER NOT NULL," +
+                "AvailableBackgrounds TEXT NOT NULL," +
+                "TierColor TEXT NOT NULL," +
+                "PRIMARY KEY(StageVariantID AUTOINCREMENT) );" +
+            // Table for SpaceZoneTemplate
+            "CREATE TABLE IF NOT EXISTS SpaceZoneTemplate" +
+                "(TemplateID INTEGER," +
+                "StageValue INTEGER NOT NULL," +
+                "Variant INTEGER NOT NULL," +
+                "Type TEXT NOT NULL," +
+                "Missions TEXT NOT NULL," +
+                "FighterGroup TEXT NOT NULL," +
+                "Time INTEGER," +
+                "SquadRating TEXT NOT NULL," +
+                "AllySquad TEXT NOT NULL," +
+                "EnemySquad TEXT NOT NULL," +
+                "ArmyRating TEXT," +
+                "AllyWarship TEXT," +
+                "EnemyWarship TEXT," +
+                "FOREIGN KEY(FighterGroup) REFERENCES FighterGroup(GroupName), " +
+                "PRIMARY KEY(TemplateID AUTOINCREMENT) );" +
+            // Table for SpaceZonePosition	
+            "CREATE TABLE IF NOT EXISTS SpaceZonePosition" +
+                "(PositionID INTEGER," +
+                "PositionType TEXT NOT NULL," +
+                "PositionLimitTopLeft TEXT NOT NULL," +
+                "PositionLimitBottomRight TEXT NOT NULL," +
+                "PRIMARY KEY(PositionID AUTOINCREMENT) );" +
+                "";
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +
@@ -571,8 +615,73 @@ public class InitializeDatabase : MonoBehaviour
             "(13, 'ND-Prot No.0', '', 'NanoCannon|SuperiorLaserCannon', 'HP-30000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5', 'HeavyBarrier|SuperiorShortLaserBeam', '#bf2600')," +
             "(14, 'ND-Zartillery', 'WSSS', 'GrandGravitationalArtillery', 'HP-20000|SPD-400|ROT-0.25|AOF-45,45|DM-1.2|AM-3.0|PM-1.0', 'HeavyBarrier|SuperiorRocketBurstDevice', '#bf2600')," +
             "(15, 'ND-MKZ', '', 'SuperiorFreezingBlaster|PlasmaCannon', 'HP-40000|SPD-600|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8', 'HeavyBarrier|AdvancedInstantWormhole', '#bf2600');";
-        // Initialize Data Success
-        string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
+        // Insert Fighter Group
+        string FighterGroup = "INSERT INTO FighterGroup VALUES " +
+            "(1, 'A1', '2,3,4', '5,9', '13',  '2,3,4', '5,9', '13')," +
+            "(2, 'A2', '2,3,4', '6,10', '13',  '2,3,4', '6,10', '13')," +
+            "(3, 'A3', '5,6,7', '8', '13,15',  '5,6,7', '8', '13,15')," +
+            "(4, 'B1', '5,6,7', '11,12', '13,14,15',  '5,6,7', '11,12', '13,14,15')," +
+            "(5, 'B2', '9,10', '12', '14', '9,10', '12', '14');";
+        // Insert Space Zone Variants
+        string SpaceZoneVariants = "INSERT INTO SpaceZoneVariants VALUES " +
+            "(1, 1, 2, '1A,1B', '#faa53d')," +
+            "(2, 2, 3, '2A,2B', '#1d9aaa')," +
+            "(3, 3, 2, '1A,1B', '#faa53d')," +
+            "(4, 4, 3, '2A,2B', '#1d9aaa')," +
+            "(5, 5, 2, '1A,1B', '#faa53d')," +
+            "(6, 6, 3, '2A,2B', '#1d9aaa')," +
+            "(7, 7, 2, '1A,1B', '#faa53d')," +
+            "(8, 8, 2, '3', '#ae2a19')," +
+            "(9, 9, 2, '3', '#ae2a19')," +
+            "(10, 0, 2, '4', '#5e4db2');";
+        // Insert SpaceZoneTemplate
+        string SpaceZoneTemplate = "INSERT INTO SpaceZoneTemplate VALUES " +
+            "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|150', '10-0-0', '10-0-0', null, null, null)," +
+            "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '100|150', '10-0-0', '9-1-0', null, null, null)," +
+            "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '100|150', '10-0-0', '9-1-0', null, null, null)," +
+            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '50|150', '10-0-0', '9-1-0', null, null, null)," +
+            "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|150', '10-0-0', '10-0-0', null, null, null)," +
+            "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '125|175', '10-0-0', '10-0-0', null, null, null)," +
+            "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '125|175', '10-0-0', '9-1-0', null, null, null)," +
+            "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '125|175', '10-0-0', '9-1-0', null, null, null)," +
+            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '75|175', '10-0-0', '9-1-0', null, null, null)," +
+            "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|175', '10-0-0', '10-0-0', null, null, null)," +
+            "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '150|200', '10-0-0', '10-0-0', null, null, null)," +
+            "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '150|200', '10-0-0', '9-1-0', null, null, null)," +
+            "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '150|200', '10-0-0', '9-1-0', null, null, null)," +
+            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '100|200', '10-0-0', '9-1-0', null, null, null)," +
+            "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|200', '10-0-0', '10-0-0', null, null, null)," +
+            "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '175|225', '10-0-0', '10-0-0', null, null, null)," +
+            "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '175|225', '10-0-0', '9-1-0', null, null, null)," +
+            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '250|300', '9-1-0', '8-2-0', null, null, null)," +
+            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '200|200', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0')," +
+            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '275|325', '9-1-0', '8-2-0', null, null, null)," +
+            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '225|225', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0')," +
+            "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '200|100',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0')," +
+            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '150|175', '9-1-0', '8-1-1', null, null, null);";
+        // Insert SpaceZonePosition
+        string SpaceZonePosition = "INSERT INTO SpaceZonePosition VALUES " +
+            "(1, 'PN', '(-3500,-700)', '(-2100,700)')," +
+            "(2, 'AA', '(-2100,3500)', '(-700,-3500)')," +
+            "(3, 'AB', '(-3500,2100)', '(-2100,-2100)')," +
+            "(4, 'AC', '(-4900,-700)', '(-4900,700)')," +
+            "(5, 'EA', '(2100,3500)', '(700,-3500)')," +
+            "(6, 'EB', '(3500,-700)', '(2100,2100)')," +
+            "(7, 'EC', '(4900,-700)', '(4900,700)')," +
+            "(8, 'AX', '(-2100,3500)|(-2100,-700)', '(-700,700)|(-700,-3500)')," +
+            "(9, 'AY', '(-3500,2100)|(-3500,-700)|(-2100,700)', '(-2100,700)|(-2100,-2100)|(-700,-700)')," +
+            "(10, 'EX', '(2100,3500)|(2100,-700)', '(700,700)|(700,-3500)')," +
+            "(11, 'EY', '(3500,2100)|(3500,-700)|(2100,700)', '(2100,700)|(2100,-2100)|(700,-700)')," +
+            "(12, 'AO', '(-3500,-700)', '(-2100,700)')," +
+            "(13, 'EO', '(3500,-700)', '(2100,700)')," +
+            "(14, 'AS', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)')," +
+            "(15, 'ES', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)')," +
+            "(16, 'PE', '(-3500,3500)', '(-2100,2100)')," +
+            "(17, 'AES', '(-4900,4900)', '(-3500,-3500)')," +
+            "(18, 'AEE', '(3500,-3500)', '(4900,-4900)')," +
+            "(19, 'EES', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)');";
+    // Initialize Data Success
+    string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
         string Failure = "INSERT INTO DatabaseInitialize VALUES ('F');";
         // Open DB
@@ -585,7 +694,11 @@ public class InitializeDatabase : MonoBehaviour
         // Insert Data Query
         IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
         // Order: Rank > Other
-        dbCommandInsertValue.CommandText = RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel + LOTWCards + DailyMissions + Option + Tutorial + DElement + Attribute + Enemy + Warship + SpaceStation + Allies;
+        dbCommandInsertValue.CommandText = 
+            RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel
+            + LOTWCards + DailyMissions + Option + Tutorial + DElement 
+            + Attribute + Enemy + Warship + SpaceStation + Allies + FighterGroup
+            + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable

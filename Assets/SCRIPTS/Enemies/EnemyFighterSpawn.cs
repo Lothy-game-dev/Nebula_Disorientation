@@ -16,8 +16,8 @@ public class EnemyFighterSpawn : MonoBehaviour
     // will do delay later
     public List<GameObject> Enemies;
     private Dictionary<int, float> EnemySpawnDelay;
-    private Vector2[] EnemySpawnPosition;
-    private int[] EnemySpawnID;
+    public Vector2[] EnemySpawnPosition;
+    public int[] EnemySpawnID;
     private GameObject ChosenModel;
     #endregion
     #region Start & Update
@@ -25,27 +25,6 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        EnemySpawnID = new int[30];
-        for (int i = 0; i < 30; i++)
-        {
-            EnemySpawnID[i] = Random.Range(2, 4);
-        }
-        EnemySpawnPosition = new Vector2[30];
-        for (int i = 0; i < 30; i++)
-        {
-            EnemySpawnPosition[i].x = Random.Range(700f, 2100f);
-            EnemySpawnPosition[i].y = Random.Range(-3500f, 3500f);
-        }
-        EnemySpawnDelay = new Dictionary<int, float>();
-        EnemySpawnDelay.Add(1, 5f);
-        EnemySpawnDelay.Add(2, 10f);
-        EnemySpawnDelay.Add(3, 5f);
-        EnemySpawnDelay.Add(4, 10f);
-        Enemies = new List<GameObject>();
-        for (int i=0;i<EnemySpawnID.Length;i++)
-        {
-            CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i]);
-        }
     }
 
     // Update is called once per frame
@@ -55,11 +34,19 @@ public class EnemyFighterSpawn : MonoBehaviour
     }
     #endregion
     #region Spawn Enemy
-    private void CreateEnemy(int id, Vector2 spawnPos)
+
+    public void SpawnEnemy()
+    {
+        Enemies = new List<GameObject>();
+        for (int i = 0; i < EnemySpawnID.Length; i++)
+        {
+            CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i);
+        }
+    }
+    private void CreateEnemy(int id, Vector2 spawnPos, int count)
     {
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
         // Get Model
-        Debug.Log((string)DataDict["Name"]);
         for (int i=0;i<EnemyModel.transform.childCount;i++)
         {
             if (EnemyModel.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(((string)DataDict["Name"]).Replace(" ","").ToLower()))
@@ -69,14 +56,13 @@ public class EnemyFighterSpawn : MonoBehaviour
         }
         GameObject Enemy = Instantiate(EnemyTemplate, new Vector3(spawnPos.x, spawnPos.y, EnemyTemplate.transform.position.z), Quaternion.identity);
         Enemies.Add(Enemy);
-        Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y;
+        if (id >= 13)
+        {
+            Enemy.tag = "EliteEnemy";
+        }
+        Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Enemy.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Enemy.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
-    }
-
-    public IEnumerator SpawnEnemy()
-    {
-        yield return null;
     }
     #endregion
 }

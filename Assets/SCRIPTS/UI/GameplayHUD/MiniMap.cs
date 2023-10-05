@@ -16,6 +16,8 @@ public class MiniMap : MonoBehaviour
     public GameObject PlayerIcon;
     public GameObject BlackholeIcon;
     public GameObject NormalAllyIcon;
+    public GameObject EliteAllyIcon;
+    public GameObject BossAllyIcon;
     // Render related
     public GameObject Player;
     public float RenderRange;
@@ -161,7 +163,7 @@ public class MiniMap : MonoBehaviour
                     icons.Add(icon);
                 }
             }
-            // Create Allies' Icons: WIP
+            // Normal Ally Icon
             if (col.tag == "AlliesFighter")
             {
                 // Check exist -> if exist: Only move icon's position
@@ -174,6 +176,58 @@ public class MiniMap : MonoBehaviour
                 else
                 {
                     GameObject icon = Instantiate(NormalAllyIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
+                    // Set Icon child of Minimap
+                    icon.transform.SetParent(transform);
+                    // Set scale of icon based on minimap scale
+                    icon.transform.localScale =
+                    new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * transform.localScale.x / InitScale);
+                    icon.SetActive(true);
+                    // Set Icon name = object's name + " Icon"
+                    icon.name = col.name + " Icon";
+                    icons.Add(icon);
+                }
+            }
+            // Elite Ally Icon
+            if (col.tag == "AlliesEliteFighter")
+            {
+                // Check exist -> if exist: Only move icon's position
+                // If not exist -> instantiate object to create new one and save to the list
+                GameObject iconCheck = IconExist(col.name);
+                if (iconCheck != null)
+                {
+                    iconCheck.transform.position = CalculateIconPosition(col.transform.position);
+                }
+                else
+                {
+                    GameObject icon = Instantiate(EliteAllyIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
+                    // Set Icon child of Minimap
+                    icon.transform.SetParent(transform);
+                    // Set scale of icon based on minimap scale
+                    icon.transform.localScale =
+                    new Vector3(icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * IconScale * transform.localScale.x / InitScale,
+                        icon.transform.localScale.x * transform.localScale.x / InitScale);
+                    icon.SetActive(true);
+                    // Set Icon name = object's name + " Icon"
+                    icon.name = col.name + " Icon";
+                    icons.Add(icon);
+                }
+            }
+            // Boss Ally Icon
+            if (col.tag == "AlliesBossFighter")
+            {
+                // Check exist -> if exist: Only move icon's position
+                // If not exist -> instantiate object to create new one and save to the list
+                GameObject iconCheck = IconExist(col.name);
+                if (iconCheck != null)
+                {
+                    iconCheck.transform.position = CalculateIconPosition(col.transform.position);
+                }
+                else
+                {
+                    GameObject icon = Instantiate(BossAllyIcon, CalculateIconPosition(col.transform.position), Quaternion.identity);
                     // Set Icon child of Minimap
                     icon.transform.SetParent(transform);
                     // Set scale of icon based on minimap scale

@@ -221,7 +221,7 @@ public class StatusBoard : MonoBehaviour
         {
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
             // set Sorting order
-            CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
+            CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
             CloneEnemy.SetActive(false);
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
@@ -380,7 +380,7 @@ public class StatusBoard : MonoBehaviour
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
             // set Sorting order
             LastEnemy = Enemy;
-            CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 300;
+            CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
             c.a = 1f;
@@ -485,7 +485,7 @@ public class StatusBoard : MonoBehaviour
                 {
                     ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = null;
-                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "No First Power";
+                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
                 }
                 if (ModelSecondPower!=null)
                 {
@@ -497,7 +497,7 @@ public class StatusBoard : MonoBehaviour
                 {
                     ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = null;
-                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "No Second Power";
+                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
                 }
             }
 
@@ -583,6 +583,8 @@ public class StatusBoard : MonoBehaviour
 
     private void SwitchWeaponPowerInfo()
     {
+        ItemBox1.GetComponent<Collider2D>().enabled = false;
+        ItemBox2.GetComponent<Collider2D>().enabled = false;
         if (isShowingWeapon)
         {
             isShowingWeapon = false;
@@ -596,7 +598,7 @@ public class StatusBoard : MonoBehaviour
             {
                 ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = null;
-                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "No First Power";
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
             }
             if (ModelSecondPower!=null)
             {
@@ -608,7 +610,7 @@ public class StatusBoard : MonoBehaviour
             {
                 ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = null;
-                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "No Second Power";
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
             }
         } else
         {
@@ -616,12 +618,20 @@ public class StatusBoard : MonoBehaviour
             ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                 = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
             ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
+            ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
             ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                 = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
             ItemBox2.transform.GetChild(0).localScale = WeaponScale;
             ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
         }
+        StartCoroutine(ResetCollider());
+    }
+
+    private IEnumerator ResetCollider()
+    {
+        yield return new WaitForSeconds(0.1f);
+        ItemBox1.GetComponent<Collider2D>().enabled = true;
+        ItemBox2.GetComponent<Collider2D>().enabled = true;
     }
     #endregion
 }

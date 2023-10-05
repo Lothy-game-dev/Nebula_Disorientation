@@ -289,12 +289,15 @@ public class FighterController : MonoBehaviour
         }
 
         //set consumable
+        int checkCount = 0;
         if (DatabaseConsumables.Count > 0)
         {
             int count = 0;
             List<GameObject> ConsumableName = new List<GameObject>();
+
             foreach (var itemKey in DatabaseConsumables)
             {
+                checkCount++;
                 for (int i = 0; i < ConsumableModel.transform.childCount; i++)
                 {                  
                     if (itemKey.Key == (ConsumableModel.transform.GetChild(i).name))
@@ -311,13 +314,17 @@ public class FighterController : MonoBehaviour
                     }
                 }
             }
-            
+
             PlayerFighter.GetComponent<PlayerFighter>().Consumables = DatabaseConsumables;
             PlayerFighter.GetComponent<PlayerFighter>().ConsumableObject = ConsumableName;
         }
-       
-        
-       
+        for (int i = checkCount; i < 4; i++)
+        {
+            ConsumableImages[i].GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+            ConsumableImages[i].transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
+        }
+
+
         // Set all stats data 
         SetStatsData();
     }

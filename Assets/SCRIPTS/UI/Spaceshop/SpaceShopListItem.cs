@@ -85,11 +85,6 @@ public class SpaceShopListItem : MonoBehaviour
             {
                 Loading.SetActive(false);
                 alreadyGen = true;
-                if (AlreadyGetPosYContent)
-                {
-                    Content.transform.position = new Vector3(Content.transform.position.x,
-                        InitPosYContent, Content.transform.position.z);
-                }
                 SetItem(FindObjectOfType<AccessDatabase>().GetSpaceShopItemNameSearchByName(SearchInput.text));
             }
         }
@@ -145,9 +140,6 @@ public class SpaceShopListItem : MonoBehaviour
         // Generate Items: Same as other bars
         Vector2 pos = FirstPos.transform.position;
         maximumHeight = BoxSize * SpriteList.Count * 0.78f;
-        Content.GetComponent<RectTransform>().sizeDelta
-            = new Vector2(Content.GetComponent<RectTransform>().sizeDelta.x,
-            maximumHeight);
         for (int i=0;i<SpriteList.Count;i++)
         {
             if (ContinueGenerating)
@@ -174,7 +166,6 @@ public class SpaceShopListItem : MonoBehaviour
                     go.transform.GetChild(5).gameObject.SetActive(true);
                 }
                 go.SetActive(true);
-                pos = new Vector2(pos.x, pos.y - BoxSize);
                 yield return new WaitForSeconds(0.05f);
             } else
             {
@@ -228,11 +219,7 @@ public class SpaceShopListItem : MonoBehaviour
     private void OnDisable()
     {
         RemoveAllItem();
-        if (AlreadyGetPosYContent)
-        {
-            Content.transform.position = new Vector3(Content.transform.position.x,
-                InitPosYContent, Content.transform.position.z);
-        }
+        Content.transform.position = new Vector3(Content.transform.position.x, 0, Content.transform.position.z);
     }
     #endregion
 }

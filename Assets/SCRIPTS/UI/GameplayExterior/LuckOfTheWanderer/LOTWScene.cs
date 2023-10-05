@@ -225,7 +225,7 @@ public class LOTWScene : MonoBehaviour
 
     public void EnterGameplay()
     {
-        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 3f);
+        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 6f);
         StartCoroutine(WaitTeleport());
     }
 
