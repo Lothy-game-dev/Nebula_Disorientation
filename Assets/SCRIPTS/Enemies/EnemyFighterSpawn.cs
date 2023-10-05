@@ -25,13 +25,17 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        EnemySpawnID = new int[] { 5, 6, 7, 8 /*9, 10, 11, 12, 13, 14, 15*/};
-        EnemySpawnPosition = new Vector2[] { 
-        new Vector2(2500,0), 
-        new Vector2(1500,0), new Vector2(3500,0), new Vector2(2500,1000),new Vector2(2500,-1000),
-        new Vector2(1500,1000), new Vector2(1500,-1000), new Vector2(3500,1000),new Vector2(3500,-1000),
-        new Vector2(500,0), new Vector2(4500,0), new Vector2(2500,2000),new Vector2(2500,-2000),
-        new Vector2(4500,2000), new Vector2(4500,-2000)};
+        EnemySpawnID = new int[30];
+        for (int i = 0; i < 30; i++)
+        {
+            EnemySpawnID[i] = Random.Range(2, 4);
+        }
+        EnemySpawnPosition = new Vector2[30];
+        for (int i = 0; i < 30; i++)
+        {
+            EnemySpawnPosition[i].x = Random.Range(700f, 2100f);
+            EnemySpawnPosition[i].y = Random.Range(-3500f, 3500f);
+        }
         EnemySpawnDelay = new Dictionary<int, float>();
         EnemySpawnDelay.Add(1, 5f);
         EnemySpawnDelay.Add(2, 10f);
@@ -53,9 +57,9 @@ public class EnemyFighterSpawn : MonoBehaviour
     #region Spawn Enemy
     private void CreateEnemy(int id, Vector2 spawnPos)
     {
-        spawnPos = spawnPos / 5;
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
         // Get Model
+        Debug.Log((string)DataDict["Name"]);
         for (int i=0;i<EnemyModel.transform.childCount;i++)
         {
             if (EnemyModel.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(((string)DataDict["Name"]).Replace(" ","").ToLower()))
