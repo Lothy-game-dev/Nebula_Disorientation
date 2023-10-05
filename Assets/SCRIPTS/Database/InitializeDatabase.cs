@@ -295,6 +295,8 @@ public class InitializeDatabase : MonoBehaviour
                 "WSDescription TEXT," +
                 "WSStat TEXT," +
                 "TierColor TEXT," +
+                "MainWeapon TEXT NOT NULL," +
+                "SupWeapon TEXT NOT NULL," +
                 "PRIMARY KEY(WSId AUTOINCREMENT) );" +
             // Table for SpaceStation
             "CREATE TABLE IF NOT EXISTS SpaceStation" +
@@ -536,23 +538,22 @@ public class InitializeDatabase : MonoBehaviour
             "(15, 'Zaturi-Warmonger', '', 'StarBlaster', 'HP-40000|SPD-600|ROT-1|AOF-60,60|DM-1.25|AM-1.0|PM-0.8', 'HeavyBarrier|AdvancedInstantWormhole', 'N', 'Zaturi-Warmonger is the third version of the Elite Fighter Prototypes by the Zaturi. It is the most fearsome Zaturi Fighter, with fantastic overall attributes. Additionally, it also possesses advanced Power Activating Module, with Heavy Barrier & Advanced Instant Wormhole equipped.', '#bf2600');";
         // Warship
         string Warship = "INSERT INTO Warship VALUES" +
-                         "(1, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', '1', '#bf2600')," +
-                         "(2, 'Zat-Frigate', 'The basic and the most common Warship to appear during any campaign.', '1', '#4c9aff')," +
-                         "(3, 'Zat-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', '1', '#4c9aff')," +
-                         "(4, 'Zat-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', '1', '#4c9aff')," +
-                         "(5, 'Zat-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', '1', '#4c9aff')," +
-                         "(6, 'Zat-Dreadnaught', 'The Zaturi has only two Dreadnaughts under command. They have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', '1', '#bf2600')," +
-                         "(7, 'Zat-FlagShip', 'The one and only Zat-FlagShip is the best Warship out there of the Zaturi. It is commanded by the Leader of the Zaturi. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', '1', '#bf2600');";
-       // Space Station
-       string SpaceStation = "INSERT INTO SpaceStation VALUES" +
+                         "(1, 'Zat-Frigate', 'The basic and the most common Warship to appear during any campaign.', 'HP-300000|SPD-200|ROT-0.25', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(2, 'Zat-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(3, 'Zat-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(4, 'Zat-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', 'HP-1000000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(5, 'Zat-Dreadnaught', 'The Zaturi has only two Dreadnaughts under command. They have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', 'HP-1500000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(6, 'Zat-FlagShip', 'The one and only Zat-FlagShip is the best Warship out there of the Zaturi. It is commanded by the Leader of the Zaturi. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', 'HP-2000000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(7, 'UEC-Frigate', 'The basic and the most common Warship to appear during any campaign.', 'HP-300000|SPD-200|ROT-0.25', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(8, 'UEC-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(9, 'UEC-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(10, 'UEC-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', 'HP-1000000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(11, 'UEC-Dreadnaught', 'The United Earth Capital (UEC) has only two Dreadnaughts under command. Commanded by Field Generals, they have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', 'HP-1500000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon')," +
+                         "(12, 'UEC-FlagShip', 'The one and only UEC-FlagShip is the best Warship out there of the UEC. It is commanded by the Leader of the UEC. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', 'HP-2000000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon');";
+        // Space Station
+        string SpaceStation = "INSERT INTO SpaceStation VALUES" +
                          "(1, 'UEC-Station', 'Space Stations provide not only accommodation for the people of the UEC, but also play as a War Strategic Fortress in the Space Zone.', '1', '#bf2600')," +
-                         "(2, 'UEC-Frigate', 'The basic and the most common Warship to appear during any campaign.', '1', '#4c9aff')," +
-                         "(3, 'UEC-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', '1', '#4c9aff')," +
-                         "(4, 'UEC-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', '1', '#4c9aff')," +
-                         "(5, 'UEC-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', '1', '#4c9aff')," +
-                         "(6, 'UEC-Dreadnaught', 'The United Earth Capital (UEC) has only two Dreadnaughts under command. Commanded by Field Generals, they have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', '1', '#bf2600')," +
-                         "(7, 'UEC-FlagShip', 'The one and only UEC-FlagShip is the best Warship out there of the UEC. It is commanded by the Leader of the UEC. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', '1', '#bf2600');";
-
+                         "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', '1', '#bf2600');";
         // Allies
         string Allies = "INSERT INTO Allies VALUES " +
             "(1, 'SSTP', '', 'Transport', 'HP-10000|SPD-300|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
