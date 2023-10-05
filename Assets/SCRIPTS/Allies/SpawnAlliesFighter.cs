@@ -25,13 +25,17 @@ public class SpawnAlliesFighter : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        AllySpawnID = new int[] {/* 1, */5, 6, 7, 8/*, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15*/};
-        AllySpawnPosition = new Vector2[] {
-        new Vector2(-2500,0),
-        new Vector2(-1500,0), new Vector2(-3500,0), new Vector2(-2500,1000),new Vector2(-2500,-1000),
-        new Vector2(-1500,1000), new Vector2(-1500,-1000), new Vector2(-3500,1000),new Vector2(-3500,-1000),
-        new Vector2(-500,0), new Vector2(-4500,0), new Vector2(-2500,2000),new Vector2(-2500,-2000),
-        new Vector2(-4500,2000), new Vector2(-4500,-2000)};
+        AllySpawnID = new int[20];
+        for (int i=0;i<20;i++)
+        {
+            AllySpawnID[i] = Random.Range(2, 4);
+        }
+        AllySpawnPosition = new Vector2[20];
+        for (int i = 0; i < 20; i++)
+        {
+            AllySpawnPosition[i].x = Random.Range(-2100f, -700f);
+            AllySpawnPosition[i].y = Random.Range(-3500f, 3500f);
+        }
         AllySpawnDelay = new Dictionary<int, float>();
         AllySpawnDelay.Add(1, 5f);
         AllySpawnDelay.Add(2, 10f);
@@ -53,7 +57,6 @@ public class SpawnAlliesFighter : MonoBehaviour
     #region Spawn Enemy
     private void CreateEnemy(int id, Vector2 spawnPos)
     {
-        spawnPos = spawnPos / 5;
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataAlliesById(id);
         // Get Model
         for (int i = 0; i < AllyModel.transform.childCount; i++)
