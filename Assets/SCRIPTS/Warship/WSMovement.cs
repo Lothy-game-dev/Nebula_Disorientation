@@ -7,6 +7,7 @@ public class WSMovement : MonoBehaviour
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
+    private AudioSource aus;
     #endregion
     #region InitializeVariables
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
@@ -28,6 +29,9 @@ public class WSMovement : MonoBehaviour
     public int SpeedUp;
     public int RotateDirection;
     public float LimitSpeedScale;
+    public List<GameObject> BackFires;
+    public float BackFireInitScale;
+    public AudioClip Sound;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -35,6 +39,15 @@ public class WSMovement : MonoBehaviour
     {
         // Initialize variables
         CurrentRotateAngle = 0;
+        BackFireInitScale = BackFires[0].transform.localScale.x;
+        aus = GetComponent<AudioSource>();
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 2000;
+        aus.minDistance = 1000;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
     }
 
     // Update is called once per frame
@@ -94,6 +107,27 @@ public class WSMovement : MonoBehaviour
     private void FighterMoving()
     {
         Vector2 movementVector = CalculateMovement();
+
+        for (int i = 0; i < BackFires.Count; i++)
+        {
+            if (CurrentSpeed > 0)
+            {
+                PlayMovingSound(CurrentSpeed * 1 / MovingSpeed);
+                if (!BackFires[i].activeSelf)
+                {
+                    BackFires[i].SetActive(true);
+                }
+                BackFires[i].transform.localScale =
+                    new Vector3(CurrentSpeed * BackFireInitScale,
+                    CurrentSpeed * BackFireInitScale,
+                    BackFires[i].transform.localScale.z);
+            }
+            else
+            {
+                StopSound();
+                BackFires[i].SetActive(false);
+            }
+        }
        
         AccelerateSpeed();
         speedVector = movementVector * CurrentSpeed * LimitSpeedScale;
@@ -188,6 +222,23 @@ public class WSMovement : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         transform.position = new Vector3(Position.x, Position.y, transform.position.z);
         CurrentSpeed = 0f;
+    }
+    #endregion
+    #region
+    public void PlayMovingSound(float volume)
+    {
+        if (aus.clip != Sound)
+        {
+            aus.clip = Sound;
+            aus.loop = true;
+            aus.Play();
+        }
+        aus.volume = volume;
+    }
+
+    public void StopSound()
+    {
+        aus.clip = null;
     }
     #endregion
 }

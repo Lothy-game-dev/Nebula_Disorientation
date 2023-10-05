@@ -13,6 +13,7 @@ public class SpawnWarship : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject WarshipModel;
+    public GameObject WSTemplate;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -44,9 +45,12 @@ public class SpawnWarship : MonoBehaviour
         {
             if (WarshipModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["WarshipName"].ToString().Replace("-","").ToLower())
             {
-                GameObject game = Instantiate(WarshipModel.transform.GetChild(i).gameObject, new Vector3(randomPos.x, randomPos.y, WarshipModel.transform.GetChild(i).position.z), Quaternion.identity);
+                GameObject game = Instantiate(WSTemplate, new Vector3(randomPos.x, randomPos.y, WarshipModel.transform.GetChild(i).position.z), Quaternion.identity);
+                game.GetComponent<SpriteRenderer>().sprite = WarshipModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
+                game.transform.localScale = WarshipModel.transform.GetChild(i).localScale;
+                game.name = data["WarshipName"].ToString();
                 game.SetActive(true);
-                game.GetComponent<WSShared>().InitData(data);
+                game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
             }
         }
     }

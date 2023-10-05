@@ -29,6 +29,8 @@ public class WSShared : MonoBehaviour
     public List<string> MainWeapon;
     public List<string> SupWeapon;
     public GameObject Weapons;
+    public GameObject BackFire;
+
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -78,7 +80,7 @@ public class WSShared : MonoBehaviour
     #endregion
     #region Init data
     // Group all function that serve the same algorithm
-    public void InitData(Dictionary<string, object> data)
+    public void InitData(Dictionary<string, object> data, GameObject model)
     {
         WM = GetComponent<WSMovement>();
         WsStat = new Dictionary<string, object>();
@@ -89,6 +91,16 @@ public class WSShared : MonoBehaviour
         WM.RotateSpeed = RotationSpd;
         WM.MovingSpeed = BaseSpeed;
 
+        //BackFire
+        List<Vector2> BFpos = model.GetComponent<WarshipModelShared>().BackFirePos;
+        for (int i = 0; i < BFpos.Count; i++)
+        {
+            GameObject game = Instantiate(BackFire, new Vector3(transform.position.x+BFpos[i].x, transform.position.y+BFpos[i].y, BackFire.transform.position.z), Quaternion.identity);
+            game.transform.SetParent(gameObject.transform);
+            game.transform.Rotate(new Vector3(0, 0, 180));
+            game.SetActive(false);
+            WM.BackFires.Add(game);
+        }
         //Weapon
         for (int i = 0; i < MainWeapon.Count; i++)
         {
