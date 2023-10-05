@@ -525,12 +525,12 @@ public class EnemyShared : FighterShared
 
     private void CheckTargetEnemy()
     {
-        if (LeftTarget!=null && Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange)
+        if (LeftTarget!=null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
         {
             LeftTarget = null;
             LeftWeapon.GetComponent<Weapons>().Aim = null;
         }
-        if (RightTarget!=null && Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange)
+        if (RightTarget!=null && (Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange || RightTarget.layer == LayerMask.NameToLayer("Untargetable")))
         {
             RightTarget = null;
             RightWeapon.GetComponent<Weapons>().Aim = null;

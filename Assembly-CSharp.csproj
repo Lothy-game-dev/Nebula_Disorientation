@@ -58,10 +58,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.2f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneGenerator.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECBackButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSceneShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRename.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerBar.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneMission.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDShowRange.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBox.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\Wormhole.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LavaOrb.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneTimer.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\Factory.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
@@ -180,6 +183,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUpBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBar.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneIntro.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaCollectButton.cs" />

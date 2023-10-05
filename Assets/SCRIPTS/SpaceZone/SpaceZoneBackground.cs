@@ -19,7 +19,6 @@ public class SpaceZoneBackground : MonoBehaviour
     void Awake()
     {
         // Initialize variables
-        SetBackground(Random.Range(0,6));
     }
 
     // Update is called once per frame
@@ -29,6 +28,17 @@ public class SpaceZoneBackground : MonoBehaviour
     }
     #endregion
     #region Function group 1
+    public void ChangeBackground(string name)
+    {
+        for (int i=0; i < BGTemplate.transform.childCount; i++)
+        {
+            if (BGTemplate.transform.GetChild(i).name.ToLower().Equals(name.ToLower()))
+            {
+                SetBackground(i);
+                break;
+            }
+        }
+    }
     public void SetBackground(int n)
     {
         if (n < BGTemplate.transform.childCount)

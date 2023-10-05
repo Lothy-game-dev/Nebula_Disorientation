@@ -2862,4 +2862,142 @@ public class AccessDatabase : MonoBehaviour
             return data;
     }
     #endregion
+    #region Access Space Zone
+    public Dictionary<string,object> GetVariantCountsAndBackgroundByStageValue(int StageValue)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select VariantCount, AvailableBackgrounds, TierColor from SpaceZoneVariants WHERE StageValue=" + StageValue;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("VariantCounts", dataReader.GetInt32(0));
+            data.Add("AvailableBackground", dataReader.GetString(1));
+            data.Add("TierColor", dataReader.GetString(2));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        } else
+        return data;
+    }
+
+    public Dictionary<string, object> GetStageZoneTemplateByStageValueAndVariant(int StageValue, int Variants)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from SpaceZoneTemplate WHERE StageValue=" + StageValue + " AND Variant=" +Variants;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("Type", dataReader.GetString(3));
+            data.Add("Missions", dataReader.GetString(4));
+            data.Add("FighterGroup", dataReader.GetString(5));
+            if (dataReader.IsDBNull(6))
+            {
+                data.Add("Time", 0);
+            } else
+            {
+                data.Add("Time", dataReader.GetInt32(6));
+            }
+            data.Add("SquadRating", dataReader.GetString(7));
+            data.Add("AllySquad", dataReader.GetString(8));
+            data.Add("EnemySquad", dataReader.GetString(9));
+            if (dataReader.IsDBNull(10))
+            {
+                data.Add("ArmyRating", null);
+                data.Add("AllyWarship", null);
+                data.Add("EnemyWarship", null);
+            }
+            else
+            {
+                data.Add("ArmyRating", dataReader.GetString(10));
+                if (dataReader.IsDBNull(11))
+                {
+                    data.Add("AllyWarship", "");
+                } else
+                data.Add("AllyWarship", dataReader.GetString(11));
+                data.Add("EnemyWarship", dataReader.GetString(12));
+            }
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
+
+    public Dictionary<string, object> GetFighterGroupsDataByName(string GroupName)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from FighterGroup WHERE GroupName='" + GroupName + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("AlliesFighterA", dataReader.GetString(2));
+            data.Add("AlliesFighterB", dataReader.GetString(3));
+            data.Add("AlliesFighterC", dataReader.GetString(4));
+            data.Add("EnemiesFighterA", dataReader.GetString(5));
+            data.Add("EnemiesFighterB", dataReader.GetString(6));
+            data.Add("EnemiesFighterC", dataReader.GetString(7));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
+
+    public Dictionary<string, object> GetSpawnPositionDataByType(string PositionType)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select PositionLimitTopLeft, PositionLimitBottomRight from SpaceZonePosition WHERE PositionType='" + PositionType + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("PositionLimitTopLeft", dataReader.GetString(0));
+            data.Add("PositionLimitBottomRight", dataReader.GetString(1));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
+
+
+    #endregion
 }

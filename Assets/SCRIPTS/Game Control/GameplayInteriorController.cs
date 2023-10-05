@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameplayInteriorController : MonoBehaviour
@@ -10,6 +11,9 @@ public class GameplayInteriorController : MonoBehaviour
     #endregion
     #region InitializeVariables
     public GameObject BlackFade;
+    public GameObject Intro;
+    public TextMeshPro Cash;
+    public TextMeshPro Shard;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -21,6 +25,7 @@ public class GameplayInteriorController : MonoBehaviour
     {
         // Initialize variables
         GenerateBlackFadeOpen(transform.position, 0f, 1f);
+        SetCashAndShard();
     }
 
     // Update is called once per frame
@@ -51,6 +56,8 @@ public class GameplayInteriorController : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
+        Intro.SetActive(true);
+        Intro.GetComponent<SpaceZoneIntro>().RunAnimation();
         Destroy(Fade);
     }
 
@@ -74,6 +81,14 @@ public class GameplayInteriorController : MonoBehaviour
             yield return new WaitForSeconds(duration / 50f);
         }
         Destroy(Fade);
+    }
+    #endregion
+    #region Cash And Shard
+    public void SetCashAndShard()
+    {
+        Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        Cash.text = "<sprite index='3'> " + (int)SessionData["SessionCash"];
+        Shard.text = "<sprite index='0'> " + (int)SessionData["SessionTimelessShard"];
     }
     #endregion
 }
