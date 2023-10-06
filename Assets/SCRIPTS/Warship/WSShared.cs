@@ -30,7 +30,11 @@ public class WSShared : MonoBehaviour
     public List<string> SupWeapon;
     public GameObject Weapons;
     public GameObject BackFire;
-
+    private GameObject LeftTarget;
+    private GameObject RightTarget;
+    private float TargetRefreshTimer;
+    private List<GameObject> SpWps;
+    private float FindTargetTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -77,6 +81,40 @@ public class WSShared : MonoBehaviour
             WM.NoLeftRightMove();
 
         }
+        TargetRefreshTimer -= Time.deltaTime;
+        if (TargetRefreshTimer <= 0f)
+        {
+            TargetRefreshTimer = Random.Range(2.5f, 3.5f);
+            CheckTargetEnemy();
+
+            for (int i = 0; i < SpWps.Count; i++)
+            {
+                if (SpWps[i] != null)
+                {
+                    SpWps[i].GetComponent<Weapons>().Aim = LeftTarget;
+                }
+                /*if (RightWeapon != null)
+                {
+                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
+                }*/
+            }
+        }
+        if (LeftTarget == null || RightTarget == null)
+        {
+            FindTargetTimer -= Time.deltaTime;
+        }
+        if (FindTargetTimer <= 0f)
+        {
+            FindTargetTimer = Random.Range(2.5f, 3.5f);
+            if (LeftTarget == null)
+            {
+                TargetLeftEnemy();
+            }
+            if (RightTarget == null)
+            {
+                TargetRightEnemy();
+            }
+        }
     }
     #endregion
     #region Init data
@@ -94,23 +132,89 @@ public class WSShared : MonoBehaviour
 
         //BackFire
         List<Vector2> BFpos = model.GetComponent<WarshipModelShared>().BackFirePos;
+        Vector2 BFScale = model.GetComponent<WarshipModelShared>().BackFireScale;
         for (int i = 0; i < BFpos.Count; i++)
         {
             GameObject game = Instantiate(BackFire, new Vector3(transform.position.x+BFpos[i].x, transform.position.y+BFpos[i].y, BackFire.transform.position.z), Quaternion.identity);
             game.transform.SetParent(gameObject.transform);
             game.transform.Rotate(new Vector3(0, 0, 180));
+            game.name = "BackFire" + i;
             game.SetActive(false);
             WM.BackFires.Add(game);
         }
-        //Weapon
+        //Main Weapon
+        if (data["MainWeapon"].ToString().Contains("|"))
+        {
+            string[] weapons = data["MainWeapon"].ToString().Split("|");
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                MainWeapon.Add(weapons[i]);
+            }
+        } else
+        {
+            MainWeapon.Add(data["MainWeapon"].ToString());
+        }
+        
+        List<Vector2> WPPos = model.GetComponent<WarshipModelShared>().MainWeaponPos;
         for (int i = 0; i < MainWeapon.Count; i++)
         {
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
+                //Find model
+                if (MainWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ","").ToLower()) 
+                {
+                    GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos[i].x, transform.position.y + WPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
+                    main.transform.SetParent(gameObject.transform);
+                    main.transform.localScale = new Vector2(1f, 1f);
+                    main.SetActive(true);
+                }
+            }           
+        }
 
+        //Sup Weapon
+        if (data["SupWeapon"].ToString().Contains("|"))
+        {
+            string[] weapons = data["SupWeapon"].ToString().Split("|");
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                SupWeapon.Add(weapons[i]);
             }
         }
+        else
+        {
+            SupWeapon.Add(data["SupWeapon"].ToString());
+        }
+
+        List<Vector2> SupWPPos = model.GetComponent<WarshipModelShared>().SupWeaponPos;
+        TargetLeftEnemy();
+        TargetRightEnemy();
+        SpWps = new List<GameObject>();
+        for (int i = 0; i < SupWeapon.Count; i++)
+        {
+            for (int j = 0; j < Weapons.transform.childCount; j++)
+            {
+                //Find model
+                if (SupWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower())
+                {
+                    GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
+                    sup.transform.SetParent(gameObject.transform);
+                    sup.transform.localScale = new Vector2(0.5f, 0.5f);
+                    sup.SetActive(true);
+
+
+                    Weapons wp = sup.GetComponent<Weapons>();
+                    wp.Fighter = gameObject;
+                    wp.Aim = LeftTarget;
+                    wp.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
+                    wp.tracking = true;
+
+                    SpWps.Add(sup);
+                }
+            }
+            
+        }
         gameObject.SetActive(true);
+        Debug.Log(SpWps.Count);
     }
     #endregion
     #region Receive Damage
@@ -150,6 +254,64 @@ public class WSShared : MonoBehaviour
         {
             CurrentHP = 0;
         }
+    }
+    #endregion
+    #region Target
+    private void TargetLeftEnemy()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 2000f, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
+        {
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var enemy in cols)
+            {
+                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                if (distanceTest < distance)
+                {
+                    distance = distanceTest;
+                    Nearest = enemy.gameObject;
+                }
+            }
+            LeftTarget = Nearest;
+            Debug.Log(Nearest);
+        }
+    }
+
+    private void TargetRightEnemy()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 2000f, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
+        {
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var enemy in cols)
+            {
+                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                if (distanceTest < distance)
+                {
+                    distance = distanceTest;
+                    Nearest = enemy.gameObject;
+                }
+            }
+            RightTarget = Nearest;
+        }
+    }
+    private void CheckTargetEnemy()
+    {
+        for (int i = 0; i < SpWps.Count; i++)
+        {
+            if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > 200 || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
+            {
+                LeftTarget = null;
+                SpWps[i].GetComponent<Weapons>().Aim = null;
+            }
+        }
+        /*if (RightTarget != null && (Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange || RightTarget.layer == LayerMask.NameToLayer("Untargetable")))
+        {
+            RightTarget = null;
+            RightWeapon.GetComponent<Weapons>().Aim = null;
+        }*/
     }
     #endregion
 }

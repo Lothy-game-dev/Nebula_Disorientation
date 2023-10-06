@@ -31,7 +31,9 @@ public class WSMovement : MonoBehaviour
     public float LimitSpeedScale;
     public List<GameObject> BackFires;
     public float BackFireInitScale;
+    public List<Vector2> BackFireInitPos;
     public AudioClip Sound;
+    private List<Vector3> DistanceList;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -39,7 +41,7 @@ public class WSMovement : MonoBehaviour
     {
         // Initialize variables
         CurrentRotateAngle = 0;
-        BackFireInitScale = BackFires[0].transform.localScale.x;
+        BackFireInitScale = BackFires[0].transform.localScale.x;      
         aus = GetComponent<AudioSource>();
         aus.spatialBlend = 1;
         aus.rolloffMode = AudioRolloffMode.Linear;
@@ -48,6 +50,12 @@ public class WSMovement : MonoBehaviour
         aus.priority = 256;
         aus.dopplerLevel = 0;
         aus.spread = 360;
+        DistanceList = new List<Vector3>();
+        for (int i = 0; i < BackFires.Count; i++)
+        {
+            BackFireInitPos.Add(BackFires[i].transform.localPosition);
+            DistanceList.Add(-gameObject.transform.position + BackFires[i].transform.position);
+        }
     }
 
     // Update is called once per frame
@@ -121,10 +129,15 @@ public class WSMovement : MonoBehaviour
                     new Vector3(CurrentSpeed * BackFireInitScale,
                     CurrentSpeed * BackFireInitScale,
                     BackFires[i].transform.localScale.z);
+                Vector3 distance = (BackFires[i].transform.position - transform.position);
+                distance = distance / distance.magnitude * DistanceList[i].magnitude;
+                BackFires[i].transform.position = transform.position + distance * (0.6f + 0.4f * (CurrentSpeed) / MovingSpeed);
+
             }
             else
             {
                 StopSound();
+                /*BackFires[i].transform.position = BackFireInitPos[i];*/
                 BackFires[i].SetActive(false);
             }
         }
