@@ -24,6 +24,7 @@ public class RocketBurstBullet : MonoBehaviour
     public float AoE;
     public LayerMask Layer;
     public float Damage;
+    public GameObject Fighter;
     private List<float> DistanceList;
     public float Distance;
     public float DistanceTravel;
@@ -35,6 +36,7 @@ public class RocketBurstBullet : MonoBehaviour
     private Dictionary<GameObject, float> EnemyDictionary;
     private GameObject AimGen;
     private List<GameObject> EnemyList;
+    private float DelayTarget;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -53,7 +55,12 @@ public class RocketBurstBullet : MonoBehaviour
         {           
             if (target == null || target.GetComponent<Collider2D>() == null || !target.GetComponent<Collider2D>().enabled)
             {
-                CheckRange();
+                DelayTarget -= Time.deltaTime;
+                if (DelayTarget<=0f)
+                {
+                    DelayTarget = 3f;
+                    CheckRange();
+                }
             }
             else
             {
@@ -243,7 +250,7 @@ public class RocketBurstBullet : MonoBehaviour
                 FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                 if (enemy != null)
                 {
-                    enemy.ReceiveDamage(Damage);
+                    enemy.ReceiveDamage(Damage, Fighter);
                 }
             }
             Destroy(AimGen);

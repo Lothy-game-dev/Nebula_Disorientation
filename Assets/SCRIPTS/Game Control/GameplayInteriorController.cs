@@ -21,6 +21,7 @@ public class GameplayInteriorController : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
+    public int SessionID;
     void Start()
     {
         // Initialize variables
@@ -89,6 +90,13 @@ public class GameplayInteriorController : MonoBehaviour
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         Cash.text = "<sprite index='3'> " + (int)SessionData["SessionCash"];
         Shard.text = "<sprite index='0'> " + (int)SessionData["SessionTimelessShard"];
+        SessionID = (int)SessionData["SessionID"];
+    }
+
+    public void AddCashAndShard(int Cash, int Shard)
+    {
+        FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, Cash, Shard);
+        SetCashAndShard();
     }
     #endregion
 }

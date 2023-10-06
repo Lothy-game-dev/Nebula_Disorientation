@@ -44,8 +44,14 @@ public class EnemyShared : FighterShared
     public GameObject RightTarget;
     private float TargetRange;
     private float DelayBetween2Weap;
-    private float DelayTimer;
+    public float DelayTimer;
     private bool LeftFire;
+    private int BountyCash;
+    private int BountyShard;
+    public float TargetRefreshTimer;
+    public float FindTargetTimer;
+    public float HPScale;
+    public float CashBountyScale;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -108,7 +114,7 @@ public class EnemyShared : FighterShared
             }
             if (Power1!="")
             {
-                if (Power1CD <= 0f)
+                if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
                 {
                     UseFirstPower();
                     if (Power1StartCharge)
@@ -118,12 +124,12 @@ public class EnemyShared : FighterShared
                 }
                 else
                 {
-                    Power1CD -= Time.deltaTime;
+                    Power1CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
                 }
             }
             if (Power2!="")
             {
-                if (Power2CD <= 0f)
+                if (Power2CD <= 0f && (LeftTarget!=null || RightTarget!=null))
                 {
                     UseSecondPower();
                     if (Power2StartCharge)
@@ -133,11 +139,11 @@ public class EnemyShared : FighterShared
                 }
                 else
                 {
-                    Power2CD -= Time.deltaTime;
+                    Power2CD -= Time.deltaTime * Random.Range(0.8f,1.2f);
                 }
             }
         }
-        
+
         resetMovetimer -= Time.deltaTime;
         if (resetMovetimer<=0f)
         {
@@ -170,29 +176,41 @@ public class EnemyShared : FighterShared
         {
             fm.NoLeftRightMove();
         }
-        CheckTargetEnemy();
-        if (LeftTarget == null)
+        
+        TargetRefreshTimer -= Time.deltaTime;
+        if (TargetRefreshTimer <= 0f)
         {
-            TargetLeftEnemy();
-        }
-        else
-        {
+            TargetRefreshTimer = Random.Range(2.5f, 3.5f);
+            CheckTargetEnemy();
             if (LeftWeapon != null)
             {
                 LeftWeapon.GetComponent<Weapons>().Aim = LeftTarget;
             }
-        }
-        if (RightTarget == null)
-        {
-            TargetRightEnemy();
-        }
-        else
-        {
             if (RightWeapon != null)
             {
                 RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
             }
         }
+        if (LeftTarget==null || RightTarget==null)
+        {
+            FindTargetTimer -= Time.deltaTime;
+        }
+        if (FindTargetTimer<=0f)
+        {
+            FindTargetTimer = Random.Range(2.5f,3.5f);
+            if (LeftTarget == null)
+            {
+                TargetLeftEnemy();
+            }
+            if (RightTarget == null)
+            {
+                TargetRightEnemy();
+            }
+        }
+    }
+    private void FixedUpdate()
+    {
+
     }
     #endregion
     #region Init Data
@@ -201,8 +219,11 @@ public class EnemyShared : FighterShared
         StatsDataDict = new Dictionary<string, object>();
         fm = GetComponent<FighterMovement>();
         FighterName = (string)Data["Name"];
+        // Bounty
+        BountyCash = (int)(int.Parse(((string)Data["DefeatReward"]).Split("|")[0]) * CashBountyScale);
+        BountyShard = int.Parse(((string)Data["DefeatReward"]).Split("|")[1]);
         StatsDataDict = FindObjectOfType<GlobalFunctionController>().ConvertEnemyStatsToDictionary((string)Data["Stats"]);
-        MaxHP = float.Parse((string)StatsDataDict["HP"]);
+        MaxHP = float.Parse((string)StatsDataDict["HP"]) * HPScale;
         // SPD, ROT
         fm.MovingSpeed = float.Parse((string)StatsDataDict["SPD"]);
         fm.RotateSpeed = float.Parse((string)StatsDataDict["ROT"]);
@@ -535,6 +556,12 @@ public class EnemyShared : FighterShared
             RightTarget = null;
             RightWeapon.GetComponent<Weapons>().Aim = null;
         }
+    }
+    #endregion
+    #region Bounty
+    public void AddBounty()
+    {
+        FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
     }
     #endregion
 }

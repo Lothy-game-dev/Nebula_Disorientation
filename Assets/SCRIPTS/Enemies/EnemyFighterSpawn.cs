@@ -18,6 +18,8 @@ public class EnemyFighterSpawn : MonoBehaviour
     public float SpawnDelay;
     public Vector2[] EnemySpawnPosition;
     public int[] EnemySpawnID;
+    public float EnemyMaxHPScale;
+    public float EnemyBountyScale;
     private GameObject ChosenModel;
     #endregion
     #region Start & Update
@@ -62,6 +64,8 @@ public class EnemyFighterSpawn : MonoBehaviour
         }
         Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Enemy.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
+        Enemy.GetComponent<EnemyShared>().HPScale = EnemyMaxHPScale;
+        Enemy.GetComponent<EnemyShared>().CashBountyScale = EnemyBountyScale;
         Enemy.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

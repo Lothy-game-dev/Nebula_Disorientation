@@ -2855,6 +2855,29 @@ public class AccessDatabase : MonoBehaviour
             return "Success";
         }
     }
+
+    public string UpdateSessionCashAndShard(int SessionID, bool IsIncrease, int Cash, int Shard)
+    {
+        Debug.Log(SessionID + " - " + Cash + " - " + Shard);
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease ? "+ " : "- ") + Shard +
+            ", SessionCash = SessionCash " + (IsIncrease ? "+ " : "- ") + Cash + " WHERE SessionId=" + SessionID;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
     #endregion
     #region Access Allies
     public Dictionary<string, object> GetDataAlliesById(int allyID)

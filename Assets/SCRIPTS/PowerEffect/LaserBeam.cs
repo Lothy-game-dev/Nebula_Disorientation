@@ -108,6 +108,7 @@ public class LaserBeam : Powers
             game.GetComponent<Beam>().Distance = Range;
             game.GetComponent<Beam>().Damage = DPH;
             game.GetComponent<Beam>().Layer = EnemyLayer;
+            game.GetComponent<Beam>().Fighter = Fighter;
             game.transform.localScale = game.transform.localScale * (i > m ? (float)(n-i)/(n-m) : 1);
 
             //Change the spirte of the bullet like a laser

@@ -50,6 +50,7 @@ public class RocketBurst : Powers
             game.GetComponent<RocketBurstBullet>().AoE = AoE;
             game.GetComponent<RocketBurstBullet>().Velocity = Velocity;
             game.GetComponent<RocketBurstBullet>().Layer = EnemyLayer;
+            game.GetComponent<RocketBurstBullet>().Fighter = Fighter;
             PlaySound(SoundEffect);
         }
     }

@@ -407,7 +407,7 @@ public class PlayerFighter : FighterShared
     private void ShowInfo()
     {
         // Temp
-        FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "�";
+        FighterTempText.GetComponent<TextMeshPro>().text = currentTemperature.ToString() + "°";
         FighterInfoCircle.GetComponent<HUDFighterInfoEffects>().CurrentTemp = currentTemperature;
         if (currentTemperature==50f)
         {

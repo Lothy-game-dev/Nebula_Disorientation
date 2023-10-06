@@ -18,6 +18,8 @@ public class SpawnAlliesFighter : MonoBehaviour
     public float[] AllySpawnDelay;
     public Vector2[] AllySpawnPosition;
     public int[] AllySpawnID;
+    public float AllyMaxHPScale;
+    public float AllyBountyScale;
     private GameObject ChosenModel;
     #endregion
     #region Start & Update
@@ -61,6 +63,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         }
         Ally.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
+        Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
     }
     #endregion
