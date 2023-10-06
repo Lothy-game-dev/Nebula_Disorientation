@@ -93,21 +93,74 @@ public class WSShared : MonoBehaviour
 
         //BackFire
         List<Vector2> BFpos = model.GetComponent<WarshipModelShared>().BackFirePos;
+        Vector2 BFScale = model.GetComponent<WarshipModelShared>().BackFireScale;
         for (int i = 0; i < BFpos.Count; i++)
         {
             GameObject game = Instantiate(BackFire, new Vector3(transform.position.x+BFpos[i].x, transform.position.y+BFpos[i].y, BackFire.transform.position.z), Quaternion.identity);
             game.transform.SetParent(gameObject.transform);
             game.transform.Rotate(new Vector3(0, 0, 180));
+            game.name = "BackFire" + i;
             game.SetActive(false);
             WM.BackFires.Add(game);
         }
-        //Weapon
+        //Main Weapon
+        if (data["MainWeapon"].ToString().Contains("|"))
+        {
+            string[] weapons = data["MainWeapon"].ToString().Split("|");
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                MainWeapon.Add(weapons[i]);
+            }
+        } else
+        {
+            MainWeapon.Add(data["MainWeapon"].ToString());
+        }
+        
+        List<Vector2> WPPos = model.GetComponent<WarshipModelShared>().MainWeaponPos;
         for (int i = 0; i < MainWeapon.Count; i++)
         {
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
+                //Find model
+                if (MainWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ","").ToLower()) 
+                {
+                    GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos[i].x, transform.position.y + WPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
+                    main.transform.SetParent(gameObject.transform);
+                    main.transform.localScale = new Vector2(1f, 1f);
+                    main.SetActive(true);
+                }
+            }           
+        }
 
+        //Sup Weapon
+        if (data["SupWeapon"].ToString().Contains("|"))
+        {
+            string[] weapons = data["SupWeapon"].ToString().Split("|");
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                SupWeapon.Add(weapons[i]);
             }
+        }
+        else
+        {
+            SupWeapon.Add(data["SupWeapon"].ToString());
+        }
+
+        List<Vector2> SupWPPos = model.GetComponent<WarshipModelShared>().SupWeaponPos;
+        for (int i = 0; i < SupWeapon.Count; i++)
+        {
+            for (int j = 0; j < Weapons.transform.childCount; j++)
+            {
+                //Find model
+                if (SupWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower())
+                {
+                    GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
+                    sup.transform.SetParent(gameObject.transform);
+                    sup.transform.localScale = new Vector2(0.5f, 0.5f);
+                    sup.SetActive(true);
+                }
+            }
+            
         }
     }
     #endregion

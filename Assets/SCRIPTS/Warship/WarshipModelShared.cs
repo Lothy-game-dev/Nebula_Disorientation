@@ -13,6 +13,7 @@ public class WarshipModelShared : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public List<Vector2> BackFirePos;
+    public Vector2 BackFireScale;
     public List<Vector2> MainWeaponPos;
     public List<Vector2> SupWeaponPos;
     #endregion
