@@ -602,4 +602,10 @@ public class FighterShared : MonoBehaviour
         }
     }
     #endregion
+    #region Calculate Healing
+    public void ReceiveHealing(float HealAmount)
+    {
+        CurrentHP += HealAmount;
+    }
+    #endregion
 }

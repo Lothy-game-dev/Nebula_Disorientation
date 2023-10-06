@@ -47,10 +47,10 @@ public class AutoRepair : Consumable
                 {
                     if (Fighter.GetComponent<PlayerFighter>().CurrentHP < Fighter.GetComponent<PlayerFighter>().MaxHP - (HealingAmount - TotalHeal))
                     {
-                        Fighter.GetComponent<PlayerFighter>().CurrentHP += (HealingAmount - TotalHeal);
+                        Fighter.GetComponent<PlayerFighter>().ReceiveHealing(HealingAmount - TotalHeal);
                     } else
                     {
-                        Fighter.GetComponent<PlayerFighter>().CurrentHP += PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP;
+                        Fighter.GetComponent<PlayerFighter>().ReceiveHealing(PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP);
                     }
                 }
                 isStart = false;
@@ -64,11 +64,11 @@ public class AutoRepair : Consumable
                 {
                     if (TotalHeal < HealingAmount - (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime))
                     {                        
-                        Fighter.GetComponent<PlayerFighter>().CurrentHP += (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);
+                        Fighter.GetComponent<PlayerFighter>().ReceiveHealing(PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);
                         TotalHeal += (PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / (100 * Duration) * Time.fixedDeltaTime);                       
                     } else
                     {
-                        Fighter.GetComponent<PlayerFighter>().CurrentHP += HealingAmount - TotalHeal;
+                        Fighter.GetComponent<PlayerFighter>().ReceiveHealing(HealingAmount - TotalHeal);
                         TotalHeal = HealingAmount;
                         Timer = Duration;
                     }      
@@ -77,7 +77,7 @@ public class AutoRepair : Consumable
                 else
                 {
                     TotalHeal += PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP;
-                    Fighter.GetComponent<PlayerFighter>().CurrentHP += PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP ;
+                    Fighter.GetComponent<PlayerFighter>().ReceiveHealing(PlayerMaxHP - Fighter.GetComponent<PlayerFighter>().CurrentHP);
                 }         
             }
             
@@ -91,7 +91,6 @@ public class AutoRepair : Consumable
     {
         isStart = true;
         PlayerMaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
-        /*TotalHeal = Fighter.GetComponent<PlayerFighter>().CurrentHP + PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / 100;*/
         HealingAmount = PlayerMaxHP * float.Parse(Effect.Split("-")[1]) / 100;
     }
     #endregion

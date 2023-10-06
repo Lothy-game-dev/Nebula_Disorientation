@@ -15,7 +15,7 @@ public class EnemyFighterSpawn : MonoBehaviour
     #region NormalVariables
     // will do delay later
     public List<GameObject> Enemies;
-    private Dictionary<int, float> EnemySpawnDelay;
+    public float SpawnDelay;
     public Vector2[] EnemySpawnPosition;
     public int[] EnemySpawnID;
     private GameObject ChosenModel;
