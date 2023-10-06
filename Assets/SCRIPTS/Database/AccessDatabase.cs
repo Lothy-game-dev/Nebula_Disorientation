@@ -1871,6 +1871,31 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public Dictionary<string, object> GetWSById(int ID)
+    {
+        Dictionary<string, object> WSDict = new Dictionary<string, object>();
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Warship Where WSid = " + ID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            WSDict.Add("WarshipID", dataReader.GetInt32(0).ToString());
+            WSDict.Add("WarshipName", dataReader.GetString(1));
+            WSDict.Add("WarshipStat", dataReader.GetString(3));
+            WSDict.Add("Tier", dataReader.GetString(4));
+            WSDict.Add("MainWeapon", dataReader.GetString(5));
+            WSDict.Add("SupWeapon", dataReader.GetString(6));
+
+        }
+        if (!check) return null;
+        return WSDict;
+    }
     #endregion
     #region Access Ownership
     public int GetCurrentOwnedNumberOfConsumableByName(int PlayerID, string itemName)

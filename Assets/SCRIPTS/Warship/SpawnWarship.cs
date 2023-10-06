@@ -12,16 +12,22 @@ public class SpawnWarship : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public GameObject WarshipModel;
+    public GameObject WSTemplate;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private Vector2 pos;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        pos.x = Random.Range(700f, 2100f);
+        pos.y = Random.Range(-3500f, 3500f);
+        SpawnWS(pos);
     }
 
     // Update is called once per frame
@@ -30,8 +36,24 @@ public class SpawnWarship : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Function group 1
+    #region Spawn Warship
     // Group all function that serve the same algorithm
+    public void SpawnWS(Vector2 randomPos)
+    {
+        Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(1);
+        for (int i = 0; i < WarshipModel.transform.childCount; i++)
+        {
+            if (WarshipModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["WarshipName"].ToString().Replace("-","").ToLower())
+            {
+                GameObject game = Instantiate(WSTemplate, new Vector3(randomPos.x, randomPos.y, WarshipModel.transform.GetChild(i).position.z), Quaternion.identity);
+                game.GetComponent<SpriteRenderer>().sprite = WarshipModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
+                game.transform.localScale = WarshipModel.transform.GetChild(i).localScale;
+                game.name = data["WarshipName"].ToString();
+                game.SetActive(true);
+                game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
+            }
+        }
+    }
     #endregion
     #region Function group ...
     // Group all function that serve the same algorithm
