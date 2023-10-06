@@ -37,20 +37,15 @@ public class Barrier : Powers
     void Update()
     {
         // Call function and timer only if possible
-        
-        if (Shield != null)
-        {
-            Shield.transform.position = Fighter.transform.position;
-        }
         if (isStart)
         {
             Timer += Time.deltaTime;
-            if (Timer >= Duration * 3/4 && isEnding)
+            if (isEnding && Timer >= Duration * 3f/4)
             {
                 Destroy(Shield);
                 isEnding = false;
                 GenEndBarrier();
-            } 
+            }
             if (Timer >= Duration)
             {
                 if (BRx != 0)
@@ -86,6 +81,7 @@ public class Barrier : Powers
     {
         isStart = true;
         Shield = Instantiate(Effect, Fighter.transform.position, Quaternion.identity);
+        Shield.transform.SetParent(Fighter.transform);
         Shield.SetActive(true);
         if (BRx != 0)
         {
@@ -104,6 +100,7 @@ public class Barrier : Powers
     public void GenEndBarrier()
     {
         Shield = Instantiate(EndEffect, Fighter.transform.position, Quaternion.identity);
+        Shield.transform.SetParent(Fighter.transform);
         Shield.SetActive(true);
     }
     #endregion

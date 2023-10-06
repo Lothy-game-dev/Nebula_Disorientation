@@ -24,6 +24,7 @@ public class Beam : MonoBehaviour
     public Vector2 InitScale;
     public LayerMask Layer;
     public LaserBeam Laser;
+    public GameObject Fighter;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -91,7 +92,7 @@ public class Beam : MonoBehaviour
                 FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
                 if (enemy != null)
                 {
-                    enemy.ReceiveDamage(Damage);
+                    enemy.ReceiveDamage(Damage, Fighter);
                 }
             }
             Destroy(gameObject);

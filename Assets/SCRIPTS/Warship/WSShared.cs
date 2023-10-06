@@ -37,6 +37,7 @@ public class WSShared : MonoBehaviour
     void Start()
     {
         // Initialize variables
+        CurrentHP = MaxHP;
     }
 
     // Update is called once per frame
@@ -162,10 +163,47 @@ public class WSShared : MonoBehaviour
             }
             
         }
+        gameObject.SetActive(true);
     }
     #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
+    #region Receive Damage
+    public void ReceiveBulletDamage(float Damage, GameObject Bullet)
+    {
+        float RealDamage = 0;
+        if (Bullet.GetComponent<UsualKineticBullet>()!=null)
+        {
+            if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
+            {
+                RealDamage = Damage * 70 / 100f;
+            } else
+            {
+                RealDamage = Damage;
+            }
+        }
+        else
+        {
+            RealDamage = Damage * 5 / 100f;
+        }
+        if (CurrentHP>= RealDamage)
+        {
+            CurrentHP -= RealDamage;
+        } else
+        {
+            CurrentHP = 0;
+        }
+    }
+
+    public void ReceivePowerDamage(float Damage)
+    {
+        float RealDamage = Damage * 50f / 100;
+        if (CurrentHP>=RealDamage)
+        {
+            CurrentHP -= RealDamage;
+        } else
+        {
+            CurrentHP = 0;
+        }
+    }
     #endregion
 }
 

@@ -125,6 +125,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInformation.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContractButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutGoButton.cs" />

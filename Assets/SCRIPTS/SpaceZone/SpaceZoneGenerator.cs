@@ -68,24 +68,105 @@ public class SpaceZoneGenerator : MonoBehaviour
         // Set Mission To Mission Object WIP
         Timer.SetTimer((int)TemplateData["Time"]);
         SpaceZoneIntro.SetData(SpaceZoneNo, (string)TemplateData["Type"], (string)TemplateData["Missions"], color);
+        
         // Squad Rating
         string SquadRating = (string)TemplateData["SquadRating"];
-        int AllySquadRating = int.Parse(SquadRating.Split("|")[0]);
-        int EnemySquadRating = int.Parse(SquadRating.Split("|")[1]);
+        float AllySquadRating = float.Parse(SquadRating.Split("|")[0]);
+        float EnemySquadRating = float.Parse(SquadRating.Split("|")[1]);
+
         // Ally Squad X Y Z
         string AllySquad = (string)TemplateData["AllySquad"];
-        int AllySquadX = int.Parse(AllySquad.Split("-")[0]);
-        int AllySquadY = int.Parse(AllySquad.Split("-")[1]);
-        int AllySquadZ = int.Parse(AllySquad.Split("-")[2]);
+        float AllySquadX = float.Parse(AllySquad.Split("-")[0]);
+        float AllySquadY = float.Parse(AllySquad.Split("-")[1]);
+        float AllySquadZ = float.Parse(AllySquad.Split("-")[2]);
 
         // Enemy Squad X Y Z
         string EnemySquad = (string)TemplateData["EnemySquad"];
-        int EnemySquadX = int.Parse(EnemySquad.Split("-")[0]);
-        int EnemySquadY = int.Parse(EnemySquad.Split("-")[1]);
-        int EnemySquadZ = int.Parse(EnemySquad.Split("-")[2]);
+        float EnemySquadX = float.Parse(EnemySquad.Split("-")[0]);
+        float EnemySquadY = float.Parse(EnemySquad.Split("-")[1]);
+        float EnemySquadZ = float.Parse(EnemySquad.Split("-")[2]);
 
+        AllyFighterSpawn.AllyMaxHPScale = 1;
+        AllyFighterSpawn.AllyBountyScale = 1;
+
+        EnemyFighterSpawn.EnemyMaxHPScale = 1;
+        EnemyFighterSpawn.EnemyBountyScale = 1;
+
+        // Change Squad Rating Based On Milestones
+        // Increase Squad rating for (2n-1)*10 and 2n * 10
+        int Scale20Odd = SpaceZoneNo / 20 + SpaceZoneNo / 10 % 2;
+        if (Scale20Odd >= 1)
+        {
+            AllyFighterSpawn.AllyMaxHPScale = 1 + Scale20Odd / 20f;
+            AllyFighterSpawn.AllyBountyScale = 1 + Scale20Odd / 5f;
+            
+
+            EnemyFighterSpawn.EnemyMaxHPScale = 1 + Scale20Odd / 20f;
+            EnemyFighterSpawn.EnemyBountyScale = 1 + Scale20Odd / 5f;
+        }
+        int Scale20Even = SpaceZoneNo / 20;
+        if (Scale20Even >= 1)
+        {
+            AllySquadRating *= (1 + Scale20Even / 10f);
+            EnemySquadRating *= (1 + Scale20Even / 10f);
+        }
+        // (5n)*10
+        if (SpaceZoneNo<350)
+        {
+            int Scale50 = SpaceZoneNo / 50;
+            if (Scale50 >= 1)
+            {
+                AllyFighterSpawn.AllyMaxHPScale = 1 + Scale50 / 20f;
+                EnemyFighterSpawn.EnemyMaxHPScale = 1 + Scale50 / 20f;
+                float realScaleAlly = 0;
+                if (AllySquadX - Scale50 < 5)
+                {
+                    realScaleAlly = AllySquadX - 5;
+                    AllySquadX = 5;
+                }
+                else
+                {
+                    realScaleAlly = Scale50;
+                    AllySquadX -= Scale50;
+                }
+                AllySquadY += realScaleAlly / 2f;
+                AllySquadZ += realScaleAlly / 2f;
+                float realScaleEnemy = 0;
+                if (EnemySquadX - Scale50 < 5)
+                {
+                    realScaleEnemy = EnemySquadX - 5;
+                    EnemySquadX = 5;
+                }
+                else
+                {
+                    realScaleEnemy = Scale50;
+                    EnemySquadX -= Scale50;
+                }
+                EnemySquadY += Scale50 / 2f;
+                EnemySquadZ += Scale50 / 2f;
+                // Chance spawn space station WAIT
+            }
+        } else
+        {
+            AllySquadX = 0;
+            AllySquadY = 7;
+            AllySquadZ = 3;
+            EnemySquadX = 0;
+            EnemySquadY = 7;
+            EnemySquadZ = 3;
+        }
+        
+        // Squad for (10n)*10
+        int SquadScale = SpaceZoneNo / 100;
+        if (SquadScale >= 1)
+        {
+
+            // Army WAIT
+        }
+
+        Debug.Log(EnemySquadRating + "-" + EnemySquadX + "-" + EnemySquadY + "-" + EnemySquadZ);
         // Get Data Fighter Group
-        Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"]);
+        Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo>350? "350":""));
         
         // Count Number Of Ally By Type
         AllyFighterACount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadX / 5);

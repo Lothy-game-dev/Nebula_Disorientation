@@ -60,6 +60,8 @@ public class FighterShared : MonoBehaviour
     //Consumable effect
     public bool isWingShield;
     public float ShieldReducedScale;
+    // Bounty
+    private GameObject Killer;
     #endregion
     #region Shared Functions
     // Initialize
@@ -83,10 +85,16 @@ public class FighterShared : MonoBehaviour
     // Update For Fighter
     public void UpdateFighter()
     {
-        CheckBarrierAndHealth();
-        CheckThermal();
-        CheckInsideBlackhole();
-        CheckSpecialEffectStatus();
+        if (!GetComponent<LimitRendering>().isNotRendering)
+        {
+            CheckBarrierAndHealth();
+            if (currentTemperature!=50)
+            {
+                CheckThermal();
+            }
+            CheckInsideBlackhole();
+            CheckSpecialEffectStatus();
+        }
     }
     // Check Barrier
     public void CheckBarrierAndHealth()
@@ -343,7 +351,7 @@ public class FighterShared : MonoBehaviour
     // Receive Burn Damage
     public void ReceiveBurnedDamage(float scale)
     {
-        ReceiveDamage(MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100);
+        ReceiveDamage(MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
     }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
@@ -441,7 +449,7 @@ public class FighterShared : MonoBehaviour
                     LavaBurnedDamageTimer -= Time.deltaTime;
                 } else
                 {
-                    ReceiveDamage(LavaBurnedDamage);
+                    ReceiveDamage(LavaBurnedDamage, gameObject);
                     ReceiveThermalDamage(true);
                     LavaBurnedCount++;
                     LavaBurnedDamageTimer = 0.1f;
@@ -557,7 +565,7 @@ public class FighterShared : MonoBehaviour
     }
     #endregion
     #region Calculate Damage Received
-    public void ReceiveDamage(float damage)
+    public void ReceiveDamage(float damage, GameObject DamageSource)
     {
         damage = damage * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
         if (CurrentBarrier>0)
@@ -596,6 +604,21 @@ public class FighterShared : MonoBehaviour
             CurrentHP -= damage;
             else
             {
+                if (DamageSource!=null)
+                {
+                    if (DamageSource.GetComponent<BulletShared>() != null)
+                    {
+                        Killer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
+                    }
+                    else
+                    {
+                        Killer = DamageSource;
+                    }
+                    if (GetComponent<EnemyShared>() != null && Killer == FindObjectOfType<GameController>().Player)
+                    {
+                        GetComponent<EnemyShared>().AddBounty();
+                    }
+                }
                 CurrentHP = 0;
                 StartCoroutine(DestroySelf());
             }

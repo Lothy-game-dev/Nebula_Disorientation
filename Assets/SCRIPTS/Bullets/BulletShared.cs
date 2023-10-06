@@ -42,6 +42,7 @@ public class BulletShared : MonoBehaviour
     #region Shared Functions
     public void InitializeBullet()
     {
+        gameObject.AddComponent<LimitRendering>();
         if (MaximumDistance==0f)
         {
             MaximumDistance = MaxEffectiveDistance;
@@ -140,13 +141,17 @@ public class BulletShared : MonoBehaviour
                     {
                         // Deal damage to all enemies in AoE range
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                        WSShared Warship = col2.gameObject.GetComponent<WSShared>();
                         if (enemy != null)
                         {
-                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy));
+                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy.gameObject), gameObject);
                             if (InflictGravitationalSlow)
                             {
                                 enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
                             }
+                        } else if (Warship!=null)
+                        {
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                         }
                     }
                 } 
@@ -154,13 +159,18 @@ public class BulletShared : MonoBehaviour
                 else
                 {
                     FighterShared enemy = col.GetComponent<FighterShared>();
+                    WSShared Warship = col.gameObject.GetComponent<WSShared>();
                     if (enemy!=null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy.gameObject), gameObject);
                         if (InflictGravitationalSlow)
                         {
                             enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
                         }
+                    }
+                    else if (Warship != null)
+                    {
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                     }
                 }
                 // Destroy after hit
@@ -193,9 +203,10 @@ public class BulletShared : MonoBehaviour
                     foreach (var col2 in cols2)
                     {
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                        WSShared Warship = col2.gameObject.GetComponent<WSShared>();
                         if (enemy != null)
                         {
-                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
+                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
                             // Receive thermal Damage
                             if (WeaponShoot.CurrentHitCount < 1)
                             {
@@ -208,13 +219,18 @@ public class BulletShared : MonoBehaviour
                                 WeaponShoot.CurrentHitCount = 1;
                             }
                         }
+                        else if (Warship != null)
+                        {
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                        }
                     }
                 } else
                 {
                     FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
+                    WSShared Warship = col.gameObject.GetComponent<WSShared>();
                     if (enemy != null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,true, enemy));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,true, enemy.gameObject), gameObject);
                         if (WeaponShoot.CurrentHitCount < 1)
                         {
                             if (WeaponShoot.CurrentHitCount == 0)
@@ -224,6 +240,10 @@ public class BulletShared : MonoBehaviour
                             enemy.ReceiveThermalDamage(isHeat);
                             WeaponShoot.CurrentHitCount = 1;
                         }
+                    }
+                    else if (Warship != null)
+                    {
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                     }
                 }
                 Destroy(gameObject);
@@ -243,9 +263,10 @@ public class BulletShared : MonoBehaviour
             {
                 AlreadyHit = true;
                 FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
+                WSShared Warship = col.gameObject.GetComponent<WSShared>();
                 if (enemy != null)
                 {
-                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
+                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
                     float a = Random.Range(0, 100f);
                     if (a <= freezingChance)
                     {
@@ -260,6 +281,10 @@ public class BulletShared : MonoBehaviour
                         enemy.ReceiveThermalDamage(false);
                         WeaponShoot.CurrentHitCount = 1;
                     }
+                }
+                else if (Warship != null)
+                {
+                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                 }
                 Destroy(gameObject);
             }
@@ -283,22 +308,32 @@ public class BulletShared : MonoBehaviour
                     foreach (var col2 in cols2)
                     {
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                        WSShared Warship = col2.gameObject.GetComponent<WSShared>();
                         if (enemy != null)
                         {
                             Debug.Log(RealDamage);
-                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
+                            enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
                             // Inflict lava burned
                             enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
+                        }
+                        else if (Warship != null)
+                        {
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                         }
                     }
                 }
                 else
                 {
                     FighterShared enemy = col.GetComponent<FighterShared>();
+                    WSShared Warship = col.gameObject.GetComponent<WSShared>();
                     if (enemy != null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
                         enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
+                    }
+                    else if (Warship != null)
+                    {
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                     }
                 }
                 Destroy(transform.parent.gameObject);
@@ -328,9 +363,14 @@ public class BulletShared : MonoBehaviour
                 {
                     // Deal damage to all enemies in AoE range
                     FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                    WSShared Warship = col2.gameObject.GetComponent<WSShared>();
                     if (enemy != null)
                     {
-                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy));
+                        enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
+                    }
+                    else if (Warship != null)
+                    {
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                     }
                 }
             }
@@ -338,59 +378,65 @@ public class BulletShared : MonoBehaviour
             {
                 PenetrateAlreadyDealDamge.Add(col.gameObject);
                 FighterShared enemy = col.GetComponent<FighterShared>();
+                WSShared Warship = col.gameObject.GetComponent<WSShared>();
                 if (enemy!=null)
                 {
-                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, ApplyNanoEffect, enemy));
-                }
-                if (ApplyNanoEffect)
-                {
-                    enemy.InflictNanoTemp();
-                    if (enemy.currentTemperature == 50f)
+                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, ApplyNanoEffect, enemy.gameObject), gameObject);
+                    if (ApplyNanoEffect)
                     {
-                        int a = Random.Range(40, 61);
-                        if (a == 50)
+                        enemy.InflictNanoTemp();
+                        if (enemy.currentTemperature == 50f)
                         {
-                            a += (Random.Range(0, 1f) >= 0.5f ? 1 : -1) * 10;
-                        }
-                        else if (a > 50)
-                        {
-                            a += 10;
-                        }
-                        else
-                        {
-                            a -= 10;
-                        }
-                        enemy.currentTemperature = a;
-                    }
-                    else if (enemy.currentTemperature > 50f && enemy.currentTemperature < 90f)
-                    {
-                        enemy.ReceiveThermalDamage(true);
-                    }
-                    else if (enemy.currentTemperature >= 90f)
-                    {
-                        enemy.ReceiveThermalDamage(true);
-                        enemy.ReceiveBurnedDamage(3);
-                    }
-                    else if (enemy.currentTemperature < 50f && enemy.currentTemperature > 0f)
-                    {
-                        enemy.ReceiveThermalDamage(false);
-                    }
-                    else if (enemy.currentTemperature <= 0f)
-                    {
-                        enemy.ReceiveThermalDamage(false);
-                        if (enemy.FrozenDuration > 0f)
-                        {
-                            if (enemy.NanoEffectFrozenDurationIncrease < (3f - 1.5f * enemy.NanoTempScale))
+                            int a = Random.Range(40, 61);
+                            if (a == 50)
                             {
-                                enemy.FrozenDuration += 1.5f * enemy.NanoTempScale;
-                                enemy.NanoEffectFrozenDurationIncrease += 1.5f * enemy.NanoTempScale;
-                            } else
+                                a += (Random.Range(0, 1f) >= 0.5f ? 1 : -1) * 10;
+                            }
+                            else if (a > 50)
                             {
-                                enemy.FrozenDuration += 3f - enemy.NanoEffectFrozenDurationIncrease;
-                                enemy.NanoEffectFrozenDurationIncrease = 3f;
+                                a += 10;
+                            }
+                            else
+                            {
+                                a -= 10;
+                            }
+                            enemy.currentTemperature = a;
+                        }
+                        else if (enemy.currentTemperature > 50f && enemy.currentTemperature < 90f)
+                        {
+                            enemy.ReceiveThermalDamage(true);
+                        }
+                        else if (enemy.currentTemperature >= 90f)
+                        {
+                            enemy.ReceiveThermalDamage(true);
+                            enemy.ReceiveBurnedDamage(3);
+                        }
+                        else if (enemy.currentTemperature < 50f && enemy.currentTemperature > 0f)
+                        {
+                            enemy.ReceiveThermalDamage(false);
+                        }
+                        else if (enemy.currentTemperature <= 0f)
+                        {
+                            enemy.ReceiveThermalDamage(false);
+                            if (enemy.FrozenDuration > 0f)
+                            {
+                                if (enemy.NanoEffectFrozenDurationIncrease < (3f - 1.5f * enemy.NanoTempScale))
+                                {
+                                    enemy.FrozenDuration += 1.5f * enemy.NanoTempScale;
+                                    enemy.NanoEffectFrozenDurationIncrease += 1.5f * enemy.NanoTempScale;
+                                }
+                                else
+                                {
+                                    enemy.FrozenDuration += 3f - enemy.NanoEffectFrozenDurationIncrease;
+                                    enemy.NanoEffectFrozenDurationIncrease = 3f;
+                                }
                             }
                         }
                     }
+                }
+                else if (Warship != null)
+                {
+                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                 }
                 if (!isPenetrating)
                 {
@@ -426,9 +472,14 @@ public class BulletShared : MonoBehaviour
         {
             // Deal damage to all enemies in AoE range
             FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+            WSShared Warship = col2.gameObject.GetComponent<WSShared>();
             if (enemy != null)
             {
-                enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,false,enemy));
+                enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,false, enemy.gameObject), gameObject);
+            }
+            else if (Warship != null)
+            {
+                Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
             }
         }
         BlackHole bhole = bh.GetComponent<BlackHole>();
@@ -592,7 +643,7 @@ public class BulletShared : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = veloc;
     }
 
-    private float CalculateFinalDamage(float InitDamage, bool isThermal, FighterShared enemy)
+    private float CalculateFinalDamage(float InitDamage, bool isThermal, GameObject enemy)
     {
         // Not Done, will be added with LOTW card later
         return InitDamage * WeaponDamageModScale;
