@@ -169,6 +169,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\SpawnAlliesFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
+    <Compile Include="Assets\SCRIPTS\Bullets\LaserBeamBullet.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />

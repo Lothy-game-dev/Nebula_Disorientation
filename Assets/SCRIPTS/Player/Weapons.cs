@@ -64,6 +64,8 @@ public class Weapons : MonoBehaviour
 
     public bool BeamActivating;
     public bool isUsingWormhole;
+
+    public bool isMainWeapon;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -614,6 +616,11 @@ public class Weapons : MonoBehaviour
             currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
             OverheatDecreaseTimer = OverheatResetTimer;
         }
+    }
+
+    void FireWSLaserBeam()
+    {
+
     }
 
     private void GenerateEffect()
