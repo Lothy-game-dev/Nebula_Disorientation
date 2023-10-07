@@ -31,9 +31,9 @@ public class SuperiorFreezingBlasterOrb : BulletShared
     {
         // Call function and timer only if possible
         UpdateBullet();
-        CalculateSFreezeBlasterDamage(FreezingChance,FreezingDuration,AddingFreezeDuration);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel();
+        CalculateSFreezeBlasterDamage(FreezingChance, FreezingDuration, AddingFreezeDuration);
     }
     #endregion
 }

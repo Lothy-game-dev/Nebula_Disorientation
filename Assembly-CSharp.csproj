@@ -199,6 +199,7 @@
     <Compile Include="Assets\SCRIPTS\Cons\AutoRepair.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWOwnedCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneMissionText.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\PowerController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialButton.cs" />

@@ -41,9 +41,9 @@ public class BlackholeOrb : BulletShared
     {
         // Call function and timer only if possible
         UpdateBullet();
-        CheckCreateBlackhole(BlackHole, BlackHoleRadius, BlackHoleExistTime, BlackHolePullingForce);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravelBlackhole(BlackHole, BlackHoleRadius, BlackHoleExistTime, BlackHolePullingForce);
+        CheckCreateBlackhole(BlackHole, BlackHoleRadius, BlackHoleExistTime, BlackHolePullingForce);
         RotateBullet();
     }
     #endregion

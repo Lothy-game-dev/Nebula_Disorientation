@@ -18,6 +18,7 @@ public class SpaceZoneTimer : MonoBehaviour
     private bool Countdown;
     private bool DoneSetupTimer;
     private float TimerDown;
+    private bool AlreadyCallEnd;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -71,7 +72,7 @@ public class SpaceZoneTimer : MonoBehaviour
     {
         int minute = (int)Timer / 60;
         int second = (int)Timer % 60;
-        string Time = minute < 10 ? "0" + minute.ToString() + ":" + second.ToString() : minute.ToString() + ":" + second.ToString();
+        string Time = minute < 10 ? "0" + minute.ToString() + ":" + (second < 10 ? "0" + second : second.ToString()) : minute.ToString() + ":" + (second < 10 ? "0" + second : second.ToString());
         TimeText.text = Time;
     }
 
@@ -79,10 +80,14 @@ public class SpaceZoneTimer : MonoBehaviour
     {
         if (Countdown)
         {
-            if (Timer==0f)
+            if (Timer<=0f)
             {
                 DoneSetupTimer = false;
-                // Fail
+                if (!AlreadyCallEnd)
+                {
+                    AlreadyCallEnd = true;
+                    mission.TimerEnd();
+                }
             }
         }
     }

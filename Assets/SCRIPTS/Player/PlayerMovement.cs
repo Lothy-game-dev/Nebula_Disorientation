@@ -318,19 +318,19 @@ public class PlayerMovement : MonoBehaviour
         float LimitRightX = RightBorder.transform.position.x - 100;
         if (transform.position.x >= LimitRightX)
         {
-            LimitSpeedScale = (50 - (transform.position.x - LimitRightX)) / 50;
+            LimitSpeedScale = (60 - (transform.position.x - LimitRightX)) / 50;
         }
         else if (transform.position.x <= LimitLeftX)
         {
-            LimitSpeedScale = (50 - (LimitLeftX - transform.position.x)) / 50;
+            LimitSpeedScale = (60 - (LimitLeftX - transform.position.x)) / 50;
         }
         else if (transform.position.y >= LimitTopY)
         {
-            LimitSpeedScale = (50 - (transform.position.y - LimitTopY)) / 50;
+            LimitSpeedScale = (60 - (transform.position.y - LimitTopY)) / 50;
         }
         else if (transform.position.y <= LimitBottomY)
         {
-            LimitSpeedScale = (50 - (LimitBottomY - transform.position.y)) / 50;
+            LimitSpeedScale = (60 - (LimitBottomY - transform.position.y)) / 50;
         }
         else LimitSpeedScale = 1;
         if (LimitSpeedScale<0f)

@@ -530,10 +530,8 @@ public class Weapons : MonoBehaviour
             EndSound();
         } else
         {
-            Debug.Log("b");
             if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
             {
-                Debug.Log("a");
                 if (!IsThermalType)
                 {
                     FireBullet();

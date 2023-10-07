@@ -16,6 +16,7 @@ public class EnemyShared : FighterShared
     public GameObject BackFire;
 
     public GameObject PowerModel;
+    public int Tier;
     private bool test;
     private Dictionary<string, object> StatsDataDict;
     private Vector2 check;

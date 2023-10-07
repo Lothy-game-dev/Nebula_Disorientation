@@ -21,6 +21,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public float AllyMaxHPScale;
     public float AllyBountyScale;
     private GameObject ChosenModel;
+    public int EscortSpawnNumber;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -42,6 +43,13 @@ public class SpawnAlliesFighter : MonoBehaviour
         for (int i = 0; i < AllySpawnID.Length; i++)
         {
             CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i);
+        }
+        if (EscortSpawnNumber>0)
+        {
+            for (int i=0;i<EscortSpawnNumber;i++)
+            {
+                CreateAlly(1, new Vector2(Random.Range(-4900,-3500),Random.Range(3500,4900)), i);
+            }
         }
     }
     private void CreateAlly(int id, Vector2 spawnPos, int count)

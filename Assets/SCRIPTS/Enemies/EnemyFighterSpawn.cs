@@ -11,6 +11,8 @@ public class EnemyFighterSpawn : MonoBehaviour
     #region InitializeVariables
     public GameObject EnemyModel;
     public GameObject EnemyTemplate;
+    public GameObject SpawnHole;
+    public AudioClip SpawnSoundEffect;
     #endregion
     #region NormalVariables
     // will do delay later
@@ -18,9 +20,16 @@ public class EnemyFighterSpawn : MonoBehaviour
     public float SpawnDelay;
     public Vector2[] EnemySpawnPosition;
     public int[] EnemySpawnID;
+    public int[] EnemyTier;
     public float EnemyMaxHPScale;
     public float EnemyBountyScale;
     private GameObject ChosenModel;
+    public float DelayBetweenSpawn;
+    public float DelaySpawnSBB;
+    private float DelaySpawnSBBTimer;
+    private bool IsSpawningSBB;
+    public List<Vector2> SpawnSBBPos;
+    private int SBBCount;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -33,6 +42,28 @@ public class EnemyFighterSpawn : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (IsSpawningSBB)
+        {
+            DelaySpawnSBBTimer -= Time.deltaTime;
+            if (DelaySpawnSBBTimer <=0f)
+            {
+                DelaySpawnSBBTimer = DelaySpawnSBB;
+                Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("ES");
+                string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+                string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+                int k = Random.Range(0, VectorRangeTopLeft.Length);
+                int LeftLimit = int.Parse(VectorRangeTopLeft[k].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int TopLimit = int.Parse(VectorRangeTopLeft[k].Replace("(", "").Replace(")", "").Split(",")[1]);
+                int RightLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int BottomLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[1]);
+                Vector2 SpawnPos = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
+                GameObject SpawnEffect = Instantiate(SpawnHole, SpawnPos, Quaternion.identity);
+                SpawnEffect.SetActive(true);
+                Destroy(SpawnEffect, 1.5f);
+                CreateEnemy(1, SpawnPos, SBBCount, 1);
+                SBBCount++;
+            }
+        }
     }
     #endregion
     #region Spawn Enemy
@@ -40,12 +71,36 @@ public class EnemyFighterSpawn : MonoBehaviour
     public void SpawnEnemy()
     {
         Enemies = new List<GameObject>();
-        for (int i = 0; i < EnemySpawnID.Length; i++)
+        if (DelayBetweenSpawn > 0f)
         {
-            CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i);
+            StartCoroutine(SpawnEnemyByTime());
+        } else
+        {
+            for (int i = 0; i < EnemySpawnID.Length; i++)
+            {
+                CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i]);
+            }
+        }
+        if (DelaySpawnSBB > 0f)
+        {
+            IsSpawningSBB = true;
+            SBBCount = 0;
         }
     }
-    private void CreateEnemy(int id, Vector2 spawnPos, int count)
+
+    private IEnumerator SpawnEnemyByTime()
+    {
+        for (int i = 0; i < EnemySpawnID.Length; i++)
+        {
+            GameObject SpawnEffect = Instantiate(SpawnHole, EnemySpawnPosition[i], Quaternion.identity);
+            SpawnEffect.SetActive(true);
+            Destroy(SpawnEffect, 1.5f);
+            CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i]);
+            yield return new WaitForSeconds(DelayBetweenSpawn);
+        }
+    }
+
+    private void CreateEnemy(int id, Vector2 spawnPos, int count, int Tier)
     {
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
         // Get Model
@@ -61,11 +116,22 @@ public class EnemyFighterSpawn : MonoBehaviour
         if (id >= 13)
         {
             Enemy.tag = "EliteEnemy";
-        }
+        } 
         Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
+        AudioSource aus = Enemy.AddComponent<AudioSource>();
+        aus.clip = SpawnSoundEffect;
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 2000;
+        aus.minDistance = 1000;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
+        Destroy(aus, 4f);
         Enemy.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Enemy.GetComponent<EnemyShared>().HPScale = EnemyMaxHPScale;
         Enemy.GetComponent<EnemyShared>().CashBountyScale = EnemyBountyScale;
+        Enemy.GetComponent<EnemyShared>().Tier = Tier;
         Enemy.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

@@ -31,9 +31,9 @@ public class UsualThermalOrb : BulletShared
     {
         // Call function and timer only if possible
         UpdateBullet();
-        CalculateThermalDamage(isHeat);
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel();
+        CalculateThermalDamage(isHeat);
     }
     #endregion
     #region Function group 1

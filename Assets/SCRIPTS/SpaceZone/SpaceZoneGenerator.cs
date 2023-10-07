@@ -12,7 +12,6 @@ public class SpaceZoneGenerator : MonoBehaviour
     public SpaceZoneBackground SpaceZoneBackground;
     public SpaceZoneTimer Timer;
     public TextMeshPro SpaceZoneNoText;
-    public TextMeshPro MissionText;
     public SpaceZoneMission Mission;
     public SpaceZoneIntro SpaceZoneIntro;
     #endregion
@@ -55,6 +54,31 @@ public class SpaceZoneGenerator : MonoBehaviour
         string[] BGs = ((string)variantData["AvailableBackground"]).Split(",");
         ChosenBG = BGs[Random.Range(0, BGs.Length)];
         SpaceZoneBackground.ChangeBackground(ChosenBG);
+        // Teleport Fighter
+        if ((SpaceZoneNo%10 == 2 || SpaceZoneNo%10 == 4 || SpaceZoneNo%10 == 6) && ChosenVariant==3)
+        {
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("PE");
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            FindObjectOfType<GameController>().Player.transform.position = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
+        } else
+        {
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("PN");
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            FindObjectOfType<GameController>().Player.transform.position = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
+        }
+        // Calculate and Generate SpaceZone
         CalculateAndGenerateSpaceZone((string)variantData["TierColor"]);
     }
 
@@ -64,7 +88,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         TemplateData = FindObjectOfType<AccessDatabase>().GetStageZoneTemplateByStageValueAndVariant(SpaceZoneNo % 10, ChosenVariant);
         // Set UI Data
         SpaceZoneNoText.text = "Space Zone No." + SpaceZoneNo;
-        MissionText.text = (string)TemplateData["Missions"];
+        Mission.MissionTextString = (string)TemplateData["Missions"];
         // Set Mission To Mission Object WIP
         Timer.SetTimer((int)TemplateData["Time"]);
         SpaceZoneIntro.SetData(SpaceZoneNo, (string)TemplateData["Type"], (string)TemplateData["Missions"], color);
@@ -175,12 +199,18 @@ public class SpaceZoneGenerator : MonoBehaviour
         // Spawn Ally
         List<int> AllyID = new List<int>();
         List<Vector2> AllySpawnPos = new List<Vector2>();
+        List<int> EnemyTier = new List<int>();
         // Spawn Ally A
         for (int i=0;i<AllyFighterACount;i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterA"]).Split(",");
             AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
-            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("AA");
+            string Spawnstr = "AA";
+            if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
+            {
+                Spawnstr = "EAS";
+            }
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
             int n = Random.Range(0, VectorRangeTopLeft.Length);
@@ -195,7 +225,12 @@ public class SpaceZoneGenerator : MonoBehaviour
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
             AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
-            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("AB");
+            string Spawnstr = "AB";
+            if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
+            {
+                Spawnstr = "EAS";
+            }
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
             int n = Random.Range(0, VectorRangeTopLeft.Length);
@@ -210,7 +245,12 @@ public class SpaceZoneGenerator : MonoBehaviour
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterC"]).Split(",");
             AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
-            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("AC");
+            string Spawnstr = "AC";
+            if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
+            {
+                Spawnstr = "EAS";
+            }
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
             int n = Random.Range(0, VectorRangeTopLeft.Length);
@@ -223,6 +263,10 @@ public class SpaceZoneGenerator : MonoBehaviour
         // Set Spawn to Spawner
         AllyFighterSpawn.AllySpawnID = AllyID.ToArray();
         AllyFighterSpawn.AllySpawnPosition = AllySpawnPos.ToArray();
+        if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6) && ChosenVariant == 3)
+        {
+            AllyFighterSpawn.EscortSpawnNumber = (int)Mathf.Ceil(AllySquadRating / 10);
+        }
         AllyFighterSpawn.SpawnAlly();
 
         // Count Number Of Enemy By Type
@@ -230,13 +274,31 @@ public class SpaceZoneGenerator : MonoBehaviour
         EnemyFighterBCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadY / 10);
         EnemyFighterCCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadZ / 30);
         // Spawn Enemy
-        List<int> EnemyID = new List<int>();
+        bool SpawningByTime = false;
+        if ((int)TemplateData["SpawnIRate"]>0)
+        {
+            EnemyFighterSpawn.DelayBetweenSpawn = 1 / (EnemySquadRating / (int) TemplateData["SpawnIRate"]);
+            SpawningByTime = true;
+        } else
+        {
+            EnemyFighterSpawn.DelayBetweenSpawn = 0;
+        }
+        if ((int)TemplateData["SpawnIIRate"]>0)
+        {
+            EnemyFighterSpawn.DelaySpawnSBB = 1 / (EnemySquadRating / (int)TemplateData["SpawnIIRate"]);
+        } else
+        {
+            EnemyFighterSpawn.DelaySpawnSBB = 0;
+        }
+        List<int> EnemyIDA = new List<int>();
+        List<int> EnemyIDB = new List<int>();
+        List<int> EnemyIDC = new List<int>();
         List<Vector2> EnemySpawnPos = new List<Vector2>();
         // Spawn Enemy A
         for (int i = 0; i < EnemyFighterACount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterA"]).Split(",");
-            EnemyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            EnemyIDA.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EA");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
@@ -246,12 +308,13 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             EnemySpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            EnemyTier.Add(3);
         }
         // Spawn Enemy B
         for (int i = 0; i < EnemyFighterBCount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterB"]).Split(",");
-            EnemyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            EnemyIDB.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EB");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
@@ -261,12 +324,13 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             EnemySpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            EnemyTier.Add(2);
         }
         // Spawn Enemy C
         for (int i = 0; i < EnemyFighterCCount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterC"]).Split(",");
-            EnemyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            EnemyIDC.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EC");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
@@ -276,11 +340,189 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             EnemySpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            EnemyTier.Add(1);
         }
         // Set Spawn to Spawner
-        EnemyFighterSpawn.EnemySpawnID = EnemyID.ToArray();
-        EnemyFighterSpawn.EnemySpawnPosition = EnemySpawnPos.ToArray();
+        List<int> IDTotal = new List<int>();
+        List<Vector2> SpawnTotal = new List<Vector2>();
+        List<int> TierTotal = new List<int>();
+        if (SpawningByTime)
+        {
+            int a = 0, b = 0, c = 0;
+            for (int i=0;i<EnemyFighterACount + EnemyFighterBCount + EnemyFighterCCount; i++)
+            {
+                bool NoA = false;
+                bool NoB = false;
+                bool NoC = false;
+                float end = 10;
+                if (a >= EnemyIDA.Count)
+                {
+                    end -= EnemySquadX;
+                    NoA = true;
+                }
+                
+                if (b >= EnemyIDB.Count)
+                {
+                    end -= EnemySquadY;
+                    NoB = true;
+                }
+                
+                if (c >= EnemyIDB.Count)
+                {
+                    end -= EnemySquadZ;
+                    NoC = true;
+                }
+
+                if (NoA && NoB && NoC)
+                {
+                    break;
+                }
+                float n = Random.Range(0f, end);
+                if (NoA && NoB && !NoC)
+                {
+                    IDTotal.Add(EnemyIDC[c]);
+                    c++;
+                    TierTotal.Add(1);
+                } 
+                else if (NoA && !NoB && NoC)
+                {
+                    IDTotal.Add(EnemyIDB[b]);
+                    b++;
+                    TierTotal.Add(2);
+                } 
+                else if (NoA && !NoB && !NoC)
+                {
+                    if (n <= EnemySquadY)
+                    {
+                        IDTotal.Add(EnemyIDB[b]);
+                        b++;
+                        TierTotal.Add(2);
+                    } else
+                    {
+                        IDTotal.Add(EnemyIDC[c]);
+                        c++;
+                        TierTotal.Add(1);
+                    }
+                }
+                else if (!NoA && NoB && !NoC)
+                {
+                    if (n <= EnemySquadX)
+                    {
+                        IDTotal.Add(EnemyIDA[a]);
+                        a++;
+                        TierTotal.Add(3);
+                    }
+                    else
+                    {
+                        IDTotal.Add(EnemyIDC[c]);
+                        c++;
+                        TierTotal.Add(1);
+                    }
+                }
+                else if (!NoA && !NoB && NoC)
+                {
+                    if (n <= EnemySquadX)
+                    {
+                        IDTotal.Add(EnemyIDA[a]);
+                        a++;
+                        TierTotal.Add(3);
+                    }
+                    else
+                    {
+                        IDTotal.Add(EnemyIDB[b]);
+                        b++;
+                        TierTotal.Add(2);
+                    }
+                }
+                else if (!NoA && !NoB && !NoC)
+                {
+                    if (n <= EnemySquadX)
+                    {
+                        IDTotal.Add(EnemyIDA[a]);
+                        a++;
+                        TierTotal.Add(3);
+                    }
+                    else if (n <= EnemySquadX + EnemySquadY)
+                    {
+                        IDTotal.Add(EnemyIDB[b]);
+                        b++;
+                        TierTotal.Add(2);
+                    } else
+                    {
+                        IDTotal.Add(EnemyIDC[c]);
+                        c++;
+                        TierTotal.Add(1);
+                    }
+                } else if (!NoA && NoB && NoC)
+                {
+                    IDTotal.Add(EnemyIDA[a]);
+                    a++;
+                    TierTotal.Add(3);
+                }
+                string Spawnstr = "ES";
+                if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
+                {
+                    Spawnstr = "EES";
+                }
+                Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+                string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+                string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+                int k = Random.Range(0, VectorRangeTopLeft.Length);
+                int LeftLimit = int.Parse(VectorRangeTopLeft[k].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int TopLimit = int.Parse(VectorRangeTopLeft[k].Replace("(", "").Replace(")", "").Split(",")[1]);
+                int RightLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int BottomLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[1]);
+                SpawnTotal.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            }
+        } else
+        {
+            IDTotal.AddRange(EnemyIDA);
+            IDTotal.AddRange(EnemyIDB);
+            IDTotal.AddRange(EnemyIDC);
+            SpawnTotal.AddRange(EnemySpawnPos);
+            TierTotal.AddRange(EnemyTier);
+        }
+        EnemyFighterSpawn.EnemySpawnID = IDTotal.ToArray();
+        EnemyFighterSpawn.EnemySpawnPosition = SpawnTotal.ToArray();
+        EnemyFighterSpawn.EnemyTier = TierTotal.ToArray();
         EnemyFighterSpawn.SpawnEnemy();
+        // Mission
+        if (SpaceZoneNo % 10 == 1 || SpaceZoneNo % 10 == 3 || SpaceZoneNo % 10 == 5 || SpaceZoneNo % 10 == 7)
+        {
+            if (ChosenVariant == 1)
+            {
+                Mission.CreateMissionAssaultV1(EnemyFighterACount + EnemyFighterBCount + EnemyFighterCCount);
+            } else
+            {
+                if (EnemyFighterCCount > 0)
+                {
+                    Mission.MissionTextString = "Eliminate Tier I Enemies";
+                    Mission.CreateMissionAssaultV2(EnemyFighterCCount, 1);
+                } else if (EnemyFighterBCount > 0)
+                {
+                    Mission.MissionTextString = "Eliminate Tier II Enemies";
+                    Mission.CreateMissionAssaultV2(EnemyFighterBCount, 2);
+                } else if (EnemyFighterCCount > 0)
+                {
+                    Mission.MissionTextString = "Eliminate Tier III Enemies";
+                    Mission.CreateMissionAssaultV2(EnemyFighterACount, 3);
+                }
+                    
+            }
+        } else if (SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6)
+        {
+            if (ChosenVariant == 1)
+            {
+                Mission.CreateMissionDefendV1();
+            } else if (ChosenVariant == 2)
+            {
+                Mission.CreateMissionDefendV2();
+            }
+            else if (ChosenVariant==3)
+            {
+                Mission.CreateMissionDefendV3((int)Mathf.Ceil(AllySquadRating / 10));
+            }
+        }
     }
     #endregion
 }

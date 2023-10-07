@@ -62,6 +62,7 @@ public class FighterShared : MonoBehaviour
     public float ShieldReducedScale;
     // Bounty
     private GameObject Killer;
+    private bool alreadyDestroy;
     #endregion
     #region Shared Functions
     // Initialize
@@ -85,16 +86,13 @@ public class FighterShared : MonoBehaviour
     // Update For Fighter
     public void UpdateFighter()
     {
-        if (!GetComponent<LimitRendering>().isNotRendering)
+        CheckBarrierAndHealth();
+        if (currentTemperature!=50)
         {
-            CheckBarrierAndHealth();
-            if (currentTemperature!=50)
-            {
-                CheckThermal();
-            }
-            CheckInsideBlackhole();
-            CheckSpecialEffectStatus();
+            CheckThermal();
         }
+        CheckInsideBlackhole();
+        CheckSpecialEffectStatus();
     }
     // Check Barrier
     public void CheckBarrierAndHealth()
@@ -120,12 +118,18 @@ public class FighterShared : MonoBehaviour
         }
         if (CurrentHP<0f)
         {
-            StartCoroutine(DestroySelf());
+            if (!alreadyDestroy)
+            {
+                alreadyDestroy = true;
+                StartCoroutine(DestroySelf());
+            }
         }
     }
 
     private IEnumerator DestroySelf()
     {
+        Destroy(LeftWeapon);
+        Destroy(RightWeapon);
         GetComponent<SpriteRenderer>().color = Color.black;
         GetComponent<Collider2D>().enabled = false;
         GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
@@ -147,11 +151,16 @@ public class FighterShared : MonoBehaviour
         GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl5.SetActive(true);
         Destroy(expl5, 0.3f);
-        Destroy(LeftWeapon);
-        Destroy(RightWeapon);
-        if (name== "Player")
+        if (name == "Player")
         {
             FindObjectOfType<CameraController>().GetComponent<AudioListener>().enabled = true;
+            FindObjectOfType<SpaceZoneMission>().PlayerDestroyed();
+        } else if (GetComponent<AlliesShared>()!=null)
+        {
+            FindObjectOfType<SpaceZoneMission>().AllyFighterDestroy(name);
+        } else if (GetComponent<EnemyShared>()!=null)
+        {
+            FindObjectOfType<SpaceZoneMission>().EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
         }
         Destroy(gameObject);
     }

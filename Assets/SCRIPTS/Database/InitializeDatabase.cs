@@ -365,6 +365,8 @@ public class InitializeDatabase : MonoBehaviour
                 "ArmyRating TEXT," +
                 "AllyWarship TEXT," +
                 "EnemyWarship TEXT," +
+                "SpawnIRate INTEGER," +
+                "SpawnIIRate INTEGER," +
                 "FOREIGN KEY(FighterGroup) REFERENCES FighterGroup(GroupName), " +
                 "PRIMARY KEY(TemplateID AUTOINCREMENT) );" +
             // Table for SpaceZonePosition	
@@ -641,29 +643,29 @@ public class InitializeDatabase : MonoBehaviour
             "(10, 0, 2, '4', '#5e4db2');";
         // Insert SpaceZoneTemplate
         string SpaceZoneTemplate = "INSERT INTO SpaceZoneTemplate VALUES " +
-            "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|150', '10-0-0', '10-0-0', null, null, null)," +
-            "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '100|150', '10-0-0', '9-1-0', null, null, null)," +
-            "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '100|150', '10-0-0', '9-1-0', null, null, null)," +
-            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '50|150', '10-0-0', '9-1-0', null, null, null)," +
-            "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|150', '10-0-0', '10-0-0', null, null, null)," +
-            "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '125|175', '10-0-0', '10-0-0', null, null, null)," +
-            "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '125|175', '10-0-0', '9-1-0', null, null, null)," +
-            "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '125|175', '10-0-0', '9-1-0', null, null, null)," +
-            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '75|175', '10-0-0', '9-1-0', null, null, null)," +
-            "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|175', '10-0-0', '10-0-0', null, null, null)," +
-            "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '150|200', '10-0-0', '10-0-0', null, null, null)," +
-            "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '150|200', '10-0-0', '9-1-0', null, null, null)," +
-            "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '150|200', '10-0-0', '9-1-0', null, null, null)," +
-            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '100|200', '10-0-0', '9-1-0', null, null, null)," +
-            "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|200', '10-0-0', '10-0-0', null, null, null)," +
-            "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '175|225', '10-0-0', '10-0-0', null, null, null)," +
-            "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '175|225', '10-0-0', '9-1-0', null, null, null)," +
-            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '250|300', '9-1-0', '8-2-0', null, null, null)," +
-            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '200|200', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0')," +
-            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '275|325', '9-1-0', '8-2-0', null, null, null)," +
-            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '225|225', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0')," +
-            "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '200|100',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0')," +
-            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '150|175', '9-1-0', '8-1-1', null, null, null);";
+            "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|150', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '100|150', '10-0-0', '9-1-0', null, null, null, null, null)," +
+            "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 150)," +
+            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '50|150', '10-0-0', '9-1-0', null, null, null, 100, null)," +
+            "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|150', '10-0-0', '10-0-0', null, null, null, 100, null)," +
+            "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '125|175', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '125|175', '10-0-0', '9-1-0', null, null, null, null, null)," +
+            "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '125|175', '10-0-0', '9-1-0', null, null, null, 300, 150)," +
+            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '75|175', '10-0-0', '9-1-0', null, null, null, 100, null)," +
+            "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|175', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '150|200', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '150|200', '10-0-0', '9-1-0', null, null, null, null, null)," +
+            "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '150|200', '10-0-0', '9-1-0', null, null, null, 300, 150)," +
+            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '100|200', '10-0-0', '9-1-0', null, null, null, 100, null)," +
+            "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|200', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '175|225', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '175|225', '10-0-0', '9-1-0', null, null, null, null, null)," +
+            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '250|300', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '200|200', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 600, 300)," +
+            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '275|325', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '225|225', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 600, 300)," +
+            "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '200|100',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0', null, null)," +
+            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '150|175', '9-1-0', '8-1-1', null, null, null, null, null);";
         // Insert SpaceZonePosition
         string SpaceZonePosition = "INSERT INTO SpaceZonePosition VALUES " +
             "(1, 'PN', '(-3500,-700)', '(-2100,700)')," +
@@ -680,11 +682,12 @@ public class InitializeDatabase : MonoBehaviour
             "(12, 'AO', '(-3500,-700)', '(-2100,700)')," +
             "(13, 'EO', '(3500,-700)', '(2100,700)')," +
             "(14, 'AS', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)')," +
-            "(15, 'ES', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)')," +
+            "(15, 'ES', '(3500,4900)|(3500,-3500)', '(4900,3500)|(4900,-4900)')," +
             "(16, 'PE', '(-3500,3500)', '(-2100,2100)')," +
             "(17, 'AES', '(-4900,4900)', '(-3500,-3500)')," +
             "(18, 'AEE', '(3500,-3500)', '(4900,-4900)')," +
-            "(19, 'EES', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)');";
+            "(19, 'EES', '(-4900,-4900)|(3500,4900)', '(-3500,-3500)|(4900,3500)')," +
+            "(20, 'EAS', '(-4900,3500)|(-3500,4900)', '(-3500,2100)|(-2100,3500)'); ";
     // Initialize Data Success
     string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail

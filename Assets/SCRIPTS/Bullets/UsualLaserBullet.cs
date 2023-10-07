@@ -32,9 +32,9 @@ public class UsualLaserBullet : BulletShared
     void Update()
     {
         // Call function and timer only if possible
-        CalculateDamage();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel();
+        CalculateDamage();
     }
     #endregion
     #region Function group 1

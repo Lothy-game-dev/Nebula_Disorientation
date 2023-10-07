@@ -32,9 +32,9 @@ public class NanoBullet : BulletShared
     void Update()
     {
         // Call function and timer only if possible
-        CalculatePenetrateDamage();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravelPenetrate(PenetrateDistance);
+        CalculatePenetrateDamage();
     }
     #endregion
     #region Function group 1
