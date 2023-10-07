@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarshipModelShared : MonoBehaviour
+public class LaserBeamBullet : BulletShared
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -12,10 +12,6 @@ public class WarshipModelShared : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public List<Vector2> BackFirePos;
-    public Vector2 BackFireScale;
-    public List<Vector2> MainWeaponPos;
-    public List<Vector2> SupWeaponPos;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
