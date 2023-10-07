@@ -16,6 +16,7 @@ public class AlliesShared : FighterShared
     public GameObject PowerModel;
     public LayerMask EnemyLayer;
     public GameObject BackFire;
+    public GameObject HeadPos;
 
     private bool test;
     private Dictionary<string, object> StatsDataDict;
@@ -50,6 +51,9 @@ public class AlliesShared : FighterShared
     public float TargetRefreshTimer;
     public float FindTargetTimer;
     public float HPScale;
+    private bool IsEscorting;
+    private Vector3 EscortTargetPosition;
+    private int DirMov;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -90,119 +94,146 @@ public class AlliesShared : FighterShared
     private void Update()
     {
         UpdateAlly();
-        if (doneInitWeapon)
-        {
-            DelayTimer -= Time.deltaTime;
-            if (LeftWeapon != null)
-            {
-                if (DelayTimer < 0f && !LeftFire)
-                {
-                    LeftFire = true;
-                    LeftWeapon.GetComponent<Weapons>().AIShootBullet();
-                    DelayTimer = DelayBetween2Weap;
-                }
-            }
-            if (RightWeapon != null)
-            {
-                if (DelayTimer < 0f && LeftFire)
-                {
-                    LeftFire = false;
-                    RightWeapon.GetComponent<Weapons>().AIShootBullet();
-                    DelayTimer = DelayBetween2Weap;
-                }
-            }
-            if (Power1 != "")
-            {
-                if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
-                {
-                    UseFirstPower();
-                    if (Power1StartCharge)
-                    {
-                        CheckPower1Charging();
-                    }
-                }
-                else
-                {
-                    Power1CD -= Time.deltaTime * Random.Range(0.8f,1.2f);
-                }
-            }
-            if (Power2 != "")
-            {
-                if (Power2CD <= 0f && (LeftTarget != null || RightTarget != null))
-                {
-                    UseSecondPower();
-                    if (Power2StartCharge)
-                    {
-                        CheckPower2Charging();
-                    }
-                }
-                else
-                {
-                    Power2CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
-                }
-            }
-        }
-
-        resetMovetimer -= Time.deltaTime;
-        if (resetMovetimer <= 0f)
-        {
-            RandomMove = Random.Range(1, 3);
-            RandomRotate = Random.Range(1, 4);
-            resetMovetimer = 2f;
-        }
-
-        if (RandomMove == 1)
+        if (IsEscorting)
         {
             fm.UpMove();
-        }
-        else if (RandomMove == 2)
-        {
-            fm.DownMove();
-        }
-        else if (RandomMove == 3)
-        {
-            fm.NoUpDownMove();
-        }
-        if (RandomRotate == 1)
-        {
-            fm.LeftMove();
-        }
-        else if (RandomRotate == 2)
-        {
-            fm.RightMove();
-        }
-        else if (RandomRotate == 3)
-        {
-            fm.NoLeftRightMove();
-        }
-        TargetRefreshTimer -= Time.deltaTime;
-        if (TargetRefreshTimer <= 0f)
-        {
-            TargetRefreshTimer = Random.Range(2.5f, 3.5f);
-            CheckTargetEnemy();
-            if (LeftWeapon != null)
+            if ((EscortTargetPosition - transform.GetChild(5).position).magnitude < 5f)
             {
-                LeftWeapon.GetComponent<Weapons>().Aim = LeftTarget;
+                DoneEscorting();
             }
-            if (RightWeapon != null)
+            if (!CheckEscortPath())
             {
-                RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
+                GameObject EscortGo = new GameObject();
+                EscortGo.transform.position = EscortTargetPosition;
+                CheckIsUpOrDownMovement(transform.GetChild(5).gameObject,EscortGo,BackFire);
+                Destroy(EscortGo);
+                if (DirMov == 1)
+                {
+                    fm.LeftMove();
+                } else if (DirMov ==-1)
+                {
+                    fm.RightMove();
+                } else if (DirMov==0)
+                {
+                    fm.NoLeftRightMove();
+                }
             }
-        }
-        if (LeftTarget == null || RightTarget == null)
+        } else
         {
-            FindTargetTimer -= Time.deltaTime;
-        }
-        if (FindTargetTimer <= 0f)
-        {
-            FindTargetTimer = Random.Range(2.5f, 3.5f);
-            if (LeftTarget == null)
+            if (doneInitWeapon)
             {
-                TargetLeftEnemy();
+                DelayTimer -= Time.deltaTime;
+                if (LeftWeapon != null)
+                {
+                    if (DelayTimer < 0f && !LeftFire)
+                    {
+                        LeftFire = true;
+                        LeftWeapon.GetComponent<Weapons>().AIShootBullet();
+                        DelayTimer = DelayBetween2Weap;
+                    }
+                }
+                if (RightWeapon != null)
+                {
+                    if (DelayTimer < 0f && LeftFire)
+                    {
+                        LeftFire = false;
+                        RightWeapon.GetComponent<Weapons>().AIShootBullet();
+                        DelayTimer = DelayBetween2Weap;
+                    }
+                }
+                if (Power1 != "")
+                {
+                    if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
+                    {
+                        UseFirstPower();
+                        if (Power1StartCharge)
+                        {
+                            CheckPower1Charging();
+                        }
+                    }
+                    else
+                    {
+                        Power1CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
+                    }
+                }
+                if (Power2 != "")
+                {
+                    if (Power2CD <= 0f && (LeftTarget != null || RightTarget != null))
+                    {
+                        UseSecondPower();
+                        if (Power2StartCharge)
+                        {
+                            CheckPower2Charging();
+                        }
+                    }
+                    else
+                    {
+                        Power2CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
+                    }
+                }
             }
-            if (RightTarget == null)
+
+            resetMovetimer -= Time.deltaTime;
+            if (resetMovetimer <= 0f)
             {
-                TargetRightEnemy();
+                RandomMove = Random.Range(1, 3);
+                RandomRotate = Random.Range(1, 4);
+                resetMovetimer = 2f;
+            }
+
+            if (RandomMove == 1)
+            {
+                fm.UpMove();
+            }
+            else if (RandomMove == 2)
+            {
+                fm.DownMove();
+            }
+            else if (RandomMove == 3)
+            {
+                fm.NoUpDownMove();
+            }
+            if (RandomRotate == 1)
+            {
+                fm.LeftMove();
+            }
+            else if (RandomRotate == 2)
+            {
+                fm.RightMove();
+            }
+            else if (RandomRotate == 3)
+            {
+                fm.NoLeftRightMove();
+            }
+            TargetRefreshTimer -= Time.deltaTime;
+            if (TargetRefreshTimer <= 0f)
+            {
+                TargetRefreshTimer = Random.Range(2.5f, 3.5f);
+                CheckTargetEnemy();
+                if (LeftWeapon != null)
+                {
+                    LeftWeapon.GetComponent<Weapons>().Aim = LeftTarget;
+                }
+                if (RightWeapon != null)
+                {
+                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
+                }
+            }
+            if (LeftTarget == null || RightTarget == null)
+            {
+                FindTargetTimer -= Time.deltaTime;
+            }
+            if (FindTargetTimer <= 0f)
+            {
+                FindTargetTimer = Random.Range(2.5f, 3.5f);
+                if (LeftTarget == null)
+                {
+                    TargetLeftEnemy();
+                }
+                if (RightTarget == null)
+                {
+                    TargetRightEnemy();
+                }
             }
         }
     }
@@ -251,7 +282,14 @@ public class AlliesShared : FighterShared
         }
         if (weaponName1 == "Transport")
         {
-
+            IsEscorting = true;
+            EscortTargetPosition = new Vector3(Random.Range(3500, 4900), Random.Range(-4900, -3500), 0);
+            float angle = Vector2.Angle(transform.GetChild(5).position - BackFire.transform.position, EscortTargetPosition - transform.position);
+            transform.Rotate(new Vector3(0, 0, -angle));
+            OnFireGO.transform.Rotate(new Vector3(0, 0, angle));
+            OnFreezeGO.transform.Rotate(new Vector3(0, 0, angle));
+            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, angle));
+            fm.CurrentRotateAngle = angle;
         }
         else
         {
@@ -554,6 +592,119 @@ public class AlliesShared : FighterShared
             RightTarget = null;
             RightWeapon.GetComponent<Weapons>().Aim = null;
         }
+    }
+
+    private bool CheckEscortPath()
+    {
+        float TopToBottom = (transform.GetChild(5).position - BackFire.transform.position).magnitude;
+        float TopToTarget = (EscortTargetPosition - transform.GetChild(5).position).magnitude;
+        float BottomToTarget = (EscortTargetPosition - BackFire.transform.position).magnitude;
+        return TopToTarget + TopToBottom - BottomToTarget < 3f;
+    }
+
+    private void CheckIsUpOrDownMovement(GameObject target, GameObject Head, GameObject Back)
+    {
+        Vector2 HeadToTarget = target.transform.position - Head.transform.position;
+        Vector2 MovingVector = Head.transform.position - Back.transform.position;
+        float angle = Vector2.Angle(HeadToTarget, MovingVector);
+        float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
+        Vector2 TempPos = new Vector2(Back.transform.position.x, Back.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
+        Vector2 CheckPos = new Vector2(target.transform.position.x, target.transform.position.y) + (TempPos - new Vector2(target.transform.position.x, target.transform.position.y)) * 2;
+        if (Head.transform.position.x == Back.transform.position.x)
+        {
+            if (Head.transform.position.y > Back.transform.position.y)
+            {
+                if (target.transform.position.x < Back.transform.position.x)
+                {
+                    DirMov = -1;
+                }
+                else if (target.transform.position.x == Back.transform.position.x)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = 1;
+                }
+            }
+            else
+            {
+                if (target.transform.position.x < Head.transform.position.x)
+                {
+                    DirMov = 1;
+                }
+                else if (target.transform.position.x == Head.transform.position.x)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = -1;
+                }
+            }
+        }
+        else if (Head.transform.position.y == Back.transform.position.y)
+        {
+            if (Head.transform.position.x > Back.transform.position.x)
+            {
+                if (target.transform.position.y > Head.transform.position.y)
+                {
+                    DirMov -= 1;
+                }
+                else if (target.transform.position.y == Head.transform.position.y)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = 1;
+                }
+            }
+            else
+            {
+                if (target.transform.position.y > Head.transform.position.y)
+                {
+                    DirMov = 1;
+                }
+                else if (target.transform.position.y == Head.transform.position.y)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov -= 1;
+                }
+            }
+        }
+        else if (Head.transform.position.x > Back.transform.position.x)
+        {
+            if (CheckPos.y < target.transform.position.y)
+            {
+                DirMov = -1;
+            }
+            else
+            {
+                DirMov = 1;
+            }
+        }
+        else
+        {
+            if (CheckPos.y < target.transform.position.y)
+            {
+                DirMov = 1;
+            }
+            else
+            {
+                DirMov = -1;
+            }
+        }
+
+    }
+
+    private void DoneEscorting()
+    {
+        FindObjectOfType<SpaceZoneMission>().AllyEscortDone();
+        Destroy(gameObject);
     }
     #endregion
 }

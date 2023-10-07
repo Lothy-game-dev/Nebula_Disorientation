@@ -58,7 +58,7 @@ public class RocketBurstBullet : MonoBehaviour
                 DelayTarget -= Time.deltaTime;
                 if (DelayTarget<=0f)
                 {
-                    DelayTarget = 3f;
+                    DelayTarget = 0.1f;
                     CheckRange();
                 }
             }

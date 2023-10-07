@@ -2980,6 +2980,21 @@ public class AccessDatabase : MonoBehaviour
                 data.Add("AllyWarship", dataReader.GetString(11));
                 data.Add("EnemyWarship", dataReader.GetString(12));
             }
+            if (dataReader.IsDBNull(13))
+            {
+                data.Add("SpawnIRate", 0);
+            } else
+            {
+                data.Add("SpawnIRate", dataReader.GetInt32(13));
+            }
+            if (dataReader.IsDBNull(14))
+            {
+                data.Add("SpawnIIRate", 0);
+            }
+            else
+            {
+                data.Add("SpawnIIRate", dataReader.GetInt32(14));
+            }
         }
         dbConnection.Close();
         if (!check)

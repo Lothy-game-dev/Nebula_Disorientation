@@ -250,7 +250,18 @@ public class StatusBoard : MonoBehaviour
         }
         NameBox.SetActive(true);
         if (EnemyObject!=null)
-        NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
+        {
+            if (EnemyObject.GetComponent<EnemyShared>()!=null)
+            {
+                NameBox.GetComponent<SpriteRenderer>().color = Color.red;
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+            } else
+            {
+                NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f);
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.black;
+            }
+            NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
+        }
         LeftWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName1 : Enemy.GetComponent<AlliesShared>().weaponName1;
         RightWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName2 : Enemy.GetComponent<AlliesShared>().weaponName2;
         FirstPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power1 : Enemy.GetComponent<AlliesShared>().Power1;
@@ -309,14 +320,32 @@ public class StatusBoard : MonoBehaviour
             }
         }
         isShowingWeapon = true;
-        ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+        if (ModelLeftWeapon != null)
+        {
+            ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
             = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
-        ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-        ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
-        ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+            ItemBox1.transform.GetChild(0).localScale = WeaponScale;
+            ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
+        }
+        else
+        {
+            ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+            = null;
+            ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+        }
+        if (ModelRightWeapon != null)
+        {
+            ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
             = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
-        ItemBox2.transform.GetChild(0).localScale = WeaponScale;
-        ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
+            ItemBox2.transform.GetChild(0).localScale = WeaponScale;
+            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
+        }
+        else
+        {
+            ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+            = null;
+            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+        }
         // WAit time to show HP and temp bar
         yield return new WaitForSeconds(0.4f);
         CloneEnemy.SetActive(true);
@@ -465,14 +494,30 @@ public class StatusBoard : MonoBehaviour
             }
             if (isShowingWeapon)
             {
-                ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                if (ModelLeftWeapon!=null)
+                {
+                    ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
-                ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
-                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    ItemBox1.transform.GetChild(0).localScale = WeaponScale;
+                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
+                } else
+                {
+                    ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+                    ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+                }
+                if (ModelRightWeapon!=null)
+                {
+                    ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                     = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
-                ItemBox2.transform.GetChild(0).localScale = WeaponScale;
-                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
+                    ItemBox2.transform.GetChild(0).localScale = WeaponScale;
+                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
+                } else
+                {
+                    ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                    = null;
+                    ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+                }
             } else
             {
                 if (ModelFirstPower!=null)
@@ -502,37 +547,55 @@ public class StatusBoard : MonoBehaviour
             }
 
         }
-        EnemyObject = Enemy.GetComponent<FighterShared>();
-        NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
-        HPSlider.maxValue = EnemyObject.MaxHP;
-        HPSlider.value = EnemyObject.CurrentHP;
-
-        //Set HP to show how much current HP
-        HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
-
-        // Barrier
-        BarrierSlider.maxValue = EnemyObject.MaxBarrier;
-        BarrierSlider.value = EnemyObject.CurrentBarrier;
-
-        BarrierText.text = Mathf.Round(EnemyObject.CurrentBarrier) + "/" + EnemyObject.MaxBarrier;
-
-        //Setting slider base on current temperature
-        TemperSlider.value = EnemyObject.currentTemperature;
-
-        //if temp > 50, the slider is red else blue
-        if (EnemyObject.currentTemperature > 50)
+        if (Enemy==null)
         {
-            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
-        } else if (EnemyObject.currentTemperature < 50)
+            CloseBoard();
+        } else
         {
-            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
-        } else if (EnemyObject.currentTemperature == 50)
-        {
-            TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+            EnemyObject = Enemy.GetComponent<FighterShared>();
+            if (EnemyObject.GetComponent<EnemyShared>() != null)
+            {
+                NameBox.GetComponent<SpriteRenderer>().color = Color.red;
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+            }
+            else
+            {
+                NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f);
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.black;
+            }
+            NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
+            HPSlider.maxValue = EnemyObject.MaxHP;
+            HPSlider.value = EnemyObject.CurrentHP;
+
+            //Set HP to show how much current HP
+            HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
+
+            // Barrier
+            BarrierSlider.maxValue = EnemyObject.MaxBarrier;
+            BarrierSlider.value = EnemyObject.CurrentBarrier;
+
+            BarrierText.text = Mathf.Round(EnemyObject.CurrentBarrier) + "/" + EnemyObject.MaxBarrier;
+
+            //Setting slider base on current temperature
+            TemperSlider.value = EnemyObject.currentTemperature;
+
+            //if temp > 50, the slider is red else blue
+            if (EnemyObject.currentTemperature > 50)
+            {
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
+            }
+            else if (EnemyObject.currentTemperature < 50)
+            {
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
+            }
+            else if (EnemyObject.currentTemperature == 50)
+            {
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+            }
+
+            //Setting to show current tempurature
+            TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
         }
-
-        //Setting to show current tempurature
-        TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
     }
 
     // Stop showing board
@@ -615,14 +678,32 @@ public class StatusBoard : MonoBehaviour
         } else
         {
             isShowingWeapon = true;
-            ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+            if (ModelLeftWeapon != null)
+            {
+                ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                 = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
-            ItemBox1.transform.GetChild(0).localScale = WeaponScale;
-            ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
-            ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                ItemBox1.transform.GetChild(0).localScale = WeaponScale;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
+            }
+            else
+            {
+                ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                = null;
+                ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+            }
+            if (ModelRightWeapon != null)
+            {
+                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                 = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
-            ItemBox2.transform.GetChild(0).localScale = WeaponScale;
-            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
+                ItemBox2.transform.GetChild(0).localScale = WeaponScale;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
+            }
+            else
+            {
+                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                = null;
+                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+            }
         }
         StartCoroutine(ResetCollider());
     }

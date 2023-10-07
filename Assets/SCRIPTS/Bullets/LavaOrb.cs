@@ -38,9 +38,9 @@ public class LavaOrb : BulletShared
     {
         // Call function and timer only if possible
         UpdateBullet();
-        CalculateLavaOrbDamage();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravelLavaOrb();
+        CalculateLavaOrbDamage();
         RotateOrb();
         Tracer.transform.position = transform.position;
     }
