@@ -446,6 +446,11 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    public void CalculateLaserBeamDmg()
+    {
+
+    }
+
     // Black hole orb
     public void CheckCreateBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
@@ -550,6 +555,19 @@ public class BulletShared : MonoBehaviour
             RealDamage = 0;
             Destroy(transform.parent.gameObject);
         }
+    }
+
+    // Check distance for laserbeam
+    public void CheckLaserBeamDistanceTravel()
+    {
+        if (Range != 0f)
+        {
+            MaxEffectiveDistance = Range;
+        }
+        if (DistanceTravel > MaxEffectiveDistance)
+        {
+            Destroy(gameObject);
+        }      
     }
     // distance travel for blackhole orb only
     public void CheckDistanceTravelBlackhole(GameObject BlackHole, float radius, float timer, float pullingForce)
