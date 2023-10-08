@@ -193,15 +193,23 @@ public class Weapons : MonoBehaviour
         // Check rotate Weapon for non-player
         if (tracking && fm != null)
         {
-            Vector2 RotPointToTarget = Aim.transform.position - RotatePoint.transform.position;
-            Vector2 RotPointToShoot = ShootingPosition.transform.position - RotatePoint.transform.position;
-            float angle = Vector2.Angle(RotPointToTarget, RotPointToShoot);
-            if (angle <= RotateLimitPositive)
+            if (Aim!=null)
             {
-                
-            } else
-            {
-
+                Vector2 RotPointToTarget = Aim.transform.position - RotatePoint.transform.position;
+                Vector2 RotPointToShoot = Fighter.transform.position - (fm.GetComponent<EnemyShared>()!=null? fm.GetComponent<EnemyShared>().BackFire.transform.position : fm.GetComponent<AlliesShared>().BackFire.transform.position);
+                float angle = Vector2.Angle(RotPointToTarget, RotPointToShoot);
+                if (angle <= RotateLimitPositive)
+                {
+                    Fireable = true;
+                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
+                    CheckIsUpOrDownMovement();
+                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle);
+                    CurrentAngle = angle;
+                }
+                else
+                {
+                    Fireable = false;
+                }
             }
         }
         // Check rotate Weapon for Warship
@@ -219,7 +227,7 @@ public class Weapons : MonoBehaviour
                     isFire = true;
                 }      
                 transform.RotateAround(WeaponPoint.transform.position, new Vector3(0,0, -DirMov), WeaponROTSpeed * angle / 10);
-                CurrentAngle = angle ;
+                CurrentAngle = angle;
             }
         }
         // Reset thermal hit count per 1/rate of hit second
