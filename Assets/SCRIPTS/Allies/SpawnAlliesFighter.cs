@@ -69,6 +69,10 @@ public class SpawnAlliesFighter : MonoBehaviour
         {
             Ally.tag = "AlliesEliteFighter";
         }
+        if (id==1)
+        {
+            Ally.transform.localScale *= 3;
+        }
         Ally.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;

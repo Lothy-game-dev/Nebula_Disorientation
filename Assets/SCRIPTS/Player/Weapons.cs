@@ -51,10 +51,10 @@ public class Weapons : MonoBehaviour
     private PlayerMovement pm;
     private FighterMovement fm;
     private WSMovement wm;
-    private float PrevAngle;
-    private float CalAngle;
-    private float CurrentAngle;
-    private float ExpectedAngle;
+    public float PrevAngle;
+    public float CalAngle;
+    public float CurrentAngle;
+    public float ExpectedAngle;
     private float LimitNegative;
     private float LimitPositive;
     private int MouseInput;
@@ -175,68 +175,20 @@ public class Weapons : MonoBehaviour
                     }
                 }
             }
-            // Check rotate Weapon for non-player
-            if (tracking && fm != null)
+        // Check rotate Weapon for non-player
+        if (tracking && fm != null)
+        {
+            Vector2 RotPointToTarget = Aim.transform.position - RotatePoint.transform.position;
+            Vector2 RotPointToShoot = ShootingPosition.transform.position - RotatePoint.transform.position;
+            float angle = Vector2.Angle(RotPointToTarget, RotPointToShoot);
+            if (angle <= RotateLimitPositive)
             {
-                // Calculate Angel and if they are <0 or >360 then set them to between 0 and 360
-                ExpectedAngle = CurrentAngle + CalAngle - PrevAngle;
-                if (ExpectedAngle >= 360)
-                {
-                    ExpectedAngle -= 360;
-                }
-                else if (ExpectedAngle < 0)
-                {
-                    ExpectedAngle += 360;
-                }
-                LimitNegative = 360 + RotateLimitNegative + fm.CurrentRotateAngle % 360;
-                if (LimitNegative >= 360)
-                {
+                
+            } else
+            {
 
-                    LimitNegative -= 360;
-                }
-                else if (LimitNegative < 0)
-                {
-                    LimitNegative += 360;
-                }
-                LimitPositive = RotateLimitPositive + fm.CurrentRotateAngle % 360;
-                if (LimitPositive >= 360)
-                {
-                    LimitPositive -= 360;
-                }
-                else if (LimitPositive < 0)
-                {
-                    LimitPositive += 360;
-                }
-                // In case the mouse doesnt change position: Will not add the rotation
-                if (PrevAngle != CalAngle)
-                {
-                    // If the mouse aim vector in shootable range -> set fireable = true
-                    // And rotate the weapon to the mouse aim position
-                    if (CheckIfAngle1BetweenAngle2And3(ExpectedAngle, LimitNegative, LimitPositive))
-                    {
-                        Fireable = true;
-                        transform.RotateAround(RotatePoint.transform.position, Vector3.back, CalAngle - PrevAngle);
-                        CurrentAngle = ExpectedAngle;
-                        PrevAngle = CalAngle;
-                    }
-                    else
-                    {
-                        // Else set fireable = false
-                        // And rotate the weapon to the nearest posible position to the mouse
-                        // also end weapon sound if there is sound
-                        // (only thermal weapon get this case since their sounds loop)
-                        Fireable = false;
-                        if (!isWarning && !isOverheatted && aus.clip != null && IsThermalType)
-                        {
-                            EndSound();
-                        }
-                        float NearestAngle = NearestPossibleAngle(CurrentAngle, LimitNegative, LimitPositive);
-                        transform.RotateAround(RotatePoint.transform.position, Vector3.back, NearestAngle);
-                        CurrentAngle += NearestAngle;
-                        PrevAngle += NearestAngle;
-                    }
-                }
             }
+        }
         // Check rotate Weapon for Warship
         if (tracking && wm != null)
         {
@@ -354,8 +306,8 @@ public class Weapons : MonoBehaviour
     // Calculate Rotation To Aim
     float CalculateRotateAngle()
     {
-        float x = transform.position.x - Aim.transform.position.x;
-        float y = transform.position.y - Aim.transform.position.y;
+        float x = RotatePoint.transform.position.x - Aim.transform.position.x;
+        float y = RotatePoint.transform.position.y - Aim.transform.position.y;
         if (Mathf.Abs(x) < 0.5f && Mathf.Abs(y) < 0.5f) {
             Fireable = false;
             return 0;
