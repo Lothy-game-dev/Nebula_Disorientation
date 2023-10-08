@@ -54,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         pf = GetComponent<PlayerFighter>();
         Movable = true;
-        CurrentRotateAngle = 0;
         BackFireInitScale = backFire.transform.localScale.x;
         AESlider.maxValue = 100f;
         ExteriorROTSpeed = 1;

@@ -134,9 +134,9 @@ public class BulletShared : MonoBehaviour
                 if (AoE>0)
                 {
                     // Create AoE effect
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
                     // Check all enemies in AoE range
-                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
                         // Deal damage to all enemies in AoE range
@@ -198,7 +198,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE>0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -303,8 +303,8 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE > 0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE, 0.8f);
-                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE, 0.8f);
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
@@ -356,9 +356,9 @@ public class BulletShared : MonoBehaviour
             if (AoE>0f)
             {
                 // Create AoE effect
-                FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE, 0, 0);
+                FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE, 0, 0);
                 // Check all enemies in AoE range
-                Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                 foreach (var col2 in cols2)
                 {
                     // Deal damage to all enemies in AoE range
@@ -525,6 +525,10 @@ public class BulletShared : MonoBehaviour
         {
             RealDamage = 0;
             Destroy(gameObject);
+            if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                PunishML();
+            }
         }
     }
 
@@ -555,6 +559,10 @@ public class BulletShared : MonoBehaviour
         {
             RealDamage = 0;
             Destroy(transform.parent.gameObject);
+            if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                PunishML();
+            }
         }
     }
 
@@ -595,6 +603,10 @@ public class BulletShared : MonoBehaviour
             // Create blackhole at the end of the distance
             CreateBlackHole(BlackHole, radius, timer, pullingForce);
             Destroy(gameObject);
+            if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                PunishML();
+            }
         }
     }
 
@@ -628,6 +640,10 @@ public class BulletShared : MonoBehaviour
             RealDamage = 0;
             // Create blackhole at the end of the distance
             Destroy(gameObject);
+            if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                PunishML();
+            }
         }
     }
 
@@ -665,7 +681,21 @@ public class BulletShared : MonoBehaviour
     private float CalculateFinalDamage(float InitDamage, bool isThermal, GameObject enemy)
     {
         // Not Done, will be added with LOTW card later
+        if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>()!=null)
+        {
+            AddPointToML();
+        }
         return InitDamage * WeaponDamageModScale;
+    }
+
+    private void AddPointToML()
+    {
+        WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(0.5f, "Hitting the enemy");
+    }
+
+    private void PunishML()
+    {
+        WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
     }
     #endregion
 }

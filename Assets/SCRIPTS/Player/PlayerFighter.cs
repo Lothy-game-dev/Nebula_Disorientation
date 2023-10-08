@@ -26,6 +26,7 @@ public class PlayerFighter : FighterShared
     public AudioClip DashSound;
     public AudioClip OverheatWarning;
     public AudioClip Overheated;
+    public AudioClip SpawnSoundEffect;
     public AudioSource DashAudioSource;
     public float TotalHealing;
     #endregion
@@ -52,6 +53,7 @@ public class PlayerFighter : FighterShared
         // Initialize variables
         InitializeFighter();
         aus = GetComponent<AudioSource>();
+        PlaySpawnSound();
         HPSlider.maxValue = MaxHP;
         ShieldPassive();
         BRSlider.maxValue = MaxBarrier;
@@ -392,6 +394,7 @@ public class PlayerFighter : FighterShared
 
     public void StopSound()
     {
+        if (aus.clip!=SpawnSoundEffect)
         aus.clip = null;
     }
 
@@ -401,6 +404,13 @@ public class PlayerFighter : FighterShared
         DashAudioSource.loop = false;
         DashAudioSource.volume = 0.75f;
         DashAudioSource.Play();
+    }
+
+    public void PlaySpawnSound()
+    {
+        aus.clip = SpawnSoundEffect;
+        aus.volume = 1;
+        aus.Play();
     }
     #endregion
     #region Show Information To HUD

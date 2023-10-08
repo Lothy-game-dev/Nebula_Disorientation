@@ -120,7 +120,7 @@ public class AlliesShared : FighterShared
             }
         } else
         {
-            if (doneInitWeapon)
+            /*if (doneInitWeapon)
             {
                 DelayTimer -= Time.deltaTime;
                 if (LeftWeapon != null)
@@ -204,7 +204,7 @@ public class AlliesShared : FighterShared
             else if (RandomRotate == 3)
             {
                 fm.NoLeftRightMove();
-            }
+            }*/
             TargetRefreshTimer -= Time.deltaTime;
             if (TargetRefreshTimer <= 0f)
             {
@@ -294,6 +294,11 @@ public class AlliesShared : FighterShared
         }
         else
         {
+            transform.Rotate(new Vector3(0, 0, -90));
+            OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
+            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
+            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
+            fm.CurrentRotateAngle = 90;
             FighterAttachedWeapon faw = gameObject.AddComponent<FighterAttachedWeapon>();
             faw.Fighter = gameObject;
             faw.FighterModel = Model;

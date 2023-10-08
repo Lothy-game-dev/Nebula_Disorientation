@@ -18,6 +18,7 @@ public class SpaceZoneGenerator : MonoBehaviour
     public AudioClip DefendMusic;
     public AudioClip OnslaughtMusic;
     public AudioClip BossMusic;
+    public GameObject StartTeleport;
     #endregion
     #region NormalVariables
     public int SpaceZoneNo;
@@ -75,7 +76,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         {
             Camera.main.GetComponent<AudioSource>().clip = BossMusic;
         }
-        Camera.main.GetComponent<AudioSource>().enabled = true;
+        StartCoroutine(StartSound());
         // Teleport Fighter
         if ((SpaceZoneNo%10 == 2 || SpaceZoneNo%10 == 4 || SpaceZoneNo%10 == 6) && ChosenVariant==3)
         {
@@ -100,6 +101,15 @@ public class SpaceZoneGenerator : MonoBehaviour
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             FindObjectOfType<GameController>().Player.transform.position = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
         }
+        
+        GameObject Player = FindObjectOfType<GameController>().Player;
+        GameObject spawnEff = Instantiate(StartTeleport, Player.transform.position, Quaternion.identity);
+        spawnEff.SetActive(true);
+        Destroy(spawnEff, 1.5f);
+        Player.transform.Rotate(new Vector3(0, 0, -90));
+        Player.GetComponent<PlayerFighter>().OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
+        Player.GetComponent<PlayerFighter>().OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
+        Player.GetComponent<PlayerMovement>().CurrentRotateAngle = 90;
         // Calculate and Generate SpaceZone
         CalculateAndGenerateSpaceZone((string)variantData["TierColor"]);
     }
@@ -564,6 +574,13 @@ public class SpaceZoneGenerator : MonoBehaviour
                 Mission.CreateMissionBossV2(EnemyFighterCCount);
             }
         }
+    }
+    #endregion
+    #region Sound
+    private IEnumerator StartSound()
+    {
+        yield return new WaitForSeconds(3f);
+        Camera.main.GetComponent<AudioSource>().enabled = true;
     }
     #endregion
 }

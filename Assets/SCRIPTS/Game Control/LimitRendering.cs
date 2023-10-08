@@ -26,7 +26,7 @@ public class LimitRendering : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(MainCamera);
+        /*Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(MainCamera);
 
         if (GeometryUtility.TestPlanesAABB(frustumPlanes, GetComponent<Renderer>().bounds) == false)
         {
@@ -39,7 +39,7 @@ public class LimitRendering : MonoBehaviour
             // Enemy is inside the camera's frustum, enable rendering.
             GetComponent<Renderer>().enabled = true;
             isNotRendering = false;
-        }
+        }*/
     }
     #endregion
     #region Function group 1

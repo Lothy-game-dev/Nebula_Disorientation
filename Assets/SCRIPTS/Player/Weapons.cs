@@ -54,7 +54,7 @@ public class Weapons : MonoBehaviour
     private float OverheatDecreaseTimer;
     private bool isWarning;
 
-    private float FireTimer;
+    public float FireTimer;
     private PlayerMovement pm;
     private FighterMovement fm;
     private WSMovement wm;
@@ -206,7 +206,7 @@ public class Weapons : MonoBehaviour
                     Fireable = true;
                     transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
                     CheckIsUpOrDownMovement();
-                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle);
+                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle/2);
                     CurrentAngle = angle;
                 }
                 else
