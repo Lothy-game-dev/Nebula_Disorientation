@@ -134,9 +134,9 @@ public class BulletShared : MonoBehaviour
                 if (AoE>0)
                 {
                     // Create AoE effect
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
                     // Check all enemies in AoE range
-                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
                         // Deal damage to all enemies in AoE range
@@ -198,7 +198,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE>0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -303,8 +303,8 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE > 0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE, 0.8f);
-                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE, 0.8f);
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
@@ -356,9 +356,9 @@ public class BulletShared : MonoBehaviour
             if (AoE>0f)
             {
                 // Create AoE effect
-                FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE, 0, 0);
+                FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE, 0, 0);
                 // Check all enemies in AoE range
-                Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, EnemyLayer);
+                Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                 foreach (var col2 in cols2)
                 {
                     // Deal damage to all enemies in AoE range

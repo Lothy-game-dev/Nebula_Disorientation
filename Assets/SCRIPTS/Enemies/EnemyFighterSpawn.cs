@@ -60,7 +60,7 @@ public class EnemyFighterSpawn : MonoBehaviour
                 GameObject SpawnEffect = Instantiate(SpawnHole, SpawnPos, Quaternion.identity);
                 SpawnEffect.SetActive(true);
                 Destroy(SpawnEffect, 1.5f);
-                CreateEnemy(1, SpawnPos, SBBCount, 1);
+                StartCoroutine(CreateEnemy(1, SpawnPos, SBBCount, 1, 0));
                 SBBCount++;
             }
         }
@@ -78,7 +78,10 @@ public class EnemyFighterSpawn : MonoBehaviour
         {
             for (int i = 0; i < EnemySpawnID.Length; i++)
             {
-                CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i]);
+                GameObject SpawnEffect = Instantiate(SpawnHole, EnemySpawnPosition[i], Quaternion.identity);
+                SpawnEffect.SetActive(true);
+                Destroy(SpawnEffect, 1.5f);
+                StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0,2f)));
             }
         }
         if (DelaySpawnSBB > 0f)
@@ -95,13 +98,14 @@ public class EnemyFighterSpawn : MonoBehaviour
             GameObject SpawnEffect = Instantiate(SpawnHole, EnemySpawnPosition[i], Quaternion.identity);
             SpawnEffect.SetActive(true);
             Destroy(SpawnEffect, 1.5f);
-            CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i]);
+            StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], 0));
             yield return new WaitForSeconds(DelayBetweenSpawn);
         }
     }
 
-    private void CreateEnemy(int id, Vector2 spawnPos, int count, int Tier)
+    private IEnumerator CreateEnemy(int id, Vector2 spawnPos, int count, int Tier, float delay)
     {
+        yield return new WaitForSeconds(delay);
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
         // Get Model
         for (int i=0;i<EnemyModel.transform.childCount;i++)
@@ -122,8 +126,8 @@ public class EnemyFighterSpawn : MonoBehaviour
         aus.clip = SpawnSoundEffect;
         aus.spatialBlend = 1;
         aus.rolloffMode = AudioRolloffMode.Linear;
-        aus.maxDistance = 2000;
-        aus.minDistance = 1000;
+        aus.maxDistance = 1000;
+        aus.minDistance = 500;
         aus.priority = 256;
         aus.dopplerLevel = 0;
         aus.spread = 360;

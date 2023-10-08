@@ -11,6 +11,8 @@ public class SpawnAlliesFighter : MonoBehaviour
     #region InitializeVariables
     public GameObject AllyModel;
     public GameObject AllyTemplate;
+    public GameObject SpawnHole;
+    public AudioClip SpawnSoundEffect;
     #endregion
     #region NormalVariables
     // will do delay later
@@ -22,6 +24,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public float AllyBountyScale;
     private GameObject ChosenModel;
     public int EscortSpawnNumber;
+    private int TotalNumberOfSpawnSound;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -42,18 +45,26 @@ public class SpawnAlliesFighter : MonoBehaviour
         Allies = new List<GameObject>();
         for (int i = 0; i < AllySpawnID.Length; i++)
         {
-            CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i);
+            StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f)));
         }
         if (EscortSpawnNumber>0)
         {
             for (int i=0;i<EscortSpawnNumber;i++)
             {
-                CreateAlly(1, new Vector2(Random.Range(-4900,-3500),Random.Range(3500,4900)), i);
+                Vector2 SpawnPos = new Vector2(Random.Range(-4900, -3500), Random.Range(3500, 4900));
+                GameObject SpawnEffect = Instantiate(SpawnHole, SpawnPos, Quaternion.identity);
+                SpawnEffect.SetActive(true);
+                Destroy(SpawnEffect, 1.5f);
+                StartCoroutine(CreateAlly(1, SpawnPos, i,0));
             }
         }
     }
-    private void CreateAlly(int id, Vector2 spawnPos, int count)
+    private IEnumerator CreateAlly(int id, Vector2 spawnPos, int count, float delay)
     {
+        yield return new WaitForSeconds(delay);
+        GameObject SpawnEffect = Instantiate(SpawnHole, spawnPos, Quaternion.identity);
+        SpawnEffect.SetActive(true);
+        Destroy(SpawnEffect, 1.5f);
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataAlliesById(id);
         // Get Model
         for (int i = 0; i < AllyModel.transform.childCount; i++)
@@ -73,6 +84,16 @@ public class SpawnAlliesFighter : MonoBehaviour
         {
             Ally.transform.localScale *= 3;
         }
+        AudioSource aus = Ally.AddComponent<AudioSource>();
+        aus.clip = SpawnSoundEffect;
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 1000;
+        aus.minDistance = 500;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
+        Destroy(aus, 4f);
         Ally.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;

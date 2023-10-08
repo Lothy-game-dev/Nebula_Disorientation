@@ -116,12 +116,14 @@ public class SpaceZoneMission : MonoBehaviour
     public void CreateMissionOnslaughtV2(int NumberOfWarship)
     {
         MissionStageName = "O2";
+        ObjectiveNumber = NumberOfWarship;
         SetMissionText();
     }
 
     public void CreateMissionBossV1(int NumberOfWarship)
     {
         MissionStageName = "B1";
+        ObjectiveNumber = NumberOfWarship;
         SetMissionText();
     }
 

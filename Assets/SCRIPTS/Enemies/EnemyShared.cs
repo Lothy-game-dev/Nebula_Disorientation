@@ -256,6 +256,11 @@ public class EnemyShared : FighterShared
             weaponName1 = checkWeapons[0];
             weaponName2 = checkWeapons[0];
         }
+        transform.Rotate(new Vector3(0, 0, -270));
+        OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
+        OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
+        fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
+        fm.CurrentRotateAngle = 270;
         if (weaponName1=="SuicideBombing")
         {
 

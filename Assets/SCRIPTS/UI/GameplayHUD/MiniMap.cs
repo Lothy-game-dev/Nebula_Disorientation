@@ -259,6 +259,7 @@ public class MiniMap : MonoBehaviour
         GameObject icon = Instantiate(PlayerIcon, transform.position, Quaternion.identity);
         // Set Player Icon Child of Minimap
         icon.transform.SetParent(transform);
+        icon.transform.Rotate(new Vector3(0, 0, -90));
         icon.SetActive(true);
         // Set PlayerMovement's PlayerIcon
         Player.GetComponent<PlayerMovement>().PlayerIcon = icon;

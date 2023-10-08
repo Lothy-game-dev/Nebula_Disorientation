@@ -294,6 +294,11 @@ public class AlliesShared : FighterShared
         }
         else
         {
+            transform.Rotate(new Vector3(0, 0, -90));
+            OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
+            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
+            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
+            fm.CurrentRotateAngle = 90;
             FighterAttachedWeapon faw = gameObject.AddComponent<FighterAttachedWeapon>();
             faw.Fighter = gameObject;
             faw.FighterModel = Model;

@@ -243,8 +243,8 @@ public class RocketBurstBullet : MonoBehaviour
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.GetChild(0).position, 10f, Layer);
         foreach (var col in cols)
         {
-            FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(col.transform.position, AoE);
-            Collider2D[] cols2 = Physics2D.OverlapCircleAll(col.transform.position, AoE, Layer);
+            FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
+            Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, Layer);
             foreach (var col2 in cols2)
             {
                 FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
