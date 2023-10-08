@@ -290,6 +290,7 @@ public class AlliesShared : FighterShared
             OnFreezeGO.transform.Rotate(new Vector3(0, 0, angle));
             fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, angle));
             fm.CurrentRotateAngle = angle;
+            BackFire.transform.localPosition *= 3;
         }
         else
         {

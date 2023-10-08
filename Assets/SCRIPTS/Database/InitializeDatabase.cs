@@ -602,7 +602,7 @@ public class InitializeDatabase : MonoBehaviour
                          "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', '1', '#bf2600');";
         // Allies
         string Allies = "INSERT INTO Allies VALUES " +
-            "(1, 'SSTP', '', 'Transport', 'HP-10000|SPD-300|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
+            "(1, 'SSTP', '', 'Transport', 'HP-10000|SPD-100|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
             "(2, 'SS29-MK1', '', 'AdvancedPulseCannon', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(3, 'SS29-MK2', '', 'AdvancedNanoFlameThrower', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(4, 'SS29-MK3', '', 'BlastCannon', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
