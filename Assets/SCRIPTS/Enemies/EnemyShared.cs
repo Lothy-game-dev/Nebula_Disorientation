@@ -95,7 +95,7 @@ public class EnemyShared : FighterShared
         if (doneInitWeapon)
         {
             DelayTimer -= Time.deltaTime;
-            if (LeftWeapon!=null)
+            /*if (LeftWeapon!=null)
             {
                 if (DelayTimer<=0f && !LeftFire)
                 {
@@ -112,8 +112,8 @@ public class EnemyShared : FighterShared
                     RightWeapon.GetComponent<Weapons>().AIShootBullet();
                     DelayTimer = DelayBetween2Weap;
                 }
-            }
-            if (Power1!="")
+            }*/
+            /*if (Power1!="")
             {
                 if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
                 {
@@ -142,7 +142,7 @@ public class EnemyShared : FighterShared
                 {
                     Power2CD -= Time.deltaTime * Random.Range(0.8f,1.2f);
                 }
-            }
+            }*/
         }
 
         resetMovetimer -= Time.deltaTime;

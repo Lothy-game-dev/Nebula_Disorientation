@@ -120,7 +120,7 @@ public class AlliesShared : FighterShared
             }
         } else
         {
-            if (doneInitWeapon)
+            /*if (doneInitWeapon)
             {
                 DelayTimer -= Time.deltaTime;
                 if (LeftWeapon != null)
@@ -204,7 +204,7 @@ public class AlliesShared : FighterShared
             else if (RandomRotate == 3)
             {
                 fm.NoLeftRightMove();
-            }
+            }*/
             TargetRefreshTimer -= Time.deltaTime;
             if (TargetRefreshTimer <= 0f)
             {

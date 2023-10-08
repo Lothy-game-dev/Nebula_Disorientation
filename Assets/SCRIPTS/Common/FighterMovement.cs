@@ -201,21 +201,33 @@ public class FighterMovement : MonoBehaviour
         float LimitLeftX = LeftBorder.transform.position.x + 100;
         float LimitRightX = RightBorder.transform.position.x - 100;
         LimitSpeedScale = 1f;
+        bool reachLimit = false;
         if (transform.position.x >= (LimitRightX + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
+            reachLimit = true;
         }
         else if (transform.position.x <= (LimitLeftX - 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitLeftX, transform.position.y)));
+            reachLimit = true;
         }
         else if (transform.position.y >= (LimitTopY + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitTopY)));
+            reachLimit = true;
         }
         else if (transform.position.y <= (LimitBottomY - 50))
         {
             StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitBottomY)));
+            reachLimit = true;
+        }
+        if (reachLimit)
+        {
+            if (GetComponent<AlliesFighterMLAgent>()!=null)
+            {
+                GetComponent<AlliesFighterMLAgent>().MovingLimitReward();
+            }
         }
     }
 
