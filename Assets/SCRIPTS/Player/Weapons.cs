@@ -619,9 +619,10 @@ public class Weapons : MonoBehaviour
     void FireWSLaserBeam()
     {
         GameObject laserbeam = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
-        laserbeam.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
+        laserbeam.transform.RotateAround(ShootingPosition.transform.position, new Vector3(0,0, (ShootingPosition.transform.position.x < transform.position.x ? 1 : -1)), Vector2.Angle(new Vector2(0,1),ShootingPosition.transform.position - RotatePoint.transform.position));
         BulletShared bul = laserbeam.GetComponent<BulletShared>();
-        bul.Destination = Aim.transform.position;
+
+        bul.Destination = RotatePoint.transform.position + (ShootingPosition.transform.position - RotatePoint.transform.position) * 2;
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
         laserbeam.SetActive(true);

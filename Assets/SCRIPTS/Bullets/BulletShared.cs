@@ -472,6 +472,7 @@ public class BulletShared : MonoBehaviour
     public void CreateBlackHole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
         GameObject bh = Instantiate(BlackHole, transform.position, Quaternion.identity);
+        bh.name = "Blackhole" + "-" + WeaponShoot.GetComponent<Weapons>().Fighter.name;
         Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, radius, EnemyLayer);
         foreach (var col2 in cols2)
         {

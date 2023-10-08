@@ -116,7 +116,7 @@ public class FighterShared : MonoBehaviour
             }
 
         }
-        if (CurrentHP<0f)
+        if (CurrentHP<=0f)
         {
             if (!alreadyDestroy)
             {
@@ -628,8 +628,7 @@ public class FighterShared : MonoBehaviour
                         GetComponent<EnemyShared>().AddBounty();
                     }
                 }
-                CurrentHP = 0;
-                StartCoroutine(DestroySelf());
+                CurrentHP = 0;        
             }
         }
     }

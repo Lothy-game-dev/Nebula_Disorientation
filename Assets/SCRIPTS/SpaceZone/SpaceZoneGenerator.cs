@@ -14,6 +14,10 @@ public class SpaceZoneGenerator : MonoBehaviour
     public TextMeshPro SpaceZoneNoText;
     public SpaceZoneMission Mission;
     public SpaceZoneIntro SpaceZoneIntro;
+    public AudioClip AssaultMusic;
+    public AudioClip DefendMusic;
+    public AudioClip OnslaughtMusic;
+    public AudioClip BossMusic;
     #endregion
     #region NormalVariables
     public int SpaceZoneNo;
@@ -54,6 +58,24 @@ public class SpaceZoneGenerator : MonoBehaviour
         string[] BGs = ((string)variantData["AvailableBackground"]).Split(",");
         ChosenBG = BGs[Random.Range(0, BGs.Length)];
         SpaceZoneBackground.ChangeBackground(ChosenBG);
+        // Music
+        if (SpaceZoneNo%10 == 1 || SpaceZoneNo%10 == 3 || SpaceZoneNo%10 == 5 || SpaceZoneNo%10 == 7)
+        {
+            Camera.main.GetComponent<AudioSource>().clip = AssaultMusic;
+        }
+        else if (SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6)
+        {
+            Camera.main.GetComponent<AudioSource>().clip = DefendMusic;
+        }
+        else if (SpaceZoneNo % 10 == 8 || SpaceZoneNo % 10 == 9)
+        {
+            Camera.main.GetComponent<AudioSource>().clip = OnslaughtMusic;
+        } 
+        else
+        {
+            Camera.main.GetComponent<AudioSource>().clip = BossMusic;
+        }
+        Camera.main.GetComponent<AudioSource>().enabled = true;
         // Teleport Fighter
         if ((SpaceZoneNo%10 == 2 || SpaceZoneNo%10 == 4 || SpaceZoneNo%10 == 6) && ChosenVariant==3)
         {
@@ -521,6 +543,25 @@ public class SpaceZoneGenerator : MonoBehaviour
             else if (ChosenVariant==3)
             {
                 Mission.CreateMissionDefendV3((int)Mathf.Ceil(AllySquadRating / 10));
+            }
+        } else if (SpaceZoneNo % 10 == 8 || SpaceZoneNo % 10 == 9)
+        {
+            if (ChosenVariant==1)
+            {
+                Mission.CreateMissionOnslaughtV1(EnemyFighterACount + EnemyFighterBCount + EnemyFighterCCount);
+            } else
+            {
+                Mission.CreateMissionOnslaughtV2(1);
+            }
+        } else if (SpaceZoneNo % 10 == 0)
+        {
+            if (ChosenVariant == 1)
+            {
+                Mission.CreateMissionBossV1(1);
+            }
+            else
+            {
+                Mission.CreateMissionBossV2(EnemyFighterCCount);
             }
         }
     }

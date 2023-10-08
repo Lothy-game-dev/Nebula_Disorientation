@@ -14,11 +14,12 @@ public class SpaceZoneTimer : MonoBehaviour
     public TextMeshPro TimeText;
     #endregion
     #region NormalVariables
-    private int Timer;
+    public int Timer;
     private bool Countdown;
-    private bool DoneSetupTimer;
+    public bool DoneSetupTimer;
     private float TimerDown;
     private bool AlreadyCallEnd;
+    private bool GlowDown;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -65,6 +66,7 @@ public class SpaceZoneTimer : MonoBehaviour
             Countdown = false;
         }
         TimerDown = 1f;
+        SetTextTimer();
         DoneSetupTimer = true;
     }
 
@@ -86,8 +88,34 @@ public class SpaceZoneTimer : MonoBehaviour
                 if (!AlreadyCallEnd)
                 {
                     AlreadyCallEnd = true;
+                    Color c = TimeText.color;
+                    c.a = 1;
+                    c.b = 1;
+                    TimeText.color = c;
                     mission.TimerEnd();
                 }
+            }
+            if (Timer<=10f)
+            {
+                Color c = TimeText.color;
+                if (c.a>=1)
+                {
+                    GlowDown = true;
+                } else if (c.a<=0)
+                {
+                    GlowDown = false;
+                }
+                if (GlowDown)
+                {
+                    c.a -= 2 * Time.deltaTime;
+                } else
+                {
+                    c.a += 2 * Time.deltaTime;
+                }
+                c.r = 1;
+                c.g = 1;
+                c.b = 0;
+                TimeText.color = c;
             }
         }
     }

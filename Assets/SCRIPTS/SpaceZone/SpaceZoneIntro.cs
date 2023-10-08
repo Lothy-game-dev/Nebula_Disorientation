@@ -18,6 +18,7 @@ public class SpaceZoneIntro : MonoBehaviour
     private float InitScaleX;
     private float InitScaleY;
     private bool alreadyClose;
+    private float AutoCloseTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -50,7 +51,15 @@ public class SpaceZoneIntro : MonoBehaviour
         // Call function and timer only if possible
         if (!alreadyClose)
         {
-            if (Input.anyKeyDown)
+            if (Input.anyKey)
+            {
+                alreadyClose = true;
+                StartCoroutine(CloseAnimation());
+            }
+            if (AutoCloseTimer>0f)
+            {
+                AutoCloseTimer -= Time.deltaTime;
+            } else
             {
                 alreadyClose = true;
                 StartCoroutine(CloseAnimation());
@@ -100,6 +109,7 @@ public class SpaceZoneIntro : MonoBehaviour
             PressText.GetComponent<TextMeshPro>().color = c2;
             yield return new WaitForSeconds(0.05f);
         }
+        AutoCloseTimer = 3f;
         alreadyClose = false;
     }
 

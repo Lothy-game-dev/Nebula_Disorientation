@@ -18,8 +18,9 @@ public class SpaceZoneMission : MonoBehaviour
     public int CurrentDoneNumber;
     public string MissionStageName;
     public string MissionTextString;
-    private bool alreadyComplete;
+    public bool alreadyComplete;
     public int A2ReqTier;
+    private int EscortNumber;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -32,7 +33,26 @@ public class SpaceZoneMission : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (CurrentDoneNumber>=ObjectiveNumber)
+        if (MissionStageName=="D3")
+        {
+            if (EscortNumber <= (int)Mathf.Ceil(ObjectiveNumber / 2))
+            {
+                if (!alreadyComplete)
+                {
+                    alreadyComplete = true;
+                    FailMission();
+                }
+            }
+            if (CurrentDoneNumber >= EscortNumber)
+            {
+                if (!alreadyComplete)
+                {
+                    alreadyComplete = true;
+                    CompleteMission();
+                }
+            }
+        } 
+        else if (MissionStageName != "D1" && MissionStageName != "D2" && CurrentDoneNumber>=ObjectiveNumber)
         {
             if (!alreadyComplete)
             {
@@ -45,7 +65,12 @@ public class SpaceZoneMission : MonoBehaviour
     #region Update Mission
     private void SetMissionText()
     {
+        if (MissionStageName!="D1" && MissionStageName!="D2")
         MissionText.text = MissionTextString + " (" + CurrentDoneNumber + "/" + ObjectiveNumber + ")";
+        else
+        {
+            MissionText.text = MissionTextString;
+        }
     }
     #endregion
     #region Create Missions
@@ -78,35 +103,43 @@ public class SpaceZoneMission : MonoBehaviour
     {
         MissionStageName = "D3";
         ObjectiveNumber = NumberOfEscort;
+        EscortNumber = NumberOfEscort;
         SetMissionText();
     }
 
     public void CreateMissionOnslaughtV1(int NumberOfEnemy)
     {
-
+        MissionStageName = "O1";
+        ObjectiveNumber = NumberOfEnemy;
+        SetMissionText();
     }
     public void CreateMissionOnslaughtV2(int NumberOfWarship)
     {
-
+        MissionStageName = "O2";
+        SetMissionText();
     }
 
     public void CreateMissionBossV1(int NumberOfWarship)
     {
-
+        MissionStageName = "B1";
+        SetMissionText();
     }
 
     public void CreateMissionBossV2(int NumberOfEliteFighter)
     {
-
+        MissionStageName = "B2";
+        A2ReqTier = 1;
+        ObjectiveNumber = NumberOfEliteFighter;
+        SetMissionText();
     }
     #endregion
     #region Destroy check
     public void EnemyFighterDestroy(string FighterName, int Tier)
     {
-        if (MissionStageName=="A1")
+        if (MissionStageName=="A1" || MissionStageName == "O1")
         {
             CurrentDoneNumber++;
-        } else if (MissionStageName == "A2")
+        } else if (MissionStageName == "A2" || MissionStageName == "B2")
         {
             if (Tier==A2ReqTier)
             {
@@ -118,7 +151,14 @@ public class SpaceZoneMission : MonoBehaviour
 
     public void AllyFighterDestroy(string FighterName)
     {
-
+        if (FighterName.Contains("SSTP"))
+        {
+            EscortNumber--;
+            if (EscortNumber<=0)
+            {
+                FailMission();
+            }
+        }
     }
 
     public void AllyEscortDone()
@@ -139,17 +179,17 @@ public class SpaceZoneMission : MonoBehaviour
     }
     public void FailMission()
     {
-        TextGO.CreateText("Mission Fail!", Color.red);
+        TextGO.CreateText("Mission Failed!", Color.red);
     }
 
     public void PlayerDestroyed()
     {
-        Debug.Log("End Session");
+        TextGO.CreateText("Mission Fail!", Color.red);
     }
 
     public void CompleteMission()
     {
-        TextGO.CreateText("Mission Complete!", Color.yellow);
+        TextGO.CreateText("Mission Accomplished!", Color.green);
     }
     #endregion
 }

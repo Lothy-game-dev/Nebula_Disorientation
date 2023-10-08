@@ -138,10 +138,10 @@ public class RocketBurstBullet : MonoBehaviour
         float curScale = 1;
         if (angle > 75 && angle < 105)
         {
-            curScale = Velocity/500f * (1.2f + 0.3f * Mathf.Abs(angle-90));
+            curScale = Velocity/500f * (1.1f + 0.2f * Mathf.Abs(angle-90));
         }
         CheckIsUpOrDownMovement();
-        transform.Rotate(new Vector3(0, 0, -DirMov * curScale * angle / 5));
+        transform.Rotate(new Vector3(0, 0, -DirMov * curScale * angle / 10));
     }
 
     private void CheckIsUpOrDownMovement()

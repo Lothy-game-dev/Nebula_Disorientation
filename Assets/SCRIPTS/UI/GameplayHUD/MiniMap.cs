@@ -67,7 +67,7 @@ public class MiniMap : MonoBehaviour
     // Render All Objects With Renderable and Enemy Layers that have Collider Within Render Range Declared
     public void RenderAllWithCollider(float range)
     {
-        Position = Player == null ? new Vector3(0, 0, 0) : Player.transform.position;
+        Position = Player == null ? Camera.main.transform.position : Player.transform.position;
         // Get All Objects With Renderable and Enemy Layers that have Collider Within Render Range Declared
         Collider2D[] cols = Physics2D.OverlapCircleAll(Position, range, RenderLayer);
         foreach (var col in cols)
