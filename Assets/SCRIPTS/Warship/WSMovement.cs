@@ -41,7 +41,10 @@ public class WSMovement : MonoBehaviour
     {
         // Initialize variables
         CurrentRotateAngle = 0;
-        BackFireInitScale = BackFires[0].transform.localScale.x;      
+        if (BackFires.Count > 0)
+        {
+            BackFireInitScale = BackFires[0].transform.localScale.x;
+        }
         aus = GetComponent<AudioSource>();
         aus.spatialBlend = 1;
         aus.rolloffMode = AudioRolloffMode.Linear;
@@ -131,7 +134,7 @@ public class WSMovement : MonoBehaviour
                     BackFires[i].transform.localScale.z);
                 Vector3 distance = (BackFires[i].transform.position - transform.position);
                 distance = distance / distance.magnitude * DistanceList[i].magnitude;
-                BackFires[i].transform.position = transform.position + distance * (0.6f + 0.4f * (CurrentSpeed) / MovingSpeed);
+                BackFires[i].transform.position = transform.position + distance * (0.9f + 0.1f * (CurrentSpeed) / MovingSpeed);
 
             }
             else
