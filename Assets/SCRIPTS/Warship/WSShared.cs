@@ -60,9 +60,10 @@ public class WSShared : MonoBehaviour
                 if (MainWps[i] != null)
                 {
                     if (DelayTimer <= 0f)
-                    {                     
-                    MainWps[i].GetComponent<Weapons>().Fireable = true;
-                    DelayTimer = 5f;
+                    {
+                        MainWps[i].GetComponent<Weapons>().isCharging = true; 
+                        MainWps[i].GetComponent<Weapons>().Fireable = true;
+                        DelayTimer = 5f;
                     }
                 }
             }
