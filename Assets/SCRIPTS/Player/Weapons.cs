@@ -31,6 +31,12 @@ public class Weapons : MonoBehaviour
     public bool IsOrbWeapon;
     public GameObject ReloadBar;
     public GameObject Effect;
+    public float Cooldown;
+    public float Duration;
+    public float ChargingTime;
+    public GameObject WeaponPoint;
+    public float WeaponROTSpeed;
+    public GameObject Charging;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -66,6 +72,10 @@ public class Weapons : MonoBehaviour
     public bool isUsingWormhole;
 
     public bool isMainWeapon;
+    public bool isFire;
+    private float BeamTimer;
+    private int DirMov;
+
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -98,6 +108,11 @@ public class Weapons : MonoBehaviour
         aus.dopplerLevel = 0;
         aus.spread = 360;
         audioScale = 0.5f;
+
+        if (!isMainWeapon)
+        {
+            WeaponROTSpeed *= 2;
+        }
     }
 
     // Update is called once per frame
@@ -192,64 +207,19 @@ public class Weapons : MonoBehaviour
         // Check rotate Weapon for Warship
         if (tracking && wm != null)
         {
-            Debug.Log("Hello");
-            // Calculate Angel and if they are <0 or >360 then set them to between 0 and 360
-            ExpectedAngle = CurrentAngle + CalAngle - PrevAngle;
-            if (ExpectedAngle >= 360)
+            if (Aim != null)
             {
-                ExpectedAngle -= 360;
-            }
-            else if (ExpectedAngle < 0)
-            {
-                ExpectedAngle += 360;
-            }
-            LimitNegative = 360 + RotateLimitNegative + wm.CurrentRotateAngle % 360;
-            if (LimitNegative >= 360)
-            {
-
-                LimitNegative -= 360;
-            }
-            else if (LimitNegative < 0)
-            {
-                LimitNegative += 360;
-            }
-            LimitPositive = RotateLimitPositive + wm.CurrentRotateAngle % 360;
-            if (LimitPositive >= 360)
-            {
-                LimitPositive -= 360;
-            }
-            else if (LimitPositive < 0)
-            {
-                LimitPositive += 360;
-            }
-            // In case the mouse doesnt change position: Will not add the rotation
-            if (PrevAngle != CalAngle)
-            {
-                // If the mouse aim vector in shootable range -> set fireable = true
-                // And rotate the weapon to the mouse aim position
-                if (CheckIfAngle1BetweenAngle2And3(ExpectedAngle, LimitNegative, LimitPositive))
+                Vector3 pos = ShootingPosition.transform.position - RotatePoint.transform.position;
+                Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
+                float angle = Vector3.Angle(ToEnemy, pos);
+                CheckIsUpOrDownMovement();
+                if (angle < 5)
                 {
-                    Fireable = true;
-                    transform.RotateAround(RotatePoint.transform.position, Vector3.back, CalAngle - PrevAngle);
-                    CurrentAngle = ExpectedAngle;
-                    PrevAngle = CalAngle;
-                }
-                else
-                {
-                    // Else set fireable = false
-                    // And rotate the weapon to the nearest posible position to the mouse
-                    // also end weapon sound if there is sound
-                    // (only thermal weapon get this case since their sounds loop)
-                    Fireable = false;
-                    if (!isWarning && !isOverheatted && aus.clip != null && IsThermalType)
-                    {
-                        EndSound();
-                    }
-                    float NearestAngle = NearestPossibleAngle(CurrentAngle, LimitNegative, LimitPositive);
-                    transform.RotateAround(RotatePoint.transform.position, Vector3.back, NearestAngle);
-                    CurrentAngle += NearestAngle;
-                    PrevAngle += NearestAngle;
-                }
+                    angle = 0;
+                    isFire = true;
+                }      
+                transform.RotateAround(WeaponPoint.transform.position, new Vector3(0,0, -DirMov), WeaponROTSpeed * angle / 10);
+                CurrentAngle = angle ;
             }
         }
         // Reset thermal hit count per 1/rate of hit second
@@ -274,6 +244,7 @@ public class Weapons : MonoBehaviour
                     EndSound();
                 }
             }
+        
     }
     private void FixedUpdate()
     {
@@ -300,6 +271,29 @@ public class Weapons : MonoBehaviour
             ReloadBar.GetComponent<Image>().fillAmount -= RateOfFire * Time.fixedDeltaTime;
         }
         FireTimer -= Time.deltaTime;
+
+        if (Fireable && isMainWeapon && isFire)
+        {
+            if (Aim == null)
+            {
+                EndSound();
+            }
+            else
+            {
+                BeamTimer += Time.deltaTime;
+                if (BeamTimer >= Duration)
+                {
+                    isFire = false;
+                    Fireable = false;
+                    BeamTimer = 0f;
+                }
+                else
+                {
+                    FireWSLaserBeam();
+                    FireTimer = 1 / 14;                   
+                }
+            }
+        }
     }
     #endregion
     #region Weapon Rotation
@@ -504,6 +498,30 @@ public class Weapons : MonoBehaviour
         }
     }
 
+    public void WSShootBullet()
+    {       
+        if (Aim == null)
+        {
+            EndSound();
+        } else
+        {
+            Debug.Log(FireTimer);
+            if (FireTimer <= 0f && Fireable && !isMainWeapon)
+            {
+                if (!IsThermalType)
+                {
+                    FireBullet();
+                    FireTimer = 1 / RateOfFire;
+                }
+                else
+                {
+                    FireFlamethrowerOrb();
+                    FireTimer = 1 / RateOfFire;
+                }
+            }
+        }
+    }
+
     // Fire Kinetic/Laser/Orb Bullet
     void FireBullet()
     {
@@ -533,6 +551,7 @@ public class Weapons : MonoBehaviour
         bul.EnemyLayer = EnemyLayer;
         bulletFire.SetActive(true);
         GenerateEffect();
+        if (Fighter.GetComponent<FighterShared>() != null) 
         // Increase overheat bar for each shot, increasing with themral status overloadded
         currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
         // Set reset timer
@@ -570,7 +589,21 @@ public class Weapons : MonoBehaviour
 
     void FireWSLaserBeam()
     {
+        GameObject laserbeam = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+        laserbeam.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle());
+        BulletShared bul = laserbeam.GetComponent<BulletShared>();
+        bul.Destination = Aim.transform.position;
+        bul.WeaponShoot = this;
+        bul.EnemyLayer = EnemyLayer;
+        laserbeam.SetActive(true);
+        Debug.Log(laserbeam);
+    }
 
+    public void ChargingWSLaserBeam()
+    {
+        GameObject charging = Instantiate(Charging, ShootingPosition.transform.position, Quaternion.identity);
+        charging.SetActive(true);
+        Destroy(charging, ChargingTime);
     }
 
     private void GenerateEffect()
@@ -767,6 +800,106 @@ public class Weapons : MonoBehaviour
         aus.loop = true;
         aus.Play();
         aus.volume = 0.08f * audioScale;
+    }
+    #endregion
+    #region Check laser beam direction
+    private void CheckIsUpOrDownMovement()
+    {
+        Vector2 HeadToTarget = Aim.transform.position - ShootingPosition.transform.position;
+        Vector2 MovingVector = ShootingPosition.transform.position - RotatePoint.transform.position;
+        float angle = Vector2.Angle(HeadToTarget, MovingVector);
+        float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
+        Vector2 TempPos = new Vector2(RotatePoint.transform.position.x, RotatePoint.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
+        Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
+        if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
+        {
+            if (ShootingPosition.transform.position.y > ShootingPosition.transform.position.y)
+            {
+                if (Aim.transform.position.x < ShootingPosition.transform.position.x)
+                {
+                    DirMov = -1;
+                }
+                else if (Aim.transform.position.x == ShootingPosition.transform.position.x)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = 1;
+                }
+            }
+            else
+            {
+                if (Aim.transform.position.x < ShootingPosition.transform.position.x)
+                {
+                    DirMov = 1;
+                }
+                else if (Aim.transform.position.x == ShootingPosition.transform.position.x)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = -1;
+                }
+            }
+        }
+        else if (ShootingPosition.transform.position.y == RotatePoint.transform.position.y)
+        {
+            if (ShootingPosition.transform.position.x > RotatePoint.transform.position.x)
+            {
+                if (Aim.transform.position.y > ShootingPosition.transform.position.y)
+                {
+                    DirMov -= 1;
+                }
+                else if (Aim.transform.position.y == ShootingPosition.transform.position.y)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov = 1;
+                }
+            }
+            else
+            {
+                if (Aim.transform.position.y > ShootingPosition.transform.position.y)
+                {
+                    DirMov = 1;
+                }
+                else if (Aim.transform.position.y == ShootingPosition.transform.position.y)
+                {
+                    DirMov = 0;
+                }
+                else
+                {
+                    DirMov -= 1;
+                }
+            }
+        }
+        else if (ShootingPosition.transform.position.x > RotatePoint.transform.position.x)
+        {
+            if (CheckPos.y < Aim.transform.position.y)
+            {
+                DirMov = -1;
+            }
+            else
+            {
+                DirMov = 1;
+            }
+        }
+        else
+        {
+            if (CheckPos.y < Aim.transform.position.y)
+            {
+                DirMov = 1;
+            }
+            else
+            {
+                DirMov = -1;
+            }
+        }
+
     }
     #endregion
 }

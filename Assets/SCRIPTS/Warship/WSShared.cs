@@ -34,7 +34,12 @@ public class WSShared : MonoBehaviour
     private GameObject RightTarget;
     private float TargetRefreshTimer;
     private List<GameObject> SpWps;
+    private List<GameObject> MainWps;
     private float FindTargetTimer;
+    private bool doneInitWeapon;
+    private float DelayTimer;
+    private float DelayTimer1;
+    private float ChargingTime;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -47,8 +52,32 @@ public class WSShared : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Call function and timer only if possible
-        resetMovetimer -= Time.deltaTime;
+        if (doneInitWeapon)
+        {
+            DelayTimer -= Time.deltaTime;
+            for (int i = 0; i < MainWps.Count; i++)
+            {
+                if (MainWps[i] != null)
+                {
+                    if (DelayTimer <= 0f)
+                    {                     
+                    MainWps[i].GetComponent<Weapons>().Fireable = true;
+                    DelayTimer = 5f;
+                    }
+                }
+            }
+
+            DelayTimer1 -= Time.deltaTime;
+            for (int i = 0; i < SpWps.Count; i++)
+            {
+                if (SpWps[i] != null)
+                {                 
+                   // SpWps[i].GetComponent<Weapons>().WSShootBullet();                  
+                }
+            }
+        }
+            // Call function and timer only if possible
+            resetMovetimer -= Time.deltaTime;
         if (resetMovetimer <= 0f)
         {
             RandomMove = Random.Range(1, 3);
@@ -91,13 +120,27 @@ public class WSShared : MonoBehaviour
             {
                 if (SpWps[i] != null)
                 {
-                    SpWps[i].GetComponent<Weapons>().Aim = LeftTarget;
+                    SpWps[i].GetComponent<Weapons>().Aim = TargetLeftEnemy(SpWps[i]);
+                    Debug.Log(i + " " + TargetLeftEnemy(SpWps[i]));
                 }
                 /*if (RightWeapon != null)
                 {
                     RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
                 }*/
             }
+
+            for (int i = 0; i < MainWps.Count; i++)
+            {
+                if (MainWps[i] != null)
+                {
+                    MainWps[i].GetComponent<Weapons>().Aim = LeftTarget;
+                }
+                /*if (RightWeapon != null)
+                {
+                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
+                }*/
+            }
+
         }
         if (LeftTarget == null || RightTarget == null)
         {
@@ -108,7 +151,7 @@ public class WSShared : MonoBehaviour
             FindTargetTimer = Random.Range(2.5f, 3.5f);
             if (LeftTarget == null)
             {
-                TargetLeftEnemy();
+                //TargetLeftEnemy(1000);
             }
             if (RightTarget == null)
             {
@@ -154,7 +197,8 @@ public class WSShared : MonoBehaviour
         {
             MainWeapon.Add(data["MainWeapon"].ToString());
         }
-        
+
+        MainWps = new List<GameObject>();
         List<Vector2> WPPos = model.GetComponent<WarshipModelShared>().MainWeaponPos;
         for (int i = 0; i < MainWeapon.Count; i++)
         {
@@ -167,6 +211,17 @@ public class WSShared : MonoBehaviour
                     main.transform.SetParent(gameObject.transform);
                     main.transform.localScale = new Vector2(1f, 1f);
                     main.SetActive(true);
+
+                    Weapons wp = main.GetComponent<Weapons>();
+                    wp.Fighter = gameObject;
+                    wp.Aim = LeftTarget;
+                    wp.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
+                    wp.tracking = true;
+                    wp.isMainWeapon = true;
+                    wp.RotateLimitPositive = 180;
+                    wp.RotateLimitNegative = -180;
+
+                    MainWps.Add(main);
                 }
             }           
         }
@@ -186,7 +241,7 @@ public class WSShared : MonoBehaviour
         }
 
         List<Vector2> SupWPPos = model.GetComponent<WarshipModelShared>().SupWeaponPos;
-        TargetLeftEnemy();
+        //TargetLeftEnemy(1000);
         TargetRightEnemy();
         SpWps = new List<GameObject>();
         for (int i = 0; i < SupWeapon.Count; i++)
@@ -207,14 +262,17 @@ public class WSShared : MonoBehaviour
                     wp.Aim = LeftTarget;
                     wp.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
                     wp.tracking = true;
+                    wp.RotateLimitPositive = 360;
+                    wp.RotateLimitNegative = -360;
+                    wp.isMainWeapon = false;
 
                     SpWps.Add(sup);
                 }
             }
             
         }
+        doneInitWeapon = true;
         gameObject.SetActive(true);
-        Debug.Log(SpWps.Count);
     }
     #endregion
     #region Receive Damage
@@ -257,16 +315,18 @@ public class WSShared : MonoBehaviour
     }
     #endregion
     #region Target
-    private void TargetLeftEnemy()
+    private GameObject TargetLeftEnemy(GameObject weapon)
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 2000f, FindObjectOfType<GameController>().PlayerLayer);
+        GameObject game = null;
+        BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, FindObjectOfType<GameController>().PlayerLayer);
         if (cols.Length > 0)
         {
             GameObject Nearest = cols[0].gameObject;
-            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
             {
-                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);
                 if (distanceTest < distance)
                 {
                     distance = distanceTest;
@@ -274,13 +334,14 @@ public class WSShared : MonoBehaviour
                 }
             }
             LeftTarget = Nearest;
-            Debug.Log(Nearest);
+            game = Nearest;
         }
+        return game;
     }
 
     private void TargetRightEnemy()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 2000f, FindObjectOfType<GameController>().PlayerLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1000f, FindObjectOfType<GameController>().PlayerLayer);
         if (cols.Length > 0)
         {
             GameObject Nearest = cols[0].gameObject;
@@ -301,7 +362,7 @@ public class WSShared : MonoBehaviour
     {
         for (int i = 0; i < SpWps.Count; i++)
         {
-            if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > 200 || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
+            if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > 800f || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
             {
                 LeftTarget = null;
                 SpWps[i].GetComponent<Weapons>().Aim = null;

@@ -22,12 +22,22 @@ public class LaserBeamBullet : BulletShared
     void Start()
     {
         // Initialize variables
+        // Initialize variables
+        rb = GetComponent<Rigidbody2D>();
+        // Calculate Velocity
+        CalculateVelocity();
+        // Accelerate Bullet
+        StartCoroutine(Accelerate(0.05f));
+        InitializeBullet();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        UpdateBullet();
+        DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
+        CheckLaserBeamDistanceTravel();
     }
     #endregion
     #region Function group 1
