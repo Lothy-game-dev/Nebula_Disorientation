@@ -60,15 +60,9 @@ public class WSShared : MonoBehaviour
                 if (MainWps[i] != null)
                 {
                     if (DelayTimer <= 0f)
-                    {
-                        MainWps[i].GetComponent<Weapons>().ChargingWSLaserBeam();
-                        ChargingTime += Time.deltaTime;
-                        if (ChargingTime >= 1.2f)
-                        {
-                            MainWps[i].GetComponent<Weapons>().Fireable = true;
-                            DelayTimer = 5f;
-                            ChargingTime = 0f;
-                        }
+                    {                     
+                    MainWps[i].GetComponent<Weapons>().Fireable = true;
+                    DelayTimer = 5f;
                     }
                 }
             }
