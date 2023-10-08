@@ -28,6 +28,7 @@ public class Weapons : MonoBehaviour
     public float OverheatResetTimer;
     public float OverheatTimer;
     public AudioClip WeaponShootSound;
+    public AudioClip WeaponChargeSound;
     public bool IsOrbWeapon;
     public GameObject ReloadBar;
     public GameObject Effect;
@@ -74,7 +75,9 @@ public class Weapons : MonoBehaviour
     public bool isMainWeapon;
     public bool isFire;
     private float BeamTimer;
+    private float ChargeTimer;
     private int DirMov;
+    public bool isCharging;
 
     #endregion
     #region Start & Update
@@ -280,17 +283,35 @@ public class Weapons : MonoBehaviour
             }
             else
             {
-                BeamTimer += Time.deltaTime;
-                if (BeamTimer >= Duration)
+                if (isCharging)
                 {
-                    isFire = false;
-                    Fireable = false;
-                    BeamTimer = 0f;
+                    if (ChargeTimer == 0)
+                    {
+                        LaserBeamChargingSound();
+                        ChargingWSLaserBeam();
+                    }
+                    ChargeTimer += Time.deltaTime;
                 }
-                else
+                if (ChargeTimer >= ChargingTime)
                 {
-                    FireWSLaserBeam();
-                    FireTimer = 1 / 14;                   
+                    isCharging = false;
+                    if (BeamTimer >= Duration)
+                    {
+                        isFire = false;
+                        Fireable = false;
+                        BeamTimer = 0f;
+                        ChargeTimer = 0f;
+                    }
+                    else
+                    {
+                        if (BeamTimer == 0)
+                        {
+                            LaserBeamSound();
+                        }
+                        FireWSLaserBeam();
+                        FireTimer = 1 / 14;                   
+                        BeamTimer += Time.deltaTime;
+                    }
                 }
             }
         }
@@ -602,6 +623,7 @@ public class Weapons : MonoBehaviour
     public void ChargingWSLaserBeam()
     {
         GameObject charging = Instantiate(Charging, ShootingPosition.transform.position, Quaternion.identity);
+        charging.transform.SetParent(gameObject.transform);
         charging.SetActive(true);
         Destroy(charging, ChargingTime);
     }
@@ -770,6 +792,22 @@ public class Weapons : MonoBehaviour
             if (Bullet.GetComponent<UsualThermalOrb>()!=null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale;
             else aus.volume = 0.2f * audioScale;
         }
+    }
+
+    public void LaserBeamSound()
+    {
+        aus.clip = WeaponShootSound;
+        aus.loop = false;
+        aus.Play();
+        aus.volume = 1f * audioScale;
+    }
+
+    public void LaserBeamChargingSound()
+    {
+        aus.clip = WeaponChargeSound;
+        aus.loop = false;
+        aus.Play();
+        aus.volume = 1f * audioScale;
     }
 
     public void EndSound()
