@@ -120,7 +120,7 @@ public class AlliesShared : FighterShared
             }
         } else
         {
-            /*if (doneInitWeapon)
+            if (doneInitWeapon)
             {
                 DelayTimer -= Time.deltaTime;
                 if (LeftWeapon != null)
@@ -172,7 +172,7 @@ public class AlliesShared : FighterShared
                     }
                 }
             }
-
+            /*
             resetMovetimer -= Time.deltaTime;
             if (resetMovetimer <= 0f)
             {
