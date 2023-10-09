@@ -12,12 +12,18 @@ public class AlliesFighterMLAgent : Agent
     private FighterMovement fm;
     private Weapons LeftWeapon;
     private Weapons RightWeapon;
+    public GameObject TopBound;
+    public GameObject LeftBound;
+    public GameObject RightBound;
+    public GameObject BottomBound;
     #endregion
     #region Normal Variable
-    private int moveUpDown;
-    private int moveLeftRight;
+    private float moveUpDown;
+    private float moveLeftRight;
     private int FireLeft;
     private int FireRight;
+    public GameObject Target;
+    private Vector2 RecordPos;
     #endregion
     #region Initialize
     public override void Initialize()
@@ -31,66 +37,61 @@ public class AlliesFighterMLAgent : Agent
     #region Training
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(fm.SpeedUp);
-        sensor.AddObservation(fm.RotateDirection);
-        sensor.AddObservation(als.LeftTarget);
-        sensor.AddObservation(als.RightTarget);
-        sensor.AddObservation(transform.position);
-        sensor.AddObservation(LeftWeapon.FireTimer);
-        sensor.AddObservation(RightWeapon.FireTimer);
+        Target = GetNearestEnemy();
+        sensor.AddObservation((TopBound.transform.position - transform.position).magnitude);
+        sensor.AddObservation((LeftBound.transform.position - transform.position).magnitude);
+        sensor.AddObservation((RightBound.transform.position - transform.position).magnitude);
+        sensor.AddObservation((BottomBound.transform.position - transform.position).magnitude);
+        if (Target!=null)
+        {
+            sensor.AddObservation((Target.transform.position - transform.position).magnitude);
+            sensor.AddObservation(Vector2.Angle(Target.transform.position - transform.position, new Vector2(0, 1)));
+            sensor.AddObservation(Target.transform.position);
+        }
     }
     public override void OnActionReceived(ActionBuffers actions)
     {
-        moveUpDown = actions.DiscreteActions[0];
-        if (moveUpDown==0)
+        Debug.Log("Discrete: " + actions.DiscreteActions[0]);
+        Debug.Log("Discrete: " + actions.DiscreteActions[1]);
+        if (actions.DiscreteActions[0]==0)
         {
             fm.UpMove();
-        } else if (moveUpDown==1)
+        }
+        else if (actions.DiscreteActions[0] == 1)
         {
             fm.DownMove();
-        } else if (moveUpDown == 2)
-        {
-            fm.NoUpDownMove();
         }
-        moveLeftRight = actions.DiscreteActions[1];
-        if (moveLeftRight == 0)
+        if (actions.DiscreteActions[1] == 0)
         {
             fm.LeftMove();
         }
-        else if (moveLeftRight == 1)
+        else if (actions.DiscreteActions[1] == 1)
         {
             fm.RightMove();
         }
-        else if (moveLeftRight == 2)
+        else if (actions.DiscreteActions[1] == 2)
         {
             fm.NoLeftRightMove();
         }
         CheckPositionToTarget();
-        FireLeft = actions.DiscreteActions[2];
-        if (FireLeft==0)
-        {
-            als.LeftWeapon.GetComponent<Weapons>().AIShootBullet();
-            CheckLeftWeaponShooting();
-        }
-        FireRight = actions.DiscreteActions[3];
-        if (FireRight == 0)
-        {
-            als.RightWeapon.GetComponent<Weapons>().AIShootBullet();
-            CheckRightWeaponShooting();
-        }
-        CheckCurrentStatus();
 
     }
     #endregion
     #region Reward
     private void CheckPositionToTarget()
     {
-        if (als.LeftTarget == null && als.RightTarget==null)
+        if (Target!=null)
         {
-            ReceivePunishment(0.1f,"Positioning");
-        } else
-        {
-            ReceiveReward(0.1f, "Positioning");
+            if ((transform.position - Target.transform.position).magnitude < 10f)
+            {
+                ReceiveReward(1f, "Finish");
+                FindObjectOfType<SpawnAlliesFighter>().SpawnAlly();
+                Destroy(gameObject);
+            }
+            else
+            {
+                ReceivePunishment(0.01f, "Far");
+            }
         }
     }
     private void CheckLeftWeaponShooting()
@@ -141,7 +142,7 @@ public class AlliesFighterMLAgent : Agent
 
     public void MovingLimitReward()
     {
-        ReceivePunishment(0.5f, "Limit");
+        ReceivePunishment(10f, "Limit");
     }
     #endregion
     #region Reward
@@ -155,6 +156,27 @@ public class AlliesFighterMLAgent : Agent
     {
         Debug.Log(name + " Receive Punishment For " + extra + " :-" + amount);
         AddReward(-amount);
+    }
+
+    public GameObject GetNearestEnemy()
+    {
+        EnemyShared[] gos = FindObjectsOfType<EnemyShared>();
+        if (gos.Length>0)
+        {
+            float nearest = (transform.position - gos[0].transform.position).magnitude;
+            GameObject nearestPos = gos[0].gameObject;
+            for (int i=1; i<gos.Length;i++)
+            {
+                float distance = (transform.position - gos[i].transform.position).magnitude;
+                if (nearest > distance)
+                {
+                    nearest = distance;
+                    nearestPos = gos[i].gameObject;
+                }
+            }
+            return nearestPos;
+        }
+        return null;
     }
     #endregion
 }

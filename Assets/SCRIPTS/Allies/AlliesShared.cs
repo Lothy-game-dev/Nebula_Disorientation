@@ -208,7 +208,7 @@ public class AlliesShared : FighterShared
             TargetRefreshTimer -= Time.deltaTime;
             if (TargetRefreshTimer <= 0f)
             {
-                TargetRefreshTimer = Random.Range(2.5f, 3.5f);
+                TargetRefreshTimer = /*Random.Range(2.5f, 3.5f);*/0f;
                 CheckTargetEnemy();
                 if (LeftWeapon != null)
                 {
@@ -225,7 +225,7 @@ public class AlliesShared : FighterShared
             }
             if (FindTargetTimer <= 0f)
             {
-                FindTargetTimer = Random.Range(2.5f, 3.5f);
+                FindTargetTimer = /*Random.Range(2.5f, 3.5f);*/0f;
                 if (LeftTarget == null)
                 {
                     TargetLeftEnemy();

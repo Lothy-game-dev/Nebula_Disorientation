@@ -14,15 +14,505 @@
                 "auxillary_file_paths": [
                     "results\\ppo\\AllyFighterCommon\\AllyFighterCommon-167104.pt"
                 ]
+            },
+            {
+                "steps": 190144,
+                "file_path": "results\\ppo\\AllyFighterCommon\\AllyFighterCommon-190144.onnx",
+                "reward": null,
+                "creation_time": 1696835231.0892649,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFighterCommon\\AllyFighterCommon-190144.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 167104,
+            "steps": 190144,
             "file_path": "results\\ppo\\AllyFighterCommon.onnx",
             "reward": null,
-            "creation_time": 1696787669.4245968,
+            "creation_time": 1696835231.0892649,
             "auxillary_file_paths": [
-                "results\\ppo\\AllyFighterCommon\\AllyFighterCommon-167104.pt"
+                "results\\ppo\\AllyFighterCommon\\AllyFighterCommon-190144.pt"
+            ]
+        }
+    },
+    "AllyFighterMovement": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-0.onnx",
+                "reward": null,
+                "creation_time": 1696836202.1643982,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-0.pt"
+                ]
+            },
+            {
+                "steps": 5632,
+                "file_path": "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-5632.onnx",
+                "reward": null,
+                "creation_time": 1696836524.966774,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-5632.pt"
+                ]
+            },
+            {
+                "steps": 29632,
+                "file_path": "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-29632.onnx",
+                "reward": null,
+                "creation_time": 1696836716.2358701,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-29632.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 29632,
+            "file_path": "results\\ppo\\AllyFighterMovement.onnx",
+            "reward": null,
+            "creation_time": 1696836716.2358701,
+            "auxillary_file_paths": [
+                "results\\ppo\\AllyFighterMovement\\AllyFighterMovement-29632.pt"
+            ]
+        }
+    },
+    "MovementAlly": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\MovementAlly\\MovementAlly-0.onnx",
+                "reward": null,
+                "creation_time": 1696836716.3861692,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly\\MovementAlly-0.pt"
+                ]
+            },
+            {
+                "steps": 51584,
+                "file_path": "results\\ppo\\MovementAlly\\MovementAlly-51584.onnx",
+                "reward": null,
+                "creation_time": 1696837069.2963812,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly\\MovementAlly-51584.pt"
+                ]
+            },
+            {
+                "steps": 57984,
+                "file_path": "results\\ppo\\MovementAlly\\MovementAlly-57984.onnx",
+                "reward": null,
+                "creation_time": 1696837277.3943436,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly\\MovementAlly-57984.pt"
+                ]
+            },
+            {
+                "steps": 68352,
+                "file_path": "results\\ppo\\MovementAlly\\MovementAlly-68352.onnx",
+                "reward": null,
+                "creation_time": 1696837400.5899203,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly\\MovementAlly-68352.pt"
+                ]
+            },
+            {
+                "steps": 71872,
+                "file_path": "results\\ppo\\MovementAlly\\MovementAlly-71872.onnx",
+                "reward": null,
+                "creation_time": 1696837499.6335537,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly\\MovementAlly-71872.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 71872,
+            "file_path": "results\\ppo\\MovementAlly.onnx",
+            "reward": null,
+            "creation_time": 1696837499.6335537,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly\\MovementAlly-71872.pt"
+            ]
+        }
+    },
+    "MovementAllyNew": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\MovementAllyNew\\MovementAllyNew-0.onnx",
+                "reward": null,
+                "creation_time": 1696837499.783931,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAllyNew\\MovementAllyNew-0.pt"
+                ]
+            },
+            {
+                "steps": 6080,
+                "file_path": "results\\ppo\\MovementAllyNew\\MovementAllyNew-6080.onnx",
+                "reward": null,
+                "creation_time": 1696837563.3317618,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAllyNew\\MovementAllyNew-6080.pt"
+                ]
+            },
+            {
+                "steps": 35520,
+                "file_path": "results\\ppo\\MovementAllyNew\\MovementAllyNew-35520.onnx",
+                "reward": null,
+                "creation_time": 1696839594.1256328,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAllyNew\\MovementAllyNew-35520.pt"
+                ]
+            },
+            {
+                "steps": 60160,
+                "file_path": "results\\ppo\\MovementAllyNew\\MovementAllyNew-60160.onnx",
+                "reward": null,
+                "creation_time": 1696839911.6374602,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAllyNew\\MovementAllyNew-60160.pt"
+                ]
+            },
+            {
+                "steps": 65600,
+                "file_path": "results\\ppo\\MovementAllyNew\\MovementAllyNew-65600.onnx",
+                "reward": null,
+                "creation_time": 1696840445.4194567,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAllyNew\\MovementAllyNew-65600.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 65600,
+            "file_path": "results\\ppo\\MovementAllyNew.onnx",
+            "reward": null,
+            "creation_time": 1696840445.4194567,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAllyNew\\MovementAllyNew-65600.pt"
+            ]
+        }
+    },
+    "MovementAlly1450": {
+        "checkpoints": [
+            {
+                "steps": 4160,
+                "file_path": "results\\ppo\\MovementAlly1450\\MovementAlly1450-4160.onnx",
+                "reward": null,
+                "creation_time": 1696837941.025613,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1450\\MovementAlly1450-4160.pt"
+                ]
+            },
+            {
+                "steps": 29824,
+                "file_path": "results\\ppo\\MovementAlly1450\\MovementAlly1450-29824.onnx",
+                "reward": null,
+                "creation_time": 1696838231.9953318,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1450\\MovementAlly1450-29824.pt"
+                ]
+            },
+            {
+                "steps": 191552,
+                "file_path": "results\\ppo\\MovementAlly1450\\MovementAlly1450-191552.onnx",
+                "reward": null,
+                "creation_time": 1696838966.3272479,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1450\\MovementAlly1450-191552.pt"
+                ]
+            },
+            {
+                "steps": 198592,
+                "file_path": "results\\ppo\\MovementAlly1450\\MovementAlly1450-198592.onnx",
+                "reward": null,
+                "creation_time": 1696839108.017648,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1450\\MovementAlly1450-198592.pt"
+                ]
+            },
+            {
+                "steps": 200512,
+                "file_path": "results\\ppo\\MovementAlly1450\\MovementAlly1450-200512.onnx",
+                "reward": null,
+                "creation_time": 1696839199.7919972,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1450\\MovementAlly1450-200512.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 200512,
+            "file_path": "results\\ppo\\MovementAlly1450.onnx",
+            "reward": null,
+            "creation_time": 1696839199.7919972,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly1450\\MovementAlly1450-200512.pt"
+            ]
+        }
+    },
+    "MovementAlly1513": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\MovementAlly1513\\MovementAlly1513-0.onnx",
+                "reward": null,
+                "creation_time": 1696839233.4482834,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1513\\MovementAlly1513-0.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 0,
+            "file_path": "results\\ppo\\MovementAlly1513.onnx",
+            "reward": null,
+            "creation_time": 1696839233.4482834,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly1513\\MovementAlly1513-0.pt"
+            ]
+        }
+    },
+    "MovementAlly1533": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\MovementAlly1533\\MovementAlly1533-0.onnx",
+                "reward": null,
+                "creation_time": 1696840445.4731107,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1533\\MovementAlly1533-0.pt"
+                ]
+            },
+            {
+                "steps": 59200,
+                "file_path": "results\\ppo\\MovementAlly1533\\MovementAlly1533-59200.onnx",
+                "reward": null,
+                "creation_time": 1696840813.0999491,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1533\\MovementAlly1533-59200.pt"
+                ]
+            },
+            {
+                "steps": 70080,
+                "file_path": "results\\ppo\\MovementAlly1533\\MovementAlly1533-70080.onnx",
+                "reward": null,
+                "creation_time": 1696841002.4895053,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1533\\MovementAlly1533-70080.pt"
+                ]
+            },
+            {
+                "steps": 105280,
+                "file_path": "results\\ppo\\MovementAlly1533\\MovementAlly1533-105280.onnx",
+                "reward": null,
+                "creation_time": 1696841306.9761133,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly1533\\MovementAlly1533-105280.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 105280,
+            "file_path": "results\\ppo\\MovementAlly1533.onnx",
+            "reward": null,
+            "creation_time": 1696841306.9761133,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly1533\\MovementAlly1533-105280.pt"
+            ]
+        }
+    },
+    "MovementAlly15541009": {
+        "checkpoints": [
+            {
+                "steps": 18048,
+                "file_path": "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-18048.onnx",
+                "reward": null,
+                "creation_time": 1696842109.289553,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-18048.pt"
+                ]
+            },
+            {
+                "steps": 28544,
+                "file_path": "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-28544.onnx",
+                "reward": null,
+                "creation_time": 1696843138.8424463,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-28544.pt"
+                ]
+            },
+            {
+                "steps": 31552,
+                "file_path": "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-31552.onnx",
+                "reward": null,
+                "creation_time": 1696843232.4052114,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-31552.pt"
+                ]
+            },
+            {
+                "steps": 53312,
+                "file_path": "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-53312.onnx",
+                "reward": null,
+                "creation_time": 1696843516.9733696,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-53312.pt"
+                ]
+            },
+            {
+                "steps": 55488,
+                "file_path": "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-55488.onnx",
+                "reward": null,
+                "creation_time": 1696844095.052968,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-55488.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 55488,
+            "file_path": "results\\ppo\\MovementAlly15541009.onnx",
+            "reward": null,
+            "creation_time": 1696844095.052968,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly15541009\\MovementAlly15541009-55488.pt"
+            ]
+        }
+    },
+    "MovementAlly16341009": {
+        "checkpoints": [
+            {
+                "steps": 4032,
+                "file_path": "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-4032.onnx",
+                "reward": null,
+                "creation_time": 1696844188.2427588,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-4032.pt"
+                ]
+            },
+            {
+                "steps": 10368,
+                "file_path": "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-10368.onnx",
+                "reward": null,
+                "creation_time": 1696844479.4578738,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-10368.pt"
+                ]
+            },
+            {
+                "steps": 16256,
+                "file_path": "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-16256.onnx",
+                "reward": null,
+                "creation_time": 1696844583.80097,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-16256.pt"
+                ]
+            },
+            {
+                "steps": 43008,
+                "file_path": "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-43008.onnx",
+                "reward": null,
+                "creation_time": 1696844868.2342858,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-43008.pt"
+                ]
+            },
+            {
+                "steps": 248320,
+                "file_path": "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-248320.onnx",
+                "reward": null,
+                "creation_time": 1696845971.200719,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-248320.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 248320,
+            "file_path": "results\\ppo\\MovementAlly16341009.onnx",
+            "reward": null,
+            "creation_time": 1696845971.200719,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly16341009\\MovementAlly16341009-248320.pt"
+            ]
+        }
+    },
+    "MovementAlly7171009": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-0.onnx",
+                "reward": null,
+                "creation_time": 1696846773.9378405,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-0.pt"
+                ]
+            },
+            {
+                "steps": 22144,
+                "file_path": "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-22144.onnx",
+                "reward": null,
+                "creation_time": 1696847035.939172,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-22144.pt"
+                ]
+            },
+            {
+                "steps": 28096,
+                "file_path": "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-28096.onnx",
+                "reward": null,
+                "creation_time": 1696850554.0122957,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-28096.pt"
+                ]
+            },
+            {
+                "steps": 40128,
+                "file_path": "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-40128.onnx",
+                "reward": null,
+                "creation_time": 1696850875.3882468,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-40128.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 40128,
+            "file_path": "results\\ppo\\MovementAlly7171009.onnx",
+            "reward": null,
+            "creation_time": 1696850875.3882468,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly7171009\\MovementAlly7171009-40128.pt"
+            ]
+        }
+    },
+    "MovementAlly18311009": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\MovementAlly18311009\\MovementAlly18311009-0.onnx",
+                "reward": null,
+                "creation_time": 1696851149.1926615,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly18311009\\MovementAlly18311009-0.pt"
+                ]
+            },
+            {
+                "steps": 8832,
+                "file_path": "results\\ppo\\MovementAlly18311009\\MovementAlly18311009-8832.onnx",
+                "reward": null,
+                "creation_time": 1696851357.7974863,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MovementAlly18311009\\MovementAlly18311009-8832.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 8832,
+            "file_path": "results\\ppo\\MovementAlly18311009.onnx",
+            "reward": null,
+            "creation_time": 1696851357.7974863,
+            "auxillary_file_paths": [
+                "results\\ppo\\MovementAlly18311009\\MovementAlly18311009-8832.pt"
             ]
         }
     }

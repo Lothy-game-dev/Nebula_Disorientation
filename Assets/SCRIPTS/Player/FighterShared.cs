@@ -18,6 +18,7 @@ public class FighterShared : MonoBehaviour
     public float BarrierRegenAmount;
     public float BarrierRegenDelay;
     public GameObject Barrier;
+    public GameObject BarrierBreak;
     public GameObject Explosion;
     private float BarrierEffectDelay;
     // Thermal Stats
@@ -609,8 +610,16 @@ public class FighterShared : MonoBehaviour
             }
         } else
         {
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, transform.position, Quaternion.identity);
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
             if (CurrentHP>damage) 
-            CurrentHP -= damage;
+                CurrentHP -= damage;
             else
             {
                 if (DamageSource!=null)

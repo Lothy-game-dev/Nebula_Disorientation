@@ -95,7 +95,7 @@ public class EnemyShared : FighterShared
         if (doneInitWeapon)
         {
             DelayTimer -= Time.deltaTime;
-            /*if (LeftWeapon!=null)
+           /* if (LeftWeapon!=null)
             {
                 if (DelayTimer<=0f && !LeftFire)
                 {
