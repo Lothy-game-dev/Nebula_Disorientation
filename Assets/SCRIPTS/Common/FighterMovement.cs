@@ -6,6 +6,8 @@ public class FighterMovement : MonoBehaviour
 {
     #region ComponentVariables
     private FighterShared fs;
+    private EnemyShared es;
+    private AlliesShared als;
     #endregion
     #region InitializeVariables
     public GameObject FireEffect;
@@ -37,6 +39,8 @@ public class FighterMovement : MonoBehaviour
     {
         // Initialize variables
         fs = GetComponent<FighterShared>();
+        als = GetComponent<AlliesShared>();
+        es = GetComponent<EnemyShared>();
         BackFireInitScale = backFire.transform.localScale.x;
         Movable = true;
         CurrentRotateAngle = 0;
@@ -236,6 +240,11 @@ public class FighterMovement : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         transform.position = new Vector3(Position.x, Position.y, transform.position.z);
         CurrentSpeed = 0f;
+    }
+
+    private void CheckOnMoving()
+    {
+
     }
     #endregion
 }
