@@ -41,7 +41,7 @@ public class SpawnWarship : MonoBehaviour
     // Group all function that serve the same algorithm
     public void SpawnWS(Vector2 randomPos)
     {
-        Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(1);
+        Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(11);
         for (int i = 0; i < WarshipModel.transform.childCount; i++)
         {
             if (WarshipModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["WarshipName"].ToString().Replace("-","").ToLower())

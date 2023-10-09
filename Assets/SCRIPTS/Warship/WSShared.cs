@@ -37,7 +37,7 @@ public class WSShared : MonoBehaviour
     private List<GameObject> MainWps;
     private float FindTargetTimer;
     private bool doneInitWeapon;
-    private float DelayTimer;
+    private float[] DelayTimer;
     private float DelayTimer1;
     private float ChargingTime;
     #endregion
@@ -54,16 +54,20 @@ public class WSShared : MonoBehaviour
     {
         if (doneInitWeapon)
         {
-            DelayTimer -= Time.deltaTime;
+            Debug.Log(MainWps.Count);
             for (int i = 0; i < MainWps.Count; i++)
             {
+                DelayTimer[i] -= Time.deltaTime;
+                Debug.Log("Time" + DelayTimer[i] + "No" + i );
                 if (MainWps[i] != null)
                 {
-                    if (DelayTimer <= 0f)
+                    Debug.Log("hello world1");
+                    if (DelayTimer[i] <= 0f)
                     {
-                        MainWps[i].GetComponent<Weapons>().isCharging = true; 
+                        Debug.Log("hello world");
+                        MainWps[i].GetComponent<Weapons>().isCharging = true;
                         MainWps[i].GetComponent<Weapons>().Fireable = true;
-                        DelayTimer = 5f;
+                        DelayTimer[i] = 5f;
                     }
                 }
             }
@@ -73,7 +77,7 @@ public class WSShared : MonoBehaviour
             {
                 if (SpWps[i] != null)
                 {                 
-                   // SpWps[i].GetComponent<Weapons>().WSShootBullet();                  
+                   SpWps[i].GetComponent<Weapons>().WSShootBullet();                  
                 }
             }
         }
@@ -176,13 +180,15 @@ public class WSShared : MonoBehaviour
 
         //BackFire
         List<Vector2> BFpos = model.GetComponent<WarshipModelShared>().BackFirePos;
-        Vector2 BFScale = model.GetComponent<WarshipModelShared>().BackFireScale;
+        List<Vector2> BFScale = model.GetComponent<WarshipModelShared>().BackFireScale;
         for (int i = 0; i < BFpos.Count; i++)
         {
+            BackFire.transform.localScale = BFScale[i];
             GameObject game = Instantiate(BackFire, new Vector3(transform.position.x+BFpos[i].x, transform.position.y+BFpos[i].y, BackFire.transform.position.z), Quaternion.identity);
             game.transform.SetParent(gameObject.transform);
             game.transform.Rotate(new Vector3(0, 0, 180));
-            game.name = "BackFire" + i;
+            game.name = "BackFire " + i;
+            game.GetComponent<SpriteRenderer>().sortingOrder = model.GetComponent<WarshipModelShared>().BackFireSortingOrder[i];
             game.SetActive(false);
             WM.BackFires.Add(game);
         }
@@ -210,7 +216,7 @@ public class WSShared : MonoBehaviour
                 {
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos[i].x, transform.position.y + WPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
-                    main.transform.localScale = new Vector2(1f, 1f);
+                    main.transform.localScale = new Vector2(0.5f, 0.5f);
                     main.SetActive(true);
 
                     Weapons wp = main.GetComponent<Weapons>();
@@ -226,6 +232,8 @@ public class WSShared : MonoBehaviour
                 }
             }           
         }
+
+        DelayTimer = new float[MainWps.Count];
 
         //Sup Weapon
         if (data["SupWeapon"].ToString().Contains("|"))

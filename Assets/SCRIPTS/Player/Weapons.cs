@@ -38,6 +38,7 @@ public class Weapons : MonoBehaviour
     public GameObject WeaponPoint;
     public float WeaponROTSpeed;
     public GameObject Charging;
+    public GameObject ChargingPosition;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -228,8 +229,11 @@ public class Weapons : MonoBehaviour
                 {
                     angle = 0;
                     isFire = true;
-                }      
-                transform.RotateAround(WeaponPoint.transform.position, new Vector3(0,0, -DirMov), WeaponROTSpeed * angle / 10);
+                } else
+                {
+                    if (!isMainWeapon) isFire = false;
+                }  
+                transform.RotateAround(WeaponPoint.transform.position, new Vector3(0,0, -DirMov), 2 * WeaponROTSpeed);
                 CurrentAngle = angle;
             }
         }
@@ -285,6 +289,7 @@ public class Weapons : MonoBehaviour
 
         if (Fireable && isMainWeapon && isFire)
         {
+            Debug.Log("Fire");
             if (Aim == null)
             {
                 EndSound();
@@ -309,12 +314,14 @@ public class Weapons : MonoBehaviour
                         Fireable = false;
                         BeamTimer = 0f;
                         ChargeTimer = 0f;
+                        WeaponROTSpeed *= 2;
                     }
                     else
                     {
                         if (BeamTimer == 0)
                         {
                             LaserBeamSound();
+                            WeaponROTSpeed /= 2;
                         }
                         FireWSLaserBeam();
                         FireTimer = 1 / 14;                   
@@ -534,8 +541,7 @@ public class Weapons : MonoBehaviour
             EndSound();
         } else
         {
-            Debug.Log(FireTimer);
-            if (FireTimer <= 0f && Fireable && !isMainWeapon)
+            if (FireTimer <= 0f && isFire && !isMainWeapon)
             {
                 if (!IsThermalType)
                 {
@@ -608,11 +614,14 @@ public class Weapons : MonoBehaviour
             bul.EnemyLayer = EnemyLayer;
             orbFire.SetActive(true);
             GenerateEffect();
-            // Sound
-            if (!isOverheatted) ThermalSound();
-            // Overheat
-            currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
-            OverheatDecreaseTimer = OverheatResetTimer;
+            if (Fighter.GetComponent<FighterShared>() != null)
+            {
+                // Sound
+                if (!isOverheatted) ThermalSound();
+                // Overheat
+                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
+                OverheatDecreaseTimer = OverheatResetTimer;
+            }
         }
     }
 
@@ -631,7 +640,8 @@ public class Weapons : MonoBehaviour
 
     public void ChargingWSLaserBeam()
     {
-        GameObject charging = Instantiate(Charging, ShootingPosition.transform.position, Quaternion.identity);
+        
+        GameObject charging = Instantiate(Charging, ChargingPosition.transform.position, Quaternion.identity);
         charging.transform.SetParent(gameObject.transform);
         charging.SetActive(true);
         Destroy(charging, ChargingTime);
