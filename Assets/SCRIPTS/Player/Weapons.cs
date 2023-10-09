@@ -79,6 +79,7 @@ public class Weapons : MonoBehaviour
     private float ChargeTimer;
     private int DirMov;
     public bool isCharging;
+    public bool isSpaceStation;
 
     #endregion
     #region Start & Update
@@ -234,6 +235,29 @@ public class Weapons : MonoBehaviour
                     if (!isMainWeapon) isFire = false;
                 }  
                 transform.RotateAround(WeaponPoint.transform.position, new Vector3(0,0, -DirMov), 2 * WeaponROTSpeed);
+                CurrentAngle = angle;
+            }
+        }
+
+        // Check rotate Weapon for SpaceStation
+        if (tracking && isSpaceStation)
+        {
+            if (Aim != null)
+            {
+                Vector3 pos = ShootingPosition.transform.position - RotatePoint.transform.position;
+                Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
+                float angle = Vector3.Angle(ToEnemy, pos);
+                CheckIsUpOrDownMovement();
+                if (angle < 5)
+                {
+                    angle = 0;
+                    isFire = true;
+                }
+                else
+                {
+                    if (!isMainWeapon) isFire = false;
+                }
+                transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
                 CurrentAngle = angle;
             }
         }
@@ -635,7 +659,6 @@ public class Weapons : MonoBehaviour
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
         laserbeam.SetActive(true);
-        Debug.Log(laserbeam);
     }
 
     public void ChargingWSLaserBeam()

@@ -2363,6 +2363,33 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public Dictionary<string, object> GetSpaceStationById(int id)
+    {
+        Dictionary<string, object> WSDict = new Dictionary<string, object>();
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from SpaceStation Where SSId = " + id;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            WSDict.Add("SpaceStationID", dataReader.GetInt32(0).ToString());
+            WSDict.Add("SpaceStationName", dataReader.GetString(1));
+            WSDict.Add("SpaceStationEffect", dataReader.GetString(3));
+            WSDict.Add("Tier", dataReader.GetString(4));
+            WSDict.Add("MainWeapon", dataReader.GetString(5));
+            WSDict.Add("SupWeapon", dataReader.GetString(6));
+            WSDict.Add("AuraRange", dataReader.GetString(7));
+            WSDict.Add("BaseHP", dataReader.GetString(8));
+
+        }
+        if (!check) return null;
+        return WSDict;
+    }
     #endregion
     #region Access Damage Element
     public List<List<string>> GetAllDMGElement()
