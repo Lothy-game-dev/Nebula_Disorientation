@@ -70,6 +70,7 @@
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRenameButton.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationShared.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
+    <Compile Include="Assets\SCRIPTS\Warship\SpawnEnemyWarship.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutGoButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECPlanets.cs" />
@@ -148,7 +150,6 @@
     <Compile Include="Assets\SCRIPTS\PowerEffect\Barrier.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumablePopUp.cs" />
-    <Compile Include="Assets\SCRIPTS\Warship\SpawnWarship.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnAllyWarship.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
@@ -203,11 +204,13 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneMissionText.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceStation\AllySpaceStationSpawn.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\PowerController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TutorialButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotNameBar.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\Powers.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuBackButton.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationModelShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBarBackground.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\RocketBurst.cs" />
