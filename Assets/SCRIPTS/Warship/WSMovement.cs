@@ -30,7 +30,7 @@ public class WSMovement : MonoBehaviour
     public int RotateDirection;
     public float LimitSpeedScale;
     public List<GameObject> BackFires;
-    public float BackFireInitScale;
+    public List<Vector2> BackFireInitScale;
     public List<Vector2> BackFireInitPos;
     public AudioClip Sound;
     private List<Vector3> DistanceList;
@@ -43,7 +43,10 @@ public class WSMovement : MonoBehaviour
         CurrentRotateAngle = 0;
         if (BackFires.Count > 0)
         {
-            BackFireInitScale = BackFires[0].transform.localScale.x;
+            for (int i = 0; i < BackFires.Count; i++)
+            {
+                BackFireInitScale.Add(BackFires[i].transform.localScale);
+            }
         }
         aus = GetComponent<AudioSource>();
         aus.spatialBlend = 1;
@@ -129,12 +132,12 @@ public class WSMovement : MonoBehaviour
                     BackFires[i].SetActive(true);
                 }
                 BackFires[i].transform.localScale =
-                    new Vector3(CurrentSpeed * BackFireInitScale,
-                    CurrentSpeed * BackFireInitScale,
+                    new Vector3(CurrentSpeed * BackFireInitScale[i].x,
+                    CurrentSpeed * BackFireInitScale[i].y,
                     BackFires[i].transform.localScale.z);
                 Vector3 distance = (BackFires[i].transform.position - transform.position);
                 distance = distance / distance.magnitude * DistanceList[i].magnitude;
-                BackFires[i].transform.position = transform.position + distance * (0.9f + 0.1f * (CurrentSpeed) / MovingSpeed);
+                BackFires[i].transform.position = transform.position + distance * (0.8f + 0.2f * (CurrentSpeed) / MovingSpeed);
 
             }
             else

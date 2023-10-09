@@ -149,6 +149,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumablePopUp.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnWarship.cs" />
+    <Compile Include="Assets\SCRIPTS\Warship\SpawnAllyWarship.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />

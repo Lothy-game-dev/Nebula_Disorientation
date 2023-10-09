@@ -58,12 +58,14 @@ public class WSShared : MonoBehaviour
             for (int i = 0; i < MainWps.Count; i++)
             {
                 DelayTimer[i] -= Time.deltaTime;
+                Debug.Log("Time" + DelayTimer[i] + "No" + i );
                 if (MainWps[i] != null)
                 {
+                    Debug.Log("hello world1");
                     if (DelayTimer[i] <= 0f)
                     {
-                        Debug.Log(MainWps[i] + "" + i);
-                        MainWps[i].GetComponent<Weapons>().isCharging = true; 
+                        Debug.Log("hello world");
+                        MainWps[i].GetComponent<Weapons>().isCharging = true;
                         MainWps[i].GetComponent<Weapons>().Fireable = true;
                         DelayTimer[i] = 5f;
                     }
@@ -178,14 +180,15 @@ public class WSShared : MonoBehaviour
 
         //BackFire
         List<Vector2> BFpos = model.GetComponent<WarshipModelShared>().BackFirePos;
-        Vector2 BFScale = model.GetComponent<WarshipModelShared>().BackFireScale;
-        BackFire.transform.localScale = BFScale;
+        List<Vector2> BFScale = model.GetComponent<WarshipModelShared>().BackFireScale;
         for (int i = 0; i < BFpos.Count; i++)
         {
+            BackFire.transform.localScale = BFScale[i];
             GameObject game = Instantiate(BackFire, new Vector3(transform.position.x+BFpos[i].x, transform.position.y+BFpos[i].y, BackFire.transform.position.z), Quaternion.identity);
             game.transform.SetParent(gameObject.transform);
             game.transform.Rotate(new Vector3(0, 0, 180));
-            game.name = "BackFire" + i;
+            game.name = "BackFire " + i;
+            game.GetComponent<SpriteRenderer>().sortingOrder = model.GetComponent<WarshipModelShared>().BackFireSortingOrder[i];
             game.SetActive(false);
             WM.BackFires.Add(game);
         }
@@ -204,7 +207,6 @@ public class WSShared : MonoBehaviour
 
         MainWps = new List<GameObject>();
         List<Vector2> WPPos = model.GetComponent<WarshipModelShared>().MainWeaponPos;
-        Debug.Log(MainWeapon.Count);
         for (int i = 0; i < MainWeapon.Count; i++)
         {
             for (int j = 0; j < Weapons.transform.childCount; j++)

@@ -38,6 +38,7 @@ public class Weapons : MonoBehaviour
     public GameObject WeaponPoint;
     public float WeaponROTSpeed;
     public GameObject Charging;
+    public GameObject ChargingPosition;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -288,6 +289,7 @@ public class Weapons : MonoBehaviour
 
         if (Fireable && isMainWeapon && isFire)
         {
+            Debug.Log("Fire");
             if (Aim == null)
             {
                 EndSound();
@@ -638,7 +640,8 @@ public class Weapons : MonoBehaviour
 
     public void ChargingWSLaserBeam()
     {
-        GameObject charging = Instantiate(Charging, ShootingPosition.transform.position, Quaternion.identity);
+        
+        GameObject charging = Instantiate(Charging, ChargingPosition.transform.position, Quaternion.identity);
         charging.transform.SetParent(gameObject.transform);
         charging.SetActive(true);
         Destroy(charging, ChargingTime);
