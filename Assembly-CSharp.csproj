@@ -79,6 +79,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\WingShield.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\TargetCursor.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneHazardEnvironment.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalItem.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
     <Compile Include="Assets\SCRIPTS\Player\Weapons.cs" />

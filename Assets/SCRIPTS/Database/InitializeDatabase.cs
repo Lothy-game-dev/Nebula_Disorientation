@@ -380,6 +380,16 @@ public class InitializeDatabase : MonoBehaviour
                 "PositionLimitTopLeft TEXT NOT NULL," +
                 "PositionLimitBottomRight TEXT NOT NULL," +
                 "PRIMARY KEY(PositionID AUTOINCREMENT) );" +
+            // Table for HazardEnvironment
+            "CREATE TABLE IF NOT EXISTS HazardEnvironment" +
+                "(HazardID INTEGER," +
+                "HazardCode TEXT NOT NULL," +
+                "HazardName TEXT NOT NULL," +
+                "HazardColor TEXT NOT NULL," +
+                "HazardDescription TEXT NOT NULL," +
+                "HazardChance INTEGER NOT NULL," +
+                "HazardStartSpawning INTEGER NOT NULL," +
+                "PRIMARY KEY(HazardID AUTOINCREMENT) );" +
                 "";
         // Initialize Data
         // ArsenalWeapon
@@ -692,6 +702,14 @@ public class InitializeDatabase : MonoBehaviour
             "(18, 'AEE', '(3500,-3500)', '(4900,-4900)')," +
             "(19, 'EES', '(-4900,-4900)|(3500,4900)', '(-3500,-3500)|(4900,3500)')," +
             "(20, 'EAS', '(-4900,3500)|(-3500,4900)', '(-3500,2100)|(-2100,3500)'); ";
+        // Insert Hazard Environment
+        string HazardEnvironment = "INSERT INTO HazardEnvironment VALUES " +
+            "(1, 'N', 'None', '#ffffff', 'Ordinary Environment', 65, 0)," +
+            "(2, 'SR', 'Unknown Asteroids', '#2898bd', 'Leftovers of destroyed planets around the galaxies', 10, 11)," +
+            "(3, 'O', 'Overloaded', '#fea362', 'Unexpected Heat from unknown sources', 10, 31)," +
+            "(4, 'GR', 'Gamma Ray Burst', '#22a06b', 'Deadly burst that intensively affects Fighter’s survival abilities', 5, 51)," +
+            "(5, 'RS', 'Rogue Star', '#ae2e24', 'Random comets wander the nebula', 5, 71)," +
+            "(6, 'ND', 'Nebula Disorientation', '#5e4db2', 'One of the Origins of the ongoing galaxy war', 5, 101);";
     // Initialize Data Success
     string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
@@ -710,7 +728,7 @@ public class InitializeDatabase : MonoBehaviour
             RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel
             + LOTWCards + DailyMissions + Option + Tutorial + DElement 
             + Attribute + Enemy + Warship + SpaceStation + Allies + FighterGroup
-            + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition;
+            + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition + HazardEnvironment;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable
