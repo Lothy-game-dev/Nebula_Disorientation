@@ -35,6 +35,7 @@ public class NanoBullet : BulletShared
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravelPenetrate(PenetrateDistance);
         CalculatePenetrateDamage();
+        CheckHitAsteroidAndRock();
     }
     #endregion
     #region Function group 1

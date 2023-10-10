@@ -43,7 +43,7 @@ public class SpaceZoneBackground : MonoBehaviour
     {
         if (n < BGTemplate.transform.childCount)
         {
-            TemplateChosen = BGTemplate.transform.GetChild(n).gameObject;
+            TemplateChosen = BGTemplate.transform.GetChild(n).GetChild(Random.Range(0, BGTemplate.transform.GetChild(n).childCount)).gameObject;
             for (int j=0;j<transform.childCount;j++)
             {
                 GameObject center = transform.GetChild(j).gameObject;

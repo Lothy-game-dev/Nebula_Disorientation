@@ -611,7 +611,7 @@ public class Weapons : MonoBehaviour
         GenerateEffect();
         if (Fighter.GetComponent<FighterShared>() != null) 
         // Increase overheat bar for each shot, increasing with themral status overloadded
-        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
+        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardOverheat;
         // Set reset timer
         OverheatDecreaseTimer = OverheatResetTimer;
         // Create sound
@@ -642,7 +642,7 @@ public class Weapons : MonoBehaviour
                 // Sound
                 if (!isOverheatted) ThermalSound();
                 // Overheat
-                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale);
+                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardOverheat;
                 OverheatDecreaseTimer = OverheatResetTimer;
             }
         }

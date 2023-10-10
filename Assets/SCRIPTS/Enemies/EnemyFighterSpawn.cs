@@ -76,7 +76,7 @@ public class EnemyFighterSpawn : MonoBehaviour
             StartCoroutine(SpawnEnemyByTime());
         } else
         {
-            for (int i = 0; i < EnemySpawnID.Length; i++)
+            for (int i = 0; i < 1/*EnemySpawnID.Length*/; i++)
             {
                 GameObject SpawnEffect = Instantiate(SpawnHole, EnemySpawnPosition[i], Quaternion.identity);
                 SpawnEffect.SetActive(true);
