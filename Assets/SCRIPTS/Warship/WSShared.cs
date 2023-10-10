@@ -58,13 +58,10 @@ public class WSShared : MonoBehaviour
             for (int i = 0; i < MainWps.Count; i++)
             {
                 DelayTimer[i] -= Time.deltaTime;
-                Debug.Log("Time" + DelayTimer[i] + "No" + i );
                 if (MainWps[i] != null)
-                {
-                    Debug.Log("hello world1");
+                {                  
                     if (DelayTimer[i] <= 0f)
-                    {
-                        Debug.Log("hello world");
+                    {                     
                         MainWps[i].GetComponent<Weapons>().isCharging = true;
                         MainWps[i].GetComponent<Weapons>().Fireable = true;
                         DelayTimer[i] = 5f;
@@ -147,7 +144,7 @@ public class WSShared : MonoBehaviour
             }
 
         }
-        if (LeftTarget == null || RightTarget == null)
+        /*if (LeftTarget == null || RightTarget == null)
         {
             FindTargetTimer -= Time.deltaTime;
         }
@@ -162,7 +159,7 @@ public class WSShared : MonoBehaviour
             {
                 TargetRightEnemy();
             }
-        }
+        }*/
     }
     #endregion
     #region Init data
@@ -251,7 +248,7 @@ public class WSShared : MonoBehaviour
 
         List<Vector2> SupWPPos = model.GetComponent<WarshipModelShared>().SupWeaponPos;
         //TargetLeftEnemy(1000);
-        TargetRightEnemy();
+        /*TargetRightEnemy();*/
         SpWps = new List<GameObject>();
         for (int i = 0; i < SupWeapon.Count; i++)
         {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnWarship : MonoBehaviour
+public class SpawnEnemyWarship : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -14,6 +14,7 @@ public class SpawnWarship : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject WarshipModel;
     public GameObject WSTemplate;
+    public int WarshipID;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -41,7 +42,7 @@ public class SpawnWarship : MonoBehaviour
     // Group all function that serve the same algorithm
     public void SpawnWS(Vector2 randomPos)
     {
-        Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(11);
+        Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(WarshipID);
         for (int i = 0; i < WarshipModel.transform.childCount; i++)
         {
             if (WarshipModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["WarshipName"].ToString().Replace("-","").ToLower())
