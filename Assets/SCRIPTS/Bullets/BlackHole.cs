@@ -56,7 +56,7 @@ public class BlackHole : MonoBehaviour
         // Call function and timer only if possible
         transform.Rotate(new Vector3(0, 0, 1));
         // Deal dmg to all hit layer within range
-        DealDamageToLayerInRange(HitLayer);
+        /*DealDamageToLayerInRange(HitLayer);*/
         // Reset hit timer
         if (ResetHitTimer>0f)
         {
@@ -80,6 +80,10 @@ public class BlackHole : MonoBehaviour
         } 
         else if (distance <= centerRadius)
         {
+            if (distance < centerRadius / 4f)
+            {
+                return new Vector2(0, 0);
+            }
             // Inside center radius: Vector pulling at maximum power
             Vector2 vectorDis = transform.position - go.transform.position;
             float ForceX = BasePullingForce * vectorDis.x / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);

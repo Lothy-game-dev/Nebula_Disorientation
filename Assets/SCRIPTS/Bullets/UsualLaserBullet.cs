@@ -35,6 +35,7 @@ public class UsualLaserBullet : BulletShared
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckDistanceTravel();
         CalculateDamage();
+        CheckHitAsteroidAndRock();
     }
     #endregion
     #region Function group 1

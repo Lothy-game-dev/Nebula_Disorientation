@@ -41,6 +41,7 @@ public class FighterMovement : MonoBehaviour
     public float PreventReachLimitTimer;
     private int InAttackRangeCount;
     private float LimitDelay;
+    public LayerMask HazardMask;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -109,8 +110,7 @@ public class FighterMovement : MonoBehaviour
         {
             GetAwayFromLimit();
         }
-
-
+        CheckForHazard();
     }
     private void FixedUpdate()
     {
@@ -894,6 +894,59 @@ public class FighterMovement : MonoBehaviour
             }
         }
         return DirMov;
+    }
+    #endregion
+    #region Check Hazard Environment
+    private void CheckForHazard()
+    {
+        if (FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID==2 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID==5)
+        {
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (HeadObject.transform.position - transform.position).magnitude, HazardMask);
+            if (cols.Length>0)
+            {
+                foreach (var col in cols)
+                {
+                    if (col.name.Contains("SR"))
+                    {
+                        if (als!=null)
+                        {
+                            als.ReceiveDamage(als.MaxHP * 10 /100, col.gameObject);
+                            als.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f);
+                            if (col.GetComponent<SpaceZoneAsteroid>()!=null)
+                            {
+                                col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
+                            }
+                        } else if (es!=null)
+                        {
+                            es.ReceiveDamage(es.MaxHP * 10 / 100, col.gameObject);
+                            es.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f);
+                            if (col.GetComponent<SpaceZoneAsteroid>() != null)
+                            {
+                                col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
+                            }
+                        }
+                        CurrentSpeed = 0;
+                    }
+                    else if (col.name.Contains("RS"))
+                    {
+                        if (als != null && !als.alreadyHitByComet)
+                        {
+                            als.HitByCometDelay = 5f;
+                            als.alreadyHitByComet = true;
+                            als.ReceiveDamage(als.MaxHP * 50 / 100, col.gameObject);
+                            als.ReceiveForce(transform.position - col.transform.position, 10000f, 1f);
+                        }
+                        else if (es != null && !es.alreadyHitByComet)
+                        {
+                            es.HitByCometDelay = 5f;
+                            es.alreadyHitByComet = true;
+                            es.ReceiveDamage(es.MaxHP * 50 / 100, col.gameObject);
+                            es.ReceiveForce(transform.position - col.transform.position, 10000f, 1f);
+                        }
+                    }
+                }
+            }
+        }
     }
     #endregion
 }

@@ -64,6 +64,11 @@ public class FighterShared : MonoBehaviour
     // Bounty
     private GameObject Killer;
     private bool alreadyDestroy;
+    public Vector2 PushForce;
+    public float ReceiveForceTime;
+    public float ReceiveForceDelay;
+    public bool alreadyHitByComet;
+    public float HitByCometDelay;
     #endregion
     #region Shared Functions
     // Initialize
@@ -94,6 +99,14 @@ public class FighterShared : MonoBehaviour
         }
         CheckInsideBlackhole();
         CheckSpecialEffectStatus();
+        if (HitByCometDelay <= 0f)
+        {
+            alreadyHitByComet = false;
+        }
+        else 
+        {
+            HitByCometDelay -= Time.deltaTime;
+        }
     }
     // Check Barrier
     public void CheckBarrierAndHealth()
@@ -361,7 +374,7 @@ public class FighterShared : MonoBehaviour
     // Receive Burn Damage
     public void ReceiveBurnedDamage(float scale)
     {
-        ReceiveDamage(MaxHP * scale * NanoTempScale * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
+        ReceiveDamage(MaxHP * scale * NanoTempScale * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardThermalBurnDmgScale * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
     }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
@@ -577,13 +590,13 @@ public class FighterShared : MonoBehaviour
     #region Calculate Damage Received
     public void ReceiveDamage(float damage, GameObject DamageSource)
     {
-        damage = damage * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
-        if (CurrentBarrier>0)
+        damage = damage * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardGammaRayBurstScale * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
+        if (CurrentBarrier > 0)
         {
-            if (CurrentBarrier>damage)
+            if (CurrentBarrier > damage)
             {
                 CurrentBarrier -= damage;
-                if (BarrierEffectDelay<=0f)
+                if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
                     GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
@@ -593,8 +606,10 @@ public class FighterShared : MonoBehaviour
                 }
                 BarrierRegenTimer = 10f;
                 BarrierRegenAmount = 500f;
-            } else
+            }
+            else
             {
+                float AfterDamage = damage - CurrentBarrier;
                 CurrentBarrier = 0;
                 if (BarrierEffectDelay <= 0f)
                 {
@@ -606,9 +621,10 @@ public class FighterShared : MonoBehaviour
                 }
                 BarrierRegenTimer = 20f;
                 BarrierRegenAmount = 250f;
-                CurrentHP -= (damage - CurrentBarrier);
+                CurrentHP -= AfterDamage;
             }
-        } else
+        }
+        else
         {
             if (BarrierEffectDelay <= 0f)
             {
@@ -618,11 +634,11 @@ public class FighterShared : MonoBehaviour
                 BRBreak.transform.SetParent(transform);
                 Destroy(BRBreak, 0.5f);
             }
-            if (CurrentHP>damage) 
+            if (CurrentHP > damage)
                 CurrentHP -= damage;
             else
             {
-                if (DamageSource!=null)
+                if (DamageSource != null)
                 {
                     if (DamageSource.GetComponent<BulletShared>() != null)
                     {
@@ -637,7 +653,7 @@ public class FighterShared : MonoBehaviour
                         GetComponent<EnemyShared>().AddBounty();
                     }
                 }
-                CurrentHP = 0;        
+                CurrentHP = 0;
             }
         }
     }
@@ -646,6 +662,35 @@ public class FighterShared : MonoBehaviour
     public void ReceiveHealing(float HealAmount)
     {
         CurrentHP += HealAmount;
+    }
+    #endregion
+    #region Push
+
+    public void ReceiveForce(Vector2 force, float strength, float time)
+    {
+        StartCoroutine(ApplyForce(force, strength, time));
+    }
+
+    private IEnumerator ApplyForce(Vector2 force, float strength, float time)
+    {
+        if (time<=0.5f)
+        {
+            int n = 10;
+            for (int i = 0; i < n; i++)
+            {
+                GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n / 2) * n / 2) * (n - n / 2 + n - 1 - i)), ForceMode2D.Impulse);
+                yield return new WaitForSeconds(time / n);
+            }
+        } else
+        {
+            int n = 20;
+            for (int i = 0; i < n; i++)
+            {
+                GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n/2)*n/2) * (n - n/2 + n - 1 - i)), ForceMode2D.Impulse);
+                yield return new WaitForSeconds(time / n);
+            }
+        }
+
     }
     #endregion
 }

@@ -43,7 +43,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public void SpawnAlly()
     {
         Allies = new List<GameObject>();
-        for (int i = 0; i < AllySpawnID.Length; i++)
+        for (int i = 0; i <0/* AllySpawnID.Length*/; i++)
         {
             StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f)));
         }

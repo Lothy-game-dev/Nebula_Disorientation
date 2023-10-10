@@ -468,6 +468,25 @@ public class BulletShared : MonoBehaviour
         }
     }
 
+    public void CheckHitAsteroidAndRock()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, HitBox, 1024);
+        foreach (var col in cols)
+        {
+            if (col.GetComponent<SpaceZoneAsteroid>()!=null)
+            {
+                col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, Speed);
+                Destroy(gameObject);
+                break;
+            } else if (col.GetComponent<SpaceZoneStar>()!=null)
+            {
+                col.GetComponent<SpaceZoneStar>().currentHP -= CalculateFinalDamage(RealDamage, false, null);
+                Destroy(gameObject);
+                break;
+            }
+        }
+    }
+
     // Create black hole
     public void CreateBlackHole(GameObject BlackHole, float radius, float timer, float pullingForce)
     {
@@ -665,6 +684,11 @@ public class BulletShared : MonoBehaviour
     private float CalculateFinalDamage(float InitDamage, bool isThermal, GameObject enemy)
     {
         // Not Done, will be added with LOTW card later
+        if (enemy!=null && enemy.GetComponent<FighterShared>()!=null && GetComponent<UsualKineticBullet>()!=null)
+        {
+            Vector2 BulletVector = transform.position - transform.GetChild(0).position;
+            enemy.GetComponent<FighterShared>().ReceiveForce(BulletVector / BulletVector.magnitude, 1000f, 0.1f);
+        }
         return InitDamage * WeaponDamageModScale;
     }
 

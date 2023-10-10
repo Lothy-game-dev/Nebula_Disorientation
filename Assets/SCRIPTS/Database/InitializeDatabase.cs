@@ -389,6 +389,7 @@ public class InitializeDatabase : MonoBehaviour
                 "HazardDescription TEXT NOT NULL," +
                 "HazardChance INTEGER NOT NULL," +
                 "HazardStartSpawning INTEGER NOT NULL," +
+                "HazardBackground TEXT," +
                 "PRIMARY KEY(HazardID AUTOINCREMENT) );" +
                 "";
         // Initialize Data
@@ -645,16 +646,16 @@ public class InitializeDatabase : MonoBehaviour
             "(10, 'B2350', '', '12', '14', '', '12', '14');";
         // Insert Space Zone Variants
         string SpaceZoneVariants = "INSERT INTO SpaceZoneVariants VALUES " +
-            "(1, 1, 2, '1A,1B', '#faa53d')," +
-            "(2, 2, 3, '2A,2B', '#1d9aaa')," +
-            "(3, 3, 2, '1A,1B', '#faa53d')," +
-            "(4, 4, 3, '2A,2B', '#1d9aaa')," +
-            "(5, 5, 2, '1A,1B', '#faa53d')," +
-            "(6, 6, 3, '2A,2B', '#1d9aaa')," +
-            "(7, 7, 2, '1A,1B', '#faa53d')," +
-            "(8, 8, 2, '3', '#ae2a19')," +
-            "(9, 9, 2, '3', '#ae2a19')," +
-            "(10, 0, 2, '4', '#5e4db2');";
+            "(1, 1, 2, 'AST', '#faa53d')," +
+            "(2, 2, 3, 'DEF', '#1d9aaa')," +
+            "(3, 3, 2, 'AST', '#faa53d')," +
+            "(4, 4, 3, 'DEF', '#1d9aaa')," +
+            "(5, 5, 2, 'AST', '#faa53d')," +
+            "(6, 6, 3, 'DEF', '#1d9aaa')," +
+            "(7, 7, 2, 'AST', '#faa53d')," +
+            "(8, 8, 2, 'ONS', '#ae2a19')," +
+            "(9, 9, 2, 'ONS', '#ae2a19')," +
+            "(10, 0, 2, 'BOS', '#5e4db2');";
         // Insert SpaceZoneTemplate
         string SpaceZoneTemplate = "INSERT INTO SpaceZoneTemplate VALUES " +
             "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|150', '10-0-0', '10-0-0', null, null, null, null, null)," +
@@ -704,12 +705,12 @@ public class InitializeDatabase : MonoBehaviour
             "(20, 'EAS', '(-4900,3500)|(-3500,4900)', '(-3500,2100)|(-2100,3500)'); ";
         // Insert Hazard Environment
         string HazardEnvironment = "INSERT INTO HazardEnvironment VALUES " +
-            "(1, 'N', 'None', '#ffffff', 'Ordinary Environment', 65, 0)," +
-            "(2, 'SR', 'Unknown Asteroids', '#2898bd', 'Leftovers of destroyed planets around the galaxies', 10, 11)," +
-            "(3, 'O', 'Overloaded', '#fea362', 'Unexpected Heat from unknown sources', 10, 31)," +
-            "(4, 'GR', 'Gamma Ray Burst', '#22a06b', 'Deadly burst that intensively affects Fighter’s survival abilities', 5, 51)," +
-            "(5, 'RS', 'Rogue Star', '#ae2e24', 'Random comets wander the nebula', 5, 71)," +
-            "(6, 'ND', 'Nebula Disorientation', '#5e4db2', 'One of the Origins of the ongoing galaxy war', 5, 101);";
+            "(1, 'N', 'None', '#ffffff', 'Ordinary Environment', 65, 0, '')," +
+            "(2, 'SR', 'Unknown Asteroids', '#2898bd', 'Leftovers of destroyed planets around the galaxies', 10, 11, '')," +
+            "(3, 'O', 'Overloaded', '#fea362', 'Unexpected Heat from unknown sources', 10, 31, 'OVL')," +
+            "(4, 'GR', 'Gamma Ray Burst', '#22a06b', 'Deadly burst that intensively affects Fighter’s survival abilities', 5, 51, 'GAM')," +
+            "(5, 'RS', 'Rogue Star', '#ae2e24', 'Random comets wander the nebula', 5, 71, '')," +
+            "(6, 'ND', 'Nebula Disorientation', '#5e4db2', 'One of the Origins of the ongoing galaxy war', 5, 101, 'NEB');";
     // Initialize Data Success
     string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
