@@ -12,13 +12,19 @@ public class WSShared : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-
+    public LayerMask MainWeaponTarget;
+    public LayerMask SupWeaponTarget;
+    public Animator Animation;
+    public GameObject Barrier;
+    public GameObject BarrierBreak;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public float CurrentHP;
     public float MaxHP;
+    public float CurrentBarrier;
+    public float MaxBarrier;
     public float BaseSpeed;
     public float RotationSpd;
     private Dictionary<string, object> WsStat;
@@ -40,6 +46,18 @@ public class WSShared : MonoBehaviour
     private float[] DelayTimer;
     private float DelayTimer1;
     private float ChargingTime;
+    private float SpawnTimer;
+    public GameObject AllyModel;
+    private GameObject ChosenModel;
+    public GameObject AllyTemplate;
+    private int[] FightersId;
+    private int Count;
+    private int IDCount;
+    private bool Spawned;
+    private float BarrierEffectDelay;
+    private float BarrierRegenTimer;
+    private float BarrierRegenAmount;
+    private float BarrierRegenDelay;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -47,6 +65,10 @@ public class WSShared : MonoBehaviour
     {
         // Initialize variables
         CurrentHP = MaxHP;
+        FightersId = new int[3] { 2, 3, 4 };
+        Count = 0;
+        IDCount = 0;
+        SpawnTimer = 10f;
     }
 
     // Update is called once per frame
@@ -54,11 +76,10 @@ public class WSShared : MonoBehaviour
     {
         if (doneInitWeapon)
         {
-            Debug.Log(MainWps.Count);
             for (int i = 0; i < MainWps.Count; i++)
             {
                 DelayTimer[i] -= Time.deltaTime;
-                if (MainWps[i] != null)
+                if (MainWps[i] != null && MainWps[i].GetComponent<Weapons>() != null)
                 {                  
                     if (DelayTimer[i] <= 0f)
                     {                     
@@ -120,10 +141,9 @@ public class WSShared : MonoBehaviour
 
             for (int i = 0; i < SpWps.Count; i++)
             {
-                if (SpWps[i] != null)
+                if (SpWps[i] != null && SpWps[i].GetComponent<Weapons>() != null)
                 {
                     SpWps[i].GetComponent<Weapons>().Aim = TargetLeftEnemy(SpWps[i]);
-                    Debug.Log(i + " " + TargetLeftEnemy(SpWps[i]));
                 }
                 /*if (RightWeapon != null)
                 {
@@ -133,14 +153,60 @@ public class WSShared : MonoBehaviour
 
             for (int i = 0; i < MainWps.Count; i++)
             {
-                if (MainWps[i] != null)
+                if (MainWps[i] != null && MainWps[i].GetComponent<Weapons>() != null)
                 {
-                    MainWps[i].GetComponent<Weapons>().Aim = LeftTarget;
+                    MainWps[i].GetComponent<Weapons>().Aim = TargetLeftEnemy(MainWps[i]);
                 }
                 /*if (RightWeapon != null)
                 {
                     RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
                 }*/
+            }
+
+        }
+        if (MainWps[0].GetComponent<Weapons>() == null)
+        {
+            SpawnTimer -= Time.deltaTime;
+            Animation = MainWps[0].GetComponent<Animator>();    
+            if (Spawned)
+            {
+                Animation.SetBool("isSpawn", false);
+                Spawned = false;
+            }
+            if (SpawnTimer < 0f)
+            {
+                Animation.SetBool("isSpawn", true);
+                SpawnFighter(FightersId[IDCount], Count);
+                Spawned = true;
+                IDCount++;
+                Count++;
+                SpawnTimer = 10f;
+                if (IDCount == 3)
+                {
+                    IDCount = 0;
+                }
+               
+            }
+        }
+
+        //Check barrier and regen barrier
+        BarrierRegenTimer -= Time.deltaTime;
+        BarrierRegenDelay -= Time.deltaTime;
+        BarrierEffectDelay -= Time.deltaTime;
+        if (BarrierRegenTimer <= 0f)
+        {
+            if (BarrierRegenDelay <= 0f && CurrentBarrier < MaxBarrier)
+            {
+                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
+                {
+                    CurrentBarrier += BarrierRegenAmount;
+                    BarrierRegenDelay = 1f;
+                }
+                else
+                {
+                    CurrentBarrier = MaxBarrier;
+                    BarrierRegenDelay = 1f;
+                }
             }
 
         }
@@ -160,6 +226,7 @@ public class WSShared : MonoBehaviour
                 TargetRightEnemy();
             }
         }*/
+
     }
     #endregion
     #region Init data
@@ -213,19 +280,26 @@ public class WSShared : MonoBehaviour
                 {
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos[i].x, transform.position.y + WPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
-                    main.transform.localScale = new Vector2(0.5f, 0.5f);
                     main.SetActive(true);
 
-                    Weapons wp = main.GetComponent<Weapons>();
-                    wp.Fighter = gameObject;
-                    wp.Aim = LeftTarget;
-                    wp.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
-                    wp.tracking = true;
-                    wp.isMainWeapon = true;
-                    wp.RotateLimitPositive = 180;
-                    wp.RotateLimitNegative = -180;
-
+                    if (MainWeapon[i] != "CarrierHatch")
+                    {
+                        main.transform.localScale = new Vector2(0.5f, 0.5f);
+                        Weapons wp = main.GetComponent<Weapons>();
+                        wp.Fighter = gameObject;
+                        wp.Aim = LeftTarget;
+                        wp.EnemyLayer = MainWeaponTarget;
+                        wp.tracking = true;
+                        wp.isMainWeapon = true;
+                        wp.RotateLimitPositive = 180;
+                        wp.RotateLimitNegative = -180;
+                    } else
+                    {
+                        main.transform.localScale = new Vector2(0.25f, 0.25f);
+                    }
                     MainWps.Add(main);
+
+
                 }
             }           
         }
@@ -266,7 +340,7 @@ public class WSShared : MonoBehaviour
                     Weapons wp = sup.GetComponent<Weapons>();
                     wp.Fighter = gameObject;
                     wp.Aim = LeftTarget;
-                    wp.EnemyLayer = FindObjectOfType<GameController>().PlayerLayer;
+                    wp.EnemyLayer = SupWeaponTarget;
                     wp.tracking = true;
                     wp.RotateLimitPositive = 360;
                     wp.RotateLimitNegative = -360;
@@ -285,12 +359,13 @@ public class WSShared : MonoBehaviour
     public void ReceiveBulletDamage(float Damage, GameObject Bullet)
     {
         float RealDamage = 0;
-        if (Bullet.GetComponent<UsualKineticBullet>()!=null)
+        if (Bullet.GetComponent<UsualKineticBullet>() != null)
         {
             if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
             {
                 RealDamage = Damage * 70 / 100f;
-            } else
+            }
+            else
             {
                 RealDamage = Damage;
             }
@@ -299,12 +374,59 @@ public class WSShared : MonoBehaviour
         {
             RealDamage = Damage * 5 / 100f;
         }
-        if (CurrentHP>= RealDamage)
+        if (CurrentBarrier > 0)
         {
-            CurrentHP -= RealDamage;
-        } else
+            if (CurrentBarrier > RealDamage)
+            {
+                CurrentBarrier -= RealDamage;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    br.transform.localScale = gameObject.transform.localScale * 4f;
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 90f;
+                BarrierRegenAmount = 2500f;
+            }
+            else
+            {
+                CurrentBarrier = 0;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    br.transform.localScale = gameObject.transform.localScale * 4f;
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 90f;
+                BarrierRegenAmount = 2500f;
+                CurrentHP -= (RealDamage - CurrentBarrier);
+            }
+        }
+        else
         {
-            CurrentHP = 0;
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, transform.position, Quaternion.identity);
+                BRBreak.transform.localScale = gameObject.transform.localScale * 4f;
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
+            if (CurrentHP >= RealDamage)
+            {
+                CurrentHP -= RealDamage;
+            }
+            else
+            {
+                CurrentHP = 0;
+            }
         }
     }
 
@@ -325,7 +447,7 @@ public class WSShared : MonoBehaviour
     {
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, FindObjectOfType<GameController>().PlayerLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             GameObject Nearest = cols[0].gameObject;
@@ -380,6 +502,53 @@ public class WSShared : MonoBehaviour
             RightWeapon.GetComponent<Weapons>().Aim = null;
         }*/
     }
+    #endregion
+    #region Spawn
+
+    public void SpawnFighter(int id, int count)
+    {
+        Dictionary<string, object> DataDict;
+        if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
+        } else
+        {
+            DataDict = FindObjectOfType<AccessDatabase>().GetDataAlliesById(id);
+        }
+        // Get Model
+        for (int i = 0; i < AllyModel.transform.childCount; i++)    
+        {
+            if (AllyModel.transform.GetChild(i).name.Replace(" ", "").ToLower().Equals(((string)DataDict["Name"]).Replace(" ", "").ToLower()))
+            {
+                ChosenModel = AllyModel.transform.GetChild(i).gameObject;
+            }
+        }
+        GameObject Ally = Instantiate(AllyTemplate, MainWps[0].transform.position, Quaternion.identity);
+        if (id >= 13)
+        {
+            Ally.tag = "AlliesEliteFighter";
+        }
+        if (id == 1)
+        {
+            Ally.transform.localScale *= 3;
+        }
+        AudioSource aus = Ally.AddComponent<AudioSource>();
+        //aus.clip = SpawnSoundEffect;
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 1000;
+        aus.minDistance = 500;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
+        Destroy(aus, 4f);
+        Ally.name = ChosenModel.name + " |" + MainWps[0].transform.position.x + " - " + MainWps[0].transform.position.y + " - " + count;
+        Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
+        Ally.GetComponent<AlliesShared>().HPScale = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindObjectOfType<SpaceZoneGenerator>().EnemyMaxHP : FindObjectOfType<SpaceZoneGenerator>().AllyMaxHP);
+        Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
+        
+    }
+
     #endregion
 }
 
