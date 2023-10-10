@@ -18,6 +18,7 @@ public class FighterMovement : MonoBehaviour
     public GameObject LeftBorder;
     public GameObject RightBorder;
     public GameObject HealthBarSlider;
+    public GameObject HeadObject;
     #endregion
     #region NormalVariables
     public float RotateSpeed;
@@ -32,6 +33,14 @@ public class FighterMovement : MonoBehaviour
     public bool Movable;
     public float LaserBeamSlowScale;
     public float ExteriorROTSpeed;
+    private float CheckMovingDelay;
+    public string LimitString;
+    private float ChosenRandom;
+    private bool inAttackRange;
+    public bool PreventReachLimit;
+    public float PreventReachLimitTimer;
+    private int InAttackRangeCount;
+    private float LimitDelay;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -43,9 +52,10 @@ public class FighterMovement : MonoBehaviour
         es = GetComponent<EnemyShared>();
         BackFireInitScale = backFire.transform.localScale.x;
         Movable = true;
-        CurrentRotateAngle = 0;
         ExteriorROTSpeed = 1;
         LaserBeamSlowScale = 1;
+        UpMove();
+        LimitString = "";
     }
 
     // Update is called once per frame
@@ -66,6 +76,41 @@ public class FighterMovement : MonoBehaviour
         if (Movable) FighterMoving();
         fs.CalculateVelocity(speedVector);
         CheckLimit();
+        CheckMovingDelay -= Time.deltaTime;
+        if (PreventReachLimitTimer <=0f)
+        {
+            if (PreventReachLimit)
+            {
+                PreventReachLimit = false;
+                NoLeftRightMove();
+            }
+        } else
+        {
+            PreventReachLimit = true;
+            PreventReachLimitTimer -= Time.deltaTime;
+        }
+        LimitDelay -= Time.deltaTime;
+        if (LimitString == "")
+        {
+            if (LimitDelay <= 0f)
+            {
+                if (!PreventReachLimit)
+                {
+                    PreventReachingLimit();
+                    if (CheckMovingDelay <= 0f)
+                    {
+                        CheckMovingDelay = Random.Range(0.1f, 0.2f);
+                        CheckOnMoving();
+                    }
+                }
+            }
+        }
+        else
+        {
+            GetAwayFromLimit();
+        }
+
+
     }
     private void FixedUpdate()
     {
@@ -135,7 +180,6 @@ public class FighterMovement : MonoBehaviour
 /*            GetComponent<PlayerFighter>().StopSound();*/
             backFire.SetActive(false);
         }
-        AccelerateSpeed();
         speedVector = movementVector * CurrentSpeed * fs.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale;
     }
     // Accelerate Players
@@ -205,36 +249,180 @@ public class FighterMovement : MonoBehaviour
         float LimitLeftX = LeftBorder.transform.position.x + 100;
         float LimitRightX = RightBorder.transform.position.x - 100;
         LimitSpeedScale = 1f;
-        bool reachLimit = false;
+        
+        // Reach Limit
         if (transform.position.x >= (LimitRightX + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
-            reachLimit = true;
+            NoUpDownMove();
+            LimitString = "Right";
         }
         else if (transform.position.x <= (LimitLeftX - 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitLeftX, transform.position.y)));
-            reachLimit = true;
+            NoUpDownMove();
+            LimitString = "Left";
         }
         else if (transform.position.y >= (LimitTopY + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitTopY)));
-            reachLimit = true;
+            NoUpDownMove();
+            LimitString = "Top";
         }
         else if (transform.position.y <= (LimitBottomY - 50))
         {
             StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitBottomY)));
-            reachLimit = true;
-        }
-        if (reachLimit)
-        {
-            if (GetComponent<AlliesFighterMLAgent>()!=null)
-            {
-                GetComponent<AlliesFighterMLAgent>().MovingLimitReward();
-            }
+            NoUpDownMove();
+            LimitString = "Bottom";
         }
     }
 
+    private void PreventReachingLimit()
+    {
+        float LimitTopY = TopBorder.transform.position.y;
+        float LimitBottomY = BottomBorder.transform.position.y;
+        float LimitLeftX = LeftBorder.transform.position.x;
+        float LimitRightX = RightBorder.transform.position.x;
+        // Prevent Reach Limit
+        int PreventX = 0;
+        int PreventY = 0;
+        if (transform.position.x >= (LimitRightX - MovingSpeed * 2))
+        {
+            PreventX = -1;
+        }
+        if (transform.position.x <= (LimitLeftX + MovingSpeed * 2))
+        {
+            PreventX = 1;
+        }
+        if (transform.position.y >= (LimitTopY - MovingSpeed * 2))
+        {
+            PreventY = -1;
+        }
+        if (transform.position.y <= (LimitBottomY + MovingSpeed * 2))
+        {
+            PreventY = 1;
+        }
+        if (PreventX != 0 || PreventY != 0)
+        {
+            PreventReachLimitTimer = Random.Range(2f, 3f);
+            PreventReachLimit = true;
+            if (PreventY == 1)
+            {
+                if (PreventX == 1)
+                {
+                    LeftMove();
+                }
+                else if (PreventX == -1)
+                {
+                    RightMove();
+                }
+                else
+                {
+                    if (CurrentRotateAngle < 180)
+                    {
+                        RightMove();
+                    }
+                    else if (CurrentRotateAngle == 180)
+                    {
+                        int n = Random.Range(0, 2);
+                        if (n == 0)
+                        {
+                            RightMove();
+                        }
+                        else
+                        {
+                            LeftMove();
+                        }
+                    }
+                    else
+                    {
+                        LeftMove();
+                    }
+                }
+            }
+            else if (PreventY == -1)
+            {
+                if (PreventX == 1)
+                {
+                    RightMove();
+                }
+                else if (PreventX == -1)
+                {
+                    LeftMove();
+                }
+                else
+                {
+                    if (CurrentRotateAngle < 180)
+                    {
+                        RightMove();
+                    }
+                    else if (CurrentRotateAngle == 180)
+                    {
+                        int n = Random.Range(0, 2);
+                        if (n == 0)
+                        {
+                            RightMove();
+                        }
+                        else
+                        {
+                            LeftMove();
+                        }
+                    }
+                    else
+                    {
+                        LeftMove();
+                    }
+                }
+            }
+            else
+            {
+                if (PreventX == 1)
+                {
+                    if (CurrentRotateAngle > 270 || CurrentRotateAngle < 90)
+                    {
+                        RightMove();
+                    }
+                    else if (CurrentRotateAngle == 270 || CurrentRotateAngle == 90)
+                    {
+                        int n = Random.Range(0, 2);
+                        if (n==0)
+                        {
+                            RightMove();
+                        } else
+                        {
+                            LeftMove();
+                        }
+                    } else
+                    {
+                        LeftMove();
+                    }
+                }
+                else if (PreventX == -1)
+                {
+                    if (CurrentRotateAngle > 270 || CurrentRotateAngle < 90)
+                    {
+                        LeftMove();
+                    }
+                    else if (CurrentRotateAngle == 270 || CurrentRotateAngle == 90)
+                    {
+                        int n = Random.Range(0, 2);
+                        if (n == 0)
+                        {
+                            RightMove();
+                        }
+                        else
+                        {
+                            LeftMove();
+                        }
+                    }
+                    else
+                    {
+                        RightMove();
+                    }
+                }
+            }
+        }
+    }
     private IEnumerator TeleportBack(Vector2 Position)
     {
         yield return new WaitForSeconds(0.1f);
@@ -242,9 +430,470 @@ public class FighterMovement : MonoBehaviour
         CurrentSpeed = 0f;
     }
 
+    private void GetAwayFromLimit()
+    {
+        if (ChosenRandom==-200f)
+        {
+            ChosenRandom = Random.Range(-100f, 100f);
+        }
+        if (LimitString == "Left")
+        {
+            GameObject go = new GameObject();
+            go.transform.position = new Vector3(transform.position.x + 1000f, transform.position.y, transform.position.z);
+            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
+            Destroy(go);
+            if (k==1)
+            {
+                RightMove();
+            } else if (k==-1)
+            {
+                LeftMove();
+            } else if (k==0)
+            {
+                UpMove();
+                NoLeftRightMove();
+                LimitString = "";
+                ChosenRandom = -200f;
+                LimitDelay = 3f;
+            }
+        } 
+        else if (LimitString == "Right")
+        {
+            GameObject go = new GameObject();
+            go.transform.position = new Vector3(transform.position.x - 1000f, transform.position.y, transform.position.z);
+            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
+            Destroy(go);
+            if (k == 1)
+            {
+                RightMove();
+            }
+            else if (k == -1)
+            {
+                LeftMove();
+            }
+            else if (k == 0)
+            {
+                UpMove();
+                NoLeftRightMove();
+                LimitString = "";
+                ChosenRandom = -200f;
+                LimitDelay = 3f;
+            }
+        }
+        else if (LimitString == "Top")
+        {
+            GameObject go = new GameObject();
+            go.transform.position = new Vector3(transform.position.x , transform.position.y - 1000f, transform.position.z);
+            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
+            Destroy(go);
+            if (k == 1)
+            {
+                RightMove();
+            }
+            else if (k == -1)
+            {
+                LeftMove();
+            }
+            else if (k == 0)
+            {
+                UpMove();
+                NoLeftRightMove();
+                LimitString = "";
+                ChosenRandom = -200f;
+                LimitDelay = 3f;
+            }
+        }
+        else if (LimitString == "Bottom")
+        {
+            GameObject go = new GameObject();
+            go.transform.position = new Vector3(transform.position.x, transform.position.y + 1000f, transform.position.z);
+            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
+            Destroy(go);
+            if (k == 1)
+            {
+                RightMove();
+            }
+            else if (k == -1)
+            {
+                LeftMove();
+            }
+            else if (k == 0)
+            {
+                UpMove();
+                NoLeftRightMove();
+                LimitString = "";
+                ChosenRandom = -200f;
+                LimitDelay = 3f;
+            }
+        }
+    }
+
     private void CheckOnMoving()
     {
+        if (als!=null)
+        {
+            if (als.LeftTarget!=null && als.RightTarget!=null)
+            {
+                if ((als.LeftTarget.transform.position - transform.position).magnitude <= als.TargetRange/2)
+                {
+                    if (!inAttackRange)
+                    {
+                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                        if (k == -1)
+                        {
+                            DownMove();
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            UpMove();
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            DownMove();
+                            RightMove();
+                        }
+                        InAttackRangeCount = 1;
+                    } else
+                    {
+                        int test = InAttackRangeCount / 20;
+                        int rand = 0;
+                        if (test > 5)
+                        {
+                            rand = Random.Range(0, 2);
+                        }
+                        if (rand==0)
+                        {
+                            int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
+                            InAttackRangeCount++;
+                        } else
+                        {
+                            als.TargetLeftEnemy();
+                            als.TargetRightEnemy();
+                        }
+                    }
+                    inAttackRange = true;
+                } else
+                {
+                    if (inAttackRange)
+                    {
+                        UpMove();
+                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
+                    }
+                    else
+                    {
+                        UpMove();
+                        int k = Random.Range(-1, 2);
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
+                    }
+                    inAttackRange = false;
+                }
+            } else
+            {
+                NoLeftRightMove();
+                UpMove();
+            }
+        } else if (es != null)
+        {
+            if (es.LeftTarget != null && es.RightTarget != null)
+            {
+                if ((es.LeftTarget.transform.position - transform.position).magnitude <= es.TargetRange / 2)
+                {
+                    if (!inAttackRange)
+                    {
+                        int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                        if (k == -1)
+                        {
+                            DownMove();
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            UpMove();
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            DownMove();
+                            RightMove();
+                        }
+                        InAttackRangeCount = 1;
+                    }
+                    else
+                    {
+                        int test = InAttackRangeCount / 20;
+                        int rand = 0;
+                        if (test > 5)
+                        {
+                            rand = Random.Range(0, 2);
+                        }
+                        if (rand == 0)
+                        {
+                            int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
+                            InAttackRangeCount++;
+                        }
+                        else
+                        {
+                            es.TargetLeftEnemy();
+                            es.TargetRightEnemy();
+                        }
+                    }
+                    inAttackRange = true;
+                }
+                else
+                {
+                    if (inAttackRange)
+                    {
+                        UpMove();
+                        int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
+                    }
+                    else
+                    {
+                        UpMove();
+                        int k = Random.Range(-1, 2);
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
+                    }
+                    inAttackRange = false;
+                }
+            }
+            else
+            {
+                NoLeftRightMove();
+                UpMove();
+            }
+        }
+    }
 
+    private int CheckIsUpOrDownMovement(GameObject Aim, GameObject ShootingPosition, GameObject RotatePoint)
+    {
+        int DirMov = 0;
+        Vector2 HeadToTarget = Aim.transform.position - ShootingPosition.transform.position;
+        Vector2 MovingVector = ShootingPosition.transform.position - RotatePoint.transform.position;
+        float angle = Vector2.Angle(HeadToTarget, MovingVector);
+        float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
+        Vector2 TempPos = new Vector2(RotatePoint.transform.position.x, RotatePoint.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
+        Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
+        float compareAngle = 30;
+        if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
+        {
+            if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)
+            {
+                if (angle < compareAngle)
+                {
+                    if (Aim.transform.position.y > ShootingPosition.transform.position.y)
+                        DirMov = 0;
+                    else
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                } else
+                {
+                    if (Aim.transform.position.x < ShootingPosition.transform.position.x)
+                    {
+                        DirMov = -1;
+                    }
+                    else if (Aim.transform.position.x == ShootingPosition.transform.position.x)
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                    else if (Aim.transform.position.x > ShootingPosition.transform.position.x)
+                    {
+                        DirMov = 1;
+                    }
+                }
+            }
+            else
+            {
+                if (angle < compareAngle)
+                {
+                    if (Aim.transform.position.y < ShootingPosition.transform.position.y)
+                        DirMov = 0;
+                    else
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                }
+                else
+                {
+                    if (Aim.transform.position.x < ShootingPosition.transform.position.x)
+                    {
+                        DirMov = 1;
+                    }
+                    else if (Aim.transform.position.x == ShootingPosition.transform.position.x)
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                    else if(Aim.transform.position.x > ShootingPosition.transform.position.x)
+                    {
+                        DirMov = -1;
+                    }
+                }
+            }
+        }
+        else if (ShootingPosition.transform.position.y == RotatePoint.transform.position.y)
+        {
+            if (ShootingPosition.transform.position.x > RotatePoint.transform.position.x)
+            {
+                if (angle < compareAngle)
+                {
+                    if (Aim.transform.position.x > ShootingPosition.transform.position.x)
+                        DirMov = 0;
+                    else
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                }
+                else
+                {
+                    if (Aim.transform.position.y > ShootingPosition.transform.position.y)
+                    {
+                        DirMov = -1;
+                    }
+                    else if (Aim.transform.position.y == ShootingPosition.transform.position.y)
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                    else if (Aim.transform.position.y < ShootingPosition.transform.position.y)
+                    {
+                        DirMov = 1;
+                    }
+                }
+            }
+            else
+            {
+                if (angle < compareAngle)
+                {
+                    if (Aim.transform.position.x < ShootingPosition.transform.position.x)
+                        DirMov = 0;
+                    else
+                    {
+                        DirMov = Random.Range(0, 1f) < 0.5f ? -1 : 1;
+                    }
+                }
+                else
+                {
+                    if (Aim.transform.position.y > ShootingPosition.transform.position.y)
+                    {
+                        DirMov = 1;
+                    }
+                    else if (Aim.transform.position.y == ShootingPosition.transform.position.y)
+                    {
+                        DirMov = Random.Range(0,1f) < 0.5f ? -1 : 1;
+                    }
+                    else if (Aim.transform.position.y < ShootingPosition.transform.position.y)
+                    {
+                        DirMov = -1;
+                    }
+                }
+            }
+        }
+        else if (ShootingPosition.transform.position.x > RotatePoint.transform.position.x)
+        {
+            if (angle < compareAngle)
+            {
+                DirMov = 0;
+            } else
+            {
+                if (CheckPos.y < Aim.transform.position.y)
+                {
+                    DirMov = -1;
+                }
+                else
+                {
+                    DirMov = 1;
+                }
+            }
+        }
+        else
+        {
+            if (angle < compareAngle)
+            {
+                DirMov = 0;
+            }
+            else
+            {
+                if (CheckPos.y < Aim.transform.position.y)
+                {
+                    DirMov = 1;
+                }
+                else
+                {
+                    DirMov = -1;
+                }
+            }
+        }
+        return DirMov;
     }
     #endregion
 }

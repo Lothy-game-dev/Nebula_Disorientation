@@ -205,14 +205,15 @@ public class Weapons : MonoBehaviour
                 if (angle <= RotateLimitPositive)
                 {
                     Fireable = true;
-                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
                     CheckIsUpOrDownMovement();
-                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle/2);
+                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle);
                     CurrentAngle = angle;
                 }
                 else
                 {
                     Fireable = false;
+                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
+                    CurrentAngle = 0;
                 }
             }
         }
@@ -870,7 +871,7 @@ public class Weapons : MonoBehaviour
         Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
         if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
         {
-            if (ShootingPosition.transform.position.y > ShootingPosition.transform.position.y)
+            if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)
             {
                 if (Aim.transform.position.x < ShootingPosition.transform.position.x)
                 {
