@@ -47,7 +47,7 @@ public class AlliesShared : FighterShared
     private bool LeftFire;
     public GameObject LeftTarget;
     public GameObject RightTarget;
-    private float TargetRange;
+    public float TargetRange;
     public float TargetRefreshTimer;
     public float FindTargetTimer;
     public float HPScale;
@@ -172,39 +172,6 @@ public class AlliesShared : FighterShared
                     }
                 }
             }
-            /*
-            resetMovetimer -= Time.deltaTime;
-            if (resetMovetimer <= 0f)
-            {
-                RandomMove = Random.Range(1, 3);
-                RandomRotate = Random.Range(1, 4);
-                resetMovetimer = 2f;
-            }
-
-            if (RandomMove == 1)
-            {
-                fm.UpMove();
-            }
-            else if (RandomMove == 2)
-            {
-                fm.DownMove();
-            }
-            else if (RandomMove == 3)
-            {
-                fm.NoUpDownMove();
-            }
-            if (RandomRotate == 1)
-            {
-                fm.LeftMove();
-            }
-            else if (RandomRotate == 2)
-            {
-                fm.RightMove();
-            }
-            else if (RandomRotate == 3)
-            {
-                fm.NoLeftRightMove();
-            }*/
             TargetRefreshTimer -= Time.deltaTime;
             if (TargetRefreshTimer <= 0f)
             {
@@ -294,11 +261,6 @@ public class AlliesShared : FighterShared
         }
         else
         {
-            transform.Rotate(new Vector3(0, 0, -90));
-            OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
-            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
-            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
-            fm.CurrentRotateAngle = 90;
             FighterAttachedWeapon faw = gameObject.AddComponent<FighterAttachedWeapon>();
             faw.Fighter = gameObject;
             faw.FighterModel = Model;
@@ -368,7 +330,11 @@ public class AlliesShared : FighterShared
             faw.RightWeapon = RightWeapon;
 
             faw.AttachWeapon();
-
+            transform.Rotate(new Vector3(0, 0, -90));
+            OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
+            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
+            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
+            fm.CurrentRotateAngle = 90;
             // Delay Weapon Fire Check Case
             if (weaponName1 == weaponName2 && !LW.IsThermalType)
             {
@@ -546,7 +512,7 @@ public class AlliesShared : FighterShared
         doneInitWeapon = true;
     }
 
-    private void TargetLeftEnemy()
+    public void TargetLeftEnemy()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, EnemyLayer);
         if (cols.Length>0)
@@ -566,7 +532,7 @@ public class AlliesShared : FighterShared
         }
     }
 
-    private void TargetRightEnemy()
+    public void TargetRightEnemy()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, EnemyLayer);
         if (cols.Length > 0)

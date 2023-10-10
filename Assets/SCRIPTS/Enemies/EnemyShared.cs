@@ -43,7 +43,7 @@ public class EnemyShared : FighterShared
     private int RandomRotate;
     public GameObject LeftTarget;
     public GameObject RightTarget;
-    private float TargetRange;
+    public float TargetRange;
     private float DelayBetween2Weap;
     public float DelayTimer;
     private bool LeftFire;
@@ -95,7 +95,7 @@ public class EnemyShared : FighterShared
         if (doneInitWeapon)
         {
             DelayTimer -= Time.deltaTime;
-           /* if (LeftWeapon!=null)
+            if (LeftWeapon!=null)
             {
                 if (DelayTimer<=0f && !LeftFire)
                 {
@@ -112,8 +112,8 @@ public class EnemyShared : FighterShared
                     RightWeapon.GetComponent<Weapons>().AIShootBullet();
                     DelayTimer = DelayBetween2Weap;
                 }
-            }*/
-            /*if (Power1!="")
+            }
+            if (Power1!="")
             {
                 if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
                 {
@@ -142,42 +142,9 @@ public class EnemyShared : FighterShared
                 {
                     Power2CD -= Time.deltaTime * Random.Range(0.8f,1.2f);
                 }
-            }*/
+            }
         }
 
-        resetMovetimer -= Time.deltaTime;
-        if (resetMovetimer<=0f)
-        {
-            RandomMove = Random.Range(1, 3);
-            RandomRotate = Random.Range(1, 4);
-            resetMovetimer = 2f;
-        }
-        
-        if (RandomMove == 1)
-        {
-            fm.UpMove();
-        } 
-        else if (RandomMove == 2)
-        {
-            fm.DownMove();
-        } 
-        else if (RandomMove == 3)
-        {
-            fm.NoUpDownMove();
-        } 
-        if (RandomRotate == 1)
-        {
-            fm.LeftMove();
-        }
-        else if (RandomRotate == 2)
-        {
-            fm.RightMove();
-        }
-        else if (RandomRotate == 3)
-        {
-            fm.NoLeftRightMove();
-        }
-        
         TargetRefreshTimer -= Time.deltaTime;
         if (TargetRefreshTimer <= 0f)
         {
@@ -256,11 +223,6 @@ public class EnemyShared : FighterShared
             weaponName1 = checkWeapons[0];
             weaponName2 = checkWeapons[0];
         }
-        transform.Rotate(new Vector3(0, 0, -270));
-        OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
-        OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
-        fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
-        fm.CurrentRotateAngle = 270;
         if (weaponName1=="SuicideBombing")
         {
 
@@ -335,6 +297,11 @@ public class EnemyShared : FighterShared
             faw.RightWeapon = RightWeapon;
 
             faw.AttachWeapon();
+            transform.Rotate(new Vector3(0, 0, -270));
+            OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
+            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
+            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
+            fm.CurrentRotateAngle = 270;
             // Delay Weapon Fire Check Case
             if (weaponName1 == weaponName2 && !LW.IsThermalType)
             {
@@ -510,7 +477,7 @@ public class EnemyShared : FighterShared
         yield return new WaitForSeconds(Random.Range(1,10));
         doneInitWeapon = true;
     }
-    private void TargetLeftEnemy()
+    public void TargetLeftEnemy()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, FindObjectOfType<GameController>().PlayerLayer);
         if (cols.Length > 0)
@@ -530,7 +497,7 @@ public class EnemyShared : FighterShared
         }
     }
 
-    private void TargetRightEnemy()
+    public void TargetRightEnemy()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, FindObjectOfType<GameController>().PlayerLayer);
         if (cols.Length > 0)
