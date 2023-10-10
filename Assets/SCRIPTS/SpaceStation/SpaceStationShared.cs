@@ -30,7 +30,10 @@ public class SpaceStationShared : MonoBehaviour
     private float FindTargetTimer;
     private bool doneInitWeapon;
     private float DelayTimer;
-    public LayerMask TargetLayer;
+    public LayerMask MainWeaponTarget;
+    public LayerMask SupWeaponTarget;
+    public LayerMask HealTarget;
+    private float ResetHealTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -102,6 +105,15 @@ public class SpaceStationShared : MonoBehaviour
         }
        
     }
+    private void FixedUpdate()
+    {
+        ResetHealTimer -= Time.fixedDeltaTime;
+        if (ResetHealTimer <= 0f)
+        {
+            HealTheAlly();
+            ResetHealTimer = 1f;
+        }
+    }
     #endregion
     #region Init Data
     // Group all function that serve the same algorithm
@@ -140,11 +152,10 @@ public class SpaceStationShared : MonoBehaviour
 
                     Weapons wp = main.GetComponent<Weapons>();
                     wp.Fighter = gameObject;
-                    wp.EnemyLayer = TargetLayer;
+                    wp.EnemyLayer = MainWeaponTarget;
                     wp.tracking = true;
                     wp.isMainWeapon = true;
                     wp.isSpaceStation = true;
-
                     MainWps.Add(main);
                 }
             }
@@ -182,11 +193,10 @@ public class SpaceStationShared : MonoBehaviour
 
                     Weapons wp = sup.GetComponent<Weapons>();
                     wp.Fighter = gameObject;
-                    wp.EnemyLayer = TargetLayer;
+                    wp.EnemyLayer = SupWeaponTarget;
                     wp.tracking = true;
                     wp.isMainWeapon = false;
                     wp.isSpaceStation = true;
-
                     SpWps.Add(sup);
                 }
             }
@@ -196,6 +206,7 @@ public class SpaceStationShared : MonoBehaviour
         gameObject.SetActive(true);
 
     }
+    
     #endregion
     #region Target
     // Group all function that serve the same algorithm
@@ -203,7 +214,7 @@ public class SpaceStationShared : MonoBehaviour
     {
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, FindObjectOfType<GameController>().PlayerLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             GameObject Nearest = cols[0].gameObject;
@@ -232,6 +243,20 @@ public class SpaceStationShared : MonoBehaviour
             {
                 target = null;
                 weapon.GetComponent<Weapons>().Aim = null;
+            }
+        }
+    }
+    #endregion
+    #region Heal ally
+    public void HealTheAlly()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 300f, HealTarget);
+        if (cols.Length > 0)
+        {
+            foreach (var ally in cols)
+            {
+                float MaxHP = ally.GetComponent<FighterShared>().MaxHP;
+                ally.GetComponent<FighterShared>().ReceiveHealing(MaxHP * 1/100 * Time.fixedDeltaTime);
             }
         }
     }

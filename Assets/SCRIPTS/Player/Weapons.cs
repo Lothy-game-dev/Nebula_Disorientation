@@ -258,7 +258,6 @@ public class Weapons : MonoBehaviour
                     if (!isMainWeapon) isFire = false;
                 }
                 transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
-                CurrentAngle = angle;
             }
         }
         // Reset thermal hit count per 1/rate of hit second
@@ -313,7 +312,6 @@ public class Weapons : MonoBehaviour
 
         if (Fireable && isMainWeapon && isFire)
         {
-            Debug.Log("Fire");
             if (Aim == null)
             {
                 EndSound();
@@ -882,7 +880,7 @@ public class Weapons : MonoBehaviour
         aus.volume = 0.08f * audioScale;
     }
     #endregion
-    #region Check laser beam direction
+    #region Check direction
     private void CheckIsUpOrDownMovement()
     {
         Vector2 HeadToTarget = Aim.transform.position - ShootingPosition.transform.position;
@@ -893,7 +891,7 @@ public class Weapons : MonoBehaviour
         Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
         if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
         {
-            if (ShootingPosition.transform.position.y > ShootingPosition.transform.position.y)
+            if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)
             {
                 if (Aim.transform.position.x < ShootingPosition.transform.position.x)
                 {
