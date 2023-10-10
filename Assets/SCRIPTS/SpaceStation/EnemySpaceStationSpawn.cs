@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AllySpaceStationSpawn : MonoBehaviour
+public class EnemySpaceStationSpawn : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -43,7 +43,7 @@ public class AllySpaceStationSpawn : MonoBehaviour
     public void SpawnSpaceStation(Vector2 randomPos)
     {
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetSpaceStationById(SpaceStationID);
-        //Debug.Log(SpaceStationModel.transform.childCount);
+        Debug.Log(SpaceStationModel.transform.childCount);
         for (int i = 0; i < SpaceStationModel.transform.childCount; i++)
         {
             if (SpaceStationModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["SpaceStationName"].ToString().Replace("-", "").ToLower())

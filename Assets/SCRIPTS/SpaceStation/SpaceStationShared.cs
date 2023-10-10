@@ -12,7 +12,7 @@ public class SpaceStationShared : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-
+    public GameObject StatusBoard;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -30,13 +30,18 @@ public class SpaceStationShared : MonoBehaviour
     private float FindTargetTimer;
     private bool doneInitWeapon;
     private float DelayTimer;
-    public LayerMask TargetLayer;
+    public LayerMask MainWeaponTarget;
+    public LayerMask SupWeaponTarget;
+    public LayerMask HealTarget;
+    private float ResetHealTimer;
+    private StatusBoard Status;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        Status = StatusBoard.GetComponent<StatusBoard>(); 
     }
 
     // Update is called once per frame
@@ -102,6 +107,15 @@ public class SpaceStationShared : MonoBehaviour
         }
        
     }
+    private void FixedUpdate()
+    {
+        ResetHealTimer -= Time.fixedDeltaTime;
+        if (ResetHealTimer <= 0f)
+        {
+            HealTheAlly();
+            ResetHealTimer = 1f;
+        }
+    }
     #endregion
     #region Init Data
     // Group all function that serve the same algorithm
@@ -109,7 +123,9 @@ public class SpaceStationShared : MonoBehaviour
     {
         MaxHP = float.Parse(data["BaseHP"].ToString());
         AuraRange = float.Parse(data["AuraRange"].ToString());
-
+        CurrentHP = MaxHP;
+        GetComponent<CapsuleCollider2D>().size = model.GetComponent<SpaceStationModelShared>().Size;
+        GetComponent<CapsuleCollider2D>().offset = model.GetComponent<SpaceStationModelShared>().Offset;
         //Main Weapon
         if (data["MainWeapon"].ToString().Contains("|"))
         {
@@ -140,11 +156,10 @@ public class SpaceStationShared : MonoBehaviour
 
                     Weapons wp = main.GetComponent<Weapons>();
                     wp.Fighter = gameObject;
-                    wp.EnemyLayer = TargetLayer;
+                    wp.EnemyLayer = MainWeaponTarget;
                     wp.tracking = true;
                     wp.isMainWeapon = true;
                     wp.isSpaceStation = true;
-
                     MainWps.Add(main);
                 }
             }
@@ -182,11 +197,10 @@ public class SpaceStationShared : MonoBehaviour
 
                     Weapons wp = sup.GetComponent<Weapons>();
                     wp.Fighter = gameObject;
-                    wp.EnemyLayer = TargetLayer;
+                    wp.EnemyLayer = SupWeaponTarget;
                     wp.tracking = true;
                     wp.isMainWeapon = false;
                     wp.isSpaceStation = true;
-
                     SpWps.Add(sup);
                 }
             }
@@ -196,6 +210,7 @@ public class SpaceStationShared : MonoBehaviour
         gameObject.SetActive(true);
 
     }
+    
     #endregion
     #region Target
     // Group all function that serve the same algorithm
@@ -203,7 +218,7 @@ public class SpaceStationShared : MonoBehaviour
     {
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, FindObjectOfType<GameController>().PlayerLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             GameObject Nearest = cols[0].gameObject;
@@ -234,6 +249,41 @@ public class SpaceStationShared : MonoBehaviour
                 weapon.GetComponent<Weapons>().Aim = null;
             }
         }
+    }
+    #endregion
+    #region Heal ally
+    public void HealTheAlly()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 300f, HealTarget);
+        if (cols.Length > 0)
+        {
+            foreach (var ally in cols)
+            {
+                if (ally.gameObject != gameObject)
+                {
+                    float MaxHP = ally.GetComponent<FighterShared>().MaxHP;
+                    float CurrentHP = ally.GetComponent<FighterShared>().CurrentHP;
+                    if (CurrentHP < MaxHP)
+                    {
+                        ally.GetComponent<FighterShared>().ReceiveHealing(MaxHP * 1/100);
+                    } else
+                    {
+                        ally.GetComponent<FighterShared>().CurrentHP = MaxHP;
+                    }
+                }
+            }
+        }
+    }
+    #endregion
+    #region check mouse
+    private void OnMouseOver()
+    {
+        Status.Timer = 5f;
+        Status.StartShowing(gameObject);
+    }
+    private void OnMouseExit()
+    {
+        Status.CheckOnDestroy();
     }
     #endregion
 }
