@@ -71,6 +71,7 @@ public class StatusBoard : MonoBehaviour
     public GameObject ModelRightWeapon;
     public GameObject ModelFirstPower;
     public GameObject ModelSecondPower;
+    private SpaceStationShared SpaceStation;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -78,11 +79,18 @@ public class StatusBoard : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         initScale = transform.localScale.x;
-        if (Enemy != null)
+        if (Enemy.GetComponent<FighterShared>() != null)
         {
             ImageInitScaleX = Enemy.transform.localScale.x * (Enemy.GetComponent<EnemyShared>()!=null? Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard : Enemy.GetComponent<AlliesShared>().ScaleOnStatusBoard) / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * (Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard : Enemy.GetComponent<AlliesShared>().ScaleOnStatusBoard) / initScale;
+        } else
+        {
+            if (Enemy.GetComponent<StatusBoard>() != null)
+            {
+
+            }
         }
+
         alreadyDelete = false;
     }
 
@@ -239,6 +247,7 @@ public class StatusBoard : MonoBehaviour
             }
             // turn off scripts
             CloneEnemyObject = (CloneEnemy.GetComponent<EnemyShared>() != null ? CloneEnemy.GetComponent<EnemyShared>() : CloneEnemy.GetComponent<AlliesShared>());
+            
             CloneEnemyObject.enabled = false;
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;
@@ -247,6 +256,16 @@ public class StatusBoard : MonoBehaviour
             CloneEnemyRb2D.simulated = false;
             CloneEnemyColl = CloneEnemy.GetComponent<Collider2D>();
             CloneEnemyColl.enabled = false;
+
+            // turn off scripts
+            if (CloneEnemy.GetComponent<SpaceStationShared>() != null)
+            {
+                SpaceStation = CloneEnemy.GetComponent<SpaceStationShared>();
+                SpaceStation.enabled = false;
+                // turn off component
+                CloneEnemyColl = SpaceStation.GetComponent<CapsuleCollider2D>();
+                CloneEnemyColl.enabled = false;
+            }
         }
         NameBox.SetActive(true);
         if (EnemyObject!=null)
@@ -552,49 +571,60 @@ public class StatusBoard : MonoBehaviour
             CloseBoard();
         } else
         {
-            EnemyObject = Enemy.GetComponent<FighterShared>();
-            if (EnemyObject.GetComponent<EnemyShared>() != null)
+            if (Enemy.GetComponent<FighterShared>() != null)
             {
-                NameBox.GetComponent<SpriteRenderer>().color = Color.red;
-                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
-            }
-            else
+                EnemyObject = Enemy.GetComponent<FighterShared>();
+                if (EnemyObject.GetComponent<EnemyShared>() != null)
+                {
+                    NameBox.GetComponent<SpriteRenderer>().color = Color.red;
+                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+                }
+                else
+                {
+                    NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f);
+                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.black;
+                }
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
+                HPSlider.maxValue = EnemyObject.MaxHP;
+                HPSlider.value = EnemyObject.CurrentHP;
+
+                //Set HP to show how much current HP
+                HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
+
+                // Barrier
+                BarrierSlider.maxValue = EnemyObject.MaxBarrier;
+                BarrierSlider.value = EnemyObject.CurrentBarrier;
+
+                BarrierText.text = Mathf.Round(EnemyObject.CurrentBarrier) + "/" + EnemyObject.MaxBarrier;
+
+                //Setting slider base on current temperature
+                TemperSlider.value = EnemyObject.currentTemperature;
+
+                //if temp > 50, the slider is red else blue
+                if (EnemyObject.currentTemperature > 50)
+                {
+                    TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
+                }
+                else if (EnemyObject.currentTemperature < 50)
+                {
+                    TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
+                }
+                else if (EnemyObject.currentTemperature == 50)
+                {
+                    TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+                }
+
+                //Setting to show current tempurature
+                TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
+            } else
             {
-                NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f);
-                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.black;
+                if (Enemy.GetComponent<FighterShared>() != null)
+                {
+                    Debug.Log("hhahha");
+                }
             }
-            NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
-            HPSlider.maxValue = EnemyObject.MaxHP;
-            HPSlider.value = EnemyObject.CurrentHP;
+            
 
-            //Set HP to show how much current HP
-            HealthText.text = Mathf.Round(EnemyObject.CurrentHP) + "/" + EnemyObject.MaxHP;
-
-            // Barrier
-            BarrierSlider.maxValue = EnemyObject.MaxBarrier;
-            BarrierSlider.value = EnemyObject.CurrentBarrier;
-
-            BarrierText.text = Mathf.Round(EnemyObject.CurrentBarrier) + "/" + EnemyObject.MaxBarrier;
-
-            //Setting slider base on current temperature
-            TemperSlider.value = EnemyObject.currentTemperature;
-
-            //if temp > 50, the slider is red else blue
-            if (EnemyObject.currentTemperature > 50)
-            {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.green, Color.red, TemperSlider.normalizedValue);
-            }
-            else if (EnemyObject.currentTemperature < 50)
-            {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Color.blue, Color.green, TemperSlider.normalizedValue);
-            }
-            else if (EnemyObject.currentTemperature == 50)
-            {
-                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
-            }
-
-            //Setting to show current tempurature
-            TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
         }
     }
 

@@ -13,12 +13,16 @@ public class SpaceStationShared : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject StatusBoard;
+    public GameObject Barrier;
+    public GameObject BarrierBreak;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public float CurrentHP;
     public float MaxHP;
+    public float CurrentBarrier;
+    public float MaxBarrier;
     public float AuraRange;
     public List<string> MainWeapon;
     public List<string> SupWeapon;
@@ -35,13 +39,17 @@ public class SpaceStationShared : MonoBehaviour
     public LayerMask HealTarget;
     private float ResetHealTimer;
     private StatusBoard Status;
+    private float BarrierEffectDelay;
+    private float BarrierRegenTimer;
+    private float BarrierRegenAmount;
+    private float BarrierRegenDelay;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        Status = StatusBoard.GetComponent<StatusBoard>(); 
+        
     }
 
     // Update is called once per frame
@@ -105,7 +113,29 @@ public class SpaceStationShared : MonoBehaviour
             }
 
         }
-       
+
+        //Check barrier and regen barrier
+        BarrierRegenTimer -= Time.deltaTime;
+        BarrierRegenDelay -= Time.deltaTime;
+        BarrierEffectDelay -= Time.deltaTime;
+        if (BarrierRegenTimer <= 0f)
+        {
+            if (BarrierRegenDelay <= 0f && CurrentBarrier < MaxBarrier)
+            {
+                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
+                {
+                    CurrentBarrier += BarrierRegenAmount;
+                    BarrierRegenDelay = 1f;
+                }
+                else
+                {
+                    CurrentBarrier = MaxBarrier;
+                    BarrierRegenDelay = 1f;
+                }
+            }
+
+        }
+
     }
     private void FixedUpdate()
     {
@@ -225,11 +255,31 @@ public class SpaceStationShared : MonoBehaviour
             float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
             {
-                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);
+                game = enemy.gameObject;
+
+                // If weapon is main weap, target enemy ws/ss only
+                if (weapon.GetComponent<Weapons>().isMainWeapon)
+                {
+                    if (enemy.tag == "BossEnemy")
+                    {
+                        game = enemy.gameObject;
+                    }
+                } else
+                {
+                    // If weapon is sup weap execept GravitationalArtillery, priotize fighter 
+                    if (!weapon.name.Contains("GravitationalArtillery"))
+                    {
+                        if (enemy.GetComponent<FighterShared>() != null)
+                        {
+                            game = enemy.gameObject;
+                        }
+                    }
+                }
+                float distanceTest = Mathf.Abs((game.transform.position - weapon.transform.position).magnitude);
                 if (distanceTest < distance)
                 {
                     distance = distanceTest;
-                    Nearest = enemy.gameObject;
+                    Nearest = game;
                 }
             }
             game = Nearest;
@@ -254,6 +304,21 @@ public class SpaceStationShared : MonoBehaviour
     #region Heal ally
     public void HealTheAlly()
     {
+        Collider2D[] cols1 = Physics2D.OverlapCircleAll(transform.position, 1000f, HealTarget);
+        if (cols1.Length > 0)
+        {
+            foreach (var ally in cols1)
+            {
+                if (ally.gameObject != gameObject)
+                {
+                    if (ally.GetComponent<FighterShared>().HealingEffect.activeSelf)
+                    {
+                        ally.GetComponent<FighterShared>().HealingEffect.SetActive(false);
+                    }
+                }
+            }
+        }
+
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 300f, HealTarget);
         if (cols.Length > 0)
         {
@@ -269,14 +334,17 @@ public class SpaceStationShared : MonoBehaviour
                     } else
                     {
                         ally.GetComponent<FighterShared>().CurrentHP = MaxHP;
+                        ally.GetComponent<FighterShared>().HealingEffect.SetActive(false);
                     }
                 }
             }
         }
+
+        
     }
     #endregion
     #region check mouse
-    private void OnMouseOver()
+    /*private void OnMouseOver()
     {
         Status.Timer = 5f;
         Status.StartShowing(gameObject);
@@ -284,6 +352,93 @@ public class SpaceStationShared : MonoBehaviour
     private void OnMouseExit()
     {
         Status.CheckOnDestroy();
+    }*/
+    #endregion
+    #region Receive Damage
+    public void ReceiveBulletDamage(float Damage, GameObject Bullet)
+    {
+        float RealDamage = 0;
+        if (Bullet.GetComponent<UsualKineticBullet>() != null)
+        {
+            if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
+            {
+                RealDamage = Damage * 70 / 100f;
+            }
+            else
+            {
+                RealDamage = Damage;
+            }
+        }
+        else
+        {
+            RealDamage = Damage * 5 / 100f;
+        }
+        if (CurrentBarrier > 0)
+        {
+            if (CurrentBarrier > RealDamage)
+            {
+                CurrentBarrier -= RealDamage;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    br.transform.localScale = gameObject.transform.localScale * 4f;
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 90f;
+                BarrierRegenAmount = 2500f;
+            } else
+            {
+                CurrentBarrier = 0;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    br.transform.localScale = gameObject.transform.localScale * 4f;
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 90f;
+                BarrierRegenAmount = 2500f;
+                CurrentHP -= (RealDamage - CurrentBarrier);
+            }
+        }
+        else
+        {
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, transform.position, Quaternion.identity);
+                BRBreak.transform.localScale = gameObject.transform.localScale * 1.5f;
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
+            if (CurrentHP >= RealDamage)
+            {
+                CurrentHP -= RealDamage;
+            }
+            else
+            {
+                CurrentHP = 0;
+            }
+        }
+    }
+
+    public void ReceivePowerDamage(float Damage)
+    {
+        float RealDamage = Damage * 50f / 100;
+        if (CurrentHP >= RealDamage)
+        {
+            CurrentHP -= RealDamage;
+        }
+        else
+        {
+            CurrentHP = 0;
+        }
     }
     #endregion
 }

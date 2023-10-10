@@ -21,6 +21,8 @@ public class FighterShared : MonoBehaviour
     public GameObject BarrierBreak;
     public GameObject Explosion;
     private float BarrierEffectDelay;
+    public GameObject HealingEffect;
+    public bool isHealing;
     // Thermal Stats
     public float currentTemperature;
     public bool isOverloadded;
@@ -661,7 +663,8 @@ public class FighterShared : MonoBehaviour
     #region Calculate Healing
     public void ReceiveHealing(float HealAmount)
     {
-        CurrentHP += HealAmount;
+       HealingEffect.SetActive(true);
+       CurrentHP += HealAmount;
     }
     #endregion
     #region Push
