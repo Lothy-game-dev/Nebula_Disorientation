@@ -51,6 +51,7 @@ public class SpawnEnemyWarship : MonoBehaviour
                 game.GetComponent<SpriteRenderer>().sprite = WarshipModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 game.transform.localScale = WarshipModel.transform.GetChild(i).localScale;
                 game.name = data["WarshipName"].ToString();
+                game.AddComponent<PolygonCollider2D>();
                 game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
             }
         }

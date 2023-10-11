@@ -35,6 +35,11 @@ public class SpaceZoneGenerator : MonoBehaviour
     public int EnemyFighterCCount;
     public float AllyMaxHP;
     public float EnemyMaxHP;
+    public List<int> AllyFighterIDs;
+    public int[] EnemyFighterIDs;
+    public float EnemyBountyScale;
+    public float AllyBountyScale;
+    public int[] EnemiesTier;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -161,10 +166,12 @@ public class SpaceZoneGenerator : MonoBehaviour
             AllyFighterSpawn.AllyMaxHPScale = 1 + Scale20Odd / 20f;
             AllyFighterSpawn.AllyBountyScale = 1 + Scale20Odd / 5f;
             AllyMaxHP = AllyFighterSpawn.AllyMaxHPScale;
+            AllyBountyScale = AllyFighterSpawn.AllyBountyScale;
 
             EnemyFighterSpawn.EnemyMaxHPScale = 1 + Scale20Odd / 20f;
             EnemyFighterSpawn.EnemyBountyScale = 1 + Scale20Odd / 5f;
             EnemyMaxHP = EnemyFighterSpawn.EnemyMaxHPScale;
+            EnemyBountyScale = EnemyFighterSpawn.EnemyBountyScale;
         }
         int Scale20Even = SpaceZoneNo / 20;
         if (Scale20Even >= 1)
@@ -265,6 +272,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
             AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            AllyFighterIDs.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
             string Spawnstr = "AB";
             if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
             {
@@ -523,8 +531,10 @@ public class SpaceZoneGenerator : MonoBehaviour
             TierTotal.AddRange(EnemyTier);
         }
         EnemyFighterSpawn.EnemySpawnID = IDTotal.ToArray();
+        EnemyFighterIDs = EnemyIDB.ToArray();
         EnemyFighterSpawn.EnemySpawnPosition = SpawnTotal.ToArray();
         EnemyFighterSpawn.EnemyTier = TierTotal.ToArray();
+        EnemiesTier = TierTotal.ToArray();
         EnemyFighterSpawn.SpawnEnemy();
         // Mission
         if (SpaceZoneNo % 10 == 1 || SpaceZoneNo % 10 == 3 || SpaceZoneNo % 10 == 5 || SpaceZoneNo % 10 == 7)

@@ -31,7 +31,7 @@ public class GameplayInteriorController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         // Call function and timer only if possible
     }
     #endregion
