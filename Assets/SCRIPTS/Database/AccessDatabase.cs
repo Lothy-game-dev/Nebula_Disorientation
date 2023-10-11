@@ -3088,6 +3088,63 @@ public class AccessDatabase : MonoBehaviour
             return data;
     }
 
+    public Dictionary<string, object> GetHazardAllDatas(int HazardId)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from HazardEnvironment WHERE HazardID='" + HazardId + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("HazardCode", dataReader.GetString(1));
+            data.Add("HazardName", dataReader.GetString(2));
+            data.Add("HazardColor", dataReader.GetString(3));
+            data.Add("HazardDescription", dataReader.GetString(4));
+            data.Add("HazardChance", dataReader.GetInt32(5));
+            data.Add("HazardStartSpawning", dataReader.GetInt32(6));
+            data.Add("HazardBackground", dataReader.GetString(7));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
 
+    public List<Dictionary<string,object>> GetAvailableHazards(int SpaceZoneNo)
+    {
+        List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select HazardID, HazardChance from HazardEnvironment WHERE HazardStartSpawning<=" + SpaceZoneNo;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            Dictionary<string, object> dataTemp = new Dictionary<string, object>();
+            dataTemp.Add("HazardID", dataReader.GetInt32(0));
+            dataTemp.Add("HazardChance", dataReader.GetInt32(1));
+            data.Add(dataTemp);
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
     #endregion
 }

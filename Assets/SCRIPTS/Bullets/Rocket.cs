@@ -21,7 +21,7 @@ public class Rocket : BulletShared
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
-        StartCoroutine(Accelerate(0.1f));
+        Accelerate();
     }
 
     // Update is called once per frame

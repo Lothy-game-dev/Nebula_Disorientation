@@ -57,9 +57,6 @@ public class EnemyFighterSpawn : MonoBehaviour
                 int RightLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[0]);
                 int BottomLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[1]);
                 Vector2 SpawnPos = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
-                GameObject SpawnEffect = Instantiate(SpawnHole, SpawnPos, Quaternion.identity);
-                SpawnEffect.SetActive(true);
-                Destroy(SpawnEffect, 1.5f);
                 StartCoroutine(CreateEnemy(1, SpawnPos, SBBCount, 1, 0));
                 SBBCount++;
             }
@@ -76,11 +73,8 @@ public class EnemyFighterSpawn : MonoBehaviour
             StartCoroutine(SpawnEnemyByTime());
         } else
         {
-            for (int i = 0; i < 1/*EnemySpawnID.Length*/; i++)
+            for (int i = 0; i < 10/*EnemySpawnID.Length*/; i++)
             {
-                GameObject SpawnEffect = Instantiate(SpawnHole, EnemySpawnPosition[i], Quaternion.identity);
-                SpawnEffect.SetActive(true);
-                Destroy(SpawnEffect, 1.5f);
                 StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0,2f)));
             }
         }
@@ -95,9 +89,6 @@ public class EnemyFighterSpawn : MonoBehaviour
     {
         for (int i = 0; i < EnemySpawnID.Length; i++)
         {
-            GameObject SpawnEffect = Instantiate(SpawnHole, EnemySpawnPosition[i], Quaternion.identity);
-            SpawnEffect.SetActive(true);
-            Destroy(SpawnEffect, 1.5f);
             StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], 0));
             yield return new WaitForSeconds(DelayBetweenSpawn);
         }
@@ -120,8 +111,13 @@ public class EnemyFighterSpawn : MonoBehaviour
         if (id >= 13)
         {
             Enemy.tag = "EliteEnemy";
+            Enemy.transform.GetChild(6).gameObject.SetActive(false);
+            Enemy.transform.GetChild(7).gameObject.SetActive(true);
         } 
         Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
+        GameObject SpawnEffect = Instantiate(SpawnHole, spawnPos, Quaternion.identity);
+        SpawnEffect.SetActive(true);
+        Destroy(SpawnEffect, 1.5f);
         AudioSource aus = Enemy.AddComponent<AudioSource>();
         aus.clip = SpawnSoundEffect;
         aus.spatialBlend = 1;

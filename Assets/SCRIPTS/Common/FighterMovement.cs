@@ -19,6 +19,9 @@ public class FighterMovement : MonoBehaviour
     public GameObject RightBorder;
     public GameObject HealthBarSlider;
     public GameObject HeadObject;
+    public SpaceZoneHazardEnvironment HazardEnvi;
+    public GameplayInteriorController ControllerMain;
+    public bool IsNotMoving;
     #endregion
     #region NormalVariables
     public float RotateSpeed;
@@ -63,7 +66,7 @@ public class FighterMovement : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (fs.isFrozen)
+        if (fs.isFrozen || ControllerMain.IsInLoading)
         {
             Movable = false;
             speedVector = new Vector2(0, 0);
@@ -77,7 +80,6 @@ public class FighterMovement : MonoBehaviour
         if (Movable) FighterMoving();
         fs.CalculateVelocity(speedVector);
         CheckLimit();
-        CheckMovingDelay -= Time.deltaTime;
         if (PreventReachLimitTimer <=0f)
         {
             if (PreventReachLimit)
@@ -90,7 +92,6 @@ public class FighterMovement : MonoBehaviour
             PreventReachLimit = true;
             PreventReachLimitTimer -= Time.deltaTime;
         }
-        LimitDelay -= Time.deltaTime;
         if (LimitString == "")
         {
             if (LimitDelay <= 0f)
@@ -100,17 +101,26 @@ public class FighterMovement : MonoBehaviour
                     PreventReachingLimit();
                     if (CheckMovingDelay <= 0f)
                     {
-                        CheckMovingDelay = Random.Range(0.1f, 0.2f);
+                        CheckMovingDelay = Random.Range(0.5f, 1f);
                         CheckOnMoving();
+                    } else
+                    {
+                        CheckMovingDelay -= Time.deltaTime;
                     }
                 }
+            } else
+            {
+                LimitDelay -= Time.deltaTime;
             }
         }
         else
         {
             GetAwayFromLimit();
         }
-        CheckForHazard();
+        if (HazardEnvi.HazardID == 2 || HazardEnvi.HazardID == 5 || HazardEnvi.HazardID == 6)
+        {
+            CheckForHazard();
+        }
     }
     private void FixedUpdate()
     {
@@ -121,12 +131,12 @@ public class FighterMovement : MonoBehaviour
     // funtion call to move
     public void UpMove()
     {
-        SpeedUp = 1;
+        SpeedUp = IsNotMoving ? 0 :1;
     }
 
     public void DownMove()
     {
-        SpeedUp = -1;
+        SpeedUp = IsNotMoving ? 0 :/*-*/ 1;
     }
 
     public void NoUpDownMove()
@@ -557,33 +567,27 @@ public class FighterMovement : MonoBehaviour
                         InAttackRangeCount = 1;
                     } else
                     {
-                        int test = InAttackRangeCount / 20;
-                        int rand = 0;
+                        int test = InAttackRangeCount / 4;
                         if (test > 5)
-                        {
-                            rand = Random.Range(0, 2);
-                        }
-                        if (rand==0)
-                        {
-                            int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                            if (k == -1)
-                            {
-                                LeftMove();
-                            }
-                            else if (k == 0)
-                            {
-                                NoLeftRightMove();
-                            }
-                            else if (k == 1)
-                            {
-                                RightMove();
-                            }
-                            InAttackRangeCount++;
-                        } else
                         {
                             als.TargetLeftEnemy();
                             als.TargetRightEnemy();
+                            return;
                         }
+                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
+                        InAttackRangeCount++;
                     }
                     inAttackRange = true;
                 } else
@@ -657,34 +661,27 @@ public class FighterMovement : MonoBehaviour
                     }
                     else
                     {
-                        int test = InAttackRangeCount / 20;
-                        int rand = 0;
+                        int test = InAttackRangeCount / 4;
                         if (test > 5)
-                        {
-                            rand = Random.Range(0, 2);
-                        }
-                        if (rand == 0)
-                        {
-                            int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
-                            if (k == -1)
-                            {
-                                LeftMove();
-                            }
-                            else if (k == 0)
-                            {
-                                NoLeftRightMove();
-                            }
-                            else if (k == 1)
-                            {
-                                RightMove();
-                            }
-                            InAttackRangeCount++;
-                        }
-                        else
                         {
                             es.TargetLeftEnemy();
                             es.TargetRightEnemy();
+                            return;
                         }
+                        int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
+                        InAttackRangeCount++;
                     }
                     inAttackRange = true;
                 }
@@ -899,8 +896,7 @@ public class FighterMovement : MonoBehaviour
     #region Check Hazard Environment
     private void CheckForHazard()
     {
-        if (FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID==2 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID==5)
-        {
+
             Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (HeadObject.transform.position - transform.position).magnitude, HazardMask);
             if (cols.Length>0)
             {
@@ -911,7 +907,7 @@ public class FighterMovement : MonoBehaviour
                         if (als!=null)
                         {
                             als.ReceiveDamage(als.MaxHP * 10 /100, col.gameObject);
-                            als.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f);
+                            als.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f, "Asteroid");
                             if (col.GetComponent<SpaceZoneAsteroid>()!=null)
                             {
                                 col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
@@ -919,7 +915,7 @@ public class FighterMovement : MonoBehaviour
                         } else if (es!=null)
                         {
                             es.ReceiveDamage(es.MaxHP * 10 / 100, col.gameObject);
-                            es.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f);
+                            es.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f, "Asteroid");
                             if (col.GetComponent<SpaceZoneAsteroid>() != null)
                             {
                                 col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
@@ -934,19 +930,19 @@ public class FighterMovement : MonoBehaviour
                             als.HitByCometDelay = 5f;
                             als.alreadyHitByComet = true;
                             als.ReceiveDamage(als.MaxHP * 50 / 100, col.gameObject);
-                            als.ReceiveForce(transform.position - col.transform.position, 10000f, 1f);
+                            als.ReceiveForce(transform.position - col.transform.position, 10000f, 1f, "Rogue Star");
                         }
                         else if (es != null && !es.alreadyHitByComet)
                         {
                             es.HitByCometDelay = 5f;
                             es.alreadyHitByComet = true;
                             es.ReceiveDamage(es.MaxHP * 50 / 100, col.gameObject);
-                            es.ReceiveForce(transform.position - col.transform.position, 10000f, 1f);
+                            es.ReceiveForce(transform.position - col.transform.position, 10000f, 1f, "Rogue Star");
                         }
+                        CurrentSpeed = 0;
                     }
                 }
             }
-        }
     }
     #endregion
 }

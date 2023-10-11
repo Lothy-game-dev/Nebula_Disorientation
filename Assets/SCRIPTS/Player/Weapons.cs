@@ -7,6 +7,7 @@ public class Weapons : MonoBehaviour
 {
     #region ComponentVariables
     private AudioSource aus;
+    private SpaceZoneHazardEnvironment HazEnv;
     #endregion
     #region InitializeVariables
     public GameObject Fighter;
@@ -39,6 +40,7 @@ public class Weapons : MonoBehaviour
     public float WeaponROTSpeed;
     public GameObject Charging;
     public GameObject ChargingPosition;
+    public GameplayInteriorController ControllerMain;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -90,6 +92,7 @@ public class Weapons : MonoBehaviour
         pm = Fighter.GetComponent<PlayerMovement>();
         fm = Fighter.GetComponent<FighterMovement>();
         wm = Fighter.GetComponent<WSMovement>();
+        HazEnv = FindObjectOfType<SpaceZoneHazardEnvironment>();
         PrevAngle = 0;
         CalAngle = 0;
         CurrentAngle = 0;
@@ -290,7 +293,7 @@ public class Weapons : MonoBehaviour
         // Fire Weapon's Bullet
         if (FireTimer <= 0f)
         {
-            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null && !Fighter.GetComponent<PlayerFighter>().isFrozen && !Fighter.GetComponent<PlayerFighter>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
+            if (Input.GetMouseButton(MouseInput) && Fireable && !isOverheatted && Fighter.GetComponent<PlayerFighter>() != null && !Fighter.GetComponent<PlayerFighter>().isFrozen && !Fighter.GetComponent<PlayerFighter>().isSFBFreeze && !BeamActivating && !isUsingWormhole && !ControllerMain.IsInLoading)
             {
                 ReloadBar.GetComponent<Image>().fillAmount = 1;
                 if (!IsThermalType)
@@ -365,6 +368,38 @@ public class Weapons : MonoBehaviour
             Fireable = false;
             return 0;
         } else
+        {
+            Fireable = true;
+        }
+        if (x > 0 && y > 0)
+        {
+            return Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg + 180;
+        }
+        else if (x > 0 && y < 0)
+        {
+            return 360 - Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg;
+        }
+        else if (x < 0 && y > 0)
+        {
+            return 180 - Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg;
+        }
+        else if (x < 0 && y < 0)
+        {
+            return Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg;
+        }
+        else return 0;
+    }
+
+    float AICalculateRotateAngle(float xIn, float yIn)
+    {
+        float x = RotatePoint.transform.position.x - Aim.transform.position.x + xIn;
+        float y = RotatePoint.transform.position.y - Aim.transform.position.y + yIn;
+        if (Mathf.Abs(x) < 0.5f && Mathf.Abs(y) < 0.5f)
+        {
+            Fireable = false;
+            return 0;
+        }
+        else
         {
             Fireable = true;
         }
@@ -534,7 +569,7 @@ public class Weapons : MonoBehaviour
     }
     #endregion
     #region Weapon Fire
-    public void AIShootBullet()
+    public void AIShootBullet(float x, float y)
     {
         if (Aim==null)
         {
@@ -545,18 +580,86 @@ public class Weapons : MonoBehaviour
             {
                 if (!IsThermalType)
                 {
-                    FireBullet();
+                    AIFireBullet(x,y);
                     FireTimer = 1 / RateOfFire;
                 }
                 else
                 {
-                    FireFlamethrowerOrb();
+                    AIFireFlamethrowerOrb(x,y);
                     FireTimer = 1 / RateOfFire;
                 }
             }
         }
     }
 
+    // Fire Kinetic/Laser/Orb Bullet
+    void AIFireBullet(float x, float y)
+    {
+        // Incase Lava orb weapon, the gameobject will be different for tracer && rotate animation
+        // so there will be an if clause
+        if (IsOrbWeapon)
+        {
+            bulletFire = Instantiate(Bullet.transform.parent.gameObject, ShootingPosition.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            bulletFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+        }
+        // Rotate the bullet to the firing position
+        bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, AICalculateRotateAngle(x, y));
+        // Same as above
+        if (IsOrbWeapon)
+        {
+            bul = bulletFire.transform.GetChild(0).GetComponent<BulletShared>();
+        }
+        else
+        {
+            bul = bulletFire.GetComponent<BulletShared>();
+        }
+        // Set bullet's properties required
+        bul.Destination = new Vector2(Aim.transform.position.x + x,Aim.transform.position.y + y);
+        bul.WeaponShoot = this;
+        bul.EnemyLayer = EnemyLayer;
+        bulletFire.SetActive(true);
+        GenerateEffect();
+        if (Fighter.GetComponent<FighterShared>() != null)
+            // Increase overheat bar for each shot, increasing with themral status overloadded
+            currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * HazEnv.HazardOverheat;
+        // Set reset timer
+        OverheatDecreaseTimer = OverheatResetTimer;
+        // Create sound
+        if (!isOverheatted) KineticSound();
+    }
+    // Fire Flamethrower type orbs
+    void AIFireFlamethrowerOrb(float x, float y)
+    {
+        // Because of performance issues, flamethrower type will fire 30 times each second,
+        // with each time firing 5 orbs
+        for (int i = 0; i < 5; i++)
+        {
+            // Mostly same as kinetic bullet
+            GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
+            // Set Angle random between -5 and 5 degree so that it could make the fire looks real
+            float Angle = Random.Range(-5f, 5f);
+            orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, AICalculateRotateAngle(x, y) + Angle);
+            BulletShared bul = orbFire.GetComponent<BulletShared>();
+            bul.Destination = CalculateFTOrbDestination(Angle, bul);
+            // For the fire shape
+            bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90 / 10 * Mathf.Deg2Rad);
+            bul.WeaponShoot = this;
+            bul.EnemyLayer = EnemyLayer;
+            orbFire.SetActive(true);
+            GenerateEffect();
+            if (Fighter.GetComponent<FighterShared>() != null)
+            {
+                // Sound
+                if (!isOverheatted) ThermalSound();
+                // Overheat
+                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * HazEnv.HazardOverheat;
+                OverheatDecreaseTimer = OverheatResetTimer;
+            }
+        }
+    }
     public void WSShootBullet()
     {       
         if (Aim == null)
@@ -611,7 +714,7 @@ public class Weapons : MonoBehaviour
         GenerateEffect();
         if (Fighter.GetComponent<FighterShared>() != null) 
         // Increase overheat bar for each shot, increasing with themral status overloadded
-        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardOverheat;
+        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * HazEnv.HazardOverheat;
         // Set reset timer
         OverheatDecreaseTimer = OverheatResetTimer;
         // Create sound
@@ -642,7 +745,7 @@ public class Weapons : MonoBehaviour
                 // Sound
                 if (!isOverheatted) ThermalSound();
                 // Overheat
-                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardOverheat;
+                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * HazEnv.HazardOverheat;
                 OverheatDecreaseTimer = OverheatResetTimer;
             }
         }
@@ -691,14 +794,14 @@ public class Weapons : MonoBehaviour
             Color c = go.transform.GetComponent<SpriteRenderer>().color;
             c.a += 0.1f;
             go.transform.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.1f);
         }
         for (int i = 0; i < 10; i++)
         {
             Color c = go.transform.GetComponent<SpriteRenderer>().color;
             c.a -= 0.1f;
             go.transform.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.1f);
         }
         Destroy(go);
     }

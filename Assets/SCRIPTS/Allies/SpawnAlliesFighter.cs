@@ -43,9 +43,9 @@ public class SpawnAlliesFighter : MonoBehaviour
     public void SpawnAlly()
     {
         Allies = new List<GameObject>();
-        for (int i = 0; i <0/* AllySpawnID.Length*/; i++)
+        for (int i = 0; i < 10/*AllySpawnID.Length*/; i++)
         {
-            StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f)));
+            StartCoroutine(CreateAlly(AllySpawnID[i], new Vector2(0, 0)/*AllySpawnPosition[i]*/, i, Random.Range(0,2f)));
         }
         if (EscortSpawnNumber>0)
         {
@@ -79,6 +79,8 @@ public class SpawnAlliesFighter : MonoBehaviour
         if (id >= 13)
         {
             Ally.tag = "AlliesEliteFighter";
+            Ally.transform.GetChild(6).gameObject.SetActive(false);
+            Ally.transform.GetChild(7).gameObject.SetActive(true);
         }
         if (id==1)
         {

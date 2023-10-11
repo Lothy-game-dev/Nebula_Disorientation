@@ -151,6 +151,7 @@ public class FighterController : MonoBehaviour
         LW.WeaponPosition = LeftWeaponPosition;
         LW.tracking = true;
         LW.EnemyLayer = EnemyLayer;
+        LW.ControllerMain = PlayerFighter.GetComponent<PlayerFighter>().ControllerMain;
         RightWeapon.SetActive(true);
         Weapons RW = RightWeapon.GetComponent<Weapons>();
         RW.Fighter = PlayerFighter;
@@ -158,6 +159,7 @@ public class FighterController : MonoBehaviour
         RW.WeaponPosition = RightWeaponPosition;
         RW.tracking = true;
         RW.EnemyLayer = EnemyLayer;
+        RW.ControllerMain = PlayerFighter.GetComponent<PlayerFighter>().ControllerMain;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
         LeftWeapon.GetComponent<Weapons>().OverHeatImage = LeftOverheatImage;

@@ -1,0 +1,29 @@
+{
+    "AllyFire": {
+        "checkpoints": [
+            {
+                "steps": 1920,
+                "file_path": "results\\22331011\\AllyFire\\AllyFire-1920.onnx",
+                "reward": null,
+                "creation_time": 1697038532.9662924,
+                "auxillary_file_paths": [
+                    "results\\22331011\\AllyFire\\AllyFire-1920.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1920,
+            "file_path": "results\\22331011\\AllyFire.onnx",
+            "reward": null,
+            "creation_time": 1697038532.9662924,
+            "auxillary_file_paths": [
+                "results\\22331011\\AllyFire\\AllyFire-1920.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.0.1+cpu"
+    }
+}

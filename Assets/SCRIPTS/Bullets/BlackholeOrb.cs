@@ -28,7 +28,7 @@ public class BlackholeOrb : BulletShared
         // Calculate Velocity
         CalculateVelocity();
         // Accelerate Bullet
-        StartCoroutine(Accelerate(0.1f));
+        Accelerate();
         InitializeBullet();
         if (ObjectRotationScale == 0f)
         {

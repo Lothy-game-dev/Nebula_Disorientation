@@ -5,6 +5,9 @@ using UnityEngine;
 public class FighterShared : MonoBehaviour
 {
     #region Shared Variables
+    private SpaceZoneHazardEnvironment HazEnv;
+    private GameController controller;
+    private SpaceZoneMission misson;
     // Weapons
     public GameObject LeftWeapon;
     public GameObject RightWeapon;
@@ -69,6 +72,7 @@ public class FighterShared : MonoBehaviour
     public float ReceiveForceDelay;
     public bool alreadyHitByComet;
     public float HitByCometDelay;
+    public float DeadPushScale;
     #endregion
     #region Shared Functions
     // Initialize
@@ -88,6 +92,10 @@ public class FighterShared : MonoBehaviour
         NanoTempScale = 1;
         NanoTempStacks = 0;
         ShieldReducedScale = 0;
+        DeadPushScale = 1;
+        HazEnv = FindObjectOfType<SpaceZoneHazardEnvironment>();
+        controller = FindObjectOfType<GameController>();
+        misson = FindObjectOfType<SpaceZoneMission>();
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -167,14 +175,14 @@ public class FighterShared : MonoBehaviour
         Destroy(expl5, 0.3f);
         if (name == "Player")
         {
-            FindObjectOfType<CameraController>().GetComponent<AudioListener>().enabled = true;
-            FindObjectOfType<SpaceZoneMission>().PlayerDestroyed();
+            Camera.main.GetComponent<AudioListener>().enabled = true;
+            misson.PlayerDestroyed();
         } else if (GetComponent<AlliesShared>()!=null)
         {
-            FindObjectOfType<SpaceZoneMission>().AllyFighterDestroy(name);
+            misson.AllyFighterDestroy(name);
         } else if (GetComponent<EnemyShared>()!=null)
         {
-            FindObjectOfType<SpaceZoneMission>().EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
+            misson.EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
         }
         Destroy(gameObject);
     }
@@ -374,7 +382,7 @@ public class FighterShared : MonoBehaviour
     // Receive Burn Damage
     public void ReceiveBurnedDamage(float scale)
     {
-        ReceiveDamage(MaxHP * scale * NanoTempScale * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardThermalBurnDmgScale * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
+        ReceiveDamage(MaxHP * scale * NanoTempScale * HazEnv.HazardThermalBurnDmgScale * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
     }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
@@ -422,7 +430,13 @@ public class FighterShared : MonoBehaviour
     public void CheckInsideBlackhole()
     {
         isBHPulled = false;
-        PulledVector = new List<Vector2>();
+        if (PulledVector==null)
+        {
+            PulledVector = new List<Vector2>();
+        } else
+        {
+            PulledVector.Clear();
+        }
         // Get all blackhole at current position
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackHoleLayer);
         if (cols.Length>0)
@@ -590,7 +604,10 @@ public class FighterShared : MonoBehaviour
     #region Calculate Damage Received
     public void ReceiveDamage(float damage, GameObject DamageSource)
     {
-        damage = damage * FindObjectOfType<SpaceZoneHazardEnvironment>().HazardGammaRayBurstScale * (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
+        damage = damage * HazEnv.HazardNDAllDamageScale * 
+            (CurrentBarrier > 0 ? HazEnv.HazardGammaRayBurstScale : 1) * 
+            (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
+        DeadPushScale = 1;
         if (CurrentBarrier > 0)
         {
             if (CurrentBarrier > damage)
@@ -648,12 +665,13 @@ public class FighterShared : MonoBehaviour
                     {
                         Killer = DamageSource;
                     }
-                    if (GetComponent<EnemyShared>() != null && Killer == FindObjectOfType<GameController>().Player)
+                    if (GetComponent<EnemyShared>() != null && Killer == controller.Player)
                     {
                         GetComponent<EnemyShared>().AddBounty();
                     }
                 }
                 CurrentHP = 0;
+                DeadPushScale = 3;
             }
         }
     }
@@ -666,8 +684,15 @@ public class FighterShared : MonoBehaviour
     #endregion
     #region Push
 
-    public void ReceiveForce(Vector2 force, float strength, float time)
+    public void ReceiveForce(Vector2 force, float strength, float time, string Source)
     {
+        if (Source=="Bullet")
+        {
+            if (CurrentBarrier <= 0)
+            {
+                StartCoroutine(ApplyForce(force, strength, time));
+            }
+        } else
         StartCoroutine(ApplyForce(force, strength, time));
     }
 
@@ -678,16 +703,22 @@ public class FighterShared : MonoBehaviour
             int n = 10;
             for (int i = 0; i < n; i++)
             {
-                GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n / 2) * n / 2) * (n - n / 2 + n - 1 - i)), ForceMode2D.Impulse);
-                yield return new WaitForSeconds(time / n);
+                if (gameObject!=null)
+                {
+                    GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n / 2) * n / 2) * (n - n / 2 + n - 1 - i)) * DeadPushScale, ForceMode2D.Impulse);
+                    yield return new WaitForSeconds(time / n);
+                }
             }
         } else
         {
             int n = 20;
             for (int i = 0; i < n; i++)
             {
-                GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n/2)*n/2) * (n - n/2 + n - 1 - i)), ForceMode2D.Impulse);
-                yield return new WaitForSeconds(time / n);
+                if (gameObject != null)
+                {
+                    GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n / 2) * n / 2) * (n - n / 2 + n - 1 - i)) * DeadPushScale, ForceMode2D.Impulse);
+                    yield return new WaitForSeconds(time / n);
+                }
             }
         }
 

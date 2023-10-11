@@ -11,12 +11,16 @@ public class SpaceZoneStar : MonoBehaviour
     #region InitializeVariables
     public GameObject Explosion;
     public GameObject Range;
+    public GameObject Stardust;
     #endregion
     #region NormalVariables
     public float currentHP;
     public float maxHP;
     private bool alreadyDestroy;
     private float RotateSpeed;
+    private float delaySpawnStardust;
+    private Vector2 MovingVector;
+    private float Radius;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,7 +34,6 @@ public class SpaceZoneStar : MonoBehaviour
     {
         // Call function and timer only if possible
         transform.Rotate(new Vector3(0, 0, 2 + RotateSpeed));
-        transform.GetChild(0).Rotate(new Vector3(0, 0, -2));
         if (currentHP <= 0f)
         {
             if (!alreadyDestroy)
@@ -39,22 +42,45 @@ public class SpaceZoneStar : MonoBehaviour
                 StartCoroutine(StarDestroy());
             }
         }
+        delaySpawnStardust -= Time.deltaTime;
+        if (delaySpawnStardust <= 0f)
+        {
+            delaySpawnStardust = 0.1f;
+            SpawnStardust();
+        }
     }
     #endregion
     #region Initialize
     public void InitializeStar(Vector2 EndPos, float Speed)
     {
-        Vector2 MovingVector = EndPos - new Vector2(transform.position.x, transform.position.y);
+        MovingVector = EndPos - new Vector2(transform.position.x, transform.position.y);
+        Radius = (Range.transform.position - transform.position).magnitude;
         GetComponent<Rigidbody2D>().velocity = MovingVector / MovingVector.magnitude * Speed;
         Destroy(gameObject, 25f);
         maxHP = 30000;
         currentHP = maxHP;
     }
+    
+    private void SpawnStardust()
+    {
+        for (int i=0; i<5; i++)
+        {
+            float angle = Random.Range(1, 90);
+            float tempCos = Mathf.Cos(angle * Mathf.Deg2Rad) * Radius;
+            float tempSin = Mathf.Sin(angle * Mathf.Deg2Rad) * Radius;
+            Vector2 newPos = -MovingVector / MovingVector.magnitude * tempCos + new Vector2(transform.position.x, transform.position.y);
+            Vector2 perpen = Vector2.Perpendicular(MovingVector);
+            Vector2 finalPos = newPos + perpen / perpen.magnitude * tempSin * (Random.Range(0, 2) - 0.5f) * 2;
+            GameObject stard = Instantiate(Stardust, finalPos, Quaternion.identity);
+            stard.transform.localScale = stard.transform.localScale * Random.Range(0.2f, 1f);
+            stard.SetActive(true);
+            Destroy(stard, 1 * (90f - angle)/90f);
+        }
+    }
 
     public IEnumerator StarDestroy()
     {
         GetComponent<Collider2D>().enabled = false;
-        float Radius = (Range.transform.position - transform.position).magnitude;
         for (int i=0; i<10; i++)
         {
             RotateSpeed = i;
@@ -64,7 +90,6 @@ public class SpaceZoneStar : MonoBehaviour
             c.b -= 1 / 10f;
             c.g -= 1 / 10f;
             GetComponent<SpriteRenderer>().color = c;
-            if (i == 5) Destroy(transform.GetChild(0).gameObject);
             for (int k=0; k< i/2 + 1; k++)
             {
                 GameObject expl = Instantiate(Explosion, new Vector2(transform.position.x + Random.Range(-Radius, Radius), transform.position.y + Random.Range(-Radius, Radius)), Quaternion.identity);

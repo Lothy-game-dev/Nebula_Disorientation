@@ -16,8 +16,7 @@ public class GameplayInteriorController : MonoBehaviour
     public TextMeshPro Shard;
     #endregion
     #region NormalVariables
-    // All other variables apart from the two aforementioned types
-    // Can be public or private, prioritize private if possible
+    public bool IsInLoading;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -25,7 +24,7 @@ public class GameplayInteriorController : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        GenerateBlackFadeOpen(transform.position, 0f, 1f);
+        GenerateBlackFadeOpen(transform.position, 5f, 1f);
         SetCashAndShard();
     }
 
@@ -49,7 +48,9 @@ public class GameplayInteriorController : MonoBehaviour
 
     private IEnumerator BlackFadeOpen(GameObject Fade, float delay, float duration)
     {
+        IsInLoading = true;
         yield return new WaitForSeconds(delay);
+        IsInLoading = false;
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;

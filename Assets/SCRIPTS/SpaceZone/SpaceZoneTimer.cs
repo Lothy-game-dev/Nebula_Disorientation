@@ -12,6 +12,7 @@ public class SpaceZoneTimer : MonoBehaviour
     #region InitializeVariables
     public SpaceZoneMission mission;
     public TextMeshPro TimeText;
+    public GameplayInteriorController ControllerMain;
     #endregion
     #region NormalVariables
     public int Timer;
@@ -33,7 +34,7 @@ public class SpaceZoneTimer : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (DoneSetupTimer)
+        if (DoneSetupTimer && !ControllerMain.IsInLoading)
         {
             if (TimerDown<=0f)
             {
