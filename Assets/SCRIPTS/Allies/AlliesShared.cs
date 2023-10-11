@@ -44,7 +44,7 @@ public class AlliesShared : FighterShared
     private int RandomRotate;
     public float DelayBetween2Weap;
     public float DelayTimer;
-    private bool LeftFire;
+    public bool LeftFire;
     public GameObject LeftTarget;
     public GameObject RightTarget;
     public float TargetRange;
@@ -123,7 +123,7 @@ public class AlliesShared : FighterShared
             if (doneInitWeapon)
             {
                 DelayTimer -= Time.deltaTime;
-                if (LeftWeapon != null)
+                /*if (LeftWeapon != null)
                 {
                     if (DelayTimer < 0f && !LeftFire)
                     {
@@ -140,7 +140,7 @@ public class AlliesShared : FighterShared
                         RightWeapon.GetComponent<Weapons>().AIShootBullet();
                         DelayTimer = DelayBetween2Weap;
                     }
-                }
+                }*/
                 if (Power1 != "")
                 {
                     if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)

@@ -11,6 +11,7 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
     #region InitializeVariables
     public GameObject[] HazardRocks;
     public GameObject HazardStar;
+    public GameplayInteriorController ControllerMain;
     #endregion
     #region NormalVariables
     public int HazardID;
@@ -34,7 +35,7 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (StartSpawningStar)
+        if (StartSpawningStar && !ControllerMain.IsInLoading)
         {
             SpawnStarDelay -= Time.deltaTime;
             if (SpawnStarDelay <= 0f)
@@ -87,6 +88,7 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
         HazardOverheat = 1;
         HazardGammaRayBurstScale = 1;
         StartSpawningStar = false;
+        HazardNDAllDamageScale = 1;
         DelaySpawnStar = 0;
         if (HazardID==2)
         {

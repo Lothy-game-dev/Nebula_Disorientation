@@ -29,6 +29,7 @@ public class BulletShared : MonoBehaviour
     protected Vector2 RealVelocity;
     protected float DistanceTravel;
 
+    private AreaOfEffect AoEEffect;
     private float WeaponDamageModScale;
     private float WeaponAoEModScale;
     private float RealDamage;
@@ -52,6 +53,7 @@ public class BulletShared : MonoBehaviour
         if (HitBoxRange!=null)
         HitBox = Mathf.Abs((HitBoxRange.transform.position - transform.position).magnitude);
         CalculateWeaponStats();
+        AoEEffect = FindObjectOfType<AreaOfEffect>();
     }
     public void UpdateBullet()
     {
@@ -92,33 +94,12 @@ public class BulletShared : MonoBehaviour
         }
     }
     // Acceleration for the first time second
-    public IEnumerator Accelerate(float time)
+    public void Accelerate()
     {
-        for (int i=0; i<4; i++)
-        {
-            if (Mathf.Abs(RealVelocity.x) < Mathf.Abs(Velocity.x) && Mathf.Abs(RealVelocity.y) < Mathf.Abs(Velocity.y))
-            {
-                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 4, RealVelocity.y + Velocity.y / 4);
-            }
-            CalculateVelocity(RealVelocity);
-            yield return new WaitForSeconds(time/4f);
-        }
+        RealVelocity = Velocity;
+        CalculateVelocity(RealVelocity);
     }
 
-    // Laser Special Accel: Increasing in both speed and size 
-    public IEnumerator AccelerateLaser(float time, float initScale)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            if (Mathf.Abs(RealVelocity.x) < Mathf.Abs(Velocity.x) && Mathf.Abs(RealVelocity.y) < Mathf.Abs(Velocity.y))
-            {
-                RealVelocity = new Vector2(RealVelocity.x + Velocity.x / 5, RealVelocity.y + Velocity.y / 5);
-            }
-            CalculateVelocity(RealVelocity);
-            transform.localScale = new Vector3(initScale*i/5,initScale*i/5,transform.localScale.z);
-            yield return new WaitForSeconds(time / 5f);
-        }
-    }
 
     // Calculate Damage for kinetic/laser/lava orb weapons
     public void CalculateDamage()
@@ -135,7 +116,7 @@ public class BulletShared : MonoBehaviour
                 if (AoE>0)
                 {
                     // Create AoE effect
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
+                    AoEEffect.CreateAreaOfEffect(transform.position, AoE);
                     // Check all enemies in AoE range
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
@@ -215,7 +196,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE>0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE);
+                    AoEEffect.CreateAreaOfEffect(transform.position, AoE);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -343,7 +324,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 if (AoE > 0)
                 {
-                    FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE, 0.8f);
+                    AoEEffect.CreateAreaOfEffect(transform.position, AoE, 0.8f);
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                     foreach (var col2 in cols2)
                     {
@@ -412,7 +393,7 @@ public class BulletShared : MonoBehaviour
             if (AoE>0f)
             {
                 // Create AoE effect
-                FindObjectOfType<AreaOfEffect>().CreateAreaOfEffect(transform.position, AoE, 0, 0);
+                AoEEffect.CreateAreaOfEffect(transform.position, AoE, 0, 0);
                 // Check all enemies in AoE range
                 Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
                 foreach (var col2 in cols2)
@@ -662,6 +643,7 @@ public class BulletShared : MonoBehaviour
         {
             RealDamage = 0;
             Destroy(gameObject);
+            PunishML();
         }
     }
 
@@ -692,6 +674,7 @@ public class BulletShared : MonoBehaviour
         {
             RealDamage = 0;
             Destroy(transform.parent.gameObject);
+            PunishML();
         }
     }
 
@@ -706,6 +689,7 @@ public class BulletShared : MonoBehaviour
         if (DistanceTravel > MaxEffectiveDistance)
         {
             Destroy(gameObject);
+            PunishML();
         }      
     }
     // distance travel for blackhole orb only
@@ -733,6 +717,7 @@ public class BulletShared : MonoBehaviour
             // Create blackhole at the end of the distance
             CreateBlackHole(BlackHole, radius, timer, pullingForce);
             Destroy(gameObject);
+            PunishML();
         }
     }
 
@@ -766,24 +751,28 @@ public class BulletShared : MonoBehaviour
             RealDamage = 0;
             // Create blackhole at the end of the distance
             Destroy(gameObject);
+            PunishML();
         }
     }
 
     // Check if bullets is pulled by blackhole, Same algorithm as fighters
     public void CheckInsideBlackhole()
     {
-        isBHPulled = false;
-        PulledVector = new List<Vector2>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackholeLayer);
-        if (cols.Length > 0)
+        if (BlackholeLayer!=1)
         {
-            foreach (var col in cols)
+            isBHPulled = false;
+            PulledVector = new List<Vector2>();
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1f, BlackholeLayer);
+            if (cols.Length > 0)
             {
-                BlackHole bh = col.GetComponent<BlackHole>();
-                if (bh != null)
+                foreach (var col in cols)
                 {
-                    isBHPulled = true;
-                    PulledVector.Add(bh.CalculatePullingVector(gameObject));
+                    BlackHole bh = col.GetComponent<BlackHole>();
+                    if (bh != null)
+                    {
+                        isBHPulled = true;
+                        PulledVector.Add(bh.CalculatePullingVector(gameObject));
+                    }
                 }
             }
         }
@@ -806,19 +795,27 @@ public class BulletShared : MonoBehaviour
         if (enemy!=null && enemy.GetComponent<FighterShared>()!=null && GetComponent<UsualKineticBullet>()!=null)
         {
             Vector2 BulletVector = transform.position - transform.GetChild(0).position;
-            enemy.GetComponent<FighterShared>().ReceiveForce(BulletVector / BulletVector.magnitude, 1000f, 0.1f);
+            enemy.GetComponent<FighterShared>().ReceiveForce(BulletVector / BulletVector.magnitude, 
+                (GetComponent<UsualKineticBullet>().isGravitationalLine ? 3000f : 1000f), (GetComponent<UsualKineticBullet>().isGravitationalLine ? 0.5f : 0.1f), "Bullet");
         }
+        AddPointToML();
         return InitDamage * WeaponDamageModScale;
     }
 
     private void AddPointToML()
     {
-        WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(0.5f, "Hitting the enemy");
+        if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+        {
+            WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(0.5f, "Hitting the enemy");
+        }
     }
 
     private void PunishML()
     {
-        WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
+        if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>()!=null)
+        {
+            WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
+        }
     }
     #endregion
 }

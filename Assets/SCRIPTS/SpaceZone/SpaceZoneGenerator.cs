@@ -19,6 +19,9 @@ public class SpaceZoneGenerator : MonoBehaviour
     public AudioClip OnslaughtMusic;
     public AudioClip BossMusic;
     public GameObject StartTeleport;
+    public SpaceZoneHazardEnvironment Hazard;
+    public TextMeshPro HazardNameText;
+    public TextMeshPro HazardDesciptionText;
     #endregion
     #region NormalVariables
     public int SpaceZoneNo;
@@ -63,8 +66,19 @@ public class SpaceZoneGenerator : MonoBehaviour
         Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
         int VariantCount = (int)variantData["VariantCounts"];
         if (ChosenVariant==0) ChosenVariant = Random.Range(1, 1 + VariantCount);
-        string[] BGs = ((string)variantData["AvailableBackground"]).Split(",");
-        ChosenBG = BGs[Random.Range(0, BGs.Length)];
+        List<Dictionary<string, object>> ListAvailableHazard = FindObjectOfType<AccessDatabase>().GetAvailableHazards(SpaceZoneNo);
+        int HazardId = RandomHazardChoose(ListAvailableHazard);
+        Dictionary<string, object> HazardData = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(HazardId);
+        HazardNameText.text = "<color=" + (string)HazardData["HazardColor"] + ">" + (string)HazardData["HazardName"] + "</color>";
+        HazardDesciptionText.text = "<color=" + (string)HazardData["HazardColor"] + ">" + (string)HazardData["HazardDescription"] + "</color>";
+        if (HazardId > 1 && (string)HazardData["HazardBackground"] != "")
+        {
+            ChosenBG = (string)HazardData["HazardBackground"];
+            Hazard.HazardID = HazardId;
+            Hazard.InitializeHazard();
+        }
+        else
+        ChosenBG = (string)variantData["AvailableBackground"];
         SpaceZoneBackground.ChangeBackground(ChosenBG);
         // Music
         if (SpaceZoneNo%10 == 1 || SpaceZoneNo%10 == 3 || SpaceZoneNo%10 == 5 || SpaceZoneNo%10 == 7)
@@ -592,6 +606,27 @@ public class SpaceZoneGenerator : MonoBehaviour
                 Mission.CreateMissionBossV2(EnemyFighterCCount);
             }
         }
+    }
+
+    private int RandomHazardChoose(List<Dictionary<string, object>> dataDict)
+    {
+        float sum = 0;
+        for (int i=0; i< dataDict.Count;i++)
+        {
+            sum += (int)dataDict[i]["HazardChance"];
+        }
+        float n = Random.Range(0, sum);
+        for (int i = 0; i < dataDict.Count; i++)
+        {
+            if (n < (int)dataDict[i]["HazardChance"])
+            {
+                return (int)dataDict[i]["HazardID"];
+            } else
+            {
+                n -= (int)dataDict[i]["HazardChance"];
+            }
+        }
+        return 1;
     }
     #endregion
     #region Sound

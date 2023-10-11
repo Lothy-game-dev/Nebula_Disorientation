@@ -231,7 +231,7 @@ public class LOTWScene : MonoBehaviour
 
     private IEnumerator WaitTeleport()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(0.5f);
         SceneManager.LoadSceneAsync("GameplayInterior");
         SceneManager.UnloadSceneAsync("GameplayExterior");
     }

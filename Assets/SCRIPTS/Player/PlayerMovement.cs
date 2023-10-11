@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject FreezeEffect;
     public GameObject HeadObject;
     public LayerMask HazardMask;
+    public GameplayInteriorController ControllerMain;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -74,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
         {
             AEEnergy = 100f;
         }
-        if (pf.isFrozen || pf.isSFBFreeze)
+        if (pf.isFrozen || pf.isSFBFreeze || ControllerMain.IsInLoading)
         {
             Movable = false;
             speedVector = new Vector2(0, 0);
@@ -371,7 +372,7 @@ public class PlayerMovement : MonoBehaviour
     #region Check Hazard
     private void CheckForHazard()
     {
-        if (FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 2 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 5)
+        if (FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 2 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 5 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 6)
         {
             Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (HeadObject.transform.position - transform.position).magnitude, HazardMask);
             if (cols.Length > 0)
@@ -383,7 +384,7 @@ public class PlayerMovement : MonoBehaviour
                         if (pf != null)
                         {
                             pf.ReceiveDamage(pf.MaxHP * 10/100, col.gameObject);
-                            pf.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f);
+                            pf.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f, "Asteroid");
                             if (col.GetComponent<SpaceZoneAsteroid>() != null)
                             {
                                 col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
@@ -397,8 +398,9 @@ public class PlayerMovement : MonoBehaviour
                             pf.HitByCometDelay = 5f;
                             pf.alreadyHitByComet = true;
                             pf.ReceiveDamage(pf.MaxHP * 50 / 100, col.gameObject);
-                            pf.ReceiveForce(transform.position - col.transform.position, 10000f, 2f);
+                            pf.ReceiveForce(transform.position - col.transform.position, 10000f, 0.5f, "Rogue Star");
                         }
+                        CurrentSpeed = 0;
                     }
                 }
             }
