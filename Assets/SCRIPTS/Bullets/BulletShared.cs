@@ -123,6 +123,7 @@ public class BulletShared : MonoBehaviour
                         // Deal damage to all enemies in AoE range
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                         WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+                        SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                         if (enemy != null)
                         {
                             enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy.gameObject), gameObject);
@@ -134,6 +135,13 @@ public class BulletShared : MonoBehaviour
                         {
                             Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                         }
+                        else
+                        {
+                            if (SpaceStation != null)
+                            {
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                            }
+                        }
                     }
                 } 
                 // In case bullet does not have AoE: Deal dmg to the enemy detected only
@@ -141,6 +149,7 @@ public class BulletShared : MonoBehaviour
                 {
                     FighterShared enemy = col.GetComponent<FighterShared>();
                     WSShared Warship = col.gameObject.GetComponent<WSShared>();
+                    SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                     if (enemy!=null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, false, enemy.gameObject), gameObject);
@@ -152,6 +161,13 @@ public class BulletShared : MonoBehaviour
                     else if (Warship != null)
                     {
                         Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                    }
+                    else
+                    {
+                        if (SpaceStation != null)
+                        {
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                        }
                     }
                 }
                 // Destroy after hit
@@ -185,6 +201,7 @@ public class BulletShared : MonoBehaviour
                     {
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                         WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+                        SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                         if (enemy != null)
                         {
                             enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
@@ -204,11 +221,19 @@ public class BulletShared : MonoBehaviour
                         {
                             Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                         }
+                        else
+                        {
+                            if (SpaceStation != null)
+                            {
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                            }
+                        }
                     }
                 } else
                 {
                     FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
                     WSShared Warship = col.gameObject.GetComponent<WSShared>();
+                    SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                     if (enemy != null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,true, enemy.gameObject), gameObject);
@@ -225,6 +250,13 @@ public class BulletShared : MonoBehaviour
                     else if (Warship != null)
                     {
                         Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                    }
+                    else
+                    {
+                        if (SpaceStation != null)
+                        {
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                        }
                     }
                 }
                 Destroy(gameObject);
@@ -245,6 +277,7 @@ public class BulletShared : MonoBehaviour
                 AlreadyHit = true;
                 FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
                 WSShared Warship = col.gameObject.GetComponent<WSShared>();
+                SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                 if (enemy != null)
                 {
                     enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
@@ -266,6 +299,12 @@ public class BulletShared : MonoBehaviour
                 else if (Warship != null)
                 {
                     Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                } else
+                {
+                    if (SpaceStation != null)
+                    {
+                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                    }
                 }
                 Destroy(gameObject);
             }
@@ -290,6 +329,7 @@ public class BulletShared : MonoBehaviour
                     {
                         FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
                         WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+                        SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                         if (enemy != null)
                         {
                             Debug.Log(RealDamage);
@@ -301,12 +341,20 @@ public class BulletShared : MonoBehaviour
                         {
                             Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
                         }
+                        else
+                        {
+                            if (SpaceStation != null)
+                            {
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                            }
+                        }
                     }
                 }
                 else
                 {
                     FighterShared enemy = col.GetComponent<FighterShared>();
                     WSShared Warship = col.gameObject.GetComponent<WSShared>();
+                    SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                     if (enemy != null)
                     {
                         enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
@@ -315,6 +363,13 @@ public class BulletShared : MonoBehaviour
                     else if (Warship != null)
                     {
                         Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                    }
+                    else
+                    {
+                        if (SpaceStation != null)
+                        {
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                        }
                     }
                 }
                 Destroy(transform.parent.gameObject);
@@ -360,6 +415,7 @@ public class BulletShared : MonoBehaviour
                 PenetrateAlreadyDealDamge.Add(col.gameObject);
                 FighterShared enemy = col.GetComponent<FighterShared>();
                 WSShared Warship = col.gameObject.GetComponent<WSShared>();
+                SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
                 if (enemy!=null)
                 {
                     enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, ApplyNanoEffect, enemy.gameObject), gameObject);
@@ -418,6 +474,13 @@ public class BulletShared : MonoBehaviour
                 else if (Warship != null)
                 {
                     Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                }
+                else
+                {
+                    if (SpaceStation != null)
+                    {
+                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                    }
                 }
                 if (!isPenetrating)
                 {

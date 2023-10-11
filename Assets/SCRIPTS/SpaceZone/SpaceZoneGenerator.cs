@@ -36,6 +36,8 @@ public class SpaceZoneGenerator : MonoBehaviour
     public int EnemyFighterACount;
     public int EnemyFighterBCount;
     public int EnemyFighterCCount;
+    public float AllyMaxHP;
+    public float EnemyMaxHP;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -157,9 +159,12 @@ public class SpaceZoneGenerator : MonoBehaviour
         float EnemySquadZ = float.Parse(EnemySquad.Split("-")[2]);
 
         AllyFighterSpawn.AllyMaxHPScale = 1;
+        AllyMaxHP = AllyFighterSpawn.AllyMaxHPScale;
         AllyFighterSpawn.AllyBountyScale = 1;
 
+
         EnemyFighterSpawn.EnemyMaxHPScale = 1;
+        EnemyMaxHP = EnemyFighterSpawn.EnemyMaxHPScale;
         EnemyFighterSpawn.EnemyBountyScale = 1;
 
         // Change Squad Rating Based On Milestones
@@ -169,10 +174,11 @@ public class SpaceZoneGenerator : MonoBehaviour
         {
             AllyFighterSpawn.AllyMaxHPScale = 1 + Scale20Odd / 20f;
             AllyFighterSpawn.AllyBountyScale = 1 + Scale20Odd / 5f;
-            
+            AllyMaxHP = AllyFighterSpawn.AllyMaxHPScale;
 
             EnemyFighterSpawn.EnemyMaxHPScale = 1 + Scale20Odd / 20f;
             EnemyFighterSpawn.EnemyBountyScale = 1 + Scale20Odd / 5f;
+            EnemyMaxHP = EnemyFighterSpawn.EnemyMaxHPScale;
         }
         int Scale20Even = SpaceZoneNo / 20;
         if (Scale20Even >= 1)
@@ -187,7 +193,9 @@ public class SpaceZoneGenerator : MonoBehaviour
             if (Scale50 >= 1)
             {
                 AllyFighterSpawn.AllyMaxHPScale = 1 + Scale50 / 20f;
+                AllyMaxHP = AllyFighterSpawn.AllyMaxHPScale;
                 EnemyFighterSpawn.EnemyMaxHPScale = 1 + Scale50 / 20f;
+                EnemyMaxHP = EnemyFighterSpawn.EnemyMaxHPScale;
                 float realScaleAlly = 0;
                 if (AllySquadX - Scale50 < 5)
                 {
