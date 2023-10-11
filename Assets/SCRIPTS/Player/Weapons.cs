@@ -83,6 +83,8 @@ public class Weapons : MonoBehaviour
     public bool isCharging;
     public bool isSpaceStation;
 
+    public float ResetHitTimer;
+
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -286,6 +288,13 @@ public class Weapons : MonoBehaviour
                     EndSound();
                 }
             }
+
+        ResetHitTimer -= Time.deltaTime;
+        if (ResetHitTimer <= 0f)
+        {
+            CurrentHitCount = 0;
+            ResetHitTimer = 1 / RateOfFire;
+        }
         
     }
     private void FixedUpdate()
@@ -313,6 +322,7 @@ public class Weapons : MonoBehaviour
             ReloadBar.GetComponent<Image>().fillAmount -= RateOfFire * Time.fixedDeltaTime;
         }
         FireTimer -= Time.deltaTime;
+
 
         if (Fireable && isMainWeapon && isFire)
         {
@@ -761,6 +771,11 @@ public class Weapons : MonoBehaviour
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
         laserbeam.SetActive(true);
+
+        if (FireTimer <= 0f)
+        {
+           
+        }
     }
 
     public void ChargingWSLaserBeam()

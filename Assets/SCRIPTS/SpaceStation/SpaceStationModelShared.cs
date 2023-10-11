@@ -14,8 +14,6 @@ public class SpaceStationModelShared : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public Vector2 MainWeaponPosition;
     public List<Vector2> SupportWeaponPosition;
-    public Vector2 Size;
-    public Vector2 Offset;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
