@@ -18,6 +18,7 @@ public class SpaceStationShared : MonoBehaviour
     public GameObject HealEffect;
     public GameObject Explosion;
     public GameObject Flash;
+    public SpaceStationHealthBar HPBar;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -143,6 +144,8 @@ public class SpaceStationShared : MonoBehaviour
         MaxHP = float.Parse(data["BaseHP"].ToString());
         AuraRange = float.Parse(data["AuraRange"].ToString());
         CurrentHP = MaxHP;
+
+        HPBar.SetPostion(model.GetComponent<SpaceStationModelShared>().HPBarPosition);
         //Main Weapon
         if (data["MainWeapon"].ToString().Contains("|"))
         {
@@ -446,6 +449,7 @@ public class SpaceStationShared : MonoBehaviour
             if (CurrentHP >= RealDamage)
             {
                 CurrentHP -= RealDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
             }
             else
             {

@@ -28,7 +28,7 @@ public class SpawnEnemyWarship : MonoBehaviour
         // Initialize variables
         /*pos.x = Random.Range(700f, 2100f);
         pos.y = Random.Range(-3500f, 3500f);*/
-        pos = new Vector2(-2000f, 200f);
+        pos = new Vector2(-4000f, 200f);
         SpawnWS(pos);
     }
 
