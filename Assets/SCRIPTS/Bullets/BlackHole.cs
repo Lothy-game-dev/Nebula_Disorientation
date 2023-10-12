@@ -13,6 +13,7 @@ public class BlackHole : MonoBehaviour
     public GameObject RangeCheck;
     public GameObject CenterRange;
     public LayerMask HitLayer;
+    public bool isBlackHole;
     #endregion
     #region NormalVariables
     public Vector2 PullingVector;
@@ -54,7 +55,7 @@ public class BlackHole : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        transform.Rotate(new Vector3(0, 0, 1));
+        transform.Rotate(new Vector3(0, 0, isBlackHole ? -1 : 1));
         // Deal dmg to all hit layer within range
         /*DealDamageToLayerInRange(HitLayer);*/
         // Reset hit timer

@@ -806,7 +806,7 @@ public class BulletShared : MonoBehaviour
     {
         if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
         {
-            WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(0.5f, "Hitting the enemy");
+            WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(10f, "Hitting the enemy");
         }
     }
 

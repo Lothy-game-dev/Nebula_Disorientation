@@ -680,5 +680,205 @@
                 "results\\ppo\\AllyFire2354\\AllyFire2354-1642624.pt"
             ]
         }
+    },
+    "AllyFire15321012": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\AllyFire15321012\\AllyFire15321012-0.onnx",
+                "reward": null,
+                "creation_time": 1697100451.688141,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire15321012\\AllyFire15321012-0.pt"
+                ]
+            },
+            {
+                "steps": 825472,
+                "file_path": "results\\ppo\\AllyFire15321012\\AllyFire15321012-825472.onnx",
+                "reward": null,
+                "creation_time": 1697102027.0874548,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire15321012\\AllyFire15321012-825472.pt"
+                ]
+            },
+            {
+                "steps": 866816,
+                "file_path": "results\\ppo\\AllyFire15321012\\AllyFire15321012-866816.onnx",
+                "reward": null,
+                "creation_time": 1697102492.047248,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire15321012\\AllyFire15321012-866816.pt"
+                ]
+            },
+            {
+                "steps": 889856,
+                "file_path": "results\\ppo\\AllyFire15321012\\AllyFire15321012-889856.onnx",
+                "reward": null,
+                "creation_time": 1697102760.2301826,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire15321012\\AllyFire15321012-889856.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 889856,
+            "file_path": "results\\ppo\\AllyFire15321012.onnx",
+            "reward": null,
+            "creation_time": 1697102760.2301826,
+            "auxillary_file_paths": [
+                "results\\ppo\\AllyFire15321012\\AllyFire15321012-889856.pt"
+            ]
+        }
+    },
+    "AllyFire18001012": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\AllyFire18001012\\AllyFire18001012-0.onnx",
+                "reward": null,
+                "creation_time": 1697108917.22988,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire18001012\\AllyFire18001012-0.pt"
+                ]
+            },
+            {
+                "steps": 14436,
+                "file_path": "results\\ppo\\AllyFire18001012\\AllyFire18001012-14436.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697109002.5917232,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire18001012\\AllyFire18001012-14436.pt"
+                ]
+            },
+            {
+                "steps": 163799,
+                "file_path": "results\\ppo\\AllyFire18001012\\AllyFire18001012-163799.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697109766.72032,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire18001012\\AllyFire18001012-163799.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 163799,
+            "file_path": "results\\ppo\\AllyFire18001012.onnx",
+            "reward": -0.20000000298023224,
+            "creation_time": 1697109766.72032,
+            "auxillary_file_paths": [
+                "results\\ppo\\AllyFire18001012\\AllyFire18001012-163799.pt"
+            ]
+        }
+    },
+    "AllyFire18271012": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\AllyFire18271012\\AllyFire18271012-0.onnx",
+                "reward": null,
+                "creation_time": 1697110346.407753,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire18271012\\AllyFire18271012-0.pt"
+                ]
+            },
+            {
+                "steps": 499993,
+                "file_path": "results\\ppo\\AllyFire18271012\\AllyFire18271012-499993.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697111723.6803625,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire18271012\\AllyFire18271012-499993.pt"
+                ]
+            },
+            {
+                "steps": 500121,
+                "file_path": "results\\ppo\\AllyFire18271012\\AllyFire18271012-500121.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697111723.7917361,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire18271012\\AllyFire18271012-500121.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500121,
+            "file_path": "results\\ppo\\AllyFire18271012.onnx",
+            "reward": -0.20000000298023224,
+            "creation_time": 1697111723.7917361,
+            "auxillary_file_paths": [
+                "results\\ppo\\AllyFire18271012\\AllyFire18271012-500121.pt"
+            ]
+        }
+    },
+    "AllyFire21041012": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\AllyFire21041012\\AllyFire21041012-0.onnx",
+                "reward": null,
+                "creation_time": 1697119629.5058818,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire21041012\\AllyFire21041012-0.pt"
+                ]
+            },
+            {
+                "steps": 19677,
+                "file_path": "results\\ppo\\AllyFire21041012\\AllyFire21041012-19677.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697119759.6788032,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire21041012\\AllyFire21041012-19677.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 19677,
+            "file_path": "results\\ppo\\AllyFire21041012.onnx",
+            "reward": -0.20000000298023224,
+            "creation_time": 1697119759.6788032,
+            "auxillary_file_paths": [
+                "results\\ppo\\AllyFire21041012\\AllyFire21041012-19677.pt"
+            ]
+        }
+    },
+    "AllyFire23091012": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\ppo\\AllyFire23091012\\AllyFire23091012-0.onnx",
+                "reward": null,
+                "creation_time": 1697127210.107268,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire23091012\\AllyFire23091012-0.pt"
+                ]
+            },
+            {
+                "steps": 144714,
+                "file_path": "results\\ppo\\AllyFire23091012\\AllyFire23091012-144714.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697127795.7399209,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire23091012\\AllyFire23091012-144714.pt"
+                ]
+            },
+            {
+                "steps": 155020,
+                "file_path": "results\\ppo\\AllyFire23091012\\AllyFire23091012-155020.onnx",
+                "reward": null,
+                "creation_time": 1697127951.8245115,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AllyFire23091012\\AllyFire23091012-155020.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 155020,
+            "file_path": "results\\ppo\\AllyFire23091012.onnx",
+            "reward": null,
+            "creation_time": 1697127951.8245115,
+            "auxillary_file_paths": [
+                "results\\ppo\\AllyFire23091012\\AllyFire23091012-155020.pt"
+            ]
+        }
     }
 }

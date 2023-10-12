@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1697125152",
+        "python_version": "3.9.11 (tags/v3.9.11:2de452f, Mar 16 2022, 14:33:45) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "E:\\Nebula_Disorientation\\Nebula_Disorientation\\venv\\Scripts\\mlagents-learn --run-id=22381012",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.0.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1697125161"
+    },
+    "total": 9.115778599999999,
+    "count": 1,
+    "self": 0.017642199999999164,
+    "children": {
+        "run_training.setup": {
+            "total": 0.04563869999999959,
+            "count": 1,
+            "self": 0.04563869999999959
+        },
+        "TrainerController.start_learning": {
+            "total": 9.0524977,
+            "count": 1,
+            "self": 0.0011796000000021678,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 9.051294299999999,
+                    "count": 1,
+                    "self": 9.051294299999999
+                },
+                "trainer_threads": {
+                    "total": 1.7999999997186933e-06,
+                    "count": 1,
+                    "self": 1.7999999997186933e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 2.19999999995224e-05,
+                    "count": 1,
+                    "self": 2.19999999995224e-05
+                }
+            }
+        }
+    }
+}

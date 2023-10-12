@@ -1,0 +1,38 @@
+{
+    "AllyFire22571012": {
+        "checkpoints": [
+            {
+                "steps": 35869,
+                "file_path": "results\\22571012\\AllyFire22571012\\AllyFire22571012-35869.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697126397.0650792,
+                "auxillary_file_paths": [
+                    "results\\22571012\\AllyFire22571012\\AllyFire22571012-35869.pt"
+                ]
+            },
+            {
+                "steps": 70458,
+                "file_path": "results\\22571012\\AllyFire22571012\\AllyFire22571012-70458.onnx",
+                "reward": 1.190909088335254,
+                "creation_time": 1697126619.9552438,
+                "auxillary_file_paths": [
+                    "results\\22571012\\AllyFire22571012\\AllyFire22571012-70458.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 70458,
+            "file_path": "results\\22571012\\AllyFire22571012.onnx",
+            "reward": 1.190909088335254,
+            "creation_time": 1697126619.9552438,
+            "auxillary_file_paths": [
+                "results\\22571012\\AllyFire22571012\\AllyFire22571012-70458.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.0.1+cpu"
+    }
+}

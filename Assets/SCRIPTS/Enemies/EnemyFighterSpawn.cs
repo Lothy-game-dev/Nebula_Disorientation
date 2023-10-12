@@ -73,7 +73,7 @@ public class EnemyFighterSpawn : MonoBehaviour
             StartCoroutine(SpawnEnemyByTime());
         } else
         {
-            for (int i = 0; i < 10/*EnemySpawnID.Length*/; i++)
+            for (int i = 0; i <EnemySpawnID.Length; i++)
             {
                 StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0,2f)));
             }

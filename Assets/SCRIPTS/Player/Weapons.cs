@@ -402,8 +402,8 @@ public class Weapons : MonoBehaviour
 
     float AICalculateRotateAngle(float xIn, float yIn)
     {
-        float x = RotatePoint.transform.position.x - Aim.transform.position.x + xIn;
-        float y = RotatePoint.transform.position.y - Aim.transform.position.y + yIn;
+        float x = RotatePoint.transform.position.x - Aim.transform.position.x - xIn;
+        float y = RotatePoint.transform.position.y - Aim.transform.position.y - yIn;
         if (Mathf.Abs(x) < 0.5f && Mathf.Abs(y) < 0.5f)
         {
             Fireable = false;
@@ -579,7 +579,7 @@ public class Weapons : MonoBehaviour
     }
     #endregion
     #region Weapon Fire
-    public void AIShootBullet(float x, float y)
+    public void AIShootBullet(float angle)
     {
         if (Aim==null)
         {
@@ -590,12 +590,12 @@ public class Weapons : MonoBehaviour
             {
                 if (!IsThermalType)
                 {
-                    AIFireBullet(x,y);
+                    AIFireBullet(angle);
                     FireTimer = 1 / RateOfFire;
                 }
                 else
                 {
-                    AIFireFlamethrowerOrb(x,y);
+                    AIFireFlamethrowerOrb(angle);
                     FireTimer = 1 / RateOfFire;
                 }
             }
@@ -603,7 +603,7 @@ public class Weapons : MonoBehaviour
     }
 
     // Fire Kinetic/Laser/Orb Bullet
-    void AIFireBullet(float x, float y)
+    void AIFireBullet(float angle)
     {
         // Incase Lava orb weapon, the gameobject will be different for tracer && rotate animation
         // so there will be an if clause
@@ -616,7 +616,7 @@ public class Weapons : MonoBehaviour
             bulletFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
         }
         // Rotate the bullet to the firing position
-        bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, AICalculateRotateAngle(x, y));
+        bulletFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + angle);
         // Same as above
         if (IsOrbWeapon)
         {
@@ -627,7 +627,10 @@ public class Weapons : MonoBehaviour
             bul = bulletFire.GetComponent<BulletShared>();
         }
         // Set bullet's properties required
-        bul.Destination = new Vector2(Aim.transform.position.x + x,Aim.transform.position.y + y);
+        Vector2 OldAim = Aim.transform.position - ShootingPosition.transform.position;
+        Vector2 perpen = Vector2.Perpendicular(OldAim);
+        Vector2 Dest = new Vector2(Aim.transform.position.x,Aim.transform.position.y) + perpen / perpen.magnitude * (angle > 0 ? -1 : 1) * Mathf.Tan(Mathf.Abs(angle) * Mathf.Deg2Rad) * OldAim.magnitude;
+        bul.Destination = Dest;
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
         bulletFire.SetActive(true);
@@ -641,7 +644,7 @@ public class Weapons : MonoBehaviour
         if (!isOverheatted) KineticSound();
     }
     // Fire Flamethrower type orbs
-    void AIFireFlamethrowerOrb(float x, float y)
+    void AIFireFlamethrowerOrb(float angle)
     {
         // Because of performance issues, flamethrower type will fire 30 times each second,
         // with each time firing 5 orbs
@@ -651,9 +654,9 @@ public class Weapons : MonoBehaviour
             GameObject orbFire = Instantiate(Bullet, ShootingPosition.transform.position, Quaternion.identity);
             // Set Angle random between -5 and 5 degree so that it could make the fire looks real
             float Angle = Random.Range(-5f, 5f);
-            orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, AICalculateRotateAngle(x, y) + Angle);
+            orbFire.transform.RotateAround(ShootingPosition.transform.position, Vector3.back, CalculateRotateAngle() + angle + Angle);
             BulletShared bul = orbFire.GetComponent<BulletShared>();
-            bul.Destination = CalculateFTOrbDestination(Angle, bul);
+            bul.Destination = CalculateFTOrbDestination(Angle + angle, bul);
             // For the fire shape
             bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90 / 10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;

@@ -1,0 +1,65 @@
+{
+    "AllyFire23091012": {
+        "checkpoints": [
+            {
+                "steps": 9826,
+                "file_path": "results\\23091012\\AllyFire23091012\\AllyFire23091012-9826.onnx",
+                "reward": -0.20000000298023224,
+                "creation_time": 1697127150.430523,
+                "auxillary_file_paths": [
+                    "results\\23091012\\AllyFire23091012\\AllyFire23091012-9826.pt"
+                ]
+            },
+            {
+                "steps": 11106,
+                "file_path": "results\\23091012\\AllyFire23091012\\AllyFire23091012-11106.onnx",
+                "reward": null,
+                "creation_time": 1697128133.1760476,
+                "auxillary_file_paths": [
+                    "results\\23091012\\AllyFire23091012\\AllyFire23091012-11106.pt"
+                ]
+            },
+            {
+                "steps": 114369,
+                "file_path": "results\\23091012\\AllyFire23091012\\AllyFire23091012-114369.onnx",
+                "reward": -0.0640000029404958,
+                "creation_time": 1697128833.7078176,
+                "auxillary_file_paths": [
+                    "results\\23091012\\AllyFire23091012\\AllyFire23091012-114369.pt"
+                ]
+            },
+            {
+                "steps": 132456,
+                "file_path": "results\\23091012\\AllyFire23091012\\AllyFire23091012-132456.onnx",
+                "reward": 0.29669564933880516,
+                "creation_time": 1697129133.2072392,
+                "auxillary_file_paths": [
+                    "results\\23091012\\AllyFire23091012\\AllyFire23091012-132456.pt"
+                ]
+            },
+            {
+                "steps": 142359,
+                "file_path": "results\\23091012\\AllyFire23091012\\AllyFire23091012-142359.onnx",
+                "reward": 1.2407499974407257,
+                "creation_time": 1697129343.8885074,
+                "auxillary_file_paths": [
+                    "results\\23091012\\AllyFire23091012\\AllyFire23091012-142359.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 142359,
+            "file_path": "results\\23091012\\AllyFire23091012.onnx",
+            "reward": 1.2407499974407257,
+            "creation_time": 1697129343.8885074,
+            "auxillary_file_paths": [
+                "results\\23091012\\AllyFire23091012\\AllyFire23091012-142359.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.0.1+cpu"
+    }
+}

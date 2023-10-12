@@ -508,7 +508,7 @@ public class AlliesShared : FighterShared
     }
     private IEnumerator WaitForDoneInit()
     {
-        yield return new WaitForSeconds(Random.Range(1, 10));
+        yield return new WaitForSeconds(0);
         doneInitWeapon = true;
     }
 
