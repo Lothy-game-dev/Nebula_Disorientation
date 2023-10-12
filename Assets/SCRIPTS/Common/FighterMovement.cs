@@ -66,7 +66,7 @@ public class FighterMovement : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if (fs.isFrozen || ControllerMain.IsInLoading)
+        if (fs.isFrozen || (ControllerMain.IsInLoading))
         {
             Movable = false;
             speedVector = new Vector2(0, 0);
@@ -79,48 +79,52 @@ public class FighterMovement : MonoBehaviour
         AccelerateSpeed();
         if (Movable) FighterMoving();
         fs.CalculateVelocity(speedVector);
-        CheckLimit();
-        if (PreventReachLimitTimer <=0f)
-        {
-            if (PreventReachLimit)
+            CheckLimit();
+            if (PreventReachLimitTimer <= 0f)
             {
-                PreventReachLimit = false;
-                NoLeftRightMove();
-            }
-        } else
-        {
-            PreventReachLimit = true;
-            PreventReachLimitTimer -= Time.deltaTime;
-        }
-        if (LimitString == "")
-        {
-            if (LimitDelay <= 0f)
-            {
-                if (!PreventReachLimit)
+                if (PreventReachLimit)
                 {
-                    PreventReachingLimit();
-                    if (CheckMovingDelay <= 0f)
+                    PreventReachLimit = false;
+                    NoLeftRightMove();
+                }
+            }
+            else
+            {
+                PreventReachLimit = true;
+                PreventReachLimitTimer -= Time.deltaTime;
+            }
+            if (LimitString == "")
+            {
+                if (LimitDelay <= 0f)
+                {
+                    if (!PreventReachLimit)
                     {
-                        CheckMovingDelay = Random.Range(0.5f, 1f);
-                        CheckOnMoving();
-                    } else
-                    {
-                        CheckMovingDelay -= Time.deltaTime;
+                        PreventReachingLimit();
+                        if (CheckMovingDelay <= 0f)
+                        {
+                            CheckMovingDelay = Random.Range(0.5f, 1f);
+                            CheckOnMoving();
+                        }
+                        else
+                        {
+                            CheckMovingDelay -= Time.deltaTime;
+                        }
                     }
                 }
-            } else
-            {
-                LimitDelay -= Time.deltaTime;
+                else
+                {
+                    LimitDelay -= Time.deltaTime;
+                }
             }
-        }
-        else
-        {
-            GetAwayFromLimit();
-        }
-        if (HazardEnvi.HazardID == 2 || HazardEnvi.HazardID == 5 || HazardEnvi.HazardID == 6)
-        {
-            CheckForHazard();
-        }
+            else
+            {
+                GetAwayFromLimit();
+            }
+            if (HazardEnvi.HazardID == 2 || HazardEnvi.HazardID == 5 || HazardEnvi.HazardID == 6)
+            {
+                CheckForHazard();
+            }
+
     }
     private void FixedUpdate()
     {
@@ -136,7 +140,7 @@ public class FighterMovement : MonoBehaviour
 
     public void DownMove()
     {
-        SpeedUp = IsNotMoving ? 0 :/*-*/ 1;
+        SpeedUp = IsNotMoving ? 0 : -1;
     }
 
     public void NoUpDownMove()

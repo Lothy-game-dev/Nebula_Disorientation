@@ -40,36 +40,15 @@ public class AlliesFighterMLAgent : Agent
         sensor.AddObservation(als.LeftTarget == null);
         if (als.LeftTarget!=null)
         {
-            sensor.AddObservation(als.LeftTarget.GetComponent<FighterMovement>().CurrentRotateAngle);
+            sensor.AddObservation(Vector2.Angle(LeftWeapon.ShootingPosition.transform.position - LeftWeapon.RotatePoint.transform.position, als.LeftTarget.GetComponent<FighterMovement>().HeadObject.transform.position - als.LeftTarget.transform.position));
             sensor.AddObservation(als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed);
             sensor.AddObservation((als.LeftTarget.transform.position - transform.position).magnitude);
-            sensor.AddObservation(Vector2.Angle(als.LeftTarget.transform.position - transform.position, transform.GetChild(5).position - transform.position));
         } else
         {
             sensor.AddObservation(0);
             sensor.AddObservation(0);
             sensor.AddObservation(0);
-            sensor.AddObservation(0);
         }
-        sensor.AddObservation(LeftWeapon.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance);
-        
-        sensor.AddObservation(als.RightTarget == null);
-        if (als.RightTarget != null)
-        {
-            sensor.AddObservation(als.RightTarget.GetComponent<FighterMovement>().CurrentRotateAngle);
-            sensor.AddObservation(als.RightTarget.GetComponent<FighterMovement>().CurrentSpeed);
-            sensor.AddObservation((als.RightTarget.transform.position - transform.position).magnitude);
-            sensor.AddObservation(Vector2.Angle(als.RightTarget.transform.position - transform.position, transform.GetChild(5).position - transform.position));
-
-        }
-        else
-        {
-            sensor.AddObservation(0);
-            sensor.AddObservation(0);
-            sensor.AddObservation(0);
-            sensor.AddObservation(0);
-        }
-        sensor.AddObservation(RightWeapon.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance);
     }
     public override void OnActionReceived(ActionBuffers actions)
     {
@@ -78,7 +57,7 @@ public class AlliesFighterMLAgent : Agent
             if (als.DelayTimer < 0f && !als.LeftFire)
             {
                 als.LeftFire = true;
-                LeftWeapon.AIShootBullet(actions.ContinuousActions[0] * 200f, actions.ContinuousActions[1] * 200f);
+                LeftWeapon.AIShootBullet(fm.RotateDirection * actions.ContinuousActions[0] * 30);
                 als.DelayTimer = als.DelayBetween2Weap;
             }
         }
@@ -87,7 +66,7 @@ public class AlliesFighterMLAgent : Agent
             if (als.DelayTimer < 0f && als.LeftFire)
             {
                 als.LeftFire = false;
-                RightWeapon.AIShootBullet(actions.ContinuousActions[2] * 200f, actions.ContinuousActions[3] * 200f);
+                RightWeapon.AIShootBullet(fm.RotateDirection * actions.ContinuousActions[0] * 30);
                 als.DelayTimer = als.DelayBetween2Weap;
             }
         }
@@ -164,14 +143,14 @@ public class AlliesFighterMLAgent : Agent
     #region Reward
     public void ReceiveReward(float amount, string extra)
     {
-        Debug.Log(name + " Receive Reward For " + extra + " :" + amount);
         AddReward(amount);
+        EndEpisode();
     }
 
     public void ReceivePunishment(float amount, string extra)
     {
-        Debug.Log(name + " Receive Punishment For " + extra + " :-" + amount);
         AddReward(-amount);
+        EndEpisode();
     }
 
     public GameObject GetNearestEnemy()
