@@ -130,6 +130,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnEnemyWarship.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutGoButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECPlanets.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Assets\SCRIPTS\PowerEffect\Barrier.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumablePopUp.cs" />
+    <Compile Include="Assets\SCRIPTS\Warship\WSHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnAllyWarship.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
