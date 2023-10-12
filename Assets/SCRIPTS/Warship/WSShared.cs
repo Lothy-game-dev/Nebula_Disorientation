@@ -17,6 +17,8 @@ public class WSShared : MonoBehaviour
     public Animator Animation;
     public GameObject Barrier;
     public GameObject BarrierBreak;
+    public GameObject Flash;
+    public GameObject Explosion;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -53,11 +55,13 @@ public class WSShared : MonoBehaviour
     private int[] FightersId;
     private int Count;
     private int IDCount;
+    private int[] EnemiesTier;
     private bool Spawned;
     private float BarrierEffectDelay;
     private float BarrierRegenTimer;
     private float BarrierRegenAmount;
     private float BarrierRegenDelay;
+    private bool AlreadyDestroy;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -65,10 +69,11 @@ public class WSShared : MonoBehaviour
     {
         // Initialize variables
         CurrentHP = MaxHP;
-        FightersId = new int[3] { 2, 3, 4 };
         Count = 0;
         IDCount = 0;
         SpawnTimer = 10f;
+        FightersId = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindAnyObjectByType<SpaceZoneGenerator>().EnemyFighterIDs : FindAnyObjectByType<SpaceZoneGenerator>().AllyFighterIDs.ToArray());
+        EnemiesTier = FindObjectOfType<SpaceZoneGenerator>().EnemiesTier;
     }
 
     // Update is called once per frame
@@ -137,10 +142,10 @@ public class WSShared : MonoBehaviour
         if (TargetRefreshTimer <= 0f)
         {
             TargetRefreshTimer = Random.Range(2.5f, 3.5f);
-            CheckTargetEnemy();
 
             for (int i = 0; i < SpWps.Count; i++)
             {
+                CheckTargetEnemy(SpWps[i], TargetLeftEnemy(SpWps[i]));
                 if (SpWps[i] != null && SpWps[i].GetComponent<Weapons>() != null)
                 {
                     SpWps[i].GetComponent<Weapons>().Aim = TargetLeftEnemy(SpWps[i]);
@@ -155,8 +160,10 @@ public class WSShared : MonoBehaviour
             {
                 if (MainWps[i] != null && MainWps[i].GetComponent<Weapons>() != null)
                 {
-                    MainWps[i].GetComponent<Weapons>().Aim = TargetLeftEnemy(MainWps[i]);
+                    CheckTargetEnemy(MainWps[i], TargetLeftEnemy(MainWps[i]));
+                    MainWps[i].GetComponent<Weapons>().Aim = MainWeaponTargetEnemy(MainWps[i]);
                 }
+
                 /*if (RightWeapon != null)
                 {
                     RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
@@ -164,8 +171,9 @@ public class WSShared : MonoBehaviour
             }
 
         }
-        if (MainWps[0].GetComponent<Weapons>() == null)
+        if (MainWps[0].GetComponent<Weapons>() == null && FightersId.Length > 0)
         {
+            
             SpawnTimer -= Time.deltaTime;
             Animation = MainWps[0].GetComponent<Animator>();    
             if (Spawned)
@@ -174,58 +182,17 @@ public class WSShared : MonoBehaviour
                 Spawned = false;
             }
             if (SpawnTimer < 0f)
-            {
+            {   
+                int random = Random.Range(0, FightersId.Length);
                 Animation.SetBool("isSpawn", true);
-                SpawnFighter(FightersId[IDCount], Count);
+                SpawnFighter(FightersId[random], EnemiesTier[random]);
                 Spawned = true;
-                IDCount++;
                 Count++;
                 SpawnTimer = 10f;
-                if (IDCount == 3)
-                {
-                    IDCount = 0;
-                }
-               
+                              
             }
         }
-
-        //Check barrier and regen barrier
-        BarrierRegenTimer -= Time.deltaTime;
-        BarrierRegenDelay -= Time.deltaTime;
-        BarrierEffectDelay -= Time.deltaTime;
-        if (BarrierRegenTimer <= 0f)
-        {
-            if (BarrierRegenDelay <= 0f && CurrentBarrier < MaxBarrier)
-            {
-                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
-                {
-                    CurrentBarrier += BarrierRegenAmount;
-                    BarrierRegenDelay = 1f;
-                }
-                else
-                {
-                    CurrentBarrier = MaxBarrier;
-                    BarrierRegenDelay = 1f;
-                }
-            }
-
-        }
-        /*if (LeftTarget == null || RightTarget == null)
-        {
-            FindTargetTimer -= Time.deltaTime;
-        }
-        if (FindTargetTimer <= 0f)
-        {
-            FindTargetTimer = Random.Range(2.5f, 3.5f);
-            if (LeftTarget == null)
-            {
-                //TargetLeftEnemy(1000);
-            }
-            if (RightTarget == null)
-            {
-                TargetRightEnemy();
-            }
-        }*/
+        CheckBarrierAndHealth();
 
     }
     #endregion
@@ -291,8 +258,6 @@ public class WSShared : MonoBehaviour
                         wp.EnemyLayer = MainWeaponTarget;
                         wp.tracking = true;
                         wp.isMainWeapon = true;
-                        wp.RotateLimitPositive = 180;
-                        wp.RotateLimitNegative = -180;
                     } else
                     {
                         main.transform.localScale = new Vector2(0.25f, 0.25f);
@@ -356,23 +321,30 @@ public class WSShared : MonoBehaviour
     }
     #endregion
     #region Receive Damage
-    public void ReceiveBulletDamage(float Damage, GameObject Bullet)
+    public void ReceiveBulletDamage(float Damage, GameObject Bullet, bool isMainWeapon, Vector2 BulletHitPos)
     {
         float RealDamage = 0;
-        if (Bullet.GetComponent<UsualKineticBullet>() != null)
+        if (!isMainWeapon)
         {
-            if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
+            if (Bullet.GetComponent<UsualKineticBullet>() != null)
             {
-                RealDamage = Damage * 70 / 100f;
+                if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
+                {
+                    RealDamage = Damage * 70 / 100f;
+                }
+                else
+                {
+                    RealDamage = Damage;
+                }
             }
             else
             {
-                RealDamage = Damage;
+                RealDamage = Damage * 5 / 100f;
             }
         }
         else
         {
-            RealDamage = Damage * 5 / 100f;
+            RealDamage = Damage;
         }
         if (CurrentBarrier > 0)
         {
@@ -382,8 +354,7 @@ public class WSShared : MonoBehaviour
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
-                    br.transform.localScale = gameObject.transform.localScale * 4f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
                     br.SetActive(true);
                     br.transform.SetParent(transform);
                     Destroy(br, 0.25f);
@@ -397,8 +368,7 @@ public class WSShared : MonoBehaviour
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
-                    br.transform.localScale = gameObject.transform.localScale * 4f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);                
                     br.SetActive(true);
                     br.transform.SetParent(transform);
                     Destroy(br, 0.25f);
@@ -413,8 +383,7 @@ public class WSShared : MonoBehaviour
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
-                GameObject BRBreak = Instantiate(BarrierBreak, transform.position, Quaternion.identity);
-                BRBreak.transform.localScale = gameObject.transform.localScale * 4f;
+                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
                 BRBreak.SetActive(true);
                 BRBreak.transform.SetParent(transform);
                 Destroy(BRBreak, 0.5f);
@@ -454,11 +423,29 @@ public class WSShared : MonoBehaviour
             float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
             {
-                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);
-                if (distanceTest < distance)
+                if (!weapon.name.Contains("GravitationalArtillery"))
                 {
-                    distance = distanceTest;
-                    Nearest = enemy.gameObject;
+                    if (enemy.GetComponent<FighterShared>() != null)
+                    {
+                        float distanceTest = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
+                        if (distanceTest < distance)
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                } else
+                {
+                    float distanceTest = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
+                    if (distanceTest < distance)
+                    {
+                        distance = distanceTest;
+                        Nearest = enemy.gameObject;
+                    }
                 }
             }
             LeftTarget = Nearest;
@@ -467,53 +454,71 @@ public class WSShared : MonoBehaviour
         return game;
     }
 
-    private void TargetRightEnemy()
+    public GameObject MainWeaponTargetEnemy(GameObject weapon)
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 1000f, FindObjectOfType<GameController>().PlayerLayer);
+        GameObject game = null;
+        BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
-            GameObject Nearest = cols[0].gameObject;
-            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            GameObject Nearest = null;
             foreach (var enemy in cols)
             {
-                float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
-                if (distanceTest < distance)
+                // If weapon is main weap, target enemy ws/ss only
+                if (weapon.GetComponent<Weapons>().isMainWeapon)
                 {
-                    distance = distanceTest;
-                    Nearest = enemy.gameObject;
+                    if (enemy.gameObject.tag == "BossEnemy" || enemy.gameObject.tag == "AlliesEliteFighter")
+                    {
+                        Nearest = enemy.gameObject;
+                        float distance = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
+                        float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);
+                        if (distanceTest < distance)
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
+                    } else
+                    {
+                        continue;
+                    }
                 }
+
             }
-            RightTarget = Nearest;
+            game = Nearest;
+            LeftTarget = game;
         }
+        return game;
     }
-    private void CheckTargetEnemy()
+
+    private void CheckTargetEnemy(GameObject weapon, GameObject target)
     {
+        BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
         for (int i = 0; i < SpWps.Count; i++)
         {
-            if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > 800f || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
+            if (target != null && (Mathf.Abs((target.transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || target.layer == LayerMask.NameToLayer("Untargetable")))
             {
-                LeftTarget = null;
-                SpWps[i].GetComponent<Weapons>().Aim = null;
+                target = null;
+                weapon.GetComponent<Weapons>().Aim = null;
             }
         }
-        /*if (RightTarget != null && (Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange || RightTarget.layer == LayerMask.NameToLayer("Untargetable")))
-        {
-            RightTarget = null;
-            RightWeapon.GetComponent<Weapons>().Aim = null;
-        }*/
     }
     #endregion
     #region Spawn
 
-    public void SpawnFighter(int id, int count)
+    public void SpawnFighter(int id , int tier)
     {
         Dictionary<string, object> DataDict;
+        float HPScale = 1;
+        float BountyScale = 1;
         if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
+            HPScale = FindObjectOfType<SpaceZoneGenerator>().EnemyMaxHP;
+            BountyScale = FindObjectOfType<SpaceZoneGenerator>().EnemyBountyScale;          
         } else
         {
             DataDict = FindObjectOfType<AccessDatabase>().GetDataAlliesById(id);
+            HPScale = FindObjectOfType<SpaceZoneGenerator>().AllyMaxHP;
         }
         // Get Model
         for (int i = 0; i < AllyModel.transform.childCount; i++)    
@@ -542,13 +547,132 @@ public class WSShared : MonoBehaviour
         aus.dopplerLevel = 0;
         aus.spread = 360;
         Destroy(aus, 4f);
-        Ally.name = ChosenModel.name + " |" + MainWps[0].transform.position.x + " - " + MainWps[0].transform.position.y + " - " + count;
-        Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
-        Ally.GetComponent<AlliesShared>().HPScale = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindObjectOfType<SpaceZoneGenerator>().EnemyMaxHP : FindObjectOfType<SpaceZoneGenerator>().AllyMaxHP);
-        Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
+        Ally.name = ChosenModel.name + " |" + MainWps[0].transform.position.x + " - " + MainWps[0].transform.position.y + " - " + Count;
+        if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Ally.GetComponent<EnemyShared>().HPScale = HPScale;
+            Ally.GetComponent<EnemyShared>().CashBountyScale = BountyScale;
+            Ally.GetComponent<EnemyShared>().Tier = tier;
+            Ally.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
+        } else
+        {
+            Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
+            Ally.GetComponent<AlliesShared>().HPScale = HPScale;
+            Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
+        }
         
     }
 
+    #endregion
+    #region Receive healing
+    public void ReceiveHealing(float HealAmount)
+    {
+        CurrentHP += HealAmount;
+    }
+    #endregion
+    #region Check barrier and health
+    public void CheckBarrierAndHealth()
+    {
+        //Check barrier and regen barrier
+        BarrierRegenTimer -= Time.deltaTime;
+        BarrierRegenDelay -= Time.deltaTime;
+        BarrierEffectDelay -= Time.deltaTime;
+        if (BarrierRegenTimer <= 0f)
+        {
+            if (BarrierRegenDelay <= 0f && CurrentBarrier < MaxBarrier)
+            {
+                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
+                {
+                    CurrentBarrier += BarrierRegenAmount;
+                    BarrierRegenDelay = 1f;
+                }
+                else
+                {
+                    CurrentBarrier = MaxBarrier;
+                    BarrierRegenDelay = 1f;
+                }
+            }
+
+        }
+
+        if (CurrentHP <= 0)
+        {
+            if (!AlreadyDestroy)
+            {
+                AlreadyDestroy = true;
+                for (int i = 0; i < gameObject.transform.childCount; i++)
+                {
+                    gameObject.transform.GetChild(i).gameObject.SetActive(false);
+                }
+                StartCoroutine(DestroySelf());
+
+            }
+        }
+    }
+
+    private IEnumerator DestroySelf()
+    {       
+        Explosion.transform.localScale = transform.localScale / 1.5f;
+        Explosion.GetComponent<SpriteRenderer>().sortingOrder = 3;
+        /* GetComponent<SpriteRenderer>().color = Color.black;*/
+        GetComponent<PolygonCollider2D>().enabled = false;
+        GetComponent<WSMovement>().enabled = false;
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
+            expl.SetActive(true);
+            Destroy(expl, 0.3f);
+            yield return new WaitForSeconds(0.05f);
+            GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 400), transform.position.y + Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            expl2.SetActive(true);
+            Destroy(expl2, 0.3f);
+            yield return new WaitForSeconds(0.05f);
+            GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 400), transform.position.y + Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            expl3.SetActive(true);
+            Destroy(expl3, 0.3f);
+            yield return new WaitForSeconds(0.05f);
+            GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 400), transform.position.y - Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            expl4.SetActive(true);
+            Destroy(expl4, 0.3f);
+            yield return new WaitForSeconds(0.05f);
+            GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 400), transform.position.y - Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            expl5.SetActive(true);
+            Destroy(expl5, 0.3f);
+        }
+
+        GenerateFlash(transform.position, 0.5f, 1f);
+
+    }
+    #endregion
+    #region Flash
+    public void GenerateFlash(Vector2 pos, float delay, float duration)
+    {
+
+        GameObject bf = Instantiate(Flash, new Vector3(pos.x, pos.y, Flash.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 1;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.transform.SetParent(transform);
+        bf.SetActive(true);
+        GetComponent<SpriteRenderer>().enabled = false;
+        StartCoroutine(FlashOpen(bf, delay, duration));
+
+    }
+
+    private IEnumerator FlashOpen(GameObject Fade, float delay, float duration)
+    {
+        yield return new WaitForSeconds(delay);
+        for (int i = 0; i < 50; i++)
+        {
+            Color c = Fade.GetComponent<SpriteRenderer>().color;
+            c.a -= 1 / 50f;
+            Fade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(duration / 50f);
+        }
+        Destroy(gameObject);
+        Destroy(Fade);
+
+    }
     #endregion
 }
 

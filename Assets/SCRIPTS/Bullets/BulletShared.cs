@@ -21,6 +21,7 @@ public class BulletShared : MonoBehaviour
     public bool ApplyNanoEffect;
     public int LavaBurnCount;
     public GameObject HitBoxRange;
+    
 
     protected Rigidbody2D rb;
     protected float Distance;
@@ -133,13 +134,13 @@ public class BulletShared : MonoBehaviour
                             }
                         } else if (Warship!=null)
                         {
-                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                         }
                         else
                         {
                             if (SpaceStation != null)
                             {
-                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                             }
                         }
                     }
@@ -160,13 +161,13 @@ public class BulletShared : MonoBehaviour
                     }
                     else if (Warship != null)
                     {
-                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                     }
                     else
                     {
                         if (SpaceStation != null)
                         {
-                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                         }
                     }
                 }
@@ -219,13 +220,13 @@ public class BulletShared : MonoBehaviour
                         }
                         else if (Warship != null)
                         {
-                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                         }
                         else
                         {
                             if (SpaceStation != null)
                             {
-                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                             }
                         }
                     }
@@ -249,13 +250,13 @@ public class BulletShared : MonoBehaviour
                     }
                     else if (Warship != null)
                     {
-                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                     }
                     else
                     {
                         if (SpaceStation != null)
                         {
-                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                         }
                     }
                 }
@@ -298,12 +299,12 @@ public class BulletShared : MonoBehaviour
                 }
                 else if (Warship != null)
                 {
-                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                 } else
                 {
                     if (SpaceStation != null)
                     {
-                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                     }
                 }
                 Destroy(gameObject);
@@ -339,13 +340,13 @@ public class BulletShared : MonoBehaviour
                         }
                         else if (Warship != null)
                         {
-                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                         }
                         else
                         {
                             if (SpaceStation != null)
                             {
-                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                             }
                         }
                     }
@@ -362,13 +363,13 @@ public class BulletShared : MonoBehaviour
                     }
                     else if (Warship != null)
                     {
-                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                     }
                     else
                     {
                         if (SpaceStation != null)
                         {
-                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                         }
                     }
                 }
@@ -406,7 +407,7 @@ public class BulletShared : MonoBehaviour
                     }
                     else if (Warship != null)
                     {
-                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                     }
                 }
             }
@@ -473,13 +474,13 @@ public class BulletShared : MonoBehaviour
                 }
                 else if (Warship != null)
                 {
-                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                 }
                 else
                 {
                     if (SpaceStation != null)
                     {
-                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject);
+                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                     }
                 }
                 if (!isPenetrating)
@@ -492,7 +493,54 @@ public class BulletShared : MonoBehaviour
 
     public void CalculateLaserBeamDmg()
     {
+        // Detect enemy
+        RealDamage = BaseDamagePerHit;
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, HitBox, EnemyLayer);
+        foreach (var col in cols)
+        {
+            if (!AlreadyHit)
+            {
+                AlreadyHit = true;
+                WSShared Warship = col.gameObject.GetComponent<WSShared>();
+                SpaceStationShared SpaceStation = col.gameObject.GetComponent<SpaceStationShared>();
+                 if (Warship != null)
+                {
+                    // Receive laser Damage
+                    if (WeaponShoot.CurrentHitCount < 1)
+                    {
+                        if (WeaponShoot.CurrentHitCount == 0)
+                        {
+                            // Set reset timer
 
+                            Debug.Log(RealDamage);
+                            Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject,true, gameObject.transform.position);
+                        }
+                        WeaponShoot.CurrentHitCount = 1;
+                    }
+                }
+                else
+                {
+                    if (SpaceStation != null)
+                    {
+                        // Receive laser Damage
+                        if (WeaponShoot.CurrentHitCount < 1)
+                        {
+                            if (WeaponShoot.CurrentHitCount == 0)
+                            {
+                                // Set reset timer
+
+                                SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
+                                Debug.Log(RealDamage);
+                            }
+                            WeaponShoot.CurrentHitCount = 1;
+                        }
+                       
+                    }
+                }
+                Destroy(gameObject);
+            }
+            break;
+        }
     }
 
     // Black hole orb
@@ -542,13 +590,20 @@ public class BulletShared : MonoBehaviour
             // Deal damage to all enemies in AoE range
             FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
             WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+            SpaceStationShared SpaceStation = col2.gameObject.GetComponent<SpaceStationShared>();
             if (enemy != null)
             {
                 enemy.ReceiveDamage(CalculateFinalDamage(RealDamage,false, enemy.gameObject), gameObject);
             }
             else if (Warship != null)
             {
-                Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject);
+                Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
+            } else
+            {
+                if (SpaceStation != null)
+                {
+                    SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
+                }
             }
         }
         BlackHole bhole = bh.GetComponent<BlackHole>();
@@ -629,6 +684,7 @@ public class BulletShared : MonoBehaviour
         if (Range != 0f)
         {
             MaxEffectiveDistance = Range;
+            
         }
         if (DistanceTravel > MaxEffectiveDistance)
         {

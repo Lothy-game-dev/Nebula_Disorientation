@@ -681,7 +681,6 @@ public class FighterShared : MonoBehaviour
     #region Calculate Healing
     public void ReceiveHealing(float HealAmount)
     {
-       HealingEffect.SetActive(true);
        CurrentHP += HealAmount;
     }
     #endregion

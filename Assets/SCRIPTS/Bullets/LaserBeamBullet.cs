@@ -38,6 +38,7 @@ public class LaserBeamBullet : BulletShared
         UpdateBullet();
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
         CheckLaserBeamDistanceTravel();
+        CalculateLaserBeamDmg();
     }
     #endregion
     #region Function group 1
