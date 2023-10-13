@@ -162,7 +162,6 @@ public class SpaceStationShared : MonoBehaviour
 
         MainWps = new List<GameObject>();
         Vector2 WPPos = model.GetComponent<SpaceStationModelShared>().MainWeaponPosition;
-        Debug.Log(MainWeapon.Count);
         for (int i = 0; i < MainWeapon.Count; i++)
         {
             for (int j = 0; j < Weapons.transform.childCount; j++)
@@ -170,7 +169,6 @@ public class SpaceStationShared : MonoBehaviour
                 //Find model
                 if (MainWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower())
                 {
-                    Debug.Log(Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower());
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos.x, transform.position.y + WPPos.y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
                     main.transform.localScale = new Vector2(0.5f, 0.5f);

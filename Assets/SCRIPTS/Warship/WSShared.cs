@@ -67,6 +67,11 @@ public class WSShared : MonoBehaviour
     public GameObject Head;
     public WSHealthBar HPBar;
     private bool isHit;
+    private Dictionary<GameObject, int> WSSSDict;
+    private List<string> WSSSName;
+    private List<float> WSSSDistance;
+    private List<GameObject> Gamelist;
+    public int Order;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -79,12 +84,15 @@ public class WSShared : MonoBehaviour
         SpawnTimer = 10f;
         FightersId = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindAnyObjectByType<SpaceZoneGenerator>().EnemyFighterIDs : FindAnyObjectByType<SpaceZoneGenerator>().AllyFighterIDs.ToArray());
         EnemiesTier = FindObjectOfType<SpaceZoneGenerator>().EnemiesTier;
+        FindAnyObjectByType<WSSSDetected>().DectectWSSS();
+        WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
+        Gamelist = new List<GameObject>();
+        Order = WSSSDict[gameObject];
     }
 
     // Update is called once per frame
     void Update()
     {
-        
         if (doneInitWeapon)
         {
             for (int i = 0; i < MainWps.Count; i++)
@@ -169,7 +177,8 @@ public class WSShared : MonoBehaviour
             }
         }
         CheckBarrierAndHealth();
-       HideWeaponWhenCollideWarship();
+       
+        CheckWhichIsOnTop();
     }
     #endregion
     #region Init data
@@ -228,7 +237,7 @@ public class WSShared : MonoBehaviour
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
                 //Find model
-                if (MainWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ","").ToLower()) 
+                if (Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower().Contains(MainWeapon[i].Replace(" ", "").ToLower())) 
                 {
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos[i].x, transform.position.y + WPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
@@ -280,7 +289,7 @@ public class WSShared : MonoBehaviour
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
                 //Find model
-                if (SupWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower())
+                if (Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower().Contains(SupWeapon[i].Replace(" ", "").ToLower()))
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
@@ -674,15 +683,25 @@ public class WSShared : MonoBehaviour
     }
     #endregion
     #region Check layer
-    public void HideWeaponWhenCollideWarship()
+    public void CheckWhichIsOnTop()
     {
-        
-        Vector3 diff = gameObject.transform.position - Camera.main.transform.position;
-
-        float curDistance = Vector3.Distance(gameObject.transform.position, Camera.main.transform.position);
-
-        Debug.Log(name + curDistance);
-        
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, Vector2.zero);
+        foreach (var x in hits )
+        {
+            if (x.collider.gameObject != gameObject)
+            {
+                if (x.collider.GetComponent<WSShared>() != null)
+                {                
+                    if (WSSSDict[gameObject] > WSSSDict[x.collider.gameObject])
+                    {
+                        Debug.Log(name + "is under" + x.collider.name);
+                    } else
+                    {                        
+                        Debug.Log(name + "is on top" + x.collider.name);
+                    }
+                }
+            }
+        }
     }
     #endregion
 }

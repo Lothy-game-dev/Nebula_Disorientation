@@ -84,7 +84,7 @@ public class Weapons : MonoBehaviour
     public bool isSpaceStation;
 
     public float ResetHitTimer;
-
+    private bool isHiding;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -295,7 +295,10 @@ public class Weapons : MonoBehaviour
             CurrentHitCount = 0;
             ResetHitTimer = 1 / RateOfFire;
         }
-        
+
+        CheckCollide();
+       
+
     }
     private void FixedUpdate()
     {
@@ -1100,6 +1103,30 @@ public class Weapons : MonoBehaviour
             }
         }
 
+    }
+    #endregion
+    #region Check Collide
+    public void CheckCollide()
+    {
+        Color c = GetComponent<SpriteRenderer>().color;
+        c.a = 1f;
+        if (GetComponent<PolygonCollider2D>() != null)
+        {
+            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, Vector2.zero);
+
+            foreach (var x in hits)
+            {
+                if (x.collider.gameObject != gameObject && x.collider.gameObject != Fighter && x.collider.GetComponent<WSShared>() != null)
+                {
+                   if (Fighter.GetComponent<WSShared>().Order > x.collider.GetComponent<WSShared>().Order)
+                    {
+                        c.a = 0f;
+                    }                         
+                    
+                } 
+            }
+        }
+        GetComponent<SpriteRenderer>().color = c;
     }
     #endregion
 }
