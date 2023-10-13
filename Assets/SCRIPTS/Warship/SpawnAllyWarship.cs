@@ -30,7 +30,7 @@ public class SpawnAllyWarship : MonoBehaviour
         /*pos.x = Random.Range(700f, 2100f);
         pos.y = Random.Range(-3500f, 3500f);*/
         pos[0] = new Vector2(-2000f, 200f);
-        pos[1] = new Vector2(-3000f, 200f);
+        pos[1] = new Vector2(-3000f, 1000f);
         SpawnWS(pos);
     }
 

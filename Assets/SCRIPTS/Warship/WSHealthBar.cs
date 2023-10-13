@@ -38,7 +38,6 @@ public class WSHealthBar : MonoBehaviour
                 StopCoroutine(coroutine);
             }
             Timer -= Time.deltaTime;
-            Debug.Log(Timer);
             Color c = slider.gameObject.transform.GetChild(1).GetChild(0).GetComponent<Image>().color;
             c.a = 1f;
             slider.gameObject.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = c;
