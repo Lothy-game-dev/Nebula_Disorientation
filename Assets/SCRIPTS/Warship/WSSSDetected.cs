@@ -43,6 +43,7 @@ public class WSSSDetected : MonoBehaviour
     // Group all function that serve the same algorithm
     public void DectectWSSS()
     {
+        // Get all Warship and SpaceStation
         Collider2D[] cols1 = Physics2D.OverlapCircleAll(transform.position, 10000f, EnemyLayer);
         Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, 10000f, AlliesLayer);
 
@@ -72,10 +73,6 @@ public class WSSSDetected : MonoBehaviour
 
             }
         }
-        foreach (var x in WSSSDict)
-        {
-            Debug.Log(x.Key + "|" + x.Value);
-        }
         WSSSDistance.Sort();
         for (int i = 0; i < WSSSDistance.Count; i++)
         {
@@ -86,11 +83,5 @@ public class WSSSDetected : MonoBehaviour
         }
     }
     #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
-    public void PrioritizeObject()
-    {
-        
-    }
-    #endregion
+   
 }

@@ -1108,6 +1108,7 @@ public class Weapons : MonoBehaviour
     #region Check Collide
     public void CheckCollide()
     {
+        // Reduce the transparency when weapon collide warship or spacestation
         Color c = GetComponent<SpriteRenderer>().color;
         c.a = 1f;
         if (GetComponent<PolygonCollider2D>() != null)
@@ -1118,12 +1119,35 @@ public class Weapons : MonoBehaviour
             {
                 if (x.collider.gameObject != gameObject && x.collider.gameObject != Fighter && x.collider.GetComponent<WSShared>() != null)
                 {
-                   if (Fighter.GetComponent<WSShared>().Order > x.collider.GetComponent<WSShared>().Order)
+                    if (Fighter.GetComponent<WSShared>() != null)
                     {
-                        c.a = 0f;
-                    }                         
-                    
-                } 
+                       if (Fighter.GetComponent<WSShared>().Order > x.collider.GetComponent<WSShared>().Order)
+                       {
+                            c.a = 0f;
+                       } else
+                        {
+                            if (Fighter.GetComponent<SpaceStationShared>() != null)
+                            {
+                                if (Fighter.GetComponent<SpaceStationShared>().Order > x.collider.GetComponent<WSShared>().Order)
+                                {
+                                    c.a = 0f;
+                                }
+                            }
+                        }                                       
+                    }
+                } else
+                {
+                    if (Fighter.GetComponent<WSShared>() != null)
+                    {
+                        if (x.collider.gameObject != gameObject && x.collider.gameObject != Fighter && x.collider.GetComponent<SpaceStationShared>() != null)
+                        {
+                            if (Fighter.GetComponent<WSShared>().Order > x.collider.GetComponent<SpaceStationShared>().Order)
+                            {
+                                c.a = 0f;
+                            }                                         
+                        }
+                    }
+                }
             }
         }
         GetComponent<SpriteRenderer>().color = c;
