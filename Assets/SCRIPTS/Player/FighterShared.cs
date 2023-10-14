@@ -619,6 +619,10 @@ public class FighterShared : MonoBehaviour
                 {
                     BarrierEffectDelay = 0.25f;
                     GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    if (name.Contains("SSTP"))
+                    {
+                        br.transform.localScale *= 3;
+                    }
                     br.SetActive(true);
                     br.transform.SetParent(transform);
                     Destroy(br, 0.25f);
@@ -634,6 +638,10 @@ public class FighterShared : MonoBehaviour
                 {
                     BarrierEffectDelay = 0.25f;
                     GameObject br = Instantiate(Barrier, transform.position, Quaternion.identity);
+                    if (name.Contains("SSTP"))
+                    {
+                        br.transform.localScale *= 3;
+                    }
                     br.SetActive(true);
                     br.transform.SetParent(transform);
                     Destroy(br, 0.25f);
@@ -649,6 +657,10 @@ public class FighterShared : MonoBehaviour
             {
                 BarrierEffectDelay = 0.25f;
                 GameObject BRBreak = Instantiate(BarrierBreak, transform.position, Quaternion.identity);
+                if (name.Contains("SSTP"))
+                {
+                    BRBreak.transform.localScale *= 3;
+                }
                 BRBreak.SetActive(true);
                 BRBreak.transform.SetParent(transform);
                 Destroy(BRBreak, 0.5f);

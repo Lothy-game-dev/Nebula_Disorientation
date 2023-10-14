@@ -25,6 +25,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     private GameObject ChosenModel;
     public int EscortSpawnNumber;
     private int TotalNumberOfSpawnSound;
+    public bool Escort;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -99,6 +100,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         Ally.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
+        Ally.GetComponent<AlliesShared>().Escort = Escort;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

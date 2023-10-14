@@ -391,6 +391,17 @@ public class InitializeDatabase : MonoBehaviour
                 "HazardStartSpawning INTEGER NOT NULL," +
                 "HazardBackground TEXT," +
                 "PRIMARY KEY(HazardID AUTOINCREMENT) );" +
+            // Table for WarshipMilestone
+            "CREATE TABLE IF NOT EXISTS WarshipMilestone" +
+                "(MilestoneID INTEGER," +
+                "MilestoneNumber INTEGER NOT NULL," +
+                "MilestoneAllyClassA INTEGER NOT NULL," +
+                "MilestoneAllyClassB INTEGER NOT NULL," +
+                "MilestoneAllyClassC INTEGER NOT NULL," +
+                "MilestoneEnemyClassA INTEGER NOT NULL," +
+                "MilestoneEnemyClassB INTEGER NOT NULL," +
+                "MilestoneEnemyClassC INTEGER NOT NULL," +
+                "PRIMARY KEY(MilestoneID AUTOINCREMENT) );" +
                 "";
         // Initialize Data
         // ArsenalWeapon
@@ -694,8 +705,8 @@ public class InitializeDatabase : MonoBehaviour
             "(9, 'AY', '(-3500,2100)|(-3500,-700)|(-2100,700)', '(-2100,700)|(-2100,-2100)|(-700,-700)')," +
             "(10, 'EX', '(2100,3500)|(2100,-700)', '(700,700)|(700,-3500)')," +
             "(11, 'EY', '(3500,2100)|(3500,-700)|(2100,700)', '(2100,700)|(2100,-2100)|(700,-700)')," +
-            "(12, 'AO', '(-3500,-700)', '(-2100,700)')," +
-            "(13, 'EO', '(3500,-700)', '(2100,700)')," +
+            "(12, 'AO', '(-3500,700)', '(-2100,-700)')," +
+            "(13, 'EO', '(3500,700)', '(2100,-700)')," +
             "(14, 'AS', '(-4900,4900)|(-4900,-3500)', '(-3500,-3500)|(-3500,-4900)')," +
             "(15, 'ES', '(3500,4900)|(3500,-3500)', '(4900,3500)|(4900,-4900)')," +
             "(16, 'PE', '(-3500,3500)', '(-2100,2100)')," +
@@ -711,8 +722,13 @@ public class InitializeDatabase : MonoBehaviour
             "(4, 'GR', 'Gamma Ray Burst', '#22a06b', 'Deadly burst that intensively affects Fighter’s survival abilities', 5, 51, 'GAM')," +
             "(5, 'RS', 'Rogue Star', '#ae2e24', 'Random comets wander the nebula', 5, 71, '')," +
             "(6, 'ND', 'Nebula Disorientation', '#5e4db2', 'One of the Origins of the ongoing galaxy war', 5, 101, 'NEB');";
-    // Initialize Data Success
-    string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
+        string WarshipMilestone = "INSERT INTO WarshipMilestone VALUES " +
+            "(1, 0, 7, 8, 9, 1, 2, 3)," +
+            "(2, 250, 9, 8, 10, 3, 2, 4)," +
+            "(3, 500, 9, 8, 11, 3, 2, 5)," +
+            "(4, 700, 10, 8, 12, 4, 2, 6);";
+        // Initialize Data Success
+        string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
         string Failure = "INSERT INTO DatabaseInitialize VALUES ('F');";
         // Open DB
@@ -729,7 +745,8 @@ public class InitializeDatabase : MonoBehaviour
             RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel
             + LOTWCards + DailyMissions + Option + Tutorial + DElement 
             + Attribute + Enemy + Warship + SpaceStation + Allies + FighterGroup
-            + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition + HazardEnvironment;
+            + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition + HazardEnvironment
+            + WarshipMilestone;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable

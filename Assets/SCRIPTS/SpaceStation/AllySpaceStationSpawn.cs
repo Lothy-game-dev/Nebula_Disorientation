@@ -14,22 +14,18 @@ public class AllySpaceStationSpawn : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject SpaceStationModel;
     public GameObject SpaceStationTemplate;
-    public int SpaceStationID;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private Vector2 pos;
+    public int[] SpaceStationID;
+    public Vector2[] SpaceStationPosition;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        /*pos.x = Random.Range(700f, 2100f);
-        pos.y = Random.Range(-3500f, 3500f);*/
-        pos = new Vector2(-3500f, 466f);
-        SpawnSpaceStation(pos);
     }
 
     // Update is called once per frame
@@ -40,7 +36,14 @@ public class AllySpaceStationSpawn : MonoBehaviour
     #endregion
     #region Spawn SpaceStation
     // Group all function that serve the same algorithm
-    public void SpawnSpaceStation(Vector2 randomPos)
+    public void SpawnAllySpaceStation()
+    {
+        for (int i=0; i < SpaceStationID.Length; i++)
+        {
+            SpawnSpaceStation(SpaceStationID[i], SpaceStationPosition[i]);
+        }
+    }
+    private void SpawnSpaceStation(int SpaceStationID, Vector2 randomPos)
     {
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetSpaceStationById(SpaceStationID);
         //Debug.Log(SpaceStationModel.transform.childCount);

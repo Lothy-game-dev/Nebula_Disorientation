@@ -20,7 +20,7 @@ public class SpaceZoneMission : MonoBehaviour
     public string MissionTextString;
     public bool alreadyComplete;
     public int A2ReqTier;
-    private int EscortNumber;
+    public int FailNumber;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -35,7 +35,7 @@ public class SpaceZoneMission : MonoBehaviour
         // Call function and timer only if possible
         if (MissionStageName=="D3")
         {
-            if (EscortNumber <= (int)Mathf.Ceil(ObjectiveNumber / 2))
+            if (FailNumber <= (int)Mathf.Ceil(ObjectiveNumber / 2))
             {
                 if (!alreadyComplete)
                 {
@@ -43,7 +43,7 @@ public class SpaceZoneMission : MonoBehaviour
                     FailMission();
                 }
             }
-            if (CurrentDoneNumber >= EscortNumber)
+            if (CurrentDoneNumber >= FailNumber)
             {
                 if (!alreadyComplete)
                 {
@@ -103,7 +103,7 @@ public class SpaceZoneMission : MonoBehaviour
     {
         MissionStageName = "D3";
         ObjectiveNumber = NumberOfEscort;
-        EscortNumber = NumberOfEscort;
+        FailNumber = NumberOfEscort;
         SetMissionText();
     }
 
@@ -113,10 +113,11 @@ public class SpaceZoneMission : MonoBehaviour
         ObjectiveNumber = NumberOfEnemy;
         SetMissionText();
     }
-    public void CreateMissionOnslaughtV2(int NumberOfWarship)
+    public void CreateMissionOnslaughtV2(int NumberOfAllyWarship, int NumberOfWarship)
     {
         MissionStageName = "O2";
         ObjectiveNumber = NumberOfWarship;
+        FailNumber = NumberOfAllyWarship;
         SetMissionText();
     }
 
@@ -155,9 +156,10 @@ public class SpaceZoneMission : MonoBehaviour
     {
         if (FighterName.Contains("SSTP"))
         {
-            EscortNumber--;
-            if (EscortNumber<=0)
+            FailNumber--;
+            if (FailNumber <= 0 && !alreadyComplete)
             {
+                alreadyComplete = true;
                 FailMission();
             }
         }
@@ -179,8 +181,44 @@ public class SpaceZoneMission : MonoBehaviour
             CompleteMission();
         }
     }
+
+    public void AllySpaceStationDestroy()
+    {
+        if (MissionStageName=="D1")
+        {
+            FailMission();
+        }
+    }
+
+    public void EnemySpaceStationDestroy()
+    {
+
+    }
+
+    public void AllyWarshipDestroy()
+    {
+        if (MissionStageName == "O2")
+        {
+            FailNumber--;
+            if (FailNumber <= 0f && !alreadyComplete)
+            {
+                alreadyComplete = true;
+                FailMission();
+            }
+        }
+    }
+
+    public void EnemyWarshipDestroy()
+    {
+        if (MissionStageName == "O2" || MissionStageName == "B1")
+        {
+            CurrentDoneNumber++;
+        }
+    }
+
     public void FailMission()
     {
+        alreadyComplete = true;
         TextGO.CreateText("Mission Failed!", Color.red);
     }
 
@@ -191,6 +229,7 @@ public class SpaceZoneMission : MonoBehaviour
 
     public void CompleteMission()
     {
+        alreadyComplete = true;
         TextGO.CreateText("Mission Accomplished!", Color.green);
     }
     #endregion

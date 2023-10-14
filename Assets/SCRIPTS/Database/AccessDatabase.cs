@@ -3146,5 +3146,37 @@ public class AccessDatabase : MonoBehaviour
         else
             return data;
     }
+
+    public Dictionary<string, object> GetWarshipMilestoneBySpaceZoneNo(int SpaceZoneNo)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from WarshipMilestone WHERE MilestoneNumber<=" + SpaceZoneNo + " ORDER BY MilestoneNumber DESC LIMIT 1";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("MilestoneID", dataReader.GetInt32(0));
+            data.Add("MilestoneNumber", dataReader.GetInt32(1));
+            data.Add("MilestoneAllyClassA", dataReader.GetInt32(2));
+            data.Add("MilestoneAllyClassB", dataReader.GetInt32(3));
+            data.Add("MilestoneAllyClassC", dataReader.GetInt32(4));
+            data.Add("MilestoneEnemyClassA", dataReader.GetInt32(5));
+            data.Add("MilestoneEnemyClassB", dataReader.GetInt32(6));
+            data.Add("MilestoneEnemyClassC", dataReader.GetInt32(7));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
     #endregion
 }

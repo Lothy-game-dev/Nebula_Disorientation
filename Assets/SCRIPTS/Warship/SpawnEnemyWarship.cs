@@ -14,12 +14,13 @@ public class SpawnEnemyWarship : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject WarshipModel;
     public GameObject WSTemplate;
-    public int WarshipID;
+
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private Vector2 pos;
+    public int[] WarshipID;
+    public Vector2[] WarshipPosition;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -40,7 +41,14 @@ public class SpawnEnemyWarship : MonoBehaviour
     #endregion
     #region Spawn Warship
     // Group all function that serve the same algorithm
-    public void SpawnWS(Vector2 randomPos)
+    public void SpawnEnemyWarships()
+    {
+        for (int i=0; i< WarshipID.Length;i++)
+        {
+            SpawnWS(WarshipID[i], WarshipPosition[i]);
+        }
+    }
+    private void SpawnWS(int WarshipID, Vector2 randomPos)
     {
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(WarshipID);
         for (int i = 0; i < WarshipModel.transform.childCount; i++)
@@ -50,6 +58,8 @@ public class SpawnEnemyWarship : MonoBehaviour
                 GameObject game = Instantiate(WSTemplate, new Vector3(randomPos.x, randomPos.y, WarshipModel.transform.GetChild(i).position.z), Quaternion.identity);
                 game.GetComponent<SpriteRenderer>().sprite = WarshipModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 game.transform.localScale = WarshipModel.transform.GetChild(i).localScale;
+                game.transform.GetChild(4).localScale = new Vector3(
+                        1 / WarshipModel.transform.GetChild(i).localScale.x * 130, 1 / WarshipModel.transform.GetChild(i).localScale.y * 130, 1 / WarshipModel.transform.GetChild(i).localScale.z);
                 game.name = data["WarshipName"].ToString();
                 game.AddComponent<PolygonCollider2D>();
                 game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
