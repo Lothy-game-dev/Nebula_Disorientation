@@ -26,11 +26,8 @@ public class SpawnEnemyWarship : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Initialize variables
-        /*pos.x = Random.Range(700f, 2100f);
-        pos.y = Random.Range(-3500f, 3500f);*/
-        pos = new Vector2(3000f, 200f);
-        SpawnWS(pos);
+        // Initialize variables  
+       
     }
 
     // Update is called once per frame

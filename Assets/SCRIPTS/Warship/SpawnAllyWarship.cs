@@ -24,18 +24,7 @@ public class SpawnAllyWarship : MonoBehaviour
     #region Start & Update
     // Start is called before the first frame update
     void Start()
-    {
-        pos = new Vector2[6];
-        // Initialize variables
-        /*pos.x = Random.Range(700f, 2100f);
-        pos.y = Random.Range(-3500f, 3500f);*/
-        pos[0] = new Vector2(-2000f, 200f);
-        pos[1] = new Vector2(-3000f, 1000f);
-        pos[2] = new Vector2(-3000f, 1500f);
-        pos[3] = new Vector2(-3000f, 2000f);
-        pos[4] = new Vector2(-3000f, 2500f);
-        pos[5] = new Vector2(-3000f, 3000f);
-        SpawnWS(pos);
+    {     
         // Initialize variables
     }
 

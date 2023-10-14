@@ -735,10 +735,9 @@ public class WSShared : MonoBehaviour
             expl5.SetActive(true);
             Destroy(expl5, 0.3f);
         }
-<<<<<<< HEAD
 
         GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
-=======
+
         if (IsEnemy)
         {
             // Bounty
@@ -748,7 +747,7 @@ public class WSShared : MonoBehaviour
             FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
         }
         GenerateFlash(transform.position, 0.5f, 1f);
->>>>>>> origin/main
+
 
     }
     #endregion
