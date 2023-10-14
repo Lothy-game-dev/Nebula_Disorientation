@@ -44,15 +44,21 @@ public class EnemyShared : FighterShared
     public GameObject LeftTarget;
     public GameObject RightTarget;
     public float TargetRange;
-    private float DelayBetween2Weap;
+    public float DelayBetween2Weap;
     public float DelayTimer;
-    private bool LeftFire;
+    public bool LeftFire;
     private int BountyCash;
     private int BountyShard;
     public float TargetRefreshTimer;
     public float FindTargetTimer;
     public float HPScale;
     public float CashBountyScale;
+    public GameObject ForceTargetGO;
+    public bool Escort;
+    public bool isBomb;
+    public string Priority;
+    public GameObject AimObject;
+    private float BombUpdateTimer;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -92,87 +98,103 @@ public class EnemyShared : FighterShared
     private void Update()
     {
         UpdateEnemy();
-        if (doneInitWeapon)
+        if (isBomb)
         {
-            /*DelayTimer -= Time.deltaTime;
-            if (LeftWeapon!=null)
+            if (doneInitWeapon)
             {
-                if (DelayTimer<=0f && !LeftFire)
-                {
-                    LeftFire = true;
-                    LeftWeapon.GetComponent<Weapons>().AIShootBullet();
-                    DelayTimer = DelayBetween2Weap;
-                }
+                doneInitWeapon = false;
+                CheckTargetEnemy();
             }
-            if (RightWeapon!=null)
+            BombUpdateTimer -= Time.deltaTime;
+            if (BombUpdateTimer<=0f)
             {
-                if (DelayTimer <= 0f && LeftFire)
-                {
-                    LeftFire = false;
-                    RightWeapon.GetComponent<Weapons>().AIShootBullet();
-                    DelayTimer = DelayBetween2Weap;
-                }
-            }*/
-            if (Power1!="")
+                BombUpdateTimer = Random.Range(0.1f, 0.2f);
+                CheckWSSS();
+            }
+        } else
+        {
+            if (doneInitWeapon)
             {
-                if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
+                DelayTimer -= Time.deltaTime;
+                if (LeftWeapon != null)
                 {
-                    UseFirstPower();
-                    if (Power1StartCharge)
+                    if (DelayTimer <= 0f && !LeftFire)
                     {
-                        CheckPower1Charging();
+                        LeftFire = true;
+                        LeftWeapon.GetComponent<Weapons>().AIShootBullet(Random.Range(-1, 1) * 30);
+                        DelayTimer = DelayBetween2Weap;
                     }
                 }
-                else
+                if (RightWeapon != null)
                 {
-                    Power1CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
-                }
-            }
-            if (Power2!="")
-            {
-                if (Power2CD <= 0f && (LeftTarget!=null || RightTarget!=null))
-                {
-                    UseSecondPower();
-                    if (Power2StartCharge)
+                    if (DelayTimer <= 0f && LeftFire)
                     {
-                        CheckPower2Charging();
+                        LeftFire = false;
+                        RightWeapon.GetComponent<Weapons>().AIShootBullet(Random.Range(-1, 1) * 30);
+                        DelayTimer = DelayBetween2Weap;
                     }
                 }
-                else
+                if (Power1 != "")
                 {
-                    Power2CD -= Time.deltaTime * Random.Range(0.8f,1.2f);
+                    if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
+                    {
+                        UseFirstPower();
+                        if (Power1StartCharge)
+                        {
+                            CheckPower1Charging();
+                        }
+                    }
+                    else
+                    {
+                        Power1CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
+                    }
+                }
+                if (Power2 != "")
+                {
+                    if (Power2CD <= 0f && (LeftTarget != null || RightTarget != null))
+                    {
+                        UseSecondPower();
+                        if (Power2StartCharge)
+                        {
+                            CheckPower2Charging();
+                        }
+                    }
+                    else
+                    {
+                        Power2CD -= Time.deltaTime * Random.Range(0.8f, 1.2f);
+                    }
                 }
             }
-        }
 
-        TargetRefreshTimer -= Time.deltaTime;
-        if (TargetRefreshTimer <= 0f)
-        {
-            TargetRefreshTimer = Random.Range(2.5f, 3.5f);
-            CheckTargetEnemy();
-            if (LeftWeapon != null)
+            TargetRefreshTimer -= Time.deltaTime;
+            if (TargetRefreshTimer <= 0f)
             {
-                LeftWeapon.GetComponent<Weapons>().Aim = LeftTarget;
+                TargetRefreshTimer = Random.Range(2.5f, 3.5f);
+                CheckTargetEnemy();
+                if (LeftWeapon != null)
+                {
+                    LeftWeapon.GetComponent<Weapons>().Aim = LeftTarget;
+                }
+                if (RightWeapon != null)
+                {
+                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
+                }
             }
-            if (RightWeapon != null)
+            if (LeftTarget == null || RightTarget == null)
             {
-                RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
+                FindTargetTimer -= Time.deltaTime;
             }
-        }
-        if (LeftTarget==null || RightTarget==null)
-        {
-            FindTargetTimer -= Time.deltaTime;
-        }
-        if (FindTargetTimer<=0f)
-        {
-            FindTargetTimer = Random.Range(2.5f,3.5f);
-            if (LeftTarget == null)
+            if (FindTargetTimer <= 0f)
             {
-                TargetLeftEnemy();
-            }
-            if (RightTarget == null)
-            {
-                TargetRightEnemy();
+                FindTargetTimer = Random.Range(2.5f, 3.5f);
+                if (LeftTarget == null)
+                {
+                    TargetLeftEnemy();
+                }
+                if (RightTarget == null)
+                {
+                    TargetRightEnemy();
+                }
             }
         }
     }
@@ -225,9 +247,18 @@ public class EnemyShared : FighterShared
         }
         if (weaponName1=="SuicideBombing")
         {
-
+            isBomb = true;
+            Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            transform.Rotate(new Vector3(0, 0, -270));
+            OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
+            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
+            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
+            fm.CurrentRotateAngle = 270;
+            fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            HealthBar.Position = HealthPos;
         } else
         {
+            isBomb = false;
             FighterAttachedWeapon faw = gameObject.AddComponent<FighterAttachedWeapon>();
             faw.Fighter = gameObject;
             faw.FighterModel = Model;
@@ -297,11 +328,37 @@ public class EnemyShared : FighterShared
             faw.RightWeapon = RightWeapon;
 
             faw.AttachWeapon();
-            transform.Rotate(new Vector3(0, 0, -270));
-            OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
-            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
-            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
-            fm.CurrentRotateAngle = 270;
+            Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            if (!Escort)
+            {
+                transform.Rotate(new Vector3(0, 0, -270));
+                OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
+                OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
+                fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
+                fm.CurrentRotateAngle = 270;
+            } else
+            {
+                if (transform.position.y > 0)
+                {
+                    int n = Random.Range(225, 255);
+                    transform.Rotate(new Vector3(0, 0, -n));
+                    OnFireGO.transform.Rotate(new Vector3(0, 0, n));
+                    OnFreezeGO.transform.Rotate(new Vector3(0, 0, n));
+                    fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, n));
+                    fm.CurrentRotateAngle = n;
+                } else
+                {
+                    int n = Random.Range(15, 45);
+                    transform.Rotate(new Vector3(0, 0, -n));
+                    OnFireGO.transform.Rotate(new Vector3(0, 0, n));
+                    OnFreezeGO.transform.Rotate(new Vector3(0, 0, n));
+                    fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, n));
+                    fm.CurrentRotateAngle = n;
+                }
+            }
+            fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            HealthBar.Position = HealthPos;
+            
             // Delay Weapon Fire Check Case
             if (weaponName1 == weaponName2 && !LW.IsThermalType)
             {
@@ -486,6 +543,11 @@ public class EnemyShared : FighterShared
             float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
             foreach (var enemy in cols)
             {
+                if (enemy == ForceTargetGO)
+                {
+                    LeftTarget = enemy.gameObject;
+                    break;
+                }
                 float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
                 if (distanceTest < distance)
                 {
@@ -494,6 +556,94 @@ public class EnemyShared : FighterShared
                 }
             }
             LeftTarget = Nearest;
+        }
+    }
+    
+    public void InitTargetEnemy()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 15000f, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
+        {
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var enemy in cols)
+            {
+                if (Priority == "WSSS")
+                {
+                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                    if (enemy.GetComponent<WSShared>() != null || enemy.GetComponent<SpaceStationShared>() != null)
+                    {
+                        if (Nearest.GetComponent<WSShared>()!=null || Nearest.GetComponent<SpaceStationShared>() != null)
+                        {
+                            if (distanceTest < distance)
+                            {
+                                distance = distanceTest;
+                                Nearest = enemy.gameObject;
+                            }
+                        } else
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
+                    }
+                }
+                else if (Priority == "WS")
+                {
+                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                    if (enemy.GetComponent<WSShared>() != null)
+                    {
+                        if (Nearest.GetComponent<WSShared>()!=null)
+                        {
+                            if (distanceTest < distance)
+                            {
+                                distance = distanceTest;
+                                Nearest = enemy.gameObject;
+                            }
+                        } else
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
+                    }
+                }
+                else if (Priority == "SSTP")
+                {
+                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                    if (enemy.name.Contains("SSTP"))
+                    {
+                        if (!Nearest.name.Contains("SSTP"))
+                        {
+                            if (distanceTest < distance)
+                            {
+                                distance = distanceTest;
+                                Nearest = enemy.gameObject;
+                            }
+                        }
+                        else
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
+                    }
+
+                }
+                else if (Priority == "Player")
+                {
+                    if (enemy.GetComponent<PlayerFighter>() != null)
+                    {
+                        Nearest = enemy.gameObject;
+                        break;
+                    }
+                } else if (Priority == "SS")
+                {
+                    if (enemy.GetComponent<SpaceStationShared>() != null)
+                    {
+                        Nearest = enemy.gameObject;
+                        break;
+                    }
+                }
+            }
+            ForceTargetGO = Nearest;
         }
     }
 
@@ -506,6 +656,11 @@ public class EnemyShared : FighterShared
             float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
             foreach (var enemy in cols)
             {
+                if (enemy == ForceTargetGO)
+                {
+                    RightTarget = enemy.gameObject;
+                    break;
+                }
                 float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
                 if (distanceTest < distance)
                 {
@@ -519,15 +674,43 @@ public class EnemyShared : FighterShared
 
     private void CheckTargetEnemy()
     {
-        if (LeftTarget!=null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
+        if (Priority!=null && Priority!="")
         {
-            LeftTarget = null;
-            LeftWeapon.GetComponent<Weapons>().Aim = null;
+            if (ForceTargetGO == null)
+            InitTargetEnemy();
+        } else
+        {
+            if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
+            {
+                LeftTarget = null;
+                LeftWeapon.GetComponent<Weapons>().Aim = null;
+            }
+            if (RightTarget != null && (Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange || RightTarget.layer == LayerMask.NameToLayer("Untargetable")))
+            {
+                RightTarget = null;
+                RightWeapon.GetComponent<Weapons>().Aim = null;
+            }
         }
-        if (RightTarget!=null && (Mathf.Abs((RightTarget.transform.position - transform.position).magnitude) > TargetRange || RightTarget.layer == LayerMask.NameToLayer("Untargetable")))
+    }
+
+    private void CheckWSSS()
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, Vector2.zero);
+        foreach (var hit in hits)
         {
-            RightTarget = null;
-            RightWeapon.GetComponent<Weapons>().Aim = null;
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject.GetComponent<WSShared>() != null)
+                {
+                    hit.collider.gameObject.GetComponent<WSShared>().ReceiveBulletDamage(hit.collider.gameObject.GetComponent<WSShared>().MaxHP * 10 / 100f, null, true, transform.position);
+                    Destroy(gameObject);
+                }
+                else if (hit.collider.gameObject.GetComponent<SpaceStationShared>() != null)
+                {
+                    hit.collider.gameObject.GetComponent<SpaceStationShared>().ReceiveBombingDamage(hit.collider.gameObject.GetComponent<SpaceStationShared>().MaxHP * 10 / 100f, transform.position);
+                    Destroy(gameObject);
+                }
+            }
         }
     }
     #endregion

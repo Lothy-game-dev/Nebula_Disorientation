@@ -30,6 +30,8 @@ public class EnemyFighterSpawn : MonoBehaviour
     private bool IsSpawningSBB;
     public List<Vector2> SpawnSBBPos;
     private int SBBCount;
+    public string Priority;
+    public bool Escort;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -57,7 +59,7 @@ public class EnemyFighterSpawn : MonoBehaviour
                 int RightLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[0]);
                 int BottomLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[1]);
                 Vector2 SpawnPos = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
-                StartCoroutine(CreateEnemy(1, SpawnPos, SBBCount, 1, 0));
+                StartCoroutine(CreateEnemy(1, SpawnPos, SBBCount, 1, 0, true));
                 SBBCount++;
             }
         }
@@ -75,7 +77,7 @@ public class EnemyFighterSpawn : MonoBehaviour
         {
             for (int i = 0; i <EnemySpawnID.Length; i++)
             {
-                StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0,2f)));
+                StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0,2f), false));
             }
         }
         if (DelaySpawnSBB > 0f)
@@ -89,12 +91,12 @@ public class EnemyFighterSpawn : MonoBehaviour
     {
         for (int i = 0; i < EnemySpawnID.Length; i++)
         {
-            StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], 0));
+            StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], 0, false));
             yield return new WaitForSeconds(DelayBetweenSpawn);
         }
     }
 
-    private IEnumerator CreateEnemy(int id, Vector2 spawnPos, int count, int Tier, float delay)
+    private IEnumerator CreateEnemy(int id, Vector2 spawnPos, int count, int Tier, float delay, bool isBoom)
     {
         yield return new WaitForSeconds(delay);
         Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetDataEnemyById(id);
@@ -128,10 +130,21 @@ public class EnemyFighterSpawn : MonoBehaviour
         aus.dopplerLevel = 0;
         aus.spread = 360;
         Destroy(aus, 4f);
+        if (isBoom)
+        {
+            Enemy.GetComponent<EnemyShared>().Priority = "WSSS";
+        } else
+        {
+            if (Priority!=null && Priority != "")
+            {
+                Enemy.GetComponent<EnemyShared>().Priority = Priority;
+            }
+        }
         Enemy.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Enemy.GetComponent<EnemyShared>().HPScale = EnemyMaxHPScale;
         Enemy.GetComponent<EnemyShared>().CashBountyScale = EnemyBountyScale;
         Enemy.GetComponent<EnemyShared>().Tier = Tier;
+        Enemy.GetComponent<EnemyShared>().Escort = Escort;
         Enemy.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 
 public class AlliesShared : FighterShared
@@ -54,6 +56,8 @@ public class AlliesShared : FighterShared
     private bool IsEscorting;
     private Vector3 EscortTargetPosition;
     private int DirMov;
+    public bool Escort;
+    public GameObject EscortObject;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -97,7 +101,7 @@ public class AlliesShared : FighterShared
         if (IsEscorting)
         {
             fm.UpMove();
-            if ((EscortTargetPosition - transform.GetChild(5).position).magnitude < 5f)
+            if ((EscortTargetPosition - transform.GetChild(5).position).magnitude < 100f)
             {
                 DoneEscorting();
             }
@@ -258,6 +262,10 @@ public class AlliesShared : FighterShared
             fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, angle));
             fm.CurrentRotateAngle = angle;
             BackFire.transform.localPosition *= 3;
+            ScaleOnStatusBoard /= 3;
+            Destroy(GetComponent<DecisionRequester>());
+            Destroy(GetComponent<AlliesFighterMLAgent>());
+            Destroy(GetComponent<BehaviorParameters>());
         }
         else
         {
@@ -330,11 +338,26 @@ public class AlliesShared : FighterShared
             faw.RightWeapon = RightWeapon;
 
             faw.AttachWeapon();
-            transform.Rotate(new Vector3(0, 0, -90));
-            OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
-            OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
-            fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
-            fm.CurrentRotateAngle = 90;
+            Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            if (!Escort)
+            {
+                transform.Rotate(new Vector3(0, 0, -90));
+                OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
+                OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
+                fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
+                fm.CurrentRotateAngle = 90;
+            } else
+            {
+                transform.Rotate(new Vector3(0, 0, -135));
+                OnFireGO.transform.Rotate(new Vector3(0, 0, 135));
+                OnFreezeGO.transform.Rotate(new Vector3(0, 0, 135));
+                fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 135));
+                fm.CurrentRotateAngle = 135;
+                EscortSSTP();
+            }
+            fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            HealthBar.Position = HealthPos;
+            
             // Delay Weapon Fire Check Case
             if (weaponName1 == weaponName2 && !LW.IsThermalType)
             {
@@ -564,6 +587,25 @@ public class AlliesShared : FighterShared
             RightTarget = null;
             RightWeapon.GetComponent<Weapons>().Aim = null;
         }
+        EscortSSTP();
+    }
+
+    private void EscortSSTP()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 5000f, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
+        {
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var escort in cols)
+            {
+                if (escort.name.Contains("SSTP"))
+                {
+                    EscortObject = escort.gameObject;
+                    break;
+                }
+            }
+        }
     }
 
     private bool CheckEscortPath()
@@ -571,7 +613,7 @@ public class AlliesShared : FighterShared
         float TopToBottom = (transform.GetChild(5).position - BackFire.transform.position).magnitude;
         float TopToTarget = (EscortTargetPosition - transform.GetChild(5).position).magnitude;
         float BottomToTarget = (EscortTargetPosition - BackFire.transform.position).magnitude;
-        return TopToTarget + TopToBottom - BottomToTarget < 3f;
+        return TopToTarget + TopToBottom - BottomToTarget < 100f;
     }
 
     private void CheckIsUpOrDownMovement(GameObject target, GameObject Head, GameObject Back)

@@ -9,7 +9,7 @@ public class EnemyHealthBar : MonoBehaviour
     public Slider slider;
     #endregion
     #region InitializeVariables
-    public GameObject Position;
+    public Vector3 Position;
     #endregion
     #region NormalVariables
     private float CurrentValue;
@@ -21,7 +21,6 @@ public class EnemyHealthBar : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        PositionSlider = Position.transform.position - transform.parent.position;
     }
 
     // Update is called once per frame
@@ -30,7 +29,7 @@ public class EnemyHealthBar : MonoBehaviour
         slider.gameObject.SetActive(CurrentValue < MaxValue);
         slider.value = CurrentValue;
         slider.maxValue = MaxValue;
-        slider.gameObject.transform.position = new Vector3(transform.parent.position.x + PositionSlider.x, transform.parent.position.y + PositionSlider.y, transform.position.z) ;
+        slider.gameObject.transform.position = transform.parent.position + Position;
     }
     #endregion
     #region Public Set Value

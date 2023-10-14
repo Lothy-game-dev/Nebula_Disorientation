@@ -14,22 +14,19 @@ public class EnemySpaceStationSpawn : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject SpaceStationModel;
     public GameObject SpaceStationTemplate;
-    public int SpaceStationID;
+
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private Vector2 pos;
+    public int[] SpaceStationID;
+    public Vector2[] SpaceStationPos;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        /*pos.x = Random.Range(700f, 2100f);
-        pos.y = Random.Range(-3500f, 3500f);*/
-        pos = new Vector2(-3500f, 466f);
-        SpawnSpaceStation(pos);
     }
 
     // Update is called once per frame
@@ -39,11 +36,18 @@ public class EnemySpaceStationSpawn : MonoBehaviour
     }
     #endregion
     #region Spawn SpaceStation
+    public void SpawnEnemySpaceStation()
+    {
+        for (int i=0;i< SpaceStationID.Length;i++)
+        {
+            SpawnSpaceStation(SpaceStationID[i], SpaceStationPos[i]);
+        }
+    }
+
     // Group all function that serve the same algorithm
-    public void SpawnSpaceStation(Vector2 randomPos)
+    private void SpawnSpaceStation(int SpaceStationID, Vector2 randomPos)
     {
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetSpaceStationById(SpaceStationID);
-        Debug.Log(SpaceStationModel.transform.childCount);
         for (int i = 0; i < SpaceStationModel.transform.childCount; i++)
         {
             if (SpaceStationModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["SpaceStationName"].ToString().Replace("-", "").ToLower())

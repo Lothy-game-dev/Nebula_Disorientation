@@ -19,6 +19,7 @@ public class SpaceStationShared : MonoBehaviour
     public GameObject Explosion;
     public GameObject Flash;
     public SpaceStationHealthBar HPBar;
+    public bool isEnemy;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -389,6 +390,63 @@ public class SpaceStationShared : MonoBehaviour
     }*/
     #endregion
     #region Receive Damage
+    public void ReceiveBombingDamage(float Damage, Vector2 BulletHitPos)
+    {
+        float RealDamage = Damage;
+        if (CurrentBarrier > 0)
+        {
+            if (CurrentBarrier > RealDamage)
+            {
+                CurrentBarrier -= RealDamage;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 90f;
+                BarrierRegenAmount = 2500f;
+            }
+            else
+            {
+                float finalDamage = (RealDamage - CurrentBarrier);
+                CurrentBarrier = 0;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 90f;
+                BarrierRegenAmount = 2500f;
+                CurrentHP -= finalDamage;
+            }
+        }
+        else
+        {
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
+            if (CurrentHP >= RealDamage)
+            {
+                CurrentHP -= RealDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
+            }
+            else
+            {
+                CurrentHP = 0;
+            }
+        }
+    }
     public void ReceiveBulletDamage(float Damage, GameObject Bullet, Vector2 BulletHitPos)
     {
         float RealDamage = 0;
@@ -424,6 +482,7 @@ public class SpaceStationShared : MonoBehaviour
                 BarrierRegenAmount = 2500f;
             } else
             {
+                float finalDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
                 if (BarrierEffectDelay <= 0f)
                 {
@@ -435,7 +494,7 @@ public class SpaceStationShared : MonoBehaviour
                 }
                 BarrierRegenTimer = 90f;
                 BarrierRegenAmount = 2500f;
-                CurrentHP -= (RealDamage - CurrentBarrier);
+                CurrentHP -= finalDamage;
             }
         }
         else
@@ -541,7 +600,13 @@ public class SpaceStationShared : MonoBehaviour
             expl5.SetActive(true);
             Destroy(expl5, 0.3f);
         }
-
+        if (isEnemy)
+        {
+            FindObjectOfType<SpaceZoneMission>().EnemySpaceStationDestroy();
+        } else
+        {
+            FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+        }
         GenerateFlash(transform.position, 0.5f, 1f);
         
     }

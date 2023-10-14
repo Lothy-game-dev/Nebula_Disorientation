@@ -45,6 +45,7 @@ public class FighterMovement : MonoBehaviour
     private int InAttackRangeCount;
     private float LimitDelay;
     public LayerMask HazardMask;
+    private float StartMovingDelay;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -60,6 +61,20 @@ public class FighterMovement : MonoBehaviour
         LaserBeamSlowScale = 1;
         UpMove();
         LimitString = "";
+        if (als!=null)
+        {
+            if (als.Escort)
+                StartMovingDelay = 5f;
+            else
+                StartMovingDelay = 15f;
+        }
+        if (es!=null)
+        {
+            if (es.Escort)
+                StartMovingDelay = 10f;
+            else
+                StartMovingDelay = 15f;
+        }
     }
 
     // Update is called once per frame
@@ -79,24 +94,42 @@ public class FighterMovement : MonoBehaviour
         AccelerateSpeed();
         if (Movable) FighterMoving();
         fs.CalculateVelocity(speedVector);
-            CheckLimit();
-            if (PreventReachLimitTimer <= 0f)
+        CheckLimit();
+        if (PreventReachLimitTimer <= 0f)
+        {
+            if (PreventReachLimit)
             {
-                if (PreventReachLimit)
-                {
-                    PreventReachLimit = false;
-                    NoLeftRightMove();
-                }
+                PreventReachLimit = false;
+                NoLeftRightMove();
             }
-            else
-            {
-                PreventReachLimit = true;
-                PreventReachLimitTimer -= Time.deltaTime;
-            }
+        }
+        else
+        {
+            PreventReachLimit = true;
+            PreventReachLimitTimer -= Time.deltaTime;
+        }
+        if (!ControllerMain.IsInLoading)
+        {
+            StartMovingDelay -= Time.deltaTime;
+        }
+        if (StartMovingDelay<=0f)
+        {
             if (LimitString == "")
             {
                 if (LimitDelay <= 0f)
                 {
+                    if ((es!=null && es.isBomb))
+                    {
+                        if (CheckMovingDelay <= 0f)
+                        {
+                            CheckMovingDelay = Random.Range(0.5f, 1f);
+                            CheckOnMoving();
+                        }
+                        else
+                        {
+                            CheckMovingDelay -= Time.deltaTime;
+                        }
+                    } else
                     if (!PreventReachLimit)
                     {
                         PreventReachingLimit();
@@ -124,11 +157,12 @@ public class FighterMovement : MonoBehaviour
             {
                 CheckForHazard();
             }
-
+        }
+        if (Movable) FighterRotate();
     }
     private void FixedUpdate()
     {
-        if (Movable) FighterRotate();
+        
     }
     #endregion
     #region Moving Calling Fuction
@@ -173,6 +207,12 @@ public class FighterMovement : MonoBehaviour
         FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         HealthBarSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
+        if (transform.childCount > 6 && transform.GetChild(6).gameObject.activeSelf) {
+            transform.GetChild(6).Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
+        }
+        if (transform.childCount > 7 && transform.GetChild(7).gameObject.activeSelf) {
+            transform.GetChild(7).Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
+        }
     }
     private void FighterMoving()
     {
@@ -546,192 +586,239 @@ public class FighterMovement : MonoBehaviour
     {
         if (als!=null)
         {
-            if (als.LeftTarget!=null && als.RightTarget!=null)
+            if (!als.Escort || als.EscortObject==null)
             {
-                if ((als.LeftTarget.transform.position - transform.position).magnitude <= als.TargetRange/2)
+                if (als.LeftTarget != null && als.RightTarget != null)
                 {
-                    if (!inAttackRange)
+                    if ((als.LeftTarget.transform.position - transform.position).magnitude <= als.TargetRange / 2)
                     {
-                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
+                        if (!inAttackRange)
                         {
-                            DownMove();
-                            LeftMove();
+                            int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                DownMove();
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                UpMove();
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                DownMove();
+                                RightMove();
+                            }
+                            InAttackRangeCount = 1;
                         }
-                        else if (k == 0)
+                        else
                         {
-                            UpMove();
-                            NoLeftRightMove();
+                            int test = InAttackRangeCount / 4;
+                            if (test > 5)
+                            {
+                                als.TargetLeftEnemy();
+                                als.TargetRightEnemy();
+                                return;
+                            }
+                            int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
+                            InAttackRangeCount++;
                         }
-                        else if (k == 1)
-                        {
-                            DownMove();
-                            RightMove();
-                        }
-                        InAttackRangeCount = 1;
-                    } else
-                    {
-                        int test = InAttackRangeCount / 4;
-                        if (test > 5)
-                        {
-                            als.TargetLeftEnemy();
-                            als.TargetRightEnemy();
-                            return;
-                        }
-                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
-                        {
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
-                        InAttackRangeCount++;
-                    }
-                    inAttackRange = true;
-                } else
-                {
-                    if (inAttackRange)
-                    {
-                        UpMove();
-                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
-                        {
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
+                        inAttackRange = true;
                     }
                     else
                     {
-                        UpMove();
-                        int k = Random.Range(-1, 2);
-                        if (k == -1)
-                        {
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
-                    }
-                    inAttackRange = false;
-                }
-            } else
-            {
-                NoLeftRightMove();
-                UpMove();
-            }
-        } else if (es != null)
-        {
-            if (es.LeftTarget != null && es.RightTarget != null)
-            {
-                if ((es.LeftTarget.transform.position - transform.position).magnitude <= es.TargetRange / 2)
-                {
-                    if (!inAttackRange)
-                    {
-                        int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
-                        {
-                            DownMove();
-                            LeftMove();
-                        }
-                        else if (k == 0)
+                        if (inAttackRange)
                         {
                             UpMove();
-                            NoLeftRightMove();
+                            int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
                         }
-                        else if (k == 1)
+                        else
                         {
-                            DownMove();
-                            RightMove();
+                            UpMove();
+                            int k = Random.Range(-1, 2);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
                         }
-                        InAttackRangeCount = 1;
+                        inAttackRange = false;
                     }
-                    else
-                    {
-                        int test = InAttackRangeCount / 4;
-                        if (test > 5)
-                        {
-                            es.TargetLeftEnemy();
-                            es.TargetRightEnemy();
-                            return;
-                        }
-                        int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
-                        {
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
-                        InAttackRangeCount++;
-                    }
-                    inAttackRange = true;
                 }
                 else
                 {
-                    if (inAttackRange)
+                    NoLeftRightMove();
+                    UpMove();
+                }
+            } else
+            {
+                int k = CheckIsUpOrDownMovement(als.EscortObject, HeadObject, gameObject);
+                if (CurrentSpeed > 200f)
+                {
+                    DownMove();
+                } else if (CurrentSpeed <100f)
+                {
+                    UpMove();
+                }
+                if (k == -1)
+                {
+                    LeftMove();
+                }
+                else if (k == 0)
+                {
+                    NoLeftRightMove();
+                }
+                else if (k == 1)
+                {
+                    RightMove();
+                }
+            }
+        } else if (es != null)
+        {
+            if (es.isBomb)
+            {
+                int k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject);
+                UpMove();
+                if (k == -1)
+                {
+                    LeftMove();
+                }
+                else if (k == 0)
+                {
+                    NoLeftRightMove();
+                }
+                else if (k == 1)
+                {
+                    RightMove();
+                }
+            } else
+            {
+                if (es.LeftTarget != null && es.RightTarget != null)
+                {
+                    if ((es.LeftTarget.transform.position - transform.position).magnitude <= es.TargetRange)
                     {
-                        UpMove();
-                        int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
+                        if (!inAttackRange)
                         {
-                            LeftMove();
+                            int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                DownMove();
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                UpMove();
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                DownMove();
+                                RightMove();
+                            }
+                            InAttackRangeCount = 1;
                         }
-                        else if (k == 0)
+                        else
                         {
-                            NoLeftRightMove();
+                            int test = InAttackRangeCount / 4;
+                            if (test > 5)
+                            {
+                                es.TargetLeftEnemy();
+                                es.TargetRightEnemy();
+                                return;
+                            }
+                            int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
+                            InAttackRangeCount++;
                         }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
+                        inAttackRange = true;
                     }
                     else
                     {
-                        UpMove();
-                        int k = Random.Range(-1, 2);
-                        if (k == -1)
+                        if (inAttackRange)
                         {
-                            LeftMove();
+                            UpMove();
+                            int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
                         }
-                        else if (k == 0)
+                        else
                         {
-                            NoLeftRightMove();
+                            UpMove();
+                            int k = Random.Range(-1, 2);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
                         }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
+                        inAttackRange = false;
                     }
-                    inAttackRange = false;
                 }
-            }
-            else
-            {
-                NoLeftRightMove();
-                UpMove();
+                else
+                {
+                    NoLeftRightMove();
+                    UpMove();
+                }
             }
         }
     }
@@ -745,7 +832,7 @@ public class FighterMovement : MonoBehaviour
         float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
         Vector2 TempPos = new Vector2(RotatePoint.transform.position.x, RotatePoint.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
         Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
-        float compareAngle = 30;
+        float compareAngle = 15;
         if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
         {
             if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)

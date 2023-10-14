@@ -30,12 +30,22 @@ public class SpaceZoneGenerator : MonoBehaviour
     private Dictionary<string, object> TemplateData;
     private EnemyFighterSpawn EnemyFighterSpawn;
     private SpawnAlliesFighter AllyFighterSpawn;
+    private SpawnAllyWarship AllyWarshipSpawner;
+    private SpawnEnemyWarship EnemyWarshipSpawner;
+    private AllySpaceStationSpawn AllySSSpawner;
+    private EnemySpaceStationSpawn EnemySSSpawner;
     public int AllyFighterACount;
     public int AllyFighterBCount;
     public int AllyFighterCCount;
     public int EnemyFighterACount;
     public int EnemyFighterBCount;
     public int EnemyFighterCCount;
+    public int AllyWarshipACount;
+    public int AllyWarshipBCount;
+    public int AllyWarshipCCount;
+    public int EnemyWarshipACount;
+    public int EnemyWarshipBCount;
+    public int EnemyWarshipCCount;
     public float AllyMaxHP;
     public float EnemyMaxHP;
     public List<int> AllyFighterIDs;
@@ -51,6 +61,12 @@ public class SpaceZoneGenerator : MonoBehaviour
         // Initialize variables
         EnemyFighterSpawn = GetComponent<EnemyFighterSpawn>();
         AllyFighterSpawn = GetComponent<SpawnAlliesFighter>();
+        
+        EnemyWarshipSpawner = GetComponent<SpawnEnemyWarship>();
+        AllyWarshipSpawner = GetComponent<SpawnAllyWarship>();
+       
+        EnemySSSpawner = GetComponent<EnemySpaceStationSpawn>();
+        AllySSSpawner = GetComponent<AllySpaceStationSpawn>();
         GenerateSpaceZone();
     }
 
@@ -65,15 +81,31 @@ public class SpaceZoneGenerator : MonoBehaviour
     {
         Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
         int VariantCount = (int)variantData["VariantCounts"];
-        if (ChosenVariant==0) ChosenVariant = Random.Range(1, 1 + VariantCount);
+        if (ChosenVariant == 0)
+        {
+            if (SpaceZoneNo < 51)
+            {
+                if (SpaceZoneNo % 10 == 0)
+                {
+                    ChosenVariant = 2;
+                } else if (SpaceZoneNo % 10 == 8 ||SpaceZoneNo % 10 == 9)
+                {
+                    ChosenVariant = 1;
+                }
+            } else
+            ChosenVariant = Random.Range(1, 1 + VariantCount);
+        }
         List<Dictionary<string, object>> ListAvailableHazard = FindObjectOfType<AccessDatabase>().GetAvailableHazards(SpaceZoneNo);
         int HazardId = RandomHazardChoose(ListAvailableHazard);
         Dictionary<string, object> HazardData = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(HazardId);
         HazardNameText.text = "<color=" + (string)HazardData["HazardColor"] + ">" + (string)HazardData["HazardName"] + "</color>";
         HazardDesciptionText.text = "<color=" + (string)HazardData["HazardColor"] + ">" + (string)HazardData["HazardDescription"] + "</color>";
-        if (HazardId > 1 && (string)HazardData["HazardBackground"] != "")
+        if (HazardId > 1)
         {
-            ChosenBG = (string)HazardData["HazardBackground"];
+            if ((string)HazardData["HazardBackground"] != "")
+            {
+                ChosenBG = (string)HazardData["HazardBackground"];
+            }
             Hazard.HazardID = HazardId;
             Hazard.InitializeHazard();
         }
@@ -163,6 +195,50 @@ public class SpaceZoneGenerator : MonoBehaviour
         float EnemySquadY = float.Parse(EnemySquad.Split("-")[1]);
         float EnemySquadZ = float.Parse(EnemySquad.Split("-")[2]);
 
+        // Army Rating
+        string ArmyRating = "";
+        string AllyWarship = "";
+        string EnemyWarship = "";
+        if (TemplateData["ArmyRating"]!=null)
+        {
+            ArmyRating = (string)TemplateData["ArmyRating"];
+            AllyWarship = (string)TemplateData["AllyWarship"];
+            EnemyWarship = (string)TemplateData["EnemyWarship"];
+        }
+        float AllyArmyRating = 0;
+        float EnemyArmyRating = 0;
+        if (ArmyRating!="")
+        {
+            AllyArmyRating = float.Parse(ArmyRating.Split("|")[0]);
+            EnemyArmyRating = float.Parse(ArmyRating.Split("|")[1]);
+        }
+
+        // Ally Army X Y Z
+        float AllyArmyX = 0;
+        float AllyArmyY = 0;
+        float AllyArmyZ = 0;
+        if (AllyWarship!="")
+        {
+            AllyArmyX = float.Parse(AllyWarship.Split("-")[0]);
+            AllyArmyY = float.Parse(AllyWarship.Split("-")[1]);
+            AllyArmyZ = float.Parse(AllyWarship.Split("-")[2]);
+        }
+
+        Debug.Log(AllyWarship);
+        // Enemy Army X Y Z
+        float EnemyArmyX = 0;
+        float EnemyArmyY = 0;
+        float EnemyArmyZ = 0;
+        if (EnemyWarship!="")
+        {
+            EnemyArmyX = float.Parse(EnemyWarship.Split("-")[0]);
+            EnemyArmyY = float.Parse(EnemyWarship.Split("-")[1]);
+            EnemyArmyZ = float.Parse(EnemyWarship.Split("-")[2]);
+        }
+
+        // Enemy Space station Spawn Chance
+        float EnemySpaceStationSpawn = 0;
+
         AllyFighterSpawn.AllyMaxHPScale = 1;
         AllyMaxHP = AllyFighterSpawn.AllyMaxHPScale;
         AllyFighterSpawn.AllyBountyScale = 1;
@@ -194,15 +270,26 @@ public class SpaceZoneGenerator : MonoBehaviour
             EnemySquadRating *= (1 + Scale20Even / 10f);
         }
         // (5n)*10
+        // Enemy SS spawn
+        int Scale50SSC = SpaceZoneNo / 50;
+        if (Scale50SSC >= 1 && SpaceZoneNo % 50==0)
+        {
+            if (Scale50SSC * 10 / 100f > 50f)
+            {
+                EnemySpaceStationSpawn = 50f;
+            } else
+            EnemySpaceStationSpawn = Scale50SSC * 10 / 100f;
+        }
+        if (Scale50SSC >= 1)
+        {
+            AllyArmyRating *= (1 + (float)Scale50SSC / 4);
+            EnemyArmyRating *= (1 + (float)Scale50SSC / 4);
+        }
         if (SpaceZoneNo<350)
         {
             int Scale50 = SpaceZoneNo / 50;
             if (Scale50 >= 1)
             {
-                AllyFighterSpawn.AllyMaxHPScale = 1 + Scale50 / 20f;
-                AllyMaxHP = AllyFighterSpawn.AllyMaxHPScale;
-                EnemyFighterSpawn.EnemyMaxHPScale = 1 + Scale50 / 20f;
-                EnemyMaxHP = EnemyFighterSpawn.EnemyMaxHPScale;
                 float realScaleAlly = 0;
                 if (AllySquadX - Scale50 < 5)
                 {
@@ -245,11 +332,41 @@ public class SpaceZoneGenerator : MonoBehaviour
         int SquadScale = SpaceZoneNo / 100;
         if (SquadScale >= 1)
         {
-
-            // Army WAIT
+            if (SpaceZoneNo%10 != 0 || ChosenVariant != 1)
+            {
+                float realScaleAllyArmy = 0;
+                if (AllyArmyX > 0)
+                {
+                    if (AllyArmyX - (float)SquadScale / 2 < 5)
+                    {
+                        realScaleAllyArmy = AllyArmyX - 5;
+                        AllyArmyX = 5;
+                    }
+                    else
+                    {
+                        realScaleAllyArmy = (float)SquadScale / 2;
+                        AllyArmyX -= (float)SquadScale / 2;
+                    }
+                    AllyArmyZ += realScaleAllyArmy;
+                }
+                if (EnemyArmyX > 0)
+                {
+                    float realScaleEnemyArmy = 0;
+                    if (EnemyArmyX - (float)SquadScale / 2 < 5)
+                    {
+                        realScaleEnemyArmy = EnemyArmyX - 5;
+                        EnemyArmyX = 5;
+                    }
+                    else
+                    {
+                        realScaleEnemyArmy = (float)SquadScale / 2;
+                        EnemyArmyX -= (float)SquadScale / 2;
+                    }
+                    EnemyArmyZ += realScaleEnemyArmy;
+                }
+            }
         }
 
-        Debug.Log(EnemySquadRating + "-" + EnemySquadX + "-" + EnemySquadY + "-" + EnemySquadZ);
         // Get Data Fighter Group
         Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo>350? "350":""));
         
@@ -328,6 +445,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6) && ChosenVariant == 3)
         {
             AllyFighterSpawn.EscortSpawnNumber = (int)Mathf.Ceil(AllySquadRating / 10);
+            AllyFighterSpawn.Escort = true;
         }
         AllyFighterSpawn.SpawnAlly();
 
@@ -429,7 +547,7 @@ public class SpaceZoneGenerator : MonoBehaviour
                     NoB = true;
                 }
                 
-                if (c >= EnemyIDB.Count)
+                if (c >= EnemyIDC.Count)
                 {
                     end -= EnemySquadZ;
                     NoC = true;
@@ -549,7 +667,186 @@ public class SpaceZoneGenerator : MonoBehaviour
         EnemyFighterSpawn.EnemySpawnPosition = SpawnTotal.ToArray();
         EnemyFighterSpawn.EnemyTier = TierTotal.ToArray();
         EnemiesTier = TierTotal.ToArray();
+        if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 1)
+        {
+            EnemyFighterSpawn.Priority = "SS";
+        } 
+        else if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 2)
+        {
+            EnemyFighterSpawn.Priority = "Player";
+        }
+        else if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
+        {
+            EnemyFighterSpawn.Priority = "SSTP";
+            EnemyFighterSpawn.Escort = true;
+        }
+        else if ((SpaceZoneNo % 10 == 8 || SpaceZoneNo % 10 == 9) && ChosenVariant == 2)
+        {
+            EnemyFighterSpawn.Priority = "WS";
+        }
         EnemyFighterSpawn.SpawnEnemy();
+        // Warship && SpaceStation
+        // Get Warship Milestone
+        Dictionary<string, object> WarshipMilestone = FindObjectOfType<AccessDatabase>().GetWarshipMilestoneBySpaceZoneNo(SpaceZoneNo);
+
+        // Count Number Of Warship Ally By Type
+        if (AllyArmyX + AllyArmyY + AllyArmyZ != 0)
+        {
+            AllyWarshipACount = (int)((float)AllyArmyRating / (AllyArmyX + AllyArmyY + AllyArmyZ) * AllyArmyX / 5);
+            AllyWarshipBCount = (int)((float)AllyArmyRating / (AllyArmyX + AllyArmyY + AllyArmyZ) * AllyArmyY / 5);
+            AllyWarshipCCount = (int)((float)AllyArmyRating / (AllyArmyX + AllyArmyY + AllyArmyZ) * AllyArmyZ / 5);
+            // Spawn Ally
+            List<int> AllyWarshipID = new List<int>();
+            List<Vector2> AllyWarshipSpawnPos = new List<Vector2>();
+            // Spawn Ally A
+            for (int i = 0; i < AllyWarshipACount; i++)
+            {
+                AllyWarshipID.Add((int)WarshipMilestone["MilestoneAllyClassA"]);
+                string Spawnstr = "AX";
+                Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+                string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+                string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+                int n = Random.Range(0, VectorRangeTopLeft.Length);
+                int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+                int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+                AllyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            }
+            // Spawn Ally B
+            for (int i = 0; i < AllyWarshipBCount; i++)
+            {
+                AllyWarshipID.Add((int)WarshipMilestone["MilestoneAllyClassB"]);
+                string Spawnstr = "AY";
+                Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+                string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+                string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+                int n = Random.Range(0, VectorRangeTopLeft.Length);
+                int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+                int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+                AllyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            }
+            // Spawn Ally C
+            for (int i = 0; i < AllyWarshipCCount; i++)
+            {
+                AllyWarshipID.Add((int)WarshipMilestone["MilestoneAllyClassC"]);
+                string Spawnstr = "AC";
+                Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+                string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+                string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+                int n = Random.Range(0, VectorRangeTopLeft.Length);
+                int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+                int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+                int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+                AllyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            }
+            // Set Spawn to Spawner
+            AllyWarshipSpawner.WarshipID = AllyWarshipID.ToArray();
+            AllyWarshipSpawner.WarshipPosition = AllyWarshipSpawnPos.ToArray();
+            AllyWarshipSpawner.SpawnAllyWarships();
+        }
+
+        // Count Number Of Warship Enemy By Type
+        EnemyWarshipACount = (int)((float)EnemyArmyRating / (EnemyArmyX + EnemyArmyY + EnemyArmyZ) * EnemyArmyX / 5);
+        EnemyWarshipBCount = (int)((float)EnemyArmyRating / (EnemyArmyX + EnemyArmyY + EnemyArmyZ) * EnemyArmyY / 5);
+        EnemyWarshipCCount = (int)((float)EnemyArmyRating / (EnemyArmyX + EnemyArmyY + EnemyArmyZ) * EnemyArmyZ / 5);
+        // Spawn Enemy
+        List<int> EnemyWarshipID = new List<int>();
+        List<Vector2> EnemyWarshipSpawnPos = new List<Vector2>();
+        // Spawn Enemy A
+        for (int i = 0; i < EnemyWarshipACount; i++)
+        {
+            EnemyWarshipID.Add((int)WarshipMilestone["MilestoneEnemyClassA"]);
+            string Spawnstr = "EX";
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            EnemyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+        }
+        // Spawn Enemy B
+        for (int i = 0; i < EnemyWarshipBCount; i++)
+        {
+            EnemyWarshipID.Add((int)WarshipMilestone["MilestoneEnemyClassB"]);
+            string Spawnstr = "EY";
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            EnemyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+        }
+        // Spawn Enemy C
+        for (int i = 0; i < EnemyWarshipCCount; i++)
+        {
+            EnemyWarshipID.Add((int)WarshipMilestone["MilestoneEnemyClassC"]);
+            string Spawnstr = "EC";
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType(Spawnstr);
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            EnemyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+        }
+        // Set Spawn to Spawner
+        EnemyWarshipSpawner.WarshipID = EnemyWarshipID.ToArray();
+        EnemyWarshipSpawner.WarshipPosition = EnemyWarshipSpawnPos.ToArray();
+        EnemyWarshipSpawner.SpawnEnemyWarships();
+        // Ally Space Station
+        if (SpaceZoneNo % 10 == 2 && ChosenVariant == 1)
+        {
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("AO");
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            // Chance
+            float k = Random.Range(0, 100f);
+            if (k<=10)
+            {
+                AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            } else if (k<=15)
+            {
+                AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            } else
+            {
+                AllySSSpawner.SpaceStationID = new int[] { 1 };
+                AllySSSpawner.SpaceStationPosition = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
+                AllySSSpawner.SpawnAllySpaceStation();
+            }
+        }
+        // Enemy Space Station
+        float random = Random.Range(0, 100f);
+        if (random < EnemySpaceStationSpawn)
+        {
+            Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EO");
+            string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
+            string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
+            int n = Random.Range(0, VectorRangeTopLeft.Length);
+            int LeftLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
+            int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
+            EnemySSSpawner.SpaceStationID = new int[] { 1 };
+            EnemySSSpawner.SpaceStationPos = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
+            EnemySSSpawner.SpawnEnemySpaceStation();
+        }
         // Mission
         if (SpaceZoneNo % 10 == 1 || SpaceZoneNo % 10 == 3 || SpaceZoneNo % 10 == 5 || SpaceZoneNo % 10 == 7)
         {
@@ -593,13 +890,14 @@ public class SpaceZoneGenerator : MonoBehaviour
                 Mission.CreateMissionOnslaughtV1(EnemyFighterACount + EnemyFighterBCount + EnemyFighterCCount);
             } else
             {
-                Mission.CreateMissionOnslaughtV2(1);
+                Mission.CreateMissionOnslaughtV2(AllyWarshipACount + AllyWarshipBCount + AllyWarshipCCount,
+                    EnemyWarshipACount + EnemyWarshipBCount + EnemyWarshipCCount);
             }
         } else if (SpaceZoneNo % 10 == 0)
         {
             if (ChosenVariant == 1)
             {
-                Mission.CreateMissionBossV1(1);
+                Mission.CreateMissionBossV1(EnemyWarshipACount + EnemyWarshipBCount + EnemyWarshipCCount);
             }
             else
             {

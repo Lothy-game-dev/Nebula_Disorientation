@@ -19,6 +19,7 @@ public class WSShared : MonoBehaviour
     public GameObject BarrierBreak;
     public GameObject Flash;
     public GameObject Explosion;
+    public bool IsEnemy;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -312,6 +313,24 @@ public class WSShared : MonoBehaviour
             }
             
         }
+        if (IsEnemy)
+        {
+            Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
+            transform.Rotate(new Vector3(0, 0, -270));
+            WM.CurrentRotateAngle += 270;
+            WM.HPSlider.transform.Rotate(new Vector3(0, 0, 270));
+            WM.HPSlider.transform.position = transform.position + HealthBarPos;
+            HPBar.Position = HealthBarPos;
+        } else
+        {
+            Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
+            transform.Rotate(new Vector3(0, 0, -90));
+            WM.CurrentRotateAngle += 90;
+            WM.HPSlider.transform.Rotate(new Vector3(0, 0, 90));
+            WM.HPSlider.transform.position = transform.position + HealthBarPos;
+            HPBar.Position = HealthBarPos;
+        }
+
         doneInitWeapon = true;
         gameObject.SetActive(true);
     }
@@ -360,6 +379,7 @@ public class WSShared : MonoBehaviour
             }
             else
             {
+                float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
                 if (BarrierEffectDelay <= 0f)
                 {
@@ -371,7 +391,7 @@ public class WSShared : MonoBehaviour
                 }
                 BarrierRegenTimer = 90f;
                 BarrierRegenAmount = 2500f;
-                CurrentHP -= (RealDamage - CurrentBarrier);
+                CurrentHP -= afterDamage;
             }
         }
         else
@@ -646,7 +666,14 @@ public class WSShared : MonoBehaviour
             expl5.SetActive(true);
             Destroy(expl5, 0.3f);
         }
-
+        if (IsEnemy)
+        {
+            // Bounty
+            FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
+        } else
+        {
+            FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
+        }
         GenerateFlash(transform.position, 0.5f, 1f);
 
     }
