@@ -39,23 +39,18 @@ public class WSShared : MonoBehaviour
     public List<string> SupWeapon;
     public GameObject Weapons;
     public GameObject BackFire;
-    private GameObject LeftTarget;
-    private GameObject RightTarget;
     private float TargetRefreshTimer;
     private List<GameObject> SpWps;
     public List<GameObject> MainWps;
     private float FindTargetTimer;
     private bool doneInitWeapon;
     private float[] DelayTimer;
-    private float DelayTimer1;
-    private float ChargingTime;
     private float SpawnTimer;
     public GameObject AllyModel;
     private GameObject ChosenModel;
     public GameObject AllyTemplate;
     private int[] FightersId;
     private int Count;
-    private int IDCount;
     private int[] EnemiesTier;
     private bool Spawned;
     private float BarrierEffectDelay;
@@ -63,16 +58,16 @@ public class WSShared : MonoBehaviour
     private float BarrierRegenAmount;
     private float BarrierRegenDelay;
     private bool AlreadyDestroy;
-    public GameObject MainTarget;
+    public Dictionary<GameObject, GameObject> MainTarget;
     public float TargetRange;
     public GameObject Head;
     public WSHealthBar HPBar;
     private bool isHit;
     private Dictionary<GameObject, int> WSSSDict;
-    private List<string> WSSSName;
-    private List<float> WSSSDistance;
-    private List<GameObject> Gamelist;
     public int Order;
+    public Dictionary<GameObject , GameObject> SpWeaponTargets;
+    private float Distance;
+    private bool isFighting;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -81,81 +76,92 @@ public class WSShared : MonoBehaviour
         // Initialize variables
         CurrentHP = MaxHP;
         Count = 0;
-        IDCount = 0;
         SpawnTimer = 10f;
         FightersId = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindAnyObjectByType<SpaceZoneGenerator>().EnemyFighterIDs : FindAnyObjectByType<SpaceZoneGenerator>().AllyFighterIDs.ToArray());
         EnemiesTier = FindObjectOfType<SpaceZoneGenerator>().EnemiesTier;
         FindAnyObjectByType<WSSSDetected>().DectectWSSS();
         WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
-        Gamelist = new List<GameObject>();
         Order = WSSSDict[gameObject];
+        isFighting = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Weapon action
         if (doneInitWeapon)
         {
             for (int i = 0; i < MainWps.Count; i++)
             {
                 DelayTimer[i] -= Time.deltaTime;
                 if (MainWps[i] != null && MainWps[i].GetComponent<Weapons>() != null)
-                {                  
+                {
                     if (DelayTimer[i] <= 0f)
-                    {                     
+                    {
                         MainWps[i].GetComponent<Weapons>().isCharging = true;
                         MainWps[i].GetComponent<Weapons>().Fireable = true;
-                        DelayTimer[i] = 5f;
+                        DelayTimer[i] = MainWps[i].GetComponent<Weapons>().Cooldown;
                     }
                 }
             }
 
-            DelayTimer1 -= Time.deltaTime;
             for (int i = 0; i < SpWps.Count; i++)
             {
                 if (SpWps[i] != null)
-                {                 
-                   SpWps[i].GetComponent<Weapons>().WSShootBullet();                  
+                {
+                    SpWps[i].GetComponent<Weapons>().WSShootBullet();
                 }
             }
         }
-            // Call function and timer only if possible
+        // Call function and timer only if possible
 
+        //Reset Target
         TargetRefreshTimer -= Time.deltaTime;
         if (TargetRefreshTimer <= 0f)
         {
-            TargetRefreshTimer = 0f;
+            TargetRefreshTimer = Random.Range(2.5f, 3.5f);
 
             for (int i = 0; i < SpWps.Count; i++)
             {
-                CheckTargetEnemy(SpWps[i], TargetLeftEnemy(SpWps[i]));
+                CheckTargetEnemy(SpWps[i]);
                 if (SpWps[i] != null && SpWps[i].GetComponent<Weapons>() != null)
                 {
-                    SpWps[i].GetComponent<Weapons>().Aim = TargetLeftEnemy(SpWps[i]);
+                    SpWps[i].GetComponent<Weapons>().Aim = SpWeaponTargets[SpWps[i]];
                 }
-                /*if (RightWeapon != null)
-                {
-                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
-                }*/
             }
-
             for (int i = 0; i < MainWps.Count; i++)
             {
+                CheckTargetEnemy(MainWps[i]);
                 if (MainWps[i] != null && MainWps[i].GetComponent<Weapons>() != null)
                 {
-                    CheckTargetEnemy(MainWps[i], MainTarget);
-                    MainWps[i].GetComponent<Weapons>().Aim = MainWeaponTargetEnemy(MainWps[i]);
+                    MainWps[i].GetComponent<Weapons>().Aim = MainTarget[MainWps[i]];
                 }
-
-                /*if (RightWeapon != null)
-                {
-                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
-                }*/
             }
 
         }
 
 
+        if (MainTarget.ContainsValue(null) || SpWeaponTargets.ContainsValue(null))
+        {
+            FindTargetTimer -= Time.deltaTime;
+            Debug.Log("khangdpetrai");
+        }
+        if (FindTargetTimer <= 0f)
+        {
+            FindTargetTimer = Random.Range(2.5f, 3.5f);            
+            for (int i = 0; i < MainWps.Count; i++)
+            {
+                MainWeaponTargetEnemy(MainWps[i]);                   
+            }
+                       
+            for (int i = 0; i < SpWps.Count; i++)
+            {
+                TargetEnemy(SpWps[i]);                                   
+            }
+            
+        }
+
+        // This is for the non-weapon warship 
         if (MainWps[0].GetComponent<Weapons>() == null && FightersId.Length > 0)
         {
             
@@ -178,8 +184,7 @@ public class WSShared : MonoBehaviour
             }
         }
         CheckBarrierAndHealth();
-       
-        CheckWhichIsOnTop();
+        
     }
     #endregion
     #region Init data
@@ -250,7 +255,7 @@ public class WSShared : MonoBehaviour
                         main.transform.localScale = WPScale;
                         Weapons wp = main.GetComponent<Weapons>();
                         wp.Fighter = gameObject;
-                        wp.Aim = LeftTarget;
+                        wp.Aim = null;
                         wp.EnemyLayer = MainWeaponTarget;
                         wp.tracking = true;
                         wp.isMainWeapon = true;
@@ -301,7 +306,7 @@ public class WSShared : MonoBehaviour
 
                     Weapons wp = sup.GetComponent<Weapons>();
                     wp.Fighter = gameObject;
-                    wp.Aim = LeftTarget;
+                    wp.Aim = null;
                     wp.EnemyLayer = SupWeaponTarget;
                     wp.tracking = true;
                     wp.RotateLimitPositive = 360;
@@ -312,6 +317,16 @@ public class WSShared : MonoBehaviour
                 }
             }
             
+        }
+        SpWeaponTargets = new Dictionary<GameObject, GameObject>();
+        MainTarget = new Dictionary<GameObject, GameObject>();
+        for (int i = 0; i < MainWps.Count; i++)
+        {
+            MainWeaponTargetEnemy(MainWps[i]);
+        }
+        for (int i = 0; i < SpWps.Count; i++)
+        {
+            SpWeaponTargets.Add(SpWps[i], TargetEnemy(SpWps[i]));           
         }
         if (IsEnemy)
         {
@@ -374,7 +389,7 @@ public class WSShared : MonoBehaviour
                     br.transform.SetParent(transform);
                     Destroy(br, 0.25f);
                 }
-                BarrierRegenTimer = 90f;
+                BarrierRegenTimer = 120f;
                 BarrierRegenAmount = 2500f;
             }
             else
@@ -389,7 +404,7 @@ public class WSShared : MonoBehaviour
                     br.transform.SetParent(transform);
                     Destroy(br, 0.25f);
                 }
-                BarrierRegenTimer = 90f;
+                BarrierRegenTimer = 120f;
                 BarrierRegenAmount = 2500f;
                 CurrentHP -= afterDamage;
             }
@@ -417,9 +432,16 @@ public class WSShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage)
+    public void ReceivePowerDamage(float Damage, GameObject Power)
     {
-        float RealDamage = Damage * 50f / 100;
+        float RealDamage = 0;
+        if (Power.GetComponent<Beam>() == null)
+        {
+            RealDamage = Damage * 50f / 100;
+        } else
+        {
+            RealDamage = Damage;
+        }
         if (CurrentHP>=RealDamage)
         {
             CurrentHP -= RealDamage;
@@ -430,8 +452,8 @@ public class WSShared : MonoBehaviour
     }
     #endregion
     #region Target
-    private GameObject TargetLeftEnemy(GameObject weapon)
-    {
+    private GameObject TargetEnemy(GameObject weapon)
+    {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
         Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
@@ -442,7 +464,6 @@ public class WSShared : MonoBehaviour
             float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
             {
-
                 if (!weapon.name.Contains("GravitationalArtillery"))
                 {
                     if (enemy.GetComponent<FighterShared>() != null)
@@ -468,7 +489,6 @@ public class WSShared : MonoBehaviour
                     }
                 }
             }
-            LeftTarget = Nearest;
             game = Nearest;
         }
         return game;
@@ -477,25 +497,26 @@ public class WSShared : MonoBehaviour
     public GameObject MainWeaponTargetEnemy(GameObject weapon)
     {
         GameObject game = null;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, TargetRange, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (isFighting == true ? TargetRange : 10000f), MainWeaponTarget);
         if (cols.Length > 0)
         {
-            GameObject Nearest = null;
             foreach (var enemy in cols)
             {
                 // If weapon is main weap, target enemy ws/ss only
                 if (weapon.GetComponent<Weapons>().isMainWeapon)
                 {
-                    if (enemy.gameObject.tag == "BossEnemy" || enemy.gameObject.tag == "AlliesEliteFighter" || enemy.gameObject.tag == "AlliesBossFighter")
+                    if (enemy.gameObject.tag == "BossEnemy" ||  enemy.gameObject.tag == "AlliesBossFighter")
                     {
-                        Nearest = enemy.gameObject;
-                        float distance = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
+                        GameObject Nearest = enemy.gameObject;
+                        float distance = Mathf.Abs((Nearest.transform.position - weapon.transform.position).magnitude);
                         float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);
                         if (distanceTest < distance)
                         {
                             distance = distanceTest;
                             Nearest = enemy.gameObject;
                         }
+                        game = Nearest;
+                        Distance = distanceTest;
                     } else
                     {
                         continue;
@@ -503,24 +524,72 @@ public class WSShared : MonoBehaviour
                 }
 
             }
-            game = Nearest;
-            MainTarget = game;
+            // If the distance between 2 ws is too far, expand the search area to 10000f,
+            // and will turn back to the weapon range if 2 ws are in the weapon range
+            if (Distance <= TargetRange)
+            {
+                isFighting = true;
+            }
+            
         }
+        MainTarget[weapon] = game;
         return game;
     }
 
-    private void CheckTargetEnemy(GameObject weapon, GameObject target)
+    private void CheckTargetEnemy(GameObject weapon)
     {
-        BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        for (int i = 0; i < SpWps.Count; i++)
+        if (!weapon.GetComponent<Weapons>().isMainWeapon)
         {
-            if (target != null && (Mathf.Abs((target.transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || target.layer == LayerMask.NameToLayer("Untargetable")))
+            BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+            for (int i = 0; i < SpWeaponTargets.Count; i++)
             {
-                target = null;
-                weapon.GetComponent<Weapons>().Aim = null;
-                MainTarget = null;
+                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                {                   
+                    weapon.GetComponent<Weapons>().Aim = null;
+                    SpWeaponTargets[weapon] = null;
+                }
             }
+        } else
+        {            
+            BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+            for (int i = 0; i < MainTarget.Count; i++)
+            {
+                if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                {
+                    weapon.GetComponent<Weapons>().Aim = null;
+                    MainTarget[weapon] = null;
+                }
+            }           
         }
+    }
+
+    public GameObject TargetAllWarshipOnthemap(GameObject weapon)
+    {
+        GameObject game = null;
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, 10000f, MainWeaponTarget);
+        if (cols.Length > 0)
+        {         
+            foreach (var enemy in cols)
+            {
+                // If weapon is main weap, target enemy ws/ss only
+                if (weapon.GetComponent<Weapons>().isMainWeapon)
+                {
+                    if (enemy.gameObject.tag == "BossEnemy" || enemy.gameObject.tag == "AlliesBossFighter")
+                    {                      
+                        game = enemy.gameObject;
+                       
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+            }           
+        }
+        return game;
+
     }
     #endregion
     #region Spawn
@@ -570,6 +639,7 @@ public class WSShared : MonoBehaviour
         Ally.name = ChosenModel.name + " |" + MainWps[0].transform.position.x + " - " + MainWps[0].transform.position.y + " - " + Count;
         if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
+            Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
             Ally.GetComponent<EnemyShared>().HPScale = HPScale;
             Ally.GetComponent<EnemyShared>().CashBountyScale = BountyScale;
             Ally.GetComponent<EnemyShared>().Tier = tier;
@@ -619,8 +689,7 @@ public class WSShared : MonoBehaviour
         {
             if (!AlreadyDestroy)
             {
-                AlreadyDestroy = true;
-                
+                AlreadyDestroy = true;               
                 StartCoroutine(DestroySelf());
 
             }
@@ -666,6 +735,9 @@ public class WSShared : MonoBehaviour
             expl5.SetActive(true);
             Destroy(expl5, 0.3f);
         }
+
+        GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
+
         if (IsEnemy)
         {
             // Bounty
@@ -675,6 +747,7 @@ public class WSShared : MonoBehaviour
             FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
         }
         GenerateFlash(transform.position, 0.5f, 1f);
+
 
     }
     #endregion

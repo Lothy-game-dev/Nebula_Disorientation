@@ -89,10 +89,24 @@ public class Beam : MonoBehaviour
             if (!Laser.onHit)
             {
                 Laser.onHit = true;
-                FighterShared enemy = col.gameObject.GetComponent<FighterShared>();
-                if (enemy != null)
+                
+                if (col.GetComponent<FighterShared>() != null)
                 {
-                    enemy.ReceiveDamage(Damage, Fighter);
+                    col.GetComponent<FighterShared>().ReceiveDamage(Damage, Fighter);
+                }
+                else
+                {
+                    if (col.GetComponent<WSShared>() != null)
+                    {
+                        col.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject);
+                    }
+                    else
+                    {
+                        if (col.GetComponent<SpaceStationShared>() != null)
+                        {
+                            col.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage);
+                        }
+                    }
                 }
             }
             Destroy(gameObject);

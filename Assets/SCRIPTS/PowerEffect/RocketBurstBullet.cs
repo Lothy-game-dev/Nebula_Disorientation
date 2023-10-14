@@ -247,10 +247,22 @@ public class RocketBurstBullet : MonoBehaviour
             Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, Layer);
             foreach (var col2 in cols2)
             {
-                FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
-                if (enemy != null)
+                /*FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();*/
+                if (col2.GetComponent<FighterShared>() != null)
                 {
-                    enemy.ReceiveDamage(Damage, Fighter);
+                    col2.GetComponent<FighterShared>().ReceiveDamage(Damage, Fighter);
+                } else
+                {
+                    if (col2.GetComponent<WSShared>() != null)
+                    {
+                        col2.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject);
+                    } else
+                    {
+                        if (col2.GetComponent<SpaceStationShared>() != null)
+                        {
+                            col2.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage);
+                        }
+                    }
                 }
             }
             Destroy(AimGen);
