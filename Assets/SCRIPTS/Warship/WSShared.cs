@@ -232,6 +232,7 @@ public class WSShared : MonoBehaviour
 
         MainWps = new List<GameObject>();
         List<Vector2> WPPos = model.GetComponent<WarshipModelShared>().MainWeaponPos;
+        Vector2 WPScale = model.GetComponent<WarshipModelShared>().MainWeaponScale;
         for (int i = 0; i < MainWeapon.Count; i++)
         {
             for (int j = 0; j < Weapons.transform.childCount; j++)
@@ -245,7 +246,7 @@ public class WSShared : MonoBehaviour
 
                     if (MainWeapon[i] != "CarrierHatch")
                     {
-                        main.transform.localScale = new Vector2(0.5f, 0.5f);
+                        main.transform.localScale = WPScale;
                         Weapons wp = main.GetComponent<Weapons>();
                         wp.Fighter = gameObject;
                         wp.Aim = LeftTarget;
@@ -416,10 +417,12 @@ public class WSShared : MonoBehaviour
         Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
+            // Find the nearest first, if a fighter is found, target it instead
             GameObject Nearest = cols[0].gameObject;
             float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
             {
+
                 if (!weapon.name.Contains("GravitationalArtillery"))
                 {
                     if (enemy.GetComponent<FighterShared>() != null)

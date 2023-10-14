@@ -48,13 +48,17 @@ public class SpaceStationShared : MonoBehaviour
     private float BarrierRegenAmount;
     private float BarrierRegenDelay;
     private bool AlreadyDestroy;
+    public Dictionary<GameObject, int> WSSSDict;
+    public int Order;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        
+        FindAnyObjectByType<WSSSDetected>().DectectWSSS();
+        WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
+        Order = WSSSDict[gameObject];
     }
 
     // Update is called once per frame
@@ -145,7 +149,7 @@ public class SpaceStationShared : MonoBehaviour
         AuraRange = float.Parse(data["AuraRange"].ToString());
         CurrentHP = MaxHP;
 
-        HPBar.SetPostion(model.GetComponent<SpaceStationModelShared>().HPBarPosition);
+        /*HPBar.SetPostion(new Vector3(transform.position.x + model.GetComponent<SpaceStationModelShared>().HPBarPosition.x, transform.position.y + model.GetComponent<SpaceStationModelShared>().HPBarPosition.y, transform.position.z));*/ 
         //Main Weapon
         if (data["MainWeapon"].ToString().Contains("|"))
         {
@@ -167,7 +171,7 @@ public class SpaceStationShared : MonoBehaviour
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
                 //Find model
-                if (MainWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower())
+                if (Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower().Contains(MainWeapon[i].Replace(" ", "").ToLower()))
                 {
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos.x, transform.position.y + WPPos.y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
@@ -207,7 +211,7 @@ public class SpaceStationShared : MonoBehaviour
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
                 //Find model
-                if (SupWeapon[i].Replace(" ", "").ToLower() == Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower())
+                if (Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower().Contains(SupWeapon[i].Replace(" ", "").ToLower()))
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
