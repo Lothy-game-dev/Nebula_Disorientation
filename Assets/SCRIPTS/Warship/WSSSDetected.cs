@@ -51,7 +51,7 @@ public class WSSSDetected : MonoBehaviour
         {
             if (obj1.tag == "BossEnemy")
             {
-                float distanceToCamera = Vector3.Distance(obj1.transform.position, Camera.main.transform.position);
+                float distanceToCamera = Vector2.Distance(obj1.transform.position, Camera.main.transform.position);
                 if (!WSSSDict.ContainsKey(distanceToCamera))
                 {
                     WSSSDict.Add(distanceToCamera, obj1.gameObject);
@@ -64,7 +64,7 @@ public class WSSSDetected : MonoBehaviour
         {
             if (obj2.tag == "AlliesBossFighter")
             {
-                float distanceToCamera = Vector3.Distance(obj2.transform.position, Camera.main.transform.position);
+                float distanceToCamera = Vector2.Distance(obj2.transform.position, Camera.main.transform.position);
                 if (!WSSSDict.ContainsKey(distanceToCamera))
                 {
                     WSSSDict.Add(distanceToCamera, obj2.gameObject);
@@ -73,6 +73,7 @@ public class WSSSDetected : MonoBehaviour
 
             }
         }
+       
         WSSSDistance.Sort();
         for (int i = 0; i < WSSSDistance.Count; i++)
         {
