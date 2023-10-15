@@ -50,7 +50,9 @@ public class SpaceStationShared : MonoBehaviour
     private float BarrierRegenDelay;
     private bool AlreadyDestroy;
     public Dictionary<GameObject, int> WSSSDict;
+    public Dictionary<GameObject, GameObject> SpWeaponTargets;
     public int Order;
+    public bool isHit;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -90,36 +92,47 @@ public class SpaceStationShared : MonoBehaviour
                 }
             }
         }
+        //Reset Target
         TargetRefreshTimer -= Time.deltaTime;
         if (TargetRefreshTimer <= 0f)
         {
             TargetRefreshTimer = Random.Range(2.5f, 3.5f);
-            //CheckTargetEnemy();
 
             for (int i = 0; i < SpWps.Count; i++)
             {
-                CheckTargetEnemy(SpWps[i], Target);
-                if (SpWps[i] != null)
+                CheckTargetEnemy(SpWps[i]);
+                if (SpWps[i] != null && SpWps[i].GetComponent<Weapons>() != null)
                 {
-                    SpWps[i].GetComponent<Weapons>().Aim = TargetEnemy(SpWps[i]);
+                    SpWps[i].GetComponent<Weapons>().Aim = SpWeaponTargets[SpWps[i]];
                 }
-                /*if (RightWeapon != null)
-                {
-                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
-                }*/
             }
-
             for (int i = 0; i < MainWps.Count; i++)
             {
-                CheckTargetEnemy(MainWps[i], Target);
-                if (MainWps[i] != null)
+                CheckTargetEnemy(MainWps[i]);
+                if (MainWps[i] != null && MainWps[i].GetComponent<Weapons>() != null)
                 {
-                    MainWps[i].GetComponent<Weapons>().Aim = MainWeaponTargetEnemy(MainWps[i]);
+                    MainWps[i].GetComponent<Weapons>().Aim = Target;
                 }
-                /*if (RightWeapon != null)
-                {
-                    RightWeapon.GetComponent<Weapons>().Aim = RightTarget;
-                }*/
+            }
+
+        }
+
+
+        if (Target == null || SpWeaponTargets.ContainsValue(null))
+        {
+            FindTargetTimer -= Time.deltaTime;
+        }
+        if (FindTargetTimer <= 0f)
+        {
+            FindTargetTimer = Random.Range(2.5f, 3.5f);
+            for (int i = 0; i < MainWps.Count; i++)
+            {
+                MainWeaponTargetEnemy(MainWps[i]);
+            }
+
+            for (int i = 0; i < SpWps.Count; i++)
+            {
+                SpWeaponTargets[SpWps[i]] = TargetEnemy(SpWps[i]);
             }
 
         }
@@ -228,6 +241,15 @@ public class SpaceStationShared : MonoBehaviour
             }
 
         }
+        SpWeaponTargets = new Dictionary<GameObject, GameObject>();             
+        for (int i = 0; i < SpWps.Count; i++)
+        {
+            SpWeaponTargets.Add(SpWps[i], TargetEnemy(SpWps[i]));
+        }
+        for (int i = 0; i < MainWps.Count; i++)
+        {
+            MainWeaponTargetEnemy(MainWps[i]);
+        }
         doneInitWeapon = true;
         gameObject.SetActive(true);
 
@@ -237,12 +259,13 @@ public class SpaceStationShared : MonoBehaviour
     #region Target
     // Group all function that serve the same algorithm
     private GameObject TargetEnemy(GameObject weapon)
-    {
+    {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
         Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
+            // Find the nearest first, if a fighter is found, target it instead
             GameObject Nearest = cols[0].gameObject;
             float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
@@ -262,8 +285,7 @@ public class SpaceStationShared : MonoBehaviour
                     {
                         continue;
                     }
-                }
-                else
+                } else
                 {
                     float distanceTest = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
                     if (distanceTest < distance)
@@ -274,21 +296,33 @@ public class SpaceStationShared : MonoBehaviour
                 }
             }
             game = Nearest;
-            Target = game;
         }
         return game;
     }
 
-    private void CheckTargetEnemy(GameObject weapon, GameObject target)
+    private void CheckTargetEnemy(GameObject weapon)
     {
-        BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        for (int i = 0; i < SpWps.Count; i++)
+        if (!weapon.GetComponent<Weapons>().isMainWeapon)
         {
-            if (target != null && (Mathf.Abs((target.transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || target.layer == LayerMask.NameToLayer("Untargetable")))
+            BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+            for (int i = 0; i < SpWeaponTargets.Count; i++)
             {
-                target = null;
-                weapon.GetComponent<Weapons>().Aim = null;
+                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                {
+                    weapon.GetComponent<Weapons>().Aim = null;
+                    SpWeaponTargets[weapon] = null;
+                }
             }
+        }
+        else
+        {
+            BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();           
+            if (Target != null && (Mathf.Abs((Target.transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || Target.layer == LayerMask.NameToLayer("Untargetable")))
+            {
+                weapon.GetComponent<Weapons>().Aim = null;
+                Target = null;
+            }
+            
         }
     }
 
@@ -515,16 +549,63 @@ public class SpaceStationShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage)
+    public void ReceivePowerDamage(float Damage, GameObject Power, Vector2 BulletHitPos)
     {
+
         float RealDamage = Damage * 50f / 100;
-        if (CurrentHP >= RealDamage)
+        if (CurrentBarrier > 0)
         {
-            CurrentHP -= RealDamage;
+            if (CurrentBarrier > RealDamage)
+            {
+                CurrentBarrier -= RealDamage;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 120f;
+                BarrierRegenAmount = 2500f;
+            }
+            else
+            {
+                float afterDamage = (RealDamage - CurrentBarrier);
+                CurrentBarrier = 0;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 120f;
+                BarrierRegenAmount = 2500f;
+                CurrentHP -= afterDamage;
+            }
         }
         else
         {
-            CurrentHP = 0;
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
+            if (CurrentHP >= RealDamage)
+            {
+                CurrentHP -= RealDamage;
+                isHit = true;
+                HPBar.SetValue(CurrentHP, MaxHP, isHit);
+            }
+            else
+            {
+                CurrentHP = 0;
+            }
         }
     }
     #endregion
@@ -603,7 +684,7 @@ public class SpaceStationShared : MonoBehaviour
         {
             FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
         }
-        GenerateFlash(transform.position, 0.5f, 1f);
+        GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
         
     }
     #endregion
@@ -615,7 +696,7 @@ public class SpaceStationShared : MonoBehaviour
         Color c = bf.GetComponent<SpriteRenderer>().color;
         c.a = 1;
         bf.GetComponent<SpriteRenderer>().color = c;
-        bf.transform.SetParent(transform);
+        bf.transform.SetParent(Flash.transform.parent);
         bf.SetActive(true);
         GetComponent<SpriteRenderer>().enabled = false;
         for (int i = 0; i < gameObject.transform.childCount; i++)
