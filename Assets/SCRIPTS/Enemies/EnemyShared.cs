@@ -545,10 +545,42 @@ public class EnemyShared : FighterShared
             {
                 if (enemy == ForceTargetGO)
                 {
-                    LeftTarget = enemy.gameObject;
+                    Nearest = enemy.gameObject;
                     break;
                 }
                 float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                if (Priority == null || Priority == "" || (!Priority.Contains("WS") && !Priority.Contains("SS")))
+                {
+                    if (weaponName1.Contains("Gravitational"))
+                    {
+                        if (enemy.GetComponent<WSShared>() != null || enemy.GetComponent<SpaceStationShared>() != null)
+                        {
+                            if (Nearest.GetComponent<WSShared>() != null || Nearest.GetComponent<SpaceStationShared>() != null)
+                            {
+                                if (distanceTest < distance)
+                                {
+                                    distance = distanceTest;
+                                    Nearest = enemy.gameObject;
+                                }
+                            }
+                            else
+                            {
+                                distance = distanceTest;
+                                Nearest = enemy.gameObject;
+                            }
+                        }
+                        else
+                        {
+                            if (Nearest.GetComponent<WSShared>() == null && Nearest.GetComponent<SpaceStationShared>() == null)
+                                if (distanceTest < distance)
+                                {
+                                    distance = distanceTest;
+                                    Nearest = enemy.gameObject;
+                                }
+                        }
+                    }
+                }
+                else
                 if (distanceTest < distance)
                 {
                     distance = distanceTest;
@@ -573,45 +605,7 @@ public class EnemyShared : FighterShared
                     float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
                     if (enemy.GetComponent<WSShared>() != null || enemy.GetComponent<SpaceStationShared>() != null)
                     {
-                        if (Nearest.GetComponent<WSShared>()!=null || Nearest.GetComponent<SpaceStationShared>() != null)
-                        {
-                            if (distanceTest < distance)
-                            {
-                                distance = distanceTest;
-                                Nearest = enemy.gameObject;
-                            }
-                        } else
-                        {
-                            distance = distanceTest;
-                            Nearest = enemy.gameObject;
-                        }
-                    }
-                }
-                else if (Priority == "WS")
-                {
-                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
-                    if (enemy.GetComponent<WSShared>() != null)
-                    {
-                        if (Nearest.GetComponent<WSShared>()!=null)
-                        {
-                            if (distanceTest < distance)
-                            {
-                                distance = distanceTest;
-                                Nearest = enemy.gameObject;
-                            }
-                        } else
-                        {
-                            distance = distanceTest;
-                            Nearest = enemy.gameObject;
-                        }
-                    }
-                }
-                else if (Priority == "SSTP")
-                {
-                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
-                    if (enemy.name.Contains("SSTP"))
-                    {
-                        if (!Nearest.name.Contains("SSTP"))
+                        if (Nearest.GetComponent<WSShared>() != null || Nearest.GetComponent<SpaceStationShared>() != null)
                         {
                             if (distanceTest < distance)
                             {
@@ -625,16 +619,28 @@ public class EnemyShared : FighterShared
                             Nearest = enemy.gameObject;
                         }
                     }
-
                 }
-                else if (Priority == "Player")
+                else if (Priority == "WS")
                 {
-                    if (enemy.GetComponent<PlayerFighter>() != null)
+                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                    if (enemy.GetComponent<WSShared>() != null)
                     {
-                        Nearest = enemy.gameObject;
-                        break;
+                        if (Nearest.GetComponent<WSShared>() != null)
+                        {
+                            if (distanceTest < distance)
+                            {
+                                distance = distanceTest;
+                                Nearest = enemy.gameObject;
+                            }
+                        }
+                        else
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
                     }
-                } else if (Priority == "SS")
+                }
+                else if (Priority == "SS")
                 {
                     if (enemy.GetComponent<SpaceStationShared>() != null)
                     {
@@ -658,10 +664,42 @@ public class EnemyShared : FighterShared
             {
                 if (enemy == ForceTargetGO)
                 {
-                    RightTarget = enemy.gameObject;
+                    Nearest = enemy.gameObject;
                     break;
                 }
                 float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                if (Priority == null || Priority == "" || (!Priority.Contains("WS") && !Priority.Contains("SS")))
+                {
+                    if (weaponName1.Contains("Gravitational"))
+                    {
+                        if (enemy.GetComponent<WSShared>() != null || enemy.GetComponent<SpaceStationShared>() != null)
+                        {
+                            if (Nearest.GetComponent<WSShared>() != null || Nearest.GetComponent<SpaceStationShared>() != null)
+                            {
+                                if (distanceTest < distance)
+                                {
+                                    distance = distanceTest;
+                                    Nearest = enemy.gameObject;
+                                }
+                            }
+                            else
+                            {
+                                distance = distanceTest;
+                                Nearest = enemy.gameObject;
+                            }
+                        }
+                        else
+                        {
+                            if (Nearest.GetComponent<WSShared>() == null && Nearest.GetComponent<SpaceStationShared>() == null)
+                                if (distanceTest < distance)
+                                {
+                                    distance = distanceTest;
+                                    Nearest = enemy.gameObject;
+                                }
+                        }
+                    }
+                }
+                else
                 if (distanceTest < distance)
                 {
                     distance = distanceTest;
@@ -702,12 +740,12 @@ public class EnemyShared : FighterShared
             {
                 if (hit.collider.gameObject.GetComponent<WSShared>() != null)
                 {
-                    hit.collider.gameObject.GetComponent<WSShared>().ReceiveBulletDamage(hit.collider.gameObject.GetComponent<WSShared>().MaxHP * 10 / 100f, null, true, transform.position);
+                    hit.collider.gameObject.GetComponent<WSShared>().ReceiveBulletDamage(hit.collider.gameObject.GetComponent<WSShared>().MaxHP * 5 / 100f, null, true, transform.position);
                     Destroy(gameObject);
                 }
                 else if (hit.collider.gameObject.GetComponent<SpaceStationShared>() != null)
                 {
-                    hit.collider.gameObject.GetComponent<SpaceStationShared>().ReceiveBombingDamage(hit.collider.gameObject.GetComponent<SpaceStationShared>().MaxHP * 10 / 100f, transform.position);
+                    hit.collider.gameObject.GetComponent<SpaceStationShared>().ReceiveBombingDamage(hit.collider.gameObject.GetComponent<SpaceStationShared>().MaxHP * 5 / 100f, transform.position);
                     Destroy(gameObject);
                 }
             }

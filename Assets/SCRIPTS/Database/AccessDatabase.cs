@@ -1891,7 +1891,7 @@ public class AccessDatabase : MonoBehaviour
             WSDict.Add("Tier", dataReader.GetString(4));
             WSDict.Add("MainWeapon", dataReader.GetString(5));
             WSDict.Add("SupWeapon", dataReader.GetString(6));
-
+            WSDict.Add("Bounty", dataReader.GetString(7));
         }
         if (!check) return null;
         return WSDict;

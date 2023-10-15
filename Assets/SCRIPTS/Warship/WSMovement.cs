@@ -20,6 +20,7 @@ public class WSMovement : MonoBehaviour
     public GameObject RightBorder;
     public GameObject HeadObject;
     public GameObject HPSlider;
+    public GameplayInteriorController ControllerMain;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -45,6 +46,8 @@ public class WSMovement : MonoBehaviour
     private bool inAttackRange;
     private int InAttackRangeCount;
     private float CheckMovingDelay;
+    private bool Moveable;
+    private float WaitTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -76,14 +79,25 @@ public class WSMovement : MonoBehaviour
 
         wss = GetComponent<WSShared>();
         LimitString = "";
+        WaitTimer = 10f;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        if ((ControllerMain.IsInLoading))
+        {
+            Moveable = false;
+            speedVector = new Vector2(0, 0);
+            CurrentSpeed = 0f;
+        }
+        else
+        {
+            Moveable = true;
+        }
         AccelerateSpeed();
-        FighterMoving();
+        if (Moveable) FighterMoving();
         GetComponent<Rigidbody2D>().velocity = speedVector;
         CheckLimit();
         if (PreventReachLimitTimer <= 0f)
@@ -99,32 +113,39 @@ public class WSMovement : MonoBehaviour
             PreventReachLimit = true;
             PreventReachLimitTimer -= Time.deltaTime;
         }
-        if (LimitString == "")
+        if (Moveable)
         {
-            if (LimitDelay <= 0f)
+            WaitTimer -= Time.deltaTime;
+        }
+        if (WaitTimer <= 0f)
+        {
+            if (LimitString == "")
             {
-                if (!PreventReachLimit)
+                if (LimitDelay <= 0f)
                 {
-                    PreventReachingLimit();
-                    if (CheckMovingDelay <= 0f)
+                    if (!PreventReachLimit)
                     {
-                        CheckMovingDelay = Random.Range(0.5f, 1f);
-                        CheckOnMoving();
+                        PreventReachingLimit();
+                        if (CheckMovingDelay <= 0f)
+                        {
+                            CheckMovingDelay = Random.Range(0.5f, 1f);
+                            CheckOnMoving();
+                        }
+                        else
+                        {
+                            CheckMovingDelay -= Time.deltaTime;
+                        }
                     }
-                    else
-                    {
-                        CheckMovingDelay -= Time.deltaTime;
-                    }
+                }
+                else
+                {
+                    LimitDelay -= Time.deltaTime;
                 }
             }
             else
             {
-                LimitDelay -= Time.deltaTime;
+                GetAwayFromLimit();
             }
-        }
-        else
-        {
-            GetAwayFromLimit();
         }
     }
     private void FixedUpdate()

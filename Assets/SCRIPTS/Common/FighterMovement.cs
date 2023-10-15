@@ -64,16 +64,16 @@ public class FighterMovement : MonoBehaviour
         if (als!=null)
         {
             if (als.Escort)
-                StartMovingDelay = 5f;
+                StartMovingDelay = 2f;
             else
-                StartMovingDelay = 15f;
+                StartMovingDelay = 7f;
         }
         if (es!=null)
         {
             if (es.Escort)
-                StartMovingDelay = 10f;
+                StartMovingDelay = 5f;
             else
-                StartMovingDelay = 15f;
+                StartMovingDelay = 7f;
         }
     }
 
@@ -135,7 +135,7 @@ public class FighterMovement : MonoBehaviour
                         PreventReachingLimit();
                         if (CheckMovingDelay <= 0f)
                         {
-                            CheckMovingDelay = Random.Range(0.5f, 1f);
+                            CheckMovingDelay = Random.Range(0.25f, 0.5f);
                             CheckOnMoving();
                         }
                         else
@@ -340,25 +340,25 @@ public class FighterMovement : MonoBehaviour
         // Prevent Reach Limit
         int PreventX = 0;
         int PreventY = 0;
-        if (transform.position.x >= (LimitRightX - MovingSpeed * 2))
+        if (transform.position.x >= (LimitRightX - MovingSpeed * 1.5f) && CurrentRotateAngle % 360 > 45 && CurrentRotateAngle % 360 <= 135)
         {
             PreventX = -1;
         }
-        if (transform.position.x <= (LimitLeftX + MovingSpeed * 2))
+        if (transform.position.x <= (LimitLeftX + MovingSpeed * 1.5f) && CurrentRotateAngle % 360 > 225 && CurrentRotateAngle % 360 <= 315)
         {
             PreventX = 1;
         }
-        if (transform.position.y >= (LimitTopY - MovingSpeed * 2))
+        if (transform.position.y >= (LimitTopY - MovingSpeed * 1.5f) && (CurrentRotateAngle % 360 > 315 || CurrentRotateAngle % 360 <= 45))
         {
             PreventY = -1;
         }
-        if (transform.position.y <= (LimitBottomY + MovingSpeed * 2))
+        if (transform.position.y <= (LimitBottomY + MovingSpeed * 1.5f) && CurrentRotateAngle % 360 > 135 && CurrentRotateAngle % 360 <= 225)
         {
             PreventY = 1;
         }
         if (PreventX != 0 || PreventY != 0)
         {
-            PreventReachLimitTimer = Random.Range(2f, 3f);
+            PreventReachLimitTimer = 180 / (RotateSpeed * 120f) + Random.Range(-0.25f, 0.25f);
             PreventReachLimit = true;
             if (PreventY == 1)
             {
@@ -660,7 +660,12 @@ public class FighterMovement : MonoBehaviour
                         else
                         {
                             UpMove();
-                            int k = Random.Range(-1, 2);
+                            int k = 0;
+                            if (als.ForceTargetGO!=null)
+                            {
+                                k = CheckIsUpOrDownMovement(als.ForceTargetGO, HeadObject, gameObject);
+                            } else
+                            k = Random.Range(-1, 2);
                             if (k == -1)
                             {
                                 LeftMove();
@@ -797,7 +802,13 @@ public class FighterMovement : MonoBehaviour
                         else
                         {
                             UpMove();
-                            int k = Random.Range(-1, 2);
+                            int k = 0;
+                            if (es.ForceTargetGO != null)
+                            {
+                                k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject);
+                            }
+                            else
+                                k = Random.Range(-1, 2);
                             if (k == -1)
                             {
                                 LeftMove();
