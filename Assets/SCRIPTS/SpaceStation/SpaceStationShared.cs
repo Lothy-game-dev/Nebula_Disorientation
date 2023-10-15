@@ -52,7 +52,13 @@ public class SpaceStationShared : MonoBehaviour
     public Dictionary<GameObject, int> WSSSDict;
     public Dictionary<GameObject, GameObject> SpWeaponTargets;
     public int Order;
+<<<<<<< HEAD
     public bool isHit;
+=======
+    private bool HitByPlayer;
+    private int BountyCash;
+    private int BountyShard;
+>>>>>>> origin/main
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -159,6 +165,12 @@ public class SpaceStationShared : MonoBehaviour
         MaxHP = float.Parse(data["BaseHP"].ToString());
         AuraRange = float.Parse(data["AuraRange"].ToString());
         CurrentHP = MaxHP;
+        if (isEnemy)
+        {
+            string Bounty = (string)data["Bounty"];
+            BountyCash = int.Parse(Bounty.Split("|")[0]);
+            BountyShard = int.Parse(Bounty.Split("|")[1]);
+        }
 
         /*HPBar.SetPostion(new Vector3(transform.position.x + model.GetComponent<SpaceStationModelShared>().HPBarPosition.x, transform.position.y + model.GetComponent<SpaceStationModelShared>().HPBarPosition.y, transform.position.z));*/ 
         //Main Weapon
@@ -480,6 +492,10 @@ public class SpaceStationShared : MonoBehaviour
     public void ReceiveBulletDamage(float Damage, GameObject Bullet, Vector2 BulletHitPos)
     {
         float RealDamage = 0;
+        if (Bullet.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<PlayerFighter>()!=null)
+        {
+            HitByPlayer = true;
+        }
         if (Bullet.GetComponent<UsualKineticBullet>() != null)
         {
             if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
@@ -549,11 +565,14 @@ public class SpaceStationShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage, GameObject Power, Vector2 BulletHitPos)
+    public void ReceivePowerDamage(float Damage, GameObject FighterCast)
     {
-
         float RealDamage = Damage * 50f / 100;
-        if (CurrentBarrier > 0)
+        if (FighterCast.GetComponent<PlayerFighter>()!=null)
+        {
+            HitByPlayer = true;
+        }
+        if (CurrentHP >= RealDamage)
         {
             if (CurrentBarrier > RealDamage)
             {
@@ -679,6 +698,10 @@ public class SpaceStationShared : MonoBehaviour
         }
         if (isEnemy)
         {
+            if (HitByPlayer)
+            {
+                FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
+            }
             FindObjectOfType<SpaceZoneMission>().EnemySpaceStationDestroy();
         } else
         {

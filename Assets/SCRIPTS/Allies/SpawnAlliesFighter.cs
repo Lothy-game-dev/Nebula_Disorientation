@@ -26,6 +26,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public int EscortSpawnNumber;
     private int TotalNumberOfSpawnSound;
     public bool Escort;
+    public string Priority;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -86,6 +87,9 @@ public class SpawnAlliesFighter : MonoBehaviour
         if (id==1)
         {
             Ally.transform.localScale *= 3;
+        } else
+        {
+            Ally.GetComponent<AlliesShared>().Priority = Priority;
         }
         AudioSource aus = Ally.AddComponent<AudioSource>();
         aus.clip = SpawnSoundEffect;

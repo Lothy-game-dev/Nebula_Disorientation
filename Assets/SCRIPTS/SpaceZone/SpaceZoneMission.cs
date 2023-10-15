@@ -214,6 +214,7 @@ public class SpaceZoneMission : MonoBehaviour
         {
             CurrentDoneNumber++;
         }
+        SetMissionText();
     }
 
     public void FailMission()

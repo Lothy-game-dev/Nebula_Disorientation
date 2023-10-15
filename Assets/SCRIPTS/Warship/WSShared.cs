@@ -65,6 +65,9 @@ public class WSShared : MonoBehaviour
     private bool isHit;
     private Dictionary<GameObject, int> WSSSDict;
     public int Order;
+    private bool HitByPlayer;
+    private int BountyCash;
+    private int BountyShard;
     public Dictionary<GameObject , GameObject> SpWeaponTargets;
     private float Distance;
     private bool isFighting;
@@ -198,6 +201,15 @@ public class WSShared : MonoBehaviour
         RotationSpd = float.Parse(WsStat["ROT"].ToString());
         WM.RotateSpeed = RotationSpd;
         WM.MovingSpeed = BaseSpeed;
+        if (IsEnemy)
+        {
+            string Bounty = (string)data["Bounty"];
+            if (Bounty!="")
+            {
+                BountyCash = int.Parse(Bounty.Split("|")[0]);
+                BountyShard = int.Parse(Bounty.Split("|")[1]);
+            }
+        }
 
         //Set head object
         Vector2 headpos = model.GetComponent<WarshipModelShared>().HeadPosition;
@@ -353,6 +365,10 @@ public class WSShared : MonoBehaviour
     public void ReceiveBulletDamage(float Damage, GameObject Bullet, bool isMainWeapon, Vector2 BulletHitPos)
     {
         float RealDamage = 0;
+        if (Bullet.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<PlayerFighter>()!=null)
+        {
+            HitByPlayer = true;
+        }
         if (!isMainWeapon)
         {
             if (Bullet.GetComponent<UsualKineticBullet>() != null)
@@ -431,11 +447,14 @@ public class WSShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage, GameObject Power , Vector2 BulletHitPos)
+    public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast)
     {
-        float RealDamage = Damage * 50f / 100;
-        Debug.Log("Dmg" + RealDamage);
-        if (CurrentBarrier > 0)
+        float RealDamage = 0;
+        if (FighterCast.GetComponent<PlayerFighter>()!=null)
+        {
+            HitByPlayer = true;
+        }
+        if (Power.GetComponent<Beam>() == null)
         {
             if (CurrentBarrier > RealDamage)
             {
@@ -780,6 +799,10 @@ public class WSShared : MonoBehaviour
         if (IsEnemy)
         {
             // Bounty
+            if (HitByPlayer)
+            {
+                FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
+            }
             FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
         } else
         {

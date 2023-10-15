@@ -227,7 +227,14 @@ public class StatusBoard : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         if (CloneEnemy == null)
         {
-            CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            try
+            {
+                CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            } catch (System.NullReferenceException)
+            {
+                CloseBoard();
+            }
+            
             // set Sorting order
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
             CloneEnemy.SetActive(false);
