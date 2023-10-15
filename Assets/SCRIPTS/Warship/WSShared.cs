@@ -448,9 +448,13 @@ public class WSShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage, GameObject Power)
+    public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast)
     {
         float RealDamage = 0;
+        if (FighterCast.GetComponent<PlayerFighter>()!=null)
+        {
+            HitByPlayer = true;
+        }
         if (Power.GetComponent<Beam>() == null)
         {
             RealDamage = Damage * 50f / 100;

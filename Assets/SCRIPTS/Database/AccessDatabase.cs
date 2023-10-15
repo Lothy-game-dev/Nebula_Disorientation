@@ -2385,7 +2385,7 @@ public class AccessDatabase : MonoBehaviour
             WSDict.Add("SupWeapon", dataReader.GetString(6));
             WSDict.Add("AuraRange", dataReader.GetString(7));
             WSDict.Add("BaseHP", dataReader.GetString(8));
-
+            WSDict.Add("Bounty", dataReader.GetString(9));
         }
         if (!check) return null;
         return WSDict;

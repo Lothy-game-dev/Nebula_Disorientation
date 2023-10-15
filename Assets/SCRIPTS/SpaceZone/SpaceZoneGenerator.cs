@@ -448,7 +448,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             AllyFighterSpawn.Escort = true;
         } else if ((SpaceZoneNo % 10 == 0 && ChosenVariant == 1))
         {
-           /* AllyFighterSpawn.Priority = "WS";*/
+           AllyFighterSpawn.Priority = "WS";
         }
         AllyFighterSpawn.SpawnAlly();
 

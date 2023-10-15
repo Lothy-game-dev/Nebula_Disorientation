@@ -59,6 +59,7 @@ public class EnemyShared : FighterShared
     public string Priority;
     public GameObject AimObject;
     private float BombUpdateTimer;
+    public GameObject GravTarget;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -649,6 +650,10 @@ public class EnemyShared : FighterShared
                     }
                 }
             }
+            if (weaponName1.Contains("Gravitational") && ForceTargetGO == null && (Nearest.GetComponent<WSShared>() != null || Nearest.GetComponent<SpaceStationShared>() != null))
+            {
+                GravTarget = Nearest;
+            }
             ForceTargetGO = Nearest;
         }
     }
@@ -670,7 +675,7 @@ public class EnemyShared : FighterShared
                 float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
                 if (Priority == null || Priority == "" || (!Priority.Contains("WS") && !Priority.Contains("SS")))
                 {
-                    if (weaponName1.Contains("Gravitational"))
+                    if (weaponName2.Contains("Gravitational"))
                     {
                         if (enemy.GetComponent<WSShared>() != null || enemy.GetComponent<SpaceStationShared>() != null)
                         {
@@ -706,17 +711,81 @@ public class EnemyShared : FighterShared
                     Nearest = enemy.gameObject;
                 }
             }
+            if (weaponName2.Contains("Gravitational") && ForceTargetGO == null && (Nearest.GetComponent<WSShared>() != null || Nearest.GetComponent<SpaceStationShared>() != null))
+            {
+                GravTarget = Nearest;
+            }
             RightTarget = Nearest;
         }
     }
 
     private void CheckTargetEnemy()
     {
-        if (Priority!=null && Priority!="")
+        bool check = false;
+        if (Priority != null && Priority != "")
         {
             if (ForceTargetGO == null)
-            InitTargetEnemy();
-        } else
+                InitTargetEnemy();
+            else
+            {
+                if ((ForceTargetGO.transform.position - transform.position).magnitude <= TargetRange)
+                {
+                    if (LeftTarget != ForceTargetGO)
+                    {
+                        LeftTarget = null;
+                        LeftWeapon.GetComponent<Weapons>().Aim = null;
+                    }
+                    if (RightTarget != ForceTargetGO)
+                    {
+                        RightTarget = null;
+                        RightWeapon.GetComponent<Weapons>().Aim = null;
+                    }
+                    check = true;
+                }
+            }
+        }
+        else if (GravTarget != null)
+        {
+            check = true;
+            if (weaponName1.Contains("Gravitational"))
+            {
+                if (LeftTarget != GravTarget)
+                {
+                    LeftTarget = null;
+                    LeftWeapon.GetComponent<Weapons>().Aim = null;
+                }
+            }
+            if (weaponName2.Contains("Gravitational"))
+            {
+                if (RightTarget != GravTarget)
+                {
+                    RightTarget = null;
+                    RightWeapon.GetComponent<Weapons>().Aim = null;
+                }
+            }
+        }
+        else if (weaponName1.Contains("Gravitational") || weaponName2.Contains("Gravitational"))
+        {
+            if (weaponName1.Contains("Gravitational"))
+            {
+                LeftTarget = null;
+                LeftWeapon.GetComponent<Weapons>().Aim = null;
+            }
+            else
+            {
+                check = true;
+            }
+            if (weaponName2.Contains("Gravitational"))
+            {
+                RightTarget = null;
+                RightWeapon.GetComponent<Weapons>().Aim = null;
+            }
+            else
+            {
+                check = true;
+            }
+        }
+        if (check)
         {
             if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
             {

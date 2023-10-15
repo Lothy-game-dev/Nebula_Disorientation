@@ -310,6 +310,7 @@ public class InitializeDatabase : MonoBehaviour
                 "SupWeapon TEXT NOT NULL," +
                 "AuraRange TEXT NOT NULL," +
                 "BaseHP TEXT NOT NULL," +
+                "Bounty TEXT," +
                 "PRIMARY KEY(SSId AUTOINCREMENT) );" +
             // Table for Tutorial
             "CREATE TABLE IF NOT EXISTS Tutorial" +
@@ -625,8 +626,8 @@ public class InitializeDatabase : MonoBehaviour
             "(12, 'UEC-FlagShip', 'The one and only UEC-FlagShip is the best Warship out there of the UEC. It is commanded by the Leader of the UEC. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', 'HP-2000000|SPD-150|ROT-0.15', '#bf2600', 'UEC Super Grand Beam Cannon | UEC Super Grand Beam Cannon', 'Nano Cannon|Nano Cannon|Plasma Cannon|Plasma Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery|Nano Effect Analyzer|Nano Effect Analyzer','');";
         // Space Station
         string SpaceStation = "INSERT INTO SpaceStation VALUES" +
-                         "(1, 'UEC-Station', 'Space Stations provide not only accommodation for the people of the UEC, but also play as a War Strategic Fortress in the Space Zone.', 'Heal|1|5', '#bf2600', 'UEC Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000', '1500000')," +
-                         "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', 'Heal|1|5', '#bf2600', 'Zaturi Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000','1500000');";
+            "(1, 'UEC-Station', 'Space Stations provide not only accommodation for the people of the UEC, but also play as a War Strategic Fortress in the Space Zone.', 'Heal|1|5', '#bf2600', 'UEC Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000', '1500000', '')," +
+            "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', 'Heal|1|5', '#bf2600', 'Zaturi Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000','1500000', '100000|50');";
         // Allies
         string Allies = "INSERT INTO Allies VALUES " +
             "(1, 'SSTP', '', 'Transport', 'HP-10000|SPD-100|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
