@@ -447,14 +447,14 @@ public class WSShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast)
+    public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast, Vector2 BulletHitPos)
     {
-        float RealDamage = 0;
+        float RealDamage = Damage * 50f /100;
         if (FighterCast.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;
         }
-        if (Power.GetComponent<Beam>() == null)
+        if (CurrentBarrier > 0)
         {
             if (CurrentBarrier > RealDamage)
             {

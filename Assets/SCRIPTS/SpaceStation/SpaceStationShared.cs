@@ -52,13 +52,10 @@ public class SpaceStationShared : MonoBehaviour
     public Dictionary<GameObject, int> WSSSDict;
     public Dictionary<GameObject, GameObject> SpWeaponTargets;
     public int Order;
-<<<<<<< HEAD
     public bool isHit;
-=======
     private bool HitByPlayer;
     private int BountyCash;
     private int BountyShard;
->>>>>>> origin/main
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -565,14 +562,14 @@ public class SpaceStationShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage, GameObject FighterCast)
+    public void ReceivePowerDamage(float Damage, GameObject FighterCast, Vector2 BulletHitPos)
     {
         float RealDamage = Damage * 50f / 100;
         if (FighterCast.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;
         }
-        if (CurrentHP >= RealDamage)
+        if (CurrentBarrier > 0)
         {
             if (CurrentBarrier > RealDamage)
             {
