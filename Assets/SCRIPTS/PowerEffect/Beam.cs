@@ -98,13 +98,13 @@ public class Beam : MonoBehaviour
                 {
                     if (col.GetComponent<WSShared>() != null)
                     {
-                        col.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject, Fighter);
+                        col.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject, Fighter, transform.position);
                     }
                     else
                     {
                         if (col.GetComponent<SpaceStationShared>() != null)
                         {
-                            col.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage, Fighter);
+                            col.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage, Fighter, transform.position);
                         }
                     }
                 }

@@ -147,7 +147,6 @@ public class WSShared : MonoBehaviour
         if (MainTarget.ContainsValue(null) || SpWeaponTargets.ContainsValue(null))
         {
             FindTargetTimer -= Time.deltaTime;
-            Debug.Log("khangdpetrai");
         }
         if (FindTargetTimer <= 0f)
         {
@@ -159,7 +158,7 @@ public class WSShared : MonoBehaviour
                        
             for (int i = 0; i < SpWps.Count; i++)
             {
-                TargetEnemy(SpWps[i]);                                   
+                SpWeaponTargets[SpWps[i]] = TargetEnemy(SpWps[i]);                                   
             }
             
         }
@@ -448,26 +447,66 @@ public class WSShared : MonoBehaviour
         }
     }
 
-    public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast)
+    public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast, Vector2 BulletHitPos)
     {
-        float RealDamage = 0;
+        float RealDamage = Damage * 50f /100;
         if (FighterCast.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;
         }
-        if (Power.GetComponent<Beam>() == null)
+        if (CurrentBarrier > 0)
         {
-            RealDamage = Damage * 50f / 100;
-        } else
-        {
-            RealDamage = Damage;
+            if (CurrentBarrier > RealDamage)
+            {
+                CurrentBarrier -= RealDamage;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 120f;
+                BarrierRegenAmount = 2500f;
+            }
+            else
+            {
+                float afterDamage = (RealDamage - CurrentBarrier);
+                CurrentBarrier = 0;
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 120f;
+                BarrierRegenAmount = 2500f;
+                CurrentHP -= afterDamage;
+            }
         }
-        if (CurrentHP>=RealDamage)
+        else
         {
-            CurrentHP -= RealDamage;
-        } else
-        {
-            CurrentHP = 0;
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
+            if (CurrentHP >= RealDamage)
+            {
+                CurrentHP -= RealDamage;
+                isHit = true;
+                HPBar.SetValue(CurrentHP, MaxHP, isHit);
+            }
+            else
+            {
+                CurrentHP = 0;
+            }
         }
     }
     #endregion
@@ -755,8 +794,7 @@ public class WSShared : MonoBehaviour
             expl5.SetActive(true);
             Destroy(expl5, 0.3f);
         }
-
-        GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
+    
 
         if (IsEnemy)
         {
@@ -770,7 +808,8 @@ public class WSShared : MonoBehaviour
         {
             FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
         }
-        GenerateFlash(transform.position, 0.5f, 1f);
+        
+        GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
 
 
     }

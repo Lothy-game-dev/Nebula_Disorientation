@@ -255,12 +255,12 @@ public class RocketBurstBullet : MonoBehaviour
                 {
                     if (col2.GetComponent<WSShared>() != null)
                     {
-                        col2.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject, Fighter);
+                        col2.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject, Fighter, transform.position);
                     } else
                     {
                         if (col2.GetComponent<SpaceStationShared>() != null)
                         {
-                            col2.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage, Fighter);
+                            col2.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage, Fighter, transform.position);
                         }
                     }
                 }
