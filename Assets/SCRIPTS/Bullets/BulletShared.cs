@@ -804,17 +804,44 @@ public class BulletShared : MonoBehaviour
 
     private void AddPointToML()
     {
-        if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+        try
         {
-            WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(10f, "Hitting the enemy");
+            if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceiveReward(10f, "Hitting the enemy");
+            }
+            else if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<EnemyFighterMLAgent>() != null)
+            {
+                WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<EnemyFighterMLAgent>().ReceiveReward(10f, "Hitting the enemy");
+            }
+            else if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<WSSupportWeaponMLAgent>() != null)
+            {
+                WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<WSSupportWeaponMLAgent>().ReceiveReward(10f, "Hitting the enemy");
+            }
+        } catch (System.Exception ex)
+        {
+
         }
     }
 
     private void PunishML()
     {
-        if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>()!=null)
+        try
         {
-            WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
+            if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<AlliesFighterMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
+            } else if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<EnemyFighterMLAgent>() != null)
+            {
+                WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<EnemyFighterMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
+            }
+            else if (WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<WSSupportWeaponMLAgent>() != null)
+            {
+                WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<WSSupportWeaponMLAgent>().ReceivePunishment(0.2f, "Not hitting the enemy");
+            }
+        } catch (System.Exception ex)
+        {
+
         }
     }
     #endregion

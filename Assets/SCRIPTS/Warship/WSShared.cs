@@ -1,5 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Barracuda;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 
 public class WSShared : MonoBehaviour
@@ -20,6 +24,7 @@ public class WSShared : MonoBehaviour
     public GameObject Flash;
     public GameObject Explosion;
     public bool IsEnemy;
+    public NNModel MLBrain;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -40,7 +45,7 @@ public class WSShared : MonoBehaviour
     public GameObject Weapons;
     public GameObject BackFire;
     private float TargetRefreshTimer;
-    private List<GameObject> SpWps;
+    public List<GameObject> SpWps;
     public List<GameObject> MainWps;
     private float FindTargetTimer;
     private bool doneInitWeapon;
@@ -71,6 +76,7 @@ public class WSShared : MonoBehaviour
     public Dictionary<GameObject , GameObject> SpWeaponTargets;
     private float Distance;
     private bool isFighting;
+    public bool isStation;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -108,13 +114,13 @@ public class WSShared : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < SpWps.Count; i++)
+            /*for (int i = 0; i < SpWps.Count; i++)
             {
                 if (SpWps[i] != null)
                 {
                     SpWps[i].GetComponent<Weapons>().WSShootBullet();
                 }
-            }
+            }*/
         }
         // Call function and timer only if possible
 
@@ -324,6 +330,18 @@ public class WSShared : MonoBehaviour
                     wp.RotateLimitNegative = -360;
                     wp.isMainWeapon = false;
 
+                    sup.AddComponent<BehaviorParameters>();
+                    sup.GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 4;
+                    
+                    sup.GetComponent<BehaviorParameters>().BehaviorType = BehaviorType.InferenceOnly;
+                    sup.GetComponent<BehaviorParameters>().Model = MLBrain;
+                    sup.GetComponent<BehaviorParameters>().BehaviorName = "AllyFire23091012";
+                    ActionSpec act = sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec;
+                    act.NumContinuousActions = 1;
+                    act.BranchSizes = null;
+                    sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec = act;
+                    sup.AddComponent<WSSupportWeaponMLAgent>();
+                    sup.AddComponent<DecisionRequester>();
                     SpWps.Add(sup);
                 }
             }
@@ -806,6 +824,10 @@ public class WSShared : MonoBehaviour
             FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
         } else
         {
+            if (isStation)
+            {
+                FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+            } else
             FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
         }
         

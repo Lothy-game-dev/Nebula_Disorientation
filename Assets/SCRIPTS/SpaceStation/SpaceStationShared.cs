@@ -1,5 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Barracuda;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 
 public class SpaceStationShared : MonoBehaviour
@@ -19,6 +23,7 @@ public class SpaceStationShared : MonoBehaviour
     public GameObject Explosion;
     public GameObject Flash;
     public SpaceStationHealthBar HPBar;
+    public NNModel MLBrain; 
     public bool isEnemy;
     #endregion
     #region NormalVariables
@@ -99,7 +104,7 @@ public class SpaceStationShared : MonoBehaviour
         TargetRefreshTimer -= Time.deltaTime;
         if (TargetRefreshTimer <= 0f)
         {
-            TargetRefreshTimer = Random.Range(2.5f, 3.5f);
+            TargetRefreshTimer = Random.Range(0.5f, 1f);
 
             for (int i = 0; i < SpWps.Count; i++)
             {
@@ -127,7 +132,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         if (FindTargetTimer <= 0f)
         {
-            FindTargetTimer = Random.Range(2.5f, 3.5f);
+            FindTargetTimer = Random.Range(0.5f, 1f);
             for (int i = 0; i < MainWps.Count; i++)
             {
                 MainWeaponTargetEnemy(MainWps[i]);
@@ -245,6 +250,19 @@ public class SpaceStationShared : MonoBehaviour
                     wp.tracking = true;
                     wp.isMainWeapon = false;
                     wp.isSpaceStation = true;
+
+                    sup.AddComponent<BehaviorParameters>();
+                    sup.GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 4;
+
+                    sup.GetComponent<BehaviorParameters>().BehaviorType = BehaviorType.InferenceOnly;
+                    sup.GetComponent<BehaviorParameters>().Model = MLBrain;
+                    sup.GetComponent<BehaviorParameters>().BehaviorName = "AllyFire23091012";
+                    ActionSpec act = sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec;
+                    act.NumContinuousActions = 1;
+                    act.BranchSizes = null;
+                    sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec = act;
+                    sup.AddComponent<WSSupportWeaponMLAgent>();
+                    sup.AddComponent<DecisionRequester>();
                     SpWps.Add(sup);
                 }
             }

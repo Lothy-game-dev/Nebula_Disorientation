@@ -37,25 +37,32 @@ public class EnemyFighterMLAgent : Agent
     #region Training
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(als.LeftTarget == null);
-        if (als.LeftTarget != null)
+        try
         {
-            sensor.AddObservation(Vector2.Angle(LeftWeapon.ShootingPosition.transform.position - LeftWeapon.RotatePoint.transform.position, 
-                als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().HeadObject.transform.position :
-                als.LeftTarget.GetComponent<WSMovement>()!= null ? als.LeftTarget.GetComponent<WSMovement>().HeadObject.transform.position :
-                als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().HeadObject.transform.position : 
-                new Vector3(als.LeftTarget.transform.position.x + 100, als.LeftTarget.transform.position.y,als.LeftTarget.transform.position.z) - als.LeftTarget.transform.position));
-            sensor.AddObservation(als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed :
-                als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().CurrentSpeed :
-                als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().CurrentSpeed : 0);
-            sensor.AddObservation((als.LeftTarget.transform.position - transform.position).magnitude);
-        }
-        else
+            sensor.AddObservation(als.LeftTarget == null);
+            if (als.LeftTarget != null)
+            {
+                sensor.AddObservation(Vector2.Angle(LeftWeapon.ShootingPosition.transform.position - LeftWeapon.RotatePoint.transform.position,
+                    als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().HeadObject.transform.position :
+                    als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().HeadObject.transform.position :
+                    als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().HeadObject.transform.position :
+                    new Vector3(als.LeftTarget.transform.position.x + 100, als.LeftTarget.transform.position.y, als.LeftTarget.transform.position.z) - als.LeftTarget.transform.position));
+                sensor.AddObservation(als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed :
+                    als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().CurrentSpeed :
+                    als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().CurrentSpeed : 0);
+                sensor.AddObservation((als.LeftTarget.transform.position - transform.position).magnitude);
+            }
+            else
+            {
+                sensor.AddObservation(0);
+                sensor.AddObservation(0);
+                sensor.AddObservation(0);
+            }
+        } catch (System.Exception ex)
         {
-            sensor.AddObservation(0);
-            sensor.AddObservation(0);
-            sensor.AddObservation(0);
+
         }
+        
     }
     public override void OnActionReceived(ActionBuffers actions)
     {

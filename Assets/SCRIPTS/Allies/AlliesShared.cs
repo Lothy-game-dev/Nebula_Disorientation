@@ -62,6 +62,8 @@ public class AlliesShared : FighterShared
     public GameObject ForceTargetGO;
     public bool IsChasingRightEnemy;
     public GameObject GravTarget;
+    public bool Defend;
+    public GameObject DefendObject;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -183,7 +185,7 @@ public class AlliesShared : FighterShared
             TargetRefreshTimer -= Time.deltaTime;
             if (TargetRefreshTimer <= 0f)
             {
-                TargetRefreshTimer = Random.Range(2.5f, 3.5f);;
+                TargetRefreshTimer = Defend? Random.Range(0.5f, 1.5f) : Random.Range(2.5f, 3.5f);
                 CheckTargetEnemy();
                 if (LeftWeapon != null)
                 {
@@ -200,7 +202,7 @@ public class AlliesShared : FighterShared
             }
             if (FindTargetTimer <= 0f)
             {
-                FindTargetTimer = Random.Range(2.5f, 3.5f);;
+                FindTargetTimer = Defend ? Random.Range(0.5f, 1.5f) : Random.Range(2.5f, 3.5f);;
                 if (LeftTarget == null)
                 {
                     TargetLeftEnemy();
@@ -267,7 +269,7 @@ public class AlliesShared : FighterShared
             fm.CurrentRotateAngle = angle;
             BackFire.transform.localPosition *= 3;
             ScaleOnStatusBoard /= 3;
-            GetComponent<Rigidbody2D>().mass = 5;
+            GetComponent<Rigidbody2D>().mass = 3;
             Destroy(GetComponent<DecisionRequester>());
             Destroy(GetComponent<AlliesFighterMLAgent>());
             Destroy(GetComponent<BehaviorParameters>());
@@ -753,7 +755,7 @@ public class AlliesShared : FighterShared
             {
                 if ((ForceTargetGO.transform.position - transform.position).magnitude <= TargetRange)
                 {
-                    if (LeftTarget!=ForceTargetGO)
+                    if (LeftTarget != ForceTargetGO)
                     {
                         LeftTarget = null;
                         LeftWeapon.GetComponent<Weapons>().Aim = null;
@@ -767,12 +769,12 @@ public class AlliesShared : FighterShared
                 }
             }
         }
-        else if (GravTarget!=null)
+        else if (GravTarget != null)
         {
             check = true;
             if (weaponName1.Contains("Gravitational"))
             {
-                if (LeftTarget!= GravTarget)
+                if (LeftTarget != GravTarget)
                 {
                     LeftTarget = null;
                     LeftWeapon.GetComponent<Weapons>().Aim = null;
@@ -786,13 +788,15 @@ public class AlliesShared : FighterShared
                     RightWeapon.GetComponent<Weapons>().Aim = null;
                 }
             }
-        } else if (weaponName1.Contains("Gravitational") || weaponName2.Contains("Gravitational"))
+        }
+        else if (weaponName1.Contains("Gravitational") || weaponName2.Contains("Gravitational"))
         {
             if (weaponName1.Contains("Gravitational"))
             {
                 LeftTarget = null;
                 LeftWeapon.GetComponent<Weapons>().Aim = null;
-            } else
+            }
+            else
             {
                 check = true;
             }
@@ -800,11 +804,13 @@ public class AlliesShared : FighterShared
             {
                 RightTarget = null;
                 RightWeapon.GetComponent<Weapons>().Aim = null;
-            } else
+            }
+            else
             {
                 check = true;
             }
         }
+        else check = true;
         if (check)
         {
             if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))
@@ -818,8 +824,12 @@ public class AlliesShared : FighterShared
                 RightWeapon.GetComponent<Weapons>().Aim = null;
             }
         }
-        if (Escort) 
+        if (Escort && EscortObject==null) 
         EscortSSTP();
+        else if (Defend && DefendObject == null)
+        {
+            DefendStation();
+        }
     }
 
     private void EscortSSTP()
@@ -834,6 +844,24 @@ public class AlliesShared : FighterShared
                 if (escort.name.Contains("SSTP"))
                 {
                     EscortObject = escort.gameObject;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void DefendStation()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 10000f, FindObjectOfType<GameController>().PlayerLayer);
+        if (cols.Length > 0)
+        {
+            GameObject Nearest = cols[0].gameObject;
+            float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+            foreach (var escort in cols)
+            {
+                if (escort.GetComponent<SpaceStationShared>()!=null || escort.GetComponent<WSShared>()!=null)
+                {
+                    DefendObject = escort.gameObject;
                     break;
                 }
             }

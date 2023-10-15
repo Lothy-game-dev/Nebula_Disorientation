@@ -83,6 +83,10 @@ public class FighterShared : MonoBehaviour
         currentTemperature = 50;
         CurrentHP = MaxHP;
         // Check Power Barrier
+        if (name.Contains("ZatSBB"))
+        {
+            MaxBarrier = 0;
+        } else
         MaxBarrier = 5000;
         CurrentBarrier = MaxBarrier;
         isRegenThermal = true;

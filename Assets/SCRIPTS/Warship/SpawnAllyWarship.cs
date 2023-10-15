@@ -76,6 +76,7 @@ public class SpawnAllyWarship : MonoBehaviour
                     1 / WarshipModel.transform.GetChild(i).localScale.x * 130, 1 / WarshipModel.transform.GetChild(i).localScale.y * 130, 1 / WarshipModel.transform.GetChild(i).localScale.z);
                 game.name = data["WarshipName"].ToString();
                 game.AddComponent<PolygonCollider2D>();
+                game.GetComponent<WSShared>().isStation = true;
                 game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
                 game.GetComponent<WSMovement>().enabled = false;
             }
