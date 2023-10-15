@@ -630,7 +630,7 @@ public class InitializeDatabase : MonoBehaviour
             "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', 'Heal|1|5', '#bf2600', 'Zaturi Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000','1500000', '100000|50');";
         // Allies
         string Allies = "INSERT INTO Allies VALUES " +
-            "(1, 'SSTP', '', 'Transport', 'HP-10000|SPD-100|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
+            "(1, 'SSTP', '', 'Transport', 'HP-20000|SPD-100|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
             "(2, 'SS29-MK1', '', 'AdvancedPulseCannon', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(3, 'SS29-MK2', '', 'AdvancedNanoFlameThrower', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(4, 'SS29-MK3', '', 'BlastCannon', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
@@ -673,17 +673,17 @@ public class InitializeDatabase : MonoBehaviour
         string SpaceZoneTemplate = "INSERT INTO SpaceZoneTemplate VALUES " +
             "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|150', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '100|150', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 150)," +
+            "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
             "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '50|150', '10-0-0', '9-1-0', null, null, null, 100, null)," +
             "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|150', '10-0-0', '10-0-0', null, null, null, 100, null)," +
             "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '125|175', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '125|175', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '125|175', '10-0-0', '9-1-0', null, null, null, 300, 150)," +
+            "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '125|175', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
             "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '75|175', '10-0-0', '9-1-0', null, null, null, 100, null)," +
             "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|175', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '150|200', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '150|200', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '150|200', '10-0-0', '9-1-0', null, null, null, 300, 150)," +
+            "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 120, '150|200', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
             "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 60, '100|200', '10-0-0', '9-1-0', null, null, null, 100, null)," +
             "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|200', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '175|225', '10-0-0', '10-0-0', null, null, null, null, null)," +

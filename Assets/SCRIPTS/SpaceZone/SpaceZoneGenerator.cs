@@ -442,13 +442,23 @@ public class SpaceZoneGenerator : MonoBehaviour
         // Set Spawn to Spawner
         AllyFighterSpawn.AllySpawnID = AllyID.ToArray();
         AllyFighterSpawn.AllySpawnPosition = AllySpawnPos.ToArray();
-        if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6) && ChosenVariant == 3)
+        if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6))
         {
-            AllyFighterSpawn.EscortSpawnNumber = (int)Mathf.Ceil(AllySquadRating / 10);
-            AllyFighterSpawn.Escort = true;
+            if (ChosenVariant==3)
+            {
+                AllyFighterSpawn.EscortSpawnNumber = (int)Mathf.Ceil(AllySquadRating / 10);
+                AllyFighterSpawn.Escort = true;
+            } else if (ChosenVariant==1)
+            {
+                AllyFighterSpawn.Defend = true;
+            }
         } else if ((SpaceZoneNo % 10 == 0 && ChosenVariant == 1))
         {
            AllyFighterSpawn.Priority = "WS";
+        }
+        else if ((SpaceZoneNo % 10 == 8 || SpaceZoneNo % 10 == 9) && ChosenVariant == 2)
+        {
+            AllyFighterSpawn.Priority = "WS";
         }
         AllyFighterSpawn.SpawnAlly();
 
@@ -468,7 +478,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         }
         if ((int)TemplateData["SpawnIIRate"]>0)
         {
-            EnemyFighterSpawn.DelaySpawnSBB = 1 / (EnemySquadRating / (int)TemplateData["SpawnIIRate"]);
+            EnemyFighterSpawn.DelaySpawnSBB = 1 / (EnemySquadRating / ((int)TemplateData["SpawnIIRate"]));
         } else
         {
             EnemyFighterSpawn.DelaySpawnSBB = 0;

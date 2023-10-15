@@ -27,6 +27,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     private int TotalNumberOfSpawnSound;
     public bool Escort;
     public string Priority;
+    public bool Defend;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -105,6 +106,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
         Ally.GetComponent<AlliesShared>().Escort = Escort;
+        Ally.GetComponent<AlliesShared>().Defend = Defend;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

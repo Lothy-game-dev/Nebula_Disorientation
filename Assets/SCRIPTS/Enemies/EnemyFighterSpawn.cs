@@ -116,6 +116,11 @@ public class EnemyFighterSpawn : MonoBehaviour
             Enemy.transform.GetChild(6).gameObject.SetActive(false);
             Enemy.transform.GetChild(7).gameObject.SetActive(true);
         } 
+        if (id==1)
+        {
+            Enemy.transform.localScale *= 2;
+            Enemy.transform.GetChild(6).localScale /= 2;
+        }
         Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         GameObject SpawnEffect = Instantiate(SpawnHole, spawnPos, Quaternion.identity);
         SpawnEffect.SetActive(true);

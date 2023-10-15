@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 
 public class EnemyShared : FighterShared
@@ -107,7 +109,7 @@ public class EnemyShared : FighterShared
                 CheckTargetEnemy();
             }
             BombUpdateTimer -= Time.deltaTime;
-            if (BombUpdateTimer<=0f)
+            if (BombUpdateTimer<=0f && CurrentHP > 0)
             {
                 BombUpdateTimer = Random.Range(0.1f, 0.2f);
                 CheckWSSS();
@@ -117,7 +119,7 @@ public class EnemyShared : FighterShared
             if (doneInitWeapon)
             {
                 DelayTimer -= Time.deltaTime;
-                if (LeftWeapon != null)
+                /*if (LeftWeapon != null)
                 {
                     if (DelayTimer <= 0f && !LeftFire)
                     {
@@ -134,7 +136,7 @@ public class EnemyShared : FighterShared
                         RightWeapon.GetComponent<Weapons>().AIShootBullet(Random.Range(-1, 1) * 30);
                         DelayTimer = DelayBetween2Weap;
                     }
-                }
+                }*/
                 if (Power1 != "")
                 {
                     if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
@@ -257,6 +259,12 @@ public class EnemyShared : FighterShared
             fm.CurrentRotateAngle = 270;
             fm.HealthBarSlider.transform.position = transform.position + HealthPos;
             HealthBar.Position = HealthPos;
+            BackFire.transform.localPosition *= 2;
+            ScaleOnStatusBoard /= 2;
+            GetComponent<Rigidbody2D>().mass /= 4;
+            Destroy(GetComponent<DecisionRequester>());
+            Destroy(GetComponent<EnemyFighterMLAgent>());
+            Destroy(GetComponent<BehaviorParameters>());
         } else
         {
             isBomb = false;
@@ -785,6 +793,7 @@ public class EnemyShared : FighterShared
                 check = true;
             }
         }
+        else check = true;
         if (check)
         {
             if (LeftTarget != null && (Mathf.Abs((LeftTarget.transform.position - transform.position).magnitude) > TargetRange || LeftTarget.layer == LayerMask.NameToLayer("Untargetable")))

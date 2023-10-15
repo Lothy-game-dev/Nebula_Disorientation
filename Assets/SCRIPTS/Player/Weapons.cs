@@ -211,6 +211,7 @@ public class Weapons : MonoBehaviour
                 if (angle <= RotateLimitPositive)
                 {
                     Fireable = true;
+                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
                     CheckIsUpOrDownMovement();
                     transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle);
                     CurrentAngle = angle;
@@ -218,8 +219,6 @@ public class Weapons : MonoBehaviour
                 else
                 {
                     Fireable = false;
-                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
-                    CurrentAngle = 0;
                 }
             }
         }
@@ -589,19 +588,39 @@ public class Weapons : MonoBehaviour
             EndSound();
         } else
         {
-            if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen && !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
+            if (Fighter.GetComponent<FighterShared>()!=null)
             {
-                if (!IsThermalType)
+                if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen &&
+                !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
                 {
-                    AIFireBullet(angle);
-                    FireTimer = 1 / RateOfFire;
+                    if (!IsThermalType)
+                    {
+                        AIFireBullet(angle);
+                        FireTimer = 1 / RateOfFire;
+                    }
+                    else
+                    {
+                        AIFireFlamethrowerOrb(angle);
+                        FireTimer = 1 / RateOfFire;
+                    }
                 }
-                else
+            } else if (Fighter.GetComponent<WSShared>() != null)
+            {
+                if (FireTimer <= 0f && Fireable)
                 {
-                    AIFireFlamethrowerOrb(angle);
-                    FireTimer = 1 / RateOfFire;
+                    if (!IsThermalType)
+                    {
+                        AIFireBullet(angle);
+                        FireTimer = 1 / RateOfFire;
+                    }
+                    else
+                    {
+                        AIFireFlamethrowerOrb(angle);
+                        FireTimer = 1 / RateOfFire;
+                    }
                 }
             }
+            
         }
     }
 
@@ -977,6 +996,7 @@ public class Weapons : MonoBehaviour
 
     public void EndSound()
     {
+        if (aus!=null)
         aus.clip = null;
     }
 
