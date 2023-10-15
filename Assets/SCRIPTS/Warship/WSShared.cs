@@ -366,7 +366,7 @@ public class WSShared : MonoBehaviour
     public void ReceiveBulletDamage(float Damage, GameObject Bullet, bool isMainWeapon, Vector2 BulletHitPos)
     {
         float RealDamage = 0;
-        if (Bullet.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<PlayerFighter>()!=null)
+        if (Bullet!=null && Bullet.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;
         }
