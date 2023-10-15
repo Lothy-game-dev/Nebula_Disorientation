@@ -62,7 +62,7 @@ public class WSSSDetected : MonoBehaviour
 
         foreach (var obj2 in cols2)
         {
-            if (obj2.tag == "AlliesBossFighter" || obj2.tag == "AlliesEliteFighter")
+            if (obj2.tag == "AlliesBossFighter")
             {
                 float distanceToCamera = Vector3.Distance(obj2.transform.position, Camera.main.transform.position);
                 if (!WSSSDict.ContainsKey(distanceToCamera))

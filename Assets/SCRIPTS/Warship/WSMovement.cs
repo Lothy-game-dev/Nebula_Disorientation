@@ -581,14 +581,14 @@ public class WSMovement : MonoBehaviour
     {
         if (wss != null)
         {
-            
-            if (wss.MainTarget != null)
+            if (wss.MainTarget[wss.MainWps[0]] != null)
             {
-                if ((wss.MainTarget.transform.position - transform.position).magnitude <= wss.TargetRange / 2)
+                Debug.Log("khang" + wss.MainTarget[wss.MainWps[0]]);
+                if ((wss.MainTarget[wss.MainWps[0]].transform.position - transform.position).magnitude <= wss.TargetRange / 2)
                 {
                     if (!inAttackRange)
                     {
-                        int k = CheckIsUpOrDownMovement(wss.MainTarget, HeadObject, gameObject);
+                        int k = CheckIsUpOrDownMovement(wss.MainTarget[wss.MainWps[0]], HeadObject, gameObject);
                         if (k == -1)
                         {
                             DownMove();
@@ -613,11 +613,11 @@ public class WSMovement : MonoBehaviour
                         {
                             foreach (var weapon in wss.MainWps)
                             {
-                                GameObject game = wss.MainWeaponTargetEnemy(weapon);
+                                wss.MainTarget[wss.MainWps[0]] = wss.MainWeaponTargetEnemy(weapon);
                             }                           
                             return;
                         }
-                        int k = CheckIsUpOrDownMovement(wss.MainTarget, HeadObject, gameObject);
+                        int k = CheckIsUpOrDownMovement(wss.MainTarget[wss.MainWps[0]], HeadObject, gameObject);
                         if (k == -1)
                         {
                             LeftMove();
@@ -639,7 +639,7 @@ public class WSMovement : MonoBehaviour
                     if (inAttackRange)
                     {
                         UpMove();
-                        int k = CheckIsUpOrDownMovement(wss.MainTarget, HeadObject, gameObject);
+                        int k = CheckIsUpOrDownMovement(wss.MainTarget[wss.MainWps[0]], HeadObject, gameObject);
                         if (k == -1)
                         {
                             LeftMove();
@@ -656,17 +656,20 @@ public class WSMovement : MonoBehaviour
                     else
                     {
                         UpMove();
-                        int k = Random.Range(-1, 2);
+                        int k = CheckIsUpOrDownMovement(wss.MainTarget[wss.MainWps[0]], HeadObject, gameObject);
                         if (k == -1)
                         {
+                            DownMove();
                             LeftMove();
                         }
                         else if (k == 0)
                         {
+                            UpMove();
                             NoLeftRightMove();
                         }
                         else if (k == 1)
                         {
+                            DownMove();
                             RightMove();
                         }
                     }

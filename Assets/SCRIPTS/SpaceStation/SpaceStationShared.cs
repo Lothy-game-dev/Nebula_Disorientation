@@ -77,7 +77,7 @@ public class SpaceStationShared : MonoBehaviour
                     {
                         MainWps[i].GetComponent<Weapons>().isCharging = true;
                         MainWps[i].GetComponent<Weapons>().Fireable = true;
-                        DelayTimer = 5f;
+                        DelayTimer = MainWps[i].GetComponent<Weapons>().Cooldown;
                     }
                 }
             }
@@ -125,10 +125,7 @@ public class SpaceStationShared : MonoBehaviour
         }
 
         CheckBarrierAndHealth();
-        if(Input.GetKey(KeyCode.P))
-        {
-            GenerateFlash(transform.position, 0.5f, 1f);
-        }
+        
 
     }
     private void FixedUpdate()
@@ -308,7 +305,7 @@ public class SpaceStationShared : MonoBehaviour
                 // If weapon is main weap, target enemy ws/ss only
                 if (weapon.GetComponent<Weapons>().isMainWeapon)
                 {
-                    if (enemy.gameObject.tag == "BossEnemy" || enemy.gameObject.tag == "AlliesEliteFighter")
+                    if (enemy.gameObject.tag == "BossEnemy" || enemy.gameObject.tag == "AlliesBossFighter")
                     {
                         Nearest = enemy.gameObject;
                         float distance = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
@@ -335,9 +332,8 @@ public class SpaceStationShared : MonoBehaviour
     #region Heal ally
     public void HealTheAlly()
     {
-       
-
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 300f, HealTarget);
+   
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 700f, HealTarget);
         if (cols.Length > 0)
         {
             foreach (var ally in cols)
@@ -363,11 +359,11 @@ public class SpaceStationShared : MonoBehaviour
                             float CurrentWSHP = ally.GetComponent<WSShared>().CurrentHP;
                             if (CurrentHP < MaxHP)
                             {
-                                ally.GetComponent<WSShared>().ReceiveHealing(MaxHP * 1 / 100);
+                                ally.GetComponent<WSShared>().ReceiveHealing(MaxWSHP * 1 / 100);
                             }
                             else
                             {
-                                ally.GetComponent<WSShared>().CurrentHP = MaxHP;
+                                ally.GetComponent<WSShared>().CurrentHP = CurrentWSHP;
                             }
                         }
                     }
@@ -622,6 +618,10 @@ public class SpaceStationShared : MonoBehaviour
         bf.transform.SetParent(transform);
         bf.SetActive(true);
         GetComponent<SpriteRenderer>().enabled = false;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
         StartCoroutine(FlashOpen(bf, delay, duration));
         
     }
