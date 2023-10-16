@@ -37,6 +37,7 @@ public class RocketBurstBullet : MonoBehaviour
     private GameObject AimGen;
     private List<GameObject> EnemyList;
     private float DelayTarget;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -247,20 +248,50 @@ public class RocketBurstBullet : MonoBehaviour
             Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, Layer);
             foreach (var col2 in cols2)
             {
-                /*FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();*/
+                float LOTWEffectScale = 1;
+                if (LOTWEffect != null)
+                {
+                    LOTWEffectScale *= LOTWEffect.LOTWPowerDMGIncScale;
+                    if (col.GetComponent<FighterShared>() != null)
+                    {
+                        if (col.GetComponent<FighterShared>().CurrentBarrier > 0)
+                        {
+                            LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                        }
+                    }
+                    else if (col.GetComponent<WSShared>() != null)
+                    {
+                        if (col.GetComponent<WSShared>().CurrentBarrier > 0)
+                        {
+                            LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                        }
+                    }
+                    else if (col.GetComponent<SpaceStationShared>() != null)
+                    {
+                        if (col.GetComponent<SpaceStationShared>().CurrentBarrier > 0)
+                        {
+                            LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                        }
+                    }
+                    if ((col.gameObject.transform.position - Fighter.transform.position).magnitude > 2000)
+                    {
+                        LOTWEffectScale *= LOTWEffect.LOTWFarDMGScale;
+                    }
+                }
+                float FinalDamage = Damage * LOTWEffectScale;
                 if (col2.GetComponent<FighterShared>() != null)
                 {
-                    col2.GetComponent<FighterShared>().ReceiveDamage(Damage, Fighter);
+                    col2.GetComponent<FighterShared>().ReceiveDamage(FinalDamage, Fighter);
                 } else
                 {
                     if (col2.GetComponent<WSShared>() != null)
                     {
-                        col2.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject, Fighter, transform.position);
+                        col2.GetComponent<WSShared>().ReceivePowerDamage(FinalDamage, gameObject, Fighter, transform.position);
                     } else
                     {
                         if (col2.GetComponent<SpaceStationShared>() != null)
                         {
-                            col2.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage, Fighter, transform.position);
+                            col2.GetComponent<SpaceStationShared>().ReceivePowerDamage(FinalDamage, Fighter, transform.position);
                         }
                     }
                 }

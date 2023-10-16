@@ -25,6 +25,7 @@ public class Beam : MonoBehaviour
     public LayerMask Layer;
     public LaserBeam Laser;
     public GameObject Fighter;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -89,22 +90,52 @@ public class Beam : MonoBehaviour
             if (!Laser.onHit)
             {
                 Laser.onHit = true;
-                
+                float LOTWEffectScale = 1;
+                if (LOTWEffect!=null)
+                {
+                    LOTWEffectScale *= LOTWEffect.LOTWPowerDMGIncScale;
+                    if (col.GetComponent<FighterShared>() != null)
+                    {
+                        if (col.GetComponent<FighterShared>().CurrentBarrier > 0)
+                        {
+                            LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                        }
+                    }
+                    else if (col.GetComponent<WSShared>() != null)
+                    {
+                        if (col.GetComponent<WSShared>().CurrentBarrier > 0)
+                        {
+                            LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                        }
+                    }
+                    else if (col.GetComponent<SpaceStationShared>() != null)
+                    {
+                        if (col.GetComponent<SpaceStationShared>().CurrentBarrier > 0)
+                        {
+                            LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                        }
+                    }
+                    if ((col.gameObject.transform.position - Fighter.transform.position).magnitude > 2000)
+                    {
+                        LOTWEffectScale *= LOTWEffect.LOTWFarDMGScale;
+                    }
+                }
+                float FinalDamage = Damage * LOTWEffectScale;
                 if (col.GetComponent<FighterShared>() != null)
                 {
-                    col.GetComponent<FighterShared>().ReceiveDamage(Damage, Fighter);
+                    col.GetComponent<FighterShared>().ReceiveDamage(FinalDamage, Fighter);
                 }
                 else
                 {
                     if (col.GetComponent<WSShared>() != null)
                     {
-                        col.GetComponent<WSShared>().ReceivePowerDamage(Damage, gameObject, Fighter, transform.position);
+                        col.GetComponent<WSShared>().ReceivePowerDamage(FinalDamage, gameObject, Fighter, transform.position);
                     }
                     else
                     {
                         if (col.GetComponent<SpaceStationShared>() != null)
                         {
-                            col.GetComponent<SpaceStationShared>().ReceivePowerDamage(Damage, Fighter, transform.position);
+                            col.GetComponent<SpaceStationShared>().ReceivePowerDamage(FinalDamage, Fighter, transform.position);
                         }
                     }
                 }

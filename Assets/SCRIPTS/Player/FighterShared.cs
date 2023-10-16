@@ -50,6 +50,7 @@ public class FighterShared : MonoBehaviour
     public int LavaBurnedDmgNumber;
     public float LavaBurnedDamageTimer;
     public float LavaBurnedDamage;
+    public float LavaBurnedDamageExteriorScale;
     public GameObject OnFireGO;
     public bool isGravitationalSlow;
     public float GravitationalSlow;
@@ -75,6 +76,7 @@ public class FighterShared : MonoBehaviour
     public bool alreadyHitByComet;
     public float HitByCometDelay;
     public float DeadPushScale;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region Shared Functions
     // Initialize
@@ -99,6 +101,7 @@ public class FighterShared : MonoBehaviour
         NanoTempStacks = 0;
         ShieldReducedScale = 0;
         DeadPushScale = 1;
+        LavaBurnedDamageExteriorScale = 1;
         HazEnv = FindObjectOfType<SpaceZoneHazardEnvironment>();
         controller = FindObjectOfType<GameController>();
         misson = FindObjectOfType<SpaceZoneMission>();
@@ -501,6 +504,7 @@ public class FighterShared : MonoBehaviour
             else
             {
                 isLavaBurned = false;
+                LavaBurnedDamageExteriorScale = 1;
                 if (OnFireGO.activeSelf && !isBurned)
                 {
                     OnFireGO.SetActive(false);
@@ -562,7 +566,7 @@ public class FighterShared : MonoBehaviour
     // Inflict self with lava burned (called by outer factors)
     public void InflictLavaBurned(float dmg, int numberOfTimes)
     {
-        LavaBurnedDamage = dmg;
+        LavaBurnedDamage = dmg * LavaBurnedDamageExteriorScale;
         LavaBurnedDamageTimer = 0f;
         LavaBurnedDmgNumber = numberOfTimes;
         LavaBurnedCount = 0;
@@ -611,6 +615,8 @@ public class FighterShared : MonoBehaviour
     public void ReceiveDamage(float damage, GameObject DamageSource)
     {
         damage = damage * HazEnv.HazardNDAllDamageScale * 
+            (LOTWEffect!=null && DamageSource.GetComponent<BulletShared>()!=null ? 1 / LOTWEffect.LOTWWeaponDMGReceivedScale : 1) *
+            (LOTWEffect!=null ? LOTWEffect.LOTWAllDamageReceiveScale : 1) *
             (CurrentBarrier > 0 ? HazEnv.HazardGammaRayBurstScale : 1) * 
             (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
         DeadPushScale = 1;
@@ -697,7 +703,7 @@ public class FighterShared : MonoBehaviour
     #region Calculate Healing
     public void ReceiveHealing(float HealAmount)
     {
-       CurrentHP += HealAmount;
+       CurrentHP += HealAmount * LOTWEffect.LOTWRepairEffectScale;
     }
     #endregion
     #region Push

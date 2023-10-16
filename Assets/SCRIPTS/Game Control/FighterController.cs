@@ -30,6 +30,7 @@ public class FighterController : MonoBehaviour
     public GameObject ConsumableModel;
     public LayerMask EnemyLayer;
     public List<GameObject> ConsumableImages;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region NormalVariables
     public string DatabaseModel;
@@ -85,6 +86,7 @@ public class FighterController : MonoBehaviour
     private void InitData()
     {
         PlayerFighter.SetActive(false);
+        LOTWEffect.InitLOTW();
         // Get Data from DB
         SetDataFromDB();
         // Get Model from model list
@@ -152,6 +154,7 @@ public class FighterController : MonoBehaviour
         LW.tracking = true;
         LW.EnemyLayer = EnemyLayer;
         LW.ControllerMain = PlayerFighter.GetComponent<PlayerFighter>().ControllerMain;
+        LW.LOTWEffect = LOTWEffect;
         RightWeapon.SetActive(true);
         Weapons RW = RightWeapon.GetComponent<Weapons>();
         RW.Fighter = PlayerFighter;
@@ -160,6 +163,7 @@ public class FighterController : MonoBehaviour
         RW.tracking = true;
         RW.EnemyLayer = EnemyLayer;
         RW.ControllerMain = PlayerFighter.GetComponent<PlayerFighter>().ControllerMain;
+        RW.LOTWEffect = LOTWEffect;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
         LeftWeapon.GetComponent<Weapons>().OverHeatImage = LeftOverheatImage;
@@ -251,6 +255,7 @@ public class FighterController : MonoBehaviour
                     FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
                     FirstPower.GetComponent<Powers>().EnemyLayer = EnemyLayer;
+                    FirstPower.GetComponent<Powers>().LOTWEffect = LOTWEffect;
                     FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
                     break;
                 }
@@ -277,6 +282,7 @@ public class FighterController : MonoBehaviour
                     SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
                     PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
                     SecondPower.GetComponent<Powers>().EnemyLayer = EnemyLayer;
+                    SecondPower.GetComponent<Powers>().LOTWEffect = LOTWEffect;
                     SecondPower.GetComponent<Powers>().InitData(SecondPower.name);
                     break;
 
@@ -339,13 +345,17 @@ public class FighterController : MonoBehaviour
         {
             //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n
             Dictionary<string, object> statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(ModelStats);
-            PlayerFighter.GetComponent<PlayerFighter>().MaxHP = int.Parse((string)statsDict["HP"]);
-            PlayerFighter.GetComponent<PlayerMovement>().MovingSpeed = int.Parse((string)statsDict["SPD"]);
+            PlayerFighter.GetComponent<PlayerFighter>().MaxHP = int.Parse((string)statsDict["HP"]) * LOTWEffect.LOTWMaxHPScale;
+            PlayerFighter.GetComponent<FighterShared>().LOTWEffect = LOTWEffect;
+            PlayerFighter.GetComponent<PlayerMovement>().MovingSpeed = int.Parse((string)statsDict["SPD"]) * LOTWEffect.LOTWMoveSpeedScale;
             PlayerFighter.GetComponent<PlayerMovement>().RotateSpeed = float.Parse((string)statsDict["ROT"]);
+            PlayerFighter.GetComponent<PlayerMovement>().LOTWEffect = LOTWEffect;
             LeftWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
             LeftWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
+            LeftWeaponGO.GetComponent<Weapons>().RateOfFire *= LOTWEffect.LOTWWeaponROFScale;
             RightWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
             RightWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
+            RightWeaponGO.GetComponent<Weapons>().RateOfFire *= LOTWEffect.LOTWWeaponROFScale;
             LeftWeaponGO.GetComponent<Weapons>().FighterWeaponDamageMod = float.Parse((string)statsDict["DM"]);
             if (!LeftWeaponGO.GetComponent<Weapons>().IsThermalType)
             {
