@@ -150,6 +150,7 @@ public class EnemyFighterSpawn : MonoBehaviour
         Enemy.GetComponent<EnemyShared>().CashBountyScale = EnemyBountyScale;
         Enemy.GetComponent<EnemyShared>().Tier = Tier;
         Enemy.GetComponent<EnemyShared>().Escort = Escort;
+        Enemy.GetComponent<EnemyShared>().EnemyID = id;
         Enemy.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

@@ -1098,4 +1098,45 @@ public class GlobalFunctionController : MonoBehaviour
         return FinalString;
     }
     #endregion
+    #region Convert Achievement
+    public Dictionary<string, string> ConvertEnemyDefeated(string stat)
+    {
+        Dictionary<string, string> EnemyDefeated = new Dictionary<string, string>();
+        string[] splitStat = stat.Split("|");
+
+        // EnemyTier I
+        string EI = splitStat[0];
+        if (EI.Contains("EI-"))
+        {
+            EI = EI.Replace("EI-", "");
+            EnemyDefeated.Add("EnemyTierI", EI);
+        }
+
+        // EnemyTier II
+        string EII = splitStat[1];
+        if (EII.Contains("EII-"))
+        {
+            EII = EII.Replace("EII-", "");
+            EnemyDefeated.Add("EnemyTierII", EII);
+        }
+
+        // EnemyTier III
+        string EIII = splitStat[2];
+        if (EIII.Contains("EIII-"))
+        {
+            EIII = EIII.Replace("EIII-", "");
+            EnemyDefeated.Add("EnemyTierIII", EIII);
+        }
+
+        // Warship
+        string Ws = splitStat[3];
+        if (Ws.Contains("WS-"))
+        {
+            Ws = Ws.Replace("WS-", "");
+            EnemyDefeated.Add("Warship", Ws);
+        }
+
+        return EnemyDefeated;
+    }
+    #endregion
 }

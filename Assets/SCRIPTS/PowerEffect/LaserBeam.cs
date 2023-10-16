@@ -96,60 +96,32 @@ public class LaserBeam : Powers
         Vector2 pos = CalculatePos(Range);
         LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
         RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
-        int n = 6;
-        int m = 2;
-        for (int i = 0; i < n; i++)
-        {
-            //Generate
-            Vector2 posBullet = new Vector2(LeftWeapon.transform.position.x, LeftWeapon.transform.position.y) + (n/2 + 1 - i)*pos/(Range*0.12f);
-            Vector2 posBullet2 = new Vector2(RightWeapon.transform.position.x, RightWeapon.transform.position.y) + (n / 2 + 1 - i) * pos / (Range * 0.12f);
-            GameObject game = Instantiate(Effect, new Vector3(posBullet.x, posBullet.y, LeftWeapon.transform.position.z), Quaternion.identity);
-            GameObject game2 = Instantiate(Effect, new Vector3(posBullet2.x, posBullet2.y, RightWeapon.transform.position.z), Quaternion.identity);
-            game.GetComponent<Beam>().Distance = Range;
-            game.GetComponent<Beam>().Damage = DPH;
-            game.GetComponent<Beam>().Layer = EnemyLayer;
-            game.GetComponent<Beam>().Fighter = Fighter;
-            game.transform.localScale = game.transform.localScale * (i > m ? (float)(n-i)/(n-m) : 1);
 
-            //Change the spirte of the bullet like a laser
-            if (!name.Contains("Superior")) {
-                if (i > m)
-                {
-                    Color c = game.GetComponent<SpriteRenderer>().color;
-                    c.r = (i > m ? (float)(n - i) / (n - m) : 1);
-                    c.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                    game.GetComponent<SpriteRenderer>().color = c;
-                    Color c2 = game.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
-                    c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                    game.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
-                }
-                if (i > m)
-                {
-                    Color c = game2.GetComponent<SpriteRenderer>().color;
-                    c.r = (i > m ? (float)(n - i) / (n - m) : 1);
-                    c.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                    game2.GetComponent<SpriteRenderer>().color = c;
-                    Color c2 = game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color;
-                    c2.a = (i > m ? (float)(n - i) / (n - m) : 1);
-                    game2.transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
-                }
-            }
-           
-            game.GetComponent<Beam>().Laser = this;
-            game2.GetComponent<Beam>().Distance = Range;
-            game2.GetComponent<Beam>().Damage = DPH;
-            game2.GetComponent<Beam>().Layer = EnemyLayer;
+        GameObject LeftWPRotationPoint = LeftWeapon.GetComponent<Weapons>().RotatePoint;
+        GameObject RightWPRotationPoint = RightWeapon.GetComponent<Weapons>().RotatePoint;
+        //Generate          
+        GameObject game = Instantiate(Effect, LeftWeapon.transform.position, Quaternion.identity);
+        game.GetComponent<Beam>().Distance = Range;
+        game.GetComponent<Beam>().Damage = DPH;
+        game.GetComponent<Beam>().Layer = EnemyLayer;
+        game.GetComponent<Beam>().Fighter = Fighter;
+        game.GetComponent<Beam>().Laser = this;
+        game.transform.Rotate(0, 0, Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle);
 
-            game2.transform.localScale = game2.transform.localScale * (i > m ? (float)(n - i) / (n - m) : 1);
-            game2.GetComponent<Beam>().Laser = this;
-            
-            game.SetActive(true);
-            game2.SetActive(true);
-            game.GetComponent<Rigidbody2D>().velocity = pos*2;
-            game2.GetComponent<Rigidbody2D>().velocity = pos*2;
+        GameObject game2 = Instantiate(Effect, RightWeapon.transform.position, Quaternion.identity);
+        game2.GetComponent<Beam>().Distance = Range;
+        game2.GetComponent<Beam>().Damage = DPH;
+        game2.GetComponent<Beam>().Layer = EnemyLayer;
+        game2.GetComponent<Beam>().Fighter = Fighter;
+        game2.GetComponent<Beam>().Laser = this;
+        game2.transform.Rotate(0, 0, Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle);
 
 
-        }
+        game.SetActive(true);
+        game2.SetActive(true);
+        game.GetComponent<Rigidbody2D>().velocity = pos*2;
+        game2.GetComponent<Rigidbody2D>().velocity = pos*2;
+      
         //slow down Fighter when firing
         if (Fighter.GetComponent<PlayerMovement>()!=null)
         {
@@ -200,6 +172,35 @@ public class LaserBeam : Powers
         }
     }
     #endregion
-   
-   
+    #region Weapon Rotation
+    // Calculate Rotation To Aim
+    float CalculateRotateAngle(Vector2 RotPoint, Vector2 AimPos)
+    {
+        float x = RotPoint.x - AimPos.x;
+        float y = RotPoint.y - AimPos.y;
+        if (Mathf.Abs(x) < 0.5f && Mathf.Abs(y) < 0.5f)
+        {        
+            return 0;
+        }       
+        if (x > 0 && y > 0)
+        {
+            return Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg + 180;
+        }
+        else if (x > 0 && y < 0)
+        {
+            return 360 - Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg;
+        }
+        else if (x < 0 && y > 0)
+        {
+            return 180 - Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg;
+        }
+        else if (x < 0 && y < 0)
+        {
+            return Mathf.Atan((float)Mathf.Abs(x) / Mathf.Abs(y)) * Mathf.Rad2Deg;
+        }
+        else return 0;
+    }
+    #endregion
+
+
 }

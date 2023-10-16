@@ -62,14 +62,6 @@ public class Beam : MonoBehaviour
         if (DistanceTravel > Distance)
         {
             Destroy(gameObject);
-        } else
-        {
-            Color c = GetComponent<SpriteRenderer>().color;
-            c.a = DistanceTravel / Distance > 0.75f?(Distance - DistanceTravel)/(Distance*3/4):1;
-            GetComponent<SpriteRenderer>().color = c;
-            Color c2 = transform.GetChild(2).GetComponent<SpriteRenderer>().color;
-            c2.a = DistanceTravel / Distance > 0.75f ? (Distance - DistanceTravel) / (Distance * 3 / 4) : 1;
-            transform.GetChild(2).GetComponent<SpriteRenderer>().color = c2;
         }
     }
     #endregion
