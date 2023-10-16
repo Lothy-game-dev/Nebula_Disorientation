@@ -11,6 +11,8 @@ public class WSShared : MonoBehaviour
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
+    private StatisticController Statistic;
+    private GameController Controller;
     #endregion
     #region InitializeVariables
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
@@ -77,6 +79,8 @@ public class WSShared : MonoBehaviour
     private float Distance;
     private bool isFighting;
     public bool isStation;
+    private GameObject Killer;
+    
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -92,6 +96,8 @@ public class WSShared : MonoBehaviour
         WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
         Order = WSSSDict[gameObject];
         isFighting = false;
+        Controller = FindObjectOfType<GameController>();
+        Statistic = FindAnyObjectByType<StatisticController>();
     }
 
     // Update is called once per frame
@@ -387,6 +393,7 @@ public class WSShared : MonoBehaviour
         {
             HitByPlayer = true;
         }
+       
         if (!isMainWeapon)
         {
             if (Bullet.GetComponent<UsualKineticBullet>() != null)
@@ -408,6 +415,10 @@ public class WSShared : MonoBehaviour
         else
         {
             RealDamage = Damage;
+        }
+        if (HitByPlayer)
+        {
+            Statistic.DamageDealt += RealDamage;
         }
         if (CurrentBarrier > 0)
         {
@@ -461,6 +472,15 @@ public class WSShared : MonoBehaviour
             else
             {
                 CurrentHP = 0;
+                if (Bullet != null)
+                {
+                    Killer = Bullet.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
+                }
+                if (Killer == Controller.Player)
+                {
+                    Statistic.Warship += 1;
+                    Statistic.TotalEnemyDefeated += 1;
+                }
             }
         }
     }
@@ -471,6 +491,10 @@ public class WSShared : MonoBehaviour
         if (FighterCast.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;
+        }
+        if (HitByPlayer)
+        {
+            FindAnyObjectByType<StatisticController>().DamageDealt += Damage;
         }
         if (CurrentBarrier > 0)
         {

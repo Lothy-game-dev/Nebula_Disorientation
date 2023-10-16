@@ -22,6 +22,10 @@ public class UECMainMenuController : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
+    private void Awake()
+    {
+        Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
+    }
     void OnEnable()
     {
         // Initialize variables

@@ -8,6 +8,7 @@ public class FighterShared : MonoBehaviour
     private SpaceZoneHazardEnvironment HazEnv;
     private GameController controller;
     private SpaceZoneMission misson;
+    private StatisticController Statistic;
     // Weapons
     public GameObject LeftWeapon;
     public GameObject RightWeapon;
@@ -76,6 +77,10 @@ public class FighterShared : MonoBehaviour
     public bool alreadyHitByComet;
     public float HitByCometDelay;
     public float DeadPushScale;
+    //Statistic
+    private Dictionary<string, object> EnemyData;
+    private GameObject DamageDealer;
+    //LOTW
     public LOTWEffect LOTWEffect;
     #endregion
     #region Shared Functions
@@ -105,6 +110,7 @@ public class FighterShared : MonoBehaviour
         HazEnv = FindObjectOfType<SpaceZoneHazardEnvironment>();
         controller = FindObjectOfType<GameController>();
         misson = FindObjectOfType<SpaceZoneMission>();
+        Statistic = FindAnyObjectByType<StatisticController>();
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -152,6 +158,10 @@ public class FighterShared : MonoBehaviour
             if (!alreadyDestroy)
             {
                 alreadyDestroy = true;
+                if (GetComponent<PlayerFighter>() != null)
+                {                  
+                    FindAnyObjectByType<StatisticController>().UpdateAchievement();     
+                }
                 StartCoroutine(DestroySelf());
             }
         }
@@ -620,6 +630,18 @@ public class FighterShared : MonoBehaviour
             (CurrentBarrier > 0 ? HazEnv.HazardGammaRayBurstScale : 1) * 
             (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
         DeadPushScale = 1;
+       
+        if (DamageSource != null)
+        {
+            if (DamageSource.GetComponent<BulletShared>() != null)
+            {
+                DamageDealer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
+            }
+            if (GetComponent<EnemyShared>() != null && DamageDealer == controller.Player)
+            {
+                Statistic.DamageDealt += damage;
+            }
+        }
         if (CurrentBarrier > 0)
         {
             if (CurrentBarrier > damage)
@@ -692,6 +714,14 @@ public class FighterShared : MonoBehaviour
                     if (GetComponent<EnemyShared>() != null && Killer == controller.Player)
                     {
                         GetComponent<EnemyShared>().AddBounty();
+                        EnemyData = FindAnyObjectByType<AccessDatabase>().GetDataEnemyById(GetComponent<EnemyShared>().EnemyID);
+                        switch(EnemyData["TierColor"])
+                        {
+                            case "#36b37e": Statistic.EnemyTierI += 1; break;
+                            case "#4c9aff": Statistic.EnemyTierII += 1; break;
+                            case "#bf2600": Statistic.EnemyTierIII += 1; break;
+                        }
+                        Statistic.TotalEnemyDefeated = (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
                     }
                 }
                 CurrentHP = 0;
