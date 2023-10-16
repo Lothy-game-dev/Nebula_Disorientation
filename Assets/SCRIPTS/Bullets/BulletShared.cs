@@ -21,7 +21,7 @@ public class BulletShared : MonoBehaviour
     public bool ApplyNanoEffect;
     public int LavaBurnCount;
     public GameObject HitBoxRange;
-    
+    public LOTWEffect LOTWEffect;
 
     protected Rigidbody2D rb;
     protected float Distance;
@@ -799,7 +799,38 @@ public class BulletShared : MonoBehaviour
                 (GetComponent<UsualKineticBullet>().isGravitationalLine ? 3000f : 1000f), (GetComponent<UsualKineticBullet>().isGravitationalLine ? 0.5f : 0.1f), "Bullet");
         }
         AddPointToML();
-        return InitDamage * WeaponDamageModScale;
+        float LOTWEffectScale = 1;
+        if (LOTWEffect!=null)
+        {
+            LOTWEffectScale *= LOTWEffect.LOTWWeaponDMGIncScale;
+            if (enemy.GetComponent<FighterShared>() != null)
+            {
+                if (enemy.GetComponent<FighterShared>().CurrentBarrier > 0)
+                LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+                if (GetComponent<UsualThermalOrb>()!=null || GetComponent<LavaOrb>()!=null || name.Contains("NanoEffect"))
+                {
+                    if (enemy.GetComponent<FighterShared>().isBurned || enemy.GetComponent<FighterShared>().isFrozen
+                    || enemy.GetComponent<FighterShared>().isLavaBurned || enemy.GetComponent<FighterShared>().isSFBFreeze)
+                    {
+                        LOTWEffectScale *= LOTWEffect.LOTWThermalWeaponDMGScale;
+                        enemy.GetComponent<FighterShared>().LavaBurnedDamageExteriorScale *= LOTWEffect.LOTWThermalWeaponDMGScale;
+                    }
+                }
+            } else if (enemy.GetComponent<WSShared>()!=null && enemy.GetComponent<WSShared>().CurrentBarrier > 0)
+            {
+                LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+            }
+            else if (enemy.GetComponent<SpaceStationShared>() != null && enemy.GetComponent<SpaceStationShared>().CurrentBarrier > 0)
+            {
+                LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
+            }
+            if ((enemy.transform.position - WeaponShoot.GetComponent<Weapons>().Fighter.transform.position).magnitude > 2000)
+            {
+                LOTWEffectScale *= LOTWEffect.LOTWFarDMGScale;
+            }
+        }
+        Debug.Log(LOTWEffectScale);
+        return InitDamage * WeaponDamageModScale * LOTWEffectScale;
     }
 
     private void AddPointToML()

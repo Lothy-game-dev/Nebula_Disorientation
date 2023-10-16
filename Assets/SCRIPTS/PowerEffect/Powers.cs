@@ -34,6 +34,7 @@ public class Powers : MonoBehaviour
     public AudioClip SoundEffect;
     public AudioClip ChargingSoundEffect;
     private float audioScale;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -75,7 +76,7 @@ public class Powers : MonoBehaviour
                     BR = float.Parse(PowerStats["BR"].ToString());
                 }              
                 Duration = float.Parse(PowerStats["Dur"].ToString());
-                CD = float.Parse(PowerStats["CD"].ToString());
+                CD = float.Parse(PowerStats["CD"].ToString()) * (LOTWEffect!=null ? 1/LOTWEffect.LOTWPowerCDScale : 1);
                 if (PowerStats.ContainsKey("BRx"))
                 {
                     BRx = float.Parse(PowerStats["BRx"].ToString());
@@ -87,11 +88,11 @@ public class Powers : MonoBehaviour
                 Velocity = float.Parse(PowerStats["V"].ToString());
                 Range = float.Parse(PowerStats["R"].ToString());
                 Duration = float.Parse(PowerStats["Dur"].ToString());
-                CD = float.Parse(PowerStats["CD"].ToString());
+                CD = float.Parse(PowerStats["CD"].ToString()) * (LOTWEffect != null ? 1 / LOTWEffect.LOTWPowerCDScale : 1);
                 break;
             case "Movement":
                 Range = float.Parse(PowerStats["R"].ToString());
-                CD = float.Parse(PowerStats["CD"].ToString());
+                CD = float.Parse(PowerStats["CD"].ToString()) * (LOTWEffect != null ? 1 / LOTWEffect.LOTWPowerCDScale : 1);
                 break;
         }
 

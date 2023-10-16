@@ -71,7 +71,7 @@ public class GameplayExteriorController : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
-/*        yield return new WaitForSeconds(wait);*/
+        yield return new WaitForSeconds(wait);
         Destroy(Fade);
     }
     #endregion

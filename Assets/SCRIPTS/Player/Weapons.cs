@@ -41,6 +41,7 @@ public class Weapons : MonoBehaviour
     public GameObject Charging;
     public GameObject ChargingPosition;
     public GameplayInteriorController ControllerMain;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -745,6 +746,7 @@ public class Weapons : MonoBehaviour
         bul.Destination = Aim.transform.position;
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
+        bul.LOTWEffect = LOTWEffect;
         bulletFire.SetActive(true);
         GenerateEffect();
         if (Fighter.GetComponent<FighterShared>() != null) 
@@ -773,6 +775,7 @@ public class Weapons : MonoBehaviour
             bul.Range = bul.MaxEffectiveDistance + 40 * Mathf.Cos(Angle * 90/10 * Mathf.Deg2Rad);
             bul.WeaponShoot = this;
             bul.EnemyLayer = EnemyLayer;
+            bul.LOTWEffect = LOTWEffect;
             orbFire.SetActive(true);
             GenerateEffect();
             if (Fighter.GetComponent<FighterShared>() != null)

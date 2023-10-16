@@ -14,6 +14,7 @@ public class GameplayInteriorController : MonoBehaviour
     public GameObject Intro;
     public TextMeshPro Cash;
     public TextMeshPro Shard;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -96,7 +97,7 @@ public class GameplayInteriorController : MonoBehaviour
 
     public void AddCashAndShard(int Cash, int Shard)
     {
-        FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, Cash, Shard);
+        FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, (int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
         SetCashAndShard();
     }
     #endregion

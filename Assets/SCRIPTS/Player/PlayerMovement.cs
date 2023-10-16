@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject HeadObject;
     public LayerMask HazardMask;
     public GameplayInteriorController ControllerMain;
+    public SpaceZoneHazardEnvironment HazEnv;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -48,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     public float ExteriorROTSpeed;
     public float LaserBeamSlowScale;
     public float AEIncreaseScale;
+    public LOTWEffect LOTWEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -110,7 +112,13 @@ public class PlayerMovement : MonoBehaviour
         pf.CalculateVelocity(speedVector);
         CheckLimit();
         ShowAE();
-        CheckForHazard();
+        if (LOTWEffect.LOTWAffectEnvironment)
+        {
+            if (HazEnv.HazardID == 2 || HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
+            {
+                CheckForHazard();
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -372,36 +380,33 @@ public class PlayerMovement : MonoBehaviour
     #region Check Hazard
     private void CheckForHazard()
     {
-        if (FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 2 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 5 || FindObjectOfType<SpaceZoneHazardEnvironment>().HazardID == 6)
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (HeadObject.transform.position - transform.position).magnitude, HazardMask);
+        if (cols.Length > 0)
         {
-            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (HeadObject.transform.position - transform.position).magnitude, HazardMask);
-            if (cols.Length > 0)
+            foreach (var col in cols)
             {
-                foreach (var col in cols)
+                if (col.name.Contains("SR"))
                 {
-                    if (col.name.Contains("SR"))
+                    if (pf != null)
                     {
-                        if (pf != null)
+                        pf.ReceiveDamage(pf.MaxHP * 10/100, col.gameObject);
+                        pf.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f, "Asteroid");
+                        if (col.GetComponent<SpaceZoneAsteroid>() != null)
                         {
-                            pf.ReceiveDamage(pf.MaxHP * 10/100, col.gameObject);
-                            pf.ReceiveForce(transform.position - col.transform.position, 3000f, 0.5f, "Asteroid");
-                            if (col.GetComponent<SpaceZoneAsteroid>() != null)
-                            {
-                                col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
-                            }
+                            col.GetComponent<SpaceZoneAsteroid>().FighterHit(transform.position, MovingSpeed);
                         }
-                        CurrentSpeed = 0;
-                    } else if (col.name.Contains("RS"))
-                    {
-                        if (pf != null && !pf.alreadyHitByComet)
-                        {
-                            pf.HitByCometDelay = 5f;
-                            pf.alreadyHitByComet = true;
-                            pf.ReceiveDamage(pf.MaxHP * 50 / 100, col.gameObject);
-                            pf.ReceiveForce(transform.position - col.transform.position, 10000f, 0.5f, "Rogue Star");
-                        }
-                        CurrentSpeed = 0;
                     }
+                    CurrentSpeed = 0;
+                } else if (col.name.Contains("RS"))
+                {
+                    if (pf != null && !pf.alreadyHitByComet)
+                    {
+                        pf.HitByCometDelay = 5f;
+                        pf.alreadyHitByComet = true;
+                        pf.ReceiveDamage(pf.MaxHP * 50 / 100, col.gameObject);
+                        pf.ReceiveForce(transform.position - col.transform.position, 10000f, 0.5f, "Rogue Star");
+                    }
+                    CurrentSpeed = 0;
                 }
             }
         }
