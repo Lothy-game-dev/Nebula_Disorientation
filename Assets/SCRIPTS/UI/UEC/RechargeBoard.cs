@@ -56,6 +56,7 @@ public class RechargeBoard : MonoBehaviour
                 CurrentShardRecharging.ToString() + " <sprite index='0'>\nSuccessfully Recharged." +
                 "\nEnjoy!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
+            FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(id, CurrentShardRecharging, 0, "ConvertShard");
             Destroy(transform.parent.gameObject);
         }
     }

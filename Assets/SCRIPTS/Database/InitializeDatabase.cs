@@ -413,6 +413,12 @@ public class InitializeDatabase : MonoBehaviour
                 "MaxSZReach INTEGER NOT NULL," +
                 "TotalShard INTEGER NOT NULL," +
                 "TotalCash INTEGER NOT NULL," +
+                "TotalEnemyDefeated INTEGER NOT NULL," +
+                "TotalDamageDealt INTEGER NOT NULL," +
+                "TotalSalaryReceived INTEGER NOT NULL," +
+                "Rank INTEGER NOT NULL," +
+                "TotalShardSpent INTEGER NOT NULL," +
+                "TotalCashSpent INTEGER NOT NULL," +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerId)," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
                 "";
