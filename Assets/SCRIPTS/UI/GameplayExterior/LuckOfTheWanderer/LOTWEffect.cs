@@ -38,10 +38,11 @@ public class LOTWEffect : MonoBehaviour
     public float LOTWPowerDMGIncScale;
     // Repairing Effect
     public float LOTWRepairEffectScale;
-
+    // Increase Cash gain
     public float LOTWCashIncScale;
-    
+    // No effect Environment
     public bool LOTWAffectEnvironment;
+    // No cost in using consumables
     public bool LOTWConsNoCost;
     #endregion
     #region Start & Update
@@ -145,10 +146,6 @@ public class LOTWEffect : MonoBehaviour
         else if (str.Contains("WROF-"))
         {
             LOTWWeaponROFScale += float.Parse(str.Replace("WROF-", "")) * stack / 100f;
-        }
-        else if (str.Contains("C-x"))
-        {
-            // Double current cash
         }
     }
     #endregion

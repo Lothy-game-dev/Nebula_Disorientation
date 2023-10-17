@@ -52,7 +52,12 @@ public class LOTWScene : MonoBehaviour
         // Get All Cards Data
         ListAllLOTW = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(0);
         // Get Owned Cards Data
-
+        bool check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetable(PlayerPrefs.GetInt("PlayerID"));
+        if (check)
+        {
+            if (ListAllLOTW.Contains(34))
+            ListAllLOTW.Remove(34);
+        }
         // Random to get 3 cards
         ListLOTWChosen = new List<int>();
         // disable button reroll

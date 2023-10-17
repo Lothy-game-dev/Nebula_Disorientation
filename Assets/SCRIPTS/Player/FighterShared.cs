@@ -401,7 +401,9 @@ public class FighterShared : MonoBehaviour
     // Receive Burn Damage
     public void ReceiveBurnedDamage(float scale)
     {
-        ReceiveDamage(MaxHP * scale * NanoTempScale * HazEnv.HazardThermalBurnDmgScale * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
+        ReceiveDamage(MaxHP * scale * NanoTempScale * 
+            (LOTWEffect != null && !LOTWEffect.LOTWAffectEnvironment ? 1 : HazEnv.HazardThermalBurnDmgScale)
+            * (1 + (currentTemperature - 90) / 10) / 100, gameObject);
     }
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
@@ -624,10 +626,13 @@ public class FighterShared : MonoBehaviour
     #region Calculate Damage Received
     public void ReceiveDamage(float damage, GameObject DamageSource)
     {
-        damage = damage * HazEnv.HazardNDAllDamageScale * 
+        damage = damage *
+            (LOTWEffect != null && !LOTWEffect.LOTWAffectEnvironment ? 1 : HazEnv.HazardNDAllDamageScale) * 
             (LOTWEffect!=null && DamageSource.GetComponent<BulletShared>()!=null ? 1 / LOTWEffect.LOTWWeaponDMGReceivedScale : 1) *
             (LOTWEffect!=null ? LOTWEffect.LOTWAllDamageReceiveScale : 1) *
-            (CurrentBarrier > 0 ? HazEnv.HazardGammaRayBurstScale : 1) * 
+            (CurrentBarrier > 0 ?
+            (LOTWEffect != null && !LOTWEffect.LOTWAffectEnvironment ? 1 : HazEnv.HazardGammaRayBurstScale) 
+            : 1) * 
             (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
         DeadPushScale = 1;
        
