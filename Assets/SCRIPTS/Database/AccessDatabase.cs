@@ -2535,6 +2535,45 @@ public class AccessDatabase : MonoBehaviour
         } else
         return dict;
     }
+    public bool CheckLOTWRepetable(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
+        IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
+        bool check = false;
+        int sessionId = -1;
+        while (dataReader1.Read())
+        {
+            check = true;
+            if (!dataReader1.IsDBNull(0))
+            {
+                sessionId = dataReader1.GetInt32(0);
+            }
+        }
+        if (!check || sessionId == -1)
+        {
+            dbConnection.Close();
+            return false;
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=34"; 
+            IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
+            bool check2 = false;
+            while (dataReader2.Read())
+            {
+                check2 = true;
+            }
+            dbConnection.Close();
+            return check2;
+        }
+    }
 
     public List<Dictionary<string, object>> GetLOTWInfoOwnedByID(int PlayerID)
     {
@@ -2653,6 +2692,17 @@ public class AccessDatabase : MonoBehaviour
         }
         else
         {
+            if (CardID==34)
+            {
+                // Queries
+                IDbCommand dbCheckComman = dbConnection.CreateCommand();
+                dbCheckComman.CommandText = "UPDATE Session SET SessionCash = SessionCash * 2 WHERE SessionID=" + sessionId;
+                int n = dbCheckComman.ExecuteNonQuery();
+                if (n!=1)
+                {
+                    return "Fail";
+                }
+            }
             // Queries
             IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
             dbCheckCommand1.CommandText = "SELECT CardDuration, CardStackable From LuckOfTheWandererCards WHERE CardID=" + CardID;

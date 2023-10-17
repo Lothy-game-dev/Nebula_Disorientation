@@ -91,7 +91,8 @@ public class SpaceZoneGenerator : MonoBehaviour
                 } else if (SpaceZoneNo % 10 == 8 ||SpaceZoneNo % 10 == 9)
                 {
                     ChosenVariant = 1;
-                }
+                } else
+                    ChosenVariant = Random.Range(1, 1 + VariantCount);
             } else
             ChosenVariant = Random.Range(1, 1 + VariantCount);
         }

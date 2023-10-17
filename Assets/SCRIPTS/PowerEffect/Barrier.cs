@@ -53,6 +53,10 @@ public class Barrier : Powers
                     if (Fighter.GetComponent<FighterShared>().CurrentBarrier>=IncreaseCurrentBarrierAmount)
                     {
                         Fighter.GetComponent<FighterShared>().CurrentBarrier -= IncreaseCurrentBarrierAmount;
+                        if (Fighter.GetComponent<FighterShared>().CurrentBarrier > Fighter.GetComponent<FighterShared>().MaxBarrier)
+                        {
+                            Fighter.GetComponent<FighterShared>().CurrentBarrier = Fighter.GetComponent<FighterShared>().MaxBarrier;
+                        }
                     } else
                     {
                         Fighter.GetComponent<FighterShared>().CurrentBarrier = 0;

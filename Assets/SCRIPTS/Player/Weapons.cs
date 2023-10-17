@@ -751,7 +751,9 @@ public class Weapons : MonoBehaviour
         GenerateEffect();
         if (Fighter.GetComponent<FighterShared>() != null) 
         // Increase overheat bar for each shot, increasing with themral status overloadded
-        currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * HazEnv.HazardOverheat;
+        currentOverheat += OverheatIncreasePerShot * 
+                (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * 
+                (LOTWEffect != null && !LOTWEffect.LOTWAffectEnvironment ? 1 : HazEnv.HazardOverheat);
         // Set reset timer
         OverheatDecreaseTimer = OverheatResetTimer;
         // Create sound
@@ -783,7 +785,8 @@ public class Weapons : MonoBehaviour
                 // Sound
                 if (!isOverheatted) ThermalSound();
                 // Overheat
-                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) * HazEnv.HazardOverheat;
+                currentOverheat += OverheatIncreasePerShot * (1 + Fighter.GetComponent<FighterShared>().OverheatIncreaseScale) *
+                    (LOTWEffect != null && !LOTWEffect.LOTWAffectEnvironment ? 1 : HazEnv.HazardOverheat);
                 OverheatDecreaseTimer = OverheatResetTimer;
             }
         }
@@ -799,11 +802,6 @@ public class Weapons : MonoBehaviour
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;
         laserbeam.SetActive(true);
-
-        if (FireTimer <= 0f)
-        {
-           
-        }
     }
 
     public void ChargingWSLaserBeam()
