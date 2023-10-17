@@ -404,6 +404,17 @@ public class InitializeDatabase : MonoBehaviour
                 "MilestoneEnemyClassB INTEGER NOT NULL," +
                 "MilestoneEnemyClassC INTEGER NOT NULL," +
                 "PRIMARY KEY(MilestoneID AUTOINCREMENT) );" +
+                "" +
+            // Table for Statistic
+            "CREATE TABLE IF NOT EXISTS Statistic" +
+                "(ID INTEGER," +
+                "PlayerID INTEGER," +
+                "EnemyDefeated TEXT NOT NULL," +
+                "MaxSZReach INTEGER NOT NULL," +
+                "TotalShard INTEGER NOT NULL," +
+                "TotalCash INTEGER NOT NULL," +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerId)," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
                 "";
         // Initialize Data
         // ArsenalWeapon

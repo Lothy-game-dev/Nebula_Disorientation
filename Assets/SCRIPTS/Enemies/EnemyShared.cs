@@ -62,6 +62,7 @@ public class EnemyShared : FighterShared
     public GameObject AimObject;
     private float BombUpdateTimer;
     public GameObject GravTarget;
+    public int EnemyID;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar

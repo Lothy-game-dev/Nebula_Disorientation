@@ -3179,4 +3179,71 @@ public class AccessDatabase : MonoBehaviour
             return data;
     }
     #endregion
+    #region Access Achievement
+    public void CreateNewPlayerAchievement(string name)
+    {
+        int PlayerId = 0;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE Name='" + name + "'";
+        IDataReader reader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (reader.Read())
+        {
+            PlayerId = reader.GetInt32(0);
+            check = true;
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+        } else
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "INSERT INTO Statistic (PlayerID,EnemyDefeated,MaxSZReach,TotalShard,TotalCash) " +
+                "VALUES (" + PlayerId + ",'EI-0|EII-0|EIII-0|WS-0',0,5,500)";
+            dbCommand.ExecuteNonQuery();          
+            dbConnection.Close();
+        }        
+    }
+
+    public Dictionary<string, object> GetPlayerAchievement(int id)
+    {
+        Dictionary<string, object> PA = new Dictionary<string, object>();
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM Statistic WHERE PlayerID='" + id + "'";
+        IDataReader reader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (reader.Read())
+        {
+            PA.Add("EnemyDefeated", reader.GetString(2));
+            PA.Add("MaxSZReach", reader.GetInt32(3));
+            PA.Add("TotalShard", reader.GetInt32(4));
+            PA.Add("TotalCash", reader.GetInt32(5));
+            check = true;
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+        }
+        return PA;
+    }
+
+    public void UpdateGameplayStatistic(Dictionary<string, object> data)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "UPDATE Statistic SET " +
+            "EnemyDefeated = '" + data["EnemyDefeated"].ToString() + "', MaxSZReach = " + int.Parse(data["SZMaxReach"].ToString()) + " WHERE PlayerID = "+ int.Parse(data["PlayerID"].ToString()) + "";
+        dbCommand.ExecuteNonQuery();
+        dbConnection.Close();
+    }
+    #endregion
 }

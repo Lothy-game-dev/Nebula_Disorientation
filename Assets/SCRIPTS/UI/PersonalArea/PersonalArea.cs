@@ -30,6 +30,7 @@ public class PersonalArea : MonoBehaviour
     public GameObject FuelEnergy;
     public GameObject WeaponOwned;
     public GameObject FighterOwned;
+    public List<GameObject> Achievements;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -46,6 +47,8 @@ public class PersonalArea : MonoBehaviour
     private int WeapOwned;
     private int ModelOwned;
     public bool isUnranked;
+    public Dictionary<string, object> PlayerAchievement;
+    public Dictionary<string, string> Achievement;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -78,6 +81,8 @@ public class PersonalArea : MonoBehaviour
         PlayerName.GetComponent<TextMeshPro>().text = (string)PlayerInformation["Name"];
         WeaponOwned.GetComponent<TextMeshPro>().text = "Weapons Owned: "+ WeapOwned + "";
         FighterOwned.GetComponent<TextMeshPro>().text = "Fighters Owned: " + ModelOwned + "";
+        PlayerAchievement = FindAnyObjectByType<AccessDatabase>().GetPlayerAchievement(PlayerId);
+        Achievement = FindAnyObjectByType<GlobalFunctionController>().ConvertEnemyDefeated(PlayerAchievement["EnemyDefeated"].ToString());
         SetData(PlayerInformation);
         if ((string)PlayerInformation["Rank"] != "Unranked")
         {
@@ -95,7 +100,7 @@ public class PersonalArea : MonoBehaviour
             game.transform.SetParent(Content.transform);
             game.SetActive(true);
             if (int.Parse(RankList[i][0]) == (int)PlayerInformation["RankId"])
-            {
+            {              
                 ShowRankInfo(RankList[i][0]);
             }
             
@@ -132,6 +137,17 @@ public class PersonalArea : MonoBehaviour
             }
             IsCollected = true;
         }
+
+        for (int i = 0; i < Achievements.Count; i++)
+        {
+            if (i == 0)
+            {
+                Achievements[i].GetComponent<TextMeshPro>().text += PlayerAchievement[Achievements[i].name].ToString();
+            } else
+            {
+                Achievements[i].GetComponent<TextMeshPro>().text += Achievement[Achievements[i].name];
+            }
+        }
         
     }
     public void ResetData()
@@ -162,6 +178,7 @@ public class PersonalArea : MonoBehaviour
     // Group all function that serve the same algorithm
     public void ShowRankInfo(string Id)
     {
+        Debug.Log((int)PlayerInformation["RankId"] + "aaaaaaaaaaaaaaaaa");
         CurrentItem(Id);
         Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = Color.green + Color.red;
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
@@ -176,11 +193,11 @@ public class PersonalArea : MonoBehaviour
     #region Check current item
     public void CurrentItem(string Id)
     {
-        for (int i = 1; i < Content.transform.childCount; i++)
+        for (int i = 0; i < Content.transform.childCount; i++)
         {
             Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
         }
-        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.yellow;
+        //Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.yellow;
     }
     #endregion
     #region Lock item
