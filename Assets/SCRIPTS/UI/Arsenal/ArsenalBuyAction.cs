@@ -150,6 +150,7 @@ public class ArsenalBuyAction : MonoBehaviour
                 // If adding ownership successfully, reduce currency
                 string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuy(FindObjectOfType<UECMainMenuController>().PlayerId, 
                     0, int.Parse(Ar.RequiredShard));
+                int shard = int.Parse(Ar.RequiredShard);
                 switch (check2)
                 {
                     case "Not Exist":
@@ -181,7 +182,8 @@ public class ArsenalBuyAction : MonoBehaviour
                         // if success, reload data to UI
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);
-                        FindObjectOfType<UECMainMenuController>().GetData();
+                        FindObjectOfType<UECMainMenuController>().GetData();                       
+                        FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, shard, 0, "Spent");
                         break;
                 }
             }

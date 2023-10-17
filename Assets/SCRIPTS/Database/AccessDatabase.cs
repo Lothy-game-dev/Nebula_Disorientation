@@ -3202,8 +3202,8 @@ public class AccessDatabase : MonoBehaviour
         } else
         {
             IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = "INSERT INTO Statistic (PlayerID,EnemyDefeated,MaxSZReach,TotalShard,TotalCash) " +
-                "VALUES (" + PlayerId + ",'EI-0|EII-0|EIII-0|WS-0',0,5,500)";
+            dbCommand.CommandText = "INSERT INTO Statistic (PlayerID,EnemyDefeated,MaxSZReach,TotalShard,TotalCash,TotalEnemyDefeated,TotalDamageDealt,TotalSalaryReceived,Rank,TotalShardSpent,TotalCashSpent) " +
+                "VALUES (" + PlayerId + ",'EI-0|EII-0|EIII-0|WS-0',0,5,500,0,0,0,0,0,0)";
             dbCommand.ExecuteNonQuery();          
             dbConnection.Close();
         }        
@@ -3242,6 +3242,33 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "UPDATE Statistic SET " +
             "EnemyDefeated = '" + data["EnemyDefeated"].ToString() + "', MaxSZReach = " + int.Parse(data["SZMaxReach"].ToString()) + " WHERE PlayerID = "+ int.Parse(data["PlayerID"].ToString()) + "";
+        dbCommand.ExecuteNonQuery();
+        dbConnection.Close();
+    }
+
+    public void UpdateEconomyStatistic(int id, int shard, int cash, string type) 
+    {
+        string query = "";
+        switch(type)
+        {
+            case "ConvertCash":
+                query = "UPDATE Statistic SET " +
+                    "TotalCash = TotalCash + " + cash + " WHERE PlayerID = " + id + ""; break;
+            case "ConvertShard":
+                query = "UPDATE Statistic SET " +
+                    "TotalShard = TotalShard + " + shard + " WHERE PlayerID = " + id + ""; break;
+            case "ReceiveSalary":
+                query = "UPDATE Statistic SET " +
+                    "TotalSalaryReceived = TotalSalaryReceived + " + cash + " WHERE PlayerID = " + id + ""; break;
+            case "Spent":
+                query = "UPDATE Statistic SET " +
+                   "TotalCashSpent = TotalCashSpent + " + cash + ",  TotalShardSpent = TotalShardSpent + " + shard + " WHERE PlayerID = " + id + ""; break;
+        }
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = query;
         dbCommand.ExecuteNonQuery();
         dbConnection.Close();
     }

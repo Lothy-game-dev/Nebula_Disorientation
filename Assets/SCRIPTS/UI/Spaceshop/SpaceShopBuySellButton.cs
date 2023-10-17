@@ -194,6 +194,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                             "Purchased Successfully.\n", 5f);
                                 FindObjectOfType<UECMainMenuController>().GetData();
+                                FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, CurrentValue, "Spent");
                                 break;
                         }
                     }
@@ -236,6 +237,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                     "Sold Successfully.\n", 5f);
                         FindObjectOfType<UECMainMenuController>().GetData();
+                        FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, CurrentValue, "ConvertCash");
                         break;
                 }
             }

@@ -77,6 +77,7 @@ public class PersonalAreaCollectButton : MonoBehaviour
                 FindObjectOfType<UECMainMenuController>().GetData();
                 gameObject.AddComponent<CursorUnallowed>();
                 FindAnyObjectByType<AccessDatabase>().SalaryCollected(FindObjectOfType<UECMainMenuController>().PlayerId);
+                FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, (int)PAController.PlayerInformation["DailyIncome"], "ReceiveSalary");
                 gameObject.transform.GetChild(1).gameObject.SetActive(true);
                 break;
         }
