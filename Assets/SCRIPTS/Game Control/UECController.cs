@@ -148,6 +148,17 @@ public class UECController : UECMenuShared
                         break;
                     case "P":
                         mission = "Play for at least " + listDM[1][i] + " minute(s).";
+                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                        {
+                            if (FindAnyObjectByType<UECMainMenuController>().isCount)
+                            {
+                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i], 1);
+                                FindAnyObjectByType<UECMainMenuController>().isCount = false;
+                            }
+                        } else
+                        {
+                            ad.DailyMissionDone(currentId, listDM[0][i]);
+                        }
                         break;
                     case "CD":
                         mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
@@ -163,10 +174,11 @@ public class UECController : UECMenuShared
                         break;
                     default: break;
                 }
-                mission += "\n(0/" + listDM[1][i] + ")";
+                mission += "\n("+ listDM[2][i] + "/" + listDM[1][i] + ")";
                 Missions.Add(mission);
             }
             DailyMissionBar.GetComponent<UECDailyMissions>().missions = Missions;
+            
         }
     }
     #endregion
