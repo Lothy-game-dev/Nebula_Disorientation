@@ -23,6 +23,8 @@ public class StatisticController : MonoBehaviour
     public int MaxSZReach;
     public float DamageDealt;
     public int TotalEnemyDefeated;
+    public int CurrentShard;
+    public int CurrentCash;
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, object> Achievement;
     private Dictionary<string, string> CurrentAchievement;
