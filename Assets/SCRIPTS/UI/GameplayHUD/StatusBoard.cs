@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.MLAgents;
+using Unity.MLAgents.Policies;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -254,8 +256,16 @@ public class StatusBoard : MonoBehaviour
             }
             // turn off scripts
             CloneEnemyObject = (CloneEnemy.GetComponent<EnemyShared>() != null ? CloneEnemy.GetComponent<EnemyShared>() : CloneEnemy.GetComponent<AlliesShared>());
-            
             CloneEnemyObject.enabled = false;
+            Destroy(CloneEnemy.GetComponent<DecisionRequester>());
+            if (CloneEnemy.GetComponent<AlliesFighterMLAgent>()!=null)
+            {
+                Destroy(CloneEnemy.GetComponent<AlliesFighterMLAgent>());
+            } else if (CloneEnemy.GetComponent<EnemyFighterMLAgent>() != null)
+            {
+                Destroy(CloneEnemy.GetComponent<EnemyFighterMLAgent>());
+            }
+            Destroy(CloneEnemy.GetComponent<BehaviorParameters>());
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;
             // turn off component
@@ -453,6 +463,16 @@ public class StatusBoard : MonoBehaviour
             // turn off scripts
             CloneEnemyObject = (CloneEnemy.GetComponent<EnemyShared>() != null ? CloneEnemy.GetComponent<EnemyShared>() : CloneEnemy.GetComponent<AlliesShared>());
             CloneEnemyObject.enabled = false;
+            Destroy(CloneEnemy.GetComponent<DecisionRequester>());
+            if (CloneEnemy.GetComponent<AlliesFighterMLAgent>() != null)
+            {
+                Destroy(CloneEnemy.GetComponent<AlliesFighterMLAgent>());
+            }
+            else if (CloneEnemy.GetComponent<EnemyFighterMLAgent>() != null)
+            {
+                Destroy(CloneEnemy.GetComponent<EnemyFighterMLAgent>());
+            }
+            Destroy(CloneEnemy.GetComponent<BehaviorParameters>());
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;
             // turn off component

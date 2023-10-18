@@ -46,7 +46,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public void SpawnAlly()
     {
         Allies = new List<GameObject>();
-        for (int i = 0; i < 0/*AllySpawnID.Length*/; i++)
+        for (int i = 0; i < AllySpawnID.Length; i++)
         {
             StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f)));
         }
@@ -106,7 +106,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
         Ally.GetComponent<AlliesShared>().Escort = Escort;
-        Ally.GetComponent<AlliesShared>().Defend = Defend;
+        Ally.GetComponent<AlliesShared>().Defend = count % 2 == 0 ? Defend : !Defend;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
     }
     #endregion
