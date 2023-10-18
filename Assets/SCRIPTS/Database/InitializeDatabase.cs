@@ -53,23 +53,6 @@ public class InitializeDatabase : MonoBehaviour
                 "Quantity INTEGER, " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // EnemyMoveset
-            "CREATE TABLE IF NOT EXISTS EnemyMoveset" +
-                "(ID INTEGER, " +
-                "EnemyID INTEGER, " +
-                "MoveID INTEGER, " +
-                "FOREIGN KEY(EnemyID) REFERENCES Enemies(EnemyID), " +
-                "FOREIGN KEY(MoveID) REFERENCES EnemiesMoves(MoveID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // StageEnemy
-            "CREATE TABLE IF NOT EXISTS StageEnemy" +
-                "(ID INTEGER, StageID INTEGER, " +
-                "EnemyID INTEGER, " +
-                "Quantity INTEGER NOT NULL, " +
-                "SpawnPosition TEXT NOT NULL, " +
-                "FOREIGN KEY(StageID) REFERENCES Stages(StageID), " +
-                "FOREIGN KEY(EnemyID) REFERENCES Enemies(EnemyID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
             // PlayerDailyMission
             "CREATE TABLE IF NOT EXISTS PlayerDailyMission" +
                 "(ID INTEGER, " +
@@ -80,7 +63,7 @@ public class InitializeDatabase : MonoBehaviour
                 "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // SessionArsenalPower
+/*            // SessionArsenalPower
             "CREATE TABLE IF NOT EXISTS SessionArsenalPower" +
                 "(ID INTEGER, " +
                 "SessionID INTEGER, " +
@@ -97,7 +80,7 @@ public class InitializeDatabase : MonoBehaviour
                 "IsEquipped TEXT NOT NULL, " +
                 "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
                 "FOREIGN KEY(WeaponID) REFERENCES ArsenalWeapon(WeaponID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +*/
             // SessionLOTWCards
             "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
                 "(ID INTEGER, " +
@@ -166,14 +149,6 @@ public class InitializeDatabase : MonoBehaviour
                 "AllyPower TEXT NOT NULL, " +
                 "AllyTier TEXT NOT NULL, " +
                 "PRIMARY KEY(AllyID AUTOINCREMENT) ); " +
-            // EnemiesMoves
-            "CREATE TABLE IF NOT EXISTS EnemiesMoves" +
-                "(MoveID INTEGER, " +
-                "MoveName TEXT NOT NULL, " +
-                "MoveStats TEXT NOT NULL, " +
-                "MovePriority INTEGER NOT NULL, " +
-                "MoveTriggerCondition TEXT NOT NULL, " +
-                "PRIMARY KEY(MoveID AUTOINCREMENT) ); " +
             // FactoryModel
             "CREATE TABLE IF NOT EXISTS FactoryModel" +
                 "(ModelID INTEGER, " +
@@ -260,16 +235,6 @@ public class InitializeDatabase : MonoBehaviour
                 "TierColor TEXT NOT NULL, " +
                 "ItemEncyc TEXT NOT NULL, " +
                 "PRIMARY KEY(ItemID AUTOINCREMENT) ); " +
-            // Stages
-            "CREATE TABLE IF NOT EXISTS Stages" +
-                "(StageID INTEGER, " +
-                "StageObjectivesVerb TEXT NOT NULL, " +
-                "StageObjectivesNumber INTEGER NOT NULL, " +
-                "StageRewardMultiplier INTEGER NOT NULL, " +
-                "StageTimeLimit INTEGER, " +
-                "StageEnemyStatsMultiplier INTEGER NOT NULL, " +
-                "StageSceneNo INTEGER NOT NULL, " +
-                "PRIMARY KEY(StageID AUTOINCREMENT) );" +
             // Table to check if database already Init
             "CREATE TABLE IF NOT EXISTS DatabaseInitialize" +
                 "(AlreadyInitialize TEXT NOT NULL);" +
@@ -809,18 +774,14 @@ public class InitializeDatabase : MonoBehaviour
             "DROP TABLE IF EXISTS PlayerArsenalWeapons;" +
             // PlayerArsenalPower
             "DROP TABLE IF EXISTS PlayerArsenalPower;" +
-            // EnemyMoveset
-            "DROP TABLE IF EXISTS EnemyMoveset;" +
-            // StageEnemy
-            "DROP TABLE IF EXISTS StageEnemy;" +
             // PlayerSpaceShopItem
             "DROP TABLE IF EXISTS PlayerSpaceShopItem;" +
             // PlayerDailyMission
             "DROP TABLE IF EXISTS PlayerDailyMission;" +
-            // SessionArsenalPower
+            /*// SessionArsenalPower
             "DROP TABLE IF EXISTS SessionArsenalPower;" +
             // SessionArsenalWeapons
-            "DROP TABLE IF EXISTS SessionArsenalWeapons;" +
+            "DROP TABLE IF EXISTS SessionArsenalWeapons;" +*/
             // SessionLOTWCards
             "DROP TABLE IF EXISTS SessionLOTWCards;" +
             // PlayerModelOwnership
@@ -833,8 +794,6 @@ public class InitializeDatabase : MonoBehaviour
             "DROP TABLE IF EXISTS DailyMissions;" +
             // Enemies
             "DROP TABLE IF EXISTS Enemies;" +
-            // EnemiesMoves
-            "DROP TABLE IF EXISTS EnemiesMoves;" +
             // FactoryModel
             "DROP TABLE IF EXISTS FactoryModel;" +
             // LuckOfTheWandererCards

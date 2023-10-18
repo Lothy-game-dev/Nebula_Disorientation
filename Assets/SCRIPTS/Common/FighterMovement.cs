@@ -672,6 +672,7 @@ public class FighterMovement : MonoBehaviour
                                     return;
                                 }
                                 int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
+                                DownMove();
                                 if (k == -1)
                                 {
                                     LeftMove();
@@ -824,6 +825,7 @@ public class FighterMovement : MonoBehaviour
                                 return;
                             }
                             int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
+                            DownMove();
                             if (k == -1)
                             {
                                 LeftMove();
@@ -903,7 +905,7 @@ public class FighterMovement : MonoBehaviour
         float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
         Vector2 TempPos = new Vector2(RotatePoint.transform.position.x, RotatePoint.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
         Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
-        float compareAngle = 30;
+        float compareAngle = 45;
         if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
         {
             if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)
@@ -1052,6 +1054,7 @@ public class FighterMovement : MonoBehaviour
                 }
             }
         }
+        Debug.Log(DirMov);
         return DirMov;
     }
     #endregion
