@@ -727,6 +727,7 @@ public class FighterShared : MonoBehaviour
                             case "#bf2600": Statistic.EnemyTierIII += 1; break;
                         }
                         Statistic.TotalEnemyDefeated = (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
+                        Statistic.KillEnemy = true;
                     }
                 }
                 CurrentHP = 0;

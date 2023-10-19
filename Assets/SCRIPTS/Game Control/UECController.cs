@@ -23,6 +23,7 @@ public class UECController : UECMenuShared
     public bool isPlanetMoving;
     private AccessDatabase ad;
     private int currentId;
+    private UECMainMenuController controller;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -35,6 +36,7 @@ public class UECController : UECMenuShared
         // Initialize variables
         isPlanetMoving = true;
         ad = FindObjectOfType<AccessDatabase>();
+        controller = FindAnyObjectByType<UECMainMenuController>();
         CheckDailyMission();
     }
 
@@ -150,10 +152,10 @@ public class UECController : UECMenuShared
                         mission = "Play for at least " + listDM[1][i] + " minute(s).";
                         if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
                         {
-                            if (FindAnyObjectByType<UECMainMenuController>().isCount)
+                            if (controller.isCount)
                             {
-                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i], 1);
-                                FindAnyObjectByType<UECMainMenuController>().isCount = false;
+                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i]);
+                                controller.isCount = false;
                             }
                         } else
                         {
@@ -171,6 +173,18 @@ public class UECController : UECMenuShared
                         break;
                     case "B":
                         mission = "Purchase " + listDM[1][i] + " item(s).";
+                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                        {
+                            if (controller.Buy)
+                            {
+                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i]);
+                                controller.Buy = false;
+                            }
+                        }
+                        else
+                        {
+                            ad.DailyMissionDone(currentId, listDM[0][i]);
+                        }
                         break;
                     default: break;
                 }
