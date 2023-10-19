@@ -24,6 +24,7 @@ public class UECMainMenuController : MonoBehaviour
     public bool isStart;
     public bool isCount;
     private DateTime StartTime;
+    public bool Buy;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
