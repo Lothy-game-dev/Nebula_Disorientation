@@ -930,6 +930,74 @@ public class GlobalFunctionController : MonoBehaviour
         return result;
     }
 
+    public List<string> ConvertEffectStringToArrayString(string str)
+    {
+        List<string> result = new List<string>();
+        if (str.Contains("HP-"))
+        {
+            result.Add("Maximum HP");
+        }
+        else if (str.Contains("MS-"))
+        {
+            result.Add("Maximum Moving Speed");
+        }
+        else if (str.Contains("RD-"))
+        {
+            result.Add("Weapon Damage Received");
+        }
+        else if (str.Contains("AWD-"))
+        {
+            result.Add("Weapon Damage");
+        }
+        else if (str.Contains("TWD-"))
+        {
+            result.Add("Thermal Weapon Damage To Thermal Status");
+        }
+        else if (str.Contains("BD-"))
+        {
+            result.Add("Damage To Barrier");
+        }
+        else if (str.Contains("FD-"))
+        {
+            result.Add("Damage To Far Enemies");
+        }
+        else if (str.Contains("PCD-"))
+        {
+            result.Add("Power Cooldown");
+        }
+        else if (str.Contains("R-"))
+        {
+            result.Add("All Repairing Effect");
+        }
+        else if (str.Equals("HAZ"))
+        {
+            result.Add("Affection Of Hazard Environment");
+        }
+        else if (str.Contains("BS-"))
+        {
+            result.Add("Weapon Damage");
+            result.Add("Power Damage");
+            result.Add("All Damage Received");
+        }
+        else if (str.Equals("CONS"))
+        {
+            result.Add("Consumable Costs");
+        }
+        else if (str.Contains("C-") && !str.Contains("C-x"))
+        {
+            result.Add("All Cash gain");
+        }
+        else if (str.Contains("WROF-"))
+        {
+            result.Add("Weapon Rate Of Fire");
+        }
+        else
+        {
+            result.Add(str);
+        }
+        return result;
+    }
+
     //HP-3000|SPD-700|ROT-0.75|AOF-0 or 90,90|DM-0|AM-0|PM-0
     public Dictionary<string, object> ConvertEnemyStatsToDictionary(string stats)
     {

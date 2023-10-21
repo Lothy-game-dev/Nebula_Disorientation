@@ -71,6 +71,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRenameButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\BonusStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\TestDisk.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\SCRIPTS\Cons\WingShield.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\StatisticController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuOptionLeftRightButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneHazardEnvironment.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalItem.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailIcon.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopInformation.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContractButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuButtons.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnEnemyWarship.cs" />
@@ -179,6 +182,7 @@
     <Compile Include="Assets\SCRIPTS\Allies\AlliesFighterMLAgent.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LaserBeamBullet.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\ActiveCards.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECMenuShared.cs" />
@@ -194,8 +198,10 @@
     <Compile Include="Assets\SCRIPTS\Warship\WSSupportWeaponMLAgent.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWEffect.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutFighterDemo.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuOption.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWCard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUpBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBar.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneIntro.cs" />
@@ -213,6 +219,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWOwnedCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneMissionText.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuEffect.cs" />
     <Compile Include="Assets\SCRIPTS\Player\FighterShared.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\AllySpaceStationSpawn.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\PowerController.cs" />

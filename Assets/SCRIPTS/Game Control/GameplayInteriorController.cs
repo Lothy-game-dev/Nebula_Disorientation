@@ -8,6 +8,7 @@ public class GameplayInteriorController : MonoBehaviour
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
     // Can be public or private
+    private AudioSource aus;
     #endregion
     #region InitializeVariables
     public GameObject BlackFade;
@@ -15,9 +16,18 @@ public class GameplayInteriorController : MonoBehaviour
     public TextMeshPro Cash;
     public TextMeshPro Shard;
     public LOTWEffect LOTWEffect;
+    public GameObject PauseMenu;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
+    private float InitAPause1;
+    private float InitAPause2;
+    private float InitAPause3;
+    private bool DoneLightUp;
+    public float MasterVolumeScale;
+    public float MusicVolumeScale;
+    public float SFXVolumeScale;
+    private Dictionary<string, object> OptionSetting;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -27,15 +37,71 @@ public class GameplayInteriorController : MonoBehaviour
         // Initialize variables
         GenerateBlackFadeOpen(transform.position, 5f, 1f);
         SetCashAndShard();
+        Color c = PauseMenu.GetComponent<SpriteRenderer>().color;
+        InitAPause1 = c.a;
+        c.a = 0;
+        PauseMenu.GetComponent<SpriteRenderer>().color = c;
+        Color c1 = PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+        InitAPause2 = c1.a;
+        c1.a = 0;
+        PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color = c1;
+        Color c2 = PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
+        InitAPause3 = c2.a;
+        c2.a = 0;
+        PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c2;
+        OptionSetting = FindAnyObjectByType<AccessDatabase>().GetOption();
+        MasterVolumeScale = float.Parse(OptionSetting["MVolume"].ToString());
+        MusicVolumeScale = float.Parse(OptionSetting["MuVolume"].ToString());
+        SFXVolumeScale = float.Parse(OptionSetting["Sfx"].ToString());
+        aus = GetComponent<AudioSource>();
+        SoundVolume();
     }
 
     // Update is called once per frame
     void Update()
     {   
         // Call function and timer only if possible
+        if (PauseMenu.activeSelf)
+        {
+            if (PauseMenu.GetComponent<SpriteRenderer>().color.a < InitAPause1)
+            {
+                Color c = PauseMenu.GetComponent<SpriteRenderer>().color;
+                c.a += InitAPause1/60;
+                PauseMenu.GetComponent<SpriteRenderer>().color = c;
+            } else
+            {
+                if (!DoneLightUp)
+                {
+                    DoneLightUp = true;
+                    PauseMenu.transform.GetChild(5).gameObject.SetActive(true);
+                    PauseMenu.transform.GetChild(6).gameObject.SetActive(true);
+                    PauseMenu.transform.GetChild(1).gameObject.SetActive(true);
+                    PauseMenu.transform.GetChild(2).gameObject.SetActive(true);
+                    PauseMenu.transform.GetChild(3).gameObject.SetActive(true);
+                    PauseMenu.transform.GetChild(4).gameObject.SetActive(true);
+                    PauseMenu.transform.GetChild(7).gameObject.SetActive(true);
+                }
+            }
+            if (PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color.a < InitAPause2)
+            {
+                Color c = PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+                c.a += InitAPause2/60;
+                PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color = c;
+            }
+            if (PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color.a < InitAPause3)
+            {
+                Color c = PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
+                c.a += InitAPause3/60;
+                PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c;
+            }
+        }
     }
     #endregion
     #region BlackFade
+    public void SoundVolume()
+    {
+        aus.volume = MasterVolumeScale / 100f * MusicVolumeScale / 100f;
+    }
     public void GenerateBlackFadeOpen(Vector2 pos, float delay, float duration)
     {
         GameObject bf = Instantiate(BlackFade, new Vector3(pos.x, pos.y, BlackFade.transform.position.z), Quaternion.identity);
@@ -99,6 +165,33 @@ public class GameplayInteriorController : MonoBehaviour
     {
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, (int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
         SetCashAndShard();
+    }
+
+    public void PauseMenuOn()
+    {
+        PauseMenu.SetActive(true);
+        DoneLightUp = false;
+    }
+
+    public void PauseMenuOff()
+    {
+        PauseMenu.SetActive(false);
+        PauseMenu.transform.GetChild(1).gameObject.SetActive(false);
+        PauseMenu.transform.GetChild(2).gameObject.SetActive(false);
+        PauseMenu.transform.GetChild(3).gameObject.SetActive(false);
+        PauseMenu.transform.GetChild(4).gameObject.SetActive(false);
+        PauseMenu.transform.GetChild(5).gameObject.SetActive(false);
+        PauseMenu.transform.GetChild(6).gameObject.SetActive(false);
+        PauseMenu.transform.GetChild(7).gameObject.SetActive(false);
+        Color c = PauseMenu.GetComponent<SpriteRenderer>().color;
+        c.a = 0;
+        PauseMenu.GetComponent<SpriteRenderer>().color = c;
+        Color c1 = PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+        c1.a = 0;
+        PauseMenu.transform.GetChild(0).GetComponent<SpriteRenderer>().color = c1;
+        Color c2 = PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
+        c2.a = 0;
+        PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c2;
     }
     #endregion
 }
