@@ -790,7 +790,7 @@ public class AccessDatabase : MonoBehaviour
             alreadyMission.Add(dataReader.GetInt32(0));
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        string insertText = "INSERT INTO PlayerDailyMission (PlayerID,MissionID,IsComplete,MissionDate) VALUES ";
+        string insertText = "INSERT INTO PlayerDailyMission (PlayerID,MissionID,IsComplete,MissionDate, MissionProgess) VALUES ";
         for (int i = 0; i < number; i++)
         {
             if (alreadyMission.Count > 0)
@@ -800,12 +800,12 @@ public class AccessDatabase : MonoBehaviour
                 {
                     n = Random.Range(1, numberOfDailyMissions + 1);
                 } while (alreadyMission.Contains(n));
-                insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "')";
+                insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "', 0)";
                 alreadyMission.Add(n);
             } else
             {
                 int n = Random.Range(1, numberOfDailyMissions + 1);
-                insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "')";
+                insertText += "(" + PlayerId + "," + n + ",'N','" + currentDate + "', 0)";
                 alreadyMission.Add(n);
             }
             if (i == number - 1)
@@ -835,17 +835,19 @@ public class AccessDatabase : MonoBehaviour
         List<List<string>> dailyMissions = new List<List<string>>();
         dailyMissions.Add(new List<string>());
         dailyMissions.Add(new List<string>());
+        dailyMissions.Add(new List<string>());
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT MissionId FROM PlayerDailyMission WHERE PlayerId=" + PlayerId + " AND MissionDate='" + currentDate + "' AND IsComplete='N'";
+        dbCheckCommand.CommandText = "SELECT MissionId, MissionProgess FROM PlayerDailyMission WHERE PlayerId=" + PlayerId + " AND MissionDate='" + currentDate + "' AND IsComplete='N'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check1 = false;
         while (dataReader.Read())
         {
             check1 = true;
+            dailyMissions[2].Add(dataReader.GetInt32(1).ToString());
             IDbCommand dbCommand = dbConnection.CreateCommand();
             dbCommand.CommandText = "SELECT MissionVerb, MissionNumber FROM DailyMissions WHERE MissionId=" + dataReader.GetInt32(0);
             IDataReader dataReader2 = dbCommand.ExecuteReader();
@@ -855,12 +857,66 @@ public class AccessDatabase : MonoBehaviour
                 check2 = true;
                 dailyMissions[0].Add(dataReader2.GetString(0));
                 dailyMissions[1].Add(dataReader2.GetInt32(1).ToString());
+               
             }
             if (!check2) return null;
         }
         if (!check1) return null;
         dbConnection.Close();
         return dailyMissions;
+    }
+    public void UpdateDailyMissionProgess(int PlayerId, string mission)   
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT MissionId FROM DailyMissions WHERE MissionVerb='" + mission + "'";
+        IDataReader dataReader2 = dbCommand.ExecuteReader();
+        int id = 0;
+        while (dataReader2.Read())
+        {
+            id = dataReader2.GetInt32(0);
+        }      
+
+        string query = "UPDATE PlayerDailyMission SET MissionProgess = MissionProgess + 1 WHERE PlayerId=" + PlayerId + " AND MissionId = " + id + "";
+        IDbCommand dbCommand2 = dbConnection.CreateCommand();
+        dbCommand2.CommandText = query;
+        dbCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+    }
+    public void DailyMissionDone(int PlayerID, string mission)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = "SELECT MissionId FROM DailyMissions WHERE MissionVerb='" + mission + "'";
+        IDataReader dataReader2 = dbCommand.ExecuteReader();
+        int id = 0;
+        while (dataReader2.Read())
+        {
+            id = dataReader2.GetInt32(0);
+        }
+
+        string query = "UPDATE PlayerDailyMission SET IsComplete = 'Y' WHERE PlayerId=" + PlayerID + " AND MissionId = " + id + "";
+        IDbCommand dbCommand2 = dbConnection.CreateCommand();
+        dbCommand2.CommandText = query;
+        dbCommand2.ExecuteNonQuery();
+
+        //Update statistic
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = "UPDATE Statistic SET TotalDailyMissionDone = TotalDailyMissionDone + 1 WHERE PlayerID = " + PlayerID + "";
+        dbCheckCommand1.ExecuteNonQuery();
+
+        //Reward
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET FuelEnergy = FuelEnergy + 100, TimelessShard = TimelessShard + 5, Cash = Cash + 2500 WHERE PlayerID = " + PlayerID + "";
+        dbCheckCommand2.ExecuteNonQuery();
+        dbConnection.Close();
+        
     }
     #endregion
     #region Option
@@ -3229,8 +3285,8 @@ public class AccessDatabase : MonoBehaviour
             return data;
     }
     #endregion
-    #region Access Achievement
-    public void CreateNewPlayerAchievement(string name)
+    #region Access Statistic
+    public void CreateNewPlayerStatistic(string name)
     {
         int PlayerId = 0;
         // Open DB
@@ -3252,8 +3308,8 @@ public class AccessDatabase : MonoBehaviour
         } else
         {
             IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = "INSERT INTO Statistic (PlayerID,EnemyDefeated,MaxSZReach,TotalShard,TotalCash,TotalEnemyDefeated,TotalDamageDealt,TotalSalaryReceived,Rank,TotalShardSpent,TotalCashSpent) " +
-                "VALUES (" + PlayerId + ",'EI-0|EII-0|EIII-0|WS-0',0,5,500,0,0,0,0,0,0)";
+            dbCommand.CommandText = "INSERT INTO Statistic (PlayerID,EnemyDefeated,MaxSZReach,TotalShard,TotalCash,TotalEnemyDefeated,TotalDamageDealt,TotalSalaryReceived,Rank,TotalShardSpent,TotalCashSpent,TotalDailyMissionDone) " +
+                "VALUES (" + PlayerId + ",'EI-0|EII-0|EIII-0|WS-0',0,5,500,0,0,0,0,0,0,0)";
             dbCommand.ExecuteNonQuery();          
             dbConnection.Close();
         }        
@@ -3321,6 +3377,18 @@ public class AccessDatabase : MonoBehaviour
         dbCommand.CommandText = query;
         dbCommand.ExecuteNonQuery();
         dbConnection.Close();
+    }
+    public void UpdateDailyMissionStatistic(int playerId)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries    
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = "UPDATE Statistic SET TotalDailyMissionDone = TotalDailyMissionDone + 1 WHERE PlayerID = " + playerId + "";
+        dbCheckCommand1.ExecuteNonQuery();
+        dbConnection.Close();
+        
     }
     #endregion
 }

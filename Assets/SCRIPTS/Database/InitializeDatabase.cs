@@ -60,6 +60,7 @@ public class InitializeDatabase : MonoBehaviour
                 "MissionID INTEGER, " +
                 "IsComplete TEXT NOT NULL, " +
                 "MissionDate TEXT NOT NULL, " +
+                "MissionProgess INTEGER NOT NULL, " +
                 "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
@@ -384,6 +385,7 @@ public class InitializeDatabase : MonoBehaviour
                 "Rank INTEGER NOT NULL," +
                 "TotalShardSpent INTEGER NOT NULL," +
                 "TotalCashSpent INTEGER NOT NULL," +
+                "TotalDailyMissionDone INTEGER NOT NULL," +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerId)," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
                 "";

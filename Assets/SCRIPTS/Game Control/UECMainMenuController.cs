@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,17 +20,23 @@ public class UECMainMenuController : MonoBehaviour
     #region NormalVariables
     public int PlayerId;
     private AccessDatabase ad;
+    public int Playedtime;
+    public bool isStart;
+    public bool isCount;
+    private DateTime StartTime;
+    public bool Buy;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     private void Awake()
     {
         Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
+        isStart = false;
     }
     void OnEnable()
     {
         // Initialize variables
-        ad = FindObjectOfType<AccessDatabase>();
+        ad = FindObjectOfType<AccessDatabase>();      
         ExitAnimationAllScene();
         GetData();
     }
@@ -38,6 +45,10 @@ public class UECMainMenuController : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (isStart)
+        {
+            SetTimer(StartTime);
+        }
     }
     #endregion
     #region Retrieve Data
@@ -48,6 +59,8 @@ public class UECMainMenuController : MonoBehaviour
         Dictionary<string,object> ListData = ad.GetPlayerInformationById(PlayerId);
         if (ListData!=null)
         {
+            isStart = true; 
+            StartTime = DateTime.Now;
             controller.SetDataToView(ListData);
             FactoryController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
             ArsenalController.SetData(ListData["Cash"].ToString(), ListData["TimelessShard"].ToString());
@@ -80,6 +93,20 @@ public class UECMainMenuController : MonoBehaviour
         foreach (var scene in DisableUponActive)
         {
             scene.GetComponent<UECMenuShared>().OnExitAnimation();
+        }
+    }
+    #endregion
+    #region Start Play Timer
+    public void SetTimer(DateTime startTime)
+    {
+        int oldTime = Playedtime;
+        DateTime myDateTime = DateTime.Now;
+        TimeSpan currentTimePlayed = myDateTime - startTime;
+        Debug.Log(currentTimePlayed);
+        Playedtime = (int)currentTimePlayed.TotalMinutes;
+        if (oldTime < Playedtime)
+        {
+            isCount = true;
         }
     }
     #endregion

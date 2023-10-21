@@ -23,6 +23,7 @@ public class UECController : UECMenuShared
     public bool isPlanetMoving;
     private AccessDatabase ad;
     private int currentId;
+    private UECMainMenuController controller;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -35,6 +36,7 @@ public class UECController : UECMenuShared
         // Initialize variables
         isPlanetMoving = true;
         ad = FindObjectOfType<AccessDatabase>();
+        controller = FindAnyObjectByType<UECMainMenuController>();
         CheckDailyMission();
     }
 
@@ -148,6 +150,17 @@ public class UECController : UECMenuShared
                         break;
                     case "P":
                         mission = "Play for at least " + listDM[1][i] + " minute(s).";
+                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                        {
+                            if (controller.isCount)
+                            {
+                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i]);
+                                controller.isCount = false;
+                            }
+                        } else
+                        {
+                            ad.DailyMissionDone(currentId, listDM[0][i]);
+                        }
                         break;
                     case "CD":
                         mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
@@ -160,13 +173,26 @@ public class UECController : UECMenuShared
                         break;
                     case "B":
                         mission = "Purchase " + listDM[1][i] + " item(s).";
+                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                        {
+                            if (controller.Buy)
+                            {
+                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i]);
+                                controller.Buy = false;
+                            }
+                        }
+                        else
+                        {
+                            ad.DailyMissionDone(currentId, listDM[0][i]);
+                        }
                         break;
                     default: break;
                 }
-                mission += "\n(0/" + listDM[1][i] + ")";
+                mission += "\n("+ listDM[2][i] + "/" + listDM[1][i] + ")";
                 Missions.Add(mission);
             }
             DailyMissionBar.GetComponent<UECDailyMissions>().missions = Missions;
+            
         }
     }
     #endregion

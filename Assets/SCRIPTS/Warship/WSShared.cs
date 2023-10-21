@@ -480,6 +480,7 @@ public class WSShared : MonoBehaviour
                 {
                     Statistic.Warship += 1;
                     Statistic.TotalEnemyDefeated += 1;
+                    Statistic.KillBossEnemy = true;
                 }
             }
         }
@@ -548,6 +549,16 @@ public class WSShared : MonoBehaviour
             else
             {
                 CurrentHP = 0;
+                if (Power != null)
+                {
+                    Killer = Power.GetComponent<Powers>().Fighter;
+                }
+                if (Killer == Controller.Player)
+                {
+                    Statistic.Warship += 1;
+                    Statistic.TotalEnemyDefeated += 1;
+                    Statistic.KillBossEnemy = true;
+                }
             }
         }
     }

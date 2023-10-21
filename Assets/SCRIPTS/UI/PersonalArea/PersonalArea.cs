@@ -154,9 +154,15 @@ public class PersonalArea : MonoBehaviour
     {
        if (Content.transform.childCount > 1)
         {
-            for (int i = 1; i < Content.transform.childCount; i++)
+            for (int i = 0; i < Content.transform.childCount; i++)
             {
-                Destroy(Content.transform.GetChild(i).gameObject);
+                if (i == 0)
+                {
+                    Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+                } else
+                {
+                    Destroy(Content.transform.GetChild(i).gameObject);
+                }
             }
         }
     }
@@ -178,7 +184,6 @@ public class PersonalArea : MonoBehaviour
     // Group all function that serve the same algorithm
     public void ShowRankInfo(string Id)
     {
-        Debug.Log((int)PlayerInformation["RankId"] + "aaaaaaaaaaaaaaaaa");
         CurrentItem(Id);
         Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = Color.green + Color.red;
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
@@ -197,7 +202,7 @@ public class PersonalArea : MonoBehaviour
         {
             Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
         }
-        //Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.yellow;
+        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.yellow;
     }
     #endregion
     #region Lock item
