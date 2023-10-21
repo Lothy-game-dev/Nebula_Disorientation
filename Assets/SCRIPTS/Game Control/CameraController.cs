@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour
     private float PosY;
     private float zoomTimer;
     private bool isPausing;
+    private GameplayInteriorController InteriorController;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -38,6 +39,7 @@ public class CameraController : MonoBehaviour
     {
         // Initialize variables
         cam = GetComponent<Camera>();
+        InteriorController = GetComponent<GameplayInteriorController>();
         isClose = false;
         CameraTracking = true;
         cam.orthographicSize = ZoomOutHeight / 2;
@@ -120,11 +122,13 @@ public class CameraController : MonoBehaviour
         {
             Time.timeScale = 0;
             isPausing = true;
+            InteriorController.PauseMenuOn();
             Debug.Log("Pause");
         } else
         {
             Time.timeScale = 1;
             isPausing = false;
+            InteriorController.PauseMenuOff();
             Debug.Log("Continue");
         }
         return isPausing;

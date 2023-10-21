@@ -46,6 +46,7 @@ public class PlayerFighter : FighterShared
     public GameObject SecondPower;
     public Dictionary<string, int> Consumables;
     public List<GameObject> ConsumableObject;
+    private float audioScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -54,6 +55,7 @@ public class PlayerFighter : FighterShared
         // Initialize variables
         InitializeFighter();
         aus = GetComponent<AudioSource>();
+        audioScale = ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
         PlaySpawnSound();
         HPSlider.maxValue = MaxHP;
         ShieldPassive();
@@ -391,7 +393,7 @@ public class PlayerFighter : FighterShared
             aus.loop = true;
             aus.Play();
         }
-        aus.volume = volume;
+        aus.volume = volume * audioScale;
     }
 
     public void StopSound()
@@ -404,14 +406,14 @@ public class PlayerFighter : FighterShared
     {
         DashAudioSource.clip = DashSound;
         DashAudioSource.loop = false;
-        DashAudioSource.volume = 0.75f;
+        DashAudioSource.volume = 0.75f * audioScale;
         DashAudioSource.Play();
     }
 
     public void PlaySpawnSound()
     {
         aus.clip = SpawnSoundEffect;
-        aus.volume = 1;
+        aus.volume = 1 * audioScale;
         aus.Play();
     }
     #endregion
