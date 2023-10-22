@@ -207,6 +207,8 @@ public class InitializeDatabase : MonoBehaviour
                 "(SessionID INTEGER, " +
                 "TotalPlayedTime INTEGER, " +
                 "CurrentStage INTEGER, " +
+                "CurrentStageHazard INTEGER, " +
+                "CurrentStageVariant INTEGER, " +
                 "CreatedDate TEXT NOT NULL, " +
                 "LastUpdate TEXT NOT NULL, " +
                 "IsCompleted TEXT NOT NULL, " +
@@ -219,7 +221,6 @@ public class InitializeDatabase : MonoBehaviour
                 "FirstPower TEXT, " +
                 "SecondPower TEXT, " +
                 "Consumables TEXT, " +
-                "FOREIGN KEY(CurrentStage) REFERENCES Stages(StageID), " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
             // SpaceShop
             "CREATE TABLE IF NOT EXISTS SpaceShop" +
@@ -370,7 +371,6 @@ public class InitializeDatabase : MonoBehaviour
                 "MilestoneEnemyClassB INTEGER NOT NULL," +
                 "MilestoneEnemyClassC INTEGER NOT NULL," +
                 "PRIMARY KEY(MilestoneID AUTOINCREMENT) );" +
-                "" +
             // Table for Statistic
             "CREATE TABLE IF NOT EXISTS Statistic" +
                 "(ID INTEGER," +

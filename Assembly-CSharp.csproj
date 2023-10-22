@@ -229,6 +229,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuBackButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationModelShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBarBackground.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\RocketBurst.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDFighterInfoEffects.cs" />

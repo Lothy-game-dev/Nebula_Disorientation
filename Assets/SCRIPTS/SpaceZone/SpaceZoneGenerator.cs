@@ -80,24 +80,13 @@ public class SpaceZoneGenerator : MonoBehaviour
     public void GenerateSpaceZone()
     {
         Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
-        int VariantCount = (int)variantData["VariantCounts"];
-        if (ChosenVariant == 0)
-        {
-            if (SpaceZoneNo < 51)
-            {
-                if (SpaceZoneNo % 10 == 0)
-                {
-                    ChosenVariant = 2;
-                } else if (SpaceZoneNo % 10 == 8 ||SpaceZoneNo % 10 == 9)
-                {
-                    ChosenVariant = 1;
-                } else
-                    ChosenVariant = Random.Range(1, 1 + VariantCount);
-            } else
-            ChosenVariant = Random.Range(1, 1 + VariantCount);
-        }
-        List<Dictionary<string, object>> ListAvailableHazard = FindObjectOfType<AccessDatabase>().GetAvailableHazards(SpaceZoneNo);
-        int HazardId = RandomHazardChoose(ListAvailableHazard);
+        Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        SpaceZoneNo = (int)SessionData["CurrentStage"];
+        PlayerPrefs.SetInt("NextStage", 0);
+        PlayerPrefs.SetInt("NextVariant", 0);
+        PlayerPrefs.SetInt("NextHazard", 0); 
+        ChosenVariant = (int)SessionData["CurrentStageVariant"];
+        int HazardId = (int)SessionData["CurrentStageHazard"];
         Dictionary<string, object> HazardData = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(HazardId);
         HazardNameText.text = "<color=" + (string)HazardData["HazardColor"] + ">" + (string)HazardData["HazardName"] + "</color>";
         HazardDesciptionText.text = "<color=" + (string)HazardData["HazardColor"] + ">" + (string)HazardData["HazardDescription"] + "</color>";
@@ -920,26 +909,6 @@ public class SpaceZoneGenerator : MonoBehaviour
         }
     }
 
-    private int RandomHazardChoose(List<Dictionary<string, object>> dataDict)
-    {
-        float sum = 0;
-        for (int i=0; i< dataDict.Count;i++)
-        {
-            sum += (int)dataDict[i]["HazardChance"];
-        }
-        float n = Random.Range(0, sum);
-        for (int i = 0; i < dataDict.Count; i++)
-        {
-            if (n < (int)dataDict[i]["HazardChance"])
-            {
-                return (int)dataDict[i]["HazardID"];
-            } else
-            {
-                n -= (int)dataDict[i]["HazardChance"];
-            }
-        }
-        return 1;
-    }
     #endregion
     #region Sound
     private IEnumerator StartSound()
