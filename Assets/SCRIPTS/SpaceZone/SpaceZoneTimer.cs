@@ -16,7 +16,7 @@ public class SpaceZoneTimer : MonoBehaviour
     #endregion
     #region NormalVariables
     public int Timer;
-    private bool Countdown;
+    public bool Countdown;
     public bool DoneSetupTimer;
     private float TimerDown;
     private bool AlreadyCallEnd;

@@ -90,7 +90,13 @@ public class StatisticController : MonoBehaviour
         MaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
         CurrentShard = Shard.text;
         CurrentCash = Cash.text;
-        PlayedTime = Timer.text;
+        if (Timer.transform.parent.gameObject.GetComponent<SpaceZoneTimer>().Countdown)
+        {
+            PlayedTime = Timer.text;
+        } else
+        {
+            PlayedTime = "1:00";
+        }
         CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
         MaxSZReach = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;

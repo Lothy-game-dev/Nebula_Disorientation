@@ -333,11 +333,6 @@ public class PlayerFighter : FighterShared
             {
                 isPausing = FindObjectOfType<CameraController>().PauseGame();
             }
-            // Pause
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                FindAnyObjectByType<GameplayInteriorController>().SZSummaryOn();
-            }
         }
         // Timer Decrease
         for (int i=0;i<6;i++)
