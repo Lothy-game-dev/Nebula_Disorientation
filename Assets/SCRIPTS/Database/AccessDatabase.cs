@@ -2888,8 +2888,8 @@ public class AccessDatabase : MonoBehaviour
             }
             // Queries
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables) VALUES " +
-                "(" + id + ",0,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
+            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables) VALUES " +
+                "(" + id + ",0,1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
                 FirstPower + "','" + SecondPower + "','" + Consumables + "');";
             int n = dbCheckCommand.ExecuteNonQuery();
@@ -2951,24 +2951,46 @@ public class AccessDatabase : MonoBehaviour
                 datas.Add("SessionID", dataReader2.GetInt32(0));
                 datas.Add("TotalPlayedTime", dataReader2.GetInt32(1));
                 datas.Add("CurrentStage", dataReader2.GetInt32(2));
-                datas.Add("CreatedDate", dataReader2.GetString(3));
-                datas.Add("LastUpdate", dataReader2.GetString(4));
-                datas.Add("IsCompleted", dataReader2.GetString(5));
-                datas.Add("SessionCash", dataReader2.GetInt32(6));
-                datas.Add("SessionTimelessShard", dataReader2.GetInt32(7));
-                datas.Add("SessionFuelEnergy", dataReader2.GetInt32(8));
-                datas.Add("Model", dataReader2.GetString(9));
-                datas.Add("LeftWeapon", dataReader2.GetString(10));
-                datas.Add("RightWeapon", dataReader2.GetString(11));
-                datas.Add("FirstPower", dataReader2.GetString(12));
-                datas.Add("SecondPower", dataReader2.GetString(13));
-                datas.Add("Consumables", dataReader2.GetString(14));
+                datas.Add("CurrentStageHazard", dataReader2.GetInt32(3));
+                datas.Add("CurrentStageVariant", dataReader2.GetInt32(4));
+                datas.Add("CreatedDate", dataReader2.GetString(5));
+                datas.Add("LastUpdate", dataReader2.GetString(6));
+                datas.Add("IsCompleted", dataReader2.GetString(7));
+                datas.Add("SessionCash", dataReader2.GetInt32(8));
+                datas.Add("SessionTimelessShard", dataReader2.GetInt32(9));
+                datas.Add("SessionFuelEnergy", dataReader2.GetInt32(10));
+                datas.Add("Model", dataReader2.GetString(11));
+                datas.Add("LeftWeapon", dataReader2.GetString(12));
+                datas.Add("RightWeapon", dataReader2.GetString(13));
+                datas.Add("FirstPower", dataReader2.GetString(14));
+                datas.Add("SecondPower", dataReader2.GetString(15));
+                datas.Add("Consumables", dataReader2.GetString(16));
             }
             dbConnection.Close();
             return datas;
         }
     }
-
+    public string UpdateSessionStageData(int SessionId, int CurrentStage, int CurrentStageHazard, int CurrentStageVariant)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET CurrentStage = " + CurrentStage + ", CurrentStageHazard = " +
+            CurrentStageHazard + ", CurrentStageVariant = " + CurrentStageVariant + " WHERE SessionId=" + SessionId;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
     public string UpdateSessionShard(int SessionId, bool IsIncrease, int amount)
     {
         // Open DB
