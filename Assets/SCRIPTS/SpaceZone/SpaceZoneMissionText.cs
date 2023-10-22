@@ -67,10 +67,11 @@ public class SpaceZoneMissionText : MonoBehaviour
         c5.a = 0;
         Text.GetComponent<TextMeshPro>().color = c5;
         Black1.SetActive(true);
-        StartCoroutine(PlayText());
+        StartCoroutine(PlayText(strText));
+              
     }
 
-    private IEnumerator PlayText()
+    private IEnumerator PlayText(string text)
     {
         for (int i=0;i<10;i++)
         {
@@ -110,6 +111,16 @@ public class SpaceZoneMissionText : MonoBehaviour
             c.a += TextInitA / 10f;
             Text.GetComponent<TextMeshPro>().color = c;
             yield return new WaitForSeconds(0.02f);
+        }
+
+        if (text == "Mission Accomplished!")
+        {
+            yield return new WaitForSeconds(2f);
+            Black2.SetActive(false);
+            Black3.SetActive(false);
+            Black4.SetActive(false);
+            Text.SetActive(false);
+            FindAnyObjectByType<GameplayInteriorController>().SZSummaryOn();
         }
     }
     #endregion

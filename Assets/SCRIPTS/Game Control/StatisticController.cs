@@ -14,6 +14,10 @@ public class StatisticController : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject MissionCompeletedBoard;
+    public GameObject Fighter;
+    public TextMeshPro Shard;
+    public TextMeshPro Cash;
+    public TextMeshPro Timer;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -25,8 +29,13 @@ public class StatisticController : MonoBehaviour
     public int MaxSZReach;
     public float DamageDealt;
     public int TotalEnemyDefeated;
-    public int CurrentShard;
-    public int CurrentCash;
+    public string CurrentShard;
+    public string CurrentCash;
+    public float CurrentHP;
+    public float MaxHP;
+    public string PlayedTime;
+    public int CurrentSZNo;
+    public int CurrentFuelCell;
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, object> Achievement;
     private Dictionary<string, string> CurrentAchievement;
@@ -60,6 +69,9 @@ public class StatisticController : MonoBehaviour
         Warship = int.Parse(CurrentAchievement["Warship"]);
         MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
+        // Set data to fuel cell bar
+        Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
+        CurrentFuelCell = (int)ListData["FuelCell"];     
     }
 
     // Update is called once per frame
@@ -73,6 +85,13 @@ public class StatisticController : MonoBehaviour
     // Group all function that serve the same algorithm
     public void UpdateAchievement()
     {
+        //Update Statistic
+        CurrentHP = Fighter.GetComponent<PlayerFighter>().CurrentHP;
+        MaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
+        CurrentShard = Shard.text;
+        CurrentCash = Cash.text;
+        PlayedTime = Timer.text;
+        CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
         MaxSZReach = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
@@ -91,53 +110,57 @@ public class StatisticController : MonoBehaviour
     private void CheckDailyMission()
     {       
         List<List<string>> listDM = ad.GetListDailyMissionUndone(PlayerID);
-        for (int i = 0; i < listDM[0].Count; i++)
+        if (listDM != null)
         {
-            string mission = "";
-            switch (listDM[0][i])
+            for (int i = 0; i < listDM[0].Count; i++)
             {
-                case "KE":
-                    mission = "Kill " + listDM[1][i] + " enemy(s).";
-                    if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
-                    {
-                        if (KillEnemy)
+                string mission = "";
+                switch (listDM[0][i])
+                {
+                    case "KE":
+                        mission = "Kill " + listDM[1][i] + " enemy(s).";
+                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
                         {
-                            ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
-                        } 
-                    } else
-                    {
-                        ad.DailyMissionDone(PlayerID, listDM[0][i]);
-                        CreateMissionCompletedNotiBoard(mission, 2f);
-                    }
-                    break;
-                case "KB":
-                    if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
-                    {
-                        if (KillBossEnemy)
-                        {
-                            ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
+                            if (KillEnemy)
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
+                            }
                         }
-                    }
-                    else
-                    {
-                        ad.DailyMissionDone(PlayerID, listDM[0][i]);
-                    }
-                    break;
-                case "C":
-                    mission = "Complete " + listDM[1][i] + " spacezone(s).";
-                    break;            
-                case "CD":
-                    mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
-                    break;
-                case "CA":
-                    mission = "Complete " + listDM[1][i] + " Assault Spacezone(s).";
-                    break;
-                case "CAA":
-                    mission = "Complete " + listDM[1][i] + " Assault Advanced Spacezone(s).";
-                    break;
-                default: break;
+                        else
+                        {
+                            ad.DailyMissionDone(PlayerID, listDM[0][i]);
+                            CreateMissionCompletedNotiBoard(mission, 2f);
+                        }
+                        break;
+                    case "KB":
+                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                        {
+                            if (KillBossEnemy)
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
+                            }
+                        }
+                        else
+                        {
+                            ad.DailyMissionDone(PlayerID, listDM[0][i]);
+                        }
+                        break;
+                    case "C":
+                        mission = "Complete " + listDM[1][i] + " spacezone(s).";
+                        break;
+                    case "CD":
+                        mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
+                        break;
+                    case "CA":
+                        mission = "Complete " + listDM[1][i] + " Assault Spacezone(s).";
+                        break;
+                    case "CAA":
+                        mission = "Complete " + listDM[1][i] + " Assault Advanced Spacezone(s).";
+                        break;
+                    default: break;
+                }
             }
-        }
+        }       
         KillEnemy = false;
         KillBossEnemy = false;
     }

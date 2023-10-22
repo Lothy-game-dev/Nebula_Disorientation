@@ -103,6 +103,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotificationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneSummary.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\WSMovement.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\WSSSDetected.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Assets\SCRIPTS\SpaceStation\EnemySpaceStationSpawn.cs" />
     <Compile Include="Assets\SCRIPTS\Database\InitializeDatabase.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CameraController.cs" />
+    <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneSummaryButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaCollectButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryItem.cs" />
