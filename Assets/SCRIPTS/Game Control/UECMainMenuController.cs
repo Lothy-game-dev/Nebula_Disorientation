@@ -24,7 +24,7 @@ public class UECMainMenuController : MonoBehaviour
     public bool isStart;
     public bool isCount;
     private DateTime StartTime;
-    public bool Buy;
+    public int BuyAmount;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -102,7 +102,6 @@ public class UECMainMenuController : MonoBehaviour
         int oldTime = Playedtime;
         DateTime myDateTime = DateTime.Now;
         TimeSpan currentTimePlayed = myDateTime - startTime;
-        Debug.Log(currentTimePlayed);
         Playedtime = (int)currentTimePlayed.TotalMinutes;
         if (oldTime < Playedtime)
         {

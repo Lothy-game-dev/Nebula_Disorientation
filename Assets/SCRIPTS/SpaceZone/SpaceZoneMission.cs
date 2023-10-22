@@ -248,7 +248,7 @@ public class SpaceZoneMission : MonoBehaviour
                 case "C":
                     if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
                     {
-                        ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                        ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
                     } else
                     {
                         ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
@@ -259,7 +259,7 @@ public class SpaceZoneMission : MonoBehaviour
                     {
                         if (MissionStageName.Contains("D"))
                         {
-                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
                         }
                     }
                     else
@@ -272,7 +272,7 @@ public class SpaceZoneMission : MonoBehaviour
                     {
                         if (MissionStageName.Contains("A"))
                         {
-                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
                         }
                     }
                     else
@@ -285,7 +285,7 @@ public class SpaceZoneMission : MonoBehaviour
                     {
                         if (MissionStageName.Contains("O"))
                         {
-                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
                         }
                     }
                     else

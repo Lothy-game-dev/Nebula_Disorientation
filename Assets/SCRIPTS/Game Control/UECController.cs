@@ -131,68 +131,73 @@ public class UECController : UECMenuShared
         {
             List<List<string>> listDM = ad.GetListDailyMissionUndone(currentId);
             List<string> Missions = new List<string>();
-            for (int i = 0; i < listDM[0].Count; i++)
+            if (listDM != null)
             {
-                string mission = "";
-                switch (listDM[0][i])
+                for (int i = 0; i < listDM[0].Count; i++)
                 {
-                    case "KE":
-                        mission = "Kill " + listDM[1][i] + " enemy(s).";
-                        break;
-                    case "KB":
-                        mission = "Kill " + listDM[1][i] + " boss enemy(s).";
-                        break;
-                    case "C":
-                        mission = "Complete " + listDM[1][i] + " spacezone(s).";
-                        break;
-                    case "S":
-                        mission = "Spend " + listDM[1][i] + " cash(s) during a session.";
-                        break;
-                    case "P":
-                        mission = "Play for at least " + listDM[1][i] + " minute(s).";
-                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
-                        {
-                            if (controller.isCount)
+                    string mission = "";
+                    switch (listDM[0][i])
+                    {
+                        case "KE":
+                            mission = "Kill " + listDM[1][i] + " enemy(s).";
+                            break;
+                        case "KB":
+                            mission = "Kill " + listDM[1][i] + " boss enemy(s).";
+                            break;
+                        case "C":
+                            mission = "Complete " + listDM[1][i] + " spacezone(s).";
+                            break;
+                        case "S":
+                            mission = "Spend " + listDM[1][i] + " cash(s) during a session.";
+                            break;
+                        case "P":
+                            mission = "Play for at least " + listDM[1][i] + " minute(s).";
+                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
                             {
-                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i]);
-                                controller.isCount = false;
+                                if (controller.isCount)
+                                {
+                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], 1);
+                                }
                             }
-                        } else
-                        {
-                            ad.DailyMissionDone(currentId, listDM[0][i]);
-                        }
-                        break;
-                    case "CD":
-                        mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
-                        break;
-                    case "CA":
-                        mission = "Complete " + listDM[1][i] + " Assault Spacezone(s).";
-                        break;
-                    case "CAA":
-                        mission = "Complete " + listDM[1][i] + " Assault Advanced Spacezone(s).";
-                        break;
-                    case "B":
-                        mission = "Purchase " + listDM[1][i] + " item(s).";
-                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
-                        {
-                            if (controller.Buy)
+                            else
                             {
-                                ad.UpdateDailyMissionProgess(currentId, listDM[0][i]);
-                                controller.Buy = false;
+                                ad.DailyMissionDone(currentId, listDM[0][i]);
+                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                             }
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(currentId, listDM[0][i]);
-                        }
-                        break;
-                    default: break;
+                            break;
+                        case "CD":
+                            mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
+                            break;
+                        case "CA":
+                            mission = "Complete " + listDM[1][i] + " Assault Spacezone(s).";
+                            break;
+                        case "CAA":
+                            mission = "Complete " + listDM[1][i] + " Assault Advanced Spacezone(s).";
+                            break;
+                        case "B":
+                            mission = "Purchase " + listDM[1][i] + " item(s).";
+                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            {
+                                if (controller.BuyAmount > 0)
+                                {
+                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.BuyAmount);
+                                }
+                            }
+                            else
+                            {
+                                ad.DailyMissionDone(currentId, listDM[0][i]);
+                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                            }
+                            break;
+                        default: break;
+                    }
+                    mission += "\n(" + listDM[2][i] + "/" + listDM[1][i] + ")";
+                    Missions.Add(mission);
                 }
-                mission += "\n("+ listDM[2][i] + "/" + listDM[1][i] + ")";
-                Missions.Add(mission);
-            }
+            }           
             DailyMissionBar.GetComponent<UECDailyMissions>().missions = Missions;
-            
+            controller.BuyAmount = 0;
+            controller.isCount = false;
         }
     }
     #endregion

@@ -183,7 +183,7 @@ public class ArsenalBuyAction : MonoBehaviour
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);
                         FindObjectOfType<UECMainMenuController>().GetData();
-                        FindObjectOfType<UECMainMenuController>().Buy = true;
+                        FindObjectOfType<UECMainMenuController>().BuyAmount = 1;
                         FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, shard, 0, "Spent");
                         break;
                 }
