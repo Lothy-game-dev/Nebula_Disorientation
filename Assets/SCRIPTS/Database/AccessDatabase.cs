@@ -865,7 +865,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return dailyMissions;
     }
-    public void UpdateDailyMissionProgess(int PlayerId, string mission)   
+    public void UpdateDailyMissionProgess(int PlayerId, string mission, int amount)   
     {
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
@@ -880,7 +880,7 @@ public class AccessDatabase : MonoBehaviour
             id = dataReader2.GetInt32(0);
         }      
 
-        string query = "UPDATE PlayerDailyMission SET MissionProgess = MissionProgess + 1 WHERE PlayerId=" + PlayerId + " AND MissionId = " + id + "";
+        string query = "UPDATE PlayerDailyMission SET MissionProgess = MissionProgess + "+ amount + " WHERE PlayerId=" + PlayerId + " AND MissionId = " + id + "";
         IDbCommand dbCommand2 = dbConnection.CreateCommand();
         dbCommand2.CommandText = query;
         dbCommand2.ExecuteNonQuery();

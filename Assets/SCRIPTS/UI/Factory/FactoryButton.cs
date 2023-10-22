@@ -150,7 +150,7 @@ public class FactoryButton : MonoBehaviour
                             "Purchased Successfully.", 5f);
                         }
                         FindObjectOfType<UECMainMenuController>().GetData();
-                        FindObjectOfType<UECMainMenuController>().Buy = true;
+                        FindObjectOfType<UECMainMenuController>().BuyAmount = 1;
                         FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, int.Parse(FactoryController.ItemPriceShard), int.Parse(FactoryController.ItemPriceCash), "Spent");
                         break;
                 }
