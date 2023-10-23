@@ -3306,6 +3306,36 @@ public class AccessDatabase : MonoBehaviour
         else
             return data;
     }
+
+    public Dictionary<string,object> GetMissionDataByValueAndVariant(int SpaceZoneValue, int SpaceZoneVariant)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from SpaceZoneMission WHERE SpaceZoneValue=" + SpaceZoneValue + " AND Variant=" + SpaceZoneVariant;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("ID", dataReader.GetInt32(0));
+            data.Add("SpaceZoneValue", dataReader.GetInt32(1));
+            data.Add("Variant", dataReader.GetInt32(2));
+            data.Add("Mission", dataReader.GetString(3));
+            data.Add("VictoryCondition", dataReader.GetString(4));
+            data.Add("DefeatCondition", dataReader.GetString(5));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
     #endregion
     #region Access Statistic
     public void CreateNewPlayerStatistic(string name)
