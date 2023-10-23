@@ -17,6 +17,7 @@ public class GameplayInteriorController : MonoBehaviour
     public TextMeshPro Shard;
     public LOTWEffect LOTWEffect;
     public GameObject PauseMenu;
+    public GameObject SZSummary;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -24,6 +25,8 @@ public class GameplayInteriorController : MonoBehaviour
     private float InitAPause2;
     private float InitAPause3;
     private bool DoneLightUp;
+    private bool DoneLightUp2;
+    private float InitASummary;
     public float MasterVolumeScale;
     public float MusicVolumeScale;
     public float SFXVolumeScale;
@@ -55,6 +58,11 @@ public class GameplayInteriorController : MonoBehaviour
         SFXVolumeScale = float.Parse(OptionSetting["Sfx"].ToString());
         aus = GetComponent<AudioSource>();
         SoundVolume();
+
+        Color c3 = SZSummary.GetComponent<SpriteRenderer>().color;
+        InitASummary = c3.a;
+        c3.a = 0;
+        SZSummary.GetComponent<SpriteRenderer>().color = c3;
     }
 
     // Update is called once per frame
@@ -93,6 +101,31 @@ public class GameplayInteriorController : MonoBehaviour
                 Color c = PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
                 c.a += InitAPause3/60;
                 PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c;
+            }
+        }
+
+        if (SZSummary.activeSelf)
+        {
+            if (SZSummary.GetComponent<SpriteRenderer>().color.a < InitASummary)
+            {
+                Color c = SZSummary.GetComponent<SpriteRenderer>().color;
+                c.a += InitASummary / 60;
+                SZSummary.GetComponent<SpriteRenderer>().color = c;
+            }
+            else
+            {
+                if (!DoneLightUp2)
+                {
+                    DoneLightUp2 = true;
+                    SZSummary.transform.GetChild(0).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(1).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(2).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(3).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(4).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(5).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(6).gameObject.SetActive(true);
+                    SZSummary.transform.GetChild(7).gameObject.SetActive(true);
+                }
             }
         }
     }
@@ -192,6 +225,14 @@ public class GameplayInteriorController : MonoBehaviour
         Color c2 = PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
         c2.a = 0;
         PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c2;
+    }
+    #endregion
+    #region SpaceZone Summary Menu
+    public void SZSummaryOn()
+    {
+        SZSummary.SetActive(true);
+        DoneLightUp2 = false;
+        SZSummary.GetComponent<SpaceZoneSummary>().Summarize();
     }
     #endregion
 }
