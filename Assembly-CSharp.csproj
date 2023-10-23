@@ -184,6 +184,7 @@
     <Compile Include="Assets\SCRIPTS\Allies\AlliesFighterMLAgent.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LaserBeamBullet.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\ActiveCards.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BlackHole.cs" />
