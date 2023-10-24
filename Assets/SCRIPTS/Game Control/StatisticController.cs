@@ -139,10 +139,11 @@ public class StatisticController : MonoBehaviour
                         else
                         {
                             ad.DailyMissionDone(PlayerID, listDM[0][i]);
-                            CreateMissionCompletedNotiBoard(mission, 2f);
+                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                         }
                         break;
                     case "KB":
+                        mission = "Kill " + listDM[1][i] + " boss enemy.";
                         if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
                         {
                             if (KillBossEnemy)
@@ -153,19 +154,8 @@ public class StatisticController : MonoBehaviour
                         else
                         {
                             ad.DailyMissionDone(PlayerID, listDM[0][i]);
+                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                         }
-                        break;
-                    case "C":
-                        mission = "Complete " + listDM[1][i] + " spacezone(s).";
-                        break;
-                    case "CD":
-                        mission = "Complete " + listDM[1][i] + " Defend/Escort Spacezone(s).";
-                        break;
-                    case "CA":
-                        mission = "Complete " + listDM[1][i] + " Assault Spacezone(s).";
-                        break;
-                    case "CAA":
-                        mission = "Complete " + listDM[1][i] + " Assault Advanced Spacezone(s).";
                         break;
                     default: break;
                 }
@@ -173,34 +163,6 @@ public class StatisticController : MonoBehaviour
         }       
         KillEnemy = false;
         KillBossEnemy = false;
-    }
-    #endregion
-    #region Notification
-    public void CreateMissionCompletedNotiBoard(string text, float autoCloseTimer)
-    {
-        Vector2 Position = Camera.main.transform.position;
-        GameObject notiBoard = Instantiate(MissionCompeletedBoard, new Vector3(Position.x, Position.y - 303, MissionCompeletedBoard.transform.position.z), Quaternion.identity);
-        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 1.5f, notiBoard.transform.GetChild(0).localScale.y);
-        notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = text + "<br> Mission Completed!";
-        notiBoard.SetActive(true);
-        notiBoard.transform.SetParent(MissionCompeletedBoard.transform.parent);
-        StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
-    }
-
-    private IEnumerator NotiBoardAnim(float autoCloseTimer, GameObject go)
-    {
-        for (int i = 0; i < 20; i++)
-        {
-            go.transform.localScale = new Vector2(go.transform.localScale.x + InitScale * 4.5f / 100, go.transform.localScale.y + InitScale * 4.5f / 100);
-            yield return new WaitForSeconds(0.01f);
-        }
-        if (autoCloseTimer > 0)
-        {
-            if (go.transform.parent.gameObject != null)
-            {
-                Destroy(go.transform.parent.gameObject, autoCloseTimer);
-            }
-        }
     }
     #endregion
 }

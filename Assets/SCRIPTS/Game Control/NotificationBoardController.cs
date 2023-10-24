@@ -157,10 +157,23 @@ public class NotificationBoardController : MonoBehaviour
     public void CreateMissionCompletedNotiBoard(string text, float autoCloseTimer)
     {
         Vector2 Position = Camera.main.transform.position;
-        GameObject notiBoard = Instantiate(MissionCompeletedBoard, new Vector3(Position.x, Position.y - 4 , MissionCompeletedBoard.transform.position.z), Quaternion.identity);
+        int pos = 0;
+        if (FindAnyObjectByType<UECMainMenuController>() != null)
+        {
+            pos = 4;
+        }
+        else
+        {
+            pos = 250;
+        }
+        GameObject notiBoard = Instantiate(MissionCompeletedBoard, new Vector3(Position.x, Position.y - pos, MissionCompeletedBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 1.5f, notiBoard.transform.GetChild(0).localScale.y);
         notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = text + "<br> Mission Completed!";
         notiBoard.SetActive(true);
+        if (FindAnyObjectByType<UECMainMenuController>() == null)
+        {
+            notiBoard.transform.SetParent(Camera.main.transform);
+        }
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
     public void CreateRankUpNotiBoard(string text, float autoCloseTimer)
@@ -179,6 +192,10 @@ public class NotificationBoardController : MonoBehaviour
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 2f, notiBoard.transform.GetChild(0).localScale.y / 2f);
         notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Congratulation! <br>You have reach " + text;
         notiBoard.SetActive(true);
+        if (FindAnyObjectByType<UECMainMenuController>() == null)
+        {          
+            notiBoard.transform.SetParent(Camera.main.transform);
+        }
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
 
