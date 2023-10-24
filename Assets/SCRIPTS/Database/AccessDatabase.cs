@@ -86,8 +86,8 @@ public class AccessDatabase : MonoBehaviour
             return "Exist";
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime) " +
-            "VALUES ('" + name + "',null,null,10,0,500,5,500,'N',null,null)";
+        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo) " +
+            "VALUES ('" + name + "',null,null,10,0,500,5,500,'N',null,null,0)";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
@@ -226,8 +226,15 @@ public class AccessDatabase : MonoBehaviour
                     string color = "#ffffff";
                     while (dataReader2.Read())
                     {
-                        rank = dataReader2.GetString(0);
-                        color = dataReader2.GetString(1);
+                        if (dataReader.GetInt32(2) == 18)
+                        {
+                            rank = dataReader2.GetString(0).Replace("?", dataReader.GetInt32(12).ToString());
+                            color = dataReader2.GetString(1);
+                        } else
+                        {
+                            rank = dataReader2.GetString(0);
+                            color = dataReader2.GetString(1);
+                        }
                     }
                     values.Add("Rank", rank);
                     values.Add("RankColor", color);
@@ -254,7 +261,8 @@ public class AccessDatabase : MonoBehaviour
                 {
                     values.Add("CollectedSalaryTime", dataReader.GetString(11));
                 }
-                
+                values.Add("SupremeWarriorNo", dataReader.GetInt32(12));
+
             }
             dbConnection.Close();
             if (!check)
@@ -1743,8 +1751,9 @@ public class AccessDatabase : MonoBehaviour
     }
     #endregion
     #region Access Rank
-    public Dictionary<string, object> GetRankById(int id)
+    public Dictionary<string, object> GetRankById(int id, int SupremeWarriorNo)
     {
+        int PlayerID = GetCurrentSessionPlayerId();
         Dictionary<string, object> rank = new Dictionary<string, object>();
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
@@ -1765,9 +1774,41 @@ public class AccessDatabase : MonoBehaviour
             while (dataReader.Read())
             {
                 check1 = true;
-                rank.Add("RankId", dataReader.GetInt32(0).ToString());
-                rank.Add("RankName", dataReader.GetString(1));
-                rank.Add("RankTier", dataReader.GetString(7));
+                
+                if (id >= 18)
+                {                  
+                    rank.Add("RankId", 18);
+                    rank.Add("RankName", dataReader.GetString(1).Replace("?" , SupremeWarriorNo.ToString()));
+                    rank.Add("RankTier", dataReader.GetString(7));
+                    rank.Add("RankConditionSZ", dataReader.GetInt32(2) + SupremeWarriorNo * 25);
+                    if (dataReader.IsDBNull(3))
+                    {
+                        rank.Add("RankCondition2Verb", "Null");
+                    }
+                    else
+                    {
+                        rank.Add("RankCondition2Verb", dataReader.GetString(3));
+                    }
+                    rank.Add("RankCondition2Num", dataReader.GetInt32(4));
+                    rank.Add("DailyIncome", dataReader.GetInt32(5) + SupremeWarriorNo * 5000);
+                    rank.Add("SupremeWarriorNo", SupremeWarriorNo);
+                } else
+                {
+                    rank.Add("RankId", dataReader.GetInt32(0).ToString());
+                    rank.Add("RankName", dataReader.GetString(1));
+                    rank.Add("RankTier", dataReader.GetString(7));
+                    rank.Add("RankConditionSZ", dataReader.GetInt32(2));
+                    if (dataReader.IsDBNull(3))
+                    {
+                        rank.Add("RankCondition2Verb", "Null");
+                    } else
+                    {
+                        rank.Add("RankCondition2Verb", dataReader.GetString(3));
+                    }
+                    rank.Add("RankCondition2Num", dataReader.GetInt32(4));
+                    rank.Add("DailyIncome", dataReader.GetInt32(5));
+                    rank.Add("SupremeWarriorNo", SupremeWarriorNo);
+                }
             }   
         }
         if (!check1) return null;
@@ -1778,6 +1819,7 @@ public class AccessDatabase : MonoBehaviour
 
     public List<List<string>> GetAllRank()
     {
+        int PlayerID = GetCurrentSessionPlayerId();
         List<List<string>> list = new List<List<string>>();
         List<string> RankList;
         // Open DB
@@ -1787,6 +1829,11 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
         dbCheckCommand.CommandText = "Select * from RankSystem";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
+
+        // Queries
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = "Select SupremeWarriorNo from PlayerProfile WHERE PlayerID = " + PlayerID + "";
+        IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
         {
@@ -1794,17 +1841,36 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             RankList.Add(dataReader.GetInt32(0).ToString());
             RankList.Add(dataReader.GetString(1));
-            RankList.Add(dataReader.GetInt32(2).ToString());
-            if (dataReader.IsDBNull(3))
+            if (dataReader.GetInt32(0) == 18)
             {
-                RankList.Add("N/A");
+                while(dataReader1.Read())
+                {
+                    RankList.Add((dataReader.GetInt32(2) + dataReader1.GetInt32(0) * 25).ToString());
+                    if (dataReader.IsDBNull(3))
+                    {
+                        RankList.Add("N/A");
+                    }
+                    else
+                    {
+                        RankList.Add(dataReader.GetString(3));
+                    }
+                    RankList.Add(dataReader.GetInt32(4).ToString());
+                    RankList.Add((dataReader.GetInt32(5) + dataReader1.GetInt32(0) * 5000).ToString());
+                }
+            } else
+            {
+                RankList.Add(dataReader.GetInt32(2).ToString());
+                if (dataReader.IsDBNull(3))
+                {
+                    RankList.Add("N/A");
+                }
+                else
+                {
+                    RankList.Add(dataReader.GetString(3));
+                }           
+                RankList.Add(dataReader.GetInt32(4).ToString());        
+                RankList.Add(dataReader.GetInt32(5).ToString());
             }
-            else
-            {
-                RankList.Add(dataReader.GetString(3));
-            }           
-            RankList.Add(dataReader.GetInt32(4).ToString());        
-            RankList.Add(dataReader.GetInt32(5).ToString());
             if (dataReader.IsDBNull(6))
             {
                 RankList.Add("N/A");
@@ -1819,6 +1885,26 @@ public class AccessDatabase : MonoBehaviour
         if (!check) return null;
         dbConnection.Close();
         return list;
+    }
+
+    public void UpdateRank(int PlayerID, Dictionary<string, object> data)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        string query = "";
+        if (int.Parse(data["RankId"].ToString()) == 18)
+        {
+            query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + ", SupremeWarriorNo = " + int.Parse(data["SupremeWarriorNo"].ToString()) + " WHERE PlayerID = " + PlayerID + "";
+        } else
+        {
+            query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + " WHERE PlayerID = " + PlayerID + "";
+        }
+        // Queries    
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = query;
+        dbCheckCommand1.ExecuteNonQuery();
+        dbConnection.Close();
     }
 
     #endregion
@@ -2886,12 +2972,22 @@ public class AccessDatabase : MonoBehaviour
                     id = dataReader1.GetInt32(0) + 1;
                 }
             }
+            // Queries            
+            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+            dbCheckCommand1.CommandText = "SELECT ModelStats FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + Model.Replace(" ", "").ToLower() + "'";
+            IDataReader dataReader3 = dbCheckCommand1.ExecuteReader();
+            string stats = "";
+            while (dataReader3.Read())
+            {
+                stats = dataReader3.GetString(0);
+            }
+            Dictionary<string, object> data = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats);
             // Queries
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables) VALUES " +
+            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP) VALUES " +
                 "(" + id + ",0,1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
-                FirstPower + "','" + SecondPower + "','" + Consumables + "');";
+                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ");";
             int n = dbCheckCommand.ExecuteNonQuery();
             if (n!=1)
             {
@@ -3032,6 +3128,19 @@ public class AccessDatabase : MonoBehaviour
         {
             return "Success";
         }
+    }
+
+    public void UpdateSessionHP(int CurrentHP, int SessionID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + " WHERE SessionId=" + SessionID;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
     }
     #endregion
     #region Access Allies
@@ -3383,6 +3492,7 @@ public class AccessDatabase : MonoBehaviour
             PA.Add("MaxSZReach", reader.GetInt32(3));
             PA.Add("TotalShard", reader.GetInt32(4));
             PA.Add("TotalCash", reader.GetInt32(5));
+            PA.Add("TotalMission", reader.GetInt32(12));
             check = true;
         }
         if (!check)

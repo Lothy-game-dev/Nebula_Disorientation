@@ -1121,7 +1121,7 @@ public class GlobalFunctionController : MonoBehaviour
             FinalString += "- Acquire a Fighter\n";
         } else
         {
-            FinalString += "- Reach Space Zone No." + ConditionSZ + "\n";
+           FinalString += "- Reach Space Zone No." + ConditionSZ + "\n";           
         }
         // Second condition
         if (ConditionSZ2 == "N/A")
@@ -1165,6 +1165,7 @@ public class GlobalFunctionController : MonoBehaviour
         }
         return FinalString;
     }
+
     #endregion
     #region Convert Achievement
     public Dictionary<string, string> ConvertEnemyDefeated(string stat)

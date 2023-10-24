@@ -71,11 +71,11 @@ public class FactoryItem : MonoBehaviour
         // Check rank, if rank = null => that item can buy without rank
         if (ItemList[int.Parse(ItemID) - 1][5] == "N/A")
         {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(0);
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(0, int.Parse(Fac.PlayerInformation["SupremeWarriorNo"].ToString()));
         }
         else
         {
-            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(ItemID) - 1][5]));
+            RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(ItemID) - 1][5]), int.Parse(Fac.PlayerInformation["SupremeWarriorNo"].ToString()));
         }
         //convert Fighter model stat => dictionary
         Status = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionary(ItemList[int.Parse(ItemID) - 1][3]);
