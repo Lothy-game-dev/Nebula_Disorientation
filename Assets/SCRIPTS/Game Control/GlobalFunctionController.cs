@@ -830,7 +830,7 @@ public class GlobalFunctionController : MonoBehaviour
         }
         else if (Effect.Contains("INV"))
         {
-            final = "Render the <color=\"black\"><b>Fighter</b></color> invisible. (Cannot be targeted)";
+            final = "Render the <b>Fighter</b> invincible. (Cannot be targeted and damaged)";
         }
         else if (Effect.Contains("FC"))
         {
