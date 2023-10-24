@@ -30,6 +30,7 @@ public class LoadoutScene : UECMenuShared
     public Dictionary<string, int> Consumables;
     public string Model;
     public int CurrentFuelCells;
+    public int CurrentHP;
     #endregion
     #region Start & Update
     // Start is called before the first frame update

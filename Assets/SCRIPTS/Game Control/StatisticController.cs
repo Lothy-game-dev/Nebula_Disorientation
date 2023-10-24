@@ -36,6 +36,7 @@ public class StatisticController : MonoBehaviour
     public string PlayedTime;
     public int CurrentSZNo;
     public int CurrentFuelCell;
+    public int MissionCompleted;
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, object> Achievement;
     private Dictionary<string, string> CurrentAchievement;
@@ -68,6 +69,7 @@ public class StatisticController : MonoBehaviour
         EnemyTierIII = int.Parse(CurrentAchievement["EnemyTierIII"]);
         Warship = int.Parse(CurrentAchievement["Warship"]);
         MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
+        MissionCompleted = int.Parse(PlayerAchievement["TotalMission"].ToString());
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
@@ -83,14 +85,14 @@ public class StatisticController : MonoBehaviour
     #endregion
     #region Update Achievement
     // Group all function that serve the same algorithm
-    public void UpdateAchievement()
+    public void UpdateStatistic()
     {
         //Update Statistic
         CurrentHP = Fighter.GetComponent<PlayerFighter>().CurrentHP;
         MaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
         CurrentShard = Shard.text;
         CurrentCash = Cash.text;
-        if (Timer.transform.parent.gameObject.GetComponent<SpaceZoneTimer>().Countdown)
+        if (!Timer.transform.parent.gameObject.GetComponent<SpaceZoneTimer>().Countdown)
         {
             PlayedTime = Timer.text;
         } else
@@ -99,16 +101,18 @@ public class StatisticController : MonoBehaviour
         }
         CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
-        MaxSZReach = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
-        if (MaxSZReach < int.Parse(SessionInformation["CurrentStage"].ToString()))
+        if (MaxSZReach < CurrentSZNo)
         {
-            MaxSZReach = int.Parse(SessionInformation["CurrentStage"].ToString());
+            MaxSZReach = CurrentSZNo;
         }
         Achievement["EnemyDefeated"] = EnemyDefeated;
         Achievement["SZMaxReach"] = MaxSZReach;
         Achievement["PlayerID"] = PlayerID;
         ad.UpdateGameplayStatistic(Achievement);
+
+        //Update session current HP
+        ad.UpdateSessionHP(int.Parse(CurrentHP.ToString()), (int)SessionInformation["SessionID"]);
     }
     #endregion
     #region Check destroy enemy type daily mission

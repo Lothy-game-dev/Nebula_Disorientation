@@ -158,10 +158,6 @@ public class FighterShared : MonoBehaviour
             if (!alreadyDestroy)
             {
                 alreadyDestroy = true;
-                if (GetComponent<PlayerFighter>() != null)
-                {                  
-                    FindAnyObjectByType<StatisticController>().UpdateAchievement();     
-                }
                 StartCoroutine(DestroySelf());
             }
         }

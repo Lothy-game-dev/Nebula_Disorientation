@@ -188,6 +188,7 @@ public class InitializeDatabase : MonoBehaviour
                 "DailyIncomeReceived TEXT NOT NULL, " +
                 "LastFuelCellUsedTime TEXT," +
                 "CollectedSalaryTime TEXT," +
+                "SupremeWarriorNo INTEGER," +
                 "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
                 "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
@@ -221,6 +222,7 @@ public class InitializeDatabase : MonoBehaviour
                 "FirstPower TEXT, " +
                 "SecondPower TEXT, " +
                 "Consumables TEXT, " +
+                "SessionCurrentHP INTEGER, " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
             // SpaceShop
             "CREATE TABLE IF NOT EXISTS SpaceShop" +
@@ -419,15 +421,15 @@ public class InitializeDatabase : MonoBehaviour
         // ArsenalPower
         string ArsenalPower = "INSERT INTO ArsenalPower VALUES " +
             "(1, 'DEF', 'Situational Barrier', 'Double the Barrier HP. (Current HP and Curent Max HP).', 'BR-x2|DC-10,20', '0', '0', null, 1, '#36b37e', 'Double the Barrier HP. (Current HP and Curent Max HP)')," +
-            "(2, 'OFF', 'Short Laser Beam', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time.<br>Detailed: While shooting, slowdown movement speed to 0.5x. ', 'DPH-1000|AoH-15/s|AoE-25|V-1500|R-750|DC-2.15,20', '10000', '25', null, 1, '#36b37e' ,'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time. While shooting, slowdown movement speed to 0.5x. ')," +
+            "(2, 'OFF', 'Short Laser Beam', 'Charging for 1.14 secs, then shoot out a powerful beam of laser in front for a quick span of time.<br>Detailed: While shooting, slowdown movement speed & rotation speed to 0.5x.', 'DPH-1000|AoH-15/s|AoE-25|V-1500|R-750|DC-2.15,20', '10000', '25', null, 1, '#36b37e' ,'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time. While shooting, slowdown movement speed to 0.5x. ')," +
             "(3, 'OFF', 'Rocket Burst Device', 'Spawn dozens of rockets that track down enemies nearby.<br>Priority: Enemy Fighter nearest to the player', 'DPH-1500|AoH-10|AoE-50|V-750|R-1500|DC-0,30', '10000', '25', null, 1, '#36b37e', 'Spawn dozens of rockets that track down enemies nearby. Priority: Enemy Fighter nearest to the player.')," +
             "(4, 'MOV', 'Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,30', '10000', '25', null, 1, '#36b37e', 'Teleport forward for a distance.')," +
             "(5, 'DEF', 'Fortified Barrier', 'Double the Barrier HP. (Current HP and Curent Max HP). <br>Barrier HP now is equaled to 100% of Fighter�s HP. (Passive Buff).', 'BR-100|BR-x2|DC-10,20', '25000', '100', 1, 5, '#4c9aff', 'Double the Barrier HP. (Current HP and Curent Max HP). Barrier HP now is equalled to 100% of Fighter�s HP. (Passive Buff)')," +
-            "(6, 'OFF', 'Enhanced Short Laser Beam', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time.<br>Detailed: While shooting, slowdown movement speed to 0.5x. ', 'DPH-2000|AoH-15/s|AoE-25|V-1500|R-750|DC-2.15,20', '25000', '100', 2, 5, '#4c9aff', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time. While shooting, slowdown movement speed to 0.5x. ')," +
+            "(6, 'OFF', 'Enhanced Short Laser Beam', 'Charging for 1.14 secs, then shoot out a powerful beam of laser in front for a quick span of time.<br>Detailed: While shooting, slowdown movement speed & rotation speed to 0.5x.', 'DPH-2000|AoH-15/s|AoE-25|V-1500|R-750|DC-2.15,20', '25000', '100', 2, 5, '#4c9aff', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time. While shooting, slowdown movement speed to 0.5x. ')," +
             "(7, 'OFF', 'Enhanced Rocket Burst Device', 'Spawn dozens of rockets that track down enemies nearby.<br>Priority: Enemy Fighter nearest to the player', 'DPH-2000|AoH-20|AoE-75|V-750|R-2000|DC-0,30', '25000', '100', 3, 5, '#4c9aff', 'Spawn dozens of rockets that track down enemies nearby. Priority: Enemy Fighter nearest to the player.')," +
             "(8, 'MOV', 'Boosted Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,30', '25000', '100', 4, 5, '#4c9aff', 'Teleport forward for a distance.')," +
             "(9, 'DEF', 'Heavy Barrier', 'Double the Barrier HP. (Current HP and Curent Max HP). <br>Barrier HP now is equaled to 200% of Fighter�s HP. (Passive Buff).', 'BR-200|BR-x2|DC-10,20', '75000', null, 5, 13, '#ff0d11', 'Double the Barrier HP. (Current HP and Curent Max HP). Barrier HP now is equalled to 100% of Fighter�s HP. (Passive Buff)')," +
-            "(10, 'OFF', 'Superior Short Laser Beam', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time.<br>Detailed: While shooting, slowdown movement speed to 0.5x. ', 'DPH-3000|AoH-15/s|AoE-25|V-1500|R-750|DC-2.15,20', '75000', null, 6, 13, '#ff0d11', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time. While shooting, slowdown movement speed to 0.5x. ')," +
+            "(10, 'OFF', 'Superior Short Laser Beam', 'Charging for 1.14 secs, then shoot out a powerful beam of laser in front for a quick span of time.<br>Detailed: While shooting, slowdown movement speed & rotation speed to 0.5x.', 'DPH-3000|AoH-15/s|AoE-25|V-1500|R-750|DC-2.15,20', '75000', null, 6, 13, '#ff0d11', 'Quickly Charging then shoot out a powerful beam of laser in front for a quick span of time. While shooting, slowdown movement speed to 0.5x. ')," +
             "(11, 'OFF', 'Superior Rocket Burst Device', 'Spawn dozens of rockets that track down enemies nearby.<br>Priority: Enemy Fighter nearest to the player', 'DPH-3000|AoH-30|AoE-100|V-1000|R-2500|DC-0,30', '75000', null, 7, 13, '#ff0d11', 'Spawn dozens of rockets that track down enemies nearby. Priority: Enemy Fighter nearest to the player.')," +
             "(12, 'MOV', 'Advanced Instant Wormhole', 'Teleport forward for a distance.', 'DPH-null|AoH-null|AoE-null|V-null|R-1000|DC-0,5', '75000', null, 8, 13, '#ff0d11', 'Teleport forward for a distance.'); ";
         // FactoryModel
@@ -448,7 +450,7 @@ public class InitializeDatabase : MonoBehaviour
             "(14, 'ND-MKZ', '', 'HP-20000|SPD-400|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8|SP-2|SC-4', '250000 | 1500', 13, '#ff0d11', 'ND-Zartillery is the second version of the Elite Fighter Prototypes. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. It is also equipped with one extra Power Slot.'); ";
         // RankSystem
         string RankSystem = "INSERT INTO RankSystem VALUES" +
-            "(1, 'Soldier', 0, null, 0, 500, 'UA-3', '#97a0af')," +
+            "(1, 'Soldier', 0, 'O', 1, 500, 'UA-3', '#97a0af')," +
             "(2, 'Gunman I', 5, null, 0, 1000, null, '#4c9aff')," +
             "(3, 'Gunman II', 15, null, 0, 1500, null, '#4c9aff')," +
             "(4, 'Gunman III', 25, null, 0, 2000, null, '#4c9aff')," +
@@ -465,7 +467,7 @@ public class InitializeDatabase : MonoBehaviour
             "(15, 'Legendary Falcon II', 150, 'D-WS', 10, 26000, null, '#ff5631')," +
             "(16, 'Legendary Falcon III', 175, 'D-WS', 10, 30000, null, '#ff5632')," +
             "(17, 'Supreme Warrior of the UEC', 200, 'PA', 15, 40000, 'UF-0', '#bf2600')," +
-            "(18, 'Supreme Warrior of the UEC n', 225, null, 0, 45000, null, '#6554c0');";
+            "(18, 'Supreme Warrior of the UEC ?', 200, null, 0, 60000, null, '#6554c0');";
         // SpaceShop
         string SpaceShop = "INSERT INTO SpaceShop VALUES " +
             "(1, 'Wing Shield', 'Equip your Fighter�s Wings with Protective Shields that last for a duration.', null, 'RED-25', 10, 'T', 5, 200, 15, '#36b37e', 'Equip your Fighter�s Wings with Protective Shields that last for a duration.')," +

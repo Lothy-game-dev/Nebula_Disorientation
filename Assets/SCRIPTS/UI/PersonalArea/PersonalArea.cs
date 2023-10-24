@@ -165,6 +165,18 @@ public class PersonalArea : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < Achievements.Count; i++)
+        {
+            if (i == 0)
+            {
+                Achievements[i].GetComponent<TextMeshPro>().text = "Max SZ Reached: ";
+            }
+            else
+            {
+                Achievements[i].GetComponent<TextMeshPro>().text = Achievements[i].GetComponent<TextMeshPro>().text.Remove(Achievements[i].GetComponent<TextMeshPro>().text.IndexOf(Achievement[Achievements[i].name]));
+            }           
+        }
     }
     public void SetData(Dictionary<string, object> Data)
     {

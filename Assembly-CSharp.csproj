@@ -200,6 +200,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWEffect.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutFighterDemo.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuOption.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\RankController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuCard.cs" />

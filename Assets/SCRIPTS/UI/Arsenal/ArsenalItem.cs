@@ -87,7 +87,7 @@ public class ArsenalItem : MonoBehaviour
         ar = Arsenal.GetComponent<Arsenal>();
         CheckCurrentItem(ItemID);
         // get the item rank 
-        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(ItemID) - 1][8]));
+        RankSys = FindAnyObjectByType<AccessDatabase>().GetRankById(int.Parse(ItemList[int.Parse(ItemID) - 1][8]), int.Parse(ar.PlayerInformation["SupremeWarriorNo"].ToString()));
         // convert stat to dictionary depend on type like weapon or power
         if (Type == "Weapon")
         {

@@ -18,6 +18,7 @@ public class NotificationBoardController : MonoBehaviour
     public GameObject SmallHUDInfoBoard;
     public GameObject RenameBoard;
     public GameObject MissionCompeletedBoard;
+    public GameObject RankUpBoard;
     #endregion
     #region NormalVariables
     public delegate void VoidFunctionPass();
@@ -159,6 +160,24 @@ public class NotificationBoardController : MonoBehaviour
         GameObject notiBoard = Instantiate(MissionCompeletedBoard, new Vector3(Position.x, Position.y - 4 , MissionCompeletedBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 1.5f, notiBoard.transform.GetChild(0).localScale.y);
         notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = text + "<br> Mission Completed!";
+        notiBoard.SetActive(true);
+        StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
+    }
+    public void CreateRankUpNotiBoard(string text, float autoCloseTimer)
+    {
+        Vector2 Position = Camera.main.transform.position;
+        int pos = 0;
+        if (FindAnyObjectByType<UECMainMenuController>() != null)
+        {
+            pos = 3;
+        } else
+        {
+            pos = 500;
+            autoCloseTimer = 7f;
+        }
+        GameObject notiBoard = Instantiate(RankUpBoard, new Vector3(Position.x, Position.y + pos, RankUpBoard.transform.position.z), Quaternion.identity);
+        notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 2f, notiBoard.transform.GetChild(0).localScale.y / 2f);
+        notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Congratulation! <br>You have reach " + text;
         notiBoard.SetActive(true);
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
