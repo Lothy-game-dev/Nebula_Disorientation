@@ -118,6 +118,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycButton.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\NanoCoat.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopScene.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionShopIcon.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\BackgroundBrieflyMoving.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\CursorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryScene.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Assets\SCRIPTS\Allies\AlliesFighterMLAgent.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LaserBeamBullet.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionStatusBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\ActiveCards.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesHealthBar.cs" />
