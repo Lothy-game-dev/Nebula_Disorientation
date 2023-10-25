@@ -70,6 +70,7 @@ public class StatisticController : MonoBehaviour
         Warship = int.Parse(CurrentAchievement["Warship"]);
         MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
         MissionCompleted = int.Parse(PlayerAchievement["TotalMission"].ToString());
+        TotalEnemyDefeated = int.Parse(PlayerAchievement["TotalEnemyDefeated"].ToString());
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
@@ -112,7 +113,7 @@ public class StatisticController : MonoBehaviour
         ad.UpdateGameplayStatistic(Achievement);
 
         //Update session current HP
-        ad.UpdateSessionHP(int.Parse(CurrentHP.ToString()), (int)SessionInformation["SessionID"]);
+        ad.UpdateSessionStat(int.Parse(CurrentHP.ToString()), TotalEnemyDefeated, int.Parse(DamageDealt.ToString()) , (int)SessionInformation["SessionID"]);
     }
     #endregion
     #region Check destroy enemy type daily mission

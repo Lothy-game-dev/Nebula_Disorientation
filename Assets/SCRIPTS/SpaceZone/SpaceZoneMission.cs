@@ -224,14 +224,14 @@ public class SpaceZoneMission : MonoBehaviour
     public void FailMission()
     {
         alreadyComplete = true;
-        TextGO.CreateText("Mission Failed!", Color.red);
         stat.UpdateStatistic();
+        TextGO.CreateText("Mission Failed!", Color.red);
     }
 
     public void PlayerDestroyed()
     {
-        TextGO.CreateText("Mission Failed!", Color.red);
         stat.UpdateStatistic();
+        TextGO.CreateText("Mission Failed!", Color.red);
     }
 
     public void CompleteMission()
