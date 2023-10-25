@@ -223,6 +223,8 @@ public class InitializeDatabase : MonoBehaviour
                 "SecondPower TEXT, " +
                 "Consumables TEXT, " +
                 "SessionCurrentHP INTEGER, " +
+                "EnemyDestroyed INTEGER, " +
+                "DamageDealt INTEGER, " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
             // SpaceShop
             "CREATE TABLE IF NOT EXISTS SpaceShop" +

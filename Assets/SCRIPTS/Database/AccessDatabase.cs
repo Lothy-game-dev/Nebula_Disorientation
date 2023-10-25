@@ -2984,10 +2984,10 @@ public class AccessDatabase : MonoBehaviour
             Dictionary<string, object> data = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats);
             // Queries
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP) VALUES " +
+            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt) VALUES " +
                 "(" + id + ",0,1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
-                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ");";
+                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ",0,0);";
             int n = dbCheckCommand.ExecuteNonQuery();
             if (n!=1)
             {
@@ -3061,6 +3061,9 @@ public class AccessDatabase : MonoBehaviour
                 datas.Add("FirstPower", dataReader2.GetString(14));
                 datas.Add("SecondPower", dataReader2.GetString(15));
                 datas.Add("Consumables", dataReader2.GetString(16));
+                datas.Add("SessionCurrentHP", dataReader2.GetInt32(17));
+                datas.Add("EnemyDestroyed", dataReader2.GetInt32(18));
+                datas.Add("DamageDealt", dataReader2.GetInt32(19));
             }
             dbConnection.Close();
             return datas;
@@ -3130,7 +3133,7 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
-    public void UpdateSessionHP(int CurrentHP, int SessionID)
+    public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID)
     {
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
@@ -3138,7 +3141,7 @@ public class AccessDatabase : MonoBehaviour
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
         IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
-        dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + " WHERE SessionId=" + SessionID;
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + ", EnemyDestroyed = EnemyDestroyed + "+ Enemy + ", DamageDealt = DamageDealt + " + Damage + " WHERE SessionId=" + SessionID;
         int n = dbCheckCommand3.ExecuteNonQuery();
         dbConnection.Close();
     }
@@ -3493,6 +3496,7 @@ public class AccessDatabase : MonoBehaviour
             PA.Add("TotalShard", reader.GetInt32(4));
             PA.Add("TotalCash", reader.GetInt32(5));
             PA.Add("TotalMission", reader.GetInt32(12));
+            PA.Add("TotalEnemyDefeated", reader.GetInt32(6));
             check = true;
         }
         if (!check)

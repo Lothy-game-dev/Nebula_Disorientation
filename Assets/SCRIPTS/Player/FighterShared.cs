@@ -638,7 +638,7 @@ public class FighterShared : MonoBehaviour
             {
                 DamageDealer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
             }
-            if (GetComponent<EnemyShared>() != null && DamageDealer == controller.Player)
+            if (DamageDealer == controller.Player)
             {
                 Statistic.DamageDealt += damage;
             }
@@ -722,7 +722,7 @@ public class FighterShared : MonoBehaviour
                             case "#4c9aff": Statistic.EnemyTierII += 1; break;
                             case "#bf2600": Statistic.EnemyTierIII += 1; break;
                         }
-                        Statistic.TotalEnemyDefeated = (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
+                        Statistic.TotalEnemyDefeated += (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
                         Statistic.KillEnemy = true;
                     }
                 }
