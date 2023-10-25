@@ -3011,6 +3011,66 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
+    public string UpdateSessionInfo(int PlayerID, string Type, string Value)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            string cmd = "UPDATE Session SET ";
+            if (Type == "LeftWeapon")
+            {
+                cmd += "LeftWeapon = '" + Value +"'";
+            }
+            else if (Type == "RightWeapon")
+            {
+                cmd += "RightWeapon = '" + Value + "'";
+            }
+            else if (Type == "FirstPower")
+            {
+                cmd += "FirstPower = '" + Value + "'";
+            }
+            else if (Type == "SecondPower")
+            {
+                cmd += "SecondPower = '" + Value + "'";
+            }
+            else if (Type=="Consumable")
+            {
+                cmd += "Consumables = '" + Value + "'";
+            }
+            dbCheckCommand3.CommandText = cmd + " WHERE SessionId=" + n;
+            int k = dbCheckCommand3.ExecuteNonQuery();
+            dbConnection.Close();
+            if (k!=1)
+            {
+                return "Fail";
+            } else
+            return "Success";
+        }
+    }
+
     public Dictionary<string, object> GetSessionInfoByPlayerId(int PlayerId)
     {
         // Open DB
