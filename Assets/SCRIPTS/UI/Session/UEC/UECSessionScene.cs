@@ -44,6 +44,7 @@ public class UECSessionScene : MonoBehaviour
     private GameObject FirstPowerGO;
     private GameObject SecondPowerGO;
     private List<GameObject> Consumables;
+    private float currentRotateAngle;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -57,6 +58,11 @@ public class UECSessionScene : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (ModelGO!=null)
+        {
+            ModelGO.transform.Rotate(new Vector3(0, 0, -1));
+            currentRotateAngle -= 1;
+        }
     }
     #endregion
     #region Generate Data
@@ -121,6 +127,7 @@ public class UECSessionScene : MonoBehaviour
                 ModelGO.transform.GetChild(0).gameObject.SetActive(false);
                 ModelGO.SetActive(true);
                 ModelGO.transform.SetParent(ModelBox.transform.GetChild(0).GetChild(0));
+                ModelGO.transform.Rotate(new Vector3(0, 0, currentRotateAngle));
                 ModelGO.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                 if (FirstWeaponGO != null) 
                 {
@@ -196,6 +203,7 @@ public class UECSessionScene : MonoBehaviour
             {
                 string name = item.Split("-")[0];
                 string stack = item.Split("-")[1];
+                Dictionary<string, object> ConssData = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(name);
                 for (int i = 0; i < ConsumableList.transform.childCount; i++)
                 {
                     if (ConsumableList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(name.Replace(" ", "").Replace("-", "").ToLower()))
@@ -221,7 +229,7 @@ public class UECSessionScene : MonoBehaviour
                             ChosenPlace.transform.position, Quaternion.identity);
                         Consumable.transform.SetParent(ChosenPlace.transform);
                         Consumable.transform.localScale = new Vector3(3, 3, 3);
-                        ChosenPlace.transform.GetChild(0).GetComponent<TextMeshPro>().text = stack;
+                        ChosenPlace.transform.GetChild(0).GetComponent<TextMeshPro>().text = stack + "/" + (int)ConssData["Stack"];
                         ChosenPlace.transform.GetChild(0).gameObject.SetActive(true);
                         Consumable.SetActive(true);
                         Consumable.GetComponent<SpriteRenderer>().sortingOrder = ConsumableBox.activeSelf ? 201 : 1;

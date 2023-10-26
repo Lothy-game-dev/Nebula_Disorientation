@@ -23,6 +23,8 @@ public class UECSessionConsumableBox : MonoBehaviour
     public GameObject Right;
     public GameObject Top;
     public GameObject Bottom;
+    public GameObject Item;
+    public GameObject[] DisableColliders;
     #endregion
     #region NormalVariables
     public List<string> CurrentCons;
@@ -62,6 +64,10 @@ public class UECSessionConsumableBox : MonoBehaviour
     }
     private IEnumerator StartAnimation()
     {
+        foreach (var col in DisableColliders)
+        {
+            col.GetComponent<Collider2D>().enabled = false;
+        }
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
         transform.GetChild(2).gameObject.SetActive(false);
@@ -133,6 +139,7 @@ public class UECSessionConsumableBox : MonoBehaviour
 
     public string AddItem(GameObject go)
     {
+        ShowDataOfItem(go);
         if (CurrentCons.Contains(go.name))
         {
             int n = CurrentCons.IndexOf(go.name);
@@ -165,6 +172,7 @@ public class UECSessionConsumableBox : MonoBehaviour
 
     public string ReduceItem(GameObject go)
     {
+        ShowDataOfItem(go);
         if (CurrentCons.Contains(go.name))
         {
             int n = CurrentCons.IndexOf(go.name);
@@ -191,6 +199,23 @@ public class UECSessionConsumableBox : MonoBehaviour
         }
     }
 
+    public void ShowDataOfItem(GameObject go)
+    {
+        Item.SetActive(true);
+        Dictionary<string, object> DataDict = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(go.name);
+        for (int i=0;i<ConsumableList.transform.childCount;i++)
+        {
+            if (ConsumableList.transform.GetChild(i).name.Replace(" ","").Replace("-","").ToLower().Equals(go.name.Replace(" ", "").Replace("-", "").ToLower()))
+            {
+                Item.GetComponent<SpriteRenderer>().sprite = ConsumableList.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
+                break;
+            }
+        }
+        Item.transform.GetChild(0).GetComponent<TextMeshPro>().text = "<color=" + (string)DataDict["Color"] + ">" + (string)DataDict["Name"] + "</color>";
+        Item.transform.GetChild(1).GetComponent<TextMeshPro>().text = (string)DataDict["Description"];
+        Item.transform.GetChild(2).GetComponent<TextMeshPro>().text = FindObjectOfType<GlobalFunctionController>().ConvertEffectAndDurationOfConsumables((string)DataDict["Effect"], (int)DataDict["Duration"]);
+        Item.transform.GetChild(3).GetComponent<TextMeshPro>().text = "Max Stack: " + (int)DataDict["Stack"];
+    }
     public void ReloadData()
     {
         // Save Data
@@ -218,6 +243,11 @@ public class UECSessionConsumableBox : MonoBehaviour
 
     private void OnDisable()
     {
+        foreach (var col in DisableColliders)
+        {
+            col.GetComponent<Collider2D>().enabled = true;
+        }
+        Item.SetActive(false);
         int n = 0;
         while (n<ListConsumables.Count)
         {
