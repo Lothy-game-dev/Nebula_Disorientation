@@ -36,6 +36,11 @@ public class SessionSummary : MonoBehaviour
     // Can be public or private, prioritize private if possible
     private AccessDatabase ad;
     private Dictionary<string, object> Data;
+    public bool isFailed;
+    public int ShardAmount;
+    public int CashAmount;
+    public bool ShardCollected;
+    public bool CashCollected;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -43,9 +48,9 @@ public class SessionSummary : MonoBehaviour
     {
         // Initialize variables
         Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
-        GenerateBlackFadeOpen(transform.position, 3f, 1f);
         ad = FindAnyObjectByType<AccessDatabase>();
         SetData();
+        GenerateBlackFadeOpen(transform.position, 3f, 1f);
     }
 
     // Update is called once per frame
@@ -59,15 +64,22 @@ public class SessionSummary : MonoBehaviour
     public void SetData()
     {
         Data = ad.GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
-        int SZno = (int.Parse(Data["SessionCurrentHP"].ToString()) == 0 ? int.Parse(Data["CurrentStage"].ToString()) - 1 : int.Parse(Data["CurrentStage"].ToString()));
+        isFailed = (int.Parse(Data["SessionCurrentHP"].ToString()) == 0 ? true : false);
+
+        int SZno = (isFailed ? int.Parse(Data["CurrentStage"].ToString()) - 1 : int.Parse(Data["CurrentStage"].ToString()));
         SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text = SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text.Replace("?", SZno.ToString());
-        Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = Data["SessionTimelessShard"].ToString() + " <sprite index='0'> ";
-        Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = Data["SessionCash"].ToString() + " <sprite index='3'> ";
         EnemyDestroyed.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + Data["EnemyDestroyed"].ToString();
         DamageDealt.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Damage Dealt: " + Data["DamageDealt"].ToString();
         FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + Data["SessionFuelEnergy"].ToString();
 
-        string status = (int.Parse(Data["SessionCurrentHP"].ToString()) == 0 ? "Mission Failed!" : "Successfully Retreated.");
+        //Economy
+        ShardAmount = (isFailed ? int.Parse(Data["SessionTimelessShard"].ToString()) / 2 : int.Parse(Data["SessionTimelessShard"].ToString()));
+        CashAmount = int.Parse(Data["SessionCash"].ToString());
+        Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? ShardAmount + "<color=red> (-" + ShardAmount + ") </color>" : ShardAmount) + " <sprite index='0'> ";
+        Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = Data["SessionCash"].ToString() + " <sprite index='3'> ";
+
+
+        string status = (isFailed ? "Mission Failed!" : "Successfully Retreated.");
         GameStatus.transform.GetChild(0).GetComponent<TextMeshPro>().text = status;
 
         //Get model
@@ -107,6 +119,9 @@ public class SessionSummary : MonoBehaviour
             }
         }
 
+        //To check shard/cash can be collected
+        ShardCollected = false;
+        CashCollected = false;
     }
     #endregion
     #region Black Fade

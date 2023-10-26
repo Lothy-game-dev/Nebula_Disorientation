@@ -696,6 +696,44 @@ public class AccessDatabase : MonoBehaviour
         }
 
     }
+
+    public string UpdateCash(int PlayerId, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            break;
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "No Exist";
+        }
+        else
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + amount.ToString() + " WHERE PlayerID=" + PlayerId;
+            int n = dbCommand.ExecuteNonQuery();
+            if (n != 1)
+            {
+                dbConnection.Close();
+                return "Fail";
+            }
+            else
+            {
+                dbConnection.Close();
+                return "Success";
+            }
+        }
+    }
     #endregion
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
@@ -747,6 +785,17 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return id;
+    }
+    public void EndSession(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "UPDATE PlayerProfile SET CurrentSession = NULL WHERE PlayerID = " + PlayerID +"";
+        dbCheckCommand.ExecuteNonQuery();
+        dbConnection.Close();
     }
     #endregion
     #region Access Daily Mission
