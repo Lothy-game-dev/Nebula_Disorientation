@@ -14,6 +14,7 @@ public class UECSessionButton : MonoBehaviour
     public GameObject NextSZInfo;
     public GameObject[] DisableColliders;
     public GameObject LOTW;
+    public GameObject Scene;
     public GameplayExteriorController Controller;
     #endregion
     #region NormalVariables
@@ -86,6 +87,7 @@ public class UECSessionButton : MonoBehaviour
     private IEnumerator MoveToLOTW()
     {
         yield return new WaitForSeconds(1.5f);
+        Scene.GetComponent<BackgroundBrieflyMoving>().enabled = false;
         Controller.GenerateBlackFadeOpen(LOTW.transform.position, 1.5f);
         Controller.ChangeToScene(LOTW);
     }

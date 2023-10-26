@@ -203,6 +203,7 @@ public class UECSessionScene : MonoBehaviour
             {
                 string name = item.Split("-")[0];
                 string stack = item.Split("-")[1];
+                Dictionary<string, object> ConssData = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(name);
                 for (int i = 0; i < ConsumableList.transform.childCount; i++)
                 {
                     if (ConsumableList.transform.GetChild(i).name.Replace(" ", "").Replace("-", "").ToLower().Equals(name.Replace(" ", "").Replace("-", "").ToLower()))
@@ -228,7 +229,7 @@ public class UECSessionScene : MonoBehaviour
                             ChosenPlace.transform.position, Quaternion.identity);
                         Consumable.transform.SetParent(ChosenPlace.transform);
                         Consumable.transform.localScale = new Vector3(3, 3, 3);
-                        ChosenPlace.transform.GetChild(0).GetComponent<TextMeshPro>().text = stack;
+                        ChosenPlace.transform.GetChild(0).GetComponent<TextMeshPro>().text = stack + "/" + (int)ConssData["Stack"];
                         ChosenPlace.transform.GetChild(0).gameObject.SetActive(true);
                         Consumable.SetActive(true);
                         Consumable.GetComponent<SpriteRenderer>().sortingOrder = ConsumableBox.activeSelf ? 201 : 1;

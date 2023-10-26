@@ -18,6 +18,7 @@ public class UECSessionStatusBoard : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private bool isShowingStats;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -64,6 +65,25 @@ public class UECSessionStatusBoard : MonoBehaviour
         NameText.GetComponent<TextMeshPro>().text = ItemName;
         DescriptionText.GetComponent<TextMeshPro>().text = ItemDescription;
         StatsText.GetComponent<TextMeshPro>().text = ItemStats;
+        isShowingStats = false;
+    }
+    #endregion
+    #region Mouse Check
+    private void OnMouseDown()
+    {
+        if (isShowingStats)
+        {
+            isShowingStats = false;
+            StatsText.SetActive(false);
+            NameText.SetActive(true);
+            DescriptionText.SetActive(true);
+        } else
+        {
+            isShowingStats = true;
+            StatsText.SetActive(true);
+            NameText.SetActive(false);
+            DescriptionText.SetActive(false);
+        }
     }
     #endregion
 }

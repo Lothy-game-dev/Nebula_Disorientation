@@ -78,6 +78,7 @@ public class GameplayExteriorController : MonoBehaviour
     public void ChangeToScene(GameObject Scene)
     {
         Camera.main.transform.position = new Vector3(Scene.transform.position.x,Scene.transform.position.y,Camera.main.transform.position.z);
+        Scene.GetComponent<BackgroundBrieflyMoving>().enabled = true;
     }
     #endregion
 }
