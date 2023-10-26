@@ -44,6 +44,7 @@ public class UECSessionScene : MonoBehaviour
     private GameObject FirstPowerGO;
     private GameObject SecondPowerGO;
     private List<GameObject> Consumables;
+    private float currentRotateAngle;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -57,6 +58,11 @@ public class UECSessionScene : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (ModelGO!=null)
+        {
+            ModelGO.transform.Rotate(new Vector3(0, 0, -1));
+            currentRotateAngle -= 1;
+        }
     }
     #endregion
     #region Generate Data
@@ -121,6 +127,7 @@ public class UECSessionScene : MonoBehaviour
                 ModelGO.transform.GetChild(0).gameObject.SetActive(false);
                 ModelGO.SetActive(true);
                 ModelGO.transform.SetParent(ModelBox.transform.GetChild(0).GetChild(0));
+                ModelGO.transform.Rotate(new Vector3(0, 0, currentRotateAngle));
                 ModelGO.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                 if (FirstWeaponGO != null) 
                 {

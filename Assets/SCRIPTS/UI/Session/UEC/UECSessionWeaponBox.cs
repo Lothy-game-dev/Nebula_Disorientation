@@ -20,6 +20,7 @@ public class UECSessionWeaponBox : MonoBehaviour
     public GameObject Right;
     public GameObject Top;
     public GameObject Bottom;
+    public GameObject[] DisableColliders;
     public string Type;
     #endregion
     #region NormalVariables
@@ -80,6 +81,10 @@ public class UECSessionWeaponBox : MonoBehaviour
 
     private IEnumerator StartAnimation()
     {
+        foreach (var col in DisableColliders)
+        {
+            col.GetComponent<Collider2D>().enabled = false;
+        }
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
         transform.GetChild(2).gameObject.SetActive(false);
@@ -103,6 +108,10 @@ public class UECSessionWeaponBox : MonoBehaviour
 
     private void OnDisable()
     {
+        foreach (var col in DisableColliders)
+        {
+            col.GetComponent<Collider2D>().enabled = true;
+        }
         int n = 0;
         while (n<ListItem.Count)
         {

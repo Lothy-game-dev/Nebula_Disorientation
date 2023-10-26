@@ -25,9 +25,9 @@ public class SpaceZoneIntroBoard : MonoBehaviour
     #region NormalVariables
     private Dictionary<string, object> SessionData;
     private int NextStage;
-    private int ChosenVariant;
-    private int ChosenHazard;
-    private int SpaceZoneNo;
+    public int ChosenVariant;
+    public int ChosenHazard;
+    public int SpaceZoneNo;
     private Dictionary<string, object> TemplateData;
     public List<string> NotableAlliesName;
     public List<string> NotableEnemiesName;
@@ -35,8 +35,10 @@ public class SpaceZoneIntroBoard : MonoBehaviour
     private List<GameObject> ListNotableEnemiesGO;
 
     private GameObject ModelGO;
-    private GameObject ModelLeftWeapon;
-    private GameObject ModelRightWeapon;
+    public GameObject ModelLeftWeapon;
+    public GameObject ModelRightWeapon;
+    private GameObject LeftWeapon;
+    private GameObject RightWeapon;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -65,33 +67,30 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         transform.position = new Vector3(Camera.main.transform.position.x,Camera.main.transform.position.y,transform.position.z);
         SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         // Get Next Stage Number, Variant and Hazard
-        if (PlayerPrefs.GetInt("NextStage")==0)
-        {
+        /*if (PlayerPrefs.GetInt("NextStage")==0)
+        {*/
             PlayerPrefs.SetInt("NextStage", (int)SessionData["CurrentStage"] + 1);
             SpaceZoneNo = (int)SessionData["CurrentStage"] + 1;
             Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
             int VariantCount = (int)variantData["VariantCounts"];
-            if (ChosenVariant == 0)
+            if (SpaceZoneNo < 51)
             {
-                if (SpaceZoneNo < 51)
+                if (SpaceZoneNo % 10 == 0)
                 {
-                    if (SpaceZoneNo % 10 == 0)
-                    {
-                        ChosenVariant = 2;
-                    } else if (SpaceZoneNo % 10 == 8 ||SpaceZoneNo % 10 == 9)
-                    {
-                        ChosenVariant = 1;
-                    } else
-                        ChosenVariant = Random.Range(1, 1 + VariantCount);
+                    ChosenVariant = 2;
+                } else if (SpaceZoneNo % 10 == 8 ||SpaceZoneNo % 10 == 9)
+                {
+                    ChosenVariant = 1;
                 } else
-                ChosenVariant = Random.Range(1, 1 + VariantCount);
-            }
+                    ChosenVariant = Random.Range(1, 1 + VariantCount);
+            } else
+            ChosenVariant = Random.Range(1, 1 + VariantCount);
             PlayerPrefs.SetInt("NextVariant", ChosenVariant);
             List<Dictionary<string, object>> ListAvailableHazard = FindObjectOfType<AccessDatabase>().GetAvailableHazards(SpaceZoneNo);
             ChosenHazard = RandomHazardChoose(ListAvailableHazard);
             PlayerPrefs.SetInt("NextHazard", ChosenHazard);
             FindObjectOfType<AccessDatabase>().UpdateSessionStageData((int)SessionData["SessionID"], SpaceZoneNo, ChosenHazard, ChosenVariant);
-        }
+        /*}*/
         // Set Data To View Next Stage Number, Variant and Hazard
         IncomingStage.GetComponent<TextMeshPro>().text = "Upcoming: Space Zone no " + SpaceZoneNo;
         Dictionary<string, object> HazDatas = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(ChosenHazard);
@@ -127,10 +126,11 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         }
         string weaponName1 = (string)SessionData["LeftWeapon"];
         string weaponName2 = (string)SessionData["RightWeapon"];
+        Debug.Log(weaponName1);
+        Debug.Log(weaponName2);
         bool alreadyLeft = false;
         bool alreadyRight = false;
-        GameObject LeftWeapon = new();
-        GameObject RightWeapon = new();
+        Debug.Log(Weapons.transform.childCount);
         for (int i = 0; i < Weapons.transform.childCount; i++)
         {
             if (alreadyLeft && alreadyRight)
@@ -154,7 +154,6 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         ModelLeftWeapon.GetComponent<SpriteRenderer>().sortingOrder = 5004;
         ModelLeftWeapon.SetActive(true);
         Destroy(ModelLeftWeapon.GetComponent<Weapons>());
-        Destroy(LeftWeapon);
 
         ModelRightWeapon = Instantiate(RightWeapon, transform.position, Quaternion.identity);
         ModelRightWeapon.transform.localScale = new Vector3(1, 1, 1);
@@ -162,7 +161,6 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         ModelRightWeapon.GetComponent<SpriteRenderer>().sortingOrder = 5004;
         ModelRightWeapon.SetActive(true);
         Destroy(ModelRightWeapon.GetComponent<Weapons>());
-        Destroy(RightWeapon);
 
         Vector3 LeftWeaponPos = new Vector3(
             ModelGO.transform.position.x + ModelGO.GetComponent<FighterModelShared>().LeftWeaponPos.x * ModelGO.transform.localScale.x * 1f / ModelGO.transform.localScale.x,
@@ -338,6 +336,8 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         }
         Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo > 350 ? "350" : ""));
         Dictionary<string, object> WarshipMilestone = FindObjectOfType<AccessDatabase>().GetWarshipMilestoneBySpaceZoneNo(SpaceZoneNo);
+        NotableAlliesName.Clear();
+        NotableEnemiesName.Clear();
         // Get Notable Allies
         if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6))
         {

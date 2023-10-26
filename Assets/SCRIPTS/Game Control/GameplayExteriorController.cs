@@ -74,5 +74,10 @@ public class GameplayExteriorController : MonoBehaviour
         yield return new WaitForSeconds(wait);
         Destroy(Fade);
     }
+
+    public void ChangeToScene(GameObject Scene)
+    {
+        Camera.main.transform.position = new Vector3(Scene.transform.position.x,Scene.transform.position.y,Camera.main.transform.position.z);
+    }
     #endregion
 }

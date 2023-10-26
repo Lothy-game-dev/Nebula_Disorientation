@@ -137,8 +137,8 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotContractButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\TextAppear.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuButtons.cs" />
-    <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionMinusButton.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnEnemyWarship.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationHealthBar.cs" />
@@ -191,6 +191,8 @@
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\LaserBeamBullet.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionStatusBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroBackButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\ActiveCards.cs" />
