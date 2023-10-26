@@ -17,11 +17,23 @@ public class RankController : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     private AccessDatabase ad;
+    private GlobalFunctionController glc;
+    private NotificationBoardController nc;
     private Dictionary<string, object> ListData;
     private Dictionary<string, object> RankStat;
     private bool FirstCondition;
     private bool SecondCondition;
     private int PlayerID;
+    private int EnemyTierI;
+    private int EnemyTierII;
+    private int EnemyTierIII;
+    private int Warship;
+    private int MaxSZReach;
+    private int MissionCompleted;
+    private int ArsenalItem;
+    private int FactoryItem;
+    private Dictionary<string, object> PlayerAchievement;
+    private Dictionary<string, string> CurrentAchievement;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -40,7 +52,8 @@ public class RankController : MonoBehaviour
         ListData = ad.GetPlayerInformationById(PlayerID);
         FirstCondition = false;
         SecondCondition = false;
-       
+        glc = FindAnyObjectByType<GlobalFunctionController>();
+        nc = FindAnyObjectByType<NotificationBoardController>();
     }
 
     // Update is called once per frame
@@ -55,18 +68,18 @@ public class RankController : MonoBehaviour
     public void CheckToRankUp()
     {
         RankStat = ad.GetRankById(int.Parse(ListData["RankId"].ToString()) + 1, int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
-        Dictionary<string, object> PlayerAchievement = ad.GetPlayerAchievement(PlayerID);
-        Dictionary<string, string> CurrentAchievement = FindAnyObjectByType<GlobalFunctionController>().ConvertEnemyDefeated(PlayerAchievement["EnemyDefeated"].ToString());
+        PlayerAchievement = ad.GetPlayerAchievement(PlayerID);
+        CurrentAchievement = glc.ConvertEnemyDefeated(PlayerAchievement["EnemyDefeated"].ToString());
        
-        int EnemyTierI = int.Parse(CurrentAchievement["EnemyTierI"]);
-        int EnemyTierII = int.Parse(CurrentAchievement["EnemyTierII"]);
-        int EnemyTierIII = int.Parse(CurrentAchievement["EnemyTierIII"]);
-        int Warship = int.Parse(CurrentAchievement["Warship"]);
-        int MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
-        int MissionCompleted = int.Parse(PlayerAchievement["TotalMission"].ToString());
+        EnemyTierI = int.Parse(CurrentAchievement["EnemyTierI"]);
+        EnemyTierII = int.Parse(CurrentAchievement["EnemyTierII"]);
+        EnemyTierIII = int.Parse(CurrentAchievement["EnemyTierIII"]);
+        Warship = int.Parse(CurrentAchievement["Warship"]);
+        MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
+        MissionCompleted = int.Parse(PlayerAchievement["TotalMission"].ToString());
 
-        int ArsenalItem = ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Weapon") + ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Power");
-        int FactoryItem = ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Model");
+        ArsenalItem = ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Weapon") + ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Power");
+        FactoryItem = ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Model");
         if (RankStat != null)
         {
             // Check space zone condition
@@ -126,7 +139,7 @@ public class RankController : MonoBehaviour
             {
                 Debug.Log("Rank Up!");
                 ad.UpdateRank(PlayerID, RankStat);
-                FindAnyObjectByType<NotificationBoardController>().CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 2f);
+                nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 2f);
                 ListData = ad.GetPlayerInformationById(PlayerID);
                 if (FindAnyObjectByType<UECMainMenuController>() != null)
                 {

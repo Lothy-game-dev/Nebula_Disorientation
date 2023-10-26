@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpaceZoneMissionText : MonoBehaviour
 {
@@ -121,6 +122,11 @@ public class SpaceZoneMissionText : MonoBehaviour
             Black4.SetActive(false);
             Text.SetActive(false);
             FindAnyObjectByType<GameplayInteriorController>().SZSummaryOn();
+        } else
+        {
+            yield return new WaitForSeconds(2f);
+            SceneManager.LoadSceneAsync("SessionSummary");
+            SceneManager.UnloadSceneAsync("GameplayInterior");
         }
     }
     #endregion
