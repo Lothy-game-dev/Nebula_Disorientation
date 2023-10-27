@@ -152,6 +152,8 @@ public class GameplayInteriorController : MonoBehaviour
         IsInLoading = true;
         yield return new WaitForSeconds(delay);
         IsInLoading = false;
+        FindAnyObjectByType<StatisticController>().StartTime = System.DateTime.Now;
+        FindAnyObjectByType<StatisticController>().isStart = true;
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;
@@ -231,6 +233,7 @@ public class GameplayInteriorController : MonoBehaviour
     #region SpaceZone Summary Menu
     public void SZSummaryOn()
     {
+       
         SZSummary.SetActive(true);
         DoneLightUp2 = false;
         SZSummary.GetComponent<SpaceZoneSummary>().Summarize();

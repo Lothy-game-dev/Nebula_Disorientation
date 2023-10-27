@@ -638,7 +638,7 @@ public class FighterShared : MonoBehaviour
             {
                 DamageDealer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
             }
-            if (DamageDealer == controller.Player)
+            if (GetComponent<EnemyShared>() != null && DamageDealer == controller.Player)
             {
                 Statistic.DamageDealt += damage;
             }
