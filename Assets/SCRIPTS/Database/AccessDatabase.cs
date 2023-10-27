@@ -216,6 +216,7 @@ public class AccessDatabase : MonoBehaviour
                 {
                     values.Add("Rank", "Unranked");
                     values.Add("RankId", 0);
+                    values.Add("RankColor", "grey");
                 } else
                 {
                     values.Add("RankId", dataReader.GetInt32(2));

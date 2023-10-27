@@ -34,6 +34,7 @@ public class RankController : MonoBehaviour
     private int FactoryItem;
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, string> CurrentAchievement;
+    private float Timer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -54,13 +55,15 @@ public class RankController : MonoBehaviour
         SecondCondition = false;
         glc = FindAnyObjectByType<GlobalFunctionController>();
         nc = FindAnyObjectByType<NotificationBoardController>();
+
+        CheckToRankUp();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Call function and timer only if possible
-        CheckToRankUp();
+        // Call function and timer only if possible       
     }
     #endregion
     #region Check condition to rank up

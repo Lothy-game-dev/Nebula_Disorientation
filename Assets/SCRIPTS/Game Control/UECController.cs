@@ -162,6 +162,7 @@ public class UECController : UECMenuShared
                             else
                             {
                                 ad.DailyMissionDone(currentId, listDM[0][i]);
+                                FindAnyObjectByType<RankController>().CheckToRankUp();
                                 FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                             }
                             break;
@@ -186,6 +187,7 @@ public class UECController : UECMenuShared
                             else
                             {
                                 ad.DailyMissionDone(currentId, listDM[0][i]);
+                                FindAnyObjectByType<RankController>().CheckToRankUp();
                                 FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                             }
                             break;
