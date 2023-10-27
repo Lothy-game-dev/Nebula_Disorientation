@@ -81,9 +81,8 @@ public class SpaceZoneGenerator : MonoBehaviour
     {
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         SpaceZoneNo = (int)SessionData["CurrentStage"];
-        PlayerPrefs.SetInt("NextStage", 0);
-        PlayerPrefs.SetInt("NextVariant", 0);
-        PlayerPrefs.SetInt("NextHazard", 0);
+        PlayerPrefs.SetInt("Variant", 0);
+        PlayerPrefs.SetInt("Hazard", 0);
         Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
         ChosenVariant = (int)SessionData["CurrentStageVariant"];
         int HazardId = (int)SessionData["CurrentStageHazard"];

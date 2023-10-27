@@ -18,6 +18,10 @@ public class SpaceZoneIntroMission : MonoBehaviour
     #region NormalVariables
     public bool IsVictory;
     private float InitScaleX;
+    private bool ChangeConditionBool;
+    private float waiting;
+    private bool ChangeConditionVictoryOrNot;
+    private int counter;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -31,6 +35,19 @@ public class SpaceZoneIntroMission : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (ChangeConditionBool)
+        {
+
+            if (transform.localScale.x < InitScaleX)
+            {
+
+                ChangeCondition(ChangeConditionVictoryOrNot);
+            } else
+            {
+                Done();
+                ChangeConditionBool = false;
+            }
+        }
     }
     #endregion
     #region Mouse Check
@@ -43,45 +60,53 @@ public class SpaceZoneIntroMission : MonoBehaviour
             IsVictory = false;
             VictoryConditionText.gameObject.SetActive(false);
             VictoryCondition.gameObject.SetActive(false);
-            StartCoroutine(ChangeCondition(true));
+            ChangeConditionVictoryOrNot = true;
+            counter = 0;
+            ChangeCondition(ChangeConditionVictoryOrNot);
+            ChangeConditionBool = true;
         } else
         {
             IsVictory = true;
             DefeatConditionText.gameObject.SetActive(false);
             DefeatCondition.gameObject.SetActive(false);
-            StartCoroutine(ChangeCondition(false));
+            ChangeConditionVictoryOrNot = false;
+            counter = 0;
+            ChangeCondition(ChangeConditionBool);
+            ChangeConditionBool = true;
         }
     }
 
-    private IEnumerator ChangeCondition(bool isVictory)
+    private void ChangeCondition(bool isVictory)
     {
-        for (int i=0; i<18; i++)
+        if (counter < 30)
         {
-            if (i < 9)
+            transform.localScale = new Vector3(transform.localScale.x - InitScaleX / 30f, transform.localScale.y, transform.localScale.z);
+        } else
+        {
+            transform.localScale = new Vector3(transform.localScale.x + InitScaleX / 30f, transform.localScale.y, transform.localScale.z);
+        }
+        if (Mathf.Abs(transform.localScale.x) < 0.01f)
+        {
+            if (isVictory)
             {
-                transform.localScale = new Vector3(transform.localScale.x - InitScaleX / 9f, transform.localScale.y, transform.localScale.z);
+                GetComponent<SpriteRenderer>().color = new Color(1,0,0, 76/255f);
             } else
             {
-                transform.localScale = new Vector3(transform.localScale.x + InitScaleX / 9f, transform.localScale.y, transform.localScale.z);
+                GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 76 / 255f);
             }
-            if (Mathf.Abs(transform.localScale.x) < 0.01f)
-            {
-                if (isVictory)
-                {
-                    GetComponent<SpriteRenderer>().color = new Color(1,0,0, 76/255f);
-                } else
-                {
-                    GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 76 / 255f);
-                }
-            }
-            yield return new WaitForSeconds(1 / 18f);
         }
+        counter++;
+    }
+
+    private void Done()
+    {
         GetComponent<Collider2D>().enabled = true;
-        if (isVictory)
+        if (ChangeConditionVictoryOrNot)
         {
             DefeatConditionText.gameObject.SetActive(true);
             DefeatCondition.gameObject.SetActive(true);
-        } else
+        }
+        else
         {
             VictoryConditionText.gameObject.SetActive(true);
             VictoryCondition.gameObject.SetActive(true);
