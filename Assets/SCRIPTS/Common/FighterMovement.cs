@@ -1054,7 +1054,6 @@ public class FighterMovement : MonoBehaviour
                 }
             }
         }
-        Debug.Log(DirMov);
         return DirMov;
     }
     #endregion

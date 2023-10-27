@@ -10,6 +10,8 @@ public class GameplayExteriorController : MonoBehaviour
     #endregion
     #region InitializeVariables
     public GameObject BlackFade;
+    public GameObject LOTWScene;
+    public GameObject UECScene;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -20,7 +22,7 @@ public class GameplayExteriorController : MonoBehaviour
     void OnEnable()
     {
         // Initialize variables
-        GenerateBlackFadeOpen(transform.position, 1f);
+        InitTeleport();
     }
 
     // Update is called once per frame
@@ -62,6 +64,23 @@ public class GameplayExteriorController : MonoBehaviour
         StartCoroutine(BlackFadeClose(bf, duration, wait));
     }
 
+    public void InitTeleport()
+    {
+        if (PlayerPrefs.GetString("InitTeleport")!="")
+        {
+            if (PlayerPrefs.GetString("InitTeleport")=="LOTW")
+            {
+                ChangeToScene(LOTWScene);
+                GenerateBlackFadeOpen(LOTWScene.transform.position, 3f);
+            } else if (PlayerPrefs.GetString("InitTeleport")=="UEC")
+            {
+                ChangeToScene(UECScene);
+                GenerateBlackFadeOpen(UECScene.transform.position, 3f);
+            }
+            PlayerPrefs.SetString("InitTeleport","");
+        }
+    }
+
     private IEnumerator BlackFadeClose(GameObject Fade, float duration, float wait)
     {
         for (int i = 0; i < 50; i++)
@@ -78,6 +97,10 @@ public class GameplayExteriorController : MonoBehaviour
     public void ChangeToScene(GameObject Scene)
     {
         Camera.main.transform.position = new Vector3(Scene.transform.position.x,Scene.transform.position.y,Camera.main.transform.position.z);
+        if (!Scene.activeSelf)
+        {
+            Scene.SetActive(true);
+        }
         Scene.GetComponent<BackgroundBrieflyMoving>().enabled = true;
     }
     #endregion
