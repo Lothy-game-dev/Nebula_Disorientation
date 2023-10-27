@@ -320,6 +320,53 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
+    public string ReduceFuelCell(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerId =" + PlayerID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int cell = -1;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                cell = dataReader.GetInt32(0);
+            }
+        }
+        if (cell == -1)
+        {
+            dbConnection.Close();
+            return "No Data";
+        }
+        else
+        {
+            if (cell <= 0)
+            {
+                dbConnection.Close();
+                return "Full";
+            }
+            else
+            {
+                IDbCommand dbCheck = dbConnection.CreateCommand();
+                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell - 1 WHERE PlayerId =" + PlayerID;
+                int n = dbCheck.ExecuteNonQuery();
+                dbConnection.Close();
+                if (n == 1)
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Fail";
+                }
+            }
+        }
+    }
+
     public string CheckIfConvertable(int PlayerId, string ConvertFrom, string ConvertTo, string FromAmount, string ToAmount)
     {
         // Open DB

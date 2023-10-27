@@ -79,12 +79,12 @@ public class SpaceZoneGenerator : MonoBehaviour
     #region Generate Space Zone By Template
     public void GenerateSpaceZone()
     {
-        Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         SpaceZoneNo = (int)SessionData["CurrentStage"];
         PlayerPrefs.SetInt("NextStage", 0);
         PlayerPrefs.SetInt("NextVariant", 0);
-        PlayerPrefs.SetInt("NextHazard", 0); 
+        PlayerPrefs.SetInt("NextHazard", 0);
+        Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
         ChosenVariant = (int)SessionData["CurrentStageVariant"];
         int HazardId = (int)SessionData["CurrentStageHazard"];
         Dictionary<string, object> HazardData = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(HazardId);
@@ -102,6 +102,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         else
         ChosenBG = (string)variantData["AvailableBackground"];
         SpaceZoneBackground.ChangeBackground(ChosenBG);
+        Debug.Log((string)variantData["AvailableBackground"]);
         // Music
         if (SpaceZoneNo%10 == 1 || SpaceZoneNo%10 == 3 || SpaceZoneNo%10 == 5 || SpaceZoneNo%10 == 7)
         {
@@ -809,7 +810,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         EnemyWarshipSpawner.WarshipPosition = EnemyWarshipSpawnPos.ToArray();
         EnemyWarshipSpawner.SpawnEnemyWarships();
         // Ally Space Station
-        if (SpaceZoneNo % 10 == 2 && ChosenVariant == 1)
+        if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 1)
         {
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("AO");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");

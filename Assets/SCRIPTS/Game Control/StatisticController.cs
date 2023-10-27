@@ -113,7 +113,7 @@ public class StatisticController : MonoBehaviour
         ad.UpdateGameplayStatistic(Achievement);
 
         //Update session current HP
-        ad.UpdateSessionStat(int.Parse(CurrentHP.ToString()), TotalEnemyDefeated, int.Parse(DamageDealt.ToString()) , (int)SessionInformation["SessionID"]);
+        ad.UpdateSessionStat(int.Parse(Mathf.RoundToInt(CurrentHP).ToString()), TotalEnemyDefeated, int.Parse(DamageDealt.ToString()) , (int)SessionInformation["SessionID"]);
     }
     #endregion
     #region Check destroy enemy type daily mission
