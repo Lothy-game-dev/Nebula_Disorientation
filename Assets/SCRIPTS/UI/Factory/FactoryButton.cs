@@ -152,6 +152,7 @@ public class FactoryButton : MonoBehaviour
                         FindObjectOfType<UECMainMenuController>().GetData();
                         FindObjectOfType<UECMainMenuController>().BuyAmount = 1;
                         FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, int.Parse(FactoryController.ItemPriceShard), int.Parse(FactoryController.ItemPriceCash), "Spent");
+                        FindAnyObjectByType<RankController>().CheckToRankUp();
                         break;
                 }
             }

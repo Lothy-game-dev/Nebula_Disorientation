@@ -63,6 +63,7 @@ public class GameplayInteriorController : MonoBehaviour
         InitASummary = c3.a;
         c3.a = 0;
         SZSummary.GetComponent<SpriteRenderer>().color = c3;
+        
     }
 
     // Update is called once per frame

@@ -186,6 +186,7 @@ public class PersonalArea : MonoBehaviour
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["FuelEnergy"]).ToString();
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
+        CurrentSalary.GetComponent<TMP_Text>().text = Data["DailyIncome"] + " <sprite index='3'>";
         if ((int)Data["FuelCell"] == 10)
         {
             FuelCell.transform.GetChild(2).gameObject.SetActive(false);

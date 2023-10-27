@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -48,6 +49,9 @@ public class StatisticController : MonoBehaviour
     private int PlayerID;
     public string StageName;
     private float InitScale;
+    private int Playedtime;
+    private bool isCount;
+    private bool isStart;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -81,6 +85,10 @@ public class StatisticController : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
+        if (isStart)
+        {
+            SetTimer(DateTime.Now);
+        }
         CheckDailyMission();
     }
     #endregion
@@ -113,10 +121,10 @@ public class StatisticController : MonoBehaviour
         ad.UpdateGameplayStatistic(Achievement);
 
         //Update session current HP
-        ad.UpdateSessionStat(int.Parse(CurrentHP.ToString()), TotalEnemyDefeated, int.Parse(DamageDealt.ToString()) , (int)SessionInformation["SessionID"]);
+        ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"]);
     }
     #endregion
-    #region Check destroy enemy type daily mission
+    #region Check daily mission
     // Group all function that serve the same algorithm
     private void CheckDailyMission()
     {       
@@ -139,7 +147,7 @@ public class StatisticController : MonoBehaviour
                         }
                         else
                         {
-                            ad.DailyMissionDone(PlayerID, listDM[0][i]);
+                            ad.DailyMissionDone(PlayerID, listDM[0][i]);                          
                             FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                         }
                         break;
@@ -158,12 +166,40 @@ public class StatisticController : MonoBehaviour
                             FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                         }
                         break;
+                    case "P":
+                        mission = "Play for at least " + listDM[1][i] + " minute(s).";
+                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                        {
+                            isStart = true;
+                            if (isCount)
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
+                            }
+                        }
+                        else
+                        {
+                            ad.DailyMissionDone(PlayerID, listDM[0][i]);
+                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                        }
+                        break;
                     default: break;
                 }
             }
         }       
         KillEnemy = false;
         KillBossEnemy = false;
+    }
+
+    public void SetTimer(DateTime startTime)
+    {
+        int oldTime = Playedtime;
+        DateTime myDateTime = DateTime.Now;
+        TimeSpan currentTimePlayed = myDateTime - startTime;
+        Playedtime = (int)currentTimePlayed.TotalMinutes;
+        if (oldTime < Playedtime)
+        {
+            isCount = true;
+        }
     }
     #endregion
 }

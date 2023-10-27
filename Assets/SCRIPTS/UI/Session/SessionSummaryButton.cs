@@ -90,14 +90,6 @@ public class SessionSummaryButton : MonoBehaviour
                     check = ad.UpdateCash(PlayerPrefs.GetInt("PlayerID"), SessionSum.CashAmount);
                     gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Collected";
                     SessionSum.CashCollected = true;
-                } else
-                {
-                    if (SessionSum.isFailed)
-                    {
-                        // Show notification when its locked
-                        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(SSController.transform.position,
-                    "You can not collect the reward noob!", 5f);
-                    } 
                 }
                 break;
             case "EndButton": 
