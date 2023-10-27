@@ -126,7 +126,7 @@ public class SpaceZoneMissionText : MonoBehaviour
         } else
         {
             yield return new WaitForSeconds(2f);
-            PlayerPrefs.SetInt("isFailed", 1);
+            PlayerPrefs.SetString("isFailed", "T");
             SceneManager.LoadSceneAsync("SessionSummary");
             SceneManager.UnloadSceneAsync("GameplayInterior");
         }

@@ -64,8 +64,8 @@ public class SessionSummary : MonoBehaviour
     public void SetData()
     {
         Data = ad.GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
-        isFailed = (PlayerPrefs.GetInt("isFailed", 0) == 1);
-        PlayerPrefs.SetInt("isFailed", 0);
+        isFailed = (PlayerPrefs.GetString("isFailed") == "T");
+        PlayerPrefs.SetString("isFailed", "");
 
         int SZno = (isFailed ? int.Parse(Data["CurrentStage"].ToString()) - 1 : int.Parse(Data["CurrentStage"].ToString()));
         SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text = SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text.Replace("?", SZno.ToString());

@@ -166,8 +166,9 @@ public class LoadoutScene : UECMenuShared
             yield return new WaitForSeconds(2 / 50f);
         }
         PlayerPrefs.SetInt("PlayerID", FindObjectOfType<UECMainMenuController>().PlayerId);
-        SceneManager.LoadSceneAsync("GameplayExterior");
+        PlayerPrefs.SetString("InitTeleport", "LOTW");
         SceneManager.UnloadSceneAsync("UECMainMenu");
+        SceneManager.LoadSceneAsync("GameplayExterior");
     }
     #endregion
 }

@@ -65,7 +65,6 @@ public class UECSessionButton : MonoBehaviour
         {
             Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
             // Get Next Stage Number, Variant and Hazard
-            PlayerPrefs.SetInt("NextStage", (int)SessionData["CurrentStage"] + 1);
             int SpaceZoneNo = (int)SessionData["CurrentStage"] + 1;
             int ChosenVariant;
             int ChosenHazard;
@@ -125,6 +124,9 @@ public class UECSessionButton : MonoBehaviour
         } else if (Type=="Retreat")
         {
             // End Session
+            PlayerPrefs.SetString("isFailed", "F");
+            SceneManager.LoadSceneAsync("SessionSummary");
+            SceneManager.UnloadSceneAsync("GameplayExterior");
         }
     }
 

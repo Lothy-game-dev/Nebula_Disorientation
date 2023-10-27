@@ -22,6 +22,7 @@ public class GameplayExteriorController : MonoBehaviour
     void OnEnable()
     {
         // Initialize variables
+        Time.timeScale = 1;
         InitTeleport();
     }
 
@@ -71,11 +72,11 @@ public class GameplayExteriorController : MonoBehaviour
             if (PlayerPrefs.GetString("InitTeleport")=="LOTW")
             {
                 ChangeToScene(LOTWScene);
-                GenerateBlackFadeOpen(LOTWScene.transform.position, 3f);
+                GenerateBlackFadeOpen(LOTWScene.transform.position, 2f);
             } else if (PlayerPrefs.GetString("InitTeleport")=="UEC")
             {
                 ChangeToScene(UECScene);
-                GenerateBlackFadeOpen(UECScene.transform.position, 3f);
+                GenerateBlackFadeOpen(UECScene.transform.position, 2f);
             }
             PlayerPrefs.SetString("InitTeleport","");
         }
