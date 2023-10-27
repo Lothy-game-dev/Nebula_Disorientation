@@ -51,7 +51,8 @@ public class StatisticController : MonoBehaviour
     private float InitScale;
     private int Playedtime;
     private bool isCount;
-    private bool isStart;
+    public bool isStart;
+    public DateTime StartTime;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -78,7 +79,7 @@ public class StatisticController : MonoBehaviour
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-        CurrentFuelCell = (int)ListData["FuelCell"];     
+        CurrentFuelCell = (int)ListData["FuelCell"];
     }
 
     // Update is called once per frame
@@ -87,7 +88,7 @@ public class StatisticController : MonoBehaviour
         // Call function and timer only if possible
         if (isStart)
         {
-            SetTimer(DateTime.Now);
+            SetTimer(StartTime);
         }
         CheckDailyMission();
     }
@@ -169,11 +170,11 @@ public class StatisticController : MonoBehaviour
                     case "P":
                         mission = "Play for at least " + listDM[1][i] + " minute(s).";
                         if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
-                        {
-                            isStart = true;
+                        {                           
                             if (isCount)
                             {
                                 ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
+                                
                             }
                         }
                         else
@@ -188,6 +189,7 @@ public class StatisticController : MonoBehaviour
         }       
         KillEnemy = false;
         KillBossEnemy = false;
+        isCount = false;
     }
 
     public void SetTimer(DateTime startTime)
@@ -196,6 +198,7 @@ public class StatisticController : MonoBehaviour
         DateTime myDateTime = DateTime.Now;
         TimeSpan currentTimePlayed = myDateTime - startTime;
         Playedtime = (int)currentTimePlayed.TotalMinutes;
+        Debug.Log(Playedtime);
         if (oldTime < Playedtime)
         {
             isCount = true;
