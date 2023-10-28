@@ -35,6 +35,7 @@ public class RankController : MonoBehaviour
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, string> CurrentAchievement;
     private float Timer;
+    public float ShowTime;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -55,9 +56,6 @@ public class RankController : MonoBehaviour
         SecondCondition = false;
         glc = FindAnyObjectByType<GlobalFunctionController>();
         nc = FindAnyObjectByType<NotificationBoardController>();
-
-        CheckToRankUp();
-        
     }
 
     // Update is called once per frame
@@ -142,7 +140,7 @@ public class RankController : MonoBehaviour
             {
                 Debug.Log("Rank Up!");
                 ad.UpdateRank(PlayerID, RankStat);
-                nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 2f);
+                nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 1f);
                 ListData = ad.GetPlayerInformationById(PlayerID);
                 if (FindAnyObjectByType<UECMainMenuController>() != null)
                 {
@@ -154,5 +152,11 @@ public class RankController : MonoBehaviour
         }
     }
     #endregion
-    
+    #region Destroy
+    public void ToDestroy()
+    {
+        Destroy(gameObject);
+    }
+    #endregion
+
 }

@@ -72,6 +72,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaRenameButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Arsenal\SessionArsenalBuyButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\BonusStatus.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuButtons.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Assets\SCRIPTS\Cons\WingShield.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\StatisticController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Arsenal\SessionArsenalButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuOptionLeftRightButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneHazardEnvironment.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalItem.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertItemBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECCurrencyBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutTeleportButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Arsenal\SessionArsenalItem.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\StatusBoard.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuOption.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\RankController.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Arsenal\SessionArsenal.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUpBox.cs" />

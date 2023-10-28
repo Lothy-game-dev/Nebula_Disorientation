@@ -116,6 +116,7 @@ public class SpaceZoneMissionText : MonoBehaviour
 
         if (text == "Mission Accomplished!")
         {
+            FindAnyObjectByType<RankController>().CheckToRankUp();
             yield return new WaitForSeconds(2f);
             Black2.SetActive(false);
             Black3.SetActive(false);

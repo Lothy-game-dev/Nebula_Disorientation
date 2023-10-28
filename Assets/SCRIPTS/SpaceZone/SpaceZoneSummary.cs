@@ -26,7 +26,7 @@ public class SpaceZoneSummary : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private StatisticController stat;
+    private StatisticController stat;  
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -46,11 +46,10 @@ public class SpaceZoneSummary : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Summarize()
     {
-        Time.timeScale = 0;
         stat = FindAnyObjectByType<StatisticController>();
         TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
-        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP: " + stat.CurrentHP + "/" + stat.MaxHP;
+        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP: " + Mathf.RoundToInt(stat.CurrentHP) + "/" + Mathf.RoundToInt(stat.MaxHP);
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
         CurrentShard.GetComponent<TextMeshPro>().text = "Current Shard: " + stat.CurrentShard;
         CurrentCash.GetComponent<TextMeshPro>().text = "Current Cash: " + stat.CurrentCash;
@@ -58,6 +57,7 @@ public class SpaceZoneSummary : MonoBehaviour
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = stat.CurrentFuelCell;
+        Time.timeScale = 0;
     }
     #endregion
     #region Function group ...

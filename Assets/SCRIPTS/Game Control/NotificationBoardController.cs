@@ -94,6 +94,7 @@ public class NotificationBoardController : MonoBehaviour
                 Destroy(go.transform.parent.gameObject, autoCloseTimer);
             }
         }
+    
     }
 
     public void CreateNormalConfirmBoard(Vector2 Position, string text)
@@ -180,13 +181,12 @@ public class NotificationBoardController : MonoBehaviour
     {
         Vector2 Position = Camera.main.transform.position;
         int pos = 0;
-        if (FindAnyObjectByType<UECMainMenuController>() != null)
+        if (FindAnyObjectByType<UECMainMenuController>() != null || FindAnyObjectByType<SessionSummary>() != null)
         {
             pos = 3;
         } else
         {
             pos = 500;
-            autoCloseTimer = 7f;
         }
         GameObject notiBoard = Instantiate(RankUpBoard, new Vector3(Position.x, Position.y + pos, RankUpBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 2f, notiBoard.transform.GetChild(0).localScale.y / 2f);
