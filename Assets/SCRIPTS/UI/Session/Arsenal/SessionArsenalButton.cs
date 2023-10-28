@@ -178,7 +178,7 @@ public class SessionArsenalButton : MonoBehaviour
         //reset the information
         ArsenalController.DescContent.GetComponent<TMP_Text>().text = "";
         ArsenalController.ItemCash.GetComponentInChildren<TextMeshPro>().text = "";
-        ArsenalController.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "";
+        //ArsenalController.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "";
         ArsenalController.Rank.GetComponentInChildren<TextMeshPro>().text = "";
         for (int i = 0; i < OtherStatusContent.transform.childCount; i++)
         {

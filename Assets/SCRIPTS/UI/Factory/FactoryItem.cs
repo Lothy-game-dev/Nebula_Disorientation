@@ -98,17 +98,18 @@ public class FactoryItem : MonoBehaviour
             Fac.EnoughPrice = false;
         }
         else
-        {         
-            if (int.Parse(Fac.PShard) == 0)
+        {
+            ShardColor = "green";
+            Fac.EnoughPrice = true;
+            /*if (int.Parse(Fac.PShard) == 0)
             {                
                 Fac.EnoughPrice = false;
                 ShardColor = "red";
             }
             else
             {
-                ShardColor = "green";
-                Fac.EnoughPrice = true;
-            }
+                
+            }*/
         }
         // check if have enough cash
         if (Fac.EnoughPrice)

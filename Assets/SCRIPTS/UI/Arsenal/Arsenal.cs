@@ -335,11 +335,6 @@ public class Arsenal : UECMenuShared
         Content.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 3;
         OtherContent.transform.parent.parent.parent.parent.GetComponent<SpriteRenderer>().sortingOrder = 2;
 
-        
-
-
-        Debug.Log(Content.transform.parent.parent.parent.parent.position);
-
         WeaponButton.GetComponent<SpriteRenderer>().sortingOrder = 4;
         PowerButton.GetComponent<SpriteRenderer>().sortingOrder = 2;
         WeaponButton.GetComponent<SpriteRenderer>().color = WeaponBoxColor;

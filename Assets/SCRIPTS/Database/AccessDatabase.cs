@@ -782,6 +782,47 @@ public class AccessDatabase : MonoBehaviour
             }
         }
     }
+
+    public string DecreaseCurrencyAfterBuyForSession(int SessionID, int Cash)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT SessionCash FROM Session WHERE " +
+            "SessionID=" + SessionID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int cashOwn = -1;
+        while (dataReader.Read())
+        {
+            cashOwn = dataReader.GetInt32(0);           
+        }
+        if (cashOwn == -1)
+        {
+            dbConnection.Close();
+            return "Not Exist";
+        }
+        if (cashOwn < Cash)
+        {
+            dbConnection.Close();
+            return "Not Enough Cash";
+        }       
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "UPDATE Session SET SessionCash = SessionCash - " + Cash
+            + " WHERE SessionID=" + SessionID;
+        int n = dbCheckCommand2.ExecuteNonQuery();
+        if (n != 1)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            dbConnection.Close();
+            return "Success";
+        }
+    }
     #endregion
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
