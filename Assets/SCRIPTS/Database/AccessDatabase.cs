@@ -254,6 +254,14 @@ public class AccessDatabase : MonoBehaviour
                 values.Add("TimelessShard", dataReader.GetInt32(7));
                 values.Add("DailyIncome", dataReader.GetInt32(8));
                 values.Add("DailyIncomeReceived", dataReader.GetString(9));
+                if (dataReader.IsDBNull(10))
+                {
+                    values.Add("LastFuelCellUsed", "");
+                }
+                else
+                {
+                    values.Add("LastFuelCellUsed", dataReader.GetString(10));
+                }
                 if (dataReader.IsDBNull(11))
                 {
                     values.Add("CollectedSalaryTime", 0);
@@ -283,14 +291,19 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerId =" + PlayerID;
+        dbCheckCommand.CommandText = "SELECT FuelCell, LastFuelCellUsedTime FROM PlayerProfile WHERE PlayerId =" + PlayerID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int cell = -1;
+        string lastUsed = "";
         while (dataReader.Read())
         {
             if (!dataReader.IsDBNull(0))
             {
                 cell = dataReader.GetInt32(0);
+            }
+            if (!dataReader.IsDBNull(1))
+            {
+                lastUsed = dataReader.GetString(1);
             }
         }
         if (cell==-1)
@@ -305,9 +318,20 @@ public class AccessDatabase : MonoBehaviour
                 return "Full";
             } else 
             {
+                string FinalStr = "";
+                if (cell < 10)
+                {
+                    if (lastUsed!=null && lastUsed!="")
+                    {
+                        System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.InvariantCulture;
+                        System.DateTime LastTime = System.DateTime.ParseExact(lastUsed, "dd/MM/yyyy HH:mm:ss", culture);
+                        LastTime = LastTime.AddHours(12);
+                        FinalStr = LastTime.ToString("dd/MM/yyyy HH:mm:ss");
+                    }
+                }
                 IDbCommand dbCheck = dbConnection.CreateCommand();
-                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell + 1 " + 
-                    (cell == 9 ? ", LastFuelCellUsedTime = '' " : "") + "WHERE PlayerId =" + PlayerID;
+                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell + 1, LastFuelCellUsedTime ='" + 
+                    (cell == 9 ? "" : FinalStr) + "' WHERE PlayerId =" + PlayerID;
                 int n = dbCheck.ExecuteNonQuery();
                 dbConnection.Close();
                 if (n==1)
@@ -353,10 +377,10 @@ public class AccessDatabase : MonoBehaviour
             else
             {
                 System.DateTime date = System.DateTime.Now;
-                string currentDateTime = date.ToString("dd/MM/yyyy");
+                string currentDateTime = date.ToString("dd/MM/yyyy HH:mm:ss");
                 IDbCommand dbCheck = dbConnection.CreateCommand();
-                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell - 1 " +
-                    ", LastFuelCellUsedTime = '" + currentDateTime + "' WHERE PlayerId =" + PlayerID;
+                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell - 1" +
+                    (cell == 10 ? ", LastFuelCellUsedTime = '" + currentDateTime + "'" : "") + " WHERE PlayerId =" + PlayerID;
                 int n = dbCheck.ExecuteNonQuery();
                 dbConnection.Close();
                 if (n == 1)

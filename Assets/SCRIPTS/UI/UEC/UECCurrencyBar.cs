@@ -31,7 +31,8 @@ public class UECCurrencyBar : MonoBehaviour
     #region MouseCheck
     private void OnMouseEnter()
     {
-        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, 
+            name.Contains("FuelCell") ? InfoText + FindObjectOfType<UECController>().RegenFuelTime : InfoText);
     }
 
     private void OnMouseExit()
