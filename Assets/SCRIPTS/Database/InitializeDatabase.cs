@@ -64,24 +64,33 @@ public class InitializeDatabase : MonoBehaviour
                 "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-/*            // SessionArsenalPower
-            "CREATE TABLE IF NOT EXISTS SessionArsenalPower" +
+            // Player Ownership
+            "CREATE TABLE IF NOT EXISTS SessionOwnership" +
                 "(ID INTEGER, " +
                 "SessionID INTEGER, " +
-                "PowerID INTEGER, " +
-                "IsEquipped TEXT NOT NULL, " +
-                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "FOREIGN KEY(PowerID) REFERENCES ArsenalPower(PowerID), " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // SessionArsenalWeapons
-            "CREATE TABLE IF NOT EXISTS SessionArsenalWeapons" +
-                "(ID INTEGER, " +
-                "SessionID INTEGER, " +
-                "WeaponID INTEGER, " +
-                "IsEquipped TEXT NOT NULL, " +
-                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "FOREIGN KEY(WeaponID) REFERENCES ArsenalWeapon(WeaponID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +*/
+            /*            // SessionArsenalPower
+                        "CREATE TABLE IF NOT EXISTS SessionArsenalPower" +
+                            "(ID INTEGER, " +
+                            "SessionID INTEGER, " +
+                            "PowerID INTEGER, " +
+                            "IsEquipped TEXT NOT NULL, " +
+                            "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
+                            "FOREIGN KEY(PowerID) REFERENCES ArsenalPower(PowerID), " +
+                            "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+                        // SessionArsenalWeapons
+                        "CREATE TABLE IF NOT EXISTS SessionArsenalWeapons" +
+                            "(ID INTEGER, " +
+                            "SessionID INTEGER, " +
+                            "WeaponID INTEGER, " +
+                            "IsEquipped TEXT NOT NULL, " +
+                            "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
+                            "FOREIGN KEY(WeaponID) REFERENCES ArsenalWeapon(WeaponID), " +
+                            "PRIMARY KEY(ID AUTOINCREMENT) ); " +*/
             // SessionLOTWCards
             "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
                 "(ID INTEGER, " +
