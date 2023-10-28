@@ -107,7 +107,7 @@ public class MainMenuCameraController : MonoBehaviour
         }
     }
 
-    public void GenerateLoadingScene(float sec)
+    public void GenerateLoadingScene(float sec) 
     {
         if (CurrentScene==null)
         {
