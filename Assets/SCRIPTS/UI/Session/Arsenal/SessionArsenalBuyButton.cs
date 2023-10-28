@@ -144,8 +144,8 @@ public class SessionArsenalBuyButton : MonoBehaviour
             else if ("Success".Equals(check))
             {
                 // If adding ownership successfully, reduce currency
-                string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuy(PlayerPrefs.GetInt("PlayerID"),
-                    int.Parse(Ar.RequiredCash), 0);
+                string check2 = FindObjectOfType<AccessDatabase>().DecreaseCurrencyAfterBuyForSession((int)Ar.SessionPlayerInformation["SessionID"],
+                    int.Parse(Ar.RequiredCash));
                 int cash = int.Parse(Ar.RequiredCash);
                 switch (check2)
                 {
@@ -178,7 +178,8 @@ public class SessionArsenalBuyButton : MonoBehaviour
                         // if success, reload data to UI
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);
-                        FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, cash, "Spent");
+                        //FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, cash, "Spent");
+                        Ar.ResetDataAfterBuy();
                         break;
                 }
             }
