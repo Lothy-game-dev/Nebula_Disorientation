@@ -165,6 +165,7 @@ public class LoadoutScene : UECMenuShared
             BlackFade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(2 / 50f);
         }
+        FindObjectOfType<AccessDatabase>().ReduceFuelCell(FindObjectOfType<UECMainMenuController>().PlayerId);
         PlayerPrefs.SetInt("PlayerID", FindObjectOfType<UECMainMenuController>().PlayerId);
         PlayerPrefs.SetString("InitTeleport", "LOTW");
         SceneManager.UnloadSceneAsync("UECMainMenu");

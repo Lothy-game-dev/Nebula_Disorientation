@@ -35,6 +35,7 @@ public class LoadingScene : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        Debug.Log(LoadingSlider.value);
         LoadingSlider.value += 100f / (LoadingTime * 60);
         if (LoadingSlider.value >= 100)
         {

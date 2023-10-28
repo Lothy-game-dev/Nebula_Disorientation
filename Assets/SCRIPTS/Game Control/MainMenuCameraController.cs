@@ -28,8 +28,6 @@ public class MainMenuCameraController : MonoBehaviour
         db = GetComponent<InitializeDatabase>();
         //db.DropDatabase();
         db.Initialization();
-        // Initialize variables
-        CurrentScene = StartScene;
     }
 
     private void OnEnable()
@@ -107,7 +105,7 @@ public class MainMenuCameraController : MonoBehaviour
         }
     }
 
-    public void GenerateLoadingScene(float sec)
+    public void GenerateLoadingScene(float sec) 
     {
         if (CurrentScene==null)
         {
@@ -117,6 +115,8 @@ public class MainMenuCameraController : MonoBehaviour
             new Vector3(CurrentScene.transform.position.x, 
             CurrentScene.transform.position.y, 
             LoadingScene.transform.position.z), Quaternion.identity);
+        Debug.Log(Load);
+        Debug.Log(Load.transform.position);
         Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
         Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
         Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;       

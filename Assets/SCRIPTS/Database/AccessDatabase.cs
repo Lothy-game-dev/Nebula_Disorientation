@@ -352,8 +352,11 @@ public class AccessDatabase : MonoBehaviour
             }
             else
             {
+                System.DateTime date = System.DateTime.Now;
+                string currentDateTime = date.ToString("dd/MM/yyyy");
                 IDbCommand dbCheck = dbConnection.CreateCommand();
-                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell - 1 WHERE PlayerId =" + PlayerID;
+                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell - 1 " +
+                    ", LastFuelCellUsedTime = '" + currentDateTime + "' WHERE PlayerId =" + PlayerID;
                 int n = dbCheck.ExecuteNonQuery();
                 dbConnection.Close();
                 if (n == 1)
