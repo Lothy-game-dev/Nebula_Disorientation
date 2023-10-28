@@ -92,6 +92,7 @@ public class UECController : UECMenuShared
                             break;
                         }
                     }
+                    Result = (int)(43200 - Result);
                     if (Result == 0)
                     {
                         // Add Fuel cell
