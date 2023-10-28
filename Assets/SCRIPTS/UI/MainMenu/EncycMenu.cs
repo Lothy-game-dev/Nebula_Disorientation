@@ -44,15 +44,7 @@ public class EncycMenu : MainMenuSceneShared
     void Start()
     {
         // Initialize variables
-        WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
-        FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
-        PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
-        EnemyList = FindAnyObjectByType<AccessDatabase>().GetAllEnemy();
-        ConsumList = FindAnyObjectByType<AccessDatabase>().GetAllConsumable();
-        WarshipList = FindAnyObjectByType<AccessDatabase>().GetAllWarship();
-        SStationList = FindAnyObjectByType<AccessDatabase>().GetAllSpaceStation();
-        DmgElementList = FindAnyObjectByType<AccessDatabase>().GetAllDMGElement();
-        AttributeList = FindAnyObjectByType<AccessDatabase>().GetAllAttribute();
+       
 
     }
 
@@ -266,6 +258,15 @@ public class EncycMenu : MainMenuSceneShared
     #region ResetData and GetData
     public void GetData()
     {
+        WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
+        FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
+        PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
+        EnemyList = FindAnyObjectByType<AccessDatabase>().GetAllEnemy();
+        ConsumList = FindAnyObjectByType<AccessDatabase>().GetAllConsumable();
+        WarshipList = FindAnyObjectByType<AccessDatabase>().GetAllWarship();
+        SStationList = FindAnyObjectByType<AccessDatabase>().GetAllSpaceStation();
+        DmgElementList = FindAnyObjectByType<AccessDatabase>().GetAllDMGElement();
+        AttributeList = FindAnyObjectByType<AccessDatabase>().GetAllAttribute();
         for (int i = 0; i < Category.Length; i++)
         {
             GameObject g = Instantiate(CateTemplate, CateTemplate.transform.position, Quaternion.identity);
@@ -300,7 +301,6 @@ public class EncycMenu : MainMenuSceneShared
             }
             game.SetActive(true);
         }
-        Debug.Log(EnemyList.Count);
     }
     public void ResetData()
     {

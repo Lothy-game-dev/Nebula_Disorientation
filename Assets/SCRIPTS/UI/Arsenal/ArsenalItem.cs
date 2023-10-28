@@ -148,16 +148,8 @@ public class ArsenalItem : MonoBehaviour
                 }
                 else
                 {
-                    if (int.Parse(ar.PShard) == 0)
-                    {
-                        ar.EnoughPrice = false;
-                        ShardColor = "red";
-                    }
-                    else
-                    {
-                        ShardColor = "green";
-                        ar.EnoughPrice = true;
-                    }
+                    ShardColor = "green";
+                    ar.EnoughPrice = true;                    
                 }
             }
             
