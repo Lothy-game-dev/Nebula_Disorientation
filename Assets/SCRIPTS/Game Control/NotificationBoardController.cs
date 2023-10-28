@@ -131,6 +131,10 @@ public class NotificationBoardController : MonoBehaviour
             infoBoard.transform.GetChild(1).GetComponent<TextMeshPro>().text = text;
             infoBoard.GetComponent<InformationBoard>().SetPosition(go);
             currentInfoBoard = infoBoard;
+            if (go.name.Contains("FuelCell"))
+            {
+                FindObjectOfType<UECController>().FuelCellInfo = infoBoard;
+            }
         }
     }
 
