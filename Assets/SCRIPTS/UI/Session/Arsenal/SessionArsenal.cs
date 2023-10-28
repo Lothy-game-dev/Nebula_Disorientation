@@ -111,7 +111,7 @@ public class SessionArsenal : MonoBehaviour
                     g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                 }
             }
-            // check owned item
+            // check weapon has picked in Loadout
             int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 g.name, "Weapon");
             if (n != -1)
@@ -124,14 +124,13 @@ public class SessionArsenal : MonoBehaviour
                 {
                     g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
                 }
-            }
-            g.SetActive(true);
+            }           
             LockItem(g, WeaponList[i][8], WeaponList[i][0]);
+            g.SetActive(true);
             // First item choosen
             if (i == 0)
             {
-                g.GetComponent<SessionArsenalItem>().ArsenalInformation(WeaponList, "1");
-                g.GetComponent<SessionArsenalItem>().LockItem();
+                g.GetComponent<SessionArsenalItem>().ArsenalInformation(WeaponList, "1");   
             }
         }
     }
@@ -179,9 +178,10 @@ public class SessionArsenal : MonoBehaviour
         // Preq Req
         if (!isLocked)
         {
-            Debug.Log(PlayerPrefs.GetInt("PlayerID"));
             string n = FindObjectOfType<AccessDatabase>().CheckWeaponPowerPrereq(PlayerPrefs.GetInt("PlayerID"), Game.name, CurrentTab);
-            if (n != "No Prereq" && n != "Pass")
+            int m = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+                Game.name, CurrentTab);
+            if (n != "No Prereq" && n != "Pass" && m < 1)
             {
                 isLocked = true;
                 if (CurrentTab == "Weapon")
@@ -230,6 +230,8 @@ public class SessionArsenal : MonoBehaviour
                 }
             }
         }
+
+
 
     }
     #endregion

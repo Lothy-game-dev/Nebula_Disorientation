@@ -61,8 +61,8 @@ public class SessionSummaryButton : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
         }
 
-        if (SessionSum.CashAmount == 0 && name == "ShardButton")
-        {
+        if (SessionSum.ShardAmount == 0 && name == "ShardButton")
+        {   
             transform.GetChild(1).gameObject.SetActive(true);
         }
     }
