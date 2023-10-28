@@ -185,7 +185,7 @@ public class SessionArsenalItem : MonoBehaviour
             RankColor = "green";
             ar.RankRequired = true;
         }
-        ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
+        //ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
         StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
@@ -236,7 +236,6 @@ public class SessionArsenalItem : MonoBehaviour
             c.a = 0.5f;
             if (BuyButton.GetComponent<CursorUnallowed>() == null)
             {
-                Debug.Log(BuyButton);
                 BuyButton.AddComponent<CursorUnallowed>();
             }
         }
@@ -249,9 +248,8 @@ public class SessionArsenalItem : MonoBehaviour
             }
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
-        BuyButton.GetComponent<ArsenalBuyAction>().PreReqName = ItemPreReq;
-        BuyButton.GetComponent<ArsenalBuyAction>().isRanked = IsRanked;
-        BuyButton.GetComponent<ArsenalBuyAction>().isZeroShard = IsZeroShard;
+        BuyButton.GetComponent<SessionArsenalBuyButton>().PreReqName = ItemPreReq;
+        BuyButton.GetComponent<SessionArsenalBuyButton>().isRanked = IsRanked;
     }
     public void StartTextRunning(string text)
     {

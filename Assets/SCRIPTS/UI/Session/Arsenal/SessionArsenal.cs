@@ -70,7 +70,7 @@ public class SessionArsenal : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        SetFirstData();
     }
 
     // Update is called once per frame
@@ -90,11 +90,11 @@ public class SessionArsenal : MonoBehaviour
             g.transform.SetParent(Content.transform);
             g.transform.localScale = new Vector3(1, 1, Item.transform.position.z);
             g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + WeaponList[i][9].ToUpper() + ">" + WeaponList[i][2] + "</color>";
-            g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
-            g.GetComponent<ArsenalItem>().Type = "Weapon";
-            g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
-            g.GetComponent<ArsenalItem>().Content = Content;
-            g.GetComponent<ArsenalItem>().ArItemList = WeaponList;
+            g.GetComponent<SessionArsenalItem>().Id = WeaponList[i][0];
+            g.GetComponent<SessionArsenalItem>().Type = "Weapon";
+            g.GetComponent<SessionArsenalItem>().ItemStatusList = WeaponStatus;
+            g.GetComponent<SessionArsenalItem>().Content = Content;
+            g.GetComponent<SessionArsenalItem>().ArItemList = WeaponList;
             // set item image
             if (WeaponList[i][2] == "Star Blaster")
             {
@@ -130,8 +130,8 @@ public class SessionArsenal : MonoBehaviour
             // First item choosen
             if (i == 0)
             {
-                g.GetComponent<ArsenalItem>().ArsenalInformation(WeaponList, "1");
-                g.GetComponent<ArsenalItem>().LockItem();
+                g.GetComponent<SessionArsenalItem>().ArsenalInformation(WeaponList, "1");
+                g.GetComponent<SessionArsenalItem>().LockItem();
             }
         }
     }
@@ -141,37 +141,6 @@ public class SessionArsenal : MonoBehaviour
     {
         int rankId = 0;
         bool isLocked = false;
-        //If item doesnt have shard value, it cant be buy permanently
-        if (!IsInSession)
-        {
-            if (CurrentTab == "Weapon")
-            {
-                if (WeaponList[int.Parse(Id) - 1][6] == "N.A")
-                {
-                    isLocked = true;
-                    Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
-                    Game.GetComponent<ArsenalItem>().LockedItem = true;
-                    Game.GetComponent<ArsenalItem>().IsRanked = false;
-                    Game.GetComponent<ArsenalItem>().IsZeroShard = true;
-                    Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                }
-            }
-            else
-            {
-                if (CurrentTab == "Power")
-                {
-                    if (PowerList[int.Parse(Id) - 1][6] == "N.A")
-                    {
-                        isLocked = true;
-                        Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
-                        Game.GetComponent<ArsenalItem>().LockedItem = true;
-                        Game.GetComponent<ArsenalItem>().IsRanked = false;
-                        Game.GetComponent<ArsenalItem>().IsZeroShard = true;
-                        Game.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                    }
-                }
-            }
-        }
         // check rank req
         if (!isLocked)
         {
@@ -191,17 +160,17 @@ public class SessionArsenal : MonoBehaviour
                     isLocked = true;
                     if (CurrentTab == "Weapon")
                     {
-                        Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
-                        Game.GetComponent<ArsenalItem>().LockedItem = true;
-                        Game.GetComponent<ArsenalItem>().ItemPreReq = "";
-                        Game.GetComponent<ArsenalItem>().IsRanked = true;
+                        Game.GetComponent<SessionArsenalItem>().BlackFadeWeapon.SetActive(true);
+                        Game.GetComponent<SessionArsenalItem>().LockedItem = true;
+                        Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
+                        Game.GetComponent<SessionArsenalItem>().IsRanked = true;
                     }
                     else if (CurrentTab == "Power")
                     {
-                        Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
-                        Game.GetComponent<ArsenalItem>().LockedItem = true;
-                        Game.GetComponent<ArsenalItem>().ItemPreReq = "";
-                        Game.GetComponent<ArsenalItem>().IsRanked = true;
+                        Game.GetComponent<SessionArsenalItem>().BlackFadePower.SetActive(true);
+                        Game.GetComponent<SessionArsenalItem>().LockedItem = true;
+                        Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
+                        Game.GetComponent<SessionArsenalItem>().IsRanked = true;
                     }
 
                 }
@@ -210,22 +179,23 @@ public class SessionArsenal : MonoBehaviour
         // Preq Req
         if (!isLocked)
         {
+            Debug.Log(PlayerPrefs.GetInt("PlayerID"));
             string n = FindObjectOfType<AccessDatabase>().CheckWeaponPowerPrereq(PlayerPrefs.GetInt("PlayerID"), Game.name, CurrentTab);
             if (n != "No Prereq" && n != "Pass")
             {
                 isLocked = true;
                 if (CurrentTab == "Weapon")
                 {
-                    Game.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
+                    Game.GetComponent<SessionArsenalItem>().BlackFadeWeapon.SetActive(true);
                 }
                 else if (CurrentTab == "Power")
                 {
-                    Game.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
+                    Game.GetComponent<SessionArsenalItem>().BlackFadePower.SetActive(true);
                 }
-                Game.GetComponent<ArsenalItem>().LockedItem = true;
-                Game.GetComponent<ArsenalItem>().ItemPreReq = n;
-                Game.GetComponent<ArsenalItem>().IsRanked = false;
-                Game.GetComponent<ArsenalItem>().IsZeroShard = false;
+                Game.GetComponent<SessionArsenalItem>().LockedItem = true;
+                Game.GetComponent<SessionArsenalItem>().ItemPreReq = n;
+                Game.GetComponent<SessionArsenalItem>().IsRanked = false;
+                Game.GetComponent<SessionArsenalItem>().IsZeroShard = false;
             }
         }
         // Already bought
@@ -237,11 +207,11 @@ public class SessionArsenal : MonoBehaviour
                 Game.name, CurrentTab);
                 if (n >= 2)
                 {
-                    Game.GetComponent<ArsenalItem>().transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
-                    Game.GetComponent<ArsenalItem>().LockedItem = true;
-                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
-                    Game.GetComponent<ArsenalItem>().IsRanked = false;
-                    Game.GetComponent<ArsenalItem>().IsZeroShard = false;
+                    Game.GetComponent<SessionArsenalItem>().transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+                    Game.GetComponent<SessionArsenalItem>().LockedItem = true;
+                    Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
+                    Game.GetComponent<SessionArsenalItem>().IsRanked = false;
+                    Game.GetComponent<SessionArsenalItem>().IsZeroShard = false;
 
                 }
             }
@@ -251,11 +221,11 @@ public class SessionArsenal : MonoBehaviour
                 Game.name, CurrentTab);
                 if (n >= 1)
                 {
-                    Game.GetComponent<ArsenalItem>().transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
-                    Game.GetComponent<ArsenalItem>().LockedItem = true;
-                    Game.GetComponent<ArsenalItem>().ItemPreReq = "";
-                    Game.GetComponent<ArsenalItem>().IsRanked = false;
-                    Game.GetComponent<ArsenalItem>().IsZeroShard = false;
+                    Game.GetComponent<SessionArsenalItem>().transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+                    Game.GetComponent<SessionArsenalItem>().LockedItem = true;
+                    Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
+                    Game.GetComponent<SessionArsenalItem>().IsRanked = false;
+                    Game.GetComponent<SessionArsenalItem>().IsZeroShard = false;
 
                 }
             }
@@ -277,8 +247,8 @@ public class SessionArsenal : MonoBehaviour
                 CurrentItem.name, CurrentTab);
                 if (n >= 2)
                 {
-                    CurrentItem.GetComponent<ArsenalItem>().BlackFadeWeapon.SetActive(true);
-                    CurrentItem.GetComponent<ArsenalItem>().LockedItem = true;
+                    CurrentItem.GetComponent<SessionArsenalItem>().BlackFadeWeapon.SetActive(true);
+                    CurrentItem.GetComponent<SessionArsenalItem>().LockedItem = true;
                     CurrentItem.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "2/2";
                 }
                 else if (n >= 0)
@@ -292,8 +262,8 @@ public class SessionArsenal : MonoBehaviour
                 CurrentItem.name, CurrentTab);
                 if (n >= 1)
                 {
-                    CurrentItem.GetComponent<ArsenalItem>().BlackFadePower.SetActive(true);
-                    CurrentItem.GetComponent<ArsenalItem>().LockedItem = true;
+                    CurrentItem.GetComponent<SessionArsenalItem>().BlackFadePower.SetActive(true);
+                    CurrentItem.GetComponent<SessionArsenalItem>().LockedItem = true;
                 }
             }
         }
@@ -401,7 +371,6 @@ public class SessionArsenal : MonoBehaviour
         PCash = SessionPlayerInformation["SessionCash"].ToString();
         PlayerCash.GetComponent<TextMeshPro>().text = SessionPlayerInformation["SessionCash"].ToString();     
         InitWeaponBoxPos = Content.transform.parent.parent.parent.parent.position;
-        Debug.Log(InitWeaponBoxPos);
         InitPowerBoxPos = OtherContent.transform.parent.parent.parent.parent.position;
         InitWeaponBtnPos = WeaponButton.transform.position;
         InitPowerBtnPos = PowerButton.transform.position;
@@ -431,6 +400,9 @@ public class SessionArsenal : MonoBehaviour
     #region Reset Data After Buy
     public void ResetDataAfterBuy()
     {
+        SessionPlayerInformation = FindAnyObjectByType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        PCash = SessionPlayerInformation["SessionCash"].ToString();
+        PlayerCash.GetComponent<TextMeshPro>().text = SessionPlayerInformation["SessionCash"].ToString();
         if ("Weapon" == CurrentTab)
         {
             DeleteAllChild();
@@ -442,11 +414,11 @@ public class SessionArsenal : MonoBehaviour
                 g.transform.SetParent(Content.transform);
                 g.transform.localScale = new Vector3(1, 1, 0);
                 g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + WeaponList[i][9].ToUpper() + ">" + WeaponList[i][2] + "</color>";
-                g.GetComponent<ArsenalItem>().Id = WeaponList[i][0];
-                g.GetComponent<ArsenalItem>().Type = "Weapon";
-                g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
-                g.GetComponent<ArsenalItem>().Content = Content;
-                g.GetComponent<ArsenalItem>().ArItemList = WeaponList;
+                g.GetComponent<SessionArsenalItem>().Id = WeaponList[i][0];
+                g.GetComponent<SessionArsenalItem>().Type = "Weapon";
+                g.GetComponent<SessionArsenalItem>().ItemStatusList = WeaponStatus;
+                g.GetComponent<SessionArsenalItem>().Content = Content;
+                g.GetComponent<SessionArsenalItem>().ArItemList = WeaponList;
                 if (WeaponList[i][2] == "Star Blaster")
                 {
                     g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
@@ -479,7 +451,7 @@ public class SessionArsenal : MonoBehaviour
                 g.SetActive(true);
                 if (i == 0)
                 {
-                    g.GetComponent<ArsenalItem>().ArsenalInformation(WeaponList, "1");
+                    g.GetComponent<SessionArsenalItem>().ArsenalInformation(WeaponList, "1");
 
                 }
 
@@ -498,19 +470,19 @@ public class SessionArsenal : MonoBehaviour
                     g.transform.SetParent(OtherContent.transform);
                     g.transform.localScale = new Vector3(1, 1, 0);
                     g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + PowerList[i][9].ToUpper() + ">" + PowerList[i][2] + "</color>";
-                    g.GetComponent<ArsenalItem>().Id = PowerList[i][0];
-                    g.GetComponent<ArsenalItem>().Type = "Power";
-                    g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
-                    g.GetComponent<ArsenalItem>().Content = OtherContent;
-                    g.GetComponent<ArsenalItem>().ArItemList = PowerList;
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerButton.GetComponent<ArsenalButton>()
-                        .PowerImage[PowerButton.GetComponent<ArsenalButton>().PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower() == (item.name.ToLower()))].sprite;
+                    g.GetComponent<SessionArsenalItem>().Id = PowerList[i][0];
+                    g.GetComponent<SessionArsenalItem>().Type = "Power";
+                    g.GetComponent<SessionArsenalItem>().ItemStatusList = PowerStatus;
+                    g.GetComponent<SessionArsenalItem>().Content = OtherContent;
+                    g.GetComponent<SessionArsenalItem>().ArItemList = PowerList;
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerButton.GetComponent<SessionArsenalButton>()
+                        .PowerImage[PowerButton.GetComponent<SessionArsenalButton>().PowerImage.FindIndex(item => PowerList[i][2].Replace(" ", "").ToLower() == (item.name.ToLower()))].sprite;
                     g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
                     LockItem(g, PowerList[i][8], PowerList[i][0]);
                     if (i == 0)
                     {
-                        g.GetComponent<ArsenalItem>().ArsenalInformation(PowerList, "1");
+                        g.GetComponent<SessionArsenalItem>().ArsenalInformation(PowerList, "1");
                     }
                 }
 
