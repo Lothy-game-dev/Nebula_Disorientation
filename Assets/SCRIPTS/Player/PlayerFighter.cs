@@ -515,7 +515,7 @@ public class PlayerFighter : FighterShared
         }
         if (br == 0)
         {
-            MaxBarrier = 5000;
+            MaxBarrier = 2000;
         } else
         {
             MaxBarrier = MaxHP * br / 100;

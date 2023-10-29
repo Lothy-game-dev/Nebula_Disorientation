@@ -657,7 +657,7 @@ public class SpaceStationShared : MonoBehaviour
     public void CheckBarrierAndHealth()
     {
         //Check barrier and regen barrier
-        BarrierRegenTimer -= Time.deltaTime;
+        /*BarrierRegenTimer -= Time.deltaTime;
         BarrierRegenDelay -= Time.deltaTime;
         BarrierEffectDelay -= Time.deltaTime;
         if (BarrierRegenTimer <= 0f)
@@ -676,7 +676,7 @@ public class SpaceStationShared : MonoBehaviour
                 }
             }
 
-        }
+        }*/
 
         if (CurrentHP <= 0)
         {

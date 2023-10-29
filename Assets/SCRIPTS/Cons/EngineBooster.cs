@@ -48,6 +48,8 @@ public class EngineBooster : Consumable
     {
         isStart = true;
         Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = int.Parse(Effect.Split("-")[1]);
+        Fighter.GetComponent<PlayerMovement>().EngineBoosterSpeedUpTimer = 5f;
+        Fighter.GetComponent<PlayerMovement>().EngineBoosterSpeedUpScale = 1.25f;
     }
     #endregion
     #region Function group ...

@@ -792,7 +792,7 @@ public class WSShared : MonoBehaviour
     public void CheckBarrierAndHealth()
     {
         //Check barrier and regen barrier
-        BarrierRegenTimer -= Time.deltaTime;
+        /*BarrierRegenTimer -= Time.deltaTime;
         BarrierRegenDelay -= Time.deltaTime;
         BarrierEffectDelay -= Time.deltaTime;
         if (BarrierRegenTimer <= 0f)
@@ -811,7 +811,7 @@ public class WSShared : MonoBehaviour
                 }
             }
 
-        }
+        }*/
 
         if (CurrentHP <= 0)
         {
