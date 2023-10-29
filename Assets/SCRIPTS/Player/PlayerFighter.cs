@@ -262,6 +262,7 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st Consumable");
                     PowerAndConsActivation[2] = true;
                     ConsCount[0] -= 1 * (LOTWEffect.LOTWConsNoCost ? 0 : 1);
+                    Consumables[ConsumableObject[0].name.Replace("(Clone)", "")] = ConsCount[0];
                     ConsCountText[0].GetComponent<TextMeshPro>().text = ConsCount[0].ToString();
                     // void function to activate power
                     ConsumableObject[0].GetComponent<Consumable>().ActivateConsumable();
@@ -281,6 +282,7 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st Consumable");
                     PowerAndConsActivation[3] = true;
                     ConsCount[1] -= 1 * (LOTWEffect.LOTWConsNoCost ? 0 : 1);
+                    Consumables[ConsumableObject[1].name.Replace("(Clone)", "")] = ConsCount[1];
                     ConsCountText[1].GetComponent<TextMeshPro>().text = ConsCount[1].ToString();
                     // void function to activate power
                     ConsumableObject[1].GetComponent<Consumable>().ActivateConsumable();
@@ -300,6 +302,7 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st Consumable");
                     PowerAndConsActivation[4] = true;
                     ConsCount[2] -= 1 * (LOTWEffect.LOTWConsNoCost ? 0 : 1);
+                    Consumables[ConsumableObject[2].name.Replace("(Clone)", "")] = ConsCount[2];
                     ConsCountText[2].GetComponent<TextMeshPro>().text = ConsCount[2].ToString();
                     // void function to activate power
                     ConsumableObject[2].GetComponent<Consumable>().ActivateConsumable();
@@ -319,6 +322,7 @@ public class PlayerFighter : FighterShared
                     Debug.Log("Activate 1st Consumable");
                     PowerAndConsActivation[5] = true;
                     ConsCount[3] -= 1 * (LOTWEffect.LOTWConsNoCost ? 0 : 1);
+                    Consumables[ConsumableObject[3].name.Replace("(Clone)", "")] = ConsCount[3];
                     ConsCountText[3].GetComponent<TextMeshPro>().text = ConsCount[3].ToString();
                     // void function to activate power
                     ConsumableObject[3].GetComponent<Consumable>().ActivateConsumable();

@@ -53,6 +53,7 @@ public class StatisticController : MonoBehaviour
     private bool isCount;
     public bool isStart;
     public DateTime StartTime;
+    private string Cons;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -119,10 +120,24 @@ public class StatisticController : MonoBehaviour
         Achievement["EnemyDefeated"] = EnemyDefeated;
         Achievement["SZMaxReach"] = MaxSZReach;
         Achievement["PlayerID"] = PlayerID;
+
+        int index = 0;
+        foreach (var x in Fighter.GetComponent<PlayerFighter>().Consumables)
+        {
+            if (index == 0)
+            {
+                Cons += x.Key + "-" + x.Value;
+            } else
+            {
+                Cons += "|" + x.Key + "-" + x.Value;
+            }
+            index++;
+        }
+
         ad.UpdateGameplayStatistic(Achievement);
 
         //Update session current HP
-        ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"]);
+        ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
     }
     #endregion
     #region Check daily mission

@@ -3753,7 +3753,7 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
-    public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID)
+    public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID, string Cons)
     {
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
@@ -3761,7 +3761,7 @@ public class AccessDatabase : MonoBehaviour
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
         IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
-        dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + ", EnemyDestroyed = EnemyDestroyed + "+ Enemy + ", DamageDealt = DamageDealt + " + Damage + " WHERE SessionId=" + SessionID;
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + ", EnemyDestroyed = EnemyDestroyed + "+ Enemy + ", DamageDealt = DamageDealt + " + Damage + ", Consumables = '"+ Cons + "' WHERE SessionId=" + SessionID;
         int n = dbCheckCommand3.ExecuteNonQuery();
         dbConnection.Close();
     }
