@@ -190,6 +190,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\GlobalFunctionController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalBuyAction.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
+    <Compile Include="Assets\SCRIPTS\Common\FuelCellBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\SpawnAlliesFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesFighterMLAgent.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuBackButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationModelShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBarBackground.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuSettingButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualKineticBullet.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\RocketBurst.cs" />

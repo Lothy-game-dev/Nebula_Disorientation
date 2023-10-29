@@ -26,10 +26,6 @@ public class UECController : UECMenuShared
     private AccessDatabase ad;
     private int currentId;
     private UECMainMenuController controller;
-    private string LastTimeFuel;
-    public string RegenFuelTime;
-    private Dictionary<string, object> Data;
-    private float timer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -51,73 +47,10 @@ public class UECController : UECMenuShared
     {
         // Call function and timer only if possible
         CheckDailyMission();
-        timer -= Time.deltaTime;
-        if (timer<=0f)
-        {
-            timer = 1f;
-            UpdateCheckFuel();
-        }
+        
     }
     #endregion
     #region Data
-
-    private void UpdateCheckFuel()
-    {
-        if (FindObjectOfType<UECMainMenuController>().PlayerId!=0)
-        {
-            Data = ad.GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
-            LastTimeFuel = (string)Data["LastFuelCellUsed"];
-            if (LastTimeFuel==null || LastTimeFuel.Length==0)
-            {
-                RegenFuelTime = "";
-            } else
-            {
-                CultureInfo culture = CultureInfo.InvariantCulture;
-                System.DateTime LastTime = System.DateTime.ParseExact(LastTimeFuel, "dd/MM/yyyy HH:mm:ss", culture);
-                System.DateTime date = System.DateTime.Now;
-                double Result = (date - LastTime).TotalSeconds;
-                if (Result <= 0)
-                {
-                    RegenFuelTime = "";
-                } else
-                {
-                    while (Result>43200)
-                    {
-                        Result = Result - 43200;
-                        // Add Fuel cell
-                        FindObjectOfType<AccessDatabase>().AddFuelCell(FindObjectOfType<UECMainMenuController>().PlayerId);
-                        Data = ad.GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
-                        if ((int)Data["FuelCell"]==10)
-                        {
-                            break;
-                        }
-                    }
-                    Result = (int)(43200 - Result);
-                    if (Result == 0)
-                    {
-                        // Add Fuel cell
-                        FindObjectOfType<AccessDatabase>().AddFuelCell(FindObjectOfType<UECMainMenuController>().PlayerId);
-                    }
-                    Data = ad.GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
-                    FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
-                    if ((int)Data["FuelCell"] == 10)
-                    {
-                        FuelCell.transform.GetChild(2).gameObject.SetActive(false);
-                    }
-                    System.TimeSpan t = System.TimeSpan.FromSeconds(Result);
-                    System.DateTime final = new System.DateTime().Add(t);
-                    RegenFuelTime = "Restore 1 in<br>" + final.ToString("HH:mm:ss");
-                }
-            }
-            if (FuelCellInfo != null)
-            {
-                FuelCellInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text =
-                    (RegenFuelTime != "" ?
-                     "Fuel Core. Energy for teleporting back to UEC during Mission.<br>" + RegenFuelTime
-                     : "Fuel Core. Energy for teleporting back to UEC during Mission.");
-            }
-        }
-    }
     public void SetDataToView(Dictionary<string, object> datas)
     {
         currentId = (int)datas["ID"];

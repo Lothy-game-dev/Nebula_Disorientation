@@ -255,13 +255,17 @@ public class EnemyShared : FighterShared
         {
             isBomb = true;
             Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            Vector3 ShieldPos = fm.ShieldBarSlider.transform.position - transform.position;
             transform.Rotate(new Vector3(0, 0, -270));
             OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
             OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
             fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
+            fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, 270));
             fm.CurrentRotateAngle = 270;
             fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            fm.ShieldBarSlider.transform.position = transform.position + ShieldPos;
             HealthBar.Position = HealthPos;
+            ShieldBar.Position = ShieldPos;
             BackFire.transform.localPosition *= 2;
             ScaleOnStatusBoard /= 2;
             GetComponent<Rigidbody2D>().mass /= 4;
@@ -341,12 +345,14 @@ public class EnemyShared : FighterShared
 
             faw.AttachWeapon();
             Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            Vector3 ShieldPos = fm.ShieldBarSlider.transform.position - transform.position;
             if (!Escort)
             {
                 transform.Rotate(new Vector3(0, 0, -270));
                 OnFireGO.transform.Rotate(new Vector3(0, 0, 270));
                 OnFreezeGO.transform.Rotate(new Vector3(0, 0, 270));
                 fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 270));
+                fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, 270));
                 fm.CurrentRotateAngle = 270;
             } else
             {
@@ -357,6 +363,7 @@ public class EnemyShared : FighterShared
                     OnFireGO.transform.Rotate(new Vector3(0, 0, n));
                     OnFreezeGO.transform.Rotate(new Vector3(0, 0, n));
                     fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, n));
+                    fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, n));
                     fm.CurrentRotateAngle = n;
                 } else
                 {
@@ -365,11 +372,14 @@ public class EnemyShared : FighterShared
                     OnFireGO.transform.Rotate(new Vector3(0, 0, n));
                     OnFreezeGO.transform.Rotate(new Vector3(0, 0, n));
                     fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, n));
+                    fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, n));
                     fm.CurrentRotateAngle = n;
                 }
             }
             fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            fm.ShieldBarSlider.transform.position = transform.position + ShieldPos;
             HealthBar.Position = HealthPos;
+            ShieldBar.Position = ShieldPos;
             
             // Delay Weapon Fire Check Case
             if (weaponName1 == weaponName2 && !LW.IsThermalType)

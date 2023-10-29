@@ -55,7 +55,14 @@ public class InformationBoard : MonoBehaviour
         InitScaleX = transform.localScale.x;
         transform.localScale = new Vector2(InitScaleX/10,transform.localScale.y);
         gameObject.SetActive(true);
-        StartCoroutine(StartAnimation());
+        if (Time.timeScale!=0)
+        {
+            StartCoroutine(StartAnimation());
+        } else
+        {
+            transform.localScale = new Vector2(InitScaleX, transform.localScale.y);
+            transform.GetChild(1).gameObject.SetActive(true);
+        }
     }
 
     private IEnumerator StartAnimation()
@@ -70,7 +77,14 @@ public class InformationBoard : MonoBehaviour
 
     public void Close()
     {
-        StartCoroutine(EndAnimation());
+        if (Time.timeScale != 0)
+        {
+            StartCoroutine(EndAnimation());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private IEnumerator EndAnimation()

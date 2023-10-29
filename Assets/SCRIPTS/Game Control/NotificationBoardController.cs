@@ -133,7 +133,7 @@ public class NotificationBoardController : MonoBehaviour
             currentInfoBoard = infoBoard;
             if (go.name.Contains("FuelCell"))
             {
-                FindObjectOfType<UECController>().FuelCellInfo = infoBoard;
+                go.GetComponent<FuelCellBar>().FuelCellInfo = infoBoard;
             }
         }
     }

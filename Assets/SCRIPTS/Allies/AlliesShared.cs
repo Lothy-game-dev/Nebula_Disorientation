@@ -268,6 +268,7 @@ public class AlliesShared : FighterShared
             OnFireGO.transform.Rotate(new Vector3(0, 0, angle));
             OnFreezeGO.transform.Rotate(new Vector3(0, 0, angle));
             fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, angle));
+            fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, angle));
             fm.CurrentRotateAngle = angle;
             BackFire.transform.localPosition *= 3;
             ScaleOnStatusBoard /= 3;
@@ -348,12 +349,14 @@ public class AlliesShared : FighterShared
 
             faw.AttachWeapon();
             Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            Vector3 ShieldPos = fm.HealthBarSlider.transform.position - transform.position;
             if (!Escort)
             {
                 transform.Rotate(new Vector3(0, 0, -90));
                 OnFireGO.transform.Rotate(new Vector3(0, 0, 90));
                 OnFreezeGO.transform.Rotate(new Vector3(0, 0, 90));
                 fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 90));
+                fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, 90));
                 fm.CurrentRotateAngle = 90;
             } else
             {
@@ -361,11 +364,14 @@ public class AlliesShared : FighterShared
                 OnFireGO.transform.Rotate(new Vector3(0, 0, 135));
                 OnFreezeGO.transform.Rotate(new Vector3(0, 0, 135));
                 fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, 135));
+                fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, 135));
                 fm.CurrentRotateAngle = 135;
                 EscortSSTP();
             }
             fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            fm.ShieldBarSlider.transform.position = transform.position + ShieldPos;
             HealthBar.Position = HealthPos;
+            ShieldBar.Position = ShieldPos;
             
             // Delay Weapon Fire Check Case
             if (weaponName1 == weaponName2 && !LW.IsThermalType)

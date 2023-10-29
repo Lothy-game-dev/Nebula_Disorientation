@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EngineBooster : Consumable
+public class PauseMenuSettingButton : MonoBehaviour
 {
     #region ComponentVariables
     // Variables used for calling componenets attached to the game object only
@@ -16,8 +16,6 @@ public class EngineBooster : Consumable
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private bool isStart;
-    private float Timer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,29 +28,18 @@ public class EngineBooster : Consumable
     void Update()
     {
         // Call function and timer only if possible
-        if (isStart)
-        {
-            Timer += Time.deltaTime;
-            if (Timer >= Duration)
-            {
-                Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = 1;
-                isStart = false;
-                Timer = 0f;
-            }
-        }
     }
     #endregion
-    #region Activate
+    #region Function group 1
     // Group all function that serve the same algorithm
-    public void BoosterEffect()
+    private void OnMouseOver()
     {
-        isStart = true;
-        Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = int.Parse(Effect.Split("-")[1]);
-        Fighter.GetComponent<PlayerMovement>().EngineBoosterSpeedUpTimer = 5f;
-        Fighter.GetComponent<PlayerMovement>().EngineBoosterSpeedUpScale = 1.25f;
+        transform.Rotate(new Vector3(0, 0, 2f));
     }
-    #endregion
-    #region Function group ...
-    // Group all function that serve the same algorithm
+
+    private void OnMouseDown()
+    {
+        FindObjectOfType<CameraController>().PauseGame();
+    }
     #endregion
 }

@@ -23,6 +23,7 @@ public class SpaceStationShared : MonoBehaviour
     public GameObject Explosion;
     public GameObject Flash;
     public SpaceStationHealthBar HPBar;
+    public SpaceStationHealthBar ShieldBar;
     public NNModel MLBrain; 
     public bool isEnemy;
     #endregion
@@ -251,7 +252,7 @@ public class SpaceStationShared : MonoBehaviour
                     wp.isMainWeapon = false;
                     wp.isSpaceStation = true;
 
-                    sup.AddComponent<BehaviorParameters>();
+                    /*sup.AddComponent<BehaviorParameters>();
                     sup.GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 4;
 
                     sup.GetComponent<BehaviorParameters>().BehaviorType = BehaviorType.InferenceOnly;
@@ -262,7 +263,7 @@ public class SpaceStationShared : MonoBehaviour
                     act.BranchSizes = null;
                     sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec = act;
                     sup.AddComponent<WSSupportWeaponMLAgent>();
-                    sup.AddComponent<DecisionRequester>();
+                    sup.AddComponent<DecisionRequester>();*/
                     SpWps.Add(sup);
                 }
             }
@@ -455,6 +456,7 @@ public class SpaceStationShared : MonoBehaviour
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -470,6 +472,7 @@ public class SpaceStationShared : MonoBehaviour
             {
                 float finalDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -481,6 +484,7 @@ public class SpaceStationShared : MonoBehaviour
                 BarrierRegenTimer = 90f;
                 BarrierRegenAmount = 2500f;
                 CurrentHP -= finalDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
             }
         }
         else
@@ -531,6 +535,7 @@ public class SpaceStationShared : MonoBehaviour
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -545,6 +550,7 @@ public class SpaceStationShared : MonoBehaviour
             {
                 float finalDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -556,6 +562,7 @@ public class SpaceStationShared : MonoBehaviour
                 BarrierRegenTimer = 90f;
                 BarrierRegenAmount = 2500f;
                 CurrentHP -= finalDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
             }
         }
         else
@@ -592,6 +599,7 @@ public class SpaceStationShared : MonoBehaviour
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -607,6 +615,7 @@ public class SpaceStationShared : MonoBehaviour
             {
                 float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -618,6 +627,7 @@ public class SpaceStationShared : MonoBehaviour
                 BarrierRegenTimer = 120f;
                 BarrierRegenAmount = 2500f;
                 CurrentHP -= afterDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
             }
         }
         else
@@ -647,7 +657,7 @@ public class SpaceStationShared : MonoBehaviour
     public void CheckBarrierAndHealth()
     {
         //Check barrier and regen barrier
-        BarrierRegenTimer -= Time.deltaTime;
+        /*BarrierRegenTimer -= Time.deltaTime;
         BarrierRegenDelay -= Time.deltaTime;
         BarrierEffectDelay -= Time.deltaTime;
         if (BarrierRegenTimer <= 0f)
@@ -666,7 +676,7 @@ public class SpaceStationShared : MonoBehaviour
                 }
             }
 
-        }
+        }*/
 
         if (CurrentHP <= 0)
         {

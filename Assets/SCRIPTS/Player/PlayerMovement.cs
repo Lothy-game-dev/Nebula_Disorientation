@@ -50,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
     public float LaserBeamSlowScale;
     public float AEIncreaseScale;
     public LOTWEffect LOTWEffect;
+    public float EngineBoosterSpeedUpTimer;
+    public float EngineBoosterSpeedUpScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -65,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         AEEnergy = 100f;
         LaserBeamSlowScale = 1;
         AEIncreaseScale = 1f;
+        EngineBoosterSpeedUpScale = 1f;
     }
 
     // Update is called once per frame
@@ -118,6 +121,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 CheckForHazard();
             }
+        }
+        if (EngineBoosterSpeedUpTimer > 0f)
+        {
+            EngineBoosterSpeedUpTimer -= Time.deltaTime;
+        } else
+        {
+            EngineBoosterSpeedUpScale = 1f;
         }
     }
     private void FixedUpdate()
@@ -251,7 +261,7 @@ public class PlayerMovement : MonoBehaviour
             backFire.SetActive(false);
         }
         AccelerateSpeed();
-        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale;
+        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale * EngineBoosterSpeedUpScale;
     }
     // Accelerate Players
     void AccelerateSpeed()

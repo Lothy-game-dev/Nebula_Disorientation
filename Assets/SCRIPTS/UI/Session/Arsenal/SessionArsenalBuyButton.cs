@@ -95,7 +95,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
     // Group all function that serve the same algorithm
     public void BuyArsenalItem()
     {
-        int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+        int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 Ar.ItemName, Ar.CurrentTab);
         bool checkcase = false;
         if (Ar.CurrentTab == "Weapon")
@@ -129,7 +129,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
         if (checkcase)
         {
             // Check case for adding ownership
-            string check = FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
+            string check = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
                 Ar.ItemName, Ar.CurrentTab, 1);
             if ("Not Found".Equals(check))
             {
@@ -152,26 +152,26 @@ public class SessionArsenalBuyButton : MonoBehaviour
                     case "Not Exist":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Can not fetch data about your pilot.\nplease contact our email.", 5f);
-                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
+                        FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
                             Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Not Enough Cash":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You don't have enough cash!\nPlease get some more.", 5f);
-                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
+                        FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
                             Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Not Enough Shard":
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You don't have enough timeless shard!\nPlease get some more.", 5f);
-                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
+                        FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
                             Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Fail":
                         // if reduce currency fail, reduce ownership
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchase Failed.\nPlease contact our email.", 5f);
-                        FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
+                        FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
                             Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Success":

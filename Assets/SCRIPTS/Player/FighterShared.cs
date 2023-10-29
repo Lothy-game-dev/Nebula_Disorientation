@@ -94,7 +94,7 @@ public class FighterShared : MonoBehaviour
         {
             MaxBarrier = 0;
         } else
-        MaxBarrier = 5000;
+        MaxBarrier = 2000;
         CurrentBarrier = MaxBarrier;
         isRegenThermal = true;
         isImmuneFrozenSlow = false;
@@ -661,7 +661,7 @@ public class FighterShared : MonoBehaviour
                     Destroy(br, 0.25f);
                 }
                 BarrierRegenTimer = 10f;
-                BarrierRegenAmount = 500f;
+                BarrierRegenAmount = 200f;
             }
             else
             {
@@ -680,7 +680,7 @@ public class FighterShared : MonoBehaviour
                     Destroy(br, 0.25f);
                 }
                 BarrierRegenTimer = 20f;
-                BarrierRegenAmount = 250f;
+                BarrierRegenAmount = 100f;
                 CurrentHP -= AfterDamage;
             }
         }
