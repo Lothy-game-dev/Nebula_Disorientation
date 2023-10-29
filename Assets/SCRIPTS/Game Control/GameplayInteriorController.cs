@@ -59,10 +59,7 @@ public class GameplayInteriorController : MonoBehaviour
         aus = GetComponent<AudioSource>();
         SoundVolume();
 
-        Color c3 = SZSummary.GetComponent<SpriteRenderer>().color;
-        InitASummary = c3.a;
-        c3.a = 0;
-        SZSummary.GetComponent<SpriteRenderer>().color = c3;
+        
         
     }
 
@@ -104,31 +101,7 @@ public class GameplayInteriorController : MonoBehaviour
                 PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c;
             }
         }
-
-        if (SZSummary.activeSelf)
-        {
-            if (SZSummary.GetComponent<SpriteRenderer>().color.a < InitASummary)
-            {
-                Color c = SZSummary.GetComponent<SpriteRenderer>().color;
-                c.a += InitASummary / 60;
-                SZSummary.GetComponent<SpriteRenderer>().color = c;
-            }
-            else
-            {
-                if (!DoneLightUp2)
-                {
-                    DoneLightUp2 = true;
-                    SZSummary.transform.GetChild(0).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(1).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(2).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(3).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(4).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(5).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(6).gameObject.SetActive(true);
-                    SZSummary.transform.GetChild(7).gameObject.SetActive(true);
-                }
-            }
-        }
+       
     }
     #endregion
     #region BlackFade
@@ -232,10 +205,9 @@ public class GameplayInteriorController : MonoBehaviour
     #endregion
     #region SpaceZone Summary Menu
     public void SZSummaryOn()
-    {
-       
+    {      
         SZSummary.SetActive(true);
-        DoneLightUp2 = false;
+        SZSummary.GetComponent<SpaceZoneSummary>().DoneLightUp2 = false;
         SZSummary.GetComponent<SpaceZoneSummary>().Summarize();
     }
     #endregion
