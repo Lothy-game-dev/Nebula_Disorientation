@@ -9,6 +9,7 @@ public class AlliesShared : FighterShared
     #region Shared Variables
     private FighterMovement fm;
     public AlliesHealthBar HealthBar;
+    public AlliesHealthBar ShieldBar;
     public float ScaleOnStatusBoard;
     public GameObject AllyStatus;
     private StatusBoard Status;
@@ -70,6 +71,7 @@ public class AlliesShared : FighterShared
     public void SetHealth()
     {
         HealthBar.SetValue(CurrentHP, MaxHP);
+        ShieldBar.SetValue(CurrentBarrier, MaxBarrier);
     }
 
     public void UpdateAlly()
