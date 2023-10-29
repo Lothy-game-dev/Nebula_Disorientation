@@ -9,6 +9,7 @@ public class EnemyShared : FighterShared
     #region Shared Variables
     private FighterMovement fm;
     public EnemyHealthBar HealthBar;
+    public EnemyHealthBar ShieldBar;
     public float ScaleOnStatusBoard;
     public GameObject EnemyStatus;
     private StatusBoard Status;
@@ -69,6 +70,7 @@ public class EnemyShared : FighterShared
     public void SetHealth()
     {
         HealthBar.SetValue(CurrentHP, MaxHP);
+        ShieldBar.SetValue(CurrentBarrier, MaxBarrier);
     }
 
     public void UpdateEnemy()
