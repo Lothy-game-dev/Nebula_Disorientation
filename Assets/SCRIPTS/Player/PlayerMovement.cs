@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
     public float EngineBoosterSpeedUpTimer;
     public float EngineBoosterSpeedUpScale;
     private bool PressDash;
+    private float DelayAERechargeTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -74,13 +75,21 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (AEEnergy<100f)
+        if (DelayAERechargeTimer <= 0f)
         {
-            AEEnergy += 5f * Time.deltaTime * AEIncreaseScale;
+            if (AEEnergy < 100f)
+            {
+                AEEnergy += 5f * Time.deltaTime * AEIncreaseScale;
+            }
+            else
+            {
+                AEEnergy = 100f;
+            }
         } else
         {
-            AEEnergy = 100f;
+            DelayAERechargeTimer -= Time.deltaTime;
         }
+        
         if (pf.isFrozen || pf.isSFBFreeze || ControllerMain.IsInLoading)
         {
             Movable = false;
@@ -112,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed && AEEnergy>=100f)
         {
             DashingTimer = DashingTime;
+            DelayAERechargeTimer = 10f + DashingTime;
             Dashing = true;
             PressDash = true;
             AEEnergy = 0f;
