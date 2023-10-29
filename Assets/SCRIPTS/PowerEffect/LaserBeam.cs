@@ -96,25 +96,26 @@ public class LaserBeam : Powers
         Vector2 pos = CalculatePos(Range);
         LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
         RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
+        float angle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
 
         GameObject LeftWPRotationPoint = LeftWeapon.GetComponent<Weapons>().RotatePoint;
         GameObject RightWPRotationPoint = RightWeapon.GetComponent<Weapons>().RotatePoint;
         //Generate          
-        GameObject game = Instantiate(Effect, LeftWeapon.transform.position, Quaternion.identity);
+        GameObject game = Instantiate(Effect, Fighter.GetComponent<FighterShared>().LeftLaserBeamPos.transform.position, Quaternion.identity);
         game.GetComponent<Beam>().Distance = Range;
         game.GetComponent<Beam>().Damage = DPH;
         game.GetComponent<Beam>().Layer = EnemyLayer;
         game.GetComponent<Beam>().Fighter = Fighter;
         game.GetComponent<Beam>().Laser = this;
-        game.transform.Rotate(0, 0, Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle);
+        game.transform.Rotate(0, 0, -angle);
 
-        GameObject game2 = Instantiate(Effect, RightWeapon.transform.position, Quaternion.identity);
+        GameObject game2 = Instantiate(Effect, Fighter.GetComponent<FighterShared>().RightLaserBeamPos.transform.position, Quaternion.identity);
         game2.GetComponent<Beam>().Distance = Range;
         game2.GetComponent<Beam>().Damage = DPH;
         game2.GetComponent<Beam>().Layer = EnemyLayer;
         game2.GetComponent<Beam>().Fighter = Fighter;
         game2.GetComponent<Beam>().Laser = this;
-        game2.transform.Rotate(0, 0, Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle);
+        game2.transform.Rotate(0, 0, -angle);
 
 
         game.SetActive(true);

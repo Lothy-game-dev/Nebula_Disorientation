@@ -82,6 +82,9 @@ public class FighterShared : MonoBehaviour
     private GameObject DamageDealer;
     //LOTW
     public LOTWEffect LOTWEffect;
+    //LaserBeam
+    public GameObject LeftLaserBeamPos;
+    public GameObject RightLaserBeamPos;
     #endregion
     #region Shared Functions
     // Initialize
