@@ -52,6 +52,8 @@ public class PlayerMovement : MonoBehaviour
     public LOTWEffect LOTWEffect;
     public float EngineBoosterSpeedUpTimer;
     public float EngineBoosterSpeedUpScale;
+    private bool PressDash;
+    private float DelayAERechargeTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -73,13 +75,21 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (AEEnergy<100f)
+        if (DelayAERechargeTimer <= 0f)
         {
-            AEEnergy += 5f * Time.deltaTime * AEIncreaseScale;
+            if (AEEnergy < 100f)
+            {
+                AEEnergy += 5f * Time.deltaTime * AEIncreaseScale;
+            }
+            else
+            {
+                AEEnergy = 100f;
+            }
         } else
         {
-            AEEnergy = 100f;
+            DelayAERechargeTimer -= Time.deltaTime;
         }
+        
         if (pf.isFrozen || pf.isSFBFreeze || ControllerMain.IsInLoading)
         {
             Movable = false;
@@ -100,13 +110,25 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             Dashing = false;
+            if (PressDash)
+            {
+                PressDash = false;
+                EngineBoosterSpeedUpTimer = 5f;
+                EngineBoosterSpeedUpScale = 1.5f;
+            }
         }
         // Dashing conditions
         if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed && AEEnergy>=100f)
         {
-            Dashing = true;
             DashingTimer = DashingTime;
+            DelayAERechargeTimer = 10f + DashingTime;
+            Dashing = true;
+            PressDash = true;
             AEEnergy = 0f;
+            if (!transform.GetChild(9).gameObject.activeSelf)
+            {
+                transform.GetChild(9).gameObject.SetActive(true);
+            }
             Dash();
         }
         // Moving Front and Back
@@ -125,9 +147,17 @@ public class PlayerMovement : MonoBehaviour
         if (EngineBoosterSpeedUpTimer > 0f)
         {
             EngineBoosterSpeedUpTimer -= Time.deltaTime;
+            if (!transform.GetChild(9).gameObject.activeSelf)
+            {
+                transform.GetChild(9).gameObject.SetActive(true);
+            }
         } else
         {
             EngineBoosterSpeedUpScale = 1f;
+            if (transform.GetChild(9).gameObject.activeSelf && !Dashing)
+            {
+                transform.GetChild(9).gameObject.SetActive(false);
+            }
         }
     }
     private void FixedUpdate()
