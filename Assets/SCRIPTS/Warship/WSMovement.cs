@@ -20,6 +20,7 @@ public class WSMovement : MonoBehaviour
     public GameObject RightBorder;
     public GameObject HeadObject;
     public GameObject HPSlider;
+    public GameObject ShieldSlider;
     public GameplayInteriorController ControllerMain;
     #endregion
     #region NormalVariables
@@ -192,6 +193,7 @@ public class WSMovement : MonoBehaviour
         transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed));
         CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed;
         HPSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed));
+        ShieldSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed));
 
 
     }

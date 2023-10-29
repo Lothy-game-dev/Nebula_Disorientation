@@ -57,12 +57,12 @@ public class UECSessionShopIcon : MonoBehaviour
             {
                 ConfigureNextPlace();
             }
-       /* }
-        else
-        {
-            rb.velocity = new Vector2(0, 0);
-            alreadySetVeloc = false;
-        }*/
+        /* }
+         else
+         {
+             rb.velocity = new Vector2(0, 0);
+             alreadySetVeloc = false;
+         }*/
     }
     #endregion
     #region Moving

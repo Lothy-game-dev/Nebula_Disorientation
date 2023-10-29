@@ -69,6 +69,7 @@ public class WSShared : MonoBehaviour
     public float TargetRange;
     public GameObject Head;
     public WSHealthBar HPBar;
+    public WSHealthBar ShieldBar;
     private bool isHit;
     private Dictionary<GameObject, int> WSSSDict;
     public int Order;
@@ -231,6 +232,7 @@ public class WSShared : MonoBehaviour
 
         //Set Hp bar slider position
         HPBar.SetPostion(model.GetComponent<WarshipModelShared>().HealthBarPosiiton);
+        ShieldBar.SetPostion(model.GetComponent<WarshipModelShared>().HealthBarPosiiton);
 
         //BackFire
         List<Vector2> BFpos = model.GetComponent<WarshipModelShared>().BackFirePos;
@@ -366,19 +368,27 @@ public class WSShared : MonoBehaviour
         if (IsEnemy)
         {
             Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
+            Vector3 ShieldBarPos = WM.ShieldSlider.transform.position - transform.position;
             transform.Rotate(new Vector3(0, 0, -270));
             WM.CurrentRotateAngle += 270;
             WM.HPSlider.transform.Rotate(new Vector3(0, 0, 270));
             WM.HPSlider.transform.position = transform.position + HealthBarPos;
             HPBar.Position = HealthBarPos;
+            WM.ShieldSlider.transform.Rotate(new Vector3(0, 0, 270));
+            WM.ShieldSlider.transform.position = transform.position + ShieldBarPos;
+            ShieldBar.Position = ShieldBarPos;
         } else
         {
             Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
+            Vector3 ShieldBarPos = WM.ShieldSlider.transform.position - transform.position;
             transform.Rotate(new Vector3(0, 0, -90));
             WM.CurrentRotateAngle += 90;
             WM.HPSlider.transform.Rotate(new Vector3(0, 0, 90));
             WM.HPSlider.transform.position = transform.position + HealthBarPos;
             HPBar.Position = HealthBarPos;
+            WM.ShieldSlider.transform.Rotate(new Vector3(0, 0, 90));
+            WM.ShieldSlider.transform.position = transform.position + ShieldBarPos;
+            ShieldBar.Position = ShieldBarPos;
         }
 
         doneInitWeapon = true;
@@ -425,6 +435,7 @@ public class WSShared : MonoBehaviour
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -440,6 +451,7 @@ public class WSShared : MonoBehaviour
             {
                 float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -451,6 +463,7 @@ public class WSShared : MonoBehaviour
                 BarrierRegenTimer = 120f;
                 BarrierRegenAmount = 2500f;
                 CurrentHP -= afterDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
             }
         }
         else
@@ -502,6 +515,7 @@ public class WSShared : MonoBehaviour
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -517,6 +531,7 @@ public class WSShared : MonoBehaviour
             {
                 float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
                 if (BarrierEffectDelay <= 0f)
                 {
                     BarrierEffectDelay = 0.25f;
@@ -528,6 +543,7 @@ public class WSShared : MonoBehaviour
                 BarrierRegenTimer = 120f;
                 BarrierRegenAmount = 2500f;
                 CurrentHP -= afterDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
             }
         }
         else

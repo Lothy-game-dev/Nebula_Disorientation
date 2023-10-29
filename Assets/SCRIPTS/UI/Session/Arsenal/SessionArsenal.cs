@@ -112,7 +112,7 @@ public class SessionArsenal : MonoBehaviour
                 }
             }
             // check weapon has picked in Loadout
-            int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+            int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 g.name, "Weapon");
             if (n != -1)
             {
@@ -179,7 +179,7 @@ public class SessionArsenal : MonoBehaviour
         if (!isLocked)
         {
             string n = FindObjectOfType<AccessDatabase>().CheckWeaponPowerPrereq(PlayerPrefs.GetInt("PlayerID"), Game.name, CurrentTab);
-            int m = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+            int m = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 Game.name, CurrentTab);
             if (n != "No Prereq" && n != "Pass" && m < 1)
             {
@@ -203,7 +203,7 @@ public class SessionArsenal : MonoBehaviour
         {
             if (CurrentTab == "Weapon")
             {
-                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+                int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 Game.name, CurrentTab);
                 if (n >= 2)
                 {
@@ -217,7 +217,7 @@ public class SessionArsenal : MonoBehaviour
             }
             else if (CurrentTab == "Power")
             {
-                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+                int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 Game.name, CurrentTab);
                 if (n >= 1)
                 {
@@ -245,7 +245,7 @@ public class SessionArsenal : MonoBehaviour
             // check owned item
             if (CurrentTab == "Weapon")
             {
-                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+                int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 CurrentItem.name, CurrentTab);
                 if (n >= 2)
                 {
@@ -260,7 +260,7 @@ public class SessionArsenal : MonoBehaviour
             }
             else if (CurrentTab == "Power")
             {
-                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+                int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 CurrentItem.name, CurrentTab);
                 if (n >= 1)
                 {
@@ -436,7 +436,7 @@ public class SessionArsenal : MonoBehaviour
                         g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
                     }
                 }
-                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
+                int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 g.name, "Weapon");
                 if (n != -1)
                 {

@@ -71,7 +71,7 @@ public class InitializeDatabase : MonoBehaviour
                 "ItemType TEXT, " +
                 "ItemID INTEGER, " +
                 "Quantity INTEGER, " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
             /*            // SessionArsenalPower
                         "CREATE TABLE IF NOT EXISTS SessionArsenalPower" +
