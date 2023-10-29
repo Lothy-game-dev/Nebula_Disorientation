@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     public LOTWEffect LOTWEffect;
     public float EngineBoosterSpeedUpTimer;
     public float EngineBoosterSpeedUpScale;
+    private bool PressDash;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -100,13 +101,24 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             Dashing = false;
+            if (PressDash)
+            {
+                PressDash = false;
+                EngineBoosterSpeedUpTimer = 5f;
+                EngineBoosterSpeedUpScale = 1.5f;
+            }
         }
         // Dashing conditions
         if (Input.GetKeyDown(KeyCode.Space) && DashingTimer <= 0f && Movable && CurrentSpeed >= MovingSpeed && AEEnergy>=100f)
         {
-            Dashing = true;
             DashingTimer = DashingTime;
+            Dashing = true;
+            PressDash = true;
             AEEnergy = 0f;
+            if (!transform.GetChild(9).gameObject.activeSelf)
+            {
+                transform.GetChild(9).gameObject.SetActive(true);
+            }
             Dash();
         }
         // Moving Front and Back
@@ -125,9 +137,17 @@ public class PlayerMovement : MonoBehaviour
         if (EngineBoosterSpeedUpTimer > 0f)
         {
             EngineBoosterSpeedUpTimer -= Time.deltaTime;
+            if (!transform.GetChild(9).gameObject.activeSelf)
+            {
+                transform.GetChild(9).gameObject.SetActive(true);
+            }
         } else
         {
             EngineBoosterSpeedUpScale = 1f;
+            if (transform.GetChild(9).gameObject.activeSelf && !Dashing)
+            {
+                transform.GetChild(9).gameObject.SetActive(false);
+            }
         }
     }
     private void FixedUpdate()
