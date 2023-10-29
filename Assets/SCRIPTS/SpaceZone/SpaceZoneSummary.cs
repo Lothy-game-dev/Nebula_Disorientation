@@ -26,20 +26,50 @@ public class SpaceZoneSummary : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    private StatisticController stat;  
+    private StatisticController stat;
+    public bool DoneLightUp2;
+    private float InitASummary;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
-        
+        Color c3 = GetComponent<SpriteRenderer>().color;
+        InitASummary = c3.a;
+        c3.a = 0;
+        GetComponent<SpriteRenderer>().color = c3;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        if (gameObject.activeSelf)
+        {
+            if (gameObject.GetComponent<SpriteRenderer>().color.a < InitASummary)
+            {
+                Color c = gameObject.GetComponent<SpriteRenderer>().color;
+                c.a += InitASummary / 60;
+                gameObject.GetComponent<SpriteRenderer>().color = c;
+            }
+            else
+            {
+                if (!DoneLightUp2)
+                {
+                    DoneLightUp2 = true;
+                    gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(1).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(2).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(3).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(4).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(5).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(6).gameObject.SetActive(true);
+                    gameObject.transform.GetChild(7).gameObject.SetActive(true);
+                }
+            }
+        }
     }
     #endregion
     #region Summarize

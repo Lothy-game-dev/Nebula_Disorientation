@@ -30,6 +30,7 @@ public class LaserBeam : Powers
     private float BeamTimer;
     public bool onHit;
     private float resetHitTimer;
+    private float BeamAngle;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -93,6 +94,19 @@ public class LaserBeam : Powers
     // Group all function that serve the same algorithm
     public void GenerateLaserBeam()
     {
+        //slow down Fighter when firing
+        if (Fighter.GetComponent<PlayerMovement>()!=null)
+        {
+            Fighter.GetComponent<PlayerMovement>().LaserBeamSlowScale = 0.5f;
+            Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
+            BeamAngle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
+        } else if (Fighter.GetComponent<FighterMovement>() != null)
+        {
+            Fighter.GetComponent<FighterMovement>().LaserBeamSlowScale = 0.5f;
+            Fighter.GetComponent<FighterMovement>().ExteriorROTSpeed = 0.5f;
+            BeamAngle = Fighter.GetComponent<FighterMovement>().CurrentRotateAngle;
+        }
+
         Vector2 pos = CalculatePos(Range);
         LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
         RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
@@ -100,21 +114,21 @@ public class LaserBeam : Powers
         GameObject LeftWPRotationPoint = LeftWeapon.GetComponent<Weapons>().RotatePoint;
         GameObject RightWPRotationPoint = RightWeapon.GetComponent<Weapons>().RotatePoint;
         //Generate          
-        GameObject game = Instantiate(Effect, LeftWeapon.transform.position, Quaternion.identity);
+        GameObject game = Instantiate(Effect, Fighter.GetComponent<FighterShared>().LeftLaserBeamPos.transform.position, Quaternion.identity);
         game.GetComponent<Beam>().Distance = Range;
         game.GetComponent<Beam>().Damage = DPH;
         game.GetComponent<Beam>().Layer = EnemyLayer;
         game.GetComponent<Beam>().Fighter = Fighter;
         game.GetComponent<Beam>().Laser = this;
-        game.transform.Rotate(0, 0, Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle);
+        game.transform.Rotate(0, 0, -BeamAngle);
 
-        GameObject game2 = Instantiate(Effect, RightWeapon.transform.position, Quaternion.identity);
+        GameObject game2 = Instantiate(Effect, Fighter.GetComponent<FighterShared>().RightLaserBeamPos.transform.position, Quaternion.identity);
         game2.GetComponent<Beam>().Distance = Range;
         game2.GetComponent<Beam>().Damage = DPH;
         game2.GetComponent<Beam>().Layer = EnemyLayer;
         game2.GetComponent<Beam>().Fighter = Fighter;
         game2.GetComponent<Beam>().Laser = this;
-        game2.transform.Rotate(0, 0, Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle);
+        game2.transform.Rotate(0, 0, -BeamAngle);
 
 
         game.SetActive(true);
@@ -122,16 +136,6 @@ public class LaserBeam : Powers
         game.GetComponent<Rigidbody2D>().velocity = pos*2;
         game2.GetComponent<Rigidbody2D>().velocity = pos*2;
       
-        //slow down Fighter when firing
-        if (Fighter.GetComponent<PlayerMovement>()!=null)
-        {
-            Fighter.GetComponent<PlayerMovement>().LaserBeamSlowScale = 0.5f;
-            Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
-        } else if (Fighter.GetComponent<FighterMovement>() != null)
-        {
-            Fighter.GetComponent<FighterMovement>().LaserBeamSlowScale = 0.5f;
-            Fighter.GetComponent<FighterMovement>().ExteriorROTSpeed = 0.5f;
-        }
     }
     #endregion
     #region Generate charging animation
