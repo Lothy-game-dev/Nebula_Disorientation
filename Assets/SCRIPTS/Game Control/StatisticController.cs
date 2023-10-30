@@ -121,17 +121,20 @@ public class StatisticController : MonoBehaviour
         Achievement["SZMaxReach"] = MaxSZReach;
         Achievement["PlayerID"] = PlayerID;
 
-        int index = 0;
-        foreach (var x in Fighter.GetComponent<PlayerFighter>().Consumables)
+        if (Fighter.GetComponent<PlayerFighter>().Consumables != null)
         {
-            if (index == 0)
+            int index = 0;
+            foreach (var x in Fighter.GetComponent<PlayerFighter>().Consumables)
             {
-                Cons += x.Key + "-" + x.Value;
-            } else
-            {
-                Cons += "|" + x.Key + "-" + x.Value;
+                if (index == 0)
+                {
+                    Cons += x.Key + "-" + x.Value;
+                } else
+                {
+                    Cons += "|" + x.Key + "-" + x.Value;
+                }
+                index++;
             }
-            index++;
         }
 
         ad.UpdateGameplayStatistic(Achievement);

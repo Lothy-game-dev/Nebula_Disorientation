@@ -23,6 +23,7 @@ public class SpaceZoneMissionText : MonoBehaviour
     private float Black3InitA;
     private float Black4InitA;
     private float TextInitA;
+    private GameplayInteriorController controller;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -34,6 +35,8 @@ public class SpaceZoneMissionText : MonoBehaviour
         Black3InitA = Black3.GetComponent<SpriteRenderer>().color.a;
         Black4InitA = Black4.GetComponent<SpriteRenderer>().color.a;
         TextInitA = Text.GetComponent<TextMeshPro>().color.a;
+
+        controller = GetComponent<GameplayInteriorController>();
     }
 
     // Update is called once per frame
@@ -125,8 +128,14 @@ public class SpaceZoneMissionText : MonoBehaviour
             FindAnyObjectByType<GameplayInteriorController>().SZSummaryOn();
         } else
         {
-            yield return new WaitForSeconds(2f);
             PlayerPrefs.SetString("isFailed", "T");
+            for (int i = 0; i < 10; i++)
+            {
+                GetComponent<AudioSource>().volume -= 0.1f;
+                controller.SFXVolumeScale -= 0.05f;
+                yield return new WaitForSeconds(0.1f);
+            }
+            yield return new WaitForSeconds(2f);
             SceneManager.LoadSceneAsync("SessionSummary");
             SceneManager.UnloadSceneAsync("GameplayInterior");
         }
