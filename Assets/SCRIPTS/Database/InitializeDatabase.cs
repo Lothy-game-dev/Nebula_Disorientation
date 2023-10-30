@@ -410,6 +410,14 @@ public class InitializeDatabase : MonoBehaviour
                 "VictoryCondition TEXT NOT NULL," +
                 "DefeatCondition TEX NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
+                "" +
+            // Table for ArsenalService
+            "CREATE TABLE IF NOT EXISTS ArsenalService" +
+                "(ID INTEGER," +
+                "Name TEXT NOT NULL," +
+                "Price TEXT NOT NULL," +
+                "Effect INTEGER NOT NULL," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
                 "";
         // Initialize Data
         // ArsenalWeapon
@@ -762,6 +770,11 @@ public class InitializeDatabase : MonoBehaviour
             "(21, 9, 2, 'Join the UEC Warship(s) to defeat Zaturi Warship(s).', 'Destruction of all Zaturi Warship(s).|Survival of the player.', 'Destruction of all UEC Warship(s).|Destruction of the player.')," +
             "(22, 0, 1, 'Defeat Zaturi Warship(s).', 'Destruction of All Zaturi Warship(s).|Survival of the player.', 'Destruction of the player.')," +
             "(23, 0, 2, 'Defeat Zaturi Elite Fighter(s).', 'Elimination of All Zaturi Elite Fighter(s).|Survival of the player.', 'Destruction of the player.');";
+        //Insert ArsenalService
+        string ArsenalService = "INSERT INTO ArsenalService VALUES " +
+            "(1, 'Repairing I', 'Grade3-1250|Grade2-3750|Grade1-7500', '25')," +
+            "(2, 'Repairing II', 'Grade3-2500|Grade2-7500|Grade1-15000', '50')," +
+            "(3, 'Repairing III', 'Grade3-5000|Grade2-15000|Grade1-15000', '100');";
         // Initialize Data Success
         string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
@@ -781,7 +794,7 @@ public class InitializeDatabase : MonoBehaviour
             + LOTWCards + DailyMissions + Option + Tutorial + DElement 
             + Attribute + Enemy + Warship + SpaceStation + Allies + FighterGroup
             + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition + HazardEnvironment
-            + WarshipMilestone + SpaceZoneMission;
+            + WarshipMilestone + SpaceZoneMission + ArsenalService;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable

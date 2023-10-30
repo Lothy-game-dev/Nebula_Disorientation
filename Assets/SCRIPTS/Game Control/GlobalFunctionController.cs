@@ -1208,4 +1208,32 @@ public class GlobalFunctionController : MonoBehaviour
         return EnemyDefeated;
     }
     #endregion
+    #region Convert Price Arsenal Service
+    public Dictionary<string, string> ConvertPrice(string price)
+    {
+        Dictionary<string, string> pricedict = new Dictionary<string, string>();
+        string[] priceSplit = price.Split("|");
+        //Grade III
+        string gradeIII = priceSplit[0];
+        if (gradeIII.Contains("Grade3"))
+        {
+            pricedict.Add(gradeIII.Split("-")[0], gradeIII.Split("-")[1]);
+        }
+
+        //Grade II
+        string gradeII = priceSplit[1];
+        if (gradeII.Contains("Grade2"))
+        {
+            pricedict.Add(gradeII.Split("-")[0], gradeII.Split("-")[1]);
+        }
+
+        //Grade I
+        string gradeI = priceSplit[2];
+        if (gradeI.Contains("Grade1"))
+        {
+            pricedict.Add(gradeI.Split("-")[0], gradeI.Split("-")[1]);
+        }
+        return pricedict;
+    }
+    #endregion
 }

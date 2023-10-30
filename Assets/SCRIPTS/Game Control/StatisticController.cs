@@ -46,7 +46,7 @@ public class StatisticController : MonoBehaviour
     public bool KillEnemy;
     public bool KillBossEnemy;
     private AccessDatabase ad;
-    private int PlayerID;
+    public int PlayerID;
     public string StageName;
     private float InitScale;
     private int Playedtime;
@@ -54,6 +54,7 @@ public class StatisticController : MonoBehaviour
     public bool isStart;
     public DateTime StartTime;
     private string Cons;
+    private Dictionary<string, int> Consumable;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -81,6 +82,7 @@ public class StatisticController : MonoBehaviour
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
         CurrentFuelCell = (int)ListData["FuelCell"];
+        Consumable = new Dictionary<string, int>();
     }
 
     // Update is called once per frame
@@ -120,6 +122,18 @@ public class StatisticController : MonoBehaviour
         Achievement["EnemyDefeated"] = EnemyDefeated;
         Achievement["SZMaxReach"] = MaxSZReach;
         Achievement["PlayerID"] = PlayerID;
+     
+        ad.UpdateGameplayStatistic(Achievement);
+
+        string Consum = (string)SessionInformation["Consumables"];
+        if (Consum.Length > 0)
+        {
+            string[] ListCons = Consum.Split("|");
+            for (int i = 0; i < ListCons.Length; i++)
+            {
+                Consumable.Add(ListCons[i].Split("-")[0], int.Parse(ListCons[i].Split("-")[1]));
+            }
+        }
 
         if (Fighter.GetComponent<PlayerFighter>().Consumables != null)
         {
@@ -129,18 +143,20 @@ public class StatisticController : MonoBehaviour
                 if (index == 0)
                 {
                     Cons += x.Key + "-" + x.Value;
-                } else
+                }
+                else
                 {
                     Cons += "|" + x.Key + "-" + x.Value;
                 }
+                ad.DecreaseOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), x.Key, "Consumable", Consumable[x.Key] - x.Value);
+                ad.DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), x.Key, "Consumable", Consumable[x.Key] - x.Value);
                 index++;
             }
         }
 
-        ad.UpdateGameplayStatistic(Achievement);
-
-        //Update session current HP
+        //Update session stat
         ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
+
     }
     #endregion
     #region Check daily mission
