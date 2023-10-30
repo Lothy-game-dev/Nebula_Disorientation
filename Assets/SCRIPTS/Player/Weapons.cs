@@ -969,7 +969,13 @@ public class Weapons : MonoBehaviour
         {
             aus.volume = 0.25f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
         } else
-        aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        {
+            aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        }
+        if (PlayerPrefs.GetString("isFailed") == "T")
+        {
+            aus.volume = 0f;
+        }
     }
     public void ThermalSound()
     {
@@ -978,8 +984,13 @@ public class Weapons : MonoBehaviour
             aus.clip = WeaponShootSound;
             aus.loop = true;
             aus.Play();
-            if (Bullet.GetComponent<UsualThermalOrb>()!=null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale;
-            else aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+            if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale;
+            else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale; }
+
+            if (PlayerPrefs.GetString("isFailed") == "T")
+            {
+                aus.volume = 0f;
+            }
         }
     }
 
@@ -989,6 +1000,10 @@ public class Weapons : MonoBehaviour
         aus.loop = false;
         aus.Play();
         aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        if (PlayerPrefs.GetString("isFailed") == "T")
+        {
+            aus.volume = 0f;
+        }
     }
 
     public void LaserBeamChargingSound()
@@ -997,6 +1012,10 @@ public class Weapons : MonoBehaviour
         aus.loop = false;
         aus.Play();
         aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        if (PlayerPrefs.GetString("isFailed") == "T")
+        {
+            aus.volume = 0f;
+        }
     }
 
     public void EndSound()

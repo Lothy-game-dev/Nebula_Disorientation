@@ -3755,6 +3755,21 @@ public class AccessDatabase : MonoBehaviour
 
     public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID, string Cons)
     {
+        string newCons = "";
+        if (Cons.Length > 0)
+        {
+            string[] stringSplit = Cons.Split("|");
+            for (int i = 0; i < stringSplit.Length; i++)
+            {
+                if (i == stringSplit.Length - 1)
+                {
+                    newCons += "'" + stringSplit[i].Split("-")[0] + "'";
+                } else
+                {
+                    newCons += "'" + stringSplit[i].Split("-")[0] + "',";
+                }
+            }
+        }
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
         dbConnection.Open();
@@ -3763,6 +3778,11 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + ", EnemyDestroyed = EnemyDestroyed + "+ Enemy + ", DamageDealt = DamageDealt + " + Damage + ", Consumables = '"+ Cons + "' WHERE SessionId=" + SessionID;
         int n = dbCheckCommand3.ExecuteNonQuery();
+
+        //Update Sesion Onwership 
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "UPDATE SessionOwnership SET Quantity = Quantity - 1 WHERE ItemID in (SELECT ItemID from SpaceShop where replace(ItemName, ' ','') in (" + newCons +")) and ItemType = 'Consumable' and SessionId=" + SessionID;
+        dbCheckCommand.ExecuteNonQuery();
         dbConnection.Close();
     }
     #endregion

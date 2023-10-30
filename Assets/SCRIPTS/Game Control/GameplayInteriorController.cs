@@ -25,8 +25,6 @@ public class GameplayInteriorController : MonoBehaviour
     private float InitAPause2;
     private float InitAPause3;
     private bool DoneLightUp;
-    private bool DoneLightUp2;
-    private float InitASummary;
     public float MasterVolumeScale;
     public float MusicVolumeScale;
     public float SFXVolumeScale;

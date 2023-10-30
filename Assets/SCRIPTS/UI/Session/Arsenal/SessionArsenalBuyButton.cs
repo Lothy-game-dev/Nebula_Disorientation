@@ -18,7 +18,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public string PreReqName;
-    public bool isRanked;
+    public bool isEnoughMoney;
     public bool isZeroShard;
     private SessionArsenal Ar;
     #endregion
@@ -43,10 +43,10 @@ public class SessionArsenalBuyButton : MonoBehaviour
         if (GetComponent<CursorUnallowed>() != null)
         {
                      
-            if (isRanked)
+            if (!isEnoughMoney)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
-                    "Rank requirement unmet.", 5f);
+                    "insufficient money.", 5f);
             }
             else if (PreReqName != null && PreReqName != "")
             {
@@ -62,7 +62,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
         }
         else
         // check the conditions before buying 
-        if (Ar.EnoughPrice && Ar.RankRequired)
+        if (Ar.EnoughPrice)
         {
             FindAnyObjectByType<NotificationBoardController>().VoidReturnFunction = BuyArsenalItem;
             if (!Ar.IsInSession)
@@ -80,14 +80,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
             if (!Ar.EnoughPrice)
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "insufficient money.", 5f);
-            }
-            else
-            {
-                if (!Ar.RankRequired)
-                {
-                    FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "Rank requirement unmet.", 5f);
-                }
-            }
+            }  
         }
     }
     #endregion

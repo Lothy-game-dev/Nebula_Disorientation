@@ -138,43 +138,7 @@ public class SessionArsenal : MonoBehaviour
     #region Locked item will be gray-ed
     public void LockItem(GameObject Game, string RankId, string Id)
     {
-        int rankId = 0;
-        bool isLocked = false;
-        // check rank req
-        if (!isLocked)
-        {
-            if (RankId != "N/A")
-            {
-                if ((string)PlayerInformation["Rank"] == "Unranked")
-                {
-                    rankId = 0;
-                }
-                else
-                {
-                    rankId = (int)PlayerInformation["RankId"];
-                }
-                // lock item if its rank requirement is higher than player's rank
-                if (rankId < int.Parse(RankId))
-                {
-                    isLocked = true;
-                    if (CurrentTab == "Weapon")
-                    {
-                        Game.GetComponent<SessionArsenalItem>().BlackFadeWeapon.SetActive(true);
-                        Game.GetComponent<SessionArsenalItem>().LockedItem = true;
-                        Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
-                        Game.GetComponent<SessionArsenalItem>().IsRanked = true;
-                    }
-                    else if (CurrentTab == "Power")
-                    {
-                        Game.GetComponent<SessionArsenalItem>().BlackFadePower.SetActive(true);
-                        Game.GetComponent<SessionArsenalItem>().LockedItem = true;
-                        Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
-                        Game.GetComponent<SessionArsenalItem>().IsRanked = true;
-                    }
-
-                }
-            }
-        }
+        bool isLocked = false;    
         // Preq Req
         if (!isLocked)
         {
