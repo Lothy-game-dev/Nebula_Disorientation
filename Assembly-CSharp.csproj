@@ -173,6 +173,7 @@
     <Compile Include="Assets\SCRIPTS\Warship\SpawnAllyWarship.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionBackButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopLoading.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalButton.cs" />
