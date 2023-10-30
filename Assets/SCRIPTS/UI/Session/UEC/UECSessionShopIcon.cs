@@ -117,10 +117,12 @@ public class UECSessionShopIcon : MonoBehaviour
             MainCamera.gameObject.transform.Translate(new Vector3(CameraVeloc.x, CameraVeloc.y, 0));
             yield return new WaitForSeconds(0.025f);
         }
-/*        FindObjectOfType<UECMainMenuController>().TeleportToScene(Controller.gameObject, MoveToScene);*/
-        FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(1f);
+        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 2f);
+        yield return new WaitForSeconds(1.5f);
+        FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeOpen(MoveToScene.transform.position, 1f);
+        FindObjectOfType<GameplayExteriorController>().ChangeToScene(MoveToScene);
         MainCamera.orthographicSize = initCameraSize;
-       /* Controller.isPlanetMoving = true;*/
+        /*Controller.isPlanetMoving = true;*/
     }
     #endregion
 }

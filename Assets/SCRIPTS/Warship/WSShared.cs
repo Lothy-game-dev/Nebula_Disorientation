@@ -81,7 +81,7 @@ public class WSShared : MonoBehaviour
     private bool isFighting;
     public bool isStation;
     private GameObject Killer;
-    
+    public GameObject NearestTarget;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -662,6 +662,28 @@ public class WSShared : MonoBehaviour
         }
         MainTarget[weapon] = game;
         return game;
+    }
+    public void TargetNearestTarget()
+    {
+        if (NearestTarget == null)
+        {
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 15000f, SupWeaponTarget);
+            if (cols.Length > 0)
+            {
+                GameObject Nearest = cols[0].gameObject;
+                float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+                foreach (var enemy in cols)
+                {
+                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                    if (distanceTest < distance)
+                    {
+                        distance = distanceTest;
+                        Nearest = enemy.gameObject;
+                    }
+                }
+                NearestTarget = Nearest;
+            }
+        }
     }
 
     private void CheckTargetEnemy(GameObject weapon)

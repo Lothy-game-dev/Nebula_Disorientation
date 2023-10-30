@@ -64,6 +64,7 @@ public class EnemyShared : FighterShared
     private float BombUpdateTimer;
     public GameObject GravTarget;
     public int EnemyID;
+    public GameObject NearestTarget;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -553,9 +554,33 @@ public class EnemyShared : FighterShared
     }
     private IEnumerator WaitForDoneInit()
     {
-        yield return new WaitForSeconds(Random.Range(1,10));
+        yield return new WaitForSeconds(0f);
         doneInitWeapon = true;
     }
+
+    public void TargetNearestTarget()
+    {
+        if (NearestTarget == null)
+        {
+            Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, 15000f, FindObjectOfType<GameController>().PlayerLayer);
+            if (cols.Length > 0)
+            {
+                GameObject Nearest = cols[0].gameObject;
+                float distance = Mathf.Abs((cols[0].transform.position - transform.position).magnitude);
+                foreach (var enemy in cols)
+                {
+                    float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - transform.position).magnitude);
+                    if (distanceTest < distance)
+                    {
+                        distance = distanceTest;
+                        Nearest = enemy.gameObject;
+                    }
+                }
+                NearestTarget = Nearest;
+            }
+        }
+    }
+
     public void TargetLeftEnemy()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, TargetRange, FindObjectOfType<GameController>().PlayerLayer);

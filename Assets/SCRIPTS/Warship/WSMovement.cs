@@ -586,6 +586,7 @@ public class WSMovement : MonoBehaviour
             if (wss.MainTarget[wss.MainWps[0]] != null)
             {
                 Debug.Log("khang" + wss.MainTarget[wss.MainWps[0]]);
+                wss.NearestTarget = null;
                 if ((wss.MainTarget[wss.MainWps[0]].transform.position - transform.position).magnitude <= wss.TargetRange / 2)
                 {
                     if (!inAttackRange)
@@ -680,8 +681,22 @@ public class WSMovement : MonoBehaviour
             }
             else
             {
-                NoLeftRightMove();
+                int k = 0;
+                wss.TargetNearestTarget();
+                k = CheckIsUpOrDownMovement(wss.NearestTarget, HeadObject, gameObject);
                 UpMove();
+                if (k == -1)
+                {
+                    LeftMove();
+                }
+                else if (k == 0)
+                {
+                    NoLeftRightMove();
+                }
+                else if (k == 1)
+                {
+                    RightMove();
+                }
             }
         }       
     }

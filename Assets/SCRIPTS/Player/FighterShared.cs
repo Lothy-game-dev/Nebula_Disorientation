@@ -158,6 +158,7 @@ public class FighterShared : MonoBehaviour
         }
         if (CurrentHP<=0f)
         {
+            CurrentHP = 0f;
             if (!alreadyDestroy)
             {
                 alreadyDestroy = true;

@@ -642,7 +642,8 @@ public class FighterMovement : MonoBehaviour
                 {
                     if (als.LeftTarget != null && als.RightTarget != null)
                     {
-                        if ((als.LeftTarget.transform.position - transform.position).magnitude <= als.TargetRange / 2)
+                        als.NearestTarget = null;
+                        if ((als.LeftTarget.transform.position - transform.position).magnitude <= als.TargetRange)
                         {
                             if (!inAttackRange)
                             {
@@ -719,7 +720,10 @@ public class FighterMovement : MonoBehaviour
                                     k = CheckIsUpOrDownMovement(als.ForceTargetGO, HeadObject, gameObject);
                                 }
                                 else
-                                    k = Random.Range(-1, 2);
+                                {
+                                    als.TargetNearestTarget();
+                                    k = CheckIsUpOrDownMovement(als.NearestTarget, HeadObject, gameObject);
+                                }
                                 if (k == -1)
                                 {
                                     LeftMove();
@@ -738,8 +742,22 @@ public class FighterMovement : MonoBehaviour
                     }
                     else
                     {
-                        NoLeftRightMove();
+                        int k = 0;
+                        als.TargetNearestTarget();
+                        k = CheckIsUpOrDownMovement(als.NearestTarget, HeadObject, gameObject);
                         UpMove();
+                        if (k == -1)
+                        {
+                            LeftMove();
+                        }
+                        else if (k == 0)
+                        {
+                            NoLeftRightMove();
+                        }
+                        else if (k == 1)
+                        {
+                            RightMove();
+                        }
                     }
                 }
             }else
@@ -785,16 +803,13 @@ public class FighterMovement : MonoBehaviour
                     {
                         RightMove();
                     }
-                } else
-                {
-                    UpMove();
-                    NoLeftRightMove();
                 }
                 
             } else
             {
                 if (es.LeftTarget != null && es.RightTarget != null)
                 {
+                    es.NearestTarget = null;
                     if ((es.LeftTarget.transform.position - transform.position).magnitude <= es.TargetRange)
                     {
                         if (!inAttackRange)
@@ -872,7 +887,10 @@ public class FighterMovement : MonoBehaviour
                                 k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject);
                             }
                             else
-                                k = Random.Range(-1, 2);
+                            {
+                                es.TargetNearestTarget();
+                                k = CheckIsUpOrDownMovement(es.NearestTarget, HeadObject, gameObject);
+                            }
                             if (k == -1)
                             {
                                 LeftMove();
@@ -891,8 +909,22 @@ public class FighterMovement : MonoBehaviour
                 }
                 else
                 {
-                    NoLeftRightMove();
+                    int k = 0;
+                    es.TargetNearestTarget();
+                    k = CheckIsUpOrDownMovement(es.NearestTarget, HeadObject, gameObject);
                     UpMove();
+                    if (k == -1)
+                    {
+                        LeftMove();
+                    }
+                    else if (k == 0)
+                    {
+                        NoLeftRightMove();
+                    }
+                    else if (k == 1)
+                    {
+                        RightMove();
+                    }
                 }
             }
         }
