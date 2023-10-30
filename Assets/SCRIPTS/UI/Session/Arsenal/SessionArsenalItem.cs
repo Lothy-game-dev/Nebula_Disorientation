@@ -127,6 +127,7 @@ public class SessionArsenalItem : MonoBehaviour
             {
                 CashColor = "red";
                 ar.EnoughPrice = false;
+                LockedItem = true;
             }
             else
             {
@@ -166,28 +167,9 @@ public class SessionArsenalItem : MonoBehaviour
             }
 
         }
-        //check rank required
-        if ((string)ar.PlayerInformation["Rank"] == "Unranked")
-        {
-            RankId = 0;
-        }
-        else
-        {
-            RankId = (int)ar.PlayerInformation["RankId"];
-        }
-        if (RankId < int.Parse((string)RankSys["RankId"]))
-        {
-            RankColor = "red";
-            ar.RankRequired = false;
-        }
-        else
-        {
-            RankColor = "green";
-            ar.RankRequired = true;
-        }
         //ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
-        ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=" + RankColor + ">Rank Required</color><br><color=" + (string)RankSys["RankTier"] + ">" + (string)RankSys["RankName"] + "</color>";
+        ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=grey>Rank Required</color><br><color=grey>" + (string)RankSys["RankName"] + "</color>";
         StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
 
         LockItem();
@@ -249,7 +231,7 @@ public class SessionArsenalItem : MonoBehaviour
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
         BuyButton.GetComponent<SessionArsenalBuyButton>().PreReqName = ItemPreReq;
-        BuyButton.GetComponent<SessionArsenalBuyButton>().isRanked = IsRanked;
+        BuyButton.GetComponent<SessionArsenalBuyButton>().isEnoughMoney = ar.EnoughPrice;
     }
     public void StartTextRunning(string text)
     {
