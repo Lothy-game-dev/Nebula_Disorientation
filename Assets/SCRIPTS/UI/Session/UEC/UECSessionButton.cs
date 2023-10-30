@@ -123,10 +123,19 @@ public class UECSessionButton : MonoBehaviour
             SceneManager.LoadSceneAsync("MainMenu");
         } else if (Type=="Retreat")
         {
-            // End Session
-            PlayerPrefs.SetString("isFailed", "F");
-            SceneManager.LoadSceneAsync("SessionSummary");
-            SceneManager.UnloadSceneAsync("GameplayExterior");
+            Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
+            if ((int)Data["FuelCell"] > 1)
+            {
+                FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
+                // End Session
+                PlayerPrefs.SetString("isFailed", "F");
+                SceneManager.LoadSceneAsync("SessionSummary");
+                SceneManager.UnloadSceneAsync("GameplayExterior");
+            } else
+            {
+                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                    "Insufficient\nFuel Core.\nCannot retreat!", 3f);
+            }
         }
     }
 

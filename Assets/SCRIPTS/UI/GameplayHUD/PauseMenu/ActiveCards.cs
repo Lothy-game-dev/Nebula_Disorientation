@@ -86,6 +86,10 @@ public class ActiveCards : MonoBehaviour
         for (int i = 0; i < ListDataAllCard.Count; i++)
         {
             Dictionary<string, object> dataDict = ListDataAllCard[i];
+            if ((int)dataDict["ID"]==34)
+            {
+                continue;
+            }
             GameObject Card = Instantiate(TemplateCard, new Vector3(Pos.x, Pos.y, TemplateCard.transform.position.z), Quaternion.identity);
             // Info
             Card.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = (string)dataDict["Name"];

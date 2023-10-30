@@ -89,8 +89,8 @@ public class SpaceShopSessionInformation : MonoBehaviour
         }
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().text =
-            "Buy (" + (Price * int.Parse(InputField.text)).ToString() + " <sprite index='3'>)";
-        BuyButton.GetComponent<SpaceShopSessionBuySellButton>().CurrentValue = Price * int.Parse(InputField.text);
+            "Buy (" + (Price * int.Parse(InputField.text) * 2).ToString() + " <sprite index='3'>)";
+        BuyButton.GetComponent<SpaceShopSessionBuySellButton>().CurrentValue = Price * int.Parse(InputField.text) * 2;
         BuyButton.GetComponent<SpaceShopSessionBuySellButton>().ItemName = BasicInfo.transform.GetChild(2).GetComponent<TextMeshPro>().text;
         BuyButton.GetComponent<SpaceShopSessionBuySellButton>().ItemNameNoColor = (string)DataDictionary["Name"];
         BuyButton.GetComponent<SpaceShopSessionBuySellButton>().Quantity = int.Parse(InputField.text);
