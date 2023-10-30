@@ -262,7 +262,7 @@ public class UECSessionScene : MonoBehaviour
         int maxHP = Mathf.CeilToInt(float.Parse((string)statsDict["HP"]) * CalculateMaxHPScaleLOTW());
         CurrentHPSlider.GetComponent<Slider>().maxValue = maxHP;
         CurrentHPSlider.GetComponent<Slider>().value = (int)SessionData["SessionCurrentHP"];
-        CurrentHPText.GetComponent<TextMeshPro>().text = "Current HP (" + Mathf.CeilToInt((int)SessionData["SessionCurrentHP"]/(float)maxHP)*100 + "%)";
+        CurrentHPText.GetComponent<TextMeshPro>().text = "Current HP (" + Mathf.CeilToInt((int)SessionData["SessionCurrentHP"]/(float)maxHP * 100) + "%)";
     }
 
     public void RemoveData()
@@ -293,7 +293,7 @@ public class UECSessionScene : MonoBehaviour
         GenerateData();
     }
 
-    private float CalculateMaxHPScaleLOTW()
+    public float CalculateMaxHPScaleLOTW()
     {
         float LOTWMaxHPScale = 1;
         List<Dictionary<string, object>> ListLOTWOwned = FindObjectOfType<AccessDatabase>().GetLOTWInfoOwnedByID(PlayerPrefs.GetInt("PlayerID"));
