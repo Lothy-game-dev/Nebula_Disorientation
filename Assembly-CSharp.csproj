@@ -67,6 +67,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDShowRange.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBox.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\Wormhole.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionListItem.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\Rocket.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionWeaponBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutConsumables.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuSpinBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\MainMenuTutorialScene.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWButtons.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionBuySellButton.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\WingShield.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\TargetCursor.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\StatisticController.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\NotificationBoardController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\RechargeBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryButtons.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionLoading.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\MainMenuCameraController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECEnterSession.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopBuySellButton.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\LaserBeam.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionItem.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GameplayInteriorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionConsumableBox.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\Barrier.cs" />
@@ -224,6 +228,7 @@
     <Compile Include="Assets\SCRIPTS\Bullets\BulletShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\Arsenal\SessionArsenal.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWCard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionInputButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuCard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUpBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutBar.cs" />
@@ -241,6 +246,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDCreateInfoBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\AutoRepair.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWOwnedCard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionInformation.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutDetailStatus.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneMissionText.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\PauseMenu\PauseMenuEffect.cs" />
