@@ -3781,6 +3781,41 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
+    public string UpdateSessionCashAndShardByPlayerID(int PlayerId, bool IsIncrease, int Cash, int Shard)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int m = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                m = dataReader.GetInt32(0);
+            }
+        }
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease ? "+ " : "- ") + Shard +
+            ", SessionCash = SessionCash " + (IsIncrease ? "+ " : "- ") + Cash + " WHERE SessionId=" + m;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
+
     public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID, string Cons)
     {      
         // Open DB

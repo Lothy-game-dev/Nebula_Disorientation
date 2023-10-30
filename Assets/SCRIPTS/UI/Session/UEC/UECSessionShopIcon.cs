@@ -17,7 +17,7 @@ public class UECSessionShopIcon : MonoBehaviour
     #region NormalVariables
     private List<GameObject> OrbitPlaces;
     private GameObject NextPlace;
-    private bool alreadySetVeloc;
+    public bool alreadySetVeloc;
     private float initScale;
     private float initCameraSize;
     private bool alreadyZoom;
@@ -103,8 +103,7 @@ public class UECSessionShopIcon : MonoBehaviour
         if (!alreadyZoom)
         {
             alreadyZoom = true;
-            /*Controller.isPlanetMoving = false;*/
-            rb.velocity = new Vector2(0, 0);
+            FindObjectOfType<UECSessionScene>().StopMovingIcon = true;
             StartCoroutine(ZoomOutWhenClick());
         }
     }
@@ -122,7 +121,8 @@ public class UECSessionShopIcon : MonoBehaviour
         FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeOpen(MoveToScene.transform.position, 1f);
         FindObjectOfType<GameplayExteriorController>().ChangeToScene(MoveToScene);
         MainCamera.orthographicSize = initCameraSize;
-        /*Controller.isPlanetMoving = true;*/
+        FindObjectOfType<UECSessionScene>().StopMovingIcon = false;
+        FindObjectOfType<UECSessionScene>().GetComponent<BackgroundBrieflyMoving>().enabled = false;
     }
     #endregion
 }

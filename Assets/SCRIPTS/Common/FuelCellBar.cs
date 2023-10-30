@@ -115,8 +115,8 @@ public class FuelCellBar : MonoBehaviour
             {
                 FuelCellInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text =
                     (RegenFuelTime != "" ?
-                     "Fuel Core. Energy for teleporting back to UEC during Mission.<br>" + RegenFuelTime
-                     : "Fuel Core. Energy for teleporting back to UEC during Mission.");
+                     "Fuel Core. Players need Fuel Core to traverse their journey back and forth.<br>" + RegenFuelTime
+                     : "Fuel Core. Players need Fuel Core to traverse their journey back and forth.");
             }
         }
     }
@@ -124,7 +124,7 @@ public class FuelCellBar : MonoBehaviour
     #region MouseCheck
     private void OnMouseEnter()
     {
-        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, "Fuel Core. Energy for teleporting back to UEC during Mission.<br>" + RegenFuelTime);
+        FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, "Fuel Core. Players need Fuel Core to traverse their journey back and forth.<br>" + RegenFuelTime);
     }
 
     private void OnMouseExit()

@@ -30,6 +30,7 @@ public class UECSessionScene : MonoBehaviour
     public GameObject FuelCell;
     public GameObject CurrentHPSlider;
     public GameObject CurrentHPText;
+    public UECSessionShopIcon[] Icons;
     #endregion
     #region NormalVariables
     private Dictionary<string, object> SessionData;
@@ -45,13 +46,15 @@ public class UECSessionScene : MonoBehaviour
     private GameObject SecondPowerGO;
     private List<GameObject> Consumables;
     private float currentRotateAngle;
+    public bool StopMovingIcon;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Initialize variables
         GenerateData();
+        StopMovingIcon = false;
     }
 
     // Update is called once per frame
@@ -62,6 +65,25 @@ public class UECSessionScene : MonoBehaviour
         {
             ModelGO.transform.Rotate(new Vector3(0, 0, -1));
             currentRotateAngle -= 1;
+        }
+        if (StopMovingIcon)
+        {
+            foreach (var icon in Icons)
+            {
+                if (icon.GetComponent<Rigidbody2D>().velocity != new Vector2(0, 0))
+                {
+                    icon.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+                }
+            }
+        } else
+        {
+            foreach (var icon in Icons)
+            {
+                if (icon.alreadySetVeloc)
+                {
+                    icon.alreadySetVeloc = false;
+                }
+            }
         }
     }
     #endregion

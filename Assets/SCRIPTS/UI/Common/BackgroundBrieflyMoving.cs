@@ -39,7 +39,10 @@ public class BackgroundBrieflyMoving : MonoBehaviour
     {
         // Call function and timer only if possible
         DefineBackgroundVelocity();
-        Background.GetComponent<Rigidbody2D>().velocity = BGveloc;
+        if (gameObject.GetComponent<BackgroundBrieflyMoving>().enabled)
+        {
+            Background.GetComponent<Rigidbody2D>().velocity = BGveloc;
+        }
     }
     #endregion
     #region Background moving
@@ -78,6 +81,11 @@ public class BackgroundBrieflyMoving : MonoBehaviour
         {
             BGveloc = new Vector2(x, y);
         }
+    }
+
+    private void OnDisable()
+    {
+        Background.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
     }
     #endregion
 }
