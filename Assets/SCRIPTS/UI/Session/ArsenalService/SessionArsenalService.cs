@@ -46,7 +46,7 @@ public class SessionArsenalService : MonoBehaviour
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         // Initialize variables
         GetData();
@@ -186,7 +186,7 @@ public class SessionArsenalService : MonoBehaviour
             Item[i].GetComponent<SessionArsenalServiceItem>().CanBeRepaired = false;           
             if (i == 0)
             {
-                if (100 - CurrentHPPercent <= 25)
+                if (100 - CurrentHPPercent <= 25 && 100 - CurrentHPPercent > 0)
                 {
                     Item[i].transform.GetChild(1).gameObject.SetActive(false);
                     Item[i].GetComponent<SessionArsenalServiceItem>().CanBeRepaired = true;
