@@ -106,7 +106,24 @@ public class NotiBoardOKButton : MonoBehaviour
                 FindObjectOfType<MainMenuCameraController>().MoveToUEC();
             } else
             {
-                FindObjectOfType<MainMenuCameraController>().MoveToUECSession(n);
+                string place = FindObjectOfType<AccessDatabase>().GetCurrentPlaceOfSession(n);
+                if (place.ToLower().Equals("uec"))
+                {
+                    FindObjectOfType<MainMenuCameraController>().MoveToUECSession(n);
+                } 
+                else if (place.ToLower().Equals("lotw"))
+                {
+                    FindObjectOfType<MainMenuCameraController>().MoveToLOTWScene(n);
+                }
+                else if (place.ToLower().Equals("gameplay"))
+                {
+                    FindObjectOfType<MainMenuCameraController>().MoveToGameplay(n);
+                }
+                else
+                {
+                    FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Camera.main.transform.position,
+                        "Cannot fetch data for this player. Please contact to our email!", 3f);
+                }
             }
         }
     }

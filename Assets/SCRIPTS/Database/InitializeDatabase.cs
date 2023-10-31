@@ -418,6 +418,12 @@ public class InitializeDatabase : MonoBehaviour
                 "Price TEXT NOT NULL," +
                 "Effect INTEGER NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
+            // Table for SessionCurrentSaveData
+            "CREATE TABLE IF NOT EXISTS SessionCurrentSaveData" +
+                "(ID INTEGER," +
+                "SessionID INTEGER NOT NULL," +
+                "SessionCurrentPlace TEXT NOT NULL," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
                 "";
         // Initialize Data
         // ArsenalWeapon

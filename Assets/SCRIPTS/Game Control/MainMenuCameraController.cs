@@ -145,16 +145,47 @@ public class MainMenuCameraController : MonoBehaviour
     public void MoveToUECSession(int PlayerID)
     {
         GenerateLoadingScene(1f);
+        PlayerPrefs.SetInt("PlayerID", PlayerID);
         transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(MoveToUECDelay(PlayerID));
+        StartCoroutine(MoveToUECDelay());
     }
 
-    private IEnumerator MoveToUECDelay(int PlayerID)
+    private IEnumerator MoveToUECDelay()
     {
         yield return new WaitForSeconds(1f);
-        PlayerPrefs.SetInt("PlayerID", PlayerID);
         PlayerPrefs.SetString("InitTeleport", "UEC");
         SceneManager.LoadSceneAsync("GameplayExterior");
+        SceneManager.UnloadSceneAsync("MainMenu");
+    }
+
+    public void MoveToLOTWScene(int PlayerID)
+    {
+        GenerateLoadingScene(1f);
+        PlayerPrefs.SetInt("PlayerID", PlayerID);
+        transform.GetChild(0).gameObject.SetActive(true);
+        StartCoroutine(MoveToLOTWDelay());
+    }
+
+    private IEnumerator MoveToLOTWDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        PlayerPrefs.SetString("InitTeleport", "LOTW");
+        SceneManager.LoadSceneAsync("GameplayExterior");
+        SceneManager.UnloadSceneAsync("MainMenu");
+    }
+
+    public void MoveToGameplay(int PlayerID)
+    {
+        GenerateLoadingScene(1f);
+        PlayerPrefs.SetInt("PlayerID", PlayerID);
+        transform.GetChild(0).gameObject.SetActive(true);
+        StartCoroutine(MoveToGameplayDelay());
+    }
+
+    private IEnumerator MoveToGameplayDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadSceneAsync("GameplayInterior");
         SceneManager.UnloadSceneAsync("MainMenu");
     }
     #endregion

@@ -81,6 +81,17 @@ public class SessionSummary : MonoBehaviour
 
 
         string status = (isFailed ? "Mission Failed!" : "Successfully Retreated.");
+
+        if (!isFailed)
+        {
+            Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
+            foreach (var item in Data)
+            {
+                FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
+                    "Consumable", item.Value);
+            }
+        }
+
         GameStatus.transform.GetChild(0).GetComponent<TextMeshPro>().text = status;
 
         //Get model

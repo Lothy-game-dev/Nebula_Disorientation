@@ -34,11 +34,11 @@ public class UECSessionScene : MonoBehaviour
     #endregion
     #region NormalVariables
     private Dictionary<string, object> SessionData;
-    private string ChosenFirstWeapon;
-    private string ChosenSecondWeapon;
-    private string ChosenFirstPower;
-    private string ChosenSecondPower;
-    private string ChosenConsumable;
+    public string ChosenFirstWeapon;
+    public string ChosenSecondWeapon;
+    public string ChosenFirstPower;
+    public string ChosenSecondPower;
+    public string ChosenConsumable;
     private GameObject ModelGO;
     private GameObject FirstWeaponGO;
     private GameObject SecondWeaponGO;

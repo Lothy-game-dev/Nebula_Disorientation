@@ -91,6 +91,7 @@ public class FighterShared : MonoBehaviour
     public void InitializeFighter()
     {
         currentTemperature = 50;
+        if (CurrentHP==0)
         CurrentHP = MaxHP;
         // Check Power Barrier
         if (name.Contains("ZatSBB"))

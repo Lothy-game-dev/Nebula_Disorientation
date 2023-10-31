@@ -142,6 +142,7 @@ public class LoadoutScene : UECMenuShared
             Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
         if ("Success".Equals(check))
         {
+            FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(FindObjectOfType<UECMainMenuController>().PlayerId, "LOTW");
             StartCoroutine(MoveToLOTW());
         }
         else if ("Fail".Equals(check))
@@ -154,26 +155,28 @@ public class LoadoutScene : UECMenuShared
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Cannot fetch data for this pilot!\nPlease try again!", 5f);
         }
-        string checkModel = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+        FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
             , Model, "Model", 1);
-        string checkLefWeapon = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+        FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
             , LeftWeapon, "Weapon", 1);
-        string checkRightWeapon = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+        FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
             , RightWeapon, "Weapon", 1);
         if (FirstPower!="")
         {
-            string checkFirstPower = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+           FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
                 , FirstPower, "Power", 1);
         }
 
         if (SecondPower!="")
         {
-            string checkSecondPower = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+            FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
                 , SecondPower, "Power", 1);
         }
         foreach (var item in Consumables)
         {
-            string checkCons = FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+            FindObjectOfType<AccessDatabase>().AddSessionOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
+                , item.Key, "Consumable", item.Value);
+            FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId
                 , item.Key, "Consumable", item.Value);
         }
     }

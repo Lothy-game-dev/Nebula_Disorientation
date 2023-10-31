@@ -220,7 +220,8 @@ public class LOTWScene : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Cannot add card to current session!", 3f);
         }
-        // Enable button pick
+        FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "Gameplay");
+        // Disable button pick
         PickButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
         PickButton.GetComponent<Collider2D>().enabled = false;
         // disable button reroll

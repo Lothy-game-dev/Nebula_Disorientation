@@ -148,7 +148,6 @@ public class StatisticController : MonoBehaviour
                 {
                     Cons += "|" + x.Key + "-" + x.Value;
                 }
-                ad.DecreaseOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), x.Key, "Consumable", Consumable[x.Key] - x.Value);
                 ad.DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), x.Key, "Consumable", Consumable[x.Key] - x.Value);
                 index++;
             }

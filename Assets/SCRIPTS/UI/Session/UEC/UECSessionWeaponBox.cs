@@ -54,7 +54,7 @@ public class UECSessionWeaponBox : MonoBehaviour
     {
         ScrollView.GetComponent<ScrollRect>().horizontal = false;
         ListItem = new List<GameObject>();
-        ListWeapon = FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(PlayerPrefs.GetInt("PlayerID"), other);
+        ListWeapon = FindObjectOfType<AccessDatabase>().GetSessionOwnedWeaponExceptForName(PlayerPrefs.GetInt("PlayerID"), other);
         for (int i = 0; i < ListWeapon.Count; i++)
         {
             for (int j = 0; j < WeaponList.transform.childCount; j++)

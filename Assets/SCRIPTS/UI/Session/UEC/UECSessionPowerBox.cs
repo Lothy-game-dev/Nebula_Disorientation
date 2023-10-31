@@ -54,7 +54,7 @@ public class UECSessionPowerBox : MonoBehaviour
     {
         ScrollView.GetComponent<ScrollRect>().horizontal = false;
         ListItem = new List<GameObject>();
-        ListPower = FindObjectOfType<AccessDatabase>().GetAllOwnedPowerExceptForName(PlayerPrefs.GetInt("PlayerID"), other);
+        ListPower = FindObjectOfType<AccessDatabase>().GetSessionAllOwnedPowerExceptForName(PlayerPrefs.GetInt("PlayerID"), other);
         for (int i = 0; i < ListPower.Count; i++)
         {
             for (int j = 0; j < PowerList.transform.childCount; j++)

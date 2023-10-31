@@ -107,7 +107,7 @@ public class UECSessionConsumableBox : MonoBehaviour
     {
         ListConsumables = new();
         ScrollView.GetComponent<ScrollRect>().horizontal = false;
-        Dictionary<string, int> ListOwnCons = FindObjectOfType<AccessDatabase>().GetOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
+        Dictionary<string, int> ListOwnCons = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
         foreach (var item in ListOwnCons)
         {
             for (int i = 0; i < ConsumableList.transform.childCount; i++)
