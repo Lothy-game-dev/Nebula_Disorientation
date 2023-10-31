@@ -99,7 +99,15 @@ public class NotiBoardOKButton : MonoBehaviour
     {
         if ("OKButton".Equals(name) && MoveToUEC)
         {
-            FindObjectOfType<MainMenuCameraController>().MoveToUEC();
+            int n = FindObjectOfType<AccessDatabase>().GetCurrentSessionPlayerId();
+            Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(n);
+            if ((int)Data["CurrentSession"]==-1)
+            {
+                FindObjectOfType<MainMenuCameraController>().MoveToUEC();
+            } else
+            {
+                FindObjectOfType<MainMenuCameraController>().MoveToUECSession(n);
+            }
         }
     }
     #endregion

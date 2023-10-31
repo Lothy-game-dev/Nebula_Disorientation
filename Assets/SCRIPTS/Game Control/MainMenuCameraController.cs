@@ -141,5 +141,21 @@ public class MainMenuCameraController : MonoBehaviour
         SceneManager.LoadSceneAsync("UECMainMenu");
         SceneManager.UnloadSceneAsync("MainMenu");
     }
+
+    public void MoveToUECSession(int PlayerID)
+    {
+        GenerateLoadingScene(1f);
+        transform.GetChild(0).gameObject.SetActive(true);
+        StartCoroutine(MoveToUECDelay(PlayerID));
+    }
+
+    private IEnumerator MoveToUECDelay(int PlayerID)
+    {
+        yield return new WaitForSeconds(1f);
+        PlayerPrefs.SetInt("PlayerID", PlayerID);
+        PlayerPrefs.SetString("InitTeleport", "UEC");
+        SceneManager.LoadSceneAsync("GameplayExterior");
+        SceneManager.UnloadSceneAsync("MainMenu");
+    }
     #endregion
 }

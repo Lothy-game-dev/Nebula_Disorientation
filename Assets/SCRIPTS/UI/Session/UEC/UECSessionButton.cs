@@ -124,7 +124,7 @@ public class UECSessionButton : MonoBehaviour
         } else if (Type=="Retreat")
         {
             Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-            if ((int)Data["FuelCell"] > 1)
+            if ((int)Data["FuelCell"] >= 1)
             {
                 FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
                 // End Session

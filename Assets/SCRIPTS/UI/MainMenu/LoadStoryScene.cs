@@ -86,7 +86,6 @@ public class LoadStoryScene : MainMenuSceneShared
             boardClone.transform.SetParent(BoardContent.transform);
             currentPilotList.Add(boardClone);
             boardClone.SetActive(true);
-            currentClonePos.y -= (Mathf.Abs(distanceToTop) + Mathf.Abs(distanceToBottom));
             yield return new WaitForSeconds(0.1f);
         }
         Vector3 pos = BoardContent.transform.position;
