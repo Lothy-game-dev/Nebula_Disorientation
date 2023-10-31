@@ -38,7 +38,7 @@ public class CinematicButton : MonoBehaviour
     {
         cine = FindAnyObjectByType<CinematicScene>();
         cine.Part++;
-        cine.GenerateBlackFadeOpen(CinematicScene.transform.position, 3f);
+        cine.GenerateBlackFadeClose(2f);
     }
     #endregion
     #region Function group ...

@@ -35,7 +35,13 @@ public class CinematicScene : MonoBehaviour
     {
         // Initialize variables
         Part = 1;
-        GenerateBlackFadeOpen(transform.position, 3f);
+        if (!UEC.activeSelf && PlayerPrefs.GetString("NewPilot") == "T")
+        {
+            GenerateBlackFadeOpen(transform.position, 3f);
+        } else
+        {
+            UEC.SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -113,7 +119,15 @@ public class CinematicScene : MonoBehaviour
             Background.SetActive(true);
             CurrentCinematic.SetActive(true);
         }
-        StartCoroutine(BlackFadeOpen(bf, duration));
+        if (Part > 4)
+        {
+            Destroy(bf);
+            PlayerPrefs.DeleteKey("NewPilot");
+            UEC.SetActive(true);
+        } else
+        {
+            StartCoroutine(BlackFadeOpen(bf, duration));
+        }
     }
 
     private IEnumerator BlackFadeOpen(GameObject Fade, float duration)
@@ -122,13 +136,7 @@ public class CinematicScene : MonoBehaviour
         {
             if (i == 30)
             {
-                if (Part > 4)
-                {
-                    UEC.SetActive(true);
-                } else
-                {
-                    CinematicStart(Part, 10f);
-                }
+                CinematicStart(Part, 10f);                          
             }                           
             Color c = Fade.GetComponent<SpriteRenderer>().color;
             c.a -= 1 / 50f;
@@ -136,6 +144,28 @@ public class CinematicScene : MonoBehaviour
             yield return new WaitForSeconds(duration / 50f);
         }
         Destroy(Fade);
+    }
+    public void GenerateBlackFadeClose(float duration)
+    {
+        GameObject bf = Instantiate(BlackFade, new Vector3(transform.position.x, transform.position.y, BlackFade.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 0;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.SetActive(true);
+        StartCoroutine(BlackFadeClose(bf, duration));
+    }
+
+    private IEnumerator BlackFadeClose(GameObject Fade, float duration)
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            Color c = Fade.GetComponent<SpriteRenderer>().color;
+            c.a += 1 / 50f;
+            Fade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(duration / 50f);
+        }
+        Destroy(Fade);
+        GenerateBlackFadeOpen(transform.position, 3f);
     }
     #endregion
 }
