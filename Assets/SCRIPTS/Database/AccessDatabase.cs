@@ -1551,6 +1551,33 @@ public class AccessDatabase : MonoBehaviour
             return stats;
         }
     }
+
+    public string GetFighterTierByName(string name)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT TierColor FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        string stats = "";
+        while (dataReader.Read())
+        {
+            check = true;
+            stats = dataReader.GetString(0);
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return stats;
+        }
+    }
     #endregion
     #region Access Power
     public List<List<string>> GetAllPower()
@@ -2473,6 +2500,7 @@ public class AccessDatabase : MonoBehaviour
                 id = dataReaderCons.GetInt32(0);
                 break;
             }
+            
         }
         else if ("Model".Equals(Type))
         {
@@ -3789,22 +3817,7 @@ public class AccessDatabase : MonoBehaviour
     }
 
     public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID, string Cons)
-    {
-        string newCons = "";
-        if (Cons.Length > 0)
-        {
-            string[] stringSplit = Cons.Split("|");
-            for (int i = 0; i < stringSplit.Length; i++)
-            {
-                if (i == stringSplit.Length - 1)
-                {
-                    newCons += "'" + stringSplit[i].Split("-")[0] + "'";
-                } else
-                {
-                    newCons += "'" + stringSplit[i].Split("-")[0] + "',";
-                }
-            }
-        }
+    {      
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
         dbConnection.Open();
@@ -3812,14 +3825,31 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + ", EnemyDestroyed = EnemyDestroyed + "+ Enemy + ", DamageDealt = DamageDealt + " + Damage + ", Consumables = '"+ Cons + "' WHERE SessionId=" + SessionID;
-        int n = dbCheckCommand3.ExecuteNonQuery();
-
-        //Update Sesion Onwership 
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "UPDATE SessionOwnership SET Quantity = Quantity - 1 WHERE ItemID in (SELECT ItemID from SpaceShop where replace(ItemName, ' ','') in (" + newCons +")) and ItemType = 'Consumable' and SessionId=" + SessionID;
-        dbCheckCommand.ExecuteNonQuery();
+        dbCheckCommand3.ExecuteNonQuery();    
         dbConnection.Close();
     }
+
+    public string RepairService(int SessionID, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = " + amount + " WHERE SessionId=" + SessionID;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
+
     #endregion
     #region Access Allies
     public Dictionary<string, object> GetDataAlliesById(int allyID)
@@ -4230,6 +4260,54 @@ public class AccessDatabase : MonoBehaviour
         dbCheckCommand1.ExecuteNonQuery();
         dbConnection.Close();
         
+    }
+    #endregion
+    #region Access ArsenalService
+    public List<Dictionary<string, object>> GetAllArsenalService()
+    {
+        List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+        Dictionary<string, object> service;
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM ArsenalService";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+
+        while (dataReader.Read())
+        {
+            service = new Dictionary<string, object>();
+            service.Add("ID", dataReader.GetInt32(0));
+            service.Add("Name", dataReader.GetString(1));
+            service.Add("Price", dataReader.GetString(2));
+            service.Add("Effect", dataReader.GetInt32(3));
+            list.Add(service);
+        }
+        dbConnection.Close();
+        return list;
+    }
+
+    public Dictionary<string, object> GetArsenalServiceById(int id)
+    {
+        Dictionary<string, object> service = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM ArsenalService WHERE ID = "+ id +"";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+
+        while (dataReader.Read())
+        {
+            service.Add("ID", dataReader.GetInt32(0));
+            service.Add("Name", dataReader.GetString(1));
+            service.Add("Price", dataReader.GetString(2));
+            service.Add("Effect", dataReader.GetInt32(3));
+        }
+        dbConnection.Close();
+        return service;
     }
     #endregion
 }

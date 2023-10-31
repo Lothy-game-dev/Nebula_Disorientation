@@ -22,6 +22,7 @@ public class SpaceZoneSummary : MonoBehaviour
     public GameObject FuelCell;
     public GameObject Timer;
     public GameObject SZNo;
+    public GameObject Fighter;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -29,6 +30,9 @@ public class SpaceZoneSummary : MonoBehaviour
     private StatisticController stat;
     public bool DoneLightUp2;
     private float InitASummary;
+    private AccessDatabase ad;
+    private string Cons;
+    private Dictionary<string, int> Consumable;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -38,8 +42,8 @@ public class SpaceZoneSummary : MonoBehaviour
         Color c3 = GetComponent<SpriteRenderer>().color;
         InitASummary = c3.a;
         c3.a = 0;
-        GetComponent<SpriteRenderer>().color = c3;
-
+        GetComponent<SpriteRenderer>().color = c3;       
+        
     }
 
     // Update is called once per frame
@@ -77,6 +81,7 @@ public class SpaceZoneSummary : MonoBehaviour
     public void Summarize()
     {
         stat = FindAnyObjectByType<StatisticController>();
+        Consumable = new Dictionary<string, int>();  
         TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
         CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP: " + Mathf.RoundToInt(stat.CurrentHP) + "/" + Mathf.RoundToInt(stat.MaxHP);
@@ -87,6 +92,7 @@ public class SpaceZoneSummary : MonoBehaviour
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = stat.CurrentFuelCell;
+      
         Time.timeScale = 0;
     }
     #endregion

@@ -149,6 +149,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\LimitRendering.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\ReactToZoomShared.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\SpawnEnemyWarship.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\ArsenalService\SessionArsenalServiceItem.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceStation\SpaceStationHealthBar.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\SuperiorFreezingBlasterOrb.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutGoButton.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadoutScene.cs" />
     <Compile Include="Assets\SCRIPTS\PowerEffect\LaserBeam.cs" />
     <Compile Include="Assets\SCRIPTS\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\ArsenalService\SessionArsenalServiceButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionItem.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GameplayInteriorController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionConsumableBox.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Common\NotiBoardOKButton.cs" />
     <Compile Include="Assets\SCRIPTS\Common\FuelCellBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\HUDSmallBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\ArsenalService\SessionArsenalService.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\SpawnAlliesFighter.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesFighterMLAgent.cs" />
     <Compile Include="Assets\SCRIPTS\Cons\Consumable.cs" />
