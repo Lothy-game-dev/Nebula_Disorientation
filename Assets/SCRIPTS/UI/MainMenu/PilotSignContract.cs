@@ -120,6 +120,7 @@ public class PilotSignContract : MonoBehaviour
                     FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(ScenePos.transform.position,
                     "CONTRACT SIGNED SUCCESSFULLY.\nMOVING TO THE UEC MAIN HALL IN 5 SECONDS...", 5f);
                     ad.CreateNewPlayerStatistic(InputField.text.ToUpper());
+                    PlayerPrefs.SetString("NewPilot", "T");
                 } else if ("No Exist".Equals(check2))
                 {
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
