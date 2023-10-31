@@ -2028,7 +2028,7 @@ public class AccessDatabase : MonoBehaviour
         {
             // Queries
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT SpaceShop.ItemName,PlayerOwnership.Quantity" +
+            dbCheckCommand.CommandText = "SELECT SpaceShop.ItemName,SessionOwnership.Quantity" +
                 " FROM SpaceShop inner join SessionOwnership WHERE SessionID=" + n +
                 " AND ItemType='Consumable' AND SpaceShop.ItemID=SessionOwnership.ItemID ORDER BY SpaceShop.ItemID ASC";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();

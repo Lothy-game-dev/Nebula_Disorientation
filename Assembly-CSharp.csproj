@@ -243,6 +243,7 @@
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaCollectButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\EncycMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryItem.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Session\SessionSummaryConsBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\UsualThermalOrb.cs" />
     <Compile Include="Assets\SCRIPTS\Enemies\EnemyFighterMLAgent.cs" />
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaScene.cs" />

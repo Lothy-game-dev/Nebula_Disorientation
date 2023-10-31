@@ -30,6 +30,7 @@ public class SessionSummary : MonoBehaviour
     public GameObject Weapon2Template;
     public GameObject ModelTemplate;
     public GameObject BlackFade;
+    public GameObject ConsInfo;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -84,12 +85,14 @@ public class SessionSummary : MonoBehaviour
 
         if (!isFailed)
         {
+            string consString = "";
             Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
             foreach (var item in Data)
             {
-                FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
-                    "Consumable", item.Value);
+                consString += (string)FindObjectOfType<AccessDatabase>().GetConsumableDataByName(item.Key)["Name"] + " x " + item.Value + "\n";
             }
+            ConsInfo.GetComponent<SessionSummaryConsBoard>().SetData(consString);
+            ConsInfo.SetActive(true);
         }
 
         GameStatus.transform.GetChild(0).GetComponent<TextMeshPro>().text = status;
