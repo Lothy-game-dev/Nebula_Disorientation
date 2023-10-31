@@ -35,6 +35,7 @@ public class CinematicScene : MonoBehaviour
     {
         // Initialize variables
         Part = 1;
+        // Show cinematic if new pilot coming
         if (!UEC.activeSelf && PlayerPrefs.GetString("NewPilot") == "T")
         {
             GenerateBlackFadeOpen(transform.position, 3f);
