@@ -24,7 +24,6 @@ public class SessionArsenalService : MonoBehaviour
     public GameObject ModelList;
     public GameObject ModelBox;
     public GameObject PlayerCash;
-    public GameObject PlayerShard;
     public GameObject OrderButton;
     #endregion
     #region NormalVariables
@@ -43,6 +42,8 @@ public class SessionArsenalService : MonoBehaviour
     public int CurrentHP;
     public int SessionID;
     public int PriceToRepair;
+    private int PCash;
+    private bool isEnoughMoney;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -69,7 +70,7 @@ public class SessionArsenalService : MonoBehaviour
     {
         SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         PlayerCash.GetComponent<TextMeshPro>().text = ((int)SessionData["SessionCash"]).ToString();
-        PlayerShard.GetComponent<TextMeshPro>().text = ((int)SessionData["SessionTimelessShard"]).ToString();
+        PCash = ((int)SessionData["SessionCash"]);
         SessionID = int.Parse(SessionData["SessionID"].ToString());
 
         // Model
@@ -122,22 +123,22 @@ public class SessionArsenalService : MonoBehaviour
         ServicePrice = FindAnyObjectByType<GlobalFunctionController>().ConvertPrice(ServiceData["Price"].ToString());
         Effect.GetComponent<TextMeshPro>().text = "Repair <color=green>" + ServiceData["Effect"].ToString() + "% </color>Max Health";
 
-        Price.GetComponent<TextMeshPro>().text = ServicePrice[grade];
+        string pricecolor = "green";
+        if (PCash >= int.Parse(ServicePrice[grade]))
+        {
+            isEnoughMoney = true;
+        } else
+        {
+            pricecolor = "red";
+            isEnoughMoney = false;
+        }
+        Price.GetComponent<TextMeshPro>().text = "<color="+ pricecolor + ">" +ServicePrice[grade] + "</color>";
         PriceToRepair = int.Parse(ServicePrice[grade]);
-        Debug.Log(PriceToRepair);
-        Debug.Log(int.Parse(PlayerCash.GetComponent<TextMeshPro>().text));
         //Order button
         OrderButton.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Order " + ServiceData["Name"].ToString();
         OrderButton.GetComponent<SessionArsenalServiceButton>().HealPercent = int.Parse(ServiceData["Effect"].ToString());
         OrderButton.GetComponent<SessionArsenalServiceButton>().CanBeRepaired = Item[id - 1].GetComponent<SessionArsenalServiceItem>().CanBeRepaired;
-        if (int.Parse(Price.GetComponent<TextMeshPro>().text) <= int.Parse(PlayerCash.GetComponent<TextMeshPro>().text))
-        {
-            OrderButton.GetComponent<SessionArsenalServiceButton>().isEnoughMoney = true;
-        } else
-        {
-            OrderButton.GetComponent<SessionArsenalServiceButton>().isEnoughMoney = false;
-        }
-
+        OrderButton.GetComponent<SessionArsenalServiceButton>().isEnoughMoney = isEnoughMoney;    
         if (!Item[id - 1].GetComponent<SessionArsenalServiceItem>().CanBeRepaired)
         {
             if (OrderButton.GetComponent<CursorUnallowed>() == null)
@@ -159,8 +160,10 @@ public class SessionArsenalService : MonoBehaviour
         for (int i = 0; i < Item.Length; i++)
         {
             Item[i].GetComponent<SpriteRenderer>().color = Color.white;
+            Item[i].transform.GetChild(1).gameObject.SetActive(true);
         }
         Item[id - 1].GetComponent<SpriteRenderer>().color = Color.green;
+        Item[id - 1].transform.GetChild(1).gameObject.SetActive(false);
     }
     #endregion
     #region Set Health
@@ -231,6 +234,12 @@ public class SessionArsenalService : MonoBehaviour
         SetHealth();
         ShowInformation(1);
         LockItem();
+    }
+    #endregion
+    #region Reset data after exiting
+    private void OnDisable()
+    {
+        Destroy(ModelGO);
     }
     #endregion
 }
