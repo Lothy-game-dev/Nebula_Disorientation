@@ -105,8 +105,9 @@ public class SpawnAlliesFighter : MonoBehaviour
         Ally.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
-        Ally.GetComponent<AlliesShared>().Escort = Escort;
-        Ally.GetComponent<AlliesShared>().Defend = count % 2 == 0 ? Defend : !Defend;
+        if (Escort)
+        Ally.GetComponent<AlliesShared>().Escort = count % 3 == 0 ? Escort : !Escort;
+        Ally.GetComponent<AlliesShared>().Defend = false;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
     }
     #endregion

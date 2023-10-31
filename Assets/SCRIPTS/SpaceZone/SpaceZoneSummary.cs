@@ -94,9 +94,77 @@ public class SpaceZoneSummary : MonoBehaviour
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = stat.CurrentFuelCell;
       
         Time.timeScale = 0;
+
+        // Load data for next
+        Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        // Get Next Stage Number, Variant and Hazard
+        PlayerPrefs.SetInt("NextStage", (int)SessionData["CurrentStage"] + 1);
+        int SpaceZoneNo = (int)SessionData["CurrentStage"] + 1;
+        int ChosenVariant;
+        int ChosenHazard;
+        if (PlayerPrefs.GetInt("Variant") == 0)
+        {
+            Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
+            int VariantCount = (int)variantData["VariantCounts"];
+            if (SpaceZoneNo < 51)
+            {
+                if (SpaceZoneNo % 10 == 0)
+                {
+                    ChosenVariant = 2;
+                }
+                else if (SpaceZoneNo % 10 == 8 || SpaceZoneNo % 10 == 9)
+                {
+                    ChosenVariant = 1;
+                }
+                else
+                    ChosenVariant = Random.Range(1, 1 + VariantCount);
+            }
+            else
+                ChosenVariant = Random.Range(1, 1 + VariantCount);
+        }
+        else
+        {
+            ChosenVariant = PlayerPrefs.GetInt("Variant");
+            PlayerPrefs.SetInt("Variant", 0);
+        }
+        if (PlayerPrefs.GetInt("Hazard") == 0)
+        {
+            List<Dictionary<string, object>> ListAvailableHazard = FindObjectOfType<AccessDatabase>().GetAvailableHazards(SpaceZoneNo);
+            ChosenHazard = RandomHazardChoose(ListAvailableHazard);
+        }
+        else
+        {
+            ChosenHazard = PlayerPrefs.GetInt("Hazard");
+            PlayerPrefs.GetInt("Hazard", 0);
+        }
+        // Update
+        FindObjectOfType<AccessDatabase>().UpdateSessionStageData((int)SessionData["SessionID"], SpaceZoneNo, ChosenHazard, ChosenVariant);
+        FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "LOTW");
+        FindObjectOfType<AccessDatabase>().UpdateReduceDurationAllCardByPlayerID(PlayerPrefs.GetInt("PlayerID"));
     }
     #endregion
-    #region Function group ...
+    #region Random Hazard
     // Group all function that serve the same algorithm
+    private int RandomHazardChoose(List<Dictionary<string, object>> dataDict)
+    {
+        float sum = 0;
+        for (int i = 0; i < dataDict.Count; i++)
+        {
+            sum += (int)dataDict[i]["HazardChance"];
+        }
+        float n = Random.Range(0, sum);
+        for (int i = 0; i < dataDict.Count; i++)
+        {
+            if (n < (int)dataDict[i]["HazardChance"])
+            {
+                return (int)dataDict[i]["HazardID"];
+            }
+            else
+            {
+                n -= (int)dataDict[i]["HazardChance"];
+            }
+        }
+        return 1;
+    }
     #endregion
 }

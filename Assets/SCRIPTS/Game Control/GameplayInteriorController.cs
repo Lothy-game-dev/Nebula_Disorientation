@@ -18,6 +18,7 @@ public class GameplayInteriorController : MonoBehaviour
     public LOTWEffect LOTWEffect;
     public GameObject PauseMenu;
     public GameObject SZSummary;
+    public GameObject LoadingScene;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -36,7 +37,8 @@ public class GameplayInteriorController : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        GenerateBlackFadeOpen(transform.position, 5f, 1f);
+        GenerateLoadingScene(5f);
+        GenerateBlackFadeOpen(transform.position, 5f, 0.5f);
         SetCashAndShard();
         Color c = PauseMenu.GetComponent<SpriteRenderer>().color;
         InitAPause1 = c.a;
@@ -107,6 +109,20 @@ public class GameplayInteriorController : MonoBehaviour
     {
         aus.volume = MasterVolumeScale / 100f * MusicVolumeScale / 100f;
     }
+
+    public void GenerateLoadingScene(float duration)
+    {
+        GameObject Load = Instantiate(LoadingScene,
+            new Vector3(Camera.main.transform.position.x,Camera.main.transform.position.y, LoadingScene.transform.position.z), Quaternion.identity);
+        Load.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+        Load.transform.SetParent(Camera.main.transform);
+        Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 1002;
+        Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 1001;
+        Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = duration;
+        Load.SetActive(true);
+    }
+
+
     public void GenerateBlackFadeOpen(Vector2 pos, float delay, float duration)
     {
         GameObject bf = Instantiate(BlackFade, new Vector3(pos.x, pos.y, BlackFade.transform.position.z), Quaternion.identity);

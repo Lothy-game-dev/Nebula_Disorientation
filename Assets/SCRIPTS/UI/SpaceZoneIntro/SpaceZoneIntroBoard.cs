@@ -67,25 +67,9 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         transform.position = new Vector3(Camera.main.transform.position.x,Camera.main.transform.position.y,transform.position.z);
         SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         // Get Next Stage Number, Variant and Hazard
-        SpaceZoneNo = (int)SessionData["CurrentStage"] + 1;
-        Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
-        int VariantCount = (int)variantData["VariantCounts"];
-        if (SpaceZoneNo < 51)
-        {
-            if (SpaceZoneNo % 10 == 0)
-            {
-                ChosenVariant = 2;
-            } else if (SpaceZoneNo % 10 == 8 ||SpaceZoneNo % 10 == 9)
-            {
-                ChosenVariant = 1;
-            } else
-                ChosenVariant = Random.Range(1, 1 + VariantCount);
-        } else
-        ChosenVariant = Random.Range(1, 1 + VariantCount);
-        List<Dictionary<string, object>> ListAvailableHazard = FindObjectOfType<AccessDatabase>().GetAvailableHazards(SpaceZoneNo);
-        ChosenHazard = RandomHazardChoose(ListAvailableHazard);
-        PlayerPrefs.SetInt("Hazard", ChosenHazard);
-        PlayerPrefs.SetInt("Variant", ChosenVariant);
+        SpaceZoneNo = (int)SessionData["CurrentStage"];
+        ChosenVariant = (int)SessionData["CurrentStageVariant"];
+        ChosenHazard = (int)SessionData["CurrentStageHazard"];
         // Set Data To View Next Stage Number, Variant and Hazard
         IncomingStage.GetComponent<TextMeshPro>().text = "Upcoming: Space Zone no " + SpaceZoneNo;
         Dictionary<string, object> HazDatas = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(ChosenHazard);

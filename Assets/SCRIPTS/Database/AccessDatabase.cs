@@ -1373,7 +1373,60 @@ public class AccessDatabase : MonoBehaviour
                 DictOwned.Remove(NameConversion[checkName]);
             }
         }
+        dbConnection.Close();
         return new List<string>(DictOwned.Keys);
+    }
+    
+    public List<string> GetSessionOwnedWeaponExceptForName(int PlayerID, string WeaponName)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader1 = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader1.Read())
+        {
+            if (!dataReader1.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader1.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return null;
+        }
+        else
+        {
+            Dictionary<string, int> DictOwned = new Dictionary<string, int>();
+            Dictionary<string, string> NameConversion = new Dictionary<string, string>();
+            string checkName = WeaponName.Replace(" ", "").ToLower();
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT ArsenalWeapon.WeaponName, Quantity FROM ArsenalWeapon " +
+                "inner join SessionOwnership WHERE SessionID=" + n + " AND ItemType='Weapon' AND ArsenalWeapon.WeaponID = SessionOwnership.ItemID ORDER BY ArsenalWeapon.WeaponID ASC";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                DictOwned.Add(dataReader.GetString(0), dataReader.GetInt32(1));
+                NameConversion.Add(dataReader.GetString(0).Replace(" ", "").ToLower(), dataReader.GetString(0));
+            }
+            if (NameConversion.ContainsKey(checkName))
+            {
+                DictOwned[NameConversion[checkName]] = DictOwned[NameConversion[checkName]] - 1;
+                if (DictOwned[NameConversion[checkName]] == 0)
+                {
+                    DictOwned.Remove(NameConversion[checkName]);
+                }
+            }
+            dbConnection.Close();
+            return new List<string>(DictOwned.Keys);
+        }
     }
     public string AddStarterGiftWeapons(int PlayerID)
     {
@@ -1707,6 +1760,75 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         return list;
     }
+
+    public List<string> GetSessionAllOwnedPowerExceptForName(int PlayerID, string Name)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader1 = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check1 = false;
+        while (dataReader1.Read())
+        {
+            if (!dataReader1.IsDBNull(0))
+            {
+                check1 = true;
+                n = dataReader1.GetInt32(0);
+            }
+        }
+        if (!check1)
+        {
+            dbConnection.Close();
+            return null;
+        }
+        else
+        {
+            List<string> list = new List<string>();
+            string check = "";
+            if (Name.Replace(" ", "").ToLower().Contains("barrier"))
+            {
+                check = "barrier";
+            }
+            else if (Name.Replace(" ", "").ToLower().Contains("wormhole"))
+            {
+                check = "wormhole";
+            }
+            else if (Name.Replace(" ", "").ToLower().Contains("laser"))
+            {
+                check = "laser";
+            }
+            else if (Name.Replace(" ", "").ToLower().Contains("rocket"))
+            {
+                check = "rocket";
+            }
+
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT ArsenalPower.PowerName FROM ArsenalPower " +
+                "inner join SessionOwnership WHERE SessionID=" + n + " AND ItemType='Power' AND ArsenalPower.PowerID = SessionOwnership.ItemID ORDER BY ArsenalPower.PowerID ASC";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                if (check != "")
+                {
+                    if (!dataReader.GetString(0).Replace(" ", "").ToLower().Contains(check))
+                    {
+                        list.Add(dataReader.GetString(0).Replace(" ", ""));
+                    }
+                }
+                else
+                {
+                    list.Add(dataReader.GetString(0).Replace(" ", ""));
+                }
+            }
+            dbConnection.Close();
+            return list;
+        }
+    }
     public Dictionary<string, object> GetPowerDataByName(string name)
     {
         Dictionary<string, object> datas = new Dictionary<string, object>();
@@ -1875,6 +1997,48 @@ public class AccessDatabase : MonoBehaviour
         }
         dbConnection.Close();
         return data;
+    }
+    
+    public Dictionary<string, int> GetSessionOwnedConsumables(int PlayerID)
+    {
+        Dictionary<string, int> data = new Dictionary<string, int>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader1 = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader1.Read())
+        {
+            if (!dataReader1.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader1.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return null;
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT SpaceShop.ItemName,SessionOwnership.Quantity" +
+                " FROM SpaceShop inner join SessionOwnership WHERE SessionID=" + n +
+                " AND ItemType='Consumable' AND SpaceShop.ItemID=SessionOwnership.ItemID ORDER BY SpaceShop.ItemID ASC";
+            IDataReader dataReader = dbCheckCommand.ExecuteReader();
+            while (dataReader.Read())
+            {
+                data.Add(dataReader.GetString(0).Replace("-", "").Replace(" ", ""), dataReader.GetInt32(1));
+            }
+            dbConnection.Close();
+            return data;
+        }
     }
 
     public List<string> GetSpaceShopItemNameSearchByName(string name)
@@ -3396,6 +3560,55 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
+    public string UpdateReduceDurationAllCardByPlayerID(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        bool check = false;
+        int sessionId = -1;
+        while (dataReader.Read())
+        {
+            check = true;
+            if (!dataReader.IsDBNull(0))
+            {
+                sessionId = dataReader.GetInt32(0);
+            }
+        }
+        if (!check || sessionId == -1)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "UPDATE SessionLOTWCards SET Duration = Duration - IIF(Duration=1000 OR Duration=-1, 0, 1) WHERE SessionID=" + sessionId;
+            int n = dbCheckCommand.ExecuteNonQuery();
+            if (n!=1)
+            {
+                dbConnection.Close();
+                return "Fail";
+            }
+            // Queries
+            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+            dbCheckCommand1.CommandText = "DELETE FROM SessionLOTWCards WHERE Duration = 0 AND SessionID=" + sessionId;
+            int m = dbCheckCommand1.ExecuteNonQuery();
+            dbConnection.Close();
+            if (m != 1)
+            {
+                
+                return "Fail";
+            } else
+            return "Success";
+        }
+    }
+
     public string AddCardToCurrentSession(int PlayerID, int CardID)
     {
         // Open DB
@@ -3596,6 +3809,115 @@ public class AccessDatabase : MonoBehaviour
                     return "Success";
                 }
             }
+        }
+    }
+
+    public string AddSessionCurrentSaveData(int PlayerID, string CurrentPlace)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            dbCheckCommand3.CommandText = "SELECT * FROM SessionCurrentSaveData WHERE SessionID=" + n;
+            IDataReader reader = dbCheckCommand3.ExecuteReader();
+            bool check2 = false;
+            int id = -1;
+            while (reader.Read())
+            {
+                check2 = true;
+                id = reader.GetInt32(0);
+            }
+            if (!check2)
+            {
+                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                dbCheckCommand.CommandText = "INSERT INTO SessionCurrentSaveData (SessionID, SessionCurrentPlace) VALUES " +
+                    "(" + n + ",'" + CurrentPlace + "')";
+                int k = dbCheckCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (k != 1)
+                {
+                    return "Fail";
+                }
+                else
+                {
+                    return "Success";
+                }
+            } else
+            {
+                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                dbCheckCommand.CommandText = "UPDATE SessionCurrentSaveData SET SessionCurrentPlace='" + CurrentPlace + "'" +
+                    " WHERE ID=" + id;
+                int k = dbCheckCommand.ExecuteNonQuery();
+                dbConnection.Close();
+                if (k != 1)
+                {
+                    return "Fail";
+                }
+                else
+                {
+                    return "Success";
+                }
+            }
+        }
+    }
+
+    public string GetCurrentPlaceOfSession(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "";
+        }
+        else
+        {
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            dbCheckCommand3.CommandText = "SELECT SessionCurrentPlace FROM SessionCurrentSaveData WHERE SessionID=" + n;
+            IDataReader reader = dbCheckCommand3.ExecuteReader();
+            string place = "";
+            while (reader.Read())
+            {
+                place = reader.GetString(0);
+            }
+            dbConnection.Close();
+            return place;
         }
     }
 

@@ -47,6 +47,7 @@ public class FighterController : MonoBehaviour
     private Dictionary<string, object> dataDict;
     private GameObject FirstPower;
     private GameObject SecondPower;
+    private int CurrentHP;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -82,6 +83,7 @@ public class FighterController : MonoBehaviour
                 DatabaseConsumables.Add(ListCons[i].Split("-")[0], int.Parse(ListCons[i].Split("-")[1]));
             }
         }
+        CurrentHP = (int)dataDict["SessionCurrentHP"];
     }
     private void InitData()
     {
@@ -346,6 +348,7 @@ public class FighterController : MonoBehaviour
             //HP-n|SPD-n|ROT-n|AOF-n,n|DM-n|AM-n|PM-n
             Dictionary<string, object> statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(ModelStats);
             PlayerFighter.GetComponent<PlayerFighter>().MaxHP = int.Parse((string)statsDict["HP"]) * LOTWEffect.LOTWMaxHPScale;
+            PlayerFighter.GetComponent<PlayerFighter>().CurrentHP = (int)CurrentHP;
             PlayerFighter.GetComponent<FighterShared>().LOTWEffect = LOTWEffect;
             PlayerFighter.GetComponent<PlayerMovement>().MovingSpeed = int.Parse((string)statsDict["SPD"]) * LOTWEffect.LOTWMoveSpeedScale;
             PlayerFighter.GetComponent<PlayerMovement>().RotateSpeed = float.Parse((string)statsDict["ROT"]);

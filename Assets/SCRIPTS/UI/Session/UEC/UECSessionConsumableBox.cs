@@ -107,7 +107,7 @@ public class UECSessionConsumableBox : MonoBehaviour
     {
         ListConsumables = new();
         ScrollView.GetComponent<ScrollRect>().horizontal = false;
-        Dictionary<string, int> ListOwnCons = FindObjectOfType<AccessDatabase>().GetOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
+        Dictionary<string, int> ListOwnCons = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
         foreach (var item in ListOwnCons)
         {
             for (int i = 0; i < ConsumableList.transform.childCount; i++)
@@ -265,13 +265,16 @@ public class UECSessionConsumableBox : MonoBehaviour
 
     private void ConvertConsumableString(string str)
     {
-        string[] ConsData = str.Split("|");
-        foreach (var item in ConsData)
+        if (str.Length>0)
         {
-            CurrentCons.Add(item.Split("-")[0]);
-            CurrentConsCount.Add(int.Parse(item.Split("-")[1]));
-            Dictionary<string, object> ConssData = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(item.Split("-")[0]);
-            CurrentConsMax.Add((int)ConssData["Stack"]);
+            string[] ConsData = str.Split("|");
+            foreach (var item in ConsData)
+            {
+                CurrentCons.Add(item.Split("-")[0]);
+                CurrentConsCount.Add(int.Parse(item.Split("-")[1]));
+                Dictionary<string, object> ConssData = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(item.Split("-")[0]);
+                CurrentConsMax.Add((int)ConssData["Stack"]);
+            }
         }
     }
 
@@ -282,6 +285,7 @@ public class UECSessionConsumableBox : MonoBehaviour
         {
             final += CurrentCons[i] + "-" + CurrentConsCount[i] + "|";
         }
+        if (final.Length>0)
         final = final.Substring(0, final.Length - 1);
         Debug.Log(final);
         return final;
