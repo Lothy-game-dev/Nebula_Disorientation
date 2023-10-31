@@ -15,6 +15,7 @@ public class MainMenuCameraController : MonoBehaviour
     public GameObject LoadingScene;
     public GameObject OptionScene;
     public GameObject EncyclopediaScene;
+    public GameObject BlackFade;
     #endregion
     #region NormalVariables
     private GameObject CurrentScene;
@@ -107,37 +108,69 @@ public class MainMenuCameraController : MonoBehaviour
 
     public void GenerateLoadingScene(float sec) 
     {
-        if (CurrentScene==null)
-        {
+        if (CurrentScene == null)
             CurrentScene = StartScene;
-        }
-        Load = Instantiate(LoadingScene, 
-            new Vector3(CurrentScene.transform.position.x, 
-            CurrentScene.transform.position.y, 
-            LoadingScene.transform.position.z), Quaternion.identity);
-        Debug.Log(Load);
-        Debug.Log(Load.transform.position);
-        Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
-        Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
-        Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;       
-        Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
-        Load.SetActive(true);
+        GameObject bf = Instantiate(BlackFade, new Vector3(CurrentScene.transform.position.x, CurrentScene.transform.position.y, BlackFade.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 1;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.SetActive(true);
+        StartCoroutine(BlackFadeOpen(bf, sec));
     }
 
-    public void GenerateLoadingSceneAtPos(Vector2 Pos, float sec)
+    private IEnumerator BlackFadeOpen(GameObject Fade, float duration)
     {
-        Load = Instantiate(LoadingScene,
-            new Vector3(Pos.x, Pos.y,
-            LoadingScene.transform.position.z), Quaternion.identity);
-        Load.GetComponent<SpriteRenderer>().sortingOrder = 50;
-        Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 101;
-        Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 100;
-        Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = sec;
-        Load.SetActive(true);
+        for (int i=0;i<50;i++)
+        {
+            Color c = Fade.GetComponent<SpriteRenderer>().color;
+            c.a -= 1/50f;
+            Fade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(duration / 50f);
+        }
+        Destroy(Fade);
+    }
+    public void GenerateLoadingSceneAtPos(Vector2 pos, float sec)
+    {
+        GameObject bf = Instantiate(BlackFade, new Vector3(pos.x, pos.y, BlackFade.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 1;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.SetActive(true);
+        StartCoroutine(BlackFadeOpen(bf, sec));
+    }
+
+    public void GenerateBlackFadeClose(float duration, float wait)
+    {
+        GameObject bf = Instantiate(BlackFade, new Vector3(transform.position.x, transform.position.y, BlackFade.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 0;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.SetActive(true);
+        StartCoroutine(BlackFadeClose(bf, duration, wait));
+    }
+
+    private IEnumerator BlackFadeClose(GameObject Fade, float duration, float wait)
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            Color c = Fade.GetComponent<SpriteRenderer>().color;
+            c.a += 1 / 50f;
+            Fade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(duration / 50f);
+        }
+        yield return new WaitForSeconds(wait);
+        Destroy(Fade);
     }
 
     public void MoveToUEC()
     {
+        GenerateBlackFadeClose(1f,4f);
+        StartCoroutine(MoveToUECDelay());
+    }
+
+    private IEnumerator MoveToUECDelay()
+    {
+        yield return new WaitForSeconds(1.5f);
         SceneManager.LoadSceneAsync("UECMainMenu");
         SceneManager.UnloadSceneAsync("MainMenu");
     }
@@ -147,10 +180,10 @@ public class MainMenuCameraController : MonoBehaviour
         GenerateLoadingScene(1f);
         PlayerPrefs.SetInt("PlayerID", PlayerID);
         transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(MoveToUECDelay());
+        StartCoroutine(MoveToUECTime());
     }
 
-    private IEnumerator MoveToUECDelay()
+    private IEnumerator MoveToUECTime()
     {
         yield return new WaitForSeconds(1f);
         PlayerPrefs.SetString("InitTeleport", "UEC");

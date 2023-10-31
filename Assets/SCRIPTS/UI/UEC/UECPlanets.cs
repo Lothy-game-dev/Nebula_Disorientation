@@ -119,8 +119,10 @@ public class UECPlanets : MonoBehaviour
             MainCamera.gameObject.transform.Translate(new Vector3(CameraVeloc.x, CameraVeloc.y,0));
             yield return new WaitForSeconds(0.025f);
         }
+        FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeClose(1f, 4f);
+        yield return new WaitForSeconds(1f);
         FindObjectOfType<UECMainMenuController>().TeleportToScene(Controller.gameObject, MoveToScene);
-        FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(1f);
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(1f); 
         MainCamera.orthographicSize = initCameraSize;
         Controller.isPlanetMoving = true;
     }

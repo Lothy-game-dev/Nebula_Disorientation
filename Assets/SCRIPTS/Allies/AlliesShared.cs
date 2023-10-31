@@ -263,6 +263,8 @@ public class AlliesShared : FighterShared
         if (weaponName1 == "Transport")
         {
             IsEscorting = true;
+            Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
+            Vector3 ShieldPos = fm.ShieldBarSlider.transform.position - transform.position;
             EscortTargetPosition = new Vector3(Random.Range(3500, 4900), Random.Range(-4900, -3500), 0);
             float angle = Vector2.Angle(transform.GetChild(5).position - BackFire.transform.position, EscortTargetPosition - transform.position);
             transform.Rotate(new Vector3(0, 0, -angle));
@@ -270,6 +272,10 @@ public class AlliesShared : FighterShared
             OnFreezeGO.transform.Rotate(new Vector3(0, 0, angle));
             fm.HealthBarSlider.transform.Rotate(new Vector3(0, 0, angle));
             fm.ShieldBarSlider.transform.Rotate(new Vector3(0, 0, angle));
+            fm.HealthBarSlider.transform.position = transform.position + HealthPos;
+            fm.ShieldBarSlider.transform.position = transform.position + ShieldPos;
+            HealthBar.Position = HealthPos;
+            ShieldBar.Position = ShieldPos;
             fm.CurrentRotateAngle = angle;
             BackFire.transform.localPosition *= 3;
             ScaleOnStatusBoard /= 3;
@@ -350,7 +356,7 @@ public class AlliesShared : FighterShared
 
             faw.AttachWeapon();
             Vector3 HealthPos = fm.HealthBarSlider.transform.position - transform.position;
-            Vector3 ShieldPos = fm.HealthBarSlider.transform.position - transform.position;
+            Vector3 ShieldPos = fm.ShieldBarSlider.transform.position - transform.position;
             if (!Escort)
             {
                 transform.Rotate(new Vector3(0, 0, -90));
