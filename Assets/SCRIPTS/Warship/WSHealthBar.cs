@@ -49,6 +49,12 @@ public class WSHealthBar : MonoBehaviour
             }
         }
         slider.value = CurrentValue;
+        if (slider.value <= 0)
+        {
+            StopCoroutine(coroutine);
+            isHit = false;
+            slider.gameObject.SetActive(false);
+        }
         slider.gameObject.transform.position = transform.parent.position + Position;
     }
     #endregion

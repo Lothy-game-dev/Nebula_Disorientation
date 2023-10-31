@@ -67,6 +67,7 @@ public class LoadOutBar : MonoBehaviour
         // Preset data
         AfterGenerateList = new List<GameObject>();
         List<string> ListWeapon = FindObjectOfType<AccessDatabase>().GetAllOwnedWeapon(FindObjectOfType<UECMainMenuController>().PlayerId);
+        Debug.Log(FindObjectOfType<UECMainMenuController>().PlayerId);
         if (ListWeapon.Count>0)
         {
             SetItem(

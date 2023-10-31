@@ -41,18 +41,12 @@ public class UECEnterSession : MonoBehaviour
 
     private void OnMouseDown()
     {
-        FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeClose(1f, 5f);
-        StartCoroutine(MoveToLoadout());
-    }
-
-    private IEnumerator MoveToLoadout()
-    {
-        yield return new WaitForSeconds(1.5f);
+        
         List<string> check = FindObjectOfType<AccessDatabase>().GetAllOwnedModel(FindObjectOfType<UECMainMenuController>().PlayerId);
         if (check.Count > 0)
         {
-            FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, LoadoutScene);
-            FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(LoadoutScene.transform.position, 1f);
+            FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeClose(1f, 5f);
+            StartCoroutine(MoveToLoadout());
         }
         else
         {
@@ -60,6 +54,13 @@ public class UECEnterSession : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(UECScene.transform.position,
                 "You don't own a fighter yet. Get your first one in the Factory!");
         }
+    }
+
+    private IEnumerator MoveToLoadout()
+    {
+        yield return new WaitForSeconds(1.5f);
+        FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, LoadoutScene);
+        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(LoadoutScene.transform.position, 1f);
     }
 
     private void OnMouseExit()

@@ -38,6 +38,17 @@ public class LoadoutScene : UECMenuShared
     {
         // Initialize variables
         Consumables = new Dictionary<string, int>();
+        LeftWeapon = "";
+        RightWeapon = "";
+        Model = "";
+        FirstPower = "";
+        SecondPower = "";
+        Weapon1Bar.SetActive(false);
+        Weapon2Bar.SetActive(false);
+        Power1Bar.SetActive(false);
+        Power2Bar.SetActive(false);
+        ConsumableBar.SetActive(false);
+        FighterDemo.SetActive(false);
         GetData();
     }
 
@@ -52,11 +63,6 @@ public class LoadoutScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
-        LeftWeapon = "";
-        RightWeapon = "";
-        Model = "";
-        FirstPower = "";
-        SecondPower = "";
         Weapon1Bar.SetActive(true);
         Weapon2Bar.SetActive(true);
         ModelBoard.SetActive(true);
@@ -70,13 +76,7 @@ public class LoadoutScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
-        Weapon1Bar.SetActive(false);
-        Weapon2Bar.SetActive(false);
-        ModelBoard.SetActive(false);
-        Power1Bar.SetActive(false);
-        Power2Bar.SetActive(false);
-        ConsumableBar.SetActive(false);
-        FighterDemo.SetActive(false);
+
     }
     #endregion
     #region On Enable Get Data

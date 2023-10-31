@@ -71,6 +71,8 @@ public class SpaceStationShared : MonoBehaviour
         FindAnyObjectByType<WSSSDetected>().DectectWSSS();
         WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
         Order = WSSSDict[gameObject];
+        ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
+        HPBar.SetValue(CurrentHP, MaxHP, true);
     }
 
     // Update is called once per frame

@@ -32,8 +32,14 @@ public class UECBackButton : MonoBehaviour
     #region OnMouseDown
     private void OnMouseDown()
     {
-        FindObjectOfType<UECMainMenuController>().TeleportToScene(FromScene, ToScene);
+        FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeClose(1f, 3f);
+        StartCoroutine(Teleport());
+    }
 
+    private IEnumerator Teleport()
+    {
+        yield return new WaitForSeconds(1.5f);
+        FindObjectOfType<UECMainMenuController>().TeleportToScene(FromScene, ToScene);
     }
     #endregion
 }
