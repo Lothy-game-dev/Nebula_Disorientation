@@ -111,6 +111,7 @@
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotificationBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Cinematic\CinematicButton.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneSummary.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\WSMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\Spaceshop\SpaceShopSessionScene.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Assets\SCRIPTS\Game Control\PlayerPrefModifyController.cs" />
     <Compile Include="Assets\SCRIPTS\TemplateScripts.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopItem.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Cinematic\CinematicScene.cs" />
     <Compile Include="Assets\SCRIPTS\Common\FighterMovement.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\FactoryButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\SessionSummary.cs" />
