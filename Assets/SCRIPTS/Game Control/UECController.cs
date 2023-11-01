@@ -36,6 +36,7 @@ public class UECController : UECMenuShared
     void Start()
     {
         // Initialize variables
+        Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
         isPlanetMoving = true;
         ad = FindObjectOfType<AccessDatabase>();
         controller = FindAnyObjectByType<UECMainMenuController>();
@@ -120,9 +121,9 @@ public class UECController : UECMenuShared
     {
         int n = ad.NumberOfDailyMissionById(currentId);
         bool checkDM = true;
-        if (n<2)
+        if (n<4)
         {
-            string check = ad.GenerateDailyMission(currentId, 2 - n);
+            string check = ad.GenerateDailyMission(currentId, 4 - n);
             if ("Fail".Equals(check))
             {
                 checkDM = false;
@@ -142,16 +143,16 @@ public class UECController : UECMenuShared
                     switch (listDM[0][i])
                     {
                         case "KE":
-                            mission = "Kill " + listDM[1][i] + " enemy(s).";
+                            mission = "Eliminate " + listDM[1][i] + " enemy(s).";
                             break;
-                        case "KB":
-                            mission = "Kill " + listDM[1][i] + " boss enemy(s).";
+                        case "SS":
+                            mission = "Spend " + listDM[1][i] + " timeless shard(s).";
                             break;
                         case "C":
                             mission = "Complete " + listDM[1][i] + " spacezone(s).";
                             break;
-                        case "S":
-                            mission = "Spend " + listDM[1][i] + " cash(s) during a session.";
+                        case "SC":
+                            mission = "Spend " + listDM[1][i] + " cash(s).";
                             break;
                         case "P":
                             mission = "Play for at least " + listDM[1][i] + " minute(s).";

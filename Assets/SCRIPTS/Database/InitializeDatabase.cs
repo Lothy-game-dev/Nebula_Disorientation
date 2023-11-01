@@ -565,9 +565,9 @@ public class InitializeDatabase : MonoBehaviour
         // Daily Missions
         string DailyMissions = "INSERT INTO DailyMissions VALUES " +
             "(1, 'KE', 20)," +
-            "(2, 'KB', 1)," +
+            "(2, 'SS', 2)," +
             "(3, 'C', 10)," +
-            "(4, 'S', 10000)," +
+            "(4, 'SC', 5000)," +
             "(5, 'P', 30)," +
             "(6, 'CD', 3)," +
             "(7, 'CA', 3)," +

@@ -15,9 +15,13 @@ public class UECDailyMissions : MonoBehaviour
     public GameObject DMBG;
     public GameObject DM1;
     public GameObject DM2;
+    public GameObject DM3;
+    public GameObject DM4;
     public GameObject DMBGBeforePos;
     public GameObject DMBG1MissionsPos;
     public GameObject DMBG2MissionsPos;
+    public GameObject DMBG3MissionsPos;
+    public GameObject DMBG4MissionsPos;
     public string InfoText;
     #endregion
     #region NormalVariables
@@ -58,7 +62,7 @@ public class UECDailyMissions : MonoBehaviour
     #region Check Daily Mission
     public void SetDailyMission()
     {
-        if (missions.Count == 2)
+        if (missions.Count == 4)
         {
             if (!DM1.activeSelf)
             {
@@ -68,11 +72,21 @@ public class UECDailyMissions : MonoBehaviour
             {
                 DM2.SetActive(true);
             }
+            if (!DM3.activeSelf)
+            {
+                DM3.SetActive(true);
+            }
+            if (!DM4.activeSelf)
+            {
+                DM4.SetActive(true);
+            }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"red\">(0/2)</color>";
+            DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
+            DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[3];
+            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"red\">(0/4)</color>";
             BGToPos = DMBG2MissionsPos.transform.position;
-        } else if (missions.Count == 1)
+        } else if (missions.Count == 3)
         {
             if (DM1.activeSelf)
             {
@@ -82,11 +96,21 @@ public class UECDailyMissions : MonoBehaviour
             {
                 DM2.SetActive(true);
             }
+            if (!DM3.activeSelf)
+            {
+                DM3.SetActive(true);
+            }
+            if (!DM4.activeSelf)
+            {
+                DM4.SetActive(true);
+            }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(1/2)</color>";
+            DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
+            DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
+            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(1/4)</color>";
             BGToPos = DMBG1MissionsPos.transform.position;
-        } else if (missions.Count == 0)
+        } else if (missions.Count == 2)
         {
             if (DM1.activeSelf)
             {
@@ -96,10 +120,74 @@ public class UECDailyMissions : MonoBehaviour
             {
                 DM2.SetActive(false);
             }
+            if (!DM3.activeSelf)
+            {
+                DM3.SetActive(true);
+            }
+            if (!DM4.activeSelf)
+            {
+                DM4.SetActive(true);
+            }
             DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-            DMText.GetComponent<TextMeshPro>().text = "<color=\"green\">completed!</color>";
+            DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
+            DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
+            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(2/4)</color>";
             BGToPos = DMBGBeforePos.transform.position;
+        } else
+        {
+            if (missions.Count == 1)
+            {
+                if (DM1.activeSelf)
+                {
+                    DM1.SetActive(false);
+                }
+                if (DM2.activeSelf)
+                {
+                    DM2.SetActive(false);
+                }
+                if (DM3.activeSelf)
+                {
+                    DM3.SetActive(false);
+                }
+                if (!DM4.activeSelf)
+                {
+                    DM4.SetActive(true);
+                }
+                DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
+                DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(3/4)</color>";
+                BGToPos = DMBGBeforePos.transform.position;
+            } else
+            {
+                if (missions.Count == 0)
+                {
+                    if (DM1.activeSelf)
+                    {
+                        DM1.SetActive(false);
+                    }
+                    if (DM2.activeSelf)
+                    {
+                        DM2.SetActive(false);
+                    }
+                    if (DM3.activeSelf)
+                    {
+                        DM3.SetActive(false);
+                    }
+                    if (DM4.activeSelf)
+                    {
+                        DM4.SetActive(false);
+                    }
+                    DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                    DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                    DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                    DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
+                    DMText.GetComponent<TextMeshPro>().text = "<color=\"green\">completed!</color>";
+                    BGToPos = DMBGBeforePos.transform.position;
+                }
+            }
         }
     }
     #endregion
