@@ -33,7 +33,14 @@ public class SpaceShopSessionInformation : MonoBehaviour
     void OnEnable()
     {
         // Initialize variables
-        DataDictionary = new Dictionary<string, object>();
+        try
+        {
+            if (!DataDictionary.ContainsKey("Name"))
+                DataDictionary = new Dictionary<string, object>();
+        } catch (System.Exception)
+        {
+            DataDictionary = new Dictionary<string, object>();
+        }
         OutputData = new Dictionary<string, string>();
         PreviousInput = "1";
     }
@@ -52,6 +59,7 @@ public class SpaceShopSessionInformation : MonoBehaviour
     #region Show Info
     public void ShowInformationOfItem(string name)
     {
+        Debug.Log("Show " + name);
         // Get data and show it to the UI
         currentItemName = name;
         DataDictionary = FindObjectOfType<AccessDatabase>().GetConsumableDataByName(name);
