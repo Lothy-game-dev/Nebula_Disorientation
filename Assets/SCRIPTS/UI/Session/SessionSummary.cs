@@ -77,8 +77,8 @@ public class SessionSummary : MonoBehaviour
         //Economy
         ShardAmount = (isFailed ? int.Parse(Data["SessionTimelessShard"].ToString()) / 2 : int.Parse(Data["SessionTimelessShard"].ToString()));
         CashAmount = (isFailed ? int.Parse(Data["SessionCash"].ToString()) / 2 : int.Parse(Data["SessionCash"].ToString()));
-        Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? ShardAmount + "<color=red> (-" + ShardAmount + ") </color>" : ShardAmount) + " <sprite index='0'> ";
-        Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? CashAmount + "<color=red> (-" + CashAmount + ") </color>" : CashAmount) + " <sprite index='3'> "; ;      
+        Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? ShardAmount * 2 + "<color=red> (-" + ShardAmount + ") </color>" : ShardAmount) + " <sprite index='0'> ";
+        Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? CashAmount * 2 + "<color=red> (-" + CashAmount + ") </color>" : CashAmount) + " <sprite index='3'> "; ;      
         if (!isFailed)
         {
             string consString = "";

@@ -81,22 +81,22 @@ public class SpaceZoneSummary : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Summarize()
     {
+        Time.timeScale = 0;
         stat = FindAnyObjectByType<StatisticController>();
         Consumable = new Dictionary<string, int>();  
         TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
-        CurrentShard.GetComponent<TextMeshPro>().text = "Current Shard: " + stat.CurrentShard;
-        CurrentCash.GetComponent<TextMeshPro>().text = "Current Cash: " + stat.CurrentCash;
+        CurrentShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: " + stat.CurrentShard.Replace("<sprite index='0'>", "");
+        CurrentCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: " + stat.CurrentCash.Replace("<sprite index='3'>", "");
         Timer.GetComponent<TextMeshPro>().text = stat.PlayedTime;
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = stat.CurrentFuelCell;
       
-        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP (" + Mathf.CeilToInt(Mathf.RoundToInt(stat.CurrentHP) / Mathf.RoundToInt(stat.MaxHP) * 100) + "%)";
+        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP (" + Mathf.CeilToInt(stat.CurrentHP / stat.MaxHP * 100) + "%)";
         HPSlider.GetComponent<Slider>().maxValue = Mathf.RoundToInt(stat.MaxHP);
         HPSlider.GetComponent<Slider>().value = Mathf.RoundToInt(stat.CurrentHP);
-        Time.timeScale = 0;
 
         // Load data for next
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
