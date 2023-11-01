@@ -442,7 +442,7 @@ public class Weapons : MonoBehaviour
 
     public bool CheckIfAngle1BetweenAngle2And3(float angle1, float angle2, float angle3)
     {
-        Debug.Log("Test Angle:" + angle1 + " - " + angle2 + " - " + angle3);
+        //Debug.Log("Test Angle:" + angle1 + " - " + angle2 + " - " + angle3);
         if (RotateLimitPositive <= 90)
         {
             if (0 <= angle1 && angle1 < 180)

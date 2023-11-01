@@ -38,8 +38,12 @@ public class CinematicButton : MonoBehaviour
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         cine = FindAnyObjectByType<CinematicScene>();
-        cine.Part++;
-        cine.GenerateBlackFadeClose(2f);
+        if (!cine.isLoading)
+        {
+            cine.Part++;
+            cine.GenerateBlackFadeClose(2f);
+            cine.isLoading = true;
+        }
     }
     #endregion
     #region Function group ...

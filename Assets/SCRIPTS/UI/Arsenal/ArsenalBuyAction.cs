@@ -188,6 +188,7 @@ public class ArsenalBuyAction : MonoBehaviour
                     "Purchased Successfully.\n", 5f);
                         FindObjectOfType<UECMainMenuController>().GetData();
                         FindObjectOfType<UECMainMenuController>().BuyAmount = 1;
+                        FindObjectOfType<UECMainMenuController>().ShardSpent = shard;
                         FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, shard, 0, "Spent");
                         FindAnyObjectByType<RankController>().CheckToRankUp();
                         break;
