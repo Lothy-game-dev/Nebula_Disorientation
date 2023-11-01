@@ -595,6 +595,26 @@ public class FighterMovement : MonoBehaviour
     {
         if (als!=null)
         {
+            if (als.IsEscorting)
+            {
+                GameObject go = new();
+                go.transform.position = als.EscortTargetPosition;
+                int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
+                Destroy(go);
+                UpMove();
+                if (k == -1)
+                {
+                    LeftMove();
+                }
+                else if (k == 0)
+                {
+                    NoLeftRightMove();
+                }
+                else if (k == 1)
+                {
+                    RightMove();
+                }
+            } else
             if (!als.Escort || als.EscortObject==null)
             {
                 if (als.Defend && als.DefendObject != null)
@@ -760,7 +780,7 @@ public class FighterMovement : MonoBehaviour
                         }
                     }
                 }
-            }else
+            } else
             {
                 int k = CheckIsUpOrDownMovement(als.EscortObject, HeadObject, gameObject);
                 if (CurrentSpeed > 400f)

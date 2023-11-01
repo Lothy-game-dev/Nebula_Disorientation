@@ -70,20 +70,26 @@ public class EnemyFighterSpawn : MonoBehaviour
     public void SpawnEnemy()
     {
         Enemies = new List<GameObject>();
-        if (DelayBetweenSpawn > 0f)
-        {
-            StartCoroutine(SpawnEnemyByTime());
-        } else
-        {
-            for (int i = 0; i< EnemySpawnID.Length; i++)
-            {
-                StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0,2f), false));
-            }
-        }
+        SpawnEnemyNormal();
         if (DelaySpawnSBB > 0f)
         {
             IsSpawningSBB = true;
             SBBCount = 0;
+        }
+    }
+
+    private void SpawnEnemyNormal()
+    {
+        if (DelayBetweenSpawn > 0f)
+        {
+            StartCoroutine(SpawnEnemyByTime());
+        }
+        else
+        {
+            for (int i = 0; i < EnemySpawnID.Length; i++)
+            {
+                StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], Random.Range(0, 2f), false));
+            }
         }
     }
 
@@ -94,6 +100,7 @@ public class EnemyFighterSpawn : MonoBehaviour
             StartCoroutine(CreateEnemy(EnemySpawnID[i], EnemySpawnPosition[i], i, EnemyTier[i], 0, false));
             yield return new WaitForSeconds(DelayBetweenSpawn);
         }
+        SpawnEnemyNormal();
     }
 
     private IEnumerator CreateEnemy(int id, Vector2 spawnPos, int count, int Tier, float delay, bool isBoom)

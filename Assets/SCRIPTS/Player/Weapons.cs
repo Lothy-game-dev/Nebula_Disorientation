@@ -977,10 +977,10 @@ public class Weapons : MonoBehaviour
         aus.Play();
         if (name.Replace("(Clone)","")== "StarBlaster")
         {
-            aus.volume = 0.25f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+            aus.volume = 0.25f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         } else
         {
-            aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+            aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         }
         if (PlayerPrefs.GetString("isFailed") == "T")
         {
@@ -994,8 +994,8 @@ public class Weapons : MonoBehaviour
             aus.clip = WeaponShootSound;
             aus.loop = true;
             aus.Play();
-            if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale;
-            else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale; }
+            if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
+            else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f; }
 
             if (PlayerPrefs.GetString("isFailed") == "T")
             {
@@ -1009,7 +1009,7 @@ public class Weapons : MonoBehaviour
         aus.clip = WeaponShootSound;
         aus.loop = false;
         aus.Play();
-        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         if (PlayerPrefs.GetString("isFailed") == "T")
         {
             aus.volume = 0f;
@@ -1021,7 +1021,7 @@ public class Weapons : MonoBehaviour
         aus.clip = WeaponChargeSound;
         aus.loop = false;
         aus.Play();
-        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         if (PlayerPrefs.GetString("isFailed") == "T")
         {
             aus.volume = 0f;
@@ -1042,7 +1042,7 @@ public class Weapons : MonoBehaviour
             OverHeatImage.GetComponent<AudioSource>().loop = true;
             OverHeatImage.GetComponent<AudioSource>().Play();
         }
-        OverHeatImage.GetComponent<AudioSource>().volume = volume;
+        OverHeatImage.GetComponent<AudioSource>().volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         OverHeatImage.GetComponent<AudioSource>().priority = 10;
     }
 
@@ -1056,7 +1056,7 @@ public class Weapons : MonoBehaviour
         aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
         aus.loop = true;
         aus.Play();
-        aus.volume = 0.08f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 0.08f * audioScale * ControllerMain.MasterVolumeScale/100f * ControllerMain.SFXVolumeScale/100f;
     }
     #endregion
     #region Check direction

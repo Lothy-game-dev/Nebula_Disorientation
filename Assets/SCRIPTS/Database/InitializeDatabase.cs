@@ -483,16 +483,16 @@ public class InitializeDatabase : MonoBehaviour
             "(2, 'SS29-MK2', '', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-1|SC-2', '20000 | 0', null, '#36b37e', 'MK2 version of the SS29 exchanges Vehicle Structure Health for Faster Movement Speed.')," +
             "(3, 'SS29-MK3', '', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0|SP-1|SC-2', '20000 | 0', null, '#36b37e', 'MK3 version of the SS29 gets sturdier Vehicle Structure Health at the cost of Movement Speed.')," +
             "(4, 'SSS-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'SSS prototypes are the advanced Fighters of the UEC, with better overall characteristics compared to the SS29 prototypes, together with expanded storage for more consumables. Their design tends to focus on better Firepower Damage Implementation, resulting in dealing more DMG from weapons.')," +
-            "(5, 'SSS-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK2 version of the SSS exchanges Vehicle Structure Health for Faster Movement Speed.')," +
-            "(6, 'SSS-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK3 version of the SSS gets sturdier Vehicle Structure Health at the cost of Movement Speed.')," +
-            "(7, 'SSS-MKL', '', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.1|AM-1.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff', 'MKL version - the most refined prototype of the SSS . It has an advanced Power Activating Module that lowers Power Cooldown and grants one extra Power Slot. However, its turning speed is quite sluggish.')," +
+            "(5, 'SSS-MK2', '', 'HP-10000|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK2 version of the SSS exchanges Vehicle Structure Health for Faster Movement Speed.')," +
+            "(6, 'SSS-MK3', '', 'HP-14000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK3 version of the SSS gets sturdier Vehicle Structure Health at the cost of Movement Speed.')," +
+            "(7, 'SSS-MKL', '', 'HP-15000|SPD-400|ROT-0.5|AOF-90,90|DM-1.1|AM-1.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff', 'MKL version - the most refined prototype of the SSS . It has an advanced Power Activating Module that lowers Power Cooldown and grants one extra Power Slot. However, its turning speed is quite sluggish.')," +
             "(8, 'UEC29-MK1', '', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MKL version - the most refined prototype of the SSS . It has an advanced Power Activating Module that lowers Power Cooldown and grants one extra Power Slot. However, its turning speed is quite sluggish.')," +
-            "(9, 'UEC29-MK2', '', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK2 version of the UEC29 exchanges Vehicle Structure Health for Faster Movement Speed.')," +
-            "(10, 'UEC29-MK3', '', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK3 version of the UEC29 gets sturdier Vehicle Structure Health at the cost of Movement Speed.')," +
-            "(11, 'UEC29-MKL', '', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|AM-2.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff', 'MKL version - the most refined prototype of the UEC29 . It has an advanced Power Activating Module that lowers Power Cooldown and grants one extra Power Slot. However, its turning speed is quite sluggish.')," +
-            "(12, 'ND-Prot No. 0', '', 'HP-15000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5|SP-2|SC-3', '250000 | 1500', 13, '#ff0d11', 'ND-Prototype No 0 is the first Elite Fighter Prototype, with better overall characteristics compared to all lower-grade Fighters. It is extremely flexible at turning, having a wider Arc of Fire. On the other hand, it also has great Firepower Damage Implementation & the best Power Activating Module, together with one extra Power Slot.')," +
-            "(13, 'ND-Zartillery', '', 'HP-5000|SPD-400|ROT-0.25|AOF-45,45|DM-1.15|AM-2.0|PM-1.0|SP-2|SC-3', '250000 | 1500', 13, '#ff0d11', 'ND-Zartillery is the second version of the Elite Fighter Prototypes. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. It is also equipped with one extra Power Slot.')," +
-            "(14, 'ND-MKZ', '', 'HP-20000|SPD-400|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8|SP-2|SC-4', '250000 | 1500', 13, '#ff0d11', 'ND-Zartillery is the second version of the Elite Fighter Prototypes. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. It is also equipped with one extra Power Slot.'); ";
+            "(9, 'UEC29-MK2', '', 'HP-10000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK2 version of the UEC29 exchanges Vehicle Structure Health for Faster Movement Speed.')," +
+            "(10, 'UEC29-MK3', '', 'HP-14000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0|SP-1|SC-3', '50000 | 200', 5, '#4c9aff', 'MK3 version of the UEC29 gets sturdier Vehicle Structure Health at the cost of Movement Speed.')," +
+            "(11, 'UEC29-MKL', '', 'HP-15000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|AM-2.0|PM-0.8|SP-2|SC-4', '75000 | 300', 5, '#4c9aff', 'MKL version - the most refined prototype of the UEC29 . It has an advanced Power Activating Module that lowers Power Cooldown and grants one extra Power Slot. However, its turning speed is quite sluggish.')," +
+            "(12, 'ND-Prot No. 0', '', 'HP-30000|SPD-550|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5|SP-2|SC-3', '250000 | 1500', 13, '#ff0d11', 'ND-Prototype No 0 is the first Elite Fighter Prototype, with better overall characteristics compared to all lower-grade Fighters. It is extremely flexible at turning, having a wider Arc of Fire. On the other hand, it also has great Firepower Damage Implementation & the best Power Activating Module, together with one extra Power Slot.')," +
+            "(13, 'ND-Zartillery', '', 'HP-20000|SPD-600|ROT-0.25|AOF-45,45|DM-1.15|AM-2.0|PM-1.0|SP-2|SC-3', '250000 | 1500', 13, '#ff0d11', 'ND-Zartillery is the second version of the Elite Fighter Prototypes. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. It is also equipped with one extra Power Slot.')," +
+            "(14, 'ND-MKZ', '', 'HP-40000|SPD-600|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8|SP-2|SC-4', '250000 | 1500', 13, '#ff0d11', 'ND-Zartillery is the second version of the Elite Fighter Prototypes. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. It is also equipped with one extra Power Slot.'); ";
         // RankSystem
         string RankSystem = "INSERT INTO RankSystem VALUES" +
             "(1, 'Soldier', 0, 'O', 1, 500, 'UA-3', '#97a0af')," +
@@ -531,35 +531,35 @@ public class InitializeDatabase : MonoBehaviour
             "(1, 'Structural Upgrader I', 'DEF', 'HP-3', 3, 1000, 'Y', 'Y', '#03c800')," +
             "(2, 'Structural Upgrader II', 'DEF', 'HP-5', 3, 1000, 'Y', 'Y', '#03c800')," +
             "(3, 'Structural Upgrader III', 'DEF', 'HP-7', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(4, 'Engine Booster I', 'DEF', 'MS-5', 3, 3, 'N', 'Y', '#03c800')," +
-            "(5, 'Engine Booster II', 'DEF', 'MS-10', 3, 3, 'N', 'Y', '#03c800')," +
+            "(4, 'Engine Booster I', 'DEF', 'MS-5', 3, 5, 'N', 'Y', '#03c800')," +
+            "(5, 'Engine Booster II', 'DEF', 'MS-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(6, 'Engine Booster III', 'DEF', 'MS-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(7, 'Multi-layer Barrier I', 'DEF', 'RD-5', 3, 3, 'N', 'Y', '#03c800')," +
-            "(8, 'Multi-layer Barrier II', 'DEF', 'RD-10', 3, 3, 'N', 'Y', '#03c800')," +
+            "(7, 'Multi-layer Barrier I', 'DEF', 'RD-5', 3, 5, 'N', 'Y', '#03c800')," +
+            "(8, 'Multi-layer Barrier II', 'DEF', 'RD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(9, 'Multi-layer Barrier III', 'DEF', 'RD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(10, 'Gun Extension I', 'OFF', 'AWD-2', 3, 3, 'N', 'Y', '#03c800')," +
-            "(11, 'Gun Extension II', 'OFF', 'AWD-5', 3, 3, 'N', 'Y', '#03c800')," +
+            "(10, 'Gun Extension I', 'OFF', 'AWD-2', 3, 5, 'N', 'Y', '#03c800')," +
+            "(11, 'Gun Extension II', 'OFF', 'AWD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(12, 'Gun Extension III', 'OFF', 'AWD-2', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(13, 'Gun Heater I', 'OFF', 'TWD-5', 3, 3, 'N', 'Y', '#03c800')," +
-            "(14, 'Gun Heater II', 'OFF', 'TWD-10', 3, 3, 'N', 'Y', '#03c800')," +
+            "(13, 'Gun Heater I', 'OFF', 'TWD-5', 3, 5, 'N', 'Y', '#03c800')," +
+            "(14, 'Gun Heater II', 'OFF', 'TWD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(15, 'Gun Heater III', 'OFF', 'TWD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(16, 'Gun AP Module I', 'OFF', 'BD-10', 3, 3, 'N', 'Y', '#03c800')," +
-            "(17, 'Gun AP Module II', 'OFF', 'BD-20', 3, 3, 'N', 'Y', '#03c800')," +
+            "(16, 'Gun AP Module I', 'OFF', 'BD-10', 3, 5, 'N', 'Y', '#03c800')," +
+            "(17, 'Gun AP Module II', 'OFF', 'BD-20', 3, 5, 'N', 'Y', '#03c800')," +
             "(18, 'Gun AP Module III', 'OFF', 'BD-10', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(19, 'Gun Accelerator I', 'OFF', 'FD-5', 3, 3, 'N', 'Y', '#03c800')," +
-            "(20, 'Gun Accelerator II', 'OFF', 'FD-10', 3, 3, 'N', 'Y', '#03c800')," +
+            "(19, 'Gun Accelerator I', 'OFF', 'FD-5', 3, 5, 'N', 'Y', '#03c800')," +
+            "(20, 'Gun Accelerator II', 'OFF', 'FD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(21, 'Gun Accelerator III', 'OFF', 'FD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
             "(22, 'Power Cooler I', 'SPE', 'PCD-5', 3, 3, 'N', 'Y', '#03c800')," +
-            "(23, 'Power Cooler II', 'SPE', 'PCD-10', 3, 3, 'N', 'Y', '#03c800')," +
+            "(23, 'Power Cooler II', 'SPE', 'PCD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(24, 'Power Cooler III', 'SPE', 'PCD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(25, 'Reformation Structure', 'DEF', 'R-100', 2, 3, 'Y', 'Y', '#0800ff')," +
-            "(26, 'Hazard Protection Coat', 'DEF', 'HAZ', 2, 3, 'Y', 'Y', '#0800ff')," +
-            "(27, 'Berserk Enchantment', 'OFF', 'BS-10-25', 2, 3, 'Y', 'Y', '#0800ff')," +
-            "(28, 'Consumable Cloner', 'SPE', 'CONS', 2, 3, 'Y', 'Y', '#0800ff')," +
-            "(29, 'Foreign Fund', 'SPE', 'C-100', 2, 3, 'Y', 'Y', '#0800ff')," +
-            "(30, 'Power Supercharger', 'SPE', 'PCD-30', 1, 3, 'N', 'Y', '#ff0000')," +
+            "(25, 'Reformation Structure', 'DEF', 'R-100', 2, 5, 'Y', 'Y', '#0800ff')," +
+            "(26, 'Hazard Protection Coat', 'DEF', 'HAZ', 2, 5, 'Y', 'Y', '#0800ff')," +
+            "(27, 'Berserk Enchantment', 'OFF', 'BS-10-25', 2, 5, 'Y', 'Y', '#0800ff')," +
+            "(28, 'Consumable Cloner', 'SPE', 'CONS', 2, 5, 'Y', 'Y', '#0800ff')," +
+            "(29, 'Foreign Fund', 'SPE', 'C-100', 2, 5, 'Y', 'Y', '#0800ff')," +
+            "(30, 'Power Supercharger', 'SPE', 'PCD-30', 1, 5, 'N', 'Y', '#ff0000')," +
             "(31, 'Power Enchanter', 'SPE', 'PCD-10', 1, 1000, 'Y', 'Y', '#ff0000')," +
-            "(32, 'Weapon Supercharger', 'OFF', 'WROF-15', 1, 3, 'N', 'Y', '#ff0000')," +
+            "(32, 'Weapon Supercharger', 'OFF', 'WROF-15', 1, 5, 'N', 'Y', '#ff0000')," +
             "(33, 'Weapon Enchanter', 'OFF', 'AWD-5', 1, 1000, 'Y', 'Y', '#ff0000')," +
             "(34, 'Franklin Effect', 'SPE', 'C-x2', 1, -1, 'N', 'N', '#ff0000');";
         // Daily Missions
@@ -631,25 +631,25 @@ public class InitializeDatabase : MonoBehaviour
             "(2, 'ZatFT-MK1', '', 'AdvancedPulseCannon', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '150|0', 'ZatFTs are the first common Fighters ever widely manufactured by the UEC. They are equipped with Situational Barrier.', '#36b37e')," +
             "(3, 'ZatFT-MK2', '', 'AdvancedNanoFlameThrower', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '150|0', 'MK2 version of the ZatFT exchanges Vehicle Structure Health for Faster Movement Speed. They are equipped with Situational Barrier.', '#36b37e')," +
             "(4, 'ZatFT-MK3', '', 'BlastCannon', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '150|0', 'MK3 version of the ZatFT gets sturdier Vehicle Structure Health at the cost of Movement Speed. They are equipped with Situational Barrier.', '#36b37e')," +
-            "(5, 'ZatWR-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '250|0', 'ZatWR prototypes are the advanced Fighters of the Zaturi, with better overall characteristics compared to the ZatFT prototypes, equipped with Fortified Barrier. Their design tends to focus on better Firepower Damage Implementation, resulting in dealing more DMG from weapons.' , '#4c9aff')," +
-            "(6, 'ZatWR-MK2', '', 'FreezingBlaster', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '250|0', 'MK2 version of the ZatWR exchanges Vehicle Structure Health for Faster Movement Speed.', '#4c9aff')," +
-            "(7, 'ZatWR-MK3', '', 'AdvancedLaserCannon', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '250|0', 'MK3 version of the ZatWR gets sturdier Vehicle Structure Health at the cost of Movement Speed.', '#4c9aff')," +
-            "(8, 'ZatWR-MKL', '', 'AdvancedLaserCannon|OrbOfVacuumGenerator', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '350|1', 'MKL version - the most refined prototype of the ZatWR. It has an advanced Power Activating Module that lowers Power Cooldown and equipped with Enhanced Short Laser Beam as a 2nd Power. However, its turning speed is quite sluggish. ', '#4c9aff')," +
-            "(9, 'KazaT-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '250|0', 'KazaT prototypes are the advanced Fighters of the ZatWR, with better overall characteristics compared to the ZatFT prototypes, equipped with Fortified Barrier. Their design tends to focus on better Firepower Area of Effect Implementation, resulting in having better AOE using weapons.', '#4c9aff')," +
-            "(10, 'KazaT-MK2', '', 'OrbofLavaGenerator', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '250|0', 'MK2 version of the KazaT exchanges Vehicle Structure Health for Faster Movement Speed.', '#4c9aff')," +
-            "(11, 'KazaT-MK3', 'WSSS', 'GravitationalArtillery', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '250|0', 'MK3 version of the KazaT gets sturdier Vehicle Structure Health at the cost of Movement Speed.', '#4c9aff')," +
-            "(12, 'KazaT-MKL', 'WSSS', 'AdvancedLaserCannon|GravitationalArtillery', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '350|1', 'MKL version - the most refined prototype of the Kazat. It has an advanced Power Activating Module that lowers Power Cooldown and equipped with Enhanced Short Laser Beam as a 2nd Power. However, its turning speed is quite sluggish.', '#4c9aff')," +
-            "(13, 'Zaturi-Prot No.1', 'WSSS', 'NanoCannon|SuperiorLaserCannon', 'HP-30000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5', 'HeavyBarrier|SuperiorShortLaserBeam', '3500|5', 'Zaturi-Prototype No 1 is the first Elite Fighter Prototype by the Zaturi, with better overall characteristics compared to all lower-grade Fighters. It is extremely flexible at turning, having a wider  Arc of Fire. On the other hand, it also has great Firepower Damage Implementation & the best Power Activating Module, together with Heavy Barrier & Superior Short Laser Beam equipped.', '#bf2600')," +
-            "(14, 'Zaturi-Ranger', 'WSSS', 'GrandGravitationalArtillery', 'HP-20000|SPD-400|ROT-0.25|AOF-45,45|DM-1.2|AM-3.0|PM-1.0', 'HeavyBarrier|SuperiorRocketBurstDevice', '3500|5', 'Zaturi-Ranger is the second version of the Elite Fighter Prototypes by the Zaturi. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. Its Powers are Heavy Barrier & Superior Rocket Burst Device.', '#bf2600')," +
-            "(15, 'Zaturi-Warmonger', '', 'StarBlaster', 'HP-40000|SPD-600|ROT-1|AOF-60,60|DM-1.25|AM-1.0|PM-0.8', 'HeavyBarrier|AdvancedInstantWormhole', '5000|5', 'Zaturi-Warmonger is the third version of the Elite Fighter Prototypes by the Zaturi. It is the most fearsome Zaturi Fighter, with fantastic overall attributes. Additionally, it also possesses advanced Power Activating Module, with Heavy Barrier & Advanced Instant Wormhole equipped.', '#bf2600');";
+            "(5, 'ZatWR-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '300|1', 'ZatWR prototypes are the advanced Fighters of the Zaturi, with better overall characteristics compared to the ZatFT prototypes, equipped with Fortified Barrier. Their design tends to focus on better Firepower Damage Implementation, resulting in dealing more DMG from weapons.' , '#4c9aff')," +
+            "(6, 'ZatWR-MK2', '', 'FreezingBlaster', 'HP-10000|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '300|1', 'MK2 version of the ZatWR exchanges Vehicle Structure Health for Faster Movement Speed.', '#4c9aff')," +
+            "(7, 'ZatWR-MK3', '', 'AdvancedLaserCannon', 'HP-14000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '300|1', 'MK3 version of the ZatWR gets sturdier Vehicle Structure Health at the cost of Movement Speed.', '#4c9aff')," +
+            "(8, 'ZatWR-MKL', '', 'AdvancedLaserCannon|OrbOfVacuumGenerator', 'HP-15000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '1000|3', 'MKL version - the most refined prototype of the ZatWR. It has an advanced Power Activating Module that lowers Power Cooldown and equipped with Enhanced Short Laser Beam as a 2nd Power. However, its turning speed is quite sluggish. ', '#4c9aff')," +
+            "(9, 'KazaT-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '300|1', 'KazaT prototypes are the advanced Fighters of the ZatWR, with better overall characteristics compared to the ZatFT prototypes, equipped with Fortified Barrier. Their design tends to focus on better Firepower Area of Effect Implementation, resulting in having better AOE using weapons.', '#4c9aff')," +
+            "(10, 'KazaT-MK2', '', 'OrbofLavaGenerator', 'HP-10000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '300|1', 'MK2 version of the KazaT exchanges Vehicle Structure Health for Faster Movement Speed.', '#4c9aff')," +
+            "(11, 'KazaT-MK3', 'WSSS', 'GravitationalArtillery', 'HP-14000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '300|1', 'MK3 version of the KazaT gets sturdier Vehicle Structure Health at the cost of Movement Speed.', '#4c9aff')," +
+            "(12, 'KazaT-MKL', 'WSSS', 'AdvancedLaserCannon|GravitationalArtillery', 'HP-15000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '1000|3', 'MKL version - the most refined prototype of the Kazat. It has an advanced Power Activating Module that lowers Power Cooldown and equipped with Enhanced Short Laser Beam as a 2nd Power. However, its turning speed is quite sluggish.', '#4c9aff')," +
+            "(13, 'Zaturi-Prot No.1', 'WSSS', 'NanoCannon|SuperiorLaserCannon', 'HP-30000|SPD-550|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5', 'HeavyBarrier|SuperiorShortLaserBeam', '5000|10', 'Zaturi-Prototype No 1 is the first Elite Fighter Prototype by the Zaturi, with better overall characteristics compared to all lower-grade Fighters. It is extremely flexible at turning, having a wider  Arc of Fire. On the other hand, it also has great Firepower Damage Implementation & the best Power Activating Module, together with Heavy Barrier & Superior Short Laser Beam equipped.', '#bf2600')," +
+            "(14, 'Zaturi-Ranger', 'WSSS', 'GrandGravitationalArtillery', 'HP-20000|SPD-600|ROT-0.25|AOF-45,45|DM-1.2|AM-3.0|PM-1.0', 'HeavyBarrier|SuperiorRocketBurstDevice', '5000|10', 'Zaturi-Ranger is the second version of the Elite Fighter Prototypes by the Zaturi. It possesses awesome Firepower Damage Implementation & superior Firepower Area of Effect Implementation, at the cost of both Vehicle Structure Health and Movement Speed. Its Powers are Heavy Barrier & Superior Rocket Burst Device.', '#bf2600')," +
+            "(15, 'Zaturi-Warmonger', '', 'StarBlaster', 'HP-40000|SPD-500|ROT-1|AOF-60,60|DM-1.25|AM-1.0|PM-0.8', 'HeavyBarrier|AdvancedInstantWormhole', '5000|10', 'Zaturi-Warmonger is the third version of the Elite Fighter Prototypes by the Zaturi. It is the most fearsome Zaturi Fighter, with fantastic overall attributes. Additionally, it also possesses advanced Power Activating Module, with Heavy Barrier & Advanced Instant Wormhole equipped.', '#bf2600');";
         // Warship
         string Warship = "INSERT INTO Warship VALUES" +
-            "(1, 'Zat-Frigate', 'The basic and the most common Warship to appear during any campaign.', 'HP-300000|SPD-200|ROT-0.25', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon','30000|5')," +
-            "(2, 'Zat-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'CarrierHatch', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Nano Flame Thrower|Superior Nano Flame Thrower|Grand Blast Cannon','30000|5')," +
-            "(3, 'Zat-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon|Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster','50000|10')," +
-            "(4, 'Zat-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', 'HP-1000000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon|Zaturi Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon','75000|30')," +
-            "(5, 'Zat-Dreadnaught', 'The Zaturi has only two Dreadnaughts under command. They have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', 'HP-1500000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Grand Beam Cannon|Zaturi Super Grand Beam Cannon', 'Superior Laser Cannon|Superior Laser Cannon|Superior Laser Cannon|Superior Laser Cannon|Superior Freezing Blaster|Superior Freezing Blaster|Gravitational Artillery|Gravitational Artillery','150000|60')," +
-            "(6, 'Zat-FlagShip', 'The one and only Zat-FlagShip is the best Warship out there of the Zaturi. It is commanded by the Leader of the Zaturi. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', 'HP-2000000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Super Grand Beam Cannon|Zaturi Super Grand Beam Cannon', 'Superior Laser Cannon|Superior Laser Cannon|Plasma Cannon|Plasma Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery|Nano Effect Analyzer|Nano Effect Analyzer','250000|100')," +
+            "(1, 'Zat-Frigate', 'The basic and the most common Warship to appear during any campaign.', 'HP-300000|SPD-200|ROT-0.25', '#4c9aff', 'Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon','30000|30')," +
+            "(2, 'Zat-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'CarrierHatch', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Nano Flame Thrower|Superior Nano Flame Thrower|Grand Blast Cannon','30000|30')," +
+            "(3, 'Zat-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon|Zaturi Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster','50000|50')," +
+            "(4, 'Zat-Battleship', 'Battleships are the best non-elite Warships ever joined the war, with super durable armor and powerful weapons.', 'HP-1000000|SPD-175|ROT-0.2', '#4c9aff', 'Zaturi Grand Beam Cannon|Zaturi Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Advanced Laser Cannon','75000|100')," +
+            "(5, 'Zat-Dreadnaught', 'The Zaturi has only two Dreadnaughts under command. They have extremely powerful firepowers and armor. Dreadnaughts usually appear on the battlefield with a whole squad of Warship.', 'HP-1500000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Grand Beam Cannon|Zaturi Super Grand Beam Cannon', 'Superior Laser Cannon|Superior Laser Cannon|Superior Laser Cannon|Superior Laser Cannon|Superior Freezing Blaster|Superior Freezing Blaster|Gravitational Artillery|Gravitational Artillery','150000|200')," +
+            "(6, 'Zat-FlagShip', 'The one and only Zat-FlagShip is the best Warship out there of the Zaturi. It is commanded by the Leader of the Zaturi. It almost never appears on the battlefield, but when it does, there is a great battle to come for sure.', 'HP-2000000|SPD-150|ROT-0.15', '#bf2600', 'Zaturi Super Grand Beam Cannon|Zaturi Super Grand Beam Cannon', 'Superior Laser Cannon|Superior Laser Cannon|Plasma Cannon|Plasma Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery|Nano Effect Analyzer|Nano Effect Analyzer','250000|300')," +
             "(7, 'UEC-Frigate', 'The basic and the most common Warship to appear during any campaign.', 'HP-300000|SPD-200|ROT-0.25', '#4c9aff', 'UEC Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Grand Blast Cannon','')," +
             "(8, 'UEC-Carrier', 'Carriers bring more Fighters to the battle consistently, at the cost of a Main Weapon.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'CarrierHatch', 'Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Pulse Cannon|Superior Nano Flame Thrower|Superior Nano Flame Thrower|Grand Blast Cannon','')," +
             "(9, 'UEC-Cruiser', 'Cruisers are among the advanced Warships out there, they are are the first ones to equip double Main Weapons.', 'HP-600000|SPD-175|ROT-0.2', '#4c9aff', 'UEC Grand Beam Cannon|UEC Grand Beam Cannon', 'Superior Pulse Cannon|Superior Pulse Cannon|Advanced Laser Cannon|Advanced Laser Cannon|Orb of Lava Generator|Orb of Lava Generator','')," +
@@ -659,24 +659,24 @@ public class InitializeDatabase : MonoBehaviour
         // Space Station
         string SpaceStation = "INSERT INTO SpaceStation VALUES" +
             "(1, 'UEC-Station', 'Space Stations provide not only accommodation for the people of the UEC, but also play as a War Strategic Fortress in the Space Zone.', 'Heal|1|5', '#bf2600', 'UEC Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000', '1500000', '')," +
-            "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', 'Heal|1|5', '#bf2600', 'Zaturi Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000','1500000', '100000|50');";
+            "(2, 'Zat-Station', 'Zaturi Space Stations have always been a pain in the ass for UEC Commanders. Encountering a Zaturi Space Station usually means it is going to be a tough battle for the UEC fellows.', 'Heal|1|5', '#bf2600', 'Zaturi Super Grand Beam Cannon', 'Advanced Laser Cannon|Advanced Laser Cannon|Advanced Freezing Blaster|Advanced Freezing Blaster|Nano Cannon|Nano Cannon|Grand Gravitational Artillery|Grand Gravitational Artillery', '1000','1500000', '100000|100');";
         // Allies
         string Allies = "INSERT INTO Allies VALUES " +
-            "(1, 'SSTP', '', 'Transport', 'HP-20000|SPD-100|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
+            "(1, 'SSTP', '', 'Transport', 'HP-30000|SPD-100|ROT-0.75|AOF-0|DM-0|AM-0|PM-0', '', '#36b37e')," +
             "(2, 'SS29-MK1', '', 'AdvancedPulseCannon', 'HP-10000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(3, 'SS29-MK2', '', 'AdvancedNanoFlameThrower', 'HP-8000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(4, 'SS29-MK3', '', 'BlastCannon', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-1.0|PM-1.0', 'SituationalBarrier', '#36b37e')," +
             "(5, 'SSS-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
-            "(6, 'SSS-MK2', '', 'FreezingBlaster', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
-            "(7, 'SSS-MK3', '', 'AdvancedLaserCannon', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
-            "(8, 'SSS-MKL', '', 'AdvancedLaserCannon|OrbofVacuumGenerator', 'HP-12000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '#4c9aff')," +
+            "(6, 'SSS-MK2', '', 'FreezingBlaster', 'HP-10000|SPD-600|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
+            "(7, 'SSS-MK3', '', 'AdvancedLaserCannon', 'HP-14000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
+            "(8, 'SSS-MKL', '', 'AdvancedLaserCannon|OrbofVacuumGenerator', 'HP-15000|SPD-400|ROT-0.75|AOF-90,90|DM-1.1|AM-1.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '#4c9aff')," +
             "(9, 'UEC29-MK1', '', 'LaserCannon', 'HP-12000|SPD-500|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
-            "(10, 'UEC29-MK2', '', 'OrbofLavaGenerator', 'HP-9600|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
-            "(11, 'UEC29-MK3', 'WSSS', 'GravitationalArtillery', 'HP-14400|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
-            "(12, 'UEC29-MKL', 'WSSS', 'AdvancedLaserCannon|GravitationalArtillery', 'HP-12000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|AM-2.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '#4c9aff')," +
-            "(13, 'ND-Prot No.0', '', 'NanoCannon|SuperiorLaserCannon', 'HP-30000|SPD-500|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5', 'HeavyBarrier|SuperiorShortLaserBeam', '#bf2600')," +
-            "(14, 'ND-Zartillery', 'WSSS', 'GrandGravitationalArtillery', 'HP-20000|SPD-400|ROT-0.25|AOF-45,45|DM-1.2|AM-3.0|PM-1.0', 'HeavyBarrier|SuperiorRocketBurstDevice', '#bf2600')," +
-            "(15, 'ND-MKZ', '', 'SuperiorFreezingBlaster|PlasmaCannon', 'HP-40000|SPD-600|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8', 'HeavyBarrier|AdvancedInstantWormhole', '#bf2600');";
+            "(10, 'UEC29-MK2', '', 'OrbofLavaGenerator', 'HP-10000|SPD-600|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
+            "(11, 'UEC29-MK3', 'WSSS', 'GravitationalArtillery', 'HP-14000|SPD-400|ROT-0.75|AOF-90,90|DM-1.0|AM-2.0|PM-1.0', 'FortifiedBarrier', '#4c9aff')," +
+            "(12, 'UEC29-MKL', 'WSSS', 'AdvancedLaserCannon|GravitationalArtillery', 'HP-15000|SPD-400|ROT-0.5|AOF-90,90|DM-1.0|AM-2.0|PM-0.8', 'FortifiedBarrier|EnhancedRocketBurstDevice', '#4c9aff')," +
+            "(13, 'ND-Prot No.0', '', 'NanoCannon|SuperiorLaserCannon', 'HP-30000|SPD-550|ROT-1.25|AOF-120,120|DM-1.15|AM-1.0|PM-0.5', 'HeavyBarrier|SuperiorShortLaserBeam', '#bf2600')," +
+            "(14, 'ND-Zartillery', 'WSSS', 'GrandGravitationalArtillery', 'HP-20000|SPD-600|ROT-0.25|AOF-45,45|DM-1.2|AM-3.0|PM-1.0', 'HeavyBarrier|SuperiorRocketBurstDevice', '#bf2600')," +
+            "(15, 'ND-MKZ', '', 'SuperiorFreezingBlaster|PlasmaCannon', 'HP-40000|SPD-500|ROT-1|AOF-90,90|DM-1.25|AM-1.0|PM-0.8', 'HeavyBarrier|AdvancedInstantWormhole', '#bf2600');";
         // Insert Fighter Group
         string FighterGroup = "INSERT INTO FighterGroup VALUES " +
             "(1, 'A1', '2,3,4', '5,9', '13',  '2,3,4', '5,9', '13')," +
@@ -705,24 +705,24 @@ public class InitializeDatabase : MonoBehaviour
         string SpaceZoneTemplate = "INSERT INTO SpaceZoneTemplate VALUES " +
             "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '50|60', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '50|75', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 60, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
-            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '50|50', '10-0-0', '9-1-0', null, null, null, 200, null)," +
+            "(3, 2, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
+            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '50|50', '10-0-0', '9-1-0', null, null, null, 100, null)," +
             "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|50', '10-0-0', '10-0-0', null, null, null, 200, null)," +
             "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '75|90', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '75|120', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 60, '125|175', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
-            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '75|75', '10-0-0', '9-1-0', null, null, null, 200, null)," +
+            "(8, 4, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '125|175', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
+            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '75|75', '10-0-0', '9-1-0', null, null, null, 100, null)," +
             "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|75', '10-0-0', '10-0-0', null, null, null, 200, null)," +
             "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|120', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '100|150', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 60, '150|200', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
-            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '100|100', '10-0-0', '9-1-0', null, null, null, 200, null)," +
+            "(13, 6, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '150|200', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
+            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '100|100', '10-0-0', '9-1-0', null, null, null, 100, null)," +
             "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|100', '10-0-0', '10-0-0', null, null, null, 200, null)," +
             "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '125|150', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '125|180', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '250|300', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '200|200', '9-1-0', '8-2-0', null, null, null, null, null)," +
             "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '200|200', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 2000, 1000)," +
-            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '275|325', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '225|225', '9-1-0', '8-2-0', null, null, null, null, null)," +
             "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '225|225', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 2000, 1000)," +
             "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '200|100',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0', null, null)," +
             "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '150|175', '8-2-0', '8-1-1', null, null, null, null, null);";
@@ -766,18 +766,18 @@ public class InitializeDatabase : MonoBehaviour
         string SpaceZoneMission = "INSERT INTO SpaceZoneMission VALUES " +
             "(1, 1, 1, 'Eliminate All Enemies.', 'Elimination of all enemies.|Survival of the player.', 'Destruction of the player.')," +
             "(2, 1, 2, 'Eliminate Target Enemies.', 'Elimination of All Targets.|Survival of the player.', 'Destruction of the player.')," +
-            "(3, 2, 1, 'Defend an UEC-Station for 60 seconds.', 'Survival of the UEC-Station.|Timer ran out.|Survival of the player.', 'Destruction of the UEC-Station.|Destruction of the player.')," +
-            "(4, 2, 2, 'Survive for 120 seconds.', 'Timer ran out.|Survival of the player.', 'Destruction of the player.')," +
+            "(3, 2, 1, 'Defend a Strategic Infrastructure for an amount of time.', 'Survival of the Defending Target.|Timer ran out.|Survival of the player.', 'Destruction of the UEC-Station.|Destruction of the player.')," +
+            "(4, 2, 2, 'Survive for an amount of time.', 'Timer ran out.|Survival of the player.', 'Destruction of the player.')," +
             "(5, 2, 3, 'Escort SSTPs from A to B on the map.', 'At least half of the SSTPs safely escaped.|Survival of the player.', 'At least half of the SSTPs were destroyed.|Destruction of the player.')," +
             "(6, 3, 1, 'Eliminate All Enemies.', 'Elimination of all enemies.|Survival of the player.', 'Destruction of the player.')," +
             "(7, 3, 2, 'Eliminate Target Enemies.', 'Elimination of All Targets.|Survival of the player.', 'Destruction of the player.')," +
-            "(8, 4, 1, 'Defend an UEC-Station for 60 seconds.', 'Survival of the UEC-Station.|Timer ran out.|Survival of the player.', 'Destruction of the UEC-Station.|Destruction of the player.')," +
-            "(9, 4, 2, 'Survive for 120 seconds.', 'Timer ran out.|Survival of the player.', 'Destruction of the player.')," +
+            "(8, 4, 1, 'Defend a Strategic Infrastructure an amount of time.', 'Survival of the Defending Target.|Timer ran out.|Survival of the player.', 'Destruction of the UEC-Station.|Destruction of the player.')," +
+            "(9, 4, 2, 'Survive for an amount of time.', 'Timer ran out.|Survival of the player.', 'Destruction of the player.')," +
             "(10, 4, 3, 'Escort SSTPs from A to B on the map.', 'At least half of the SSTPs safely escaped.|Survival of the player.', 'At least half of the SSTPs were destroyed.|Destruction of the player.')," +
             "(11, 5, 1, 'Eliminate All Enemies.', 'Elimination of all enemies.|Survival of the player.', 'Destruction of the player.')," +
             "(12, 5, 2, 'Eliminate Target Enemies.', 'Elimination of All Targets.|Survival of the player.', 'Destruction of the player.')," +
-            "(13, 6, 1, 'Defend an UEC-Station for 60 seconds.', 'Survival of the UEC-Station.|Timer ran out.|Survival of the player.', 'Destruction of the UEC-Station.|Destruction of the player.')," +
-            "(14, 6, 2, 'Survive for 120 seconds.', 'Timer ran out.|Survival of the player.', 'Destruction of the player.')," +
+            "(13, 6, 1, 'Defend a Strategic Infrastructure for an amount of time.', 'Survival of the Defending Target.|Timer ran out.|Survival of the player.', 'Destruction of the UEC-Station.|Destruction of the player.')," +
+            "(14, 6, 2, 'Survive for an amount of time.', 'Timer ran out.|Survival of the player.', 'Destruction of the player.')," +
             "(15, 6, 3, 'Escort SSTPs from A to B on the map.', 'At least half of the SSTPs safely escaped.|Survival of the player.', 'At least half of the SSTPs were destroyed.|Destruction of the player.')," +
             "(16, 7, 1, 'Eliminate All Enemies.', 'Elimination of all enemies.|Survival of the player.', 'Destruction of the player.')," +
             "(17, 7, 2, 'Eliminate Target Enemies.', 'Elimination of All Targets.|Survival of the player.', 'Destruction of the player.')," +

@@ -163,10 +163,11 @@ public class SpaceZoneGenerator : MonoBehaviour
         TemplateData = FindObjectOfType<AccessDatabase>().GetStageZoneTemplateByStageValueAndVariant(SpaceZoneNo % 10, ChosenVariant);
         // Set UI Data
         SpaceZoneNoText.text = "Space Zone No." + SpaceZoneNo;
-        Mission.MissionTextString = (string)TemplateData["Missions"];
+        int Time = Mathf.RoundToInt(((int)TemplateData["Time"]) * (1 + (SpaceZoneNo / 20)/10f));
+        Mission.MissionTextString = ((string)TemplateData["Missions"]).Replace("an amount of time", Time + " seconds");
         // Set Mission To Mission Object WIP
-        Timer.SetTimer((int)TemplateData["Time"]);
-        SpaceZoneIntro.SetData(SpaceZoneNo, (string)TemplateData["Type"], (string)TemplateData["Missions"], color);
+        Timer.SetTimer(Time);
+        SpaceZoneIntro.SetData(SpaceZoneNo, (string)TemplateData["Type"], ((string)TemplateData["Missions"]).Replace("an amount of time", Time + " seconds"), color);
         
         // Squad Rating
         string SquadRating = (string)TemplateData["SquadRating"];
@@ -821,10 +822,10 @@ public class SpaceZoneGenerator : MonoBehaviour
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             // Chance
             float k = Random.Range(0, 100f);
-            if (k<=10)
+            if (k<=50)
             {
                 AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
-            } else if (k<=15)
+            } else if (k<=85)
             {
                 AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
             } else
