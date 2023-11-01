@@ -25,6 +25,8 @@ public class UECMainMenuController : MonoBehaviour
     public bool isCount;
     private DateTime StartTime;
     public int BuyAmount;
+    public int CashSpent;
+    public int ShardSpent;
     #endregion
     #region Start & Update
     // Start is called before the first frame update

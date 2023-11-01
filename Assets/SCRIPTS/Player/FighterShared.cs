@@ -731,7 +731,7 @@ public class FighterShared : MonoBehaviour
                                 case "#4c9aff": Statistic.EnemyTierII += 1; break;
                                 case "#bf2600": Statistic.EnemyTierIII += 1; break;
                             }
-                            Statistic.TotalEnemyDefeated += (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
+                            Statistic.TotalEnemyDefeated += 1;
                             Statistic.KillEnemy = true;
                         } else if (PlayerDamageReceive > MaxHP/2)
                         {

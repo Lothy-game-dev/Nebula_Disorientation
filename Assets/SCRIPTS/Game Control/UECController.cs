@@ -147,12 +147,36 @@ public class UECController : UECMenuShared
                             break;
                         case "SS":
                             mission = "Spend " + listDM[1][i] + " timeless shard(s).";
+                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            {
+                                if (controller.ShardSpent > 0)
+                                {
+                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.ShardSpent);
+                                }
+                            }
+                            else
+                            {
+                                ad.DailyMissionDone(currentId, listDM[0][i]);
+                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                            }
                             break;
                         case "C":
                             mission = "Complete " + listDM[1][i] + " spacezone(s).";
                             break;
                         case "SC":
                             mission = "Spend " + listDM[1][i] + " cash(s).";
+                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            {
+                                if (controller.CashSpent > 0)
+                                {
+                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.CashSpent);
+                                }
+                            }
+                            else
+                            {
+                                ad.DailyMissionDone(currentId, listDM[0][i]);
+                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                            }
                             break;
                         case "P":
                             mission = "Play for at least " + listDM[1][i] + " minute(s).";

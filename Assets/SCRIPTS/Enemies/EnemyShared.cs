@@ -881,7 +881,7 @@ public class EnemyShared : FighterShared
     #region Bounty
     public void AddBounty()
     {
-        FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
+        FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);       
     }
     #endregion
 }

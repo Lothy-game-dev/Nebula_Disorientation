@@ -38,6 +38,8 @@ public class StatisticController : MonoBehaviour
     public int CurrentSZNo;
     public int CurrentFuelCell;
     public int MissionCompleted;
+    public int ShardCollected;
+    public int CashCollected;
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, object> Achievement;
     private Dictionary<string, string> CurrentAchievement;
@@ -47,6 +49,7 @@ public class StatisticController : MonoBehaviour
     public bool KillBossEnemy;
     private AccessDatabase ad;
     public int PlayerID;
+    public int SessionID;
     public string StageName;
     private float InitScale;
     private int Playedtime;
@@ -55,6 +58,8 @@ public class StatisticController : MonoBehaviour
     public DateTime StartTime;
     private string Cons;
     private Dictionary<string, int> Consumable;
+    public int CurrentShardReward;
+    public int CurrentCashReward;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -115,6 +120,7 @@ public class StatisticController : MonoBehaviour
         CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
         SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
+        SessionID = (int)SessionInformation["SessionID"];
         if (MaxSZReach < CurrentSZNo)
         {
             MaxSZReach = CurrentSZNo;
@@ -153,6 +159,18 @@ public class StatisticController : MonoBehaviour
             }
         }
 
+        //Mission Reward
+        // Stage 10,20,30,....
+        if (CurrentSZNo % 10 == 0)
+        {
+            CurrentShardReward = Mathf.CeilToInt(CurrentSZNo / 20) + 1;           
+        } else
+        {
+            CurrentShardReward = 0;
+        }
+        CurrentCashReward = 500 * (Mathf.CeilToInt((CurrentSZNo - 1) / 10) + 1);
+        Debug.Log("KHanbggggggggggggg" + CurrentCashReward);
+       
         //Update session stat
         ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
 
@@ -231,11 +249,22 @@ public class StatisticController : MonoBehaviour
         DateTime myDateTime = DateTime.Now;
         TimeSpan currentTimePlayed = myDateTime - startTime;
         Playedtime = (int)currentTimePlayed.TotalMinutes;
-        Debug.Log(Playedtime);
         if (oldTime < Playedtime)
         {
             isCount = true;
         }
+    }
+    #endregion
+    #region Price Collected
+    public void PriceCollected(int cash, int shard)
+    {
+        CashCollected += cash;
+        ShardCollected += shard;
+    }
+    public void SessionPriceUpdated(int cash, int shard)
+    {
+        CurrentCash = (int.Parse(CurrentCash.Replace("<sprite index='3'>", "")) + cash).ToString();
+        CurrentShard = (int.Parse(CurrentShard.Replace("<sprite index='0'>", "")) + shard).ToString();
     }
     #endregion
 }

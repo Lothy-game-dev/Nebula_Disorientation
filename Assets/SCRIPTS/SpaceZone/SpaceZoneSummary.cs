@@ -24,6 +24,8 @@ public class SpaceZoneSummary : MonoBehaviour
     public GameObject SZNo;
     public GameObject Fighter;
     public GameObject HPSlider;
+    public GameObject SessionCash;
+    public GameObject SessionShard;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -82,13 +84,22 @@ public class SpaceZoneSummary : MonoBehaviour
     public void Summarize()
     {
         Time.timeScale = 0;
+        FindAnyObjectByType<GameplayInteriorController>().isEnding = true;
         stat = FindAnyObjectByType<StatisticController>();
+
+        stat.PriceCollected(stat.CurrentCashReward, stat.CurrentShardReward);
+        FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(stat.SessionID, true, stat.CurrentCashReward, stat.CurrentShardReward);
+        stat.SessionPriceUpdated(stat.CurrentCashReward, stat.CurrentShardReward);
+
+
         Consumable = new Dictionary<string, int>();  
         TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
-        CurrentShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: " + stat.CurrentShard.Replace("<sprite index='0'>", "");
-        CurrentCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: " + stat.CurrentCash.Replace("<sprite index='3'>", "");
+        SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> " + stat.CurrentShard.Replace("<sprite index='0'>", "");
+        SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br>" + stat.CurrentCash.Replace("<sprite index='3'>", "");
+        CurrentShard.GetComponent<TextMeshPro>().text = "Shard Collected <sprite=0>: <br> " + stat.ShardCollected;
+        CurrentCash.GetComponent<TextMeshPro>().text = "Cash Collected <sprite=3>: <br>" + stat.CashCollected;
         Timer.GetComponent<TextMeshPro>().text = stat.PlayedTime;
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;

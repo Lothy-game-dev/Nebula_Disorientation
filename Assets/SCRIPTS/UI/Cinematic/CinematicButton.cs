@@ -37,8 +37,12 @@ public class CinematicButton : MonoBehaviour
     private void OnMouseDown()
     {
         cine = FindAnyObjectByType<CinematicScene>();
-        cine.Part++;
-        cine.GenerateBlackFadeClose(2f);
+        if (!cine.isLoading)
+        {
+            cine.Part++;
+            cine.GenerateBlackFadeClose(2f);
+            cine.isLoading = true;
+        }
     }
     #endregion
     #region Function group ...

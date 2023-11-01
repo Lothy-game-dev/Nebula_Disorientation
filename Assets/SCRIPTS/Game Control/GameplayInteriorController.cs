@@ -30,6 +30,7 @@ public class GameplayInteriorController : MonoBehaviour
     public float MusicVolumeScale;
     public float SFXVolumeScale;
     private Dictionary<string, object> OptionSetting;
+    public bool isEnding;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -187,6 +188,7 @@ public class GameplayInteriorController : MonoBehaviour
     public void AddCashAndShard(int Cash, int Shard)
     {
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, (int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
+        FindAnyObjectByType<StatisticController>().PriceCollected((int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
         SetCashAndShard();
     }
 

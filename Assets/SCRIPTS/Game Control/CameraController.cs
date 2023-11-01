@@ -118,18 +118,21 @@ public class CameraController : MonoBehaviour
     #region Main Gameplay Popup Screen
     public bool PauseGame()
     {
-        if (!isPausing)
+        if (!InteriorController.isEnding)
         {
-            Time.timeScale = 0;
-            isPausing = true;
-            InteriorController.PauseMenuOn();
-            Debug.Log("Pause");
-        } else
-        {
-            Time.timeScale = 1;
-            isPausing = false;
-            InteriorController.PauseMenuOff();
-            Debug.Log("Continue");
+            if (!isPausing)
+            {
+                Time.timeScale = 0;
+                isPausing = true;
+                InteriorController.PauseMenuOn();
+                Debug.Log("Pause");
+            } else
+            {
+                Time.timeScale = 1;
+                isPausing = false;
+                InteriorController.PauseMenuOff();
+                Debug.Log("Continue");
+            }
         }
         return isPausing;
     }

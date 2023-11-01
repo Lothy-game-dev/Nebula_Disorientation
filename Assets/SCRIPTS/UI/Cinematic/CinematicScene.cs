@@ -27,7 +27,7 @@ public class CinematicScene : MonoBehaviour
     private string CurrentText;
     private GameObject Background;
     private GameObject CurrentCinematic;
-    private Coroutine coroutine;
+    public bool isLoading;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -145,6 +145,7 @@ public class CinematicScene : MonoBehaviour
             yield return new WaitForSeconds(duration / 50f);
         }
         Destroy(Fade);
+        isLoading = false;
     }
     public void GenerateBlackFadeClose(float duration)
     {
