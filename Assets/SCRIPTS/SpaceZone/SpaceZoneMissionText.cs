@@ -24,6 +24,7 @@ public class SpaceZoneMissionText : MonoBehaviour
     private float Black4InitA;
     private float TextInitA;
     private GameplayInteriorController controller;
+    private StatisticController stat;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -37,6 +38,7 @@ public class SpaceZoneMissionText : MonoBehaviour
         TextInitA = Text.GetComponent<TextMeshPro>().color.a;
 
         controller = GetComponent<GameplayInteriorController>();
+        stat = FindAnyObjectByType<StatisticController>();
     }
 
     // Update is called once per frame
@@ -117,10 +119,22 @@ public class SpaceZoneMissionText : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
 
+        for (int i = 0; i < 20; i++)
+        {
+            GetComponent<AudioSource>().volume -= 0.1f;
+            controller.SFXVolumeScale -= 5f;
+            if (stat.Fighter.GetComponent<PlayerFighter>() != null)
+            {
+                stat.Fighter.GetComponent<PlayerFighter>().audioScale -= 500f;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+
         if (text == "Mission Accomplished!")
         {
-            FindAnyObjectByType<RankController>().CheckToRankUp();
+            //Decrease volumn when summarizing
             yield return new WaitForSeconds(2f);
+            FindAnyObjectByType<RankController>().CheckToRankUp();
             Black2.SetActive(false);
             Black3.SetActive(false);
             Black4.SetActive(false);
@@ -128,14 +142,8 @@ public class SpaceZoneMissionText : MonoBehaviour
             FindAnyObjectByType<GameplayInteriorController>().SZSummaryOn();
         } else
         {
-            PlayerPrefs.SetString("isFailed", "T");
-            for (int i = 0; i < 10; i++)
-            {
-                GetComponent<AudioSource>().volume -= 0.1f;
-                controller.SFXVolumeScale -= 0.05f;
-                yield return new WaitForSeconds(0.1f);
-            }
             yield return new WaitForSeconds(2f);
+            PlayerPrefs.SetString("isFailed", "T");
             SceneManager.LoadSceneAsync("SessionSummary");
             SceneManager.UnloadSceneAsync("GameplayInterior");
         }

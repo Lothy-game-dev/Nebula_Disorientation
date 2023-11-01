@@ -38,25 +38,15 @@ public class SessionSummaryButton : MonoBehaviour
     {
         // Call function and timer only if possible
         if (name == "EndButton")
-        {
-            if (SessionSum.isFailed)
+        {          
+            if ((SessionSum.ShardCollected || SessionSum.ShardAmount == 0) && (SessionSum.CashCollected || SessionSum.CashAmount == 0))
             {
-                if (SessionSum.ShardCollected || SessionSum.ShardAmount == 0)
-                {
-                    transform.GetChild(1).gameObject.SetActive(false);
-                    isLocked = false;
-                }
-            } else
-            {
-                if ((SessionSum.ShardCollected || SessionSum.ShardAmount == 0) && (SessionSum.CashCollected || SessionSum.CashAmount == 0))
-                {
-                    transform.GetChild(1).gameObject.SetActive(false);
-                    isLocked = false;
-                }
-            }
+                transform.GetChild(1).gameObject.SetActive(false);
+                isLocked = false;
+            }           
         }
 
-        if ((SessionSum.isFailed || SessionSum.CashAmount == 0) && name == "CashButton")
+        if (SessionSum.CashAmount == 0 && name == "CashButton")
         {
             transform.GetChild(1).gameObject.SetActive(true);
         }
@@ -85,7 +75,7 @@ public class SessionSummaryButton : MonoBehaviour
                 break;
             case "CashButton":
                 // Collect cash
-                if (!SessionSum.CashCollected && !SessionSum.isFailed && SessionSum.CashAmount > 0)
+                if (!SessionSum.CashCollected && SessionSum.CashAmount > 0)
                 {
                     check = ad.UpdateCash(PlayerPrefs.GetInt("PlayerID"), SessionSum.CashAmount);
                     gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Collected";
@@ -100,33 +90,21 @@ public class SessionSummaryButton : MonoBehaviour
                 "Please collect all the reward before ending the session!", 5f);
                 } else
                 {
-                    //End Session
-                    if (SessionSum.isFailed)
+                    //End Session                
+                    if ((SessionSum.ShardCollected || SessionSum.ShardAmount == 0) && (SessionSum.CashCollected || SessionSum.CashAmount == 0))
                     {
-                        if (SessionSum.ShardCollected || SessionSum.ShardAmount == 0)
+                        Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
+                        foreach (var item in Data)
                         {
-                            ad.EndSession(PlayerPrefs.GetInt("PlayerID"));
-                            SceneManager.LoadSceneAsync("UECMainMenu");
-                            SceneManager.UnloadSceneAsync("SessionSummary");
+                            FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
+                                "Consumable", item.Value);
+                            FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
+                                "Consumable", item.Value);
                         }
-                    }
-                    else
-                    {
-                        if ((SessionSum.ShardCollected || SessionSum.ShardAmount == 0) && (SessionSum.CashCollected || SessionSum.CashAmount == 0))
-                        {
-                            Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
-                            foreach (var item in Data)
-                            {
-                                FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
-                                    "Consumable", item.Value);
-                                FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
-                                    "Consumable", item.Value);
-                            }
-                            ad.EndSession(PlayerPrefs.GetInt("PlayerID"));
-                            SceneManager.LoadSceneAsync("UECMainMenu");
-                            SceneManager.UnloadSceneAsync("SessionSummary");
-                        }
-                    }
+                        ad.EndSession(PlayerPrefs.GetInt("PlayerID"));
+                        SceneManager.LoadSceneAsync("UECMainMenu");
+                        SceneManager.UnloadSceneAsync("SessionSummary");
+                    }                  
                 }
                 break;
         }

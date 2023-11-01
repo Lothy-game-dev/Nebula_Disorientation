@@ -76,13 +76,9 @@ public class SessionSummary : MonoBehaviour
 
         //Economy
         ShardAmount = (isFailed ? int.Parse(Data["SessionTimelessShard"].ToString()) / 2 : int.Parse(Data["SessionTimelessShard"].ToString()));
-        CashAmount = int.Parse(Data["SessionCash"].ToString());
+        CashAmount = (isFailed ? int.Parse(Data["SessionCash"].ToString()) / 2 : int.Parse(Data["SessionCash"].ToString()));
         Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? ShardAmount + "<color=red> (-" + ShardAmount + ") </color>" : ShardAmount) + " <sprite index='0'> ";
-        Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = Data["SessionCash"].ToString() + " <sprite index='3'> ";
-
-
-        string status = (isFailed ? "Mission Failed!" : "Successfully Retreated.");
-
+        Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? CashAmount + "<color=red> (-" + CashAmount + ") </color>" : CashAmount) + " <sprite index='3'> "; ;      
         if (!isFailed)
         {
             string consString = "";
@@ -95,7 +91,7 @@ public class SessionSummary : MonoBehaviour
             ConsInfo.SetActive(true);
         }
 
-        GameStatus.transform.GetChild(0).GetComponent<TextMeshPro>().text = status;
+        GameStatus.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? "Mission Failed!" : "Successfully Retreated.");
 
         //Get model
         for (int i = 0; i < ModelList.transform.childCount; i++)
