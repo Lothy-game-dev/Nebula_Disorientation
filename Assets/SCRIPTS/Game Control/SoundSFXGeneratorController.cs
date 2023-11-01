@@ -14,6 +14,8 @@ public class SoundSFXGeneratorController : MonoBehaviour
     public AudioClip LoadoutCons;
     public AudioClip LoadoutWeapon;
     public AudioClip LoadoutFighter;
+    public AudioClip Repair;
+    public AudioClip ButtonClick;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -37,7 +39,7 @@ public class SoundSFXGeneratorController : MonoBehaviour
     /// <summary>
     /// Generate Sound
     /// </summary>
-    /// <param name="Type">EconomySpend / EconomyInsuff / LoadoutCons / LoadoutWeapon / LoadoutFighter</param>
+    /// <param name="Type">EconomySpend / EconomyInsuff / LoadoutCons / LoadoutWeapon / LoadoutFighter / Repair / ButtonClick</param>
     public void GenerateSound(string Type)
     {
         if (Type=="EconomySpend")
@@ -55,6 +57,12 @@ public class SoundSFXGeneratorController : MonoBehaviour
         } else if (Type== "LoadoutFighter")
         {
             GetComponent<AudioSource>().clip = LoadoutFighter;
+        } else if (Type=="Repair")
+        {
+            GetComponent<AudioSource>().clip = Repair;
+        } else if (Type=="ButtonClick")
+        {
+            GetComponent<AudioSource>().clip = ButtonClick;
         }
         GetComponent<AudioSource>().Play();
     }

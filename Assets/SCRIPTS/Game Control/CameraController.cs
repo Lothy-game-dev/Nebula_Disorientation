@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour
         // Call function and timer only if possible
         // Change to close or zoom-out when press left shift
         zoomTimer -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.LeftShift) && zoomTimer<=0f)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && zoomTimer<=0f && Time.timeScale != 0 && !InteriorController.IsInLoading)
         {
             if (!isClose)
             {

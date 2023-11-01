@@ -48,6 +48,7 @@ public class MainMenuButtons : MonoBehaviour
     private void OnMouseEnter()
     {
     }
+
     private void OnMouseOver()
     {
         Color c = GetComponent<SpriteRenderer>().color;
@@ -149,6 +150,7 @@ public class MainMenuButtons : MonoBehaviour
         c2.b = 1;
         Text.GetComponent<SpriteRenderer>().color = c2;
         transform.position = BeforePosition.transform.position;
+        transform.localScale = new Vector3(InitScale, InitScale, InitScale);
         StartCoroutine(MoveToAfterPos());
     }
 
@@ -186,6 +188,7 @@ public class MainMenuButtons : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         rb.velocity = new Vector2(0, 0);
+        transform.position = AfterPosition.transform.position;
         if (name.Equals("NewStoryButton"))
         {
             yield return new WaitForSeconds(0.5f);

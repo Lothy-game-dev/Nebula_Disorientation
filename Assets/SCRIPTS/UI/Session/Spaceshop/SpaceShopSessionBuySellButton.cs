@@ -50,6 +50,7 @@ public class SpaceShopSessionBuySellButton : MonoBehaviour
             }
             else
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                     "Insufficient money", 5f);
             }
@@ -197,6 +198,7 @@ public class SpaceShopSessionBuySellButton : MonoBehaviour
                                 break;
                             case "Success":
                                 // if success, reload data to UI
+                                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                             "Purchased Successfully.\n", 5f);
                                 Scene.GetComponent<SpaceShopSessionScene>().SetData();

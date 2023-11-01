@@ -47,6 +47,7 @@ public class LOTWScene : MonoBehaviour
     void Start()
     {
         // Initialize variables
+        FindObjectOfType<UECSessionScene>().gameObject.SetActive(false);
         // Get Stage Info
         SetStageInfoData();
         // Get All Cards Data
