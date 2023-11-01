@@ -46,7 +46,7 @@ public class PlayerFighter : FighterShared
     public GameObject SecondPower;
     public Dictionary<string, int> Consumables;
     public List<GameObject> ConsumableObject;
-    private float audioScale;
+    public float audioScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update

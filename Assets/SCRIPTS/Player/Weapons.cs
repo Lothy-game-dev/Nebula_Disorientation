@@ -985,10 +985,7 @@ public class Weapons : MonoBehaviour
         {
             aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         }
-        if (PlayerPrefs.GetString("isFailed") == "T")
-        {
-            aus.volume = 0f;
-        }
+        
     }
     public void ThermalSound()
     {
@@ -1000,10 +997,7 @@ public class Weapons : MonoBehaviour
             if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
             else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f; }
 
-            if (PlayerPrefs.GetString("isFailed") == "T")
-            {
-                aus.volume = 0f;
-            }
+            
         }
     }
 
@@ -1013,10 +1007,6 @@ public class Weapons : MonoBehaviour
         aus.loop = false;
         aus.Play();
         aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
-        if (PlayerPrefs.GetString("isFailed") == "T")
-        {
-            aus.volume = 0f;
-        }
     }
 
     public void LaserBeamChargingSound()
@@ -1025,10 +1015,6 @@ public class Weapons : MonoBehaviour
         aus.loop = false;
         aus.Play();
         aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
-        if (PlayerPrefs.GetString("isFailed") == "T")
-        {
-            aus.volume = 0f;
-        }
     }
 
     public void EndSound()
