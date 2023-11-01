@@ -87,7 +87,7 @@ public class AccessDatabase : MonoBehaviour
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo) " +
-            "VALUES ('" + name + "',null,null,10,0,500,5,500,'N',null,null,0)";
+            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0)";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {

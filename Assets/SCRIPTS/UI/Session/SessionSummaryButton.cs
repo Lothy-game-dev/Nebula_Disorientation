@@ -70,6 +70,7 @@ public class SessionSummaryButton : MonoBehaviour
                 {
                     check = ad.RechargeTimelessShard(PlayerPrefs.GetInt("PlayerID"), SessionSum.ShardAmount);
                     gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Collected";
+                    SessionSum.Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = SessionSum.ShardAmount + " <sprite index='0'>";
                     SessionSum.ShardCollected = true;
                 } 
                 break;
@@ -79,6 +80,7 @@ public class SessionSummaryButton : MonoBehaviour
                 {
                     check = ad.UpdateCash(PlayerPrefs.GetInt("PlayerID"), SessionSum.CashAmount);
                     gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Collected";
+                    SessionSum.Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = SessionSum.CashAmount + " <sprite index='3'>";
                     SessionSum.CashCollected = true;
                 }
                 break;
