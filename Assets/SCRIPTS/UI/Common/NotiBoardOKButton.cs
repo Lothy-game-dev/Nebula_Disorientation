@@ -54,6 +54,7 @@ public class NotiBoardOKButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         // Cases
         if ("OKButton".Equals(name) || "CancelButton".Equals(name))
         {

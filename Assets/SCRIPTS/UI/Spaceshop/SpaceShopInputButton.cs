@@ -47,6 +47,7 @@ public class SpaceShopInputButton : MonoBehaviour
             // If mouse down when collider hit -> increase/decrease the input by 1 each time
             if (Input.GetMouseButton(0))
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
                 if (inputDelay<=0f)
                 {
                     InputField.text = (int.Parse(InputField.text) + (name=="Decrease"?-1:1)

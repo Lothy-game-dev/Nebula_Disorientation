@@ -41,7 +41,7 @@ public class UECEnterSession : MonoBehaviour
 
     private void OnMouseDown()
     {
-        
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         List<string> check = FindObjectOfType<AccessDatabase>().GetAllOwnedModel(FindObjectOfType<UECMainMenuController>().PlayerId);
         if (check.Count > 0)
         {

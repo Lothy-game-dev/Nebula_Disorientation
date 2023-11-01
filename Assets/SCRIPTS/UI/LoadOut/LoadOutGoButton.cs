@@ -49,6 +49,7 @@ public class LoadOutGoButton : MonoBehaviour
 
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (Scene.GetComponent<LoadoutScene>().CurrentFuelCells>0)
         {
             //Data

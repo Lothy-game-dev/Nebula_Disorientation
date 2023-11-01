@@ -33,6 +33,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         // When mouse down, check condition
         if ("Buy".Equals(name))
         {

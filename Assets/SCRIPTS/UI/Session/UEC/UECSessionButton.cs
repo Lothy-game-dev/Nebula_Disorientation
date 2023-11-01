@@ -61,6 +61,7 @@ public class UECSessionButton : MonoBehaviour
 
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (Type=="Continue")
         {
             Controller.GenerateBlackFadeClose(1f, 3f);

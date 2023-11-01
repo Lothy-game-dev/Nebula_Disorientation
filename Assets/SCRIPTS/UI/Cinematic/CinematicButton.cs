@@ -36,6 +36,7 @@ public class CinematicButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         cine = FindAnyObjectByType<CinematicScene>();
         cine.Part++;
         cine.GenerateBlackFadeClose(2f);

@@ -38,7 +38,8 @@ public class PersonalAreaCollectButton : MonoBehaviour
     #region Check mouse
     // Group all function that serve the same algorithm
     private void OnMouseDown()
-    {      
+    {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         PAController = PersonalArea.GetComponent<PersonalArea>();
         if (PAController.isUnranked)
         {

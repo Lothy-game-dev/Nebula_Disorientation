@@ -72,6 +72,7 @@ public class MainMenuButtons : MonoBehaviour
     }
     private void OnMouseExit()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (!alreadySelect)
         {
             Color c = GetComponent<SpriteRenderer>().color;

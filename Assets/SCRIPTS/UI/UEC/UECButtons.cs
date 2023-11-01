@@ -46,6 +46,7 @@ public class UECButtons : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if ("Quit".Equals(name))
         {
             FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeClose(0.5f, 3f);

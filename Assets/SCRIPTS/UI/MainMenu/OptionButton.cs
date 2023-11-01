@@ -48,6 +48,7 @@ public class OptionButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if ("LeftButton".Equals(gameObject.name))
         {
             OptionMenu.IsClicked = true;

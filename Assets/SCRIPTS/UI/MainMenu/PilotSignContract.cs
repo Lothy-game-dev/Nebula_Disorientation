@@ -95,6 +95,7 @@ public class PilotSignContract : MonoBehaviour
     #region Sign Contract
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (name == "Sign" && !alreadySign)
         {
             CheckAndSign();

@@ -40,6 +40,7 @@ public class SessionArsenalServiceButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (GetComponent<CursorUnallowed>() == null)
         {
             if (CanBeRepaired && isEnoughMoney)

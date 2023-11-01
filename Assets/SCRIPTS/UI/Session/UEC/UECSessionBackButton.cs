@@ -32,6 +32,7 @@ public class UECSessionBackButton : MonoBehaviour
     #region OnMouseDown
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         StartCoroutine(Move());
     }
 

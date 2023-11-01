@@ -33,6 +33,7 @@ public class SpaceZoneIntroBackButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         Board.SetActive(false);
         foreach (var col in EnableColliders)
         {

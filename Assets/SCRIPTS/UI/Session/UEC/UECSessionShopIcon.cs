@@ -100,6 +100,7 @@ public class UECSessionShopIcon : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (!alreadyZoom)
         {
             alreadyZoom = true;

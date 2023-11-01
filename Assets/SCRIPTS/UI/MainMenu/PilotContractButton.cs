@@ -103,6 +103,7 @@ public class PilotContractButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (name=="Right")
         {
             if (PilotContract.GetComponent<PilotContract>()!=null)

@@ -38,6 +38,7 @@ public class FactoryButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         // check the conditions before buying 
         if (GetComponent<CursorUnallowed>() != null)
         {

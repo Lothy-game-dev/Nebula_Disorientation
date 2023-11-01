@@ -278,8 +278,8 @@
     <Compile Include="Assets\SCRIPTS\UI\PersonalArea\PersonalAreaItem.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneStar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\PilotSignContract.cs" />
-    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopListItem.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\SoundSFXGeneratorController.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopListItem.cs" />
     <Compile Include="Assets\SCRIPTS\Warship\WarshipModelShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECDailyMissions.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayExterior\LuckOfTheWanderer\LOTWScene.cs" />

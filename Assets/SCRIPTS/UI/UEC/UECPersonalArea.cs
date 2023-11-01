@@ -50,6 +50,7 @@ public class UECPersonalArea : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, PersonalAreaScene);
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(PersonalAreaScene.transform.position, 1f);
     }
