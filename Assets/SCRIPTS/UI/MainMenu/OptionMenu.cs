@@ -98,6 +98,7 @@ public class OptionMenu : MainMenuSceneShared
         Master = MasterVolumnSlider.value.ToString();
         Music = MusicVolumnSlider.value.ToString();
         Sound = SFXSlider.value.ToString();
+        Camera.main.GetComponent<SoundController>().CheckSoundVolumeByNumber(MasterVolumnSlider.value, MusicVolumnSlider.value, SFXSlider.value);
         MasterVolumnSlider.transform.GetChild(3).GetComponent<TextMeshPro>().text = Mathf.RoundToInt(float.Parse(Master)).ToString() + "%";
         MusicVolumnSlider.transform.GetChild(3).GetComponent<TextMeshPro>().text = Mathf.RoundToInt(float.Parse(Music)).ToString() + "%";
         SFXSlider.transform.GetChild(3).GetComponent<TextMeshPro>().text = Mathf.RoundToInt(float.Parse(Sound)).ToString() + "%";

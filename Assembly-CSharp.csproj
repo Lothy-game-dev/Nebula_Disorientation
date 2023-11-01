@@ -95,6 +95,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Session\SessionSummaryButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroMission.cs" />
     <Compile Include="Assets\SCRIPTS\SpaceZone\SpaceZoneTimer.cs" />
+    <Compile Include="Assets\SCRIPTS\Game Control\SoundController.cs" />
     <Compile Include="Assets\SCRIPTS\Allies\AlliesShared.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Factory\Factory.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\NanoBullet.cs" />
