@@ -82,6 +82,7 @@ public class WSShared : MonoBehaviour
     public bool isStation;
     private GameObject Killer;
     public GameObject NearestTarget;
+    private float PlayerDamageReceive;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -431,6 +432,7 @@ public class WSShared : MonoBehaviour
         if (HitByPlayer)
         {
             Statistic.DamageDealt += RealDamage;
+            PlayerDamageReceive += RealDamage;
         }
         if (CurrentBarrier > 0)
         {
@@ -892,7 +894,7 @@ public class WSShared : MonoBehaviour
         if (IsEnemy)
         {
             // Bounty
-            if (HitByPlayer)
+            if (HitByPlayer && PlayerDamageReceive > MaxHP * 5 / 100f)
             {
                 FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
             }

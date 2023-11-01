@@ -396,7 +396,7 @@ public class PlayerFighter : FighterShared
             aus.loop = true;
             aus.Play();
         }
-        aus.volume = volume * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
     }
 
     public void StopSound()
@@ -409,14 +409,14 @@ public class PlayerFighter : FighterShared
     {
         DashAudioSource.clip = DashSound;
         DashAudioSource.loop = false;
-        DashAudioSource.volume = 0.75f * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        DashAudioSource.volume = 0.75f * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         DashAudioSource.Play();
     }
 
     public void PlaySpawnSound()
     {
         aus.clip = SpawnSoundEffect;
-        aus.volume = 1 * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 1 * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         aus.Play();
     }
     #endregion

@@ -442,7 +442,8 @@ public class Weapons : MonoBehaviour
 
     public bool CheckIfAngle1BetweenAngle2And3(float angle1, float angle2, float angle3)
     {
-        if (RotateLimitPositive<=90)
+        Debug.Log("Test Angle:" + angle1 + " - " + angle2 + " - " + angle3);
+        if (RotateLimitPositive <= 90)
         {
             if (0 <= angle1 && angle1 < 180)
             {
@@ -485,7 +486,8 @@ public class Weapons : MonoBehaviour
                 else return false;
             }
             else return false;
-        } else
+        }
+        else if (RotateLimitPositive < 180)
         {
             if (0 <= angle1 && angle1 < 180)
             {
@@ -516,7 +518,7 @@ public class Weapons : MonoBehaviour
                 }
                 else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
                 {
-                    if (angle2 <= angle1 || angle1 >= angle3) return true;
+                    if (angle2 <= angle1 || angle1 <= angle3) return true;
                     else return false;
                 }
                 else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
@@ -529,6 +531,7 @@ public class Weapons : MonoBehaviour
             }
             else return false;
         }
+        else if (RotateLimitPositive == 180) return true; else return false;
     }
 
     public float NearestPossibleAngle(float angle1, float angle2, float angle3)
@@ -977,10 +980,10 @@ public class Weapons : MonoBehaviour
         aus.Play();
         if (name.Replace("(Clone)","")== "StarBlaster")
         {
-            aus.volume = 0.25f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+            aus.volume = 0.25f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         } else
         {
-            aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+            aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         }
         
     }
@@ -991,8 +994,8 @@ public class Weapons : MonoBehaviour
             aus.clip = WeaponShootSound;
             aus.loop = true;
             aus.Play();
-            if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale;
-            else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale; }
+            if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
+            else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f; }
 
             
         }
@@ -1003,7 +1006,7 @@ public class Weapons : MonoBehaviour
         aus.clip = WeaponShootSound;
         aus.loop = false;
         aus.Play();
-        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
     }
 
     public void LaserBeamChargingSound()
@@ -1011,7 +1014,7 @@ public class Weapons : MonoBehaviour
         aus.clip = WeaponChargeSound;
         aus.loop = false;
         aus.Play();
-        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
     }
 
     public void EndSound()
@@ -1028,7 +1031,7 @@ public class Weapons : MonoBehaviour
             OverHeatImage.GetComponent<AudioSource>().loop = true;
             OverHeatImage.GetComponent<AudioSource>().Play();
         }
-        OverHeatImage.GetComponent<AudioSource>().volume = volume;
+        OverHeatImage.GetComponent<AudioSource>().volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         OverHeatImage.GetComponent<AudioSource>().priority = 10;
     }
 
@@ -1042,7 +1045,7 @@ public class Weapons : MonoBehaviour
         aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
         aus.loop = true;
         aus.Play();
-        aus.volume = 0.08f * audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
+        aus.volume = 0.08f * audioScale * ControllerMain.MasterVolumeScale/100f * ControllerMain.SFXVolumeScale/100f;
     }
     #endregion
     #region Check direction

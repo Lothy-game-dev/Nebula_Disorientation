@@ -889,7 +889,7 @@ public class GlobalFunctionController : MonoBehaviour
         }
         else if (str.Contains("FD-"))
         {
-            result = "Deal +" + str.Replace("FD-", "") + "% Damage against enemies 2000+ Space Units from you"; 
+            result = "Deal +" + str.Replace("FD-", "") + "% Damage against enemies 1000+ Space Units from you"; 
         }
         else if (str.Contains("PCD-"))
         {

@@ -54,8 +54,8 @@ public class AlliesShared : FighterShared
     public float TargetRefreshTimer;
     public float FindTargetTimer;
     public float HPScale;
-    private bool IsEscorting;
-    private Vector3 EscortTargetPosition;
+    public bool IsEscorting;
+    public Vector3 EscortTargetPosition;
     private int DirMov;
     public bool Escort;
     public GameObject EscortObject;

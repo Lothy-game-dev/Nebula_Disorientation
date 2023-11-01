@@ -50,8 +50,9 @@ public class PlayerMovement : MonoBehaviour
     public float LaserBeamSlowScale;
     public float AEIncreaseScale;
     public LOTWEffect LOTWEffect;
-    public float EngineBoosterSpeedUpTimer;
-    public float EngineBoosterSpeedUpScale;
+    public float AccelEngineSpeedUpTimer;
+    public float AccelEngineSpeedUpScale;
+    public float AccelEngineRoTUpScale;
     private bool PressDash;
     private float DelayAERechargeTimer;
     #endregion
@@ -69,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
         AEEnergy = 100f;
         LaserBeamSlowScale = 1;
         AEIncreaseScale = 1f;
-        EngineBoosterSpeedUpScale = 1f;
+        AccelEngineSpeedUpScale = 1f;
     }
 
     // Update is called once per frame
@@ -113,8 +114,9 @@ public class PlayerMovement : MonoBehaviour
             if (PressDash)
             {
                 PressDash = false;
-                EngineBoosterSpeedUpTimer = 5f;
-                EngineBoosterSpeedUpScale = 1.5f;
+                AccelEngineSpeedUpTimer = 5f;
+                AccelEngineSpeedUpScale = 1.5f;
+                AccelEngineRoTUpScale = 2f;
             }
         }
         // Dashing conditions
@@ -144,16 +146,17 @@ public class PlayerMovement : MonoBehaviour
                 CheckForHazard();
             }
         }
-        if (EngineBoosterSpeedUpTimer > 0f)
+        if (AccelEngineSpeedUpTimer > 0f)
         {
-            EngineBoosterSpeedUpTimer -= Time.deltaTime;
+            AccelEngineSpeedUpTimer -= Time.deltaTime;
             if (!transform.GetChild(9).gameObject.activeSelf)
             {
                 transform.GetChild(9).gameObject.SetActive(true);
             }
         } else
         {
-            EngineBoosterSpeedUpScale = 1f;
+            AccelEngineSpeedUpScale = 1f;
+            AccelEngineRoTUpScale = 1f;
             if (transform.GetChild(9).gameObject.activeSelf && !Dashing)
             {
                 transform.GetChild(9).gameObject.SetActive(false);
@@ -215,15 +218,15 @@ public class PlayerMovement : MonoBehaviour
     void PlayerRotate()
     {
         float RotateScale = 2;
-        transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
-        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed;
+        transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
+        CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale;
         if (PlayerIcon!=null)
         {
-            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
+            PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
         }
         // Fire and Freeze eff not rotate
-        FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
-        FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed));
+        FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
+        FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
     }
     // Detect Player's Input Cases for W and S
     void DetectWSButton()
@@ -291,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
             backFire.SetActive(false);
         }
         AccelerateSpeed();
-        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale * EngineBoosterSpeedUpScale;
+        speedVector = movementVector * CurrentSpeed * pf.SlowedMoveSpdScale * LimitSpeedScale * LaserBeamSlowScale * AccelEngineSpeedUpScale;
     }
     // Accelerate Players
     void AccelerateSpeed()
