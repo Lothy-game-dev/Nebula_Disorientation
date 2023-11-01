@@ -84,10 +84,8 @@ public class UECSessionButton : MonoBehaviour
             if ((int)Data["FuelCell"] >= 1)
             {
                 FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
-                // End Session
-                PlayerPrefs.SetString("isFailed", "F");
-                SceneManager.LoadSceneAsync("SessionSummary");
-                SceneManager.UnloadSceneAsync("GameplayExterior");
+                FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 3f);
+                StartCoroutine(MoveToSessionSum());
             } else
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
@@ -105,6 +103,15 @@ public class UECSessionButton : MonoBehaviour
         Controller.ChangeToScene(LOTW);
     }
     
+    private IEnumerator MoveToSessionSum()
+    {
+        yield return new WaitForSeconds(1.5f);
+        // End Session
+        PlayerPrefs.SetString("isFailed", "F");
+        SceneManager.LoadSceneAsync("SessionSummary");
+        SceneManager.UnloadSceneAsync("GameplayExterior");
+    }
+
     private IEnumerator MoveToGameplay()
     {
         yield return new WaitForSeconds(1.5f);

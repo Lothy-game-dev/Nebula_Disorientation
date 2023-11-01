@@ -55,7 +55,7 @@ public class Weapons : MonoBehaviour
 
     private bool isOverheatted;
     private float OverheatCDTimer;
-    private float OverheatDecreaseTimer;
+    public float OverheatDecreaseTimer;
     private bool isWarning;
 
     public float FireTimer;
@@ -86,6 +86,7 @@ public class Weapons : MonoBehaviour
 
     public float ResetHitTimer;
     private bool isHiding;
+    private bool MobStopFiring;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -272,26 +273,26 @@ public class Weapons : MonoBehaviour
         }
         // Reset thermal hit count per 1/rate of hit second
         if (HitCountResetTimer > 0f)
+        {
+            HitCountResetTimer -= Time.deltaTime;
+        }
+        else
+        {
+            CurrentHitCount = 0;
+            HitCountResetTimer = 1 / RateOfHit;
+        }
+        // Check weapon overheat
+        if (Fighter.GetComponent<FighterShared>() != null)
+            CheckOverheatStatus();
+        // Remove sound when stop holding for thermal weapon
+        // Kinetic and other type unaffected
+        if (Input.GetMouseButtonUp(MouseInput) && Fighter.GetComponent<PlayerFighter>() != null)
+        {
+            if (!isOverheatted && IsThermalType)
             {
-                HitCountResetTimer -= Time.deltaTime;
+                EndSound();
             }
-            else
-            {
-                CurrentHitCount = 0;
-                HitCountResetTimer = 1 / RateOfHit;
-            }
-            // Check weapon overheat
-            if (Fighter.GetComponent<PlayerFighter>() != null)
-                CheckOverheatStatus();
-            // Remove sound when stop holding for thermal weapon
-            // Kinetic and other type unaffected
-            if (Input.GetMouseButtonUp(MouseInput) && Fighter.GetComponent<PlayerFighter>() != null)
-            {
-                if (!isOverheatted && IsThermalType)
-                {
-                    EndSound();
-                }
-            }
+        }
 
         ResetHitTimer -= Time.deltaTime;
         if (ResetHitTimer <= 0f)
@@ -590,13 +591,14 @@ public class Weapons : MonoBehaviour
     {
         if (Aim==null)
         {
+            if (IsThermalType)
             EndSound();
         } else
         {
             if (Fighter.GetComponent<FighterShared>()!=null)
             {
                 if (FireTimer <= 0f && Fireable && !Fighter.GetComponent<FighterShared>().isFrozen &&
-                !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && !isUsingWormhole)
+                !Fighter.GetComponent<FighterShared>().isSFBFreeze && !BeamActivating && !isUsingWormhole && !MobStopFiring)
                 {
                     if (!IsThermalType)
                     {
@@ -867,18 +869,33 @@ public class Weapons : MonoBehaviour
     // Check overheat
     void CheckOverheatStatus()
     {
+        if (Fighter.GetComponent<FighterShared>()!=null && Fighter.GetComponent<PlayerFighter>()==null)
+        {
+            if (currentOverheat >= 90)
+            {
+                MobStopFiring = true;
+            }
+            if (currentOverheat <= 20)
+            {
+                MobStopFiring = false;
+            }
+        }
         // If overheat rate < 80% when is not overheatted then remove warning sound
-        if (currentOverheat <80 && !isOverheatted && isWarning)
+        if (Fighter.GetComponent<PlayerFighter>() != null)
         {
-            EndOverheatWarningSound();
-            isWarning = false;
+            if (currentOverheat < 80 && !isOverheatted && isWarning)
+            {
+                EndOverheatWarningSound();
+                isWarning = false;
+            }
+            // If overheat rate >= 80% then play overheat warning sounds
+            if (currentOverheat >= 80 && !isOverheatted)
+            {
+                OverheatSound80Percent(((currentOverheat - 75) * 2) / 100);
+                isWarning = true;
+            }
         }
-        // If overheat rate >= 80% then play overheat warning sounds
-        if (currentOverheat >= 80 && !isOverheatted)
-        {
-            OverheatSound80Percent(((currentOverheat-75)*2)/100);
-            isWarning = true;
-        }
+
         // If overheat rate >= 100% and is not overheatted then become overheatted and set timer, etc.
         if (currentOverheat >= 100 && !isOverheatted)
         {
