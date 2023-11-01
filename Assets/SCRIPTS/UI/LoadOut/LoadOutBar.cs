@@ -67,12 +67,12 @@ public class LoadOutBar : MonoBehaviour
         // Preset data
         AfterGenerateList = new List<GameObject>();
         List<string> ListWeapon = FindObjectOfType<AccessDatabase>().GetAllOwnedWeapon(FindObjectOfType<UECMainMenuController>().PlayerId);
-        Debug.Log(FindObjectOfType<UECMainMenuController>().PlayerId);
         if (ListWeapon.Count>0)
         {
             SetItem(
             ListWeapon,
-            ListWeapon[0],true);
+            Type == "LeftWeapon" ? (Scene.GetComponent<LoadoutScene>().LeftWeapon == "" ? ListWeapon[0] : Scene.GetComponent<LoadoutScene>().LeftWeapon)
+            : (Scene.GetComponent<LoadoutScene>().RightWeapon == "" ? ListWeapon[0] : Scene.GetComponent<LoadoutScene>().RightWeapon), true);
         }
     }
 

@@ -101,6 +101,8 @@ public class LoadoutScene : UECMenuShared
         {
             // Do you want to move to factory
         }
+        Power1Bar.GetComponent<LoadOutPowerBar>().SetItem(FirstPower);
+        Power2Bar.GetComponent<LoadOutPowerBar>().SetItem(SecondPower);
         ConsumableBar.GetComponent<LoadOutConsumables>().SetInitData(
             FindObjectOfType<AccessDatabase>().GetOwnedConsumables(FindObjectOfType<UECMainMenuController>().PlayerId));
         if (ConsSaveString!=null && ConsSaveString.Length>0)
@@ -113,9 +115,16 @@ public class LoadoutScene : UECMenuShared
             }
             foreach (var item in ConsDict)
             {
-                for (int i = 0; i < item.Value; i++)
+                Dictionary<string, int> OwnedData = FindObjectOfType<AccessDatabase>().GetOwnedConsumables(FindObjectOfType<UECMainMenuController>().PlayerId);
+                int k = 0;
+                if (OwnedData.ContainsKey(item.Key))
                 {
-                    int n = ConsumableBar.GetComponent<LoadOutConsumables>().IncreaseItem(item.Key);
+                    if (item.Value < OwnedData[item.Key]) k = item.Value;
+                    else k = OwnedData[item.Key];
+                    for (int i = 0; i < k; i++)
+                    {
+                        int n = ConsumableBar.GetComponent<LoadOutConsumables>().IncreaseItem(item.Key);
+                    }
                 }
             }
         }

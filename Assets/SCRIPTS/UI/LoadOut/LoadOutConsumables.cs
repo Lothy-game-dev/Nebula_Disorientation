@@ -125,6 +125,7 @@ public class LoadOutConsumables : MonoBehaviour
                         CurrentItemLimit[n] = k;
                         Consumables[n].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                         = AddModel.GetComponent<SpriteRenderer>().sprite;
+                        Consumables[n].transform.GetChild(2).gameObject.SetActive(false);
                         Consumables[n].transform.GetChild(1).gameObject.SetActive(true);
                         Consumables[n].transform.GetChild(1).GetComponent<TextMeshPro>().text = CurrentItemCount[n] + "/" + CurrentItemLimit[n];
                         return CurrentItemCount[n];
@@ -175,6 +176,7 @@ public class LoadOutConsumables : MonoBehaviour
                 CurrentItemCount[n] = 0;
                 Consumables[n].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
                         = null;
+                Consumables[n].transform.GetChild(2).gameObject.SetActive(true);
                 Consumables[n].transform.GetChild(1).gameObject.SetActive(false);
                 Consumables[n].transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
             }
