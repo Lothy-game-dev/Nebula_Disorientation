@@ -136,6 +136,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                         break;
                                     case "Success":
                                         // if success, reload data to UI
+                                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                                     "Purchased Successfully.\n", 5f);
                                         FindObjectOfType<UECMainMenuController>().GetData();

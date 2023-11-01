@@ -29,6 +29,7 @@ public class LoadOutModelBox : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutFighter");
         board.GetComponent<LoadOutModelBoard>().ResetModel(name);
     }
     #endregion

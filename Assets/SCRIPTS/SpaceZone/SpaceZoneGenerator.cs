@@ -257,8 +257,8 @@ public class SpaceZoneGenerator : MonoBehaviour
         int Scale20Even = SpaceZoneNo / 20;
         if (Scale20Even >= 1)
         {
-            AllySquadRating *= (1 + Scale20Even / 10f);
-            EnemySquadRating *= (1 + Scale20Even / 10f);
+            AllySquadRating *= (1 + Scale20Even / 5f);
+            EnemySquadRating *= (1 + Scale20Even / 5f);
         }
         // (5n)*10
         // Enemy SS spawn

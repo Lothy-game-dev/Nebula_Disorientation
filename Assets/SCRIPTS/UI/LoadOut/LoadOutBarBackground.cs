@@ -55,12 +55,14 @@ public class LoadOutBarBackground : MonoBehaviour
             alreadyClick = true;
             if (Bar.GetComponent<LoadOutBar>() != null)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutWeapon");
                 Bar.GetComponent<LoadOutBar>().BackgroundMouseDown();
             } else if (Bar.GetComponent<LoadOutPowerBar>()!=null)
             {
                 Bar.GetComponent<LoadOutPowerBar>().OnBackgroundMouseDown();
             } else if (Bar.GetComponent<LoadOutConsumables>()!=null)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutCons");     
                 Bar.GetComponent<LoadOutConsumables>().OnBackgroundMouseDown();
             }
         }

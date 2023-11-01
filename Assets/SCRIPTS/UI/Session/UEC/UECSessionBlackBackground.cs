@@ -55,11 +55,11 @@ public class UECSessionBlackBackground : MonoBehaviour
             alreadyClick = true;
             if (Bar.GetComponent<UECSessionWeaponBox>() != null)
             {
-               Bar.GetComponent<UECSessionWeaponBox>().BackgroundMouseDown();
+                Bar.GetComponent<UECSessionWeaponBox>().BackgroundMouseDown();
             }
             else if (Bar.GetComponent<UECSessionPowerBox>() != null)
             {
-               Bar.GetComponent<UECSessionPowerBox>().BackgroundMouseDown();
+                Bar.GetComponent<UECSessionPowerBox>().BackgroundMouseDown();
             }
             else if (Bar.GetComponent<UECSessionConsumableBox>() != null)
             {
