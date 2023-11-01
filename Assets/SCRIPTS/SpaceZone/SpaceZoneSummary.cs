@@ -23,6 +23,7 @@ public class SpaceZoneSummary : MonoBehaviour
     public GameObject Timer;
     public GameObject SZNo;
     public GameObject Fighter;
+    public GameObject HPSlider;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -84,7 +85,6 @@ public class SpaceZoneSummary : MonoBehaviour
         Consumable = new Dictionary<string, int>();  
         TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
-        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP: " + Mathf.RoundToInt(stat.CurrentHP) + "/" + Mathf.RoundToInt(stat.MaxHP);
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
         CurrentShard.GetComponent<TextMeshPro>().text = "Current Shard: " + stat.CurrentShard;
         CurrentCash.GetComponent<TextMeshPro>().text = "Current Cash: " + stat.CurrentCash;
@@ -93,6 +93,9 @@ public class SpaceZoneSummary : MonoBehaviour
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = stat.CurrentFuelCell;
       
+        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP (" + Mathf.CeilToInt(Mathf.RoundToInt(stat.CurrentHP) / Mathf.RoundToInt(stat.MaxHP) * 100) + "%)";
+        HPSlider.GetComponent<Slider>().maxValue = Mathf.RoundToInt(stat.MaxHP);
+        HPSlider.GetComponent<Slider>().value = Mathf.RoundToInt(stat.CurrentHP);
         Time.timeScale = 0;
 
         // Load data for next
