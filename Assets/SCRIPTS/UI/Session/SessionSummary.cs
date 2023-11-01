@@ -87,12 +87,17 @@ public class SessionSummary : MonoBehaviour
         {
             string consString = "";
             Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
+            bool show = false;
             foreach (var item in Data)
             {
+                show = true;
                 consString += (string)FindObjectOfType<AccessDatabase>().GetConsumableDataByName(item.Key)["Name"] + " x " + item.Value + "\n";
             }
-            ConsInfo.GetComponent<SessionSummaryConsBoard>().SetData(consString);
-            ConsInfo.SetActive(true);
+            if (show)
+            {
+                ConsInfo.GetComponent<SessionSummaryConsBoard>().SetData(consString);
+                ConsInfo.SetActive(true);
+            }
         }
 
         GameStatus.transform.GetChild(0).GetComponent<TextMeshPro>().text = status;
