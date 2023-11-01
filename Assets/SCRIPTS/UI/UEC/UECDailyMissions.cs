@@ -209,6 +209,7 @@ public class UECDailyMissions : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         // Animation
         if (!BGGoingTo)
         {

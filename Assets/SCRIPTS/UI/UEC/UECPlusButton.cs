@@ -36,6 +36,7 @@ public class UECPlusButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if ("Convert".Equals(Action))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalConvertBoard(Scene.transform.position, ConvertFrom, ConvertTo, ConvertRate);

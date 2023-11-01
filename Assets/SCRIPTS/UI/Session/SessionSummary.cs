@@ -31,6 +31,8 @@ public class SessionSummary : MonoBehaviour
     public GameObject ModelTemplate;
     public GameObject BlackFade;
     public GameObject ConsInfo;
+    public AudioClip Retreat;
+    public AudioClip Failed;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -51,7 +53,7 @@ public class SessionSummary : MonoBehaviour
         Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
         ad = FindAnyObjectByType<AccessDatabase>();
         SetData();
-        GenerateBlackFadeOpen(transform.position, 3f, 1f);
+        GenerateBlackFadeOpen(transform.position,3f, 1f);
     }
 
     // Update is called once per frame
@@ -167,6 +169,8 @@ public class SessionSummary : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
+        GetComponent<AudioSource>().clip = isFailed ? Failed : Retreat;
+        GetComponent<AudioSource>().Play();
         Destroy(Fade);
     }
     #endregion

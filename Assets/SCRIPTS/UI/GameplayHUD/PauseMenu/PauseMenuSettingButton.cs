@@ -39,6 +39,7 @@ public class PauseMenuSettingButton : MonoBehaviour
 
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         FindObjectOfType<CameraController>().PauseGame();
     }
     #endregion

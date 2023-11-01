@@ -55,14 +55,16 @@ public class UECSessionBlackBackground : MonoBehaviour
             alreadyClick = true;
             if (Bar.GetComponent<UECSessionWeaponBox>() != null)
             {
-               Bar.GetComponent<UECSessionWeaponBox>().BackgroundMouseDown();
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutWeapon");
+                Bar.GetComponent<UECSessionWeaponBox>().BackgroundMouseDown();
             }
             else if (Bar.GetComponent<UECSessionPowerBox>() != null)
             {
-               Bar.GetComponent<UECSessionPowerBox>().BackgroundMouseDown();
+                Bar.GetComponent<UECSessionPowerBox>().BackgroundMouseDown();
             }
             else if (Bar.GetComponent<UECSessionConsumableBox>() != null)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutCons");
                 Bar.GetComponent<UECSessionConsumableBox>().BackgroundMouseDown();
             }
         }

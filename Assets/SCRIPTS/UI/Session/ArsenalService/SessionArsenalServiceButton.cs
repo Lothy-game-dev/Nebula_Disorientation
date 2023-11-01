@@ -40,6 +40,7 @@ public class SessionArsenalServiceButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (GetComponent<CursorUnallowed>() == null)
         {
             if (CanBeRepaired && isEnoughMoney)
@@ -50,6 +51,7 @@ public class SessionArsenalServiceButton : MonoBehaviour
             {
                 if (!isEnoughMoney)
                 {
+                    FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalServiceController.transform.position,
                     "insufficient money.", 5f);
                 }
@@ -73,6 +75,7 @@ public class SessionArsenalServiceButton : MonoBehaviour
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalServiceController.transform.position,
                 "Purchase Failed.\nPlease contact our email.", 5f); break;
             case "Success":
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("Repair");
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalServiceController.transform.position,
                 "Repair Successfully!.", 5f); 
                 FindAnyObjectByType<AccessDatabase>().DecreaseCurrencyAfterBuyForSession(service.SessionID, service.PriceToRepair);

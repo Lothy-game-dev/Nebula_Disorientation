@@ -32,6 +32,7 @@ public class LoadStoryButtons : MonoBehaviour
 
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (name=="Delete")
         {
             Scene.CheckBeforeDelete();

@@ -83,6 +83,7 @@ public class ArsenalBuyAction : MonoBehaviour
         {
             if (!Ar.EnoughPrice)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "insufficient money.", 5f);
             }
             else
@@ -160,12 +161,14 @@ public class ArsenalBuyAction : MonoBehaviour
                             Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Not Enough Cash":
+                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You don't have enough cash!\nPlease get some more.", 5f);
                         FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
                             Ar.ItemName, Ar.CurrentTab, 1);
                         break;
                     case "Not Enough Shard":
+                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "You don't have enough timeless shard!\nPlease get some more.", 5f);
                         FindObjectOfType<AccessDatabase>().DecreaseOwnershipToItem(FindObjectOfType<UECMainMenuController>().PlayerId,
@@ -180,6 +183,7 @@ public class ArsenalBuyAction : MonoBehaviour
                         break;
                     case "Success":
                         // if success, reload data to UI
+                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);
                         FindObjectOfType<UECMainMenuController>().GetData();

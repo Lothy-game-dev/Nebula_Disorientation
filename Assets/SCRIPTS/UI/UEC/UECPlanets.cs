@@ -102,6 +102,7 @@ public class UECPlanets : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (!alreadyZoom)
         {
             alreadyZoom = true;

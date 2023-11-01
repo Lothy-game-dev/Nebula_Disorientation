@@ -40,11 +40,13 @@ public class SessionArsenalBuyButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (GetComponent<CursorUnallowed>() != null)
         {
                      
             if (!isEnoughMoney)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "insufficient money.", 5f);
             }
@@ -79,6 +81,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
         {
             if (!Ar.EnoughPrice)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position, "insufficient money.", 5f);
             }  
         }
@@ -169,6 +172,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
                         break;
                     case "Success":
                         // if success, reload data to UI
+                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);
                         //FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, cash, "Spent");

@@ -43,6 +43,7 @@ public class TutorialButton : MonoBehaviour
     #region Check mouse
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         ShowInfo(ItemID);
     }
     private void OnMouseEnter()

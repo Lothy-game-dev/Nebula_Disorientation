@@ -41,6 +41,7 @@ public class CinematicScene : MonoBehaviour
             GenerateBlackFadeOpen(transform.position, 3f);
         } else
         {
+            gameObject.SetActive(false);
             UEC.SetActive(true);
         }
     }
@@ -125,6 +126,7 @@ public class CinematicScene : MonoBehaviour
             Destroy(bf);
             PlayerPrefs.DeleteKey("NewPilot");
             UEC.SetActive(true);
+            gameObject.SetActive(false);
         } else
         {
             StartCoroutine(BlackFadeOpen(bf, duration));

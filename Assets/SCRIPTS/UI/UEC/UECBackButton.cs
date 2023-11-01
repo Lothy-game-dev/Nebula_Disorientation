@@ -32,6 +32,7 @@ public class UECBackButton : MonoBehaviour
     #region OnMouseDown
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeClose(1f, 3f);
         StartCoroutine(Teleport());
     }

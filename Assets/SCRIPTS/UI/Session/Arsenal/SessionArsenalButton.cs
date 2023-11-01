@@ -48,7 +48,7 @@ public class SessionArsenalButton : MonoBehaviour
     #region Generate item list 
     private void OnMouseDown()
     {
-
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if ("Weapon" == gameObject.name)
         {
             DeleteAllChild();

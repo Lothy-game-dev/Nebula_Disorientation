@@ -31,6 +31,7 @@ public class LOTWButtons : MonoBehaviour
     #region Mouse check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (Type=="Reroll")
         {
             if (Noti!=null && Noti!="")

@@ -40,6 +40,7 @@ public class MainMenuBackButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (PlayerPrefs.GetInt("BackToUEC") == 1)
         {
             PlayerPrefs.SetInt("BackToUEC", 0);

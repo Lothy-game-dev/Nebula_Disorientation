@@ -40,9 +40,9 @@ public class CameraController : MonoBehaviour
         // Initialize variables
         cam = GetComponent<Camera>();
         InteriorController = GetComponent<GameplayInteriorController>();
-        isClose = false;
+        isClose = true;
         CameraTracking = true;
-        cam.orthographicSize = ZoomOutHeight / 2;
+        cam.orthographicSize = CloseHeight / 2;
     }
 
     // Update is called once per frame
@@ -51,20 +51,20 @@ public class CameraController : MonoBehaviour
         // Call function and timer only if possible
         // Change to close or zoom-out when press left shift
         zoomTimer -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.LeftShift) && zoomTimer<=0f)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && zoomTimer<=0f && Time.timeScale != 0 && !InteriorController.IsInLoading)
         {
             if (!isClose)
             {
                 isClose = true;
                 GameController.GetComponent<GameController>().IsClose = true;
-                cam.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+                cam.gameObject.transform.localScale = new Vector3(1f, 1f, 1);
                 cam.orthographicSize = CloseHeight / 2;
                 zoomTimer = 0.5f;
             } else
             {
                 isClose = false;
                 GameController.GetComponent<GameController>().IsClose = false;
-                cam.gameObject.transform.localScale = new Vector3(1f, 1f, 1);
+                cam.gameObject.transform.localScale = new Vector3(2f, 2f, 1);
                 cam.orthographicSize = ZoomOutHeight / 2;
                 zoomTimer = 0.5f;
             }

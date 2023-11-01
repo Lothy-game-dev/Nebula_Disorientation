@@ -33,6 +33,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
     #region Mouse Check
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         // When mouse down, check condition
         if ("Buy".Equals(name))
         {
@@ -48,6 +49,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                     "Buy " + Quantity + "\n" + ItemName + "\nFor " + CurrentValue + " <sprite index='3'> ?");
             } else
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                     "Insufficient money", 5f);
             }
@@ -120,10 +122,12 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                     "Can not fetch data about your pilot.\nplease contact our email.", 5f);
                                         break;
                                     case "Not Enough Cash":
+                                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                                     "You don't have enough <sprite index='3'>!\nPlease get some more.", 5f);
                                         break;
                                     case "Not Enough Shard":
+                                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                                     "You don't have enough <sprite index='0'>!\nPlease get some more.", 5f);
                                         break;
@@ -136,6 +140,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                         break;
                                     case "Success":
                                         // if success, reload data to UI
+                                        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                                     "Purchased Successfully.\n", 5f);
                                         FindObjectOfType<UECMainMenuController>().GetData();
@@ -191,6 +196,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                                 break;
                             case "Success":
                                 // if success, reload data to UI
+                                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
                             "Purchased Successfully.\n", 5f);
                                 FindObjectOfType<UECMainMenuController>().GetData();

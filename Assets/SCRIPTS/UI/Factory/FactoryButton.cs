@@ -38,6 +38,7 @@ public class FactoryButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         // check the conditions before buying 
         if (GetComponent<CursorUnallowed>() != null)
         {
@@ -62,6 +63,7 @@ public class FactoryButton : MonoBehaviour
         {
             if (!FactoryController.EnoughPrice)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomyInsuff");
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position, "insufficient money.", 5f);
             } else
             {
@@ -146,6 +148,7 @@ public class FactoryButton : MonoBehaviour
                             }
                         } else
                         {
+                            FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Factory.transform.position,
                             "Purchased Successfully.", 5f);
                         }
