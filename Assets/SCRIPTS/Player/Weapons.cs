@@ -442,7 +442,8 @@ public class Weapons : MonoBehaviour
 
     public bool CheckIfAngle1BetweenAngle2And3(float angle1, float angle2, float angle3)
     {
-        if (RotateLimitPositive<=90)
+        Debug.Log("Test Angle:" + angle1 + " - " + angle2 + " - " + angle3);
+        if (RotateLimitPositive <= 90)
         {
             if (0 <= angle1 && angle1 < 180)
             {
@@ -485,7 +486,8 @@ public class Weapons : MonoBehaviour
                 else return false;
             }
             else return false;
-        } else
+        }
+        else if (RotateLimitPositive < 180)
         {
             if (0 <= angle1 && angle1 < 180)
             {
@@ -516,7 +518,7 @@ public class Weapons : MonoBehaviour
                 }
                 else if (180 <= angle2 && angle2 < 360 && 180 <= angle3 && angle3 < 360)
                 {
-                    if (angle2 <= angle1 || angle1 >= angle3) return true;
+                    if (angle2 <= angle1 || angle1 <= angle3) return true;
                     else return false;
                 }
                 else if (0 <= angle2 && angle2 < 180 && 180 <= angle3 && angle3 < 360)
@@ -529,6 +531,7 @@ public class Weapons : MonoBehaviour
             }
             else return false;
         }
+        else if (RotateLimitPositive == 180) return true; else return false;
     }
 
     public float NearestPossibleAngle(float angle1, float angle2, float angle3)

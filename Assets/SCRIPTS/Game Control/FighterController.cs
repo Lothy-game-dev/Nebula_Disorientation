@@ -94,7 +94,7 @@ public class FighterController : MonoBehaviour
         // Get Model from model list
         for (int i=0;i<FighterModel.transform.childCount;i++)
         {
-            if (FighterModel.transform.GetChild(i).name.Equals(DatabaseModel))
+            if (FighterModel.transform.GetChild(i).name.Replace(" ","").ToLower().Equals(DatabaseModel.Replace(" ", "").ToLower()))
             {
                 CurrentModel = FighterModel.transform.GetChild(i).gameObject;
                 break;

@@ -80,6 +80,7 @@ public class FighterShared : MonoBehaviour
     //Statistic
     private Dictionary<string, object> EnemyData;
     private GameObject DamageDealer;
+    private float PlayerDamageReceive;
     //LOTW
     public LOTWEffect LOTWEffect;
     //LaserBeam
@@ -646,6 +647,7 @@ public class FighterShared : MonoBehaviour
             if (GetComponent<EnemyShared>() != null && DamageDealer == controller.Player)
             {
                 Statistic.DamageDealt += damage;
+                PlayerDamageReceive += damage;
             }
         }
         if (CurrentBarrier > 0)
@@ -717,18 +719,24 @@ public class FighterShared : MonoBehaviour
                     {
                         Killer = DamageSource;
                     }
-                    if (GetComponent<EnemyShared>() != null && Killer == controller.Player)
+                    if (GetComponent<EnemyShared>() != null)
                     {
-                        GetComponent<EnemyShared>().AddBounty();
-                        EnemyData = FindAnyObjectByType<AccessDatabase>().GetDataEnemyById(GetComponent<EnemyShared>().EnemyID);
-                        switch(EnemyData["TierColor"])
+                        if (Killer == controller.Player)
                         {
-                            case "#36b37e": Statistic.EnemyTierI += 1; break;
-                            case "#4c9aff": Statistic.EnemyTierII += 1; break;
-                            case "#bf2600": Statistic.EnemyTierIII += 1; break;
+                            GetComponent<EnemyShared>().AddBounty();
+                            EnemyData = FindAnyObjectByType<AccessDatabase>().GetDataEnemyById(GetComponent<EnemyShared>().EnemyID);
+                            switch (EnemyData["TierColor"])
+                            {
+                                case "#36b37e": Statistic.EnemyTierI += 1; break;
+                                case "#4c9aff": Statistic.EnemyTierII += 1; break;
+                                case "#bf2600": Statistic.EnemyTierIII += 1; break;
+                            }
+                            Statistic.TotalEnemyDefeated += (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
+                            Statistic.KillEnemy = true;
+                        } else if (PlayerDamageReceive > MaxHP/2)
+                        {
+                            GetComponent<EnemyShared>().AddBounty();
                         }
-                        Statistic.TotalEnemyDefeated += (Statistic.EnemyTierI + Statistic.EnemyTierII + Statistic.EnemyTierIII);
-                        Statistic.KillEnemy = true;
                     }
                 }
                 CurrentHP = 0;
