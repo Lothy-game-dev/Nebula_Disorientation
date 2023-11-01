@@ -71,7 +71,8 @@ public class LoadOutBar : MonoBehaviour
         {
             SetItem(
             ListWeapon,
-            ListWeapon[0],true);
+            Type == "LeftWeapon" ? (Scene.GetComponent<LoadoutScene>().LeftWeapon == "" ? ListWeapon[0] : Scene.GetComponent<LoadoutScene>().LeftWeapon)
+            : (Scene.GetComponent<LoadoutScene>().RightWeapon == "" ? ListWeapon[0] : Scene.GetComponent<LoadoutScene>().RightWeapon), true);
         }
     }
 

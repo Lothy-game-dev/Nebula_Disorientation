@@ -99,6 +99,8 @@ public class WSShared : MonoBehaviour
         isFighting = false;
         Controller = FindObjectOfType<GameController>();
         Statistic = FindAnyObjectByType<StatisticController>();
+        ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
+        HPBar.SetValue(CurrentHP, MaxHP, true);
     }
 
     // Update is called once per frame

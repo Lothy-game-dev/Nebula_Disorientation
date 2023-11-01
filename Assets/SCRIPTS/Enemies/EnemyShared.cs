@@ -856,11 +856,21 @@ public class EnemyShared : FighterShared
             {
                 if (hit.collider.gameObject.GetComponent<WSShared>() != null)
                 {
+                    GameObject Explo = Instantiate(Explosion, transform.position, Quaternion.identity);
+                    Explo.transform.localScale *= 3;
+                    Explo.GetComponent<SpriteRenderer>().sortingOrder = 10;
+                    Explo.SetActive(true);
+                    Destroy(Explo, 0.3f);
                     hit.collider.gameObject.GetComponent<WSShared>().ReceiveBulletDamage(hit.collider.gameObject.GetComponent<WSShared>().MaxHP * 5 / 100f, null, true, transform.position);
                     Destroy(gameObject);
                 }
                 else if (hit.collider.gameObject.GetComponent<SpaceStationShared>() != null)
                 {
+                    GameObject Explo = Instantiate(Explosion, transform.position, Quaternion.identity);
+                    Explo.transform.localScale *= 3;
+                    Explo.GetComponent<SpriteRenderer>().sortingOrder = 10;
+                    Explo.SetActive(true);
+                    Destroy(Explo, 0.3f);
                     hit.collider.gameObject.GetComponent<SpaceStationShared>().ReceiveBombingDamage(hit.collider.gameObject.GetComponent<SpaceStationShared>().MaxHP * 5 / 100f, transform.position);
                     Destroy(gameObject);
                 }

@@ -51,6 +51,12 @@ public class SpaceStationHealthBar : MonoBehaviour
             }
         }
         slider.value = CurrentValue;
+        if (slider.value <= 0)
+        {
+            StopCoroutine(coroutine);
+            isHit = false;
+            slider.gameObject.SetActive(false);
+        }
         slider.maxValue = MaxValue;
         slider.gameObject.transform.position = new Vector3(transform.parent.position.x + PositionSlider.x, transform.parent.position.y + PositionSlider.y, transform.position.z);
     }

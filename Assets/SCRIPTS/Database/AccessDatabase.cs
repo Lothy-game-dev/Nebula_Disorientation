@@ -913,6 +913,93 @@ public class AccessDatabase : MonoBehaviour
         dbCheckCommand.ExecuteNonQuery();
         dbConnection.Close();
     }
+
+    public string InputLoadoutSaveData(int PlayerID, string Model, string LeftWeapon, string RightWeapon, string FirstPower, string SecondPower,
+        string Consumables)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        Dictionary<string, object> Data = new();
+        // Queries
+        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        dbCheckCommand1.CommandText = "SELECT * FROM LoadoutSaveData WHERE PlayerID=" + PlayerID;
+        IDataReader reader = dbCheckCommand1.ExecuteReader();
+        while (reader.Read())
+        {
+            Data.Add("ID", reader.GetInt32(0));
+            Data.Add("PlayerID", reader.GetInt32(1));
+            Data.Add("Model", reader.GetString(2));
+            Data.Add("LeftWeapon", reader.GetString(3));
+            Data.Add("RightWeapon", reader.GetString(4));
+            Data.Add("FirstPower", reader.GetString(5));
+            Data.Add("SecondPower", reader.GetString(6));
+            Data.Add("Consumables", reader.GetString(7));
+        }
+        if (Data.ContainsKey("ID"))
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "UPDATE LoadoutSaveData SET " +
+                "Model='" + Model + "'" +
+                ", LeftWeapon='" + LeftWeapon + "'" +
+                ", RightWeapon='" + RightWeapon + "'" +
+                ", FirstPower='" + FirstPower + "'" +
+                ", SecondPower='" + SecondPower + "'" +
+                ", Consumables='" + Consumables + "'" +
+                " WHERE LoadoutSaveDataID =" + (int)Data["ID"];
+            int n = dbCheckCommand.ExecuteNonQuery();
+            dbConnection.Close();
+            if (n != 1)
+            {
+                return "Fail";
+            }
+            else
+            {
+                return "Success";
+            }
+        } else
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "INSERT INTO LoadoutSaveData (PlayerID,Model,LeftWeapon,RightWeapon,FirstPower,SecondPower,Consumables) " +
+                "VALUES (" + PlayerID + ",'" + Model + "','" + LeftWeapon + "','" + RightWeapon + "','" + FirstPower + "','" + SecondPower + "','" + Consumables + "')";
+            int n = dbCheckCommand.ExecuteNonQuery();
+            dbConnection.Close();
+            if (n != 1)
+            {
+                return "Fail";
+            }
+            else
+            {
+                return "Success";
+            }
+        }
+    }
+
+    public Dictionary<string, object> GetLoadoutSaveData(int PlayerID)
+    {
+        Dictionary<string, object> Data = new();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT * FROM LoadoutSaveData WHERE PlayerID=" + PlayerID;
+        IDataReader reader = dbCheckCommand.ExecuteReader();
+        while (reader.Read())
+        {
+            Data.Add("ID", reader.GetInt32(0));
+            Data.Add("PlayerID", reader.GetInt32(1));
+            Data.Add("Model", reader.GetString(2));
+            Data.Add("LeftWeapon", reader.GetString(3));
+            Data.Add("RightWeapon", reader.GetString(4));
+            Data.Add("FirstPower", reader.GetString(5));
+            Data.Add("SecondPower", reader.GetString(6));
+            Data.Add("Consumables", reader.GetString(7));
+        }
+        dbConnection.Close();
+        return Data;
+    }
     #endregion
     #region Access Daily Mission
     public int NumberOfDailyMissionById(int PlayerId)
