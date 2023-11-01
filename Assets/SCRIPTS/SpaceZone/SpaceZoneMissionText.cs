@@ -119,14 +119,10 @@ public class SpaceZoneMissionText : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 10; i++)
         {
             GetComponent<AudioSource>().volume -= 0.1f;
-            controller.SFXVolumeScale -= 5f;
-            if (stat.Fighter.GetComponent<PlayerFighter>() != null)
-            {
-                stat.Fighter.GetComponent<PlayerFighter>().audioScale -= 500f;
-            }
+            controller.SFXVolumeScale -= 10f;
             yield return new WaitForSeconds(0.1f);
         }
 
