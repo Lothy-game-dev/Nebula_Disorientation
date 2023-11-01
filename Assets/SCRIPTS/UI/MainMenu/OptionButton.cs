@@ -107,6 +107,7 @@ public class OptionButton : MonoBehaviour
             FindAnyObjectByType<AccessDatabase>().UpdateOptionSetting(Mathf.RoundToInt(float.Parse(OptionMenu.Master)),
                                     Mathf.RoundToInt(float.Parse(OptionMenu.Music)), Mathf.RoundToInt(float.Parse(OptionMenu.Sound)), Mathf.RoundToInt(float.Parse(OptionMenu.FpsCounter)), OptionMenu.Resol);
             OptionMenu.IsSaved = true;
+            Camera.main.GetComponent<SoundController>().CheckSoundVolumeByDB();
         }
     }
     #endregion

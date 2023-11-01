@@ -1179,7 +1179,7 @@ public class AccessDatabase : MonoBehaviour
         
     }
     #endregion
-    #region Option
+    #region Access Option
     public Dictionary<string, object> GetOption()
     {
         Dictionary<string, object> option = new Dictionary<string, object>();

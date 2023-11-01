@@ -101,6 +101,7 @@ public class UECSessionButton : MonoBehaviour
         FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "LOTW");
         Controller.GenerateBlackFadeOpen(LOTW.transform.position, 1.5f);
         Controller.ChangeToScene(LOTW);
+        gameObject.SetActive(false);
     }
     
     private IEnumerator MoveToSessionSum()
