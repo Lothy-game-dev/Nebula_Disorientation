@@ -55,6 +55,7 @@ public class UECSessionBlackBackground : MonoBehaviour
             alreadyClick = true;
             if (Bar.GetComponent<UECSessionWeaponBox>() != null)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutWeapon");
                 Bar.GetComponent<UECSessionWeaponBox>().BackgroundMouseDown();
             }
             else if (Bar.GetComponent<UECSessionPowerBox>() != null)
@@ -63,6 +64,7 @@ public class UECSessionBlackBackground : MonoBehaviour
             }
             else if (Bar.GetComponent<UECSessionConsumableBox>() != null)
             {
+                FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("LoadoutCons");
                 Bar.GetComponent<UECSessionConsumableBox>().BackgroundMouseDown();
             }
         }
