@@ -235,6 +235,17 @@ public class InitializeDatabase : MonoBehaviour
                 "EnemyDestroyed INTEGER, " +
                 "DamageDealt INTEGER, " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
+            // LoadoutSaveData
+            "CREATE TABLE IF NOT EXISTS LoadoutSaveData" +
+                "(LoadOutSaveDataID INTEGER," +
+                "PlayerID INTEGER," +
+                "Model TEXT, " +
+                "LeftWeapon TEXT, " +
+                "RightWeapon TEXT, " +
+                "FirstPower TEXT, " +
+                "SecondPower TEXT, " +
+                "Consumables TEXT, " +
+                "PRIMARY KEY(LoadOutSaveDataID AUTOINCREMENT) ); " +
             // SpaceShop
             "CREATE TABLE IF NOT EXISTS SpaceShop" +
                 "(ItemID INTEGER, " +
@@ -695,24 +706,24 @@ public class InitializeDatabase : MonoBehaviour
             "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '50|60', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '50|75', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(3, 2, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 60, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
-            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '50|150', '10-0-0', '9-1-0', null, null, null, 100, null)," +
-            "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|150', '10-0-0', '10-0-0', null, null, null, 100, null)," +
+            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '50|50', '10-0-0', '9-1-0', null, null, null, 200, null)," +
+            "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '50|50', '10-0-0', '10-0-0', null, null, null, 200, null)," +
             "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '75|90', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '75|120', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(8, 4, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 60, '125|175', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
-            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '75|175', '10-0-0', '9-1-0', null, null, null, 100, null)," +
-            "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|175', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '75|75', '10-0-0', '9-1-0', null, null, null, 200, null)," +
+            "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '75|75', '10-0-0', '10-0-0', null, null, null, 200, null)," +
             "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '100|120', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '100|150', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(13, 6, 1, 'Defend', 'Defend a UEC Space Station for an amount of time', 'A1', 60, '150|200', '10-0-0', '9-1-0', null, null, null, 300, 300)," +
-            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '100|200', '10-0-0', '9-1-0', null, null, null, 100, null)," +
-            "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|200', '10-0-0', '10-0-0', null, null, null, null, null)," +
+            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '100|100', '10-0-0', '9-1-0', null, null, null, 200, null)," +
+            "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '100|100', '10-0-0', '10-0-0', null, null, null, 200, null)," +
             "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '125|150', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '125|180', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '250|300', '9-1-0', '8-2-0', null, null, null, null, null)," +
-            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '200|200', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 600, 300)," +
+            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '200|200', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 2000, 1000)," +
             "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '275|325', '9-1-0', '8-2-0', null, null, null, null, null)," +
-            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '225|225', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 600, 300)," +
+            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '225|225', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 2000, 1000)," +
             "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '200|100',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0', null, null)," +
             "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '150|175', '8-2-0', '8-1-1', null, null, null, null, null);";
         // Insert SpaceZonePosition

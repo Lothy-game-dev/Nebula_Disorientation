@@ -33,6 +33,7 @@ public class Powers : MonoBehaviour
     public float BRx;
     public AudioClip SoundEffect;
     public AudioClip ChargingSoundEffect;
+    public GameplayInteriorController ControllerMain;
     private float audioScale;
     public LOTWEffect LOTWEffect;
     #endregion
@@ -42,7 +43,7 @@ public class Powers : MonoBehaviour
     {
         // Initialize variables
         /*InitData();*/
-        
+        ControllerMain = FindObjectOfType<GameplayInteriorController>();
     }
 
     // Update is called once per frame
@@ -144,7 +145,7 @@ public class Powers : MonoBehaviour
         sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 0.35f* audioScale;
+        sound.volume = 0.35f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale; ;
     }  
     public void EndSound()
     {

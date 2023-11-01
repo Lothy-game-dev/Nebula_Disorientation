@@ -55,7 +55,6 @@ public class PlayerFighter : FighterShared
         // Initialize variables
         InitializeFighter();
         aus = GetComponent<AudioSource>();
-        audioScale = ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
         PlaySpawnSound();
         HPSlider.maxValue = MaxHP;
         ShieldPassive();
@@ -397,7 +396,7 @@ public class PlayerFighter : FighterShared
             aus.loop = true;
             aus.Play();
         }
-        aus.volume = volume * audioScale;
+        aus.volume = volume * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
     }
 
     public void StopSound()
@@ -410,14 +409,14 @@ public class PlayerFighter : FighterShared
     {
         DashAudioSource.clip = DashSound;
         DashAudioSource.loop = false;
-        DashAudioSource.volume = 0.75f * audioScale;
+        DashAudioSource.volume = 0.75f * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
         DashAudioSource.Play();
     }
 
     public void PlaySpawnSound()
     {
         aus.clip = SpawnSoundEffect;
-        aus.volume = 1 * audioScale;
+        aus.volume = 1 * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale;
         aus.Play();
     }
     #endregion

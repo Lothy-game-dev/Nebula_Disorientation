@@ -39,6 +39,10 @@ public class UECBackButton : MonoBehaviour
     private IEnumerator Teleport()
     {
         yield return new WaitForSeconds(1.5f);
+        if (FromScene.GetComponent<LoadoutScene>()!=null)
+        {
+            FromScene.GetComponent<LoadoutScene>().SaveLoadoutData();
+        }
         FindObjectOfType<UECMainMenuController>().TeleportToScene(FromScene, ToScene);
     }
     #endregion

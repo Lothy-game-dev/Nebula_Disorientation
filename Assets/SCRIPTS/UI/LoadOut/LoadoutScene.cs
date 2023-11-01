@@ -31,6 +31,7 @@ public class LoadoutScene : UECMenuShared
     public string Model;
     public int CurrentFuelCells;
     public int CurrentHP;
+    public string ConsSaveString;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -38,18 +39,6 @@ public class LoadoutScene : UECMenuShared
     {
         // Initialize variables
         Consumables = new Dictionary<string, int>();
-        LeftWeapon = "";
-        RightWeapon = "";
-        Model = "";
-        FirstPower = "";
-        SecondPower = "";
-        Weapon1Bar.SetActive(false);
-        Weapon2Bar.SetActive(false);
-        Power1Bar.SetActive(false);
-        Power2Bar.SetActive(false);
-        ConsumableBar.SetActive(false);
-        FighterDemo.SetActive(false);
-        GetData();
     }
 
     // Update is called once per frame
@@ -63,6 +52,19 @@ public class LoadoutScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
+        Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetLoadoutSaveData(FindObjectOfType<UECMainMenuController>().PlayerId);
+        if (Data.ContainsKey("Model"))
+            Model = (string)Data["Model"];
+        if (Data.ContainsKey("LeftWeapon"))
+            LeftWeapon = (string)Data["LeftWeapon"];
+        if (Data.ContainsKey("RightWeapon"))
+            RightWeapon = (string)Data["RightWeapon"];
+        if (Data.ContainsKey("FirstPower"))
+            FirstPower = (string)Data["FirstPower"];
+        if (Data.ContainsKey("SecondPower"))
+            SecondPower = (string)Data["SecondPower"];
+        if (Data.ContainsKey("Consumables"))
+            ConsSaveString = (string)Data["Consumables"];
         Weapon1Bar.SetActive(true);
         Weapon2Bar.SetActive(true);
         ModelBoard.SetActive(true);
@@ -76,7 +78,12 @@ public class LoadoutScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
-
+        Weapon1Bar.SetActive(false);
+        Weapon2Bar.SetActive(false);
+        Power1Bar.SetActive(false);
+        Power2Bar.SetActive(false);
+        ConsumableBar.SetActive(false);
+        FighterDemo.SetActive(false);
     }
     #endregion
     #region On Enable Get Data
@@ -88,13 +95,30 @@ public class LoadoutScene : UECMenuShared
         {
             ModelBoard.GetComponent<LoadOutModelBoard>().SetItems(
             ListReplaceSpace(ListOwnedModel),
-            ListReplaceSpace(ListOwnedModel)[0]);
+            Model == "" ?
+            ListReplaceSpace(ListOwnedModel)[0] : Model);
         } else
         {
             // Do you want to move to factory
         }
         ConsumableBar.GetComponent<LoadOutConsumables>().SetInitData(
             FindObjectOfType<AccessDatabase>().GetOwnedConsumables(FindObjectOfType<UECMainMenuController>().PlayerId));
+        if (ConsSaveString!=null && ConsSaveString.Length>0)
+        {
+            string[] ConsData = ConsSaveString.Split("|");
+            Dictionary<string, int> ConsDict = new();
+            foreach (var con in ConsData)
+            {
+                ConsDict.Add(con.Split("-")[0], int.Parse(con.Split("-")[1]));
+            }
+            foreach (var item in ConsDict)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    int n = ConsumableBar.GetComponent<LoadOutConsumables>().IncreaseItem(item.Key);
+                }
+            }
+        }
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
             .GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId);
@@ -122,6 +146,24 @@ public class LoadoutScene : UECMenuShared
         return inList;
     }
 
+    public void SaveLoadoutData()
+    {
+        string ConsText = "";
+        if (Consumables != null)
+        {
+            foreach (var item in Consumables)
+            {
+                ConsText += item.Key + "-" + item.Value + "|";
+            }
+            if (ConsText.Length > 0)
+            {
+                ConsText = ConsText.Substring(0, ConsText.Length - 1);
+            }
+        }
+        FindObjectOfType<AccessDatabase>().InputLoadoutSaveData(FindObjectOfType<UECMainMenuController>().PlayerId,
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
+    }
+
     public void BuyFighter()
     {
         FindObjectOfType<UECMainMenuController>().TeleportToScene(gameObject, Factory);
@@ -139,6 +181,8 @@ public class LoadoutScene : UECMenuShared
             ConsText = ConsText.Substring(0, ConsText.Length - 1);
         }
         string check = FindObjectOfType<AccessDatabase>().AddNewSession(FindObjectOfType<UECMainMenuController>().PlayerId,
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
+        FindObjectOfType<AccessDatabase>().InputLoadoutSaveData(FindObjectOfType<UECMainMenuController>().PlayerId,
             Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
         if ("Success".Equals(check))
         {

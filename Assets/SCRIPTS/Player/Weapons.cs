@@ -824,7 +824,7 @@ public class Weapons : MonoBehaviour
             GameObject Eff = Instantiate(Effect, ShootingPosition.transform.position, Quaternion.identity);
             Eff.transform.localScale = Eff.transform.localScale * 30f;
             Color c = Eff.transform.GetComponent<SpriteRenderer>().color;
-            c.a = 0f;
+            c.a = 1f;
             Eff.transform.GetComponent<SpriteRenderer>().color = c;
             Eff.transform.SetParent(transform);
             Eff.SetActive(true);
@@ -834,19 +834,12 @@ public class Weapons : MonoBehaviour
 
     private IEnumerator ShowEffect(GameObject go)
     {
-        for (int i=0;i<10;i++)
-        {
-            Color c = go.transform.GetComponent<SpriteRenderer>().color;
-            c.a += 0.1f;
-            go.transform.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(0.1f);
-        }
         for (int i = 0; i < 10; i++)
         {
             Color c = go.transform.GetComponent<SpriteRenderer>().color;
             c.a -= 0.1f;
             go.transform.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
         Destroy(go);
     }
