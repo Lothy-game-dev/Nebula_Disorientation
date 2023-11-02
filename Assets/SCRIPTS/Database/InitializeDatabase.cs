@@ -234,6 +234,7 @@ public class InitializeDatabase : MonoBehaviour
                 "SessionCurrentHP INTEGER, " +
                 "EnemyDestroyed INTEGER, " +
                 "DamageDealt INTEGER, " +
+                "ConsumablesCD TEXT, " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
             // LoadoutSaveData
             "CREATE TABLE IF NOT EXISTS LoadoutSaveData" +
@@ -245,6 +246,7 @@ public class InitializeDatabase : MonoBehaviour
                 "FirstPower TEXT, " +
                 "SecondPower TEXT, " +
                 "Consumables TEXT, " +
+                "ConsumablesCD TEXT, " +
                 "PRIMARY KEY(LoadOutSaveDataID AUTOINCREMENT) ); " +
             // SpaceShop
             "CREATE TABLE IF NOT EXISTS SpaceShop" +
