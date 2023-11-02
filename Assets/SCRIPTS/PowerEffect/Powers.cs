@@ -42,8 +42,6 @@ public class Powers : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        /*InitData();*/
-        ControllerMain = FindObjectOfType<GameplayInteriorController>();
     }
 
     // Update is called once per frame
