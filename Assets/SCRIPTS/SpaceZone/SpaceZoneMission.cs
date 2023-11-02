@@ -237,7 +237,7 @@ public class SpaceZoneMission : MonoBehaviour
     public void CompleteMission()
     {
         alreadyComplete = true;
-        CheckDailyMission();
+        //CheckDailyMission();
         stat.UpdateStatistic();
         TextGO.CreateText("Mission Accomplished!", Color.green);
         
@@ -254,52 +254,64 @@ public class SpaceZoneMission : MonoBehaviour
                 switch (listDM[0][i])
                 {
                     case "C":
-                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                        if (listDM[3][i] == "N")
                         {
-                            ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                            }
+                            else
+                            {
+                                ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            }
                         }
                         break;
                     case "CD":
-                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                        if (listDM[3][i] == "N")
                         {
-                            if (MissionStageName.Contains("D"))
+                            if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
                             {
-                                ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                                if (MissionStageName.Contains("D"))
+                                {
+                                    ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                                }
                             }
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            else
+                            {
+                                ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            }
                         }
                         break;
                     case "CA":
-                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                        if (listDM[3][i] == "N")
                         {
-                            if (MissionStageName.Contains("A"))
+                            if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
                             {
-                                ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                                if (MissionStageName.Contains("A"))
+                                {
+                                    ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                                }
                             }
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            else
+                            {
+                                ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            }
                         }
                         break;
                     case "CAA":
-                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                        if (listDM[3][i] == "N")
                         {
-                            if (MissionStageName.Contains("O"))
+                            if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
                             {
-                                ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                                if (MissionStageName.Contains("O"))
+                                {
+                                    ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[0][i], 1);
+                                }
                             }
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            else
+                            {
+                                ad.DailyMissionDone(PlayerPrefs.GetInt("PlayerID"), listDM[0][i]);
+                            }
                         }
                         break;
                     default: break;

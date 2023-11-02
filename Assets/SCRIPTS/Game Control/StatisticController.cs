@@ -98,7 +98,7 @@ public class StatisticController : MonoBehaviour
         {
             SetTimer(StartTime);
         }
-        CheckDailyMission();
+        //CheckDailyMission();
     }
     #endregion
     #region Update Achievement
