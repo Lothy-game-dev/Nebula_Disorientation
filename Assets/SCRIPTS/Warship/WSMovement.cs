@@ -585,7 +585,6 @@ public class WSMovement : MonoBehaviour
         {
             if (wss.MainTarget[wss.MainWps[0]] != null)
             {
-                Debug.Log("khang" + wss.MainTarget[wss.MainWps[0]]);
                 wss.NearestTarget = null;
                 if ((wss.MainTarget[wss.MainWps[0]].transform.position - transform.position).magnitude <= wss.TargetRange / 2)
                 {
