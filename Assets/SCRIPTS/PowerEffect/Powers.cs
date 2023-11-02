@@ -145,7 +145,7 @@ public class Powers : MonoBehaviour
         sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 0.35f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale; ;
+        sound.volume = 0.35f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale/100f ;
     }  
     public void EndSound()
     {

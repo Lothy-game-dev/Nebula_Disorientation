@@ -436,6 +436,7 @@ public class WSShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
@@ -472,6 +473,7 @@ public class WSShared : MonoBehaviour
         }
         else
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
@@ -516,6 +518,7 @@ public class WSShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
@@ -552,6 +555,7 @@ public class WSShared : MonoBehaviour
         }
         else
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
@@ -843,6 +847,7 @@ public class WSShared : MonoBehaviour
         {
             if (!AlreadyDestroy)
             {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
                 AlreadyDestroy = true;               
                 StartCoroutine(DestroySelf());
 

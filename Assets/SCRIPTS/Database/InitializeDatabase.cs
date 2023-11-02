@@ -549,7 +549,7 @@ public class InitializeDatabase : MonoBehaviour
             "(19, 'Gun Accelerator I', 'OFF', 'FD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(20, 'Gun Accelerator II', 'OFF', 'FD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(21, 'Gun Accelerator III', 'OFF', 'FD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(22, 'Power Cooler I', 'SPE', 'PCD-5', 3, 3, 'N', 'Y', '#03c800')," +
+            "(22, 'Power Cooler I', 'SPE', 'PCD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(23, 'Power Cooler II', 'SPE', 'PCD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(24, 'Power Cooler III', 'SPE', 'PCD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
             "(25, 'Reformation Structure', 'DEF', 'R-100', 2, 5, 'Y', 'Y', '#0800ff')," +

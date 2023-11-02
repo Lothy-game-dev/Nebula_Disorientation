@@ -83,6 +83,7 @@ public class Barrier : Powers
     // Group all function that serve the same algorithm
     public void GenBarrier()
     {
+        PlaySound(SoundEffect);
         isStart = true;
         Shield = Instantiate(Effect, Fighter.transform.position, Quaternion.identity);
         Shield.transform.SetParent(Fighter.transform);

@@ -12,6 +12,7 @@ public class Consumable : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
+    public AudioClip Sound;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -49,14 +50,27 @@ public class Consumable : MonoBehaviour
     // Group all function that serve the same algorithm?
     public void ActivateConsumable()
     {
+        gameObject.GetComponent<AudioSource>().clip = Sound;
+        
         switch (Effect.Split("-")[0])
         {
-            case "RED": gameObject.GetComponent<WingShield>().WingmanShieldEffect(); break;
-            case "AER": gameObject.GetComponent<EngineBooster>().BoosterEffect(); break;
-            case "RMH": gameObject.GetComponent<AutoRepair>().ActivateAutoRepair(); break;
-            case "INV": gameObject.GetComponent<NanoCoat>().NanoCoatActivated(); break;
-            case "FC": break;
+            case "RED": 
+                gameObject.GetComponent<WingShield>().WingmanShieldEffect(); 
+                break;
+            case "AER": 
+                gameObject.GetComponent<EngineBooster>().BoosterEffect(); 
+                break;
+            case "RMH":
+                gameObject.GetComponent<AudioSource>().volume = 0.5f;
+                gameObject.GetComponent<AutoRepair>().ActivateAutoRepair(); 
+                break;
+            case "INV": 
+                gameObject.GetComponent<NanoCoat>().NanoCoatActivated(); 
+                break;
+            case "FC": 
+                break;
         }
+        gameObject.GetComponent<AudioSource>().Play();
     }
     #endregion
 }
