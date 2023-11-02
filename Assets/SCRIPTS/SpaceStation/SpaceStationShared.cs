@@ -766,6 +766,7 @@ public class SpaceStationShared : MonoBehaviour
         bf.GetComponent<SpriteRenderer>().color = c;
         bf.transform.SetParent(Flash.transform.parent);
         bf.SetActive(true);
+        GetComponent<LimitRendering>().enabled = false;
         GetComponent<SpriteRenderer>().enabled = false;
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
@@ -784,11 +785,9 @@ public class SpaceStationShared : MonoBehaviour
             c.a -= 1 / 50f;
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
-        }
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
-        Destroy(gameObject, 1f);
+        }   
         Destroy(Fade);
+        Destroy(gameObject);
         
     }
     #endregion

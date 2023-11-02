@@ -45,7 +45,10 @@ public class UECDailyMissions : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        SetDailyMission();
+        if (missions.Count > 0)
+        {
+            SetDailyMission();
+        }
         if (BGGoingTo)
         {
             if (DMBG.transform.position.y < BGToPos.y)
