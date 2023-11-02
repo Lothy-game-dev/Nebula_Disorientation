@@ -28,10 +28,7 @@ public class UECDailyMissions : MonoBehaviour
     public List<string> missions;
     private Vector2 BGToPos;
     private bool BGGoingTo;
-    private Vector2 DM1Pos;
-    private Vector2 DM2Pos;
-    private Vector2 DM3Pos;
-    private Vector2 DM4Pos;
+    public int MissionUndone;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -41,10 +38,6 @@ public class UECDailyMissions : MonoBehaviour
         List<string> missions = new List<string>();
         DMBG.transform.position = DMBGBeforePos.transform.position;
         BGGoingTo = false;
-        DM1Pos = DM1.GetComponent<RectTransform>().anchoredPosition;
-        DM2Pos = DM2.GetComponent<RectTransform>().anchoredPosition;
-        DM3Pos = DM3.GetComponent<RectTransform>().anchoredPosition;
-        DM4Pos = DM4.GetComponent<RectTransform>().anchoredPosition;
     }
 
     // Update is called once per frame
@@ -70,140 +63,12 @@ public class UECDailyMissions : MonoBehaviour
     #region Check Daily Mission
     public void SetDailyMission()
     {
- 
-        if (missions.Count == 4)
-        {
-            if (!DM1.activeSelf)
-            {
-                DM1.SetActive(true);
-            }
-            if (!DM2.activeSelf)
-            {
-                DM2.SetActive(true);
-            }
-            if (!DM3.activeSelf)
-            {
-                DM3.SetActive(true);
-            }
-            if (!DM4.activeSelf)
-            {
-                DM4.SetActive(true);
-            }
-            DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
-            DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
-            DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
-            DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[3];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"red\">(0/4)</color>";
-            BGToPos = DMBG3MissionsPos.transform.position;
-        } else if (missions.Count == 3)
-        {
-            if (DM1.activeSelf)
-            {
-                DM1.SetActive(false);
-            }
-            if (!DM2.activeSelf)
-            {
-                DM2.SetActive(true);
-            }
-            if (!DM3.activeSelf)
-            {
-                DM3.SetActive(true);
-            }
-            if (!DM4.activeSelf)
-            {
-                DM4.SetActive(true);
-            }
-            DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-            DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
-            DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
-            DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(1/4)</color>";
-            DM2.GetComponent<RectTransform>().anchoredPosition = DM1Pos;
-            DM3.GetComponent<RectTransform>().anchoredPosition = DM2Pos;
-            DM4.GetComponent<RectTransform>().anchoredPosition = DM3Pos;
-            BGToPos = DMBG3MissionsPos.transform.position;
-        } else if (missions.Count == 2)
-        {
-            if (DM1.activeSelf)
-            {
-                DM1.SetActive(false);
-            }
-            if (DM2.activeSelf)
-            {
-                DM2.SetActive(false);
-            }
-            if (!DM3.activeSelf)
-            {               
-                DM3.SetActive(true);             
-            }
-            if (!DM4.activeSelf)
-            {
-                DM4.SetActive(true);               
-            }
-            DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-            DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-            DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
-            DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
-            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(2/4)</color>";
-            BGToPos = DMBG3MissionsPos.transform.position;
-            DM3.GetComponent<RectTransform>().anchoredPosition = DM1Pos;
-            DM4.GetComponent<RectTransform>().anchoredPosition = DM2Pos;
-        } else
-        {
-            if (missions.Count == 1)
-            {
-                if (DM1.activeSelf)
-                {
-                    DM1.SetActive(false);
-                }
-                if (DM2.activeSelf)
-                {
-                    DM2.SetActive(false);
-                }
-                if (DM3.activeSelf)
-                {
-                    DM3.SetActive(false);
-                }
-                if (!DM4.activeSelf)
-                {
-                    DM4.SetActive(true);
-                }
-                DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
-                DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"yellow\">(3/4)</color>";
-                BGToPos = DMBG3MissionsPos.transform.position;
-                DM4.GetComponent<RectTransform>().anchoredPosition = DM1Pos;
-            } else
-            {
-                if (missions.Count == 0)
-                {
-                    if (DM1.activeSelf)
-                    {
-                        DM1.SetActive(false);
-                    }
-                    if (DM2.activeSelf)
-                    {
-                        DM2.SetActive(false);
-                    }
-                    if (DM3.activeSelf)
-                    {
-                        DM3.SetActive(false);
-                    }
-                    if (DM4.activeSelf)
-                    {
-                        DM4.SetActive(false);
-                    }
-                    DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                    DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                    DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                    DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
-                    DMText.GetComponent<TextMeshPro>().text = "<color=\"green\">completed!</color>";
-                    BGToPos = DMBGBeforePos.transform.position;
-                }
-            }
-        }
+        DM1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[0];
+        DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
+        DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
+        DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[3];
+        DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"red\">("+(missions.Count - MissionUndone)+"/4)</color>";
+        BGToPos = DMBG3MissionsPos.transform.position;       
     }
     #endregion
     #region Mouse Check

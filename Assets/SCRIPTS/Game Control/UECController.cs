@@ -133,7 +133,8 @@ public class UECController : UECMenuShared
         }
         if (checkDM)
         {
-            List<List<string>> listDM = ad.GetListDailyMissionUndone(currentId);
+            List<List<string>> listDMUndone = ad.GetListDailyMissionUndone(currentId);
+            List<List<string>> listDM = ad.GetListDailyMission(currentId);
             List<string> Missions = new List<string>();
             if (listDM != null)
             {
@@ -147,17 +148,22 @@ public class UECController : UECMenuShared
                             break;
                         case "SS":
                             mission = "Spend " + listDM[1][i] + " timeless shard(s).";
-                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            if (listDM[3][i] == "N" )
                             {
-                                if (controller.ShardSpent > 0)
+                                if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
                                 {
-                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.ShardSpent);
+                                    if (controller.ShardSpent > 0)
+                                    {
+                                        ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.ShardSpent);
+                                        controller.ShardSpent = 0;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                ad.DailyMissionDone(currentId, listDM[0][i]);
-                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                else
+                                {
+                                    ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    controller.GetData();
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
                             }
                             break;
                         case "C":
@@ -165,33 +171,42 @@ public class UECController : UECMenuShared
                             break;
                         case "SC":
                             mission = "Spend " + listDM[1][i] + " cash(s).";
-                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            if (listDM[3][i] == "N")
                             {
-                                if (controller.CashSpent > 0)
+                                if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
                                 {
-                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.CashSpent);
+                                    if (controller.CashSpent > 0)
+                                    {
+                                        ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.CashSpent);
+                                        controller.CashSpent = 0;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                ad.DailyMissionDone(currentId, listDM[0][i]);
-                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                else
+                                {
+                                    ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    controller.GetData();
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
                             }
                             break;
                         case "P":
                             mission = "Play for at least " + listDM[1][i] + " minute(s).";
-                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            if (listDM[3][i] == "N")
                             {
-                                if (controller.isCount)
+                                if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
                                 {
-                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], 1);
+                                    if (controller.isCount)
+                                    {
+                                        ad.UpdateDailyMissionProgess(currentId, listDM[0][i], 1);
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                ad.DailyMissionDone(currentId, listDM[0][i]);
-                                FindAnyObjectByType<RankController>().CheckToRankUp();
-                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                else
+                                {
+                                    ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    controller.GetData();
+                                    FindAnyObjectByType<RankController>().CheckToRankUp();
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
                             }
                             break;
                         case "CD":
@@ -205,18 +220,22 @@ public class UECController : UECMenuShared
                             break;
                         case "B":
                             mission = "Purchase " + listDM[1][i] + " item(s).";
-                            if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                            if (listDM[3][i] == "N")
                             {
-                                if (controller.BuyAmount > 0)
+                                if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
                                 {
-                                    ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.BuyAmount);
+                                    if (controller.BuyAmount > 0)
+                                    {
+                                        ad.UpdateDailyMissionProgess(currentId, listDM[0][i], controller.BuyAmount);
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                ad.DailyMissionDone(currentId, listDM[0][i]);
-                                FindAnyObjectByType<RankController>().CheckToRankUp();
-                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                else
+                                {
+                                    ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    controller.GetData();
+                                    FindAnyObjectByType<RankController>().CheckToRankUp();
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
                             }
                             break;
                         default: break;
@@ -226,6 +245,7 @@ public class UECController : UECMenuShared
                 }
             }           
             DailyMissionBar.GetComponent<UECDailyMissions>().missions = Missions;
+            DailyMissionBar.GetComponent<UECDailyMissions>().MissionUndone = listDMUndone.Count;
             controller.BuyAmount = 0;
             controller.isCount = false;
         }
