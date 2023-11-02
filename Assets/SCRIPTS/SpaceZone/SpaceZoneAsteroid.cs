@@ -58,14 +58,14 @@ public class SpaceZoneAsteroid : MonoBehaviour
                 Component.GetComponent<SpaceZoneAsteroid>().SplitCreate(new Vector2(Component.transform.position.x - ForcePos.x,Component.transform.position.y - ForcePos.y), Power/6f);
             }
             GetComponent<SpriteRenderer>().enabled = false;
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 2f);
         } else
         {
             GameObject go = Instantiate(Explosion, transform.position, Quaternion.identity);
             go.SetActive(true);
             Destroy(go, 0.3f);
             GetComponent<SpriteRenderer>().enabled = false;
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 2f);
         }
     }
 
