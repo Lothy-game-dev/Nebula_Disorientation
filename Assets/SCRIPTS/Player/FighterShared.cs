@@ -199,41 +199,43 @@ public class FighterShared : MonoBehaviour
         GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
         expl.SetActive(true);
         Destroy(expl, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10,30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl2.SetActive(true);
         Destroy(expl2, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl3.SetActive(true);
         Destroy(expl3, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl4.SetActive(true);
         Destroy(expl4, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl5.SetActive(true);
         Destroy(expl5, 0.3f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl6 = Instantiate(Explosion, transform.position, Quaternion.identity);
         expl6.SetActive(true);
         Destroy(expl6, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl7 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl7.SetActive(true);
         Destroy(expl7, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl8 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl8.SetActive(true);
         Destroy(expl8, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl9 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl9.SetActive(true);
         Destroy(expl9, 0.3f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         GameObject expl10 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl10.SetActive(true);
         Destroy(expl10, 0.3f);
+        yield return new WaitForSeconds(0.15f);
         if (name == "Player")
         {
             Camera.main.GetComponent<AudioListener>().enabled = true;
@@ -245,9 +247,8 @@ public class FighterShared : MonoBehaviour
         {
             misson.EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
         }
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
-        Destroy(gameObject, 0.5f);
+        GetComponent<SpriteRenderer>().sprite = null;
+        Destroy(gameObject, 1f);
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
