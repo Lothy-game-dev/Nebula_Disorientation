@@ -287,6 +287,25 @@ public class UECSessionScene : MonoBehaviour
         CurrentHPText.GetComponent<TextMeshPro>().text = "Current HP (" + Mathf.CeilToInt((int)SessionData["SessionCurrentHP"]/(float)maxHP * 100) + "%)";
     }
 
+    public void ResetEconomyData()
+    {
+        SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        // Cash Shard Cell
+        Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)SessionData["SessionCash"]).ToString();
+        TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)SessionData["SessionTimelessShard"]).ToString();
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
+        Dictionary<string, object> datas = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)datas["FuelCell"];
+        // Model
+        string Model = (string)SessionData["Model"];
+        string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(Model);
+        Dictionary<string, object> statsDict = FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionary(stats);
+        int maxHP = Mathf.CeilToInt(float.Parse((string)statsDict["HP"]) * CalculateMaxHPScaleLOTW());
+        CurrentHPSlider.GetComponent<Slider>().maxValue = maxHP;
+        CurrentHPSlider.GetComponent<Slider>().value = (int)SessionData["SessionCurrentHP"];
+        CurrentHPText.GetComponent<TextMeshPro>().text = "Current HP (" + Mathf.CeilToInt((int)SessionData["SessionCurrentHP"] / (float)maxHP * 100) + "%)";
+    }
+
     public void RemoveData()
     {
         Destroy(ModelGO);

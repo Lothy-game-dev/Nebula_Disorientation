@@ -45,7 +45,7 @@ public class SpaceZoneSummaryButton : MonoBehaviour
         } else if (Type=="BackToUEC")
         {
             Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-            if ((int)ListData["FuelCell"] > 1)
+            if ((int)ListData["FuelCell"] >= 1)
             {
                 FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
                 FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "UEC");

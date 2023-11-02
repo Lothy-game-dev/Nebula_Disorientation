@@ -837,7 +837,7 @@ public class GlobalFunctionController : MonoBehaviour
             final = "Instantly gain 1 <sprite index='2'>. Can't be purchased if Fuel Core is full.";
         }
         output.Add("Effect", "Effect: " + final);
-        output.Add("Duration", "Duration: " + (int)datas["Duration"] + " seconds.");
+        output.Add("Duration", "Duration: " + (Effect.Contains("FC") ? "-" : (int)datas["Duration"] + " seconds."));
         output.Add("Stack", "Max Stack: " + (int)datas["Stack"] + " Per Session.");
         output.Add("Price", ((int)datas["Price"]).ToString());
         output.Add("Cooldown", "Cooldown: " + ((int)datas["Cooldown"] == 0 ? "No cooldown." :

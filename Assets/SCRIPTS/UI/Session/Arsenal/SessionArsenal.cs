@@ -68,7 +68,7 @@ public class SessionArsenal : MonoBehaviour
     #region Start & Update
 
     // Start is called before the first frame update
-    private void OnEnable()
+    void OnEnable()
     {
         SetFirstData();
     }  

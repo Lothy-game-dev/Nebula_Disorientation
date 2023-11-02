@@ -616,7 +616,7 @@ public class Weapons : MonoBehaviour
                 }
             } else if (Fighter.GetComponent<WSShared>() != null)
             {
-                if (FireTimer <= 0f && Fireable)
+                if (FireTimer <= 0f && isFire && !isMainWeapon)
                 {
                     if (!IsThermalType)
                     {

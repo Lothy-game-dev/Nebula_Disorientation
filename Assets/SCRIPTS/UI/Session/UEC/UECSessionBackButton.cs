@@ -43,6 +43,10 @@ public class UECSessionBackButton : MonoBehaviour
         FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeOpen(ToScene.transform.position, 1f);
         FindObjectOfType<GameplayExteriorController>().ChangeToScene(ToScene);
         FromScene.SetActive(false);
+        if (ToScene.GetComponent<UECSessionScene>()!=null)
+        {
+            ToScene.GetComponent<UECSessionScene>().ResetEconomyData();
+        }
     }
     #endregion
 }
