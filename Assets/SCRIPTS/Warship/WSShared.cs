@@ -639,7 +639,7 @@ public class WSShared : MonoBehaviour
             foreach (var enemy in cols)
             {
                 // If weapon is main weap, target enemy ws/ss only
-                if (weapon.GetComponent<Weapons>().isMainWeapon)
+                if (weapon.GetComponent<Weapons>().isMainWeapon && weapon.GetComponent<Weapons>() != null)
                 {
                     if (enemy.gameObject.tag == "BossEnemy" ||  enemy.gameObject.tag == "AlliesBossFighter")
                     {
@@ -696,58 +696,32 @@ public class WSShared : MonoBehaviour
 
     private void CheckTargetEnemy(GameObject weapon)
     {
-        if (!weapon.GetComponent<Weapons>().isMainWeapon)
+        if (weapon.GetComponent<Weapons>() != null)
         {
-            BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-            for (int i = 0; i < SpWeaponTargets.Count; i++)
+            if (!weapon.GetComponent<Weapons>().isMainWeapon)
             {
-                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
-                {                   
-                    weapon.GetComponent<Weapons>().Aim = null;
-                    SpWeaponTargets[weapon] = null;
-                }
-            }
-        } else
-        {            
-            BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-            for (int i = 0; i < MainTarget.Count; i++)
-            {
-                if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+                for (int i = 0; i < SpWeaponTargets.Count; i++)
                 {
-                    weapon.GetComponent<Weapons>().Aim = null;
-                    MainTarget[weapon] = null;
-                }
-            }           
-        }
-    }
-
-    public GameObject TargetAllWarshipOnthemap(GameObject weapon)
-    {
-        GameObject game = null;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, 10000f, MainWeaponTarget);
-        if (cols.Length > 0)
-        {         
-            foreach (var enemy in cols)
-            {
-                // If weapon is main weap, target enemy ws/ss only
-                if (weapon.GetComponent<Weapons>().isMainWeapon)
-                {
-                    if (enemy.gameObject.tag == "BossEnemy" || enemy.gameObject.tag == "AlliesBossFighter")
-                    {                      
-                        game = enemy.gameObject;
-                       
-                        break;
+                    if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                    {                   
+                        weapon.GetComponent<Weapons>().Aim = null;
+                        SpWeaponTargets[weapon] = null;
                     }
-                    else
+                }
+            } else
+            {            
+                BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
+                for (int i = 0; i < MainTarget.Count; i++)
+                {
+                    if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                     {
-                        continue;
+                        weapon.GetComponent<Weapons>().Aim = null;
+                        MainTarget[weapon] = null;
                     }
-                }
-
-            }           
+                }           
+            }
         }
-        return game;
-
     }
     #endregion
     #region Spawn

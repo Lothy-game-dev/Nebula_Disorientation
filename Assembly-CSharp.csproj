@@ -120,6 +120,7 @@
     <Compile Include="Assets\SCRIPTS\Warship\WSSSDetected.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\Border.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertItemBox.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\FirstTimeTutorial\FirstTimeTutorial.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECCurrencyBar.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutTeleportButton.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\Arsenal\SessionArsenalItem.cs" />
