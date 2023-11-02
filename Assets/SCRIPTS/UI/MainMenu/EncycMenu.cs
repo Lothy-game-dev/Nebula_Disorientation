@@ -44,7 +44,15 @@ public class EncycMenu : MainMenuSceneShared
     void Start()
     {
         // Initialize variables
-       
+        WeaponList = FindAnyObjectByType<AccessDatabase>().GetAllArsenalWeapon();
+        FighterList = FindAnyObjectByType<AccessDatabase>().GetAllFighter();
+        PowerList = FindAnyObjectByType<AccessDatabase>().GetAllPower();
+        EnemyList = FindAnyObjectByType<AccessDatabase>().GetAllEnemy();
+        ConsumList = FindAnyObjectByType<AccessDatabase>().GetAllConsumable();
+        WarshipList = FindAnyObjectByType<AccessDatabase>().GetAllWarship();
+        SStationList = FindAnyObjectByType<AccessDatabase>().GetAllSpaceStation();
+        DmgElementList = FindAnyObjectByType<AccessDatabase>().GetAllDMGElement();
+        AttributeList = FindAnyObjectByType<AccessDatabase>().GetAllAttribute();
 
     }
 
@@ -72,6 +80,7 @@ public class EncycMenu : MainMenuSceneShared
                 game.GetComponent<EncycButton>().Id = int.Parse(WeaponList[i][0]);
                 game.name = WeaponList[i][2];
                 game.SetActive(true);
+
             }
         } else
         {
