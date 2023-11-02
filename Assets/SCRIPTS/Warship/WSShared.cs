@@ -899,7 +899,7 @@ public class WSShared : MonoBehaviour
         if (IsEnemy)
         {
             // Bounty
-            if (HitByPlayer && PlayerDamageReceive > MaxHP * 5 / 100f)
+            if (HitByPlayer || PlayerDamageReceive > MaxHP * 5 / 100f)
             {
                 FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
             }

@@ -913,7 +913,7 @@ public class GlobalFunctionController : MonoBehaviour
         }
         else if (str.Contains("C-") && !str.Contains("C-x"))
         {
-            result = "+" + str.Replace("C-", "") + "% Cash received in the upcoming Space Zones";
+            result = "+" + str.Replace("C-", "") + "% Cash received from bounties in the upcoming Space Zones";
         }
         else if (str.Contains("WROF-"))
         {

@@ -266,6 +266,8 @@ public class StatusBoard : MonoBehaviour
                 Destroy(CloneEnemy.GetComponent<EnemyFighterMLAgent>());
             }
             Destroy(CloneEnemy.GetComponent<BehaviorParameters>());
+            Destroy(CloneEnemy.GetComponent<SoundController>());
+            Destroy(CloneEnemy.GetComponent<AudioSource>());
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;
             // turn off component
@@ -473,6 +475,8 @@ public class StatusBoard : MonoBehaviour
                 Destroy(CloneEnemy.GetComponent<EnemyFighterMLAgent>());
             }
             Destroy(CloneEnemy.GetComponent<BehaviorParameters>());
+            Destroy(CloneEnemy.GetComponent<SoundController>());
+            Destroy(CloneEnemy.GetComponent<AudioSource>());
             FighterMovement fm = CloneEnemy.GetComponent<FighterMovement>();
             fm.enabled = false;
             // turn off component

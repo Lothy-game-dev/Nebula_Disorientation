@@ -19,6 +19,7 @@ public class GameplayInteriorController : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject SZSummary;
     public GameObject LoadingScene;
+    public GameObject Template;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -191,6 +192,7 @@ public class GameplayInteriorController : MonoBehaviour
     {
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, (int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
         FindAnyObjectByType<StatisticController>().PriceCollected((int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
+        ShowCashAndShardEffect((int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
         SetCashAndShard();
     }
 
@@ -198,6 +200,34 @@ public class GameplayInteriorController : MonoBehaviour
     {
         PauseMenu.SetActive(true);
         DoneLightUp = false;
+    }
+
+    private void ShowCashAndShardEffect(int CashVal, int ShardVal)
+    {
+        if (CashVal > 0)
+        {
+            GameObject CashPlace = Cash.gameObject.transform.GetChild(1).gameObject;
+            GameObject CashUp = Instantiate(Template, CashPlace.transform.position, Quaternion.identity);
+            CashUp.transform.SetParent(Cash.transform);
+            CashUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "+" + CashVal + "<sprite index='3'/>";
+            CashUp.transform.localScale = new Vector3(1, 1, 1f);
+            CashUp.SetActive(true);
+            CashUp.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 20f);
+            
+            Destroy(CashUp, 2f);
+        }
+        if (ShardVal > 0)
+        {
+            GameObject ShardPlace = Shard.gameObject.transform.GetChild(1).gameObject;
+            GameObject ShardUp = Instantiate(Template, ShardPlace.transform.position, Quaternion.identity);
+            ShardUp.transform.SetParent(Cash.transform);
+            ShardUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "+" + ShardVal + "<sprite index='0'/>";
+            ShardUp.transform.localScale = new Vector3(1, 1, 1f);
+            ShardUp.SetActive(true);
+            ShardUp.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 20f);
+            
+            Destroy(ShardUp, 2f);
+        }
     }
 
     public void PauseMenuOff()

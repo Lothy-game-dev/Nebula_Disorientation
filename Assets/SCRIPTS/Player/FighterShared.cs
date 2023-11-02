@@ -802,7 +802,7 @@ public class FighterShared : MonoBehaviour
                             }
                             Statistic.TotalEnemyDefeated += 1;
                             Statistic.KillEnemy = true;
-                        } else if (PlayerDamageReceive > MaxHP/2)
+                        } else if (PlayerDamageReceive >= MaxHP/2)
                         {
                             GetComponent<EnemyShared>().AddBounty();
                         }
