@@ -184,6 +184,7 @@ public class SessionArsenalItem : MonoBehaviour
     #region Check current item on mouse down
     public void CheckCurrentItem(string id)
     {
+        Debug.Log(Content.transform.GetChild(int.Parse(id) - 1));
         for (int i = 0; i < Content.transform.childCount; i++)
         {
             Color c = Content.transform.GetChild(i).GetComponent<Image>().color;
@@ -232,6 +233,7 @@ public class SessionArsenalItem : MonoBehaviour
         BuyButton.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
         BuyButton.GetComponent<SessionArsenalBuyButton>().PreReqName = ItemPreReq;
         BuyButton.GetComponent<SessionArsenalBuyButton>().isEnoughMoney = ar.EnoughPrice;
+        BuyButton.GetComponent<SessionArsenalBuyButton>().ItemId = Id;
     }
     public void StartTextRunning(string text)
     {

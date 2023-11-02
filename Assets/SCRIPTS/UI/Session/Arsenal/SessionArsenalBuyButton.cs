@@ -21,6 +21,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
     public bool isEnoughMoney;
     public bool isZeroShard;
     private SessionArsenal Ar;
+    public string ItemId;
     #endregion
     #region Start & Update
     // Start is called before the first frame update

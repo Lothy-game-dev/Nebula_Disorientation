@@ -417,7 +417,7 @@ public class SessionArsenal : MonoBehaviour
                 }
                 LockItem(g, WeaponList[i][8], WeaponList[i][0]);
                 g.SetActive(true);
-
+                
             }
         }
         else
@@ -443,6 +443,7 @@ public class SessionArsenal : MonoBehaviour
                     g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
                     LockItem(g, PowerList[i][8], PowerList[i][0]);
+                    
                 }
 
             }
