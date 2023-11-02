@@ -55,6 +55,7 @@ public class PlayerFighter : FighterShared
         // Initialize variables
         InitializeFighter();
         aus = GetComponent<AudioSource>();
+        isPausing = false;
         PlaySpawnSound();
         HPSlider.maxValue = MaxHP;
         ShieldPassive();

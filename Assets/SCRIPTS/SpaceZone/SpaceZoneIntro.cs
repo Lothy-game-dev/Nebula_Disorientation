@@ -51,7 +51,7 @@ public class SpaceZoneIntro : MonoBehaviour
         // Call function and timer only if possible
         if (!alreadyClose)
         {
-            if (Input.anyKey)
+            if (Input.GetMouseButtonDown(0))
             {
                 alreadyClose = true;
                 StartCoroutine(CloseAnimation());
