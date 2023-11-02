@@ -146,16 +146,19 @@ public class StatisticController : MonoBehaviour
             int index = 0;
             foreach (var x in Fighter.GetComponent<PlayerFighter>().Consumables)
             {
-                if (index == 0)
+                if (x.Value != 0)
                 {
-                    Cons += x.Key + "-" + x.Value;
-                }
-                else
-                {
-                    Cons += "|" + x.Key + "-" + x.Value;
+                    if (index == 0)
+                    {
+                        Cons += x.Key + "-" + x.Value;
+                    }
+                    else
+                    {
+                        Cons += "|" + x.Key + "-" + x.Value;
+                    }
+                    index++;
                 }
                 ad.DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), x.Key, "Consumable", Consumable[x.Key] - x.Value);
-                index++;
             }
         }
 
