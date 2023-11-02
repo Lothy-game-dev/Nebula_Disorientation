@@ -134,7 +134,6 @@ public class UECController : UECMenuShared
         if (checkDM)
         {
             List<List<string>> listDMUndone = ad.GetListDailyMissionUndone(currentId);
-            Debug.Log(listDMUndone.Count);
             List<List<string>> listDM = ad.GetListDailyMission(currentId);
             List<string> Missions = new List<string>();
             if (listDM != null)
