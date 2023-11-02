@@ -23,6 +23,16 @@ public class SpaceZoneAsteroid : MonoBehaviour
     void Start()
     {
         // Initialize variables
+        AudioSource aus = gameObject.AddComponent<AudioSource>();
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 2000;
+        aus.minDistance = 1000;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
+        SoundController sc = gameObject.AddComponent<SoundController>();
+        sc.SoundType = "SFX";
     }
 
     // Update is called once per frame
@@ -37,6 +47,7 @@ public class SpaceZoneAsteroid : MonoBehaviour
     // Group all function that serve the same algorithm
     public void FighterHit(Vector2 ForcePos, float Power)
     {
+        Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("OtherExplo", gameObject);
         GetComponent<Collider2D>().enabled = false;
         if (SmallerComponents.Length > 0)
         {
@@ -46,13 +57,15 @@ public class SpaceZoneAsteroid : MonoBehaviour
                 Component.SetActive(true);
                 Component.GetComponent<SpaceZoneAsteroid>().SplitCreate(new Vector2(Component.transform.position.x - ForcePos.x,Component.transform.position.y - ForcePos.y), Power/6f);
             }
-            Destroy(gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(gameObject, 5f);
         } else
         {
             GameObject go = Instantiate(Explosion, transform.position, Quaternion.identity);
             go.SetActive(true);
             Destroy(go, 0.3f);
-            Destroy(gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(gameObject, 5f);
         }
     }
 

@@ -785,7 +785,16 @@ public class SpaceStationShared : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
-        Destroy(gameObject);
+        GetComponent<SpriteRenderer>().enabled = false;
+        foreach (var wp in MainWps)
+        {
+            wp.GetComponent<SpriteRenderer>().enabled = false;
+        }
+        foreach (var wp in SpWps)
+        {
+            wp.GetComponent<SpriteRenderer>().enabled = false;
+        }
+        Destroy(gameObject, 6f);
         Destroy(Fade);
         
     }

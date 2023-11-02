@@ -27,6 +27,16 @@ public class SpaceZoneStar : MonoBehaviour
     void Start()
     {
         // Initialize variables
+        AudioSource aus = gameObject.AddComponent<AudioSource>();
+        aus.spatialBlend = 1;
+        aus.rolloffMode = AudioRolloffMode.Linear;
+        aus.maxDistance = 2000;
+        aus.minDistance = 1000;
+        aus.priority = 256;
+        aus.dopplerLevel = 0;
+        aus.spread = 360;
+        SoundController sc = gameObject.AddComponent<SoundController>();
+        sc.SoundType = "SFX";
     }
 
     // Update is called once per frame
@@ -38,6 +48,7 @@ public class SpaceZoneStar : MonoBehaviour
         {
             if (!alreadyDestroy)
             {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("OtherExplo", gameObject);
                 alreadyDestroy = true;
                 StartCoroutine(StarDestroy());
             }
@@ -98,7 +109,8 @@ public class SpaceZoneStar : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
-        Destroy(gameObject);
+        GetComponent<SpriteRenderer>().enabled = false;
+        Destroy(gameObject, 5f);
     }
     #endregion
 }
