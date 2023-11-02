@@ -3717,19 +3717,14 @@ public class AccessDatabase : MonoBehaviour
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
             dbCheckCommand.CommandText = "UPDATE SessionLOTWCards SET Duration = Duration - IIF(Duration=1000 OR Duration=-1, 0, 1) WHERE SessionID=" + sessionId;
             int n = dbCheckCommand.ExecuteNonQuery();
-            if (n!=1)
-            {
-                dbConnection.Close();
-                return "Fail";
-            }
             // Queries
             IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
             dbCheckCommand1.CommandText = "DELETE FROM SessionLOTWCards WHERE Duration = 0 AND SessionID=" + sessionId;
             int m = dbCheckCommand1.ExecuteNonQuery();
+            Debug.Log("Delete");
             dbConnection.Close();
             if (m != 1)
             {
-                
                 return "Fail";
             } else
             return "Success";

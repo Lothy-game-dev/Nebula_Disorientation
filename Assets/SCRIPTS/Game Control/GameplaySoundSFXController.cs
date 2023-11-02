@@ -16,6 +16,7 @@ public class GameplaySoundSFXController : MonoBehaviour
     public AudioClip WSExplo;
     public AudioClip SSExplo;
     public AudioClip OtherExplo;
+    public GameplayInteriorController InteriorController;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -56,7 +57,6 @@ public class GameplaySoundSFXController : MonoBehaviour
         }
         else if (Type == "FighterExplo")
         {
-            Debug.Log("ExploF");
             go.GetComponent<AudioSource>().clip = FighterExplo;
         }
         else if (Type == "WSExplo")
@@ -71,6 +71,7 @@ public class GameplaySoundSFXController : MonoBehaviour
         {
             go.GetComponent<AudioSource>().clip = OtherExplo;
         }
+        go.GetComponent<AudioSource>().volume = InteriorController.MasterVolumeScale / 100f * InteriorController.SFXVolumeScale / 100f;
         go.GetComponent<AudioSource>().Play();
     }
     #endregion
