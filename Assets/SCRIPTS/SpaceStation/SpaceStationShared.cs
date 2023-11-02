@@ -787,7 +787,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
-        Destroy(gameObject, 0.5f);
+        Destroy(gameObject, 1f);
         Destroy(Fade);
         
     }
