@@ -73,7 +73,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         // Set Data To View Next Stage Number, Variant and Hazard
         IncomingStage.GetComponent<TextMeshPro>().text = "Upcoming: Space Zone no " + SpaceZoneNo;
         Dictionary<string, object> HazDatas = FindObjectOfType<AccessDatabase>().GetHazardAllDatas(ChosenHazard);
-        HazardInfo.GetComponent<TextMeshPro>().text = "Environment: <color=" + (string)HazDatas["HazardColor"] + ">" + (string)HazDatas["HazardName"] + "</color>";
+        HazardInfo.GetComponent<TextMeshPro>().text = "Environment<br><color=" + (string)HazDatas["HazardColor"] + ">" + (string)HazDatas["HazardName"] + "</color>";
         // Get Mission Data
         Dictionary<string, object> MissionData = FindObjectOfType<AccessDatabase>().GetMissionDataByValueAndVariant(SpaceZoneNo % 10, ChosenVariant);
         Mission.transform.GetChild(1).GetChild(0).GetComponent<TextMeshPro>().text = (string)MissionData["Mission"];

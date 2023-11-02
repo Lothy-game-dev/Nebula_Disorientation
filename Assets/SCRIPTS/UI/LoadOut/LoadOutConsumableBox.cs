@@ -41,8 +41,6 @@ public class LoadOutConsumableBox : MonoBehaviour
             PopUp.GetComponent<LoadOutConsumablePopUp>().CheckIncreaseClickItem(gameObject);
         } else
         {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "Item ran out!\nVisit the space shop to get some more!", 5f);
         }
     }
 
