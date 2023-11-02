@@ -44,24 +44,31 @@ public class SoundSFXGeneratorController : MonoBehaviour
     {
         if (Type=="EconomySpend")
         {
+            GetComponent<AudioSource>().volume = 1f;
             GetComponent<AudioSource>().clip = EconomySpend;
         } else if (Type== "EconomyInsuff")
         {
+            GetComponent<AudioSource>().volume = 1f;
             GetComponent<AudioSource>().clip = EconomyInsuff;
         } else if (Type== "LoadoutCons")
         {
+            GetComponent<AudioSource>().volume = 1f;
             GetComponent<AudioSource>().clip = LoadoutCons;
         } else if (Type== "LoadoutWeapon")
         {
+            GetComponent<AudioSource>().volume = 1f;
             GetComponent<AudioSource>().clip = LoadoutWeapon;
         } else if (Type== "LoadoutFighter")
         {
+            GetComponent<AudioSource>().volume = 1f;
             GetComponent<AudioSource>().clip = LoadoutFighter;
         } else if (Type=="Repair")
         {
+            GetComponent<AudioSource>().volume = 0.5f;
             GetComponent<AudioSource>().clip = Repair;
         } else if (Type=="ButtonClick")
         {
+            GetComponent<AudioSource>().volume = 0.5f;
             GetComponent<AudioSource>().clip = ButtonClick;
         }
         GetComponent<AudioSource>().Play();

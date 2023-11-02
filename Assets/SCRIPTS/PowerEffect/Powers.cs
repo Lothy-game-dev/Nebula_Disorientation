@@ -42,8 +42,6 @@ public class Powers : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        /*InitData();*/
-        ControllerMain = FindObjectOfType<GameplayInteriorController>();
     }
 
     // Update is called once per frame
@@ -145,7 +143,7 @@ public class Powers : MonoBehaviour
         sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 0.35f* audioScale * ControllerMain.MasterVolumeScale * ControllerMain.SFXVolumeScale; ;
+        sound.volume = 0.35f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale/100f ;
     }  
     public void EndSound()
     {

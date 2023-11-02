@@ -73,6 +73,17 @@ public class SpaceStationShared : MonoBehaviour
         Order = WSSSDict[gameObject];
         ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
         HPBar.SetValue(CurrentHP, MaxHP, true);
+        if (GetComponent<AudioSource>() != null)
+        {
+            AudioSource aus = gameObject.AddComponent<AudioSource>();
+            aus.spatialBlend = 1;
+            aus.rolloffMode = AudioRolloffMode.Linear;
+            aus.maxDistance = 2000;
+            aus.minDistance = 1000;
+            aus.priority = 256;
+            aus.dopplerLevel = 0;
+            aus.spread = 360;
+        }
     }
 
     // Update is called once per frame
@@ -455,6 +466,7 @@ public class SpaceStationShared : MonoBehaviour
         float RealDamage = Damage;
         if (CurrentBarrier > 0)
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
@@ -491,6 +503,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         else
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
@@ -534,6 +547,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
@@ -569,6 +583,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         else
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
@@ -598,6 +613,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
@@ -634,6 +650,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         else
         {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
@@ -684,6 +701,7 @@ public class SpaceStationShared : MonoBehaviour
         {
             if (!AlreadyDestroy)
             {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("SSExplo", gameObject);
                 AlreadyDestroy = true;
                 StartCoroutine(DestroySelf());
 
@@ -767,7 +785,9 @@ public class SpaceStationShared : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
-        Destroy(gameObject);
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 1f);
         Destroy(Fade);
         
     }

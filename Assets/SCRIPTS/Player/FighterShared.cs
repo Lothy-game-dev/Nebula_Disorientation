@@ -116,6 +116,19 @@ public class FighterShared : MonoBehaviour
         controller = FindObjectOfType<GameController>();
         misson = FindObjectOfType<SpaceZoneMission>();
         Statistic = FindAnyObjectByType<StatisticController>();
+        if (GetComponent<PlayerFighter>()==null)
+        {
+            AudioSource aus = gameObject.AddComponent<AudioSource>();
+            aus.spatialBlend = 1;
+            aus.rolloffMode = AudioRolloffMode.Linear;
+            aus.maxDistance = 2000;
+            aus.minDistance = 1000;
+            aus.priority = 256;
+            aus.dopplerLevel = 0;
+            aus.spread = 360;
+            SoundController sc = gameObject.AddComponent<SoundController>();
+            sc.SoundType = "SFX";
+        }
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -163,6 +176,14 @@ public class FighterShared : MonoBehaviour
             CurrentHP = 0f;
             if (!alreadyDestroy)
             {
+                if (GetComponent<PlayerFighter>() == null)
+                {
+                    Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterExplo", gameObject);
+                } else
+                {
+                    Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterExplo", transform.GetChild(12).gameObject);
+                }
+               
                 alreadyDestroy = true;
                 StartCoroutine(DestroySelf());
             }
@@ -178,19 +199,19 @@ public class FighterShared : MonoBehaviour
         GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
         expl.SetActive(true);
         Destroy(expl, 0.3f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
         GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10,30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl2.SetActive(true);
         Destroy(expl2, 0.3f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
         GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y + Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl3.SetActive(true);
         Destroy(expl3, 0.3f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
         GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl4.SetActive(true);
         Destroy(expl4, 0.3f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
         GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(10, 30), transform.position.y - Random.Range(10, 30), transform.position.z), Quaternion.identity);
         expl5.SetActive(true);
         Destroy(expl5, 0.3f);
@@ -205,7 +226,9 @@ public class FighterShared : MonoBehaviour
         {
             misson.EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
         }
-        Destroy(gameObject);
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 1.5f);
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
@@ -652,6 +675,15 @@ public class FighterShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
+            if (GetComponent<PlayerFighter>() == null)
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
+            }
+            else
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", transform.GetChild(12).gameObject);
+            }
+            
             if (CurrentBarrier > damage)
             {
                 CurrentBarrier -= damage;
@@ -693,6 +725,14 @@ public class FighterShared : MonoBehaviour
         }
         else
         {
+            if (GetComponent<PlayerFighter>() == null)
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterHit", gameObject);
+            }
+            else
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterHit", transform.GetChild(12).gameObject);
+            }
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
