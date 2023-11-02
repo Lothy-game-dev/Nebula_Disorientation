@@ -83,9 +83,9 @@ public class FuelCellBar : MonoBehaviour
                 }
                 else
                 {
-                    while (Result > 43200)
+                    while (Result > 7200)
                     {
-                        Result = Result - 43200;
+                        Result = Result - 7200;
                         // Add Fuel cell
                         FindObjectOfType<AccessDatabase>().AddFuelCell(PlayerID);
                         Data = ad.GetPlayerInformationById(PlayerID);
@@ -94,7 +94,7 @@ public class FuelCellBar : MonoBehaviour
                             break;
                         }
                     }
-                    Result = (int)(43200 - Result);
+                    Result = (int)(7200 - Result);
                     if (Result == 0)
                     {
                         // Add Fuel cell

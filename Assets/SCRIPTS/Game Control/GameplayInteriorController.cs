@@ -31,6 +31,7 @@ public class GameplayInteriorController : MonoBehaviour
     public float SFXVolumeScale;
     private Dictionary<string, object> OptionSetting;
     public bool isEnding;
+    public bool isLoweringSound;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -58,6 +59,7 @@ public class GameplayInteriorController : MonoBehaviour
         MusicVolumeScale = float.Parse(OptionSetting["MuVolume"].ToString());
         SFXVolumeScale = float.Parse(OptionSetting["Sfx"].ToString());
         aus = GetComponent<AudioSource>();
+        isLoweringSound = false;
         SoundVolume();
 
         

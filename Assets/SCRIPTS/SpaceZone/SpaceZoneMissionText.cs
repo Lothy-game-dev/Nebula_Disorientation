@@ -119,17 +119,18 @@ public class SpaceZoneMissionText : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
 
-        for (int i = 0; i < 10; i++)
-        {
-            GetComponent<AudioSource>().volume -= 0.1f;
-            controller.SFXVolumeScale -= 10f;
-            yield return new WaitForSeconds(0.1f);
-        }
+        controller.isLoweringSound = true;
 
         if (text == "Mission Accomplished!")
         {
             //Decrease volumn when summarizing
-            yield return new WaitForSeconds(2f);
+            for (int i = 0; i < 10; i++)
+            {
+                GetComponent<AudioSource>().volume -= 0.1f;
+                controller.SFXVolumeScale -= 10f;
+                yield return new WaitForSeconds(0.2f);
+
+            }
             FindAnyObjectByType<RankController>().CheckToRankUp();
             Black2.SetActive(false);
             Black3.SetActive(false);
@@ -138,7 +139,12 @@ public class SpaceZoneMissionText : MonoBehaviour
             FindAnyObjectByType<GameplayInteriorController>().SZSummaryOn();
         } else
         {
-            yield return new WaitForSeconds(2f);
+            for (int i = 0; i < 10; i++)
+            {
+                GetComponent<AudioSource>().volume -= 0.1f;
+                controller.SFXVolumeScale -= 10f;
+                yield return new WaitForSeconds(0.2f);
+            }
             PlayerPrefs.SetString("isFailed", "T");
             SceneManager.LoadSceneAsync("SessionSummary");
             SceneManager.UnloadSceneAsync("GameplayInterior");

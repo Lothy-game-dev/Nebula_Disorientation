@@ -65,10 +65,20 @@ public class NotiBoardOKButton : MonoBehaviour
             Destroy(NotiBoard);
         } else if ("ConvertButton".Equals(name))
         {
-            ConvertBoard cb = NotiBoard.transform.GetChild(0).GetComponent<ConvertBoard>();
-            if (cb!=null)
+            if (NotiBoard.transform.GetChild(0).GetComponent<ConvertBoard>()==null)
             {
-                cb.Convert();
+                ConvertSessionBoard csb = NotiBoard.transform.GetChild(0).GetComponent<ConvertSessionBoard>();
+                if (csb!=null)
+                {
+                    csb.Convert();
+                }
+            } else
+            {
+                ConvertBoard cb = NotiBoard.transform.GetChild(0).GetComponent<ConvertBoard>();
+                if (cb != null)
+                {
+                    cb.Convert();
+                }
             }
         } else if ("BackButton".Equals(name))
         {

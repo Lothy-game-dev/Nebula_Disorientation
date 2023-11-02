@@ -325,7 +325,7 @@ public class AccessDatabase : MonoBehaviour
                     {
                         System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.InvariantCulture;
                         System.DateTime LastTime = System.DateTime.ParseExact(lastUsed, "dd/MM/yyyy HH:mm:ss", culture);
-                        LastTime = LastTime.AddHours(12);
+                        LastTime = LastTime.AddHours(2);
                         FinalStr = LastTime.ToString("dd/MM/yyyy HH:mm:ss");
                     }
                 }
