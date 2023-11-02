@@ -928,9 +928,10 @@ public class WSShared : MonoBehaviour
         bf.GetComponent<SpriteRenderer>().color = c;
         bf.transform.SetParent(Flash.transform.parent.transform);
         bf.SetActive(true);
+        GetComponent<LimitRendering>().enabled = false;
         GetComponent<SpriteRenderer>().enabled = false;
         for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
+        {   
            gameObject.transform.GetChild(i).gameObject.SetActive(false);           
         }
         StartCoroutine(FlashOpen(bf, delay, duration));
@@ -939,7 +940,7 @@ public class WSShared : MonoBehaviour
 
     private IEnumerator FlashOpen(GameObject Fade, float delay, float duration)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(delay);       
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;
@@ -947,10 +948,8 @@ public class WSShared : MonoBehaviour
             Fade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(duration / 50f);
         }
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
-        Destroy(gameObject, 1f);
         Destroy(Fade);
+        Destroy(gameObject);
 
     }
     #endregion

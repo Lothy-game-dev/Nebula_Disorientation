@@ -84,7 +84,9 @@ public class CinematicScene : MonoBehaviour
         {
             Background.transform.localScale = new Vector3(Background.transform.localScale.x - 0.2f / 300f, Background.transform.localScale.y - 0.2f / 300f, Background.transform.localScale.z);
             yield return new WaitForSeconds(duration / 300f);
-        }       
+        }
+        GenerateBlackFadeClose(2f);
+        Part++;
     }
     private IEnumerator ShowSkipButton()
     {
