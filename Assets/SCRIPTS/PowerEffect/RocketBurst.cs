@@ -38,7 +38,7 @@ public class RocketBurst : Powers
     public void GenerateRocket()
     {
         VList = CalculateAngle(10);
-
+        PlaySound(SoundEffect);
         for (int i = 0;  i < AoH; i++)
         {
             GameObject game = Instantiate(Effect, new Vector3(VList[i].x + Fighter.transform.position.x, VList[i].y + Fighter.transform.position.y, 0), Quaternion.identity);
@@ -52,7 +52,6 @@ public class RocketBurst : Powers
             game.GetComponent<RocketBurstBullet>().Layer = EnemyLayer;
             game.GetComponent<RocketBurstBullet>().Fighter = Fighter;
             game.GetComponent<RocketBurstBullet>().LOTWEffect = LOTWEffect;
-           PlaySound(SoundEffect);
         }
     }
     #endregion
