@@ -77,6 +77,7 @@ public class UECSessionWeaponBox : MonoBehaviour
                 }
             }
         }
+        ScrollView.GetComponent<ScrollRect>().horizontal = true;
     }
 
     private IEnumerator StartAnimation()

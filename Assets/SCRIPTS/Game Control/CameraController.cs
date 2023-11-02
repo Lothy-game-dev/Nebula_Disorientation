@@ -126,12 +126,14 @@ public class CameraController : MonoBehaviour
                 isPausing = true;
                 InteriorController.PauseMenuOn();
                 Debug.Log("Pause");
+                FollowObject.GetComponent<PlayerFighter>().isPausing = true;
             } else
             {
                 Time.timeScale = 1;
                 isPausing = false;
                 InteriorController.PauseMenuOff();
                 Debug.Log("Continue");
+                FollowObject.GetComponent<PlayerFighter>().isPausing = false;
             }
         }
         return isPausing;
