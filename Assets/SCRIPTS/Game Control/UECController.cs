@@ -166,23 +166,22 @@ public class UECController : UECMenuShared
                                 {
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
                                     controller.GetData();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Spend " + listDM[1][i] + " timeless shard.", 2f);
                                 }
                             } else
                             {
-                                missionColor = "#00ff00";
+                                missionColor = "#008000";
                             }
                             mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " timeless shard.";
                             break;
                         case "C":
                             if (listDM[3][i] == "Y")
                             {
-                                missionColor = "#00ff00";
+                                missionColor = "#008000";
                             }
                             mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " spacezones.";
                             break;
                         case "SC":
-                            mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " cash.";
                             if (listDM[3][i] == "N")
                             {
                                 if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
@@ -197,15 +196,15 @@ public class UECController : UECMenuShared
                                 {
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
                                     controller.GetData();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Spend " + listDM[1][i] + " cash.", 2f);
                                 }
                             } else
                             {
                                 missionColor = "#008000";
                             }
+                            mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " cash.";
                             break;
                         case "P":
-                            mission = "<color=" + missionColor + "> Play for at least " + listDM[1][i] + " minutes.";
                             if (listDM[3][i] == "N")
                             {
                                 if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
@@ -220,12 +219,13 @@ public class UECController : UECMenuShared
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
                                     controller.GetData();
                                     FindAnyObjectByType<RankController>().CheckToRankUp();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Play for at least " + listDM[1][i] + " minutes.", 2f);
                                 }
                             } else
                             {
                                 missionColor = "#008000";
                             }
+                            mission = "<color=" + missionColor + "> Play for at least " + listDM[1][i] + " minutes.";
                             break;
                         case "CD":
                             if (listDM[3][i] == "Y")
@@ -263,7 +263,7 @@ public class UECController : UECMenuShared
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
                                     controller.GetData();
                                     FindAnyObjectByType<RankController>().CheckToRankUp();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Purchase " + listDM[1][i] + " items.", 2f);
                                 }
                             } else
                             {

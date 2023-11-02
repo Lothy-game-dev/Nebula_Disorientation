@@ -68,6 +68,8 @@ public class UECDailyMissions : MonoBehaviour
         DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
         DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
         DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[3];
+        Debug.Log(missions.Count);
+        Debug.Log(MissionUndone);
         if (missions.Count - MissionUndone == 4)
         {
             DMText.GetComponent<TextMeshPro>().text = "<color=#008000>Completed!</color>";

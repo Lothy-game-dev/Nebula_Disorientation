@@ -417,7 +417,10 @@ public class SessionArsenal : MonoBehaviour
                 }
                 LockItem(g, WeaponList[i][8], WeaponList[i][0]);
                 g.SetActive(true);
-                
+                if (i == int.Parse(BuyButton.GetComponent<SessionArsenalBuyButton>().ItemId))
+                {
+                    g.GetComponent<SessionArsenalItem>().CheckCurrentItem(BuyButton.GetComponent<SessionArsenalBuyButton>().ItemId);
+                }
             }
         }
         else

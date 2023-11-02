@@ -293,7 +293,10 @@ public class Weapons : MonoBehaviour
                 EndSound();
             }
         }
-
+        if (IsThermalType && ControllerMain.isLoweringSound)
+        {
+            EndSound();
+        }
         ResetHitTimer -= Time.deltaTime;
         if (ResetHitTimer <= 0f)
         {
@@ -985,8 +988,9 @@ public class Weapons : MonoBehaviour
         {
             aus.volume = 1f* audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
         }
-        
     }
+
+
     public void ThermalSound()
     {
         if (aus.clip!=WeaponShootSound)
@@ -996,8 +1000,6 @@ public class Weapons : MonoBehaviour
             aus.Play();
             if (Bullet.GetComponent<UsualThermalOrb>() != null && Bullet.GetComponent<UsualThermalOrb>().isHeat) aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
             else { aus.volume = 0.2f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f; }
-
-            
         }
     }
 

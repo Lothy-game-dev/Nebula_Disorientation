@@ -824,7 +824,7 @@ public class BulletShared : MonoBehaviour
             {
                 LOTWEffectScale *= LOTWEffect.LOTWBarrierDMGScale;
             }
-            if ((enemy.transform.position - WeaponShoot.GetComponent<Weapons>().Fighter.transform.position).magnitude >= 1000)
+            if ((enemy.transform.position - WeaponShoot.GetComponent<Weapons>().Fighter.transform.position).magnitude >= 1500)
             {
                 LOTWEffectScale *= LOTWEffect.LOTWFarDMGScale;
             }
