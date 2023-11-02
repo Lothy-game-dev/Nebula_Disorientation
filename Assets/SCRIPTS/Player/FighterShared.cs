@@ -227,9 +227,8 @@ public class FighterShared : MonoBehaviour
             misson.EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
         }
         GetComponent<SpriteRenderer>().enabled = false;
-        LeftWeapon.GetComponent<SpriteRenderer>().enabled = false;
-        RightWeapon.GetComponent<SpriteRenderer>().enabled = false;
-        Destroy(gameObject, 5f);
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 0.5f);
     }
     // Check Thermal Status, must be called in Update()
     public void CheckThermal()
