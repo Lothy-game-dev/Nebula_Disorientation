@@ -29,6 +29,7 @@ public class UECDailyMissions : MonoBehaviour
     private Vector2 BGToPos;
     private bool BGGoingTo;
     public int MissionUndone;
+    private string DMDone;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -67,7 +68,13 @@ public class UECDailyMissions : MonoBehaviour
         DM2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[1];
         DM3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[2];
         DM4.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = missions[3];
-        DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=\"red\">(0/4)</color>";
+        if (missions.Count - MissionUndone == 4)
+        {
+            DMText.GetComponent<TextMeshPro>().text = "<color=#008000>Completed!</color>";
+        } else
+        {
+            DMText.GetComponent<TextMeshPro>().text = "Daily missions <color=red>("+(missions.Count - MissionUndone)+"/4)</color>";
+        }
         BGToPos = DMBG3MissionsPos.transform.position;       
     }
     #endregion
