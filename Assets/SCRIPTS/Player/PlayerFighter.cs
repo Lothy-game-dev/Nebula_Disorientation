@@ -40,7 +40,7 @@ public class PlayerFighter : FighterShared
     private float[] ChargingPower;
     private float[] ChargingPowerReq;
     private int[] ConsCount;
-    private bool isPausing;
+    public bool isPausing;
     private float testTimer;
     public GameObject FirstPower;
     public GameObject SecondPower;
@@ -335,7 +335,7 @@ public class PlayerFighter : FighterShared
             // Pause
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                isPausing = FindObjectOfType<CameraController>().PauseGame();
+                FindObjectOfType<CameraController>().PauseGame();
             }
         }
         // Timer Decrease
