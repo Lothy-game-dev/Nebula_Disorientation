@@ -676,7 +676,15 @@ public class FighterShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
-            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
+            if (GetComponent<PlayerFighter>() == null)
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
+            }
+            else
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", transform.GetChild(12).gameObject);
+            }
+            
             if (CurrentBarrier > damage)
             {
                 CurrentBarrier -= damage;
@@ -718,7 +726,14 @@ public class FighterShared : MonoBehaviour
         }
         else
         {
-            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterHit", gameObject);
+            if (GetComponent<PlayerFighter>() == null)
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterHit", gameObject);
+            }
+            else
+            {
+                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterHit", transform.GetChild(12).gameObject);
+            }
             if (BarrierEffectDelay <= 0f)
             {
                 BarrierEffectDelay = 0.25f;
