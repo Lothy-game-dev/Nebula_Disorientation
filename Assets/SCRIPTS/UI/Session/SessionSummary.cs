@@ -77,7 +77,8 @@ public class SessionSummary : MonoBehaviour
         FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + Data["SessionFuelEnergy"].ToString();
 
         //Economy
-        ShardAmount = (isFailed ? (int.Parse(Data["SessionTimelessShard"].ToString()) / 2) + 1 : int.Parse(Data["SessionTimelessShard"].ToString()));
+        ShardAmount = (isFailed ? (int.Parse(Data["SessionTimelessShard"].ToString()) / 2) : int.Parse(Data["SessionTimelessShard"].ToString()));
+        ShardAmount = (int.Parse(Data["SessionTimelessShard"].ToString()) % 2 == 1 ? ShardAmount + 1 : ShardAmount);
         CashAmount = (isFailed ? int.Parse(Data["SessionCash"].ToString()) / 2 : int.Parse(Data["SessionCash"].ToString()));
         Shard.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? int.Parse(Data["SessionTimelessShard"].ToString()) + "<color=red> (-" + (int.Parse(Data["SessionTimelessShard"].ToString()) - ShardAmount) + ") </color>" : ShardAmount) + " <sprite index='0'> ";
         Cash.transform.GetChild(0).GetComponent<TextMeshPro>().text = (isFailed ? CashAmount * 2 + "<color=red> (-" + CashAmount + ") </color>" : CashAmount) + " <sprite index='3'> "; ;      

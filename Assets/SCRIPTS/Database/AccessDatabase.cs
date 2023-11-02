@@ -1178,6 +1178,46 @@ public class AccessDatabase : MonoBehaviour
         dbConnection.Close();
         
     }
+
+    public List<List<string>> GetListDailyMission(int PlayerId)
+    {
+        System.DateTime date = System.DateTime.Now;
+        string currentDate = date.ToString("yyyy-MM-dd");
+        List<List<string>> dailyMissions = new List<List<string>>();
+        dailyMissions.Add(new List<string>());
+        dailyMissions.Add(new List<string>());
+        dailyMissions.Add(new List<string>());
+        dailyMissions.Add(new List<string>());
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT MissionId, MissionProgess, IsComplete FROM PlayerDailyMission WHERE PlayerId=" + PlayerId + " AND MissionDate='" + currentDate + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check1 = false;
+        while (dataReader.Read())
+        {
+            check1 = true;
+            dailyMissions[2].Add(dataReader.GetInt32(1).ToString());
+            dailyMissions[3].Add(dataReader.GetString(2));
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "SELECT MissionVerb, MissionNumber FROM DailyMissions WHERE MissionId=" + dataReader.GetInt32(0);
+            IDataReader dataReader2 = dbCommand.ExecuteReader();
+            bool check2 = false;
+            while (dataReader2.Read())
+            {
+                check2 = true;
+                dailyMissions[0].Add(dataReader2.GetString(0));
+                dailyMissions[1].Add(dataReader2.GetInt32(1).ToString());
+
+            }
+            if (!check2) return null;
+        }
+        if (!check1) return null;
+        dbConnection.Close();
+        return dailyMissions;
+    }
     #endregion
     #region Access Option
     public Dictionary<string, object> GetOption()

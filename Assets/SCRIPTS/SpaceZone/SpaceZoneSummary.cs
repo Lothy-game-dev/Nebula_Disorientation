@@ -87,7 +87,6 @@ public class SpaceZoneSummary : MonoBehaviour
         FindAnyObjectByType<GameplayInteriorController>().isEnding = true;
         stat = FindAnyObjectByType<StatisticController>();
 
-        stat.PriceCollected(stat.CurrentCashReward, stat.CurrentShardReward);
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(stat.SessionID, true, stat.CurrentCashReward, stat.CurrentShardReward);
         stat.SessionPriceUpdated(stat.CurrentCashReward, stat.CurrentShardReward);
 
@@ -98,8 +97,8 @@ public class SpaceZoneSummary : MonoBehaviour
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
         SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> " + stat.CurrentShard.Replace("<sprite index='0'>", "");
         SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br>" + stat.CurrentCash.Replace("<sprite index='3'>", "");
-        CurrentShard.GetComponent<TextMeshPro>().text = "Shard Collected <sprite=0>: <br> " + stat.ShardCollected;
-        CurrentCash.GetComponent<TextMeshPro>().text = "Cash Collected <sprite=3>: <br>" + stat.CashCollected;
+        CurrentShard.GetComponent<TextMeshPro>().text = "<sprite=0> Collected : <br> " + stat.ShardCollected + " + " + stat.CurrentShardReward;
+        CurrentCash.GetComponent<TextMeshPro>().text = "<sprite=3> Collected : <br>" + stat.CashCollected + " + " + stat.CurrentCashReward;
         Timer.GetComponent<TextMeshPro>().text = stat.PlayedTime;
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
