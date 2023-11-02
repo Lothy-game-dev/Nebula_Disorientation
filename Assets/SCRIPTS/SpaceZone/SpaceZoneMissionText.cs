@@ -120,6 +120,7 @@ public class SpaceZoneMissionText : MonoBehaviour
         }
 
         controller.isLoweringSound = true;
+        controller.FinalUpdateCashShard();
 
         if (text == "Mission Accomplished!")
         {

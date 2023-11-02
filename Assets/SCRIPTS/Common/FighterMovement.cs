@@ -216,12 +216,6 @@ public class FighterMovement : MonoBehaviour
         FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         HealthBarSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         ShieldBarSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
-        if (transform.childCount > 6 && transform.GetChild(6).gameObject.activeSelf) {
-            transform.GetChild(6).Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
-        }
-        if (transform.childCount > 7 && transform.GetChild(7).gameObject.activeSelf) {
-            transform.GetChild(7).Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
-        }
     }
     private void FighterMoving()
     {

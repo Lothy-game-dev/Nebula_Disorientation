@@ -30,6 +30,8 @@ public class GameplayInteriorController : MonoBehaviour
     public float MasterVolumeScale;
     public float MusicVolumeScale;
     public float SFXVolumeScale;
+    public int CurrentStageCash;
+    public int CurrentStageShard;
     private Dictionary<string, object> OptionSetting;
     public bool isEnding;
     public bool isLoweringSound;
@@ -42,6 +44,8 @@ public class GameplayInteriorController : MonoBehaviour
         // Initialize variables
         GenerateLoadingScene(5f);
         GenerateBlackFadeOpen(transform.position, 5f, 0.5f);
+        CurrentStageCash = 0;
+        CurrentStageShard = 0;
         SetCashAndShard();
         Color c = PauseMenu.GetComponent<SpriteRenderer>().color;
         InitAPause1 = c.a;
@@ -183,17 +187,23 @@ public class GameplayInteriorController : MonoBehaviour
     public void SetCashAndShard()
     {
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
-        Cash.text = "<sprite index='3'> " + (int)SessionData["SessionCash"];
-        Shard.text = "<sprite index='0'> " + (int)SessionData["SessionTimelessShard"];
+        Cash.text = "<sprite index='3'> " + CurrentStageCash;
+        Shard.text = "<sprite index='0'> " + CurrentStageShard;
         SessionID = (int)SessionData["SessionID"];
     }
 
-    public void AddCashAndShard(int Cash, int Shard)
+    public void AddCashAndShard(int Cash, int Shard, GameObject go)
     {
-        FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, (int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
+        CurrentStageCash += (int)(Cash * LOTWEffect.LOTWCashIncScale);
+        CurrentStageShard += Shard;
         FindAnyObjectByType<StatisticController>().PriceCollected((int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
-        ShowCashAndShardEffect((int)(Cash * LOTWEffect.LOTWCashIncScale), Shard);
+        ShowCashAndShardEffect((int)(Cash * LOTWEffect.LOTWCashIncScale), Shard, go);
         SetCashAndShard();
+    }
+
+    public void FinalUpdateCashShard()
+    {
+        FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, CurrentStageCash, CurrentStageShard);
     }
 
     public void PauseMenuOn()
@@ -202,31 +212,18 @@ public class GameplayInteriorController : MonoBehaviour
         DoneLightUp = false;
     }
 
-    private void ShowCashAndShardEffect(int CashVal, int ShardVal)
+    public void ShowCashAndShardEffect(int CashVal, int ShardVal, GameObject go)
     {
         if (CashVal > 0)
         {
-            GameObject CashPlace = Cash.gameObject.transform.GetChild(1).gameObject;
-            GameObject CashUp = Instantiate(Template, CashPlace.transform.position, Quaternion.identity);
-            CashUp.transform.SetParent(Cash.transform);
-            CashUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "+" + CashVal + "<sprite index='3'/>";
-            CashUp.transform.localScale = new Vector3(1, 1, 1f);
+            GameObject CashUp = Instantiate(Template, go.transform.position, Quaternion.identity);
+            /*CashUp.transform.SetParent(Cash.transform);*/
+            CashUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "+" + CashVal + " <sprite index='3'/>" + (ShardVal > 0 ? " +" + ShardVal + " <sprite index='0'/>" : "");
+            CashUp.transform.localScale = new Vector3(100, 100, 100f);
             CashUp.SetActive(true);
             CashUp.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 20f);
             
             Destroy(CashUp, 2f);
-        }
-        if (ShardVal > 0)
-        {
-            GameObject ShardPlace = Shard.gameObject.transform.GetChild(1).gameObject;
-            GameObject ShardUp = Instantiate(Template, ShardPlace.transform.position, Quaternion.identity);
-            ShardUp.transform.SetParent(Cash.transform);
-            ShardUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "+" + ShardVal + "<sprite index='0'/>";
-            ShardUp.transform.localScale = new Vector3(1, 1, 1f);
-            ShardUp.SetActive(true);
-            ShardUp.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 20f);
-            
-            Destroy(ShardUp, 2f);
         }
     }
 

@@ -745,7 +745,7 @@ public class SpaceStationShared : MonoBehaviour
         {
             if (HitByPlayer)
             {
-                FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
+                FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard, gameObject);
             }
             FindObjectOfType<SpaceZoneMission>().EnemySpaceStationDestroy();
         } else

@@ -120,14 +120,23 @@ public class EnemyFighterSpawn : MonoBehaviour
         if (id >= 13)
         {
             Enemy.tag = "EliteEnemy";
-            Enemy.transform.GetChild(6).gameObject.SetActive(false);
-            Enemy.transform.GetChild(7).gameObject.SetActive(true);
         } 
         if (id==1)
         {
             Enemy.transform.localScale *= 2;
-            Enemy.transform.GetChild(6).gameObject.SetActive(false);
-            Enemy.transform.GetChild(11).gameObject.SetActive(true);
+            Enemy.transform.GetChild(9).gameObject.SetActive(true);
+        } else
+        {
+            if (Tier==1)
+            {
+                Enemy.transform.GetChild(12).gameObject.SetActive(true);
+            } else if (Tier==2)
+            {
+                Enemy.transform.GetChild(11).gameObject.SetActive(true);
+            } else
+            {
+                Enemy.transform.GetChild(10).gameObject.SetActive(true);
+            }
         }
         Enemy.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         GameObject SpawnEffect = Instantiate(SpawnHole, spawnPos, Quaternion.identity);

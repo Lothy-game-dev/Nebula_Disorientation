@@ -20,6 +20,7 @@ public class SpawnAllyWarship : MonoBehaviour
     // Can be public or private, prioritize private if possible
     public int[] WarshipID;
     public Vector2[] WarshipPosition;
+    public string[] WarshipClass;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -40,10 +41,10 @@ public class SpawnAllyWarship : MonoBehaviour
     {
         for (int j = 0; j < WarshipID.Length; j++)
         {
-            SpawnWS(WarshipID[j], WarshipPosition[j]);
+            SpawnWS(WarshipID[j], WarshipPosition[j], WarshipClass[j]);
         }
     }
-    private void SpawnWS(int WarshipID, Vector2 Position)
+    private void SpawnWS(int WarshipID, Vector2 Position, string Class)
     {
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(WarshipID);
         for (int i = 0; i < WarshipModel.transform.childCount; i++)
@@ -53,6 +54,18 @@ public class SpawnAllyWarship : MonoBehaviour
                 GameObject game = Instantiate(WSTemplate, new Vector3(Position.x, Position.y, WarshipModel.transform.GetChild(i).position.z), Quaternion.identity);
                 game.GetComponent<SpriteRenderer>().sprite = WarshipModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 game.transform.localScale = WarshipModel.transform.GetChild(i).localScale;
+                if (Class=="A")
+                {
+                    game.transform.GetChild(4).gameObject.SetActive(true);
+                } else if (Class=="B")
+                {
+                    game.transform.GetChild(5).gameObject.SetActive(true);
+                } else if (Class=="C")
+                {
+                    game.transform.GetChild(6).gameObject.SetActive(true);
+                    game.transform.GetChild(6).localScale = new Vector2(WarshipModel.transform.GetChild(i).localScale.y /
+                        WarshipModel.transform.GetChild(i).localScale.x * game.transform.GetChild(6).localScale.x, game.transform.GetChild(6).localScale.y);
+                }
                 game.transform.GetChild(3).localScale = new Vector3(
                     1/WarshipModel.transform.GetChild(i).localScale.x * 130,1/WarshipModel.transform.GetChild(i).localScale.y * 130, 1/WarshipModel.transform.GetChild(i).localScale.z);
                 game.name = data["WarshipName"].ToString();
@@ -75,6 +88,7 @@ public class SpawnAllyWarship : MonoBehaviour
                 game.transform.GetChild(3).localScale = new Vector3(
                     1 / WarshipModel.transform.GetChild(i).localScale.x * 130, 1 / WarshipModel.transform.GetChild(i).localScale.y * 130, 1 / WarshipModel.transform.GetChild(i).localScale.z);
                 game.name = data["WarshipName"].ToString();
+                game.transform.GetChild(6).gameObject.SetActive(true);
                 game.AddComponent<PolygonCollider2D>();
                 game.GetComponent<WSShared>().isStation = true;
                 game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
