@@ -15,6 +15,7 @@ public class ConvertItemBox : MonoBehaviour
     public GameObject CircleInner;
     public GameObject OtherBox;
     public ConvertBoard board;
+    public ConvertSessionBoard boardS;
     #endregion
     #region NormalVariables
     private GameObject CurrentItemObject;
@@ -171,7 +172,12 @@ public class ConvertItemBox : MonoBehaviour
         }
         Destroy(CircleInner,0.5f);
         // Complete Anim
-        board.ConvertDone();
+        if (board!=null)
+            board.ConvertDone();
+        else
+        {
+            boardS.ConvertDone();
+        }
     }
     #endregion
 }
