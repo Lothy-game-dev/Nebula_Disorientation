@@ -106,6 +106,7 @@ public class EncycMenu : MainMenuSceneShared
                 {
                     ResetAll();
                     ChangeColorWhenChoosen("WS & SS");
+                    Debug.Log(WarshipList.Count);
                     for (int i = 0; i < WarshipList.Count + SStationList.Count; i++)
                     {
                         GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);

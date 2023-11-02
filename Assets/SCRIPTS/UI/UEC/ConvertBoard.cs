@@ -128,6 +128,7 @@ public class ConvertBoard : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
             "Converted successfully!!!\nYou received " + TextOutput.text + " " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
+            FindObjectOfType<UECMainMenuController>().ShardSpent = int.Parse(TextInput.text);
             FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(id, 0, int.Parse(TextOutput.text), "ConvertCash");
             Destroy(gameObject.transform.parent.gameObject);
         }
