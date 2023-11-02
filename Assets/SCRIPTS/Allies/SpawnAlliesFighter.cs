@@ -20,6 +20,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public float[] AllySpawnDelay;
     public Vector2[] AllySpawnPosition;
     public int[] AllySpawnID;
+    public string[] AllyClass;
     public float AllyMaxHPScale;
     public float AllyBountyScale;
     private GameObject ChosenModel;
@@ -48,7 +49,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         Allies = new List<GameObject>();
         for (int i = 0; i < AllySpawnID.Length; i++)
         {
-            StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f)));
+            StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f), AllyClass[i]));
         }
         if (EscortSpawnNumber>0)
         {
@@ -58,11 +59,11 @@ public class SpawnAlliesFighter : MonoBehaviour
                 GameObject SpawnEffect = Instantiate(SpawnHole, SpawnPos, Quaternion.identity);
                 SpawnEffect.SetActive(true);
                 Destroy(SpawnEffect, 1.5f);
-                StartCoroutine(CreateAlly(1, SpawnPos, i,0));
+                StartCoroutine(CreateAlly(1, SpawnPos, i,0, "SSTP"));
             }
         }
     }
-    private IEnumerator CreateAlly(int id, Vector2 spawnPos, int count, float delay)
+    private IEnumerator CreateAlly(int id, Vector2 spawnPos, int count, float delay, string Class)
     {
         yield return new WaitForSeconds(delay);
         GameObject SpawnEffect = Instantiate(SpawnHole, spawnPos, Quaternion.identity);
@@ -82,15 +83,25 @@ public class SpawnAlliesFighter : MonoBehaviour
         if (id >= 13)
         {
             Ally.tag = "AlliesEliteFighter";
-            Ally.transform.GetChild(6).gameObject.SetActive(false);
-            Ally.transform.GetChild(7).gameObject.SetActive(true);
         }
         if (id==1)
         {
             Ally.transform.localScale *= 3;
+            Ally.transform.GetChild(9).gameObject.SetActive(true);
         } else
         {
             Ally.GetComponent<AlliesShared>().Priority = Priority;
+            if (Class=="A")
+            {
+                Ally.transform.GetChild(10).gameObject.SetActive(true);
+            } else if (Class == "B")
+            {
+                Ally.transform.GetChild(11).gameObject.SetActive(true);
+            }
+            else if (Class == "C")
+            {
+                Ally.transform.GetChild(12).gameObject.SetActive(true);
+            }
         }
         AudioSource aus = Ally.AddComponent<AudioSource>();
         aus.clip = SpawnSoundEffect;

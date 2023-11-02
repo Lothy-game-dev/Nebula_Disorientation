@@ -875,7 +875,7 @@ public class WSShared : MonoBehaviour
             // Bounty
             if (HitByPlayer || PlayerDamageReceive > MaxHP * 5 / 100f)
             {
-                FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard);
+                FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard, gameObject);
             }
             FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
         } else

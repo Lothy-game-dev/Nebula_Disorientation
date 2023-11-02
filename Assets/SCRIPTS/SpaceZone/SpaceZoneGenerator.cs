@@ -371,6 +371,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         List<int> AllyID = new List<int>();
         List<Vector2> AllySpawnPos = new List<Vector2>();
         List<int> EnemyTier = new List<int>();
+        List<string> AllyClass = new List<string>();
         // Spawn Ally A
         for (int i=0;i<AllyFighterACount;i++)
         {
@@ -390,6 +391,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             AllySpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            AllyClass.Add("A");
         }
         // Spawn Ally B
         for (int i = 0; i < AllyFighterBCount; i++)
@@ -411,6 +413,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             AllySpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            AllyClass.Add("B");
         }
         // Spawn Ally C
         for (int i = 0; i < AllyFighterCCount; i++)
@@ -431,10 +434,12 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             AllySpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            AllyClass.Add("C");
         }
         // Set Spawn to Spawner
         AllyFighterSpawn.AllySpawnID = AllyID.ToArray();
         AllyFighterSpawn.AllySpawnPosition = AllySpawnPos.ToArray();
+        AllyFighterSpawn.AllyClass = AllyClass.ToArray();
         if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6))
         {
             if (ChosenVariant==3)
@@ -704,6 +709,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             // Spawn Ally
             List<int> AllyWarshipID = new List<int>();
             List<Vector2> AllyWarshipSpawnPos = new List<Vector2>();
+            List<string> WSClass = new List<string>();
             // Spawn Ally A
             for (int i = 0; i < AllyWarshipACount; i++)
             {
@@ -718,6 +724,7 @@ public class SpaceZoneGenerator : MonoBehaviour
                 int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
                 int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
                 AllyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                WSClass.Add("A");
             }
             // Spawn Ally B
             for (int i = 0; i < AllyWarshipBCount; i++)
@@ -733,6 +740,7 @@ public class SpaceZoneGenerator : MonoBehaviour
                 int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
                 int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
                 AllyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                WSClass.Add("B");
             }
             // Spawn Ally C
             for (int i = 0; i < AllyWarshipCCount; i++)
@@ -748,10 +756,12 @@ public class SpaceZoneGenerator : MonoBehaviour
                 int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
                 int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
                 AllyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                WSClass.Add("C");
             }
             // Set Spawn to Spawner
             AllyWarshipSpawner.WarshipID = AllyWarshipID.ToArray();
             AllyWarshipSpawner.WarshipPosition = AllyWarshipSpawnPos.ToArray();
+            AllyWarshipSpawner.WarshipClass = WSClass.ToArray();
             AllyWarshipSpawner.SpawnAllyWarships();
         }
 
@@ -762,6 +772,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         // Spawn Enemy
         List<int> EnemyWarshipID = new List<int>();
         List<Vector2> EnemyWarshipSpawnPos = new List<Vector2>();
+        List<string> EnemyWarshipClass = new List<string>();
         // Spawn Enemy A
         for (int i = 0; i < EnemyWarshipACount; i++)
         {
@@ -776,6 +787,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             EnemyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            EnemyWarshipClass.Add("A");
         }
         // Spawn Enemy B
         for (int i = 0; i < EnemyWarshipBCount; i++)
@@ -791,6 +803,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             EnemyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            EnemyWarshipClass.Add("B");
         }
         // Spawn Enemy C
         for (int i = 0; i < EnemyWarshipCCount; i++)
@@ -806,10 +819,12 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             EnemyWarshipSpawnPos.Add(new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+            EnemyWarshipClass.Add("C");
         }
         // Set Spawn to Spawner
         EnemyWarshipSpawner.WarshipID = EnemyWarshipID.ToArray();
         EnemyWarshipSpawner.WarshipPosition = EnemyWarshipSpawnPos.ToArray();
+        EnemyWarshipSpawner.WarshipClass = EnemyWarshipClass.ToArray();
         EnemyWarshipSpawner.SpawnEnemyWarships();
         // Ally Space Station
         if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 1)

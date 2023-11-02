@@ -1100,7 +1100,9 @@ public class GlobalFunctionController : MonoBehaviour
         }
         else if ("fuelcore".Equals(Currency.Replace(" ", "").ToLower())
             || "core".Equals(Currency.Replace(" ", "").ToLower())
-            || "fuel".Equals(Currency.Replace(" ", "").ToLower()))
+            || "fuel".Equals(Currency.Replace(" ", "").ToLower())
+            || "fuelcell".Equals(Currency.Replace(" ", "").ToLower())
+            || "cell".Equals(Currency.Replace(" ", "").ToLower()))
         {
             return "<sprite index='2'>";
         }
