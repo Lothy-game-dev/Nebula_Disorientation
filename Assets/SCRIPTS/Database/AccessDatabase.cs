@@ -1093,9 +1093,7 @@ public class AccessDatabase : MonoBehaviour
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         List<List<string>> dailyMissions = new List<List<string>>();
-        dailyMissions.Add(new List<string>());
-        dailyMissions.Add(new List<string>());
-        dailyMissions.Add(new List<string>());
+        List<string> DM;
         // Open DB
         dbConnection = new SqliteConnection("URI=file:Database.db");
         dbConnection.Open();
@@ -1106,8 +1104,9 @@ public class AccessDatabase : MonoBehaviour
         bool check1 = false;
         while (dataReader.Read())
         {
+            DM = new List<string>();
             check1 = true;
-            dailyMissions[2].Add(dataReader.GetInt32(1).ToString());
+            DM.Add(dataReader.GetInt32(1).ToString());
             IDbCommand dbCommand = dbConnection.CreateCommand();
             dbCommand.CommandText = "SELECT MissionVerb, MissionNumber FROM DailyMissions WHERE MissionId=" + dataReader.GetInt32(0);
             IDataReader dataReader2 = dbCommand.ExecuteReader();
@@ -1115,10 +1114,11 @@ public class AccessDatabase : MonoBehaviour
             while (dataReader2.Read())
             {
                 check2 = true;
-                dailyMissions[0].Add(dataReader2.GetString(0));
-                dailyMissions[1].Add(dataReader2.GetInt32(1).ToString());
+                DM.Add(dataReader2.GetString(0));
+                DM.Add(dataReader2.GetInt32(1).ToString());
                
             }
+            dailyMissions.Add(DM);
             if (!check2) return null;
         }
         if (!check1) return null;
