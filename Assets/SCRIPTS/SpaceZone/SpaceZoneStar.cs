@@ -110,7 +110,7 @@ public class SpaceZoneStar : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         GetComponent<SpriteRenderer>().enabled = false;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, 2f);
     }
     #endregion
 }
