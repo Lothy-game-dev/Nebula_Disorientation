@@ -71,12 +71,15 @@ public class SessionArsenal : MonoBehaviour
     void OnEnable()
     {
         SetFirstData();
-    }
-
+    }  
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+    }
+    private void OnDisable()
+    {
+        ResetData();
     }
     #endregion
     #region Generate first weapon category
@@ -142,10 +145,9 @@ public class SessionArsenal : MonoBehaviour
         // Preq Req
         if (!isLocked)
         {
-            string n = FindObjectOfType<AccessDatabase>().CheckWeaponPowerPrereq(PlayerPrefs.GetInt("PlayerID"), Game.name, CurrentTab);
-            int m = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
-                Game.name, CurrentTab);
-            if (n != "No Prereq" && n != "Pass" && m < 1)
+            string n = FindObjectOfType<AccessDatabase>().CheckWeaponPowerPrereqForSession(PlayerPrefs.GetInt("PlayerID"), Game.name, CurrentTab);
+
+            if (n != "No Prereq" && n != "Pass")
             {
                 isLocked = true;
                 if (CurrentTab == "Weapon")
@@ -415,12 +417,7 @@ public class SessionArsenal : MonoBehaviour
                 }
                 LockItem(g, WeaponList[i][8], WeaponList[i][0]);
                 g.SetActive(true);
-                if (i == 0)
-                {
-                    g.GetComponent<SessionArsenalItem>().ArsenalInformation(WeaponList, "1");
-
-                }
-
+                
             }
         }
         else
@@ -446,10 +443,7 @@ public class SessionArsenal : MonoBehaviour
                     g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     g.SetActive(true);
                     LockItem(g, PowerList[i][8], PowerList[i][0]);
-                    if (i == 0)
-                    {
-                        g.GetComponent<SessionArsenalItem>().ArsenalInformation(PowerList, "1");
-                    }
+                    
                 }
 
             }

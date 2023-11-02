@@ -21,6 +21,7 @@ public class SessionArsenalBuyButton : MonoBehaviour
     public bool isEnoughMoney;
     public bool isZeroShard;
     private SessionArsenal Ar;
+    public string ItemId;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -175,7 +176,6 @@ public class SessionArsenalBuyButton : MonoBehaviour
                         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);
-                        //FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, cash, "Spent");
                         Ar.ResetDataAfterBuy();
                         break;
                 }
