@@ -35,7 +35,7 @@ public class EngineBooster : Consumable
             Timer += Time.deltaTime;
             if (Timer >= Duration)
             {
-                Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = 1;
+                Fighter.GetComponent<PlayerMovement>().AEIncreaseScale -= int.Parse(Effect.Split("-")[1]);
                 isStart = false;
                 Timer = 0f;
             }
@@ -47,7 +47,7 @@ public class EngineBooster : Consumable
     public void BoosterEffect()
     {
         isStart = true;
-        Fighter.GetComponent<PlayerMovement>().AEIncreaseScale = int.Parse(Effect.Split("-")[1]);
+        Fighter.GetComponent<PlayerMovement>().AEIncreaseScale += int.Parse(Effect.Split("-")[1]);
     }
     #endregion
     #region Function group ...
