@@ -77,7 +77,7 @@ public class PersonalAreaCollectButton : MonoBehaviour
     #region Collect salary
     public void CollectDailyIncome()
     {
-        string check = FindAnyObjectByType<AccessDatabase>().CollectSalary(FindObjectOfType<UECMainMenuController>().PlayerId, (int)PAController.PlayerInformation["DailyIncome"]);
+        string check = FindAnyObjectByType<AccessDatabase>().CollectSalary(FindObjectOfType<UECMainMenuController>().PlayerId, (int)PAController.PlayerInformation["DailyIncome"], (int)PAController.PlayerInformation["DailyIncomeShard"]);
         switch (check)
         {
             case "Not Exist":

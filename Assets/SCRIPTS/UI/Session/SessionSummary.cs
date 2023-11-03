@@ -33,6 +33,7 @@ public class SessionSummary : MonoBehaviour
     public GameObject ConsInfo;
     public AudioClip Retreat;
     public AudioClip Failed;
+    public GameObject SessionPlayTime;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -75,6 +76,7 @@ public class SessionSummary : MonoBehaviour
         EnemyDestroyed.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + "<color=#3bccec>" + Data["EnemyDestroyed"].ToString() + "</color>";
         DamageDealt.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Damage Dealt: " + "<color=#3bccec>" + Data["DamageDealt"].ToString() + "</color>";
         FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + "<color=#3bccec>" + Data["SessionFuelEnergy"].ToString() + "</color>";
+        SessionPlayTime.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Session Playtime: " + "<color=#3bccec>" + Data["TotalPlayedTime"].ToString() + "</color>";
 
         //Economy
         ShardAmount = (isFailed ? (int.Parse(Data["SessionTimelessShard"].ToString()) / 2) : int.Parse(Data["SessionTimelessShard"].ToString()));
