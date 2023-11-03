@@ -878,15 +878,15 @@ public class SpaceZoneGenerator : MonoBehaviour
             {
                 if (EnemyFighterCCount > 0)
                 {
-                    Mission.MissionTextString = "Eliminate Tier I Enemies";
+                    Mission.MissionTextString = "Eliminate Class C Enemies";
                     Mission.CreateMissionAssaultV2(EnemyFighterCCount, 1);
                 } else if (EnemyFighterBCount > 0)
                 {
-                    Mission.MissionTextString = "Eliminate Tier II Enemies";
+                    Mission.MissionTextString = "Eliminate Class B Enemies";
                     Mission.CreateMissionAssaultV2(EnemyFighterBCount, 2);
                 } else if (EnemyFighterCCount > 0)
                 {
-                    Mission.MissionTextString = "Eliminate Tier III Enemies";
+                    Mission.MissionTextString = "Eliminate Class A Enemies";
                     Mission.CreateMissionAssaultV2(EnemyFighterACount, 3);
                 }
                     

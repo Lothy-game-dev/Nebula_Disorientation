@@ -66,6 +66,7 @@ public class AlliesShared : FighterShared
     public bool Defend;
     public GameObject DefendObject;
     public GameObject NearestTarget;
+    public string Class;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -87,7 +88,7 @@ public class AlliesShared : FighterShared
 
     private void OnMouseOver()
     {
-        Status.Timer = 5f;
+        Status.Timer = 3f;
         Status.StartShowing(gameObject);
     }
 
