@@ -86,17 +86,16 @@ public class SpaceZoneSummary : MonoBehaviour
         Time.timeScale = 0;
         FindAnyObjectByType<GameplayInteriorController>().isEnding = true;
         stat = FindAnyObjectByType<StatisticController>();
-
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(stat.SessionID, true, stat.CurrentCashReward, stat.CurrentShardReward);
-        stat.SessionPriceUpdated(stat.CurrentCashReward, stat.CurrentShardReward);
+        Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
 
 
         Consumable = new Dictionary<string, int>();  
         TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
-        SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> " + stat.CurrentShard.Replace("<sprite index='0'>", "");
-        SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br>" + stat.CurrentCash.Replace("<sprite index='3'>", "");
+        SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> " + SessionData["SessionTimelessShard"].ToString();
+        SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br>" + SessionData["SessionCash"].ToString();
         CurrentShard.GetComponent<TextMeshPro>().text = "<sprite=0> Collected : <br> " + stat.ShardCollected + " + " + stat.CurrentShardReward;
         CurrentCash.GetComponent<TextMeshPro>().text = "<sprite=3> Collected : <br>" + stat.CashCollected + " + " + stat.CurrentCashReward;
         Timer.GetComponent<TextMeshPro>().text = stat.PlayedTime;
@@ -109,7 +108,6 @@ public class SpaceZoneSummary : MonoBehaviour
         HPSlider.GetComponent<Slider>().value = Mathf.RoundToInt(stat.CurrentHP);
 
         // Load data for next
-        Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         // Get Next Stage Number, Variant and Hazard
         PlayerPrefs.SetInt("NextStage", (int)SessionData["CurrentStage"] + 1);
         int SpaceZoneNo = (int)SessionData["CurrentStage"] + 1;
