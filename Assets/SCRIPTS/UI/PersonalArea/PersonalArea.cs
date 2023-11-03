@@ -191,6 +191,10 @@ public class PersonalArea : MonoBehaviour
         {
             FuelCell.transform.GetChild(2).gameObject.SetActive(false);
         }
+        if ((string)Data["Rank"] != "Unranked")
+        {
+            isUnranked = false;
+        }
     }
     #endregion
     #region Show rank's information (Daily income, condition to rank up,...)
