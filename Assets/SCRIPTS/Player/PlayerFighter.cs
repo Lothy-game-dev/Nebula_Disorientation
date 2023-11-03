@@ -95,7 +95,7 @@ public class PlayerFighter : FighterShared
         {
             testTimer -= Time.deltaTime;
         }
-        if (!ControllerMain.IsInLoading)
+        if (!ControllerMain.IsInLoading && !ControllerMain.isEnding)
         {
             // Power Usage
             // 1st Power

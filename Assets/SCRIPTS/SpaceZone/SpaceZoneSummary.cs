@@ -84,7 +84,6 @@ public class SpaceZoneSummary : MonoBehaviour
     public void Summarize()
     {
         Time.timeScale = 0;
-        FindAnyObjectByType<GameplayInteriorController>().isEnding = true;
         stat = FindAnyObjectByType<StatisticController>();
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(stat.SessionID, true, stat.CurrentCashReward, stat.CurrentShardReward);
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));

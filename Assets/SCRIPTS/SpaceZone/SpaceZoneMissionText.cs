@@ -51,6 +51,7 @@ public class SpaceZoneMissionText : MonoBehaviour
     // Group all function that serve the same algorithm
     public void CreateText(string strText, Color color)
     {
+        controller.isEnding = true;
         Black2.SetActive(false);
         Black3.SetActive(false);
         Black4.SetActive(false);

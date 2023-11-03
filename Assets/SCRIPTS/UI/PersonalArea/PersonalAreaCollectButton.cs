@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PersonalAreaCollectButton : MonoBehaviour
@@ -21,18 +22,30 @@ public class PersonalAreaCollectButton : MonoBehaviour
     private PersonalArea PAController;
     public DateTime ResetDateTime;
     public DateTime CollectedTime;
+    private Vector2 InitScale;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        PAController = PersonalArea.GetComponent<PersonalArea>();
+        if (!PAController.IsCollected)
+        {
+            GetComponent<SpriteRenderer>().color = Color.yellow;
+            gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.yellow;
+        } else
+        {
+            GetComponent<SpriteRenderer>().color = Color.white;
+            gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        
     }
     #endregion
     #region Check mouse
@@ -40,7 +53,6 @@ public class PersonalAreaCollectButton : MonoBehaviour
     private void OnMouseDown()
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
-        PAController = PersonalArea.GetComponent<PersonalArea>();
         if (PAController.isUnranked)
         {
             FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
@@ -51,6 +63,8 @@ public class PersonalAreaCollectButton : MonoBehaviour
             {
                 PAController.IsCollected = true;
                 CollectDailyIncome();
+                GetComponent<SpriteRenderer>().color = Color.white;
+                gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
