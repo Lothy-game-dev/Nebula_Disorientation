@@ -43,7 +43,7 @@ public class HUDCreateInfoBoard : MonoBehaviour
         for (int i=0;i<Text.Count;i++)
         {
             FindObjectOfType<NotificationBoardController>().
-                CreateHUDSmallInfoBoard(CreatePos[i].transform.position, Text[i], TopBottomLeftRight[i]);
+                CreateHUDSmallInfoBoard(CreatePos[i], Text[i], TopBottomLeftRight[i]);
         }
     }
     private void OnMouseExit()

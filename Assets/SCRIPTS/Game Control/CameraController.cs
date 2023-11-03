@@ -41,6 +41,7 @@ public class CameraController : MonoBehaviour
         cam = GetComponent<Camera>();
         InteriorController = GetComponent<GameplayInteriorController>();
         isClose = true;
+        GameController.GetComponent<GameController>().IsClose = true;
         CameraTracking = true;
         cam.orthographicSize = CloseHeight / 2;
     }

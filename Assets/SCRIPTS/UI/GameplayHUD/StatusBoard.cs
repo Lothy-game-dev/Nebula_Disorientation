@@ -166,7 +166,7 @@ public class StatusBoard : MonoBehaviour
         {
             // If close -> All range and scale is half
             transform.position = new Vector3(ClosePosition.transform.position.x, ClosePosition.transform.position.y, transform.position.z);
-            transform.localScale = new Vector3(initScale / 2, initScale / 2, initScale / 2);
+            transform.localScale = new Vector3(initScale, initScale, initScale);
             if (CloneEnemy != null)
             {
                 CloneEnemy.transform.localScale = new Vector2(ImageInitScaleX, ImageInitScaleY);
@@ -180,7 +180,7 @@ public class StatusBoard : MonoBehaviour
             {
                 CloneEnemy.transform.localScale = new Vector2(ImageInitScaleX, ImageInitScaleY);
             }
-            transform.localScale = new Vector3(initScale, initScale, initScale);
+            transform.localScale = new Vector3(initScale*2, initScale*2, initScale*2);
         }
     }
     #endregion

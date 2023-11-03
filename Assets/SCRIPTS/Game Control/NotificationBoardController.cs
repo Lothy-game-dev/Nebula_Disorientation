@@ -145,15 +145,15 @@ public class NotificationBoardController : MonoBehaviour
         }
     }
 
-    public void CreateHUDSmallInfoBoard(Vector2 position, string text, string LeftRightTopBottom)
+    public void CreateHUDSmallInfoBoard(GameObject go, string text, string LeftRightTopBottom)
     {
         if (text!="")
         {
             GameObject smallHUDBoard = Instantiate(SmallHUDInfoBoard,
-                new Vector3(position.x, position.y, SmallHUDInfoBoard.transform.position.z), Quaternion.identity);
+                new Vector3(go.transform.position.x, go.transform.position.y, SmallHUDInfoBoard.transform.position.z), Quaternion.identity);
             smallHUDBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = text;
-            smallHUDBoard.GetComponent<HUDSmallBoard>().SetPosition(position, LeftRightTopBottom);
-            smallHUDBoard.transform.SetParent(transform);
+            smallHUDBoard.GetComponent<HUDSmallBoard>().SetPosition(go.transform.position, LeftRightTopBottom);
+            smallHUDBoard.transform.SetParent(go.transform);
             currentHUDSmallBoard.Add(smallHUDBoard);
         }
     }
