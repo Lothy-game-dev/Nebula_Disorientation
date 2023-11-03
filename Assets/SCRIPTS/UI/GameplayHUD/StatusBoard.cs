@@ -291,6 +291,7 @@ public class StatusBoard : MonoBehaviour
             try
             {
                 CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+                CloneEnemy.SetActive(false);
             } catch (System.NullReferenceException)
             {
                 CloseBoard();
@@ -298,7 +299,6 @@ public class StatusBoard : MonoBehaviour
             
             // set Sorting order
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
-            CloneEnemy.SetActive(false);
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
             c.a = 0.5f;
@@ -539,6 +539,7 @@ public class StatusBoard : MonoBehaviour
             ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             Destroy(CloneEnemy);
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            CloneEnemy.SetActive(false);
             // set Sorting order
             LastEnemy = Enemy;
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
@@ -756,6 +757,7 @@ public class StatusBoard : MonoBehaviour
                 NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f, 127 / 255f);
                 NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0, 0, 0, 127 / 255f);
             }
+            CloneEnemy.SetActive(true);
         }
         if (Enemy==null)
         {
