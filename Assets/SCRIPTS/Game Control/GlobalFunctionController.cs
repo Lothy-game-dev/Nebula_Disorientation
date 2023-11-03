@@ -838,10 +838,10 @@ public class GlobalFunctionController : MonoBehaviour
         }
         output.Add("Effect", "Effect: " + final);
         output.Add("Duration", "Duration: " + (Effect.Contains("FC") ? "-" : (int)datas["Duration"] + " seconds."));
-        output.Add("Stack", "Max Stack: " + (int)datas["Stack"] + " Per Session.");
+        output.Add("Stack", "Max Stack: " + (Effect.Contains("FC") ? "None." : (int)datas["Stack"] + " Per Session."));
         output.Add("Price", ((int)datas["Price"]).ToString());
-        output.Add("Cooldown", "Cooldown: " + ((int)datas["Cooldown"] == 0 ? "No cooldown." :
-            (int)datas["Cooldown"]) + " seconds.");
+        output.Add("Cooldown", "Cooldown: " + ((int)datas["Cooldown"] == 0 ? "None." :
+            ((int)datas["Cooldown"]) + " seconds."));
         output.Add("Stock", ((int)datas["StockPerDay"]).ToString());
         return output;
     }

@@ -4290,6 +4290,49 @@ public class AccessDatabase : MonoBehaviour
             return datas;
         }
     }
+
+    public string UpdateSessionCurrentHP(int PlayerID, bool isIncrease, int Amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = SessionCurrentHP " + (isIncrease ? "+ " : "- ") 
+                + Amount + " WHERE SessionId=" + n;
+            int m = dbCheckCommand3.ExecuteNonQuery();
+            if (m != 1)
+            {
+                return "Fail";
+            }
+            else
+            {
+                return "Success";
+            }
+        }
+    }
+
     public string UpdateSessionStageData(int SessionId, int CurrentStage, int CurrentStageHazard, int CurrentStageVariant)
     {
         // Open DB

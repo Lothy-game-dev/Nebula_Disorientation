@@ -199,12 +199,16 @@ public class FighterShared : MonoBehaviour
         if (GetComponent<PlayerMovement>()!=null)
         {
             GetComponent<PlayerMovement>().backFire.GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<PlayerMovement>().backFire.GetComponent<Animator>().enabled = false;
             GetComponent<PlayerMovement>().backFire.GetComponent<SpriteRenderer>().sprite = null; 
         } else if (GetComponent<FighterMovement>()!=null)
         {
             GetComponent<FighterMovement>().backFire.GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<FighterMovement>().backFire.GetComponent<Animator>().enabled = false;
             GetComponent<FighterMovement>().backFire.GetComponent<SpriteRenderer>().sprite = null; 
         }
+        Destroy(OnFireGO);
+        Destroy(OnFreezeGO);
         GetComponent<SpriteRenderer>().color = Color.black;
         GetComponent<Collider2D>().enabled = false;
         GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);

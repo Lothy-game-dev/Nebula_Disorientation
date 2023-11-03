@@ -221,6 +221,14 @@ public class LOTWScene : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Cannot add card to current session!", 3f);
         }
+        if (chosenCard.GetComponent<LOTWCard>().CardId == 1 || chosenCard.GetComponent<LOTWCard>().CardId == 2 || chosenCard.GetComponent<LOTWCard>().CardId == 3)
+        {
+            string Model = (string)FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"))["Model"];
+            string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(Model);
+            int MaxHP = int.Parse((string)FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats)["HP"]);
+            int Scale = int.Parse(chosenCard.GetComponent<LOTWCard>().DataDictionary["Effect"].ToString().Replace("HP-",""));
+            FindObjectOfType<AccessDatabase>().UpdateSessionCurrentHP(PlayerPrefs.GetInt("PlayerID"), true, (int)(MaxHP * Scale / 100f));
+        }
         FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "Gameplay");
         // Disable button pick
         PickButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);

@@ -673,6 +673,32 @@ public class BulletShared : MonoBehaviour
         if (DistanceTravel >= MaximumDistance)
         {
             RealDamage = 0;
+            AoEEffect.CreateAreaOfEffect(transform.position, AoE/2f, 0.8f);
+            Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE/2f, EnemyLayer);
+            foreach (var col2 in cols2)
+            {
+                FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+                SpaceStationShared SpaceStation = col2.gameObject.GetComponent<SpaceStationShared>();
+                if (enemy != null)
+                {
+                    Debug.Log(RealDamage);
+                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
+                    // Inflict lava burned
+                    enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
+                }
+                else if (Warship != null)
+                {
+                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
+                }
+                else
+                {
+                    if (SpaceStation != null)
+                    {
+                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
+                    }
+                }
+            }
             Destroy(transform.parent.gameObject);
             PunishML();
         }
