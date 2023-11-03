@@ -534,7 +534,7 @@ public class SpaceStationShared : MonoBehaviour
         {
             if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
             {
-                RealDamage = Damage * 70 / 100f;
+                RealDamage = Damage * 10 / 100f;
             }
             else
             {
@@ -543,7 +543,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         else
         {
-            RealDamage = Damage * 5 / 100f;
+            RealDamage = Damage * 10 / 100f;
         }
         if (CurrentBarrier > 0)
         {
@@ -606,7 +606,7 @@ public class SpaceStationShared : MonoBehaviour
 
     public void ReceivePowerDamage(float Damage, GameObject FighterCast, Vector2 BulletHitPos)
     {
-        float RealDamage = Damage * 50f / 100;
+        float RealDamage = Damage * 10f / 100;
         if (FighterCast.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;
