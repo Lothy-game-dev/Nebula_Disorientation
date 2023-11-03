@@ -16,12 +16,14 @@ public class SpaceZoneSummaryButton : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private StatisticController stat;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
         // Initialize variables
+        stat = FindAnyObjectByType<StatisticController>();
     }
 
     // Update is called once per frame
@@ -39,6 +41,7 @@ public class SpaceZoneSummaryButton : MonoBehaviour
             NextSZInfo.SetActive(true);
         } else if (Type=="Continue")
         {
+            stat.UpdateSessionPlaytime(stat.SessionID, stat.SessionPlayTime);
             PlayerPrefs.SetString("InitTeleport", "LOTW");
             SceneManager.UnloadSceneAsync("GameplayInterior");
             SceneManager.LoadSceneAsync("GameplayExterior");

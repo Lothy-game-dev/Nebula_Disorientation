@@ -147,6 +147,7 @@ public class SpaceZoneMissionText : MonoBehaviour
                 controller.SFXVolumeScale -= 10f;
                 yield return new WaitForSeconds(0.2f);
             }
+            stat.UpdateSessionPlaytime(stat.SessionID, stat.SessionPlayTime);
             PlayerPrefs.SetString("isFailed", "T");
             SceneManager.LoadSceneAsync("SessionSummary");
             SceneManager.UnloadSceneAsync("GameplayInterior");

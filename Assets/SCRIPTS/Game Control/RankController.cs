@@ -138,7 +138,6 @@ public class RankController : MonoBehaviour
 
             if (FirstCondition && SecondCondition)
             {
-                Debug.Log("Rank Up!");
                 ad.UpdateRank(PlayerID, RankStat);
                 nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 1f);
                 ListData = ad.GetPlayerInformationById(PlayerID);
