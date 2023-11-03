@@ -64,8 +64,10 @@ public class UECSessionButton : MonoBehaviour
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (Type=="Continue")
         {
-            Controller.GenerateBlackFadeClose(1f, 3f);
-            StartCoroutine(MoveToLOTW());
+            FindObjectOfType<NotificationBoardController>().VoidReturnFunction = Continue;
+            FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
+                "Ready to continue?");
+ 
         } else if (Type=="NextSZInfo")
         {
             NextSZInfo.SetActive(true);
@@ -93,6 +95,12 @@ public class UECSessionButton : MonoBehaviour
                     "Insufficient\nFuel Core.\nCannot retreat!", 3f);
             }
         }
+    }
+
+    public void Continue()
+    {
+        Controller.GenerateBlackFadeClose(1f, 3f);
+        StartCoroutine(MoveToLOTW());
     }
 
     private IEnumerator MoveToLOTW()

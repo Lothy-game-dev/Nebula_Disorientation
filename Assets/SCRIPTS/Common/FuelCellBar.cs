@@ -48,7 +48,7 @@ public class FuelCellBar : MonoBehaviour
         // Call function and timer only if possible
         if (Time.timeScale == 0)
         {
-            timer -= 1 / 90f;
+            timer -= 1 / 30f;
         }
         else
         timer -= Time.deltaTime;
@@ -87,7 +87,7 @@ public class FuelCellBar : MonoBehaviour
                     {
                         Result = Result - 7200;
                         // Add Fuel cell
-                        FindObjectOfType<AccessDatabase>().AddFuelCell(PlayerID);
+                        ad.AddFuelCell(PlayerID);
                         Data = ad.GetPlayerInformationById(PlayerID);
                         if ((int)Data["FuelCell"] == 10)
                         {
@@ -98,13 +98,18 @@ public class FuelCellBar : MonoBehaviour
                     if (Result == 0)
                     {
                         // Add Fuel cell
-                        FindObjectOfType<AccessDatabase>().AddFuelCell(PlayerID);
+                        ad.AddFuelCell(PlayerID);
                     }
                     Data = ad.GetPlayerInformationById(PlayerID);
                     transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
                     if ((int)Data["FuelCell"] == 10)
                     {
+                        if (transform.childCount > 2)
                         transform.GetChild(2).gameObject.SetActive(false);
+                    } else
+                    {
+                        if (transform.childCount > 2)
+                            transform.GetChild(2).gameObject.SetActive(true);
                     }
                     System.TimeSpan t = System.TimeSpan.FromSeconds(Result);
                     System.DateTime final = new System.DateTime().Add(t);
