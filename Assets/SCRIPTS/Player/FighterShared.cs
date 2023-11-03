@@ -86,6 +86,7 @@ public class FighterShared : MonoBehaviour
     //LaserBeam
     public GameObject LeftLaserBeamPos;
     public GameObject RightLaserBeamPos;
+    private bool alreadyDead;
     #endregion
     #region Shared Functions
     // Initialize
@@ -129,6 +130,7 @@ public class FighterShared : MonoBehaviour
             SoundController sc = gameObject.AddComponent<SoundController>();
             sc.SoundType = "SFX";
         }
+        alreadyDead = false;
     }
     // Update For Fighter
     public void UpdateFighter()
@@ -778,8 +780,9 @@ public class FighterShared : MonoBehaviour
                 CurrentHP -= damage;
             else
             {
-                if (DamageSource != null)
+                if (DamageSource != null && !alreadyDead)
                 {
+                    alreadyDead = true;
                     if (DamageSource.GetComponent<BulletShared>() != null)
                     {
                         Killer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;

@@ -73,24 +73,6 @@ public class InitializeDatabase : MonoBehaviour
                 "Quantity INTEGER, " +
                 "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            /*            // SessionArsenalPower
-                        "CREATE TABLE IF NOT EXISTS SessionArsenalPower" +
-                            "(ID INTEGER, " +
-                            "SessionID INTEGER, " +
-                            "PowerID INTEGER, " +
-                            "IsEquipped TEXT NOT NULL, " +
-                            "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                            "FOREIGN KEY(PowerID) REFERENCES ArsenalPower(PowerID), " +
-                            "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-                        // SessionArsenalWeapons
-                        "CREATE TABLE IF NOT EXISTS SessionArsenalWeapons" +
-                            "(ID INTEGER, " +
-                            "SessionID INTEGER, " +
-                            "WeaponID INTEGER, " +
-                            "IsEquipped TEXT NOT NULL, " +
-                            "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                            "FOREIGN KEY(WeaponID) REFERENCES ArsenalWeapon(WeaponID), " +
-                            "PRIMARY KEY(ID AUTOINCREMENT) ); " +*/
             // SessionLOTWCards
             "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
                 "(ID INTEGER, " +
@@ -423,7 +405,6 @@ public class InitializeDatabase : MonoBehaviour
                 "VictoryCondition TEXT NOT NULL," +
                 "DefeatCondition TEX NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
-                "" +
             // Table for ArsenalService
             "CREATE TABLE IF NOT EXISTS ArsenalService" +
                 "(ID INTEGER," +
