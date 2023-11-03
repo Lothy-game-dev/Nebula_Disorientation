@@ -50,16 +50,23 @@ public class Barrier : Powers
             {
                 if (BRx != 0)
                 {
-                    if (Fighter.GetComponent<FighterShared>().CurrentBarrier>=IncreaseCurrentBarrierAmount)
+                    if (Fighter.GetComponent<FighterShared>().CurrentBarrier > Fighter.GetComponent<FighterShared>().MaxBarrier - IncreaseMaxBarrierAmount)
                     {
-                        Fighter.GetComponent<FighterShared>().CurrentBarrier -= IncreaseCurrentBarrierAmount;
-                        if (Fighter.GetComponent<FighterShared>().CurrentBarrier > Fighter.GetComponent<FighterShared>().MaxBarrier)
+                        Fighter.GetComponent<FighterShared>().CurrentBarrier = Fighter.GetComponent<FighterShared>().MaxBarrier - IncreaseMaxBarrierAmount;
+                    }
+                    else
+                    {
+                        if (Fighter.GetComponent<FighterShared>().CurrentBarrier>=IncreaseMaxBarrierAmount)
                         {
-                            Fighter.GetComponent<FighterShared>().CurrentBarrier = Fighter.GetComponent<FighterShared>().MaxBarrier;
-                        }
-                    } else
-                    {
-                        Fighter.GetComponent<FighterShared>().CurrentBarrier = 0;
+                            Fighter.GetComponent<FighterShared>().CurrentBarrier -= IncreaseMaxBarrierAmount;
+                            if (Fighter.GetComponent<FighterShared>().CurrentBarrier > Fighter.GetComponent<FighterShared>().MaxBarrier)
+                            {
+                                Fighter.GetComponent<FighterShared>().CurrentBarrier = Fighter.GetComponent<FighterShared>().MaxBarrier;
+                            }
+                        } else
+                        {
+                            Fighter.GetComponent<FighterShared>().CurrentBarrier = 0;
+                        }                    
                     }
                     Fighter.GetComponent<FighterShared>().MaxBarrier -= IncreaseMaxBarrierAmount;
                 }
@@ -95,8 +102,9 @@ public class Barrier : Powers
             IncreaseCurrentBarrierAmount = (Fighter.GetComponent<FighterShared>().CurrentBarrier * BRx) - Fighter.GetComponent<FighterShared>().CurrentBarrier;
             IncreaseMaxBarrierAmount = (Fighter.GetComponent<FighterShared>().MaxBarrier * BRx) - Fighter.GetComponent<FighterShared>().MaxBarrier;
 
-            Fighter.GetComponent<FighterShared>().CurrentBarrier *= BRx;
             Fighter.GetComponent<FighterShared>().MaxBarrier *= BRx;
+            Fighter.GetComponent<FighterShared>().CurrentBarrier += IncreaseMaxBarrierAmount;
+         
         }
         
     }
