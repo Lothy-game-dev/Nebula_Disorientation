@@ -104,7 +104,12 @@ public class FuelCellBar : MonoBehaviour
                     transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
                     if ((int)Data["FuelCell"] == 10)
                     {
+                        if (transform.childCount > 2)
                         transform.GetChild(2).gameObject.SetActive(false);
+                    } else
+                    {
+                        if (transform.childCount > 2)
+                            transform.GetChild(2).gameObject.SetActive(true);
                     }
                     System.TimeSpan t = System.TimeSpan.FromSeconds(Result);
                     System.DateTime final = new System.DateTime().Add(t);
