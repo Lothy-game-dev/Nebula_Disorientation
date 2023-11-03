@@ -110,6 +110,10 @@ public class NotificationBoardController : MonoBehaviour
     {
         GameObject notiBoard = Instantiate(ConvertBoard, new Vector3(Position.x, Position.y, ConvertBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 10, notiBoard.transform.GetChild(0).localScale.y / 10);
+        if (ConvertFrom == "Fuel Energy")
+        {
+            notiBoard.transform.GetChild(0).GetComponent<ConvertBoard>().isRevert = true;
+        }
         if (notiBoard.transform.GetChild(0).GetComponent<ConvertBoard>() != null)
         {
             notiBoard.transform.GetChild(0).GetComponent<ConvertBoard>().SetConvertItem(ConvertFrom, ConvertTo, Rate);
@@ -136,6 +140,8 @@ public class NotificationBoardController : MonoBehaviour
         {
             GameObject infoBoard = Instantiate(InformationBoard, new Vector3(go.transform.position.x, go.transform.position.y, InformationBoard.transform.position.z), Quaternion.identity);
             infoBoard.transform.GetChild(1).GetComponent<TextMeshPro>().text = text;
+            infoBoard.transform.localScale = new Vector3(infoBoard.transform.localScale.x * Camera.main.transform.localScale.x,
+                infoBoard.transform.localScale.y * Camera.main.transform.localScale.y, infoBoard.transform.localScale.z);
             infoBoard.GetComponent<InformationBoard>().SetPosition(go);
             currentInfoBoard = infoBoard;
             if (go.name.Contains("FuelCell"))

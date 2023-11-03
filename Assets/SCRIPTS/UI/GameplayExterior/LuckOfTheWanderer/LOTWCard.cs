@@ -30,9 +30,9 @@ public class LOTWCard : MonoBehaviour
     public bool NoRed;
 
     private int CardTier;
-    private int CardId;
+    public int CardId;
     private string CardType;
-    private Dictionary<string, object> DataDictionary;
+    public Dictionary<string, object> DataDictionary;
     private float InitScaleX;
     private float InitScaleY;
     private float StopTimer;

@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class StatusBoard : MonoBehaviour
 {
     #region ComponentVariables
-    private Animator anim;
     #endregion
     #region InitializeVariables
     // Status related
@@ -31,6 +30,7 @@ public class StatusBoard : MonoBehaviour
     public GameObject HPBar;
     public GameObject BarrierBar;
     public GameObject TempBar;
+    public GameObject TierText;
     // Check mouse
     public GameObject Left;
     public GameObject Right;
@@ -74,12 +74,12 @@ public class StatusBoard : MonoBehaviour
     public GameObject ModelFirstPower;
     public GameObject ModelSecondPower;
     private SpaceStationShared SpaceStation;
+    private bool isTextTranUp;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
         initScale = transform.localScale.x;
         if (Enemy.GetComponent<FighterShared>() != null)
         {
@@ -106,14 +106,16 @@ public class StatusBoard : MonoBehaviour
         {
             WeaponPowerSwitchTimer -= Time.deltaTime;
             CheckOnDestroy();
+            TextTransUp();
         } else
         {
-            WeaponPowerSwitchTimer = 2.5f;
+            WeaponPowerSwitchTimer = 2;
+            TextTransDown();
         }
         if (WeaponPowerSwitchTimer<=0f)
         {
             SwitchWeaponPowerInfo();
-            WeaponPowerSwitchTimer = 2.5f;
+            WeaponPowerSwitchTimer = 2;
         }
         if (isShow)
         {
@@ -140,6 +142,7 @@ public class StatusBoard : MonoBehaviour
                     BarrierBar.SetActive(false);
                     TemperText.gameObject.SetActive(false);
                     TempBar.SetActive(false);
+                    TierText.SetActive(false);
                     alreadyDelete = true;
                 }
                 StartCoroutine(CloseBoard());
@@ -156,6 +159,62 @@ public class StatusBoard : MonoBehaviour
             Camera.main.ScreenToWorldPoint(Input.mousePosition).y < Bottom.transform.position.y)
             return true;
         return false;
+    }
+
+    private void TextTransUp()
+    {
+        Color cHealth = HealthText.color;
+        cHealth.a = 1f;
+        HealthText.color = cHealth; 
+        Color cBarrier = BarrierText.color;
+        cBarrier.a = 1f;
+        BarrierText.color = cBarrier;
+        Color cTemp = TemperText.color;
+        cTemp.a = 1f;
+        TemperText.color = cTemp;
+        Color cTier = TierText.GetComponent<TextMeshPro>().color;
+        cTier.a = 1f;
+        TierText.GetComponent<TextMeshPro>().color = cTier;
+        Color cHPBar = HPBar.transform.GetChild(2).GetComponent<TextMeshPro>().color;
+        cHPBar.a = 1f;
+        HPBar.transform.GetChild(2).GetComponent<TextMeshPro>().color = cHPBar;
+        Color cBRBar = BarrierBar.transform.GetChild(2).GetComponent<TextMeshPro>().color;
+        cBRBar.a = 1f;
+        BarrierBar.transform.GetChild(2).GetComponent<TextMeshPro>().color = cBRBar;
+        Color cTempBar = TempBar.transform.GetChild(2).GetComponent<TextMeshPro>().color;
+        cTempBar.a = 1f;
+        TempBar.transform.GetChild(2).GetComponent<TextMeshPro>().color = cTempBar;
+        Color cName = NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        cName.a = 1f;
+        NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = cName;
+    }
+
+    private void TextTransDown()
+    {
+        Color cHealth = HealthText.color;
+        cHealth.a = 0.5f;
+        HealthText.color = cHealth;
+        Color cBarrier = BarrierText.color;
+        cBarrier.a = 0.5f;
+        BarrierText.color = cBarrier;
+        Color cTemp = TemperText.color;
+        cTemp.a = 0.5f;
+        TemperText.color = cTemp;
+        Color cTier = TierText.GetComponent<TextMeshPro>().color;
+        cTier.a = 0.5f;
+        TierText.GetComponent<TextMeshPro>().color = cTier;
+        Color cHPBar = HPBar.transform.GetChild(2).GetComponent<TextMeshPro>().color;
+        cHPBar.a = 0.5f;
+        HPBar.transform.GetChild(2).GetComponent<TextMeshPro>().color = cHPBar;
+        Color cBRBar = BarrierBar.transform.GetChild(2).GetComponent<TextMeshPro>().color;
+        cBRBar.a = 0.5f;
+        BarrierBar.transform.GetChild(2).GetComponent<TextMeshPro>().color = cBRBar;
+        Color cTempBar = TempBar.transform.GetChild(2).GetComponent<TextMeshPro>().color;
+        cTempBar.a = 0.5f;
+        TempBar.transform.GetChild(2).GetComponent<TextMeshPro>().color = cTempBar;
+        Color cName = NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+        cName.a = 0.5f;
+        NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = cName;
     }
     #endregion
     #region React When Zoom Out/Close
@@ -188,7 +247,7 @@ public class StatusBoard : MonoBehaviour
     // Start showing enemy
     public void StartShowing(GameObject enemy)
     {
-        WeaponPowerSwitchTimer = 2.5f;
+        WeaponPowerSwitchTimer = 2f;
         Enemy = enemy;
         isShow = false;
         startCounting = false;
@@ -226,12 +285,13 @@ public class StatusBoard : MonoBehaviour
         ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
         ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
         // Wait for animation 1s to show enemy
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0);
         if (CloneEnemy == null)
         {
             try
             {
                 CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+                CloneEnemy.SetActive(false);
             } catch (System.NullReferenceException)
             {
                 CloseBoard();
@@ -239,14 +299,47 @@ public class StatusBoard : MonoBehaviour
             
             // set Sorting order
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
-            CloneEnemy.SetActive(false);
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
-            c.a = 0.8f;
+            c.a = 0.5f;
             c.r = 1;
             c.g = 1;
             c.b = 1;
             CloneEnemy.GetComponent<SpriteRenderer>().color = c;
+            if (CloneEnemy.GetComponent<AlliesShared>()!=null)
+            {
+                if (CloneEnemy.GetComponent<AlliesShared>().Class == "A")
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class A";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 1, 0, 127 / 255f);
+                } else if (CloneEnemy.GetComponent<AlliesShared>().Class == "B")
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class B";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 0, 1, 127 / 255f);
+                } else
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class C";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
+                }
+            } else if (CloneEnemy.GetComponent<EnemyShared>() != null)
+            {
+                if (CloneEnemy.GetComponent<EnemyShared>().Tier == 3)
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class A";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 1, 0, 127 / 255f);
+                }
+                else if (CloneEnemy.GetComponent<EnemyShared>().Tier == 2)
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class B";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 0, 1, 127 / 255f);
+                }
+                else
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class C";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
+                }
+            }
+            TierText.SetActive(true);
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
             // Destroy objects need to be destroyed so it wont interact
@@ -285,21 +378,23 @@ public class StatusBoard : MonoBehaviour
                 CloneEnemyColl = SpaceStation.GetComponent<CapsuleCollider2D>();
                 CloneEnemyColl.enabled = false;
             }
-        }
-        NameBox.SetActive(true);
-        if (EnemyObject!=null)
-        {
-            if (EnemyObject.GetComponent<EnemyShared>()!=null)
+            NameBox.SetActive(true);
+            if (EnemyObject != null)
             {
-                NameBox.GetComponent<SpriteRenderer>().color = Color.red;
-                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
-            } else
-            {
-                NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f);
-                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.black;
+                if (EnemyObject.GetComponent<EnemyShared>() != null)
+                {
+                    NameBox.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 127 / 255f);
+                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(1, 1, 1, 127 / 255f);
+                }
+                else
+                {
+                    NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f, 127 / 255f);
+                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0, 0, 0, 127 / 255f);
+                }
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
             }
-            NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
         }
+        
         LeftWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName1 : Enemy.GetComponent<AlliesShared>().weaponName1;
         RightWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName2 : Enemy.GetComponent<AlliesShared>().weaponName2;
         FirstPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power1 : Enemy.GetComponent<AlliesShared>().Power1;
@@ -439,22 +534,60 @@ public class StatusBoard : MonoBehaviour
 
     public void UpdateStatus()
     {
-        if (Enemy!= LastEnemy)
+        if (Enemy != LastEnemy)
         {
             ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             Destroy(CloneEnemy);
             CloneEnemy = Instantiate(Enemy, EnemyImagePosition.transform.position, Quaternion.identity);
+            CloneEnemy.SetActive(false);
             // set Sorting order
             LastEnemy = Enemy;
             CloneEnemy.GetComponent<SpriteRenderer>().sortingOrder = 200;
             // Set color and transparency
             Color c = CloneEnemy.GetComponent<SpriteRenderer>().color;
-            c.a = 1f;
+            c.a = 0.5f;
             c.r = 1;
             c.g = 1;
             c.b = 1;
             CloneEnemy.GetComponent<SpriteRenderer>().color = c;
+            if (CloneEnemy.GetComponent<AlliesShared>() != null)
+            {
+                if (CloneEnemy.GetComponent<AlliesShared>().Class == "A")
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class A";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 1, 0, 127 / 255f);
+                }
+                else if (CloneEnemy.GetComponent<AlliesShared>().Class == "B")
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class B";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 0, 1, 127 / 255f);
+                }
+                else
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class C";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
+                }
+            }
+            else if (CloneEnemy.GetComponent<EnemyShared>() != null)
+            {
+                if (CloneEnemy.GetComponent<EnemyShared>().Tier == 3)
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class A";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 1, 0, 127 / 255f);
+                }
+                else if (CloneEnemy.GetComponent<EnemyShared>().Tier == 2)
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class B";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 0, 1, 127 / 255f);
+                }
+                else
+                {
+                    TierText.GetComponent<TextMeshPro>().text = "Class C";
+                    TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
+                }
+            }
+            TierText.SetActive(true);
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
             // Destroy objects need to be destroyed so it wont interact
@@ -491,6 +624,16 @@ public class StatusBoard : MonoBehaviour
 
             bool alreadyLeft = false;
             bool alreadyRight = false;
+            if (LeftWeaponName == null || LeftWeaponName == "Transport" || LeftWeaponName== "SuicideBombing")
+            {
+                alreadyLeft = true;
+                ModelLeftWeapon = null;
+            }
+            if (LeftWeaponName == null || RightWeaponName == "Transport" || RightWeaponName == "SuicideBombing")
+            {
+                alreadyRight = true;
+                ModelRightWeapon = null;
+            }
             for (int i = 0; i < WeaponList.transform.childCount; i++)
             {
                 if (alreadyLeft && alreadyRight)
@@ -511,6 +654,16 @@ public class StatusBoard : MonoBehaviour
 
             bool alreadyFirst = false;
             bool alreadySecond = false;
+            if (FirstPower == null || FirstPower == "")
+            {
+                alreadyFirst = true;
+                ModelFirstPower = null;
+            }
+            if (SecondPower == null || SecondPower == "")
+            {
+                alreadySecond = true;
+                ModelSecondPower = null;
+            }
             for (int i = 0; i < PowerList.transform.childCount; i++)
             {
                 if (alreadyFirst && alreadySecond)
@@ -595,7 +748,18 @@ public class StatusBoard : MonoBehaviour
                     ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
                 }
             }
-
+            EnemyObject = Enemy.GetComponent<FighterShared>();
+            if (EnemyObject.GetComponent<EnemyShared>() != null)
+            {
+                NameBox.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 127 / 255f);
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(1, 1, 1, 127 / 255f);
+            }
+            else
+            {
+                NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f, 127 / 255f);
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0, 0, 0, 127 / 255f);
+            }
+            CloneEnemy.SetActive(true);
         }
         if (Enemy==null)
         {
@@ -605,16 +769,6 @@ public class StatusBoard : MonoBehaviour
             if (Enemy.GetComponent<FighterShared>() != null)
             {
                 EnemyObject = Enemy.GetComponent<FighterShared>();
-                if (EnemyObject.GetComponent<EnemyShared>() != null)
-                {
-                    NameBox.GetComponent<SpriteRenderer>().color = Color.red;
-                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
-                }
-                else
-                {
-                    NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f);
-                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.black;
-                }
                 NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
                 HPSlider.maxValue = EnemyObject.MaxHP;
                 HPSlider.value = EnemyObject.CurrentHP;
@@ -674,9 +828,8 @@ public class StatusBoard : MonoBehaviour
     {
         isEnding = true;
         OkToDestroy = true;
-        anim.SetTrigger("End");
         // Wait for aniamtion
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
         isEnding = false;
         if (OkToDestroy)
         {
@@ -688,18 +841,14 @@ public class StatusBoard : MonoBehaviour
     public void CheckOnDestroy()
     {
         // Set Timer to close to 5s
-        Timer = 5f;
+        Timer = 3f;
         if (isEnding)
         {
             isEnding = false;
-            // Remove trigger end from animator
-            anim.ResetTrigger("End");
             // Deny destroy object
             OkToDestroy = false;
             // Stop the coroutine for closing board
             StopCoroutine(CloseBoard());
-            // Trigger Start anim again
-            anim.SetTrigger("Start");
             // Show stats
             StartShowing(Enemy);
         }

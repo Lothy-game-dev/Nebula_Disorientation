@@ -43,7 +43,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         // Call function and timer only if possible
     }
     #endregion
-    #region Spawn Enemy
+    #region Spawn Ally
     public void SpawnAlly()
     {
         Allies = new List<GameObject>();
@@ -59,7 +59,7 @@ public class SpawnAlliesFighter : MonoBehaviour
                 GameObject SpawnEffect = Instantiate(SpawnHole, SpawnPos, Quaternion.identity);
                 SpawnEffect.SetActive(true);
                 Destroy(SpawnEffect, 1.5f);
-                StartCoroutine(CreateAlly(1, SpawnPos, i,0, "SSTP"));
+                StartCoroutine(CreateAlly(1, SpawnPos, i,0, "A"));
             }
         }
     }
@@ -118,6 +118,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
         if (Escort)
         Ally.GetComponent<AlliesShared>().Escort = false;
+        Ally.GetComponent<AlliesShared>().Class = Class;
         Ally.GetComponent<AlliesShared>().Defend = false;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
     }

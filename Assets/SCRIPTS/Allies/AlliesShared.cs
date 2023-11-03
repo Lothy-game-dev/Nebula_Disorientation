@@ -20,6 +20,7 @@ public class AlliesShared : FighterShared
     public LayerMask EnemyLayer;
     public GameObject BackFire;
     public GameObject HeadPos;
+    public GameObject SpawnHole;
 
     private bool test;
     private Dictionary<string, object> StatsDataDict;
@@ -66,6 +67,7 @@ public class AlliesShared : FighterShared
     public bool Defend;
     public GameObject DefendObject;
     public GameObject NearestTarget;
+    public string Class;
     #endregion
     #region Shared Functions
     // Set Health to Health Bar
@@ -87,7 +89,7 @@ public class AlliesShared : FighterShared
 
     private void OnMouseOver()
     {
-        Status.Timer = 5f;
+        Status.Timer = 3f;
         Status.StartShowing(gameObject);
     }
 
@@ -1016,6 +1018,9 @@ public class AlliesShared : FighterShared
     private void DoneEscorting()
     {
         FindObjectOfType<SpaceZoneMission>().AllyEscortDone();
+        GameObject SpawnEffect = Instantiate(SpawnHole, transform.position, Quaternion.identity);
+        SpawnEffect.SetActive(true);
+        Destroy(SpawnEffect, 1.5f);
         Destroy(gameObject);
     }
     #endregion

@@ -14,9 +14,12 @@ public class ConvertBoard : MonoBehaviour
     public ConvertItemBox ItemRight;
     public TMP_InputField TextInput;
     public TextMeshPro TextOutput;
+    public TMP_InputField TextOutputRevert;
+    public TextMeshPro TextInputRevert;
     public TextMeshPro Text;
     #endregion
     #region NormalVariables
+    public bool isRevert;
     private float ConvertRate;
     private string From;
     private string To;
@@ -40,6 +43,17 @@ public class ConvertBoard : MonoBehaviour
                 {
                     TextInput.text = "100000";
                 }
+                if (isRevert)
+                {
+                    int CurrentFE = (int)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId)["FuelEnergy"];
+                    if ((int)(int.Parse(TextInput.text) * ConvertRate) > CurrentFE)
+                    {
+                        TextOutput.color = Color.red;
+                    } else
+                    {
+                        TextOutput.color = Color.black;
+                    }
+                }
                 TextOutput.text = ((int)(int.Parse(TextInput.text) * ConvertRate)).ToString();
             } else
             {
@@ -51,6 +65,15 @@ public class ConvertBoard : MonoBehaviour
     #region Set Convert Item
     public void SetConvertItem(string ConvertFrom, string ConvertTo, float Rate)
     {
+        if (isRevert)
+        {
+            TextOutputRevert.transform.parent.gameObject.SetActive(true);
+            TextInput.transform.parent.gameObject.SetActive(false);
+            TextInputRevert.gameObject.SetActive(true);
+            TextOutput.gameObject.SetActive(false);
+            TextInput = TextOutputRevert;
+            TextOutput = TextInputRevert;
+        }
         From = ConvertFrom;
         ItemLeft.ShowItem(ConvertFrom);
         To = ConvertTo;
@@ -62,7 +85,7 @@ public class ConvertBoard : MonoBehaviour
     public void Convert()
     {
         int id = FindObjectOfType<UECMainMenuController>().PlayerId;
-        string check = FindObjectOfType<AccessDatabase>().CheckIfConvertable(id, From, To, TextInput.text, TextOutput.text);
+        string check = FindObjectOfType<AccessDatabase>().CheckIfConvertable(id, From, To, isRevert ? TextOutput.text : TextInput.text, isRevert ? TextInput.text : TextOutput.text);
         if ("Fail".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
@@ -78,7 +101,7 @@ public class ConvertBoard : MonoBehaviour
         else if ("Over Limit".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "'s quantity after converted is over its limit!\n Please try again.", 5f);
+            FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + " quantity after converted is over its limit!\n Please try again.", 5f);
             TextInput.text = "0";
             TextOutput.text = "0";
             ItemLeft.ShowItem(From);
@@ -88,6 +111,7 @@ public class ConvertBoard : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
             "Your " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(From) + " is not enough for this conversion!\n Please try again.", 5f);
             TextInput.text = "0";
+            TextOutput.color = Color.black;
             TextOutput.text = "0";
             ItemLeft.ShowItem(From);
         }
@@ -110,7 +134,7 @@ public class ConvertBoard : MonoBehaviour
     public void ConvertDone()
     {
         int id = FindObjectOfType<UECMainMenuController>().PlayerId;
-        string check = FindObjectOfType<AccessDatabase>().ConvertCurrencyById(id, From, To, TextInput.text, TextOutput.text);
+        string check = FindObjectOfType<AccessDatabase>().ConvertCurrencyById(id, From, To, isRevert ? TextOutput.text : TextInput.text, isRevert ? TextInput.text : TextOutput.text);
         if ("Fail".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
@@ -126,7 +150,7 @@ public class ConvertBoard : MonoBehaviour
         else if ("Success".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Converted successfully!!!\nYou received " + TextOutput.text + " " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "!", 5f);
+            "Converted successfully!!!\nYou received " + (isRevert ? TextInput.text : TextOutput.text) + " " + FindObjectOfType<GlobalFunctionController>().ConvertToIcon(To) + "!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
             FindObjectOfType<UECMainMenuController>().ShardSpent = int.Parse(TextInput.text);
             FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(id, 0, int.Parse(TextOutput.text), "ConvertCash");

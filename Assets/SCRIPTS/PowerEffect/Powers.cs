@@ -63,7 +63,7 @@ public class Powers : MonoBehaviour
         sound.minDistance = 1000;
         sound.dopplerLevel = 0;
         sound.priority = 256;
-        audioScale = 0.5f;
+        audioScale = 1f;
         //Get power stat from DB
         Power = FindAnyObjectByType<AccessDatabase>().GetPowerDataByName(name.Replace("(Clone)", ""));
         PowerStats = FindAnyObjectByType<GlobalFunctionController>().ConvertPowerStatsToDictionary(Power["Stats"].ToString());
@@ -144,7 +144,7 @@ public class Powers : MonoBehaviour
         sound.loop = false;
         sound.Play();
         sound.volume = 
-            (GetComponent<Barrier>()!=null ? 1f : 0.35f) 
+            (GetComponent<Barrier>()!=null ? 1f : 0.175f) 
             * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale/100f ;
     }  
     public void EndSound()

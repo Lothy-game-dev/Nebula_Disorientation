@@ -70,7 +70,16 @@ public class SpaceZoneMission : MonoBehaviour
     private void SetMissionText()
     {
         if (MissionStageName!="D1" && MissionStageName!="D2")
-        MissionText.text = MissionTextString + " (" + CurrentDoneNumber + "/" + ObjectiveNumber + ")";
+        {
+            if (MissionStageName == "D3")
+            {
+                MissionText.text = MissionTextString + " (" + CurrentDoneNumber + "/" + Mathf.CeilToInt(ObjectiveNumber/2f) + ")";
+            }
+            else
+            {
+                MissionText.text = MissionTextString + " (" + CurrentDoneNumber + "/" + ObjectiveNumber + ")";
+            }
+        }
         else
         {
             MissionText.text = MissionTextString;

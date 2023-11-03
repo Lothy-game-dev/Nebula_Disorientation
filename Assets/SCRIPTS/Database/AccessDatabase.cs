@@ -522,12 +522,14 @@ public class AccessDatabase : MonoBehaviour
         if (from != "" && to != "")
         {
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
+            dbCheckCommand.CommandText = "SELECT Name, FuelCell FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             bool check = false;
+            int FuelCell = 0;
             while (dataReader.Read())
             {
                 check = true;
+                FuelCell = dataReader.GetInt32(1);
                 break;
             }
             if (!check)
@@ -538,7 +540,8 @@ public class AccessDatabase : MonoBehaviour
             {
                 IDbCommand dbCommand = dbConnection.CreateCommand();
                 dbCommand.CommandText = "UPDATE PlayerProfile SET " + from + " = " + from + " - " + FromAmount +
-                    "," + to + " = " + to + " + " + ToAmount + " WHERE PlayerID=" + PlayerId;
+                    "," + to + " = " + to + " + " + ToAmount + (to == "FuelCell" && FuelCell == 9? ", LastFuelCellUsedTime = ''" : "") +
+                    " WHERE PlayerID=" + PlayerId;
                 int n = dbCommand.ExecuteNonQuery();
                 dbConnection.Close();
                 if (n != 1)
@@ -4290,6 +4293,49 @@ public class AccessDatabase : MonoBehaviour
             return datas;
         }
     }
+
+    public string UpdateSessionCurrentHP(int PlayerID, bool isIncrease, int Amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = SessionCurrentHP " + (isIncrease ? "+ " : "- ") 
+                + Amount + " WHERE SessionId=" + n;
+            int m = dbCheckCommand3.ExecuteNonQuery();
+            if (m != 1)
+            {
+                return "Fail";
+            }
+            else
+            {
+                return "Success";
+            }
+        }
+    }
+
     public string UpdateSessionStageData(int SessionId, int CurrentStage, int CurrentStageHazard, int CurrentStageVariant)
     {
         // Open DB
