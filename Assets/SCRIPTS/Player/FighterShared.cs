@@ -155,20 +155,17 @@ public class FighterShared : MonoBehaviour
     public void CheckBarrierAndHealth()
     {
         BarrierRegenTimer -= Time.deltaTime;
-        BarrierRegenDelay -= Time.deltaTime;
         BarrierEffectDelay -= Time.deltaTime;
         if (BarrierRegenTimer<=0f)
         {
-            if (BarrierRegenDelay<=0f && CurrentBarrier<MaxBarrier)
+            if (CurrentBarrier<MaxBarrier)
             {
-                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
+                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount * Time.deltaTime)
                 {
-                    CurrentBarrier += BarrierRegenAmount;
-                    BarrierRegenDelay = 1f;
+                    CurrentBarrier += BarrierRegenAmount * Time.deltaTime;
                 } else
                 {
                     CurrentBarrier = MaxBarrier;
-                    BarrierRegenDelay = 1f;
                 }
             }
 

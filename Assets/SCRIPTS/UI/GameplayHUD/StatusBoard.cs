@@ -339,6 +339,7 @@ public class StatusBoard : MonoBehaviour
                     TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
                 }
             }
+            TierText.SetActive(true);
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
             // Destroy objects need to be destroyed so it wont interact
@@ -586,6 +587,7 @@ public class StatusBoard : MonoBehaviour
                     TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
                 }
             }
+            TierText.SetActive(true);
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
             // Destroy objects need to be destroyed so it wont interact

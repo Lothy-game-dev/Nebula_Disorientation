@@ -522,12 +522,14 @@ public class AccessDatabase : MonoBehaviour
         if (from != "" && to != "")
         {
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
+            dbCheckCommand.CommandText = "SELECT Name, FuelCell FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             bool check = false;
+            int FuelCell = 0;
             while (dataReader.Read())
             {
                 check = true;
+                FuelCell = dataReader.GetInt32(1);
                 break;
             }
             if (!check)
@@ -538,7 +540,8 @@ public class AccessDatabase : MonoBehaviour
             {
                 IDbCommand dbCommand = dbConnection.CreateCommand();
                 dbCommand.CommandText = "UPDATE PlayerProfile SET " + from + " = " + from + " - " + FromAmount +
-                    "," + to + " = " + to + " + " + ToAmount + " WHERE PlayerID=" + PlayerId;
+                    "," + to + " = " + to + " + " + ToAmount + (to == "FuelCell" && FuelCell == 9? ", LastFuelCellUsedTime = ''" : "") +
+                    " WHERE PlayerID=" + PlayerId;
                 int n = dbCommand.ExecuteNonQuery();
                 dbConnection.Close();
                 if (n != 1)

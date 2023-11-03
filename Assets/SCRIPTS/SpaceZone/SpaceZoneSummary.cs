@@ -91,13 +91,13 @@ public class SpaceZoneSummary : MonoBehaviour
 
 
         Consumable = new Dictionary<string, int>();  
-        TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + stat.TotalEnemyDefeated;
-        TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: " + stat.DamageDealt;
-        SZNo.GetComponent<TextMeshPro>().text = "Space Zone No." + stat.CurrentSZNo + " Completed!";
-        SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> " + SessionData["SessionTimelessShard"].ToString();
-        SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br>" + SessionData["SessionCash"].ToString();
-        CurrentShard.GetComponent<TextMeshPro>().text = "<sprite=0> Collected : <br> " + stat.ShardCollected + " + " + stat.CurrentShardReward;
-        CurrentCash.GetComponent<TextMeshPro>().text = "<sprite=3> Collected : <br>" + stat.CashCollected + " + " + stat.CurrentCashReward;
+        TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: <color=#3bccec>" + stat.TotalEnemyDefeated + "</color>";
+        TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: <color=#3bccec>" + stat.DamageDealt + "</color>";
+        SZNo.GetComponent<TextMeshPro>().text = "Space Zone No. <color=#3bccec>" + stat.CurrentSZNo + "</color> Completed!";
+        SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> <color=#3bccec>" + SessionData["SessionTimelessShard"].ToString() + "</color>";
+        SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br> <color=#3bccec>" + SessionData["SessionCash"].ToString() + "</color>";
+        CurrentShard.GetComponent<TextMeshPro>().text = "<sprite=0> Collected : <br> <color=#3bccec>" + stat.ShardCollected + "</color> + <color=#3bccec>" + stat.CurrentShardReward + "</color>";
+        CurrentCash.GetComponent<TextMeshPro>().text = "<sprite=3> Collected : <br> <color=#3bccec>" + stat.CashCollected + "</color> + <color=#3bccec>" + stat.CurrentCashReward + "</color>";
         Timer.GetComponent<TextMeshPro>().text = stat.PlayedTime;
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;

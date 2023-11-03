@@ -71,10 +71,10 @@ public class SessionSummary : MonoBehaviour
         PlayerPrefs.SetString("isFailed", "");
 
         int SZno = (isFailed ? int.Parse(Data["CurrentStage"].ToString()) - 1 : int.Parse(Data["CurrentStage"].ToString()));
-        SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text = SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text.Replace("?", SZno.ToString());
-        EnemyDestroyed.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + Data["EnemyDestroyed"].ToString();
-        DamageDealt.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Damage Dealt: " + Data["DamageDealt"].ToString();
-        FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + Data["SessionFuelEnergy"].ToString();
+        SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text = SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text.Replace("?", "<color=#3bccec>" + SZno.ToString() + "</color>");
+        EnemyDestroyed.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + "<color=#3bccec>" + Data["EnemyDestroyed"].ToString() + "</color>";
+        DamageDealt.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Damage Dealt: " + "<color=#3bccec>" + Data["DamageDealt"].ToString() + "</color>";
+        FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + "<color=#3bccec>" + Data["SessionFuelEnergy"].ToString() + "</color>";
 
         //Economy
         ShardAmount = (isFailed ? (int.Parse(Data["SessionTimelessShard"].ToString()) / 2) : int.Parse(Data["SessionTimelessShard"].ToString()));
