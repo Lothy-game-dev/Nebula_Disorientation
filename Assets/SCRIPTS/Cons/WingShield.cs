@@ -36,7 +36,7 @@ public class WingShield : Consumable
             if (Timer >= Duration)
             {
                 Fighter.GetComponent<PlayerFighter>().isWingShield = false;
-                Fighter.GetComponent<PlayerFighter>().ShieldReducedScale = 0;
+                Fighter.GetComponent<PlayerFighter>().ShieldReducedScale -= float.Parse(Effect.Split("-")[1].ToString());
                 isStart = false;
                 Timer = 0f;
             }
@@ -49,7 +49,7 @@ public class WingShield : Consumable
     {
         isStart = true;
         Fighter.GetComponent<PlayerFighter>().isWingShield = true;
-        Fighter.GetComponent<PlayerFighter>().ShieldReducedScale = float.Parse(Effect.Split("-")[1].ToString());
+        Fighter.GetComponent<PlayerFighter>().ShieldReducedScale += float.Parse(Effect.Split("-")[1].ToString());
     }
     #endregion
     #region Function group ...
