@@ -493,9 +493,9 @@ public class InitializeDatabase : MonoBehaviour
             "(11, 'Master Duelist II', 120, 'D-I', 20, 50000, null, '#ffc401',10)," +
             "(12, 'Master Duelist III', 135, 'D-I', 30, 55000, null, '#ffc402',10)," +
             "(13, 'Honored Warrior of the UEC', 150, 'O', 5, 60000, 'UA-1', '#ff991f',25)," +
-            "(14, 'Legendary Falcon I', 160, 'D-WS', 3, 70000, null, '#ff5631',25)," +
-            "(15, 'Legendary Falcon II', 170, 'D-WS', 5, 80000, null, '#ff5631',25)," +
-            "(16, 'Legendary Falcon III', 185, 'D-WS', 10, 90000, null, '#ff5632',25)," +
+            "(14, 'Legendary Falcon I', 160, 'D-WS', 5, 70000, null, '#ff5631',25)," +
+            "(15, 'Legendary Falcon II', 170, 'D-WS', 15, 80000, null, '#ff5631',25)," +
+            "(16, 'Legendary Falcon III', 185, 'D-WS', 30, 90000, null, '#ff5632',25)," +
             "(17, 'Supreme Warrior of the UEC', 200, 'PA', 15, 100000, 'UF-1', '#bf2600',50)," +
             "(18, 'Supreme Warrior of the UEC ?', 200, null, 0, 100000, null, '#6554c0', 50);";
         // SpaceShop

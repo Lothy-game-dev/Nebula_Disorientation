@@ -178,9 +178,9 @@ public class EncycButton : MonoBehaviour
                         {
                             if (ItemType == "Warship")
                             {
-                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.2f, 0.2f), 2);
+                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.25f, 0.25f), 2);
                                 ChangeColorWhenChoosen(Id.ToString());
-                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WarshipImage[WarshipImage.FindIndex(item => wlist[1].Replace("Zat-", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WarshipImage[WarshipImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
                             }
                             else
                             {
@@ -188,7 +188,7 @@ public class EncycButton : MonoBehaviour
                                 {
                                     ShowInforOfItem(Menu.SStationList, 1, 4, new Vector2(0.2f, 0.2f), 2);
                                     ChangeColorWhenChoosen((Id + Menu.WarshipList.Count).ToString());
-                                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = SpaceStationImage[SpaceStationImage.FindIndex(item => wlist[1].Replace("UEC-", "").ToLower().Contains(item.name.ToLower()))].sprite;
+                                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = SpaceStationImage[SpaceStationImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
                                 }
                                 else
                                 {

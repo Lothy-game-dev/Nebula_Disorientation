@@ -854,6 +854,43 @@ public class AccessDatabase : MonoBehaviour
             return "Success";
         }
     }
+    public string UpdateFuelEnergy(int PlayerId, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            break;
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "No Exist";
+        }
+        else
+        {
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = "UPDATE PlayerProfile SET FuelEnergy = FuelEnergy + " + amount + " WHERE PlayerID=" + PlayerId;
+            int n = dbCommand.ExecuteNonQuery();
+            if (n != 1)
+            {
+                dbConnection.Close();
+                return "Fail";
+            }
+            else
+            {
+                dbConnection.Close();
+                return "Success";
+            }
+        }
+    }
     #endregion
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
@@ -4483,6 +4520,7 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionFuelEnergy = SessionFuelEnergy " + (IsIncrease ? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
+        Debug.Log(dbCheckCommand3.CommandText);
         dbConnection.Close();
         if (n != 1)
         {
