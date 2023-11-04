@@ -84,8 +84,8 @@ public class StatisticController : MonoBehaviour
         Warship = int.Parse(CurrentAchievement["Warship"]);
         MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
         MissionCompleted = int.Parse(PlayerAchievement["TotalMission"].ToString());
-        TotalEnemyDefeated = int.Parse(PlayerAchievement["TotalEnemyDefeated"].ToString());
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
+        TotalEnemyDefeated = 0;
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
         CurrentFuelCell = (int)ListData["FuelCell"];
@@ -172,17 +172,16 @@ public class StatisticController : MonoBehaviour
         // Stage 10,20,30,....
         if (CurrentSZNo % 10 == 0)
         {
-            CurrentShardReward = Mathf.CeilToInt(CurrentSZNo / 20) + 1;           
+            CurrentShardReward = (CurrentSZNo / 20) + 1;           
         } else
         {
             CurrentShardReward = 0;
         }
-        CurrentCashReward = 500 * (Mathf.CeilToInt((CurrentSZNo - 1) / 10) + 1);
-        Debug.Log("KHanbggggggggggggg" + CurrentCashReward);
+        CurrentCashReward = 500 * ((CurrentSZNo - 1) / 10) + 1;
        
         //Update session stat
         ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
-
+        ad.UpdateSessionFuelEnergy(SessionID, true, (int)SessionInformation["EnemyDestroyed"] * 10);
     }
     #endregion
     #region Check daily mission
