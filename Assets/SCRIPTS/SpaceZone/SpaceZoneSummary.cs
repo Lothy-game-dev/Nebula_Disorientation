@@ -87,7 +87,6 @@ public class SpaceZoneSummary : MonoBehaviour
         Time.timeScale = 0;
         stat = FindAnyObjectByType<StatisticController>();
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(stat.SessionID, true, stat.CurrentCashReward, stat.CurrentShardReward);
-        FindObjectOfType<AccessDatabase>().UpdateSessionFuelEnergy(stat.SessionID, true, stat.TotalEnemyDefeated * 10);
         Dictionary<string, object> SessionData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
 
 
