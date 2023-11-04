@@ -263,8 +263,8 @@ public class FighterShared : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
         if (GetComponent<FighterMovement>() != null)
         {
-            Destroy(GetComponent<FighterMovement>().HealthBarSlider.transform.parent);
-            Destroy(GetComponent<FighterMovement>().ShieldBarSlider.transform.parent);
+            Destroy(GetComponent<FighterMovement>().HealthBarSlider.transform.parent.gameObject);
+            Destroy(GetComponent<FighterMovement>().ShieldBarSlider.transform.parent.gameObject);
         }
         if (name == "Player")
         {
@@ -408,13 +408,13 @@ public class FighterShared : MonoBehaviour
             {
                 BurnedDelay -= Time.deltaTime;
             }
-            if (!OnFireGO.activeSelf)
+            if (OnFireGO != null && !OnFireGO.activeSelf)
             {
                 OnFireGO.SetActive(true);
             }
         } else
         {
-            if (OnFireGO.activeSelf && !isLavaBurned)
+            if (OnFireGO!=null && OnFireGO.activeSelf && !isLavaBurned)
             {
                 OnFireGO.SetActive(false);
             }
@@ -448,14 +448,14 @@ public class FighterShared : MonoBehaviour
             {
                 FrozenDuration -= Time.deltaTime;
                 CalculateVelocity(new Vector2(0, 0));
-                if (!OnFreezeGO.activeSelf)
+                if (OnFreezeGO != null && !OnFreezeGO.activeSelf)
                 {
                     OnFreezeGO.SetActive(true);
                 }
             }
             else
             {
-                if (OnFreezeGO.activeSelf)
+                if (OnFreezeGO != null && OnFreezeGO.activeSelf)
                 {
                     OnFreezeGO.SetActive(false);
                 }
@@ -710,18 +710,23 @@ public class FighterShared : MonoBehaviour
             : 1) * 
             (isWingShield && CurrentBarrier > 0 ? (100 - ShieldReducedScale) / 100 : 1);
         DeadPushScale = 1;
-       
-        if (DamageSource != null)
+        try
         {
-            if (DamageSource.GetComponent<BulletShared>() != null)
+            if (DamageSource != null)
             {
-                DamageDealer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
+                if (DamageSource.GetComponent<BulletShared>() != null)
+                {
+                    DamageDealer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
+                }
+                if (GetComponent<EnemyShared>() != null && DamageDealer == controller.Player)
+                {
+                    Statistic.DamageDealt += damage;
+                    PlayerDamageReceive += damage;
+                }
             }
-            if (GetComponent<EnemyShared>() != null && DamageDealer == controller.Player)
-            {
-                Statistic.DamageDealt += damage;
-                PlayerDamageReceive += damage;
-            }
+        } catch (System.Exception)
+        {
+            // Ignore
         }
         if (CurrentBarrier > 0)
         {
@@ -801,33 +806,41 @@ public class FighterShared : MonoBehaviour
             {
                 if (DamageSource != null && !alreadyDead)
                 {
-                    alreadyDead = true;
-                    if (DamageSource.GetComponent<BulletShared>() != null)
+                    try
                     {
-                        Killer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
-                    }
-                    else
-                    {
-                        Killer = DamageSource;
-                    }
-                    if (GetComponent<EnemyShared>() != null)
-                    {
-                        if (Killer == controller.Player)
+                        alreadyDead = true;
+                        if (DamageSource.GetComponent<BulletShared>() != null)
                         {
-                            GetComponent<EnemyShared>().AddBounty();
-                            EnemyData = FindAnyObjectByType<AccessDatabase>().GetDataEnemyById(GetComponent<EnemyShared>().EnemyID);
-                            switch (EnemyData["TierColor"])
-                            {
-                                case "#36b37e": Statistic.EnemyTierI += 1; break;
-                                case "#4c9aff": Statistic.EnemyTierII += 1; break;
-                                case "#bf2600": Statistic.EnemyTierIII += 1; break;
-                            }
-                            Statistic.TotalEnemyDefeated += 1;
-                            Statistic.KillEnemy = true;
-                        } else if (PlayerDamageReceive >= MaxHP/2)
-                        {
-                            GetComponent<EnemyShared>().AddBounty();
+                            Killer = DamageSource.GetComponent<BulletShared>().WeaponShoot.GetComponent<Weapons>().Fighter;
                         }
+                        else
+                        {
+                            Killer = DamageSource;
+                        }
+                        if (GetComponent<EnemyShared>() != null)
+                        {
+                            if (Killer == controller.Player)
+                            {
+                                GetComponent<EnemyShared>().AddBounty();
+                                EnemyData = FindAnyObjectByType<AccessDatabase>().GetDataEnemyById(GetComponent<EnemyShared>().EnemyID);
+                                switch (EnemyData["TierColor"])
+                                {
+                                    case "#36b37e": Statistic.EnemyTierI += 1; break;
+                                    case "#4c9aff": Statistic.EnemyTierII += 1; break;
+                                    case "#bf2600": Statistic.EnemyTierIII += 1; break;
+                                }
+                                Statistic.TotalEnemyDefeated += 1;
+                                Statistic.KillEnemy = true;
+                            }
+                            else if (PlayerDamageReceive >= MaxHP / 2)
+                            {
+                                GetComponent<EnemyShared>().AddBounty();
+                            }
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        // Ignore
                     }
                 }
                 CurrentHP = 0;

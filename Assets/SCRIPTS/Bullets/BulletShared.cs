@@ -700,7 +700,6 @@ public class BulletShared : MonoBehaviour
                 }
             }
             Destroy(transform.parent.gameObject);
-            PunishML();
         }
     }
 

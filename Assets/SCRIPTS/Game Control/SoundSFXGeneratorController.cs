@@ -20,10 +20,11 @@ public class SoundSFXGeneratorController : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    private Dictionary<string, object> Data;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Initialize variables
     }
@@ -42,33 +43,36 @@ public class SoundSFXGeneratorController : MonoBehaviour
     /// <param name="Type">EconomySpend / EconomyInsuff / LoadoutCons / LoadoutWeapon / LoadoutFighter / Repair / ButtonClick</param>
     public void GenerateSound(string Type)
     {
+        Data = FindObjectOfType<AccessDatabase>().GetOption();
         if (Type=="EconomySpend")
         {
-            GetComponent<AudioSource>().volume = 1f;
+            GetComponent<AudioSource>().volume = 1f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
             GetComponent<AudioSource>().clip = EconomySpend;
         } else if (Type== "EconomyInsuff")
         {
-            GetComponent<AudioSource>().volume = 1f;
+            GetComponent<AudioSource>().volume = 1f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
             GetComponent<AudioSource>().clip = EconomyInsuff;
         } else if (Type== "LoadoutCons")
         {
-            GetComponent<AudioSource>().volume = 1f;
+            GetComponent<AudioSource>().volume = 1f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
             GetComponent<AudioSource>().clip = LoadoutCons;
         } else if (Type== "LoadoutWeapon")
         {
-            GetComponent<AudioSource>().volume = 1f;
+            GetComponent<AudioSource>().volume = 1f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
             GetComponent<AudioSource>().clip = LoadoutWeapon;
         } else if (Type== "LoadoutFighter")
         {
-            GetComponent<AudioSource>().volume = 1f;
+            GetComponent<AudioSource>().volume = 1f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
             GetComponent<AudioSource>().clip = LoadoutFighter;
         } else if (Type=="Repair")
         {
-            GetComponent<AudioSource>().volume = 0.5f;
+            GetComponent<AudioSource>().volume = 0.5f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
             GetComponent<AudioSource>().clip = Repair;
         } else if (Type=="ButtonClick")
         {
-            GetComponent<AudioSource>().volume = 0.5f;
+            GetComponent<AudioSource>().volume = 0.5f * (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
+            Debug.Log((int)Data["MVolume"]);
+            Debug.Log((int)Data["Sfx"]);
             GetComponent<AudioSource>().clip = ButtonClick;
         }
         GetComponent<AudioSource>().Play();
