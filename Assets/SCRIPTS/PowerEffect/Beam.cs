@@ -115,7 +115,7 @@ public class Beam : MonoBehaviour
                 float FinalDamage = Damage * LOTWEffectScale;
                 if (col.GetComponent<FighterShared>() != null)
                 {
-                    col.GetComponent<FighterShared>().ReceiveDamage(FinalDamage, Fighter);
+                    col.GetComponent<FighterShared>().ReceiveDamage(FinalDamage, Fighter, true);
                 }
                 else
                 {
