@@ -307,7 +307,7 @@ public class LOTWScene : MonoBehaviour
         RerollChance = 3;
         ShardCostReroll = new int[] { 1, 2, 3 };
         datas = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
-        LOTWNoText.GetComponent<TextMeshPro>().text = "Luck of the wanderer\nNo. " + (int)datas["CurrentStage"];
+        LOTWNoText.GetComponent<TextMeshPro>().text = "Luck of the wanderer\nNo. <color=#3bccec>" + (int)datas["CurrentStage"] + "</color>";
         SessionShardText.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["SessionTimelessShard"]).ToString();
         currentShard = (int)datas["SessionTimelessShard"];
         SessionId = (int)datas["SessionID"];
