@@ -39,12 +39,28 @@ public class SpaceZoneIntroBoard : MonoBehaviour
     public GameObject ModelRightWeapon;
     private GameObject LeftWeapon;
     private GameObject RightWeapon;
+    private string ChosenSZD1;
+    private string ChosenEnemySS;
+    private List<string> ChosenAllyFC;
+    private List<string> ChosenAllyFB;
+    private List<string> ChosenAllyFA;
+    private List<string> ChosenEnemyFC;
+    private List<string> ChosenEnemyFB;
+    private List<string> ChosenEnemyFA;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     void OnEnable()
     {
         // Initialize variables
+        ChosenSZD1 = "";
+        ChosenEnemySS = "";
+        ChosenAllyFC = new();
+        ChosenAllyFB = new();
+        ChosenAllyFA = new();
+        ChosenEnemyFC = new();
+        ChosenEnemyFB = new();
+        ChosenEnemyFA = new();
         GenerateData();
     }
 
@@ -62,6 +78,20 @@ public class SpaceZoneIntroBoard : MonoBehaviour
     // Group all function that serve the same algorithm
     public void GenerateData()
     {
+        // Get Predict data
+        string Predict = PlayerPrefs.GetString("Predict" + PlayerPrefs.GetInt("PlayerID"));
+        if (Predict.Length > 0)
+        {
+            ChosenSZD1 = Predict.Split("|")[0];
+            ChosenEnemySS = Predict.Split("|")[1];
+            ChosenAllyFC = new List<string>(Predict.Split("|")[2].Split("~"));
+            ChosenAllyFB = new List<string>(Predict.Split("|")[3].Split("~"));
+            ChosenAllyFA = new List<string>(Predict.Split("|")[4].Split("~"));
+            ChosenEnemyFC = new List<string>(Predict.Split("|")[5].Split("~"));
+            ChosenEnemyFB = new List<string>(Predict.Split("|")[6].Split("~"));
+            ChosenEnemyFA = new List<string>(Predict.Split("|")[7].Split("~"));
+        }
+
         ListNotableAlliesGO = new List<GameObject>();
         ListNotableEnemiesGO = new List<GameObject>();
         transform.position = new Vector3(Camera.main.transform.position.x,Camera.main.transform.position.y,transform.position.z);
@@ -321,7 +351,30 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         if ((SpaceZoneNo%10==2 || SpaceZoneNo%10==4 || SpaceZoneNo%10==6))
         {
             if (ChosenVariant == 1)
-                NotableAlliesName.Add("UEC_Station");
+            {
+                float n = Random.Range(0, 100f);
+                string chosen = "";
+                if (ChosenSZD1=="")
+                {
+                    if (n <= 50f)
+                    {
+                        chosen = ("UEC-Dreadnaught");
+                    }
+                    else if (n <= 85f)
+                    {
+                        chosen = ("UEC-Flagship");
+                    }
+                    else
+                    {
+                        chosen = ("UEC-Station");
+                    }
+                    ChosenSZD1 = chosen;
+                } else
+                {
+                    chosen = ChosenSZD1;
+                }
+                NotableAlliesName.Add(chosen);
+            }
             if (ChosenVariant == 3)
                 NotableAlliesName.Add("SSTP");
         }
@@ -354,48 +407,95 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         int AllyFighterCCount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadZ / 30);
         if (AllyFighterCCount > 0 && NotableAlliesName.Count < 3)
         {
-            string[] idList = ((string)FighterGroupData["AlliesFighterC"]).Split(",");
-            for (int i = idList.Length - 1;i >= 0; i--)
+            if (ChosenAllyFC.Count > 0)
             {
-                if (NotableAlliesName.Count < 3)
+                foreach (var str in ChosenAllyFC)
                 {
-                    int id = int.Parse(idList[i]);
-                    NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
-                } else
+                    NotableAlliesName.Add(str);
+                    if (NotableAlliesName.Count >= 3)
+                    {
+                        break;
+                    }
+                }
+            } else
+            {
+                string[] idList = ((string)FighterGroupData["AlliesFighterC"]).Split(",");
+                for (int i = idList.Length - 1; i >= 0; i--)
                 {
-                    break;
+                    if (NotableAlliesName.Count < 3)
+                    {
+                        int id = int.Parse(idList[i]);
+                        NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                        ChosenAllyFC.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
         if (AllyFighterBCount > 0 && NotableAlliesName.Count < 3)
         {
-            string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
-            for (int i = idList.Length - 1;i >= 0; i--)
+            if (ChosenAllyFB.Count > 0)
             {
-                if (NotableAlliesName.Count < 3)
+                foreach (var str in ChosenAllyFB)
                 {
-                    int id = int.Parse(idList[i]);
-                    NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
-                } else
+                    NotableAlliesName.Add(str);
+                    if (NotableAlliesName.Count >= 3)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
+                for (int i = idList.Length - 1; i >= 0; i--)
                 {
-                    break;
+                    if (NotableAlliesName.Count < 3)
+                    {
+                        int id = int.Parse(idList[i]);
+                        NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                        ChosenAllyFB.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
         if (AllyFighterACount > 0 && NotableAlliesName.Count < 3)
         {
-            string[] idList = ((string)FighterGroupData["AlliesFighterA"]).Split(",");
-            for (int i = idList.Length - 1;i >= 0; i--)
+            if (ChosenAllyFA.Count > 0)
             {
-                if (NotableAlliesName.Count < 3)
+                foreach (var str in ChosenAllyFA)
                 {
-                    int id = int.Parse(idList[i]);
-                    NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
-                } else
-                {
-                    break;
+                    NotableAlliesName.Add(str);
+                    if (NotableAlliesName.Count >= 3)
+                    {
+                        break;
+                    }
                 }
             }
+            else
+            {
+                string[] idList = ((string)FighterGroupData["AlliesFighterA"]).Split(",");
+                for (int i = idList.Length - 1; i >= 0; i--)
+                {
+                    if (NotableAlliesName.Count < 3)
+                    {
+                        int id = int.Parse(idList[i]);
+                        NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                        ChosenAllyFA.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            } 
         }
         // Generate Notable Allies Model
         for (int i=0; i<NotableAlliesName.Count;i++)
@@ -452,6 +552,26 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                     }
                 }
         }
+        if (SpaceZoneNo%50==0 && SpaceZoneNo>0)
+        {
+            int n = SpaceZoneNo / 50;
+            if (ChosenEnemySS!="")
+            {
+                NotableEnemiesName.Add(ChosenEnemySS);
+            } else
+            {
+                float k = Random.Range(1, 100f);
+                if (k <= (n * 10 > 50 ? 50 : n * 10))
+                {
+                    ChosenEnemySS = "Zat-Station";
+                }
+                else
+                {
+                    ChosenEnemySS = "NO";
+                }
+                NotableEnemiesName.Add(ChosenEnemySS);
+            }
+        }
         // Get Notable Enemies
         if (EnemyArmyRating > 0)
         {
@@ -482,49 +602,94 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         int EnemyFighterCCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadZ / 30);
         if (EnemyFighterCCount > 0 && NotableEnemiesName.Count < 3)
         {
-            string[] idList = ((string)FighterGroupData["EnemiesFighterC"]).Split(",");
-            for (int i = idList.Length - 1; i >= 0; i--)
+            if (ChosenEnemyFC.Count > 0)
             {
-                if (NotableEnemiesName.Count < 3)
+                foreach (var str in ChosenEnemyFC)
                 {
-                    int id = int.Parse(idList[i]);
-                    NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                    NotableEnemiesName.Add(str);
+                    if (NotableEnemiesName.Count >= 3)
+                    {
+                        break;
+                    }
                 }
-                else
+            }
+            else
+            {
+                string[] idList = ((string)FighterGroupData["EnemiesFighterC"]).Split(",");
+                for (int i = idList.Length - 1; i >= 0; i--)
                 {
-                    break;
+                    if (NotableEnemiesName.Count < 3)
+                    {
+                        int id = int.Parse(idList[i]);
+                        NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                        ChosenEnemyFC.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
         if (EnemyFighterBCount > 0 && NotableEnemiesName.Count < 3)
         {
-            string[] idList = ((string)FighterGroupData["EnemiesFighterB"]).Split(",");
-            for (int i = idList.Length - 1; i >= 0; i--)
+            if (ChosenEnemyFB.Count > 0)
             {
-                if (NotableEnemiesName.Count < 3)
+                foreach (var str in ChosenEnemyFB)
                 {
-                    int id = int.Parse(idList[i]);
-                    NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                    NotableEnemiesName.Add(str);
+                    if (NotableEnemiesName.Count >= 3)
+                    {
+                        break;
+                    }
                 }
-                else
+            }
+            else
+            {
+                string[] idList = ((string)FighterGroupData["EnemiesFighterB"]).Split(",");
+                for (int i = idList.Length - 1; i >= 0; i--)
                 {
-                    break;
+                    if (NotableEnemiesName.Count < 3)
+                    {
+                        int id = int.Parse(idList[i]);
+                        NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                        ChosenEnemyFB.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
         if (EnemyFighterACount > 0 && NotableEnemiesName.Count < 3)
         {
-            string[] idList = ((string)FighterGroupData["EnemiesFighterA"]).Split(",");
-            for (int i = idList.Length - 1; i >= 0; i--)
+            if (ChosenEnemyFA.Count > 0)
             {
-                if (NotableEnemiesName.Count < 3)
+                foreach (var str in ChosenEnemyFA)
                 {
-                    int id = int.Parse(idList[i]);
-                    NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                    NotableEnemiesName.Add(str);
+                    if (NotableEnemiesName.Count >= 3)
+                    {
+                        break;
+                    }
                 }
-                else
+            }
+            else
+            {
+                string[] idList = ((string)FighterGroupData["EnemiesFighterA"]).Split(",");
+                for (int i = idList.Length - 1; i >= 0; i--)
                 {
-                    break;
+                    if (NotableEnemiesName.Count < 3)
+                    {
+                        int id = int.Parse(idList[i]);
+                        NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                        ChosenEnemyFA.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -583,6 +748,83 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         break;
                     }
                 }
+        }
+        // Add Data
+        if (PlayerPrefs.GetString("Predict" + PlayerPrefs.GetInt("PlayerID"))=="")
+        {
+            string Final = ChosenSZD1 + "|" + ChosenEnemySS + "|";
+            for (int i = 0; i < ChosenAllyFC.Count; i++)
+            {
+                if (i == ChosenAllyFC.Count - 1)
+                {
+                    Final += ChosenAllyFC[i];
+                }
+                else
+                {
+                    Final += ChosenAllyFC[i] + "~";
+                }
+            }
+            Final += "|";
+            for (int i = 0; i < ChosenAllyFB.Count; i++)
+            {
+                if (i == ChosenAllyFB.Count - 1)
+                {
+                    Final += ChosenAllyFB[i];
+                }
+                else
+                {
+                    Final += ChosenAllyFB[i] + "~";
+                }
+            }
+            Final += "|";
+            for (int i = 0; i < ChosenAllyFA.Count; i++)
+            {
+                if (i == ChosenAllyFA.Count - 1)
+                {
+                    Final += ChosenAllyFA[i];
+                }
+                else
+                {
+                    Final += ChosenAllyFA[i] + "~";
+                }
+            }
+            Final += "|";
+            for (int i = 0; i < ChosenEnemyFC.Count; i++)
+            {
+                if (i == ChosenEnemyFC.Count - 1)
+                {
+                    Final += ChosenEnemyFC[i];
+                }
+                else
+                {
+                    Final += ChosenEnemyFC[i] + "~";
+                }
+            }
+            Final += "|";
+            for (int i = 0; i < ChosenEnemyFB.Count; i++)
+            {
+                if (i == ChosenEnemyFB.Count - 1)
+                {
+                    Final += ChosenEnemyFB[i];
+                }
+                else
+                {
+                    Final += ChosenEnemyFB[i] + "~";
+                }
+            }
+            Final += "|";
+            for (int i = 0; i < ChosenEnemyFA.Count; i++)
+            {
+                if (i == ChosenEnemyFA.Count - 1)
+                {
+                    Final += ChosenEnemyFA[i];
+                }
+                else
+                {
+                    Final += ChosenEnemyFA[i] + "~";
+                }
+            }
+            PlayerPrefs.SetString("Predict" + PlayerPrefs.GetInt("PlayerID"), Final);
         }
     }
     #endregion

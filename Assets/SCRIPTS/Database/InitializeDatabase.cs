@@ -420,6 +420,12 @@ public class InitializeDatabase : MonoBehaviour
                 "SessionID INTEGER NOT NULL," +
                 "SessionCurrentPlace TEXT NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
+/*            // Table for SessionPredictData
+            "CREATE TABLE IF NOT EXISTS SessionPredictData" +
+                "(ID INTEGER," +
+                "SessionID INTEGER NOT NULL," +
+                "SessionPrediction TEXT NOT NULL," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +*/
                 "";
         // Initialize Data
         // ArsenalWeapon

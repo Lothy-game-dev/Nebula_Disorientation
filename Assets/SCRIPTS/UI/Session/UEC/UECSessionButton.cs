@@ -87,7 +87,8 @@ public class UECSessionButton : MonoBehaviour
             if ((int)Data["FuelCell"] >= 1)
             {
                 FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
-                FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 3f);
+                FindObjectOfType<GameplayExteriorController>().GenerateLoadingScene(2f);
+                FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 4f);
                 StartCoroutine(MoveToSessionSum());
             } else
             {
@@ -99,23 +100,23 @@ public class UECSessionButton : MonoBehaviour
 
     public void Continue()
     {
-        Controller.GenerateBlackFadeClose(1f, 3f);
+        Controller.GenerateBlackFadeClose(0.25f, 3f);
         StartCoroutine(MoveToLOTW());
     }
 
     private IEnumerator MoveToLOTW()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         Scene.GetComponent<BackgroundBrieflyMoving>().enabled = false;
         FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "LOTW");
-        Controller.GenerateBlackFadeOpen(LOTW.transform.position, 1.5f);
         Controller.ChangeToScene(LOTW);
+        Controller.GenerateLoadingScene(2f);
         gameObject.SetActive(false);
     }
     
     private IEnumerator MoveToSessionSum()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
         // End Session
         PlayerPrefs.SetString("isFailed", "F");
         SceneManager.LoadSceneAsync("SessionSummary");

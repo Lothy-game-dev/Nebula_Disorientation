@@ -226,7 +226,29 @@ public class SpaceZoneGenerator : MonoBehaviour
             EnemyArmyY = float.Parse(EnemyWarship.Split("-")[1]);
             EnemyArmyZ = float.Parse(EnemyWarship.Split("-")[2]);
         }
-
+        // Get Predict data
+        string Predict = PlayerPrefs.GetString("Predict" + PlayerPrefs.GetInt("PlayerID"));
+        Debug.Log(Predict);
+        string ChosenSZD1 = "",
+            ChosenEnemySS = "";
+        List<string> ChosenAllyFC = new();
+        List<string> ChosenAllyFB = new();
+        List<string> ChosenAllyFA = new();
+        List<string> ChosenEnemyFC = new();
+        List<string> ChosenEnemyFB = new();
+        List<string> ChosenEnemyFA = new();
+        if (Predict.Length > 0)
+        {
+            ChosenSZD1 = Predict.Split("|")[0];
+            ChosenEnemySS = Predict.Split("|")[1];
+            ChosenAllyFC = new List<string>(Predict.Split("|")[2].Split("~"));
+            ChosenAllyFB = new List<string>(Predict.Split("|")[3].Split("~"));
+            ChosenAllyFA = new List<string>(Predict.Split("|")[4].Split("~"));
+            ChosenEnemyFC = new List<string>(Predict.Split("|")[5].Split("~"));
+            ChosenEnemyFB = new List<string>(Predict.Split("|")[6].Split("~"));
+            ChosenEnemyFA = new List<string>(Predict.Split("|")[7].Split("~"));
+        }
+        PlayerPrefs.SetString("Predict" + PlayerPrefs.GetInt("PlayerID"), "");
         // Enemy Space station Spawn Chance
         float EnemySpaceStationSpawn = 0;
 
@@ -267,11 +289,21 @@ public class SpaceZoneGenerator : MonoBehaviour
         int Scale50SSC = SpaceZoneNo / 50;
         if (Scale50SSC >= 1 && SpaceZoneNo % 50==0)
         {
-            if (Scale50SSC * 10 / 100f > 50f)
+            if (ChosenEnemySS=="NO")
             {
-                EnemySpaceStationSpawn = 50f;
+                EnemySpaceStationSpawn = 0;
+            } else if (ChosenEnemySS== "Zat-Station")
+            {
+                EnemySpaceStationSpawn = 100;
             } else
-            EnemySpaceStationSpawn = Scale50SSC * 10 / 100f;
+            {
+                if (Scale50SSC * 10 / 100f > 50f)
+                {
+                    EnemySpaceStationSpawn = 50f;
+                }
+                else
+                    EnemySpaceStationSpawn = Scale50SSC * 10 / 100f;
+            }
         }
         if (Scale50SSC >= 1)
         {
@@ -359,7 +391,6 @@ public class SpaceZoneGenerator : MonoBehaviour
                 }
             }
         }
-
         // Get Data Fighter Group
         Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo>350? "350":""));
         
@@ -376,7 +407,16 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i=0;i<AllyFighterACount;i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterA"]).Split(",");
-            AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            if (ChosenAllyFA.Count > 0)
+            {
+                int ID = (int)FindObjectOfType<AccessDatabase>().GetDataAlliesByName(ChosenAllyFA[0])["ID"];
+                AllyID.Add(ID);
+                ChosenAllyFA.RemoveAt(0);
+            }
+            else
+            {
+                AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            }
             string Spawnstr = "AA";
             if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
             {
@@ -397,7 +437,16 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < AllyFighterBCount; i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
-            AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            if (ChosenAllyFB.Count > 0)
+            {
+                int ID = (int)FindObjectOfType<AccessDatabase>().GetDataAlliesByName(ChosenAllyFB[0])["ID"];
+                AllyID.Add(ID);
+                ChosenAllyFB.RemoveAt(0);
+            }
+            else
+            {
+                AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            }
             AllyFighterIDs.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
             string Spawnstr = "AB";
             if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
@@ -419,7 +468,16 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < AllyFighterCCount; i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterC"]).Split(",");
-            AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            if (ChosenAllyFC.Count > 0)
+            {
+                int ID = (int)FindObjectOfType<AccessDatabase>().GetDataAlliesByName(ChosenAllyFC[0])["ID"];
+                AllyID.Add(ID);
+                ChosenAllyFC.RemoveAt(0);
+            }
+            else
+            {
+                AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            }
             string Spawnstr = "AC";
             if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
             {
@@ -489,7 +547,16 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < EnemyFighterACount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterA"]).Split(",");
-            EnemyIDA.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            if (ChosenEnemyFA.Count > 0)
+            {
+                int ID = (int)FindObjectOfType<AccessDatabase>().GetDataEnemyByName(ChosenEnemyFA[0])["ID"];
+                EnemyIDA.Add(ID);
+                ChosenEnemyFA.RemoveAt(0);
+            }
+            else
+            {
+                EnemyIDA.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            }
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EA");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
@@ -505,7 +572,17 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < EnemyFighterBCount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterB"]).Split(",");
-            EnemyIDB.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            if (ChosenEnemyFB.Count > 0)
+            {
+                int ID = (int)FindObjectOfType<AccessDatabase>().GetDataEnemyByName(ChosenEnemyFB[0])["ID"];
+                EnemyIDB.Add(ID);
+                ChosenEnemyFB.RemoveAt(0);
+            }
+            else
+            {
+                EnemyIDB.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            }
+            
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EB");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
@@ -521,7 +598,16 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < EnemyFighterCCount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterC"]).Split(",");
-            EnemyIDC.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            if (ChosenEnemyFC.Count > 0)
+            {
+                int ID = (int)FindObjectOfType<AccessDatabase>().GetDataEnemyByName(ChosenEnemyFC[0])["ID"];
+                EnemyIDC.Add(ID);
+                ChosenEnemyFC.RemoveAt(0);
+            }
+            else
+            {
+                EnemyIDC.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            }
             Dictionary<string, object> SpawnPosData = FindObjectOfType<AccessDatabase>().GetSpawnPositionDataByType("EC");
             string[] VectorRangeTopLeft = ((string)SpawnPosData["PositionLimitTopLeft"]).Split("|");
             string[] VectorRangeBottomRight = ((string)SpawnPosData["PositionLimitBottomRight"]).Split("|");
@@ -838,18 +924,39 @@ public class SpaceZoneGenerator : MonoBehaviour
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             // Chance
-            float k = Random.Range(0, 100f);
-            if (k<=50)
+            if (ChosenSZD1=="")
             {
-                AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
-            } else if (k<=85)
-            {
-                AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                float k = Random.Range(0, 100f);
+                if (k <= 50)
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (k <= 85)
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else
+                {
+                    AllySSSpawner.SpaceStationID = new int[] { 1 };
+                    AllySSSpawner.SpaceStationPosition = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
+                    AllySSSpawner.SpawnAllySpaceStation();
+                }
             } else
             {
-                AllySSSpawner.SpaceStationID = new int[] { 1 };
-                AllySSSpawner.SpaceStationPosition = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
-                AllySSSpawner.SpawnAllySpaceStation();
+                if (ChosenSZD1 == "UEC-Dreadnaught")
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (ChosenSZD1 == "UEC-Flagship")
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (ChosenSZD1 == "UEC-Station")
+                {
+                    AllySSSpawner.SpaceStationID = new int[] { 1 };
+                    AllySSSpawner.SpaceStationPosition = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
+                    AllySSSpawner.SpawnAllySpaceStation();
+                }            
             }
         }
         // Enemy Space Station
