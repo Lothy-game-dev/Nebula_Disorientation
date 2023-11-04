@@ -38,6 +38,7 @@ public class CinematicButton : MonoBehaviour
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         cine = FindAnyObjectByType<CinematicScene>();
+        //check to prevent from spamming the skip button
         if (!cine.isLoading)
         {
             cine.Part++;

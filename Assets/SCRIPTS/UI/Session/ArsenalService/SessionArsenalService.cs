@@ -124,6 +124,7 @@ public class SessionArsenalService : MonoBehaviour
         Effect.GetComponent<TextMeshPro>().text = "Repair <color=green>" + ServiceData["Effect"].ToString() + "% </color>Max Health";
 
         string pricecolor = "green";
+        // check if enough money
         if (PCash >= int.Parse(ServicePrice[grade]))
         {
             isEnoughMoney = true;
@@ -182,7 +183,7 @@ public class SessionArsenalService : MonoBehaviour
     #region Lock Item
     public void LockItem()
     {
-        //Lock if 
+        //Lock if current hp that unmet the requirement
         for (int i = 0; i < Item.Length; i++)
         {
             Item[i].transform.GetChild(1).gameObject.SetActive(true);

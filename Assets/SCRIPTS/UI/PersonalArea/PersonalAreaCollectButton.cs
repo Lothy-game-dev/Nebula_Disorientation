@@ -87,8 +87,6 @@ public class PersonalAreaCollectButton : MonoBehaviour
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
                     "Collect Failed.\nPlease try again later.", 5f); break;
             case "Success":
-                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
-                    "Collect Successfully.\nSee you tomorrow!.", 5f);
                 FindObjectOfType<UECMainMenuController>().GetData();
                 gameObject.AddComponent<CursorUnallowed>();
                 FindAnyObjectByType<AccessDatabase>().SalaryCollected(FindObjectOfType<UECMainMenuController>().PlayerId);
