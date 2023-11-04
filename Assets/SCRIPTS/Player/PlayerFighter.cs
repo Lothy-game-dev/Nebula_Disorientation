@@ -30,6 +30,7 @@ public class PlayerFighter : FighterShared
     public AudioSource DashAudioSource;
     public float TotalHealing;
     public GameplayInteriorController ControllerMain;
+    public GameObject HealEffect;
     #endregion
     #region NormalVariables
     private float[] PowerAndConsCD;
@@ -47,6 +48,7 @@ public class PlayerFighter : FighterShared
     public Dictionary<string, int> Consumables;
     public List<GameObject> ConsumableObject;
     public float audioScale;
+    private float HealEffDelay;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -95,6 +97,7 @@ public class PlayerFighter : FighterShared
         {
             testTimer -= Time.deltaTime;
         }
+        HealEffDelay -= Time.deltaTime;
         if (!ControllerMain.IsInLoading && !ControllerMain.isEnding)
         {
             // Power Usage
@@ -526,6 +529,30 @@ public class PlayerFighter : FighterShared
         }
         
         CurrentBarrier = MaxBarrier;
+    }
+
+    public void GenerateHealingEffect(float Scale)
+    {
+        if (HealEffDelay <= 0f)
+        {
+            HealEffDelay = 0.5f;
+            StartCoroutine(GenerateHeal(Scale));
+        }
+    }
+
+    private IEnumerator GenerateHeal(float Scale)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            float randomX = Random.Range(-30f, 30f);
+            float randomY = Random.Range(-30f, 30f);
+            GameObject HealEff = Instantiate(HealEffect, new Vector2(transform.position.x + randomX, transform.position.y + randomY), Quaternion.identity);
+            HealEff.transform.localScale = HealEffect.transform.localScale * Scale;
+            HealEff.SetActive(true);
+            HealEff.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 100f);
+            Destroy(HealEff, 1f);
+            yield return new WaitForSeconds(0.3f);
+        }
     }
     #endregion
 }
