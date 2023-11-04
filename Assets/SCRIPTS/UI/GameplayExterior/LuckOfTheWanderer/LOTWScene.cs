@@ -172,7 +172,7 @@ public class LOTWScene : MonoBehaviour
             else
             {
                 RerollButton.transform.GetChild(1).GetComponent<TextMeshPro>().text = "(" + RerollChance + " time" + (RerollChance > 1 ? "s" : "") + " left)";
-                RerollButton.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Reroll\n(" + ShardCostReroll[3 - RerollChance] + " <sprite index='0'>)";
+                RerollButton.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Reroll\n-" + ShardCostReroll[3 - RerollChance] + " <sprite index='0'>";
             }
 
             RedCardAlert.SetActive(false);

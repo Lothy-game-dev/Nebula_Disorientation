@@ -664,7 +664,17 @@ public class FighterMovement : MonoBehaviour
                                 int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
                                 if (k == -1)
                                 {
-                                    DownMove();
+                                    if (als.Class == "C")
+                                    {
+                                        if (CurrentSpeed / MovingSpeed < 0.5f)
+                                        {
+                                            UpMove();
+                                        } else
+                                        {
+                                            DownMove();
+                                        }
+                                    } else
+                                        DownMove();
                                     LeftMove();
                                 }
                                 else if (k == 0)
@@ -674,7 +684,19 @@ public class FighterMovement : MonoBehaviour
                                 }
                                 else if (k == 1)
                                 {
-                                    DownMove();
+                                    if (als.Class == "C")
+                                    {
+                                        if (CurrentSpeed / MovingSpeed < 0.5f)
+                                        {
+                                            UpMove();
+                                        }
+                                        else
+                                        {
+                                            DownMove();
+                                        }
+                                    }
+                                    else
+                                        DownMove();
                                     RightMove();
                                 }
                                 InAttackRangeCount = 1;
@@ -689,7 +711,19 @@ public class FighterMovement : MonoBehaviour
                                     return;
                                 }
                                 int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                                DownMove();
+                                if (als.Class == "C")
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        UpMove();
+                                    }
+                                    else
+                                    {
+                                        DownMove();
+                                    }
+                                }
+                                else
+                                    DownMove();
                                 if (k == -1)
                                 {
                                     LeftMove();
@@ -779,7 +813,19 @@ public class FighterMovement : MonoBehaviour
                 int k = CheckIsUpOrDownMovement(als.EscortObject, HeadObject, gameObject);
                 if (CurrentSpeed > 400f)
                 {
-                    DownMove();
+                    if (als.Class == "C")
+                    {
+                        if (CurrentSpeed / MovingSpeed < 0.5f)
+                        {
+                            UpMove();
+                        }
+                        else
+                        {
+                            DownMove();
+                        }
+                    }
+                    else
+                        DownMove();
                 } else if (CurrentSpeed <100f)
                 {
                     UpMove();
@@ -831,7 +877,19 @@ public class FighterMovement : MonoBehaviour
                             int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
                             if (k == -1)
                             {
-                                DownMove();
+                                if (es.Tier == 1)
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        UpMove();
+                                    }
+                                    else
+                                    {
+                                        DownMove();
+                                    }
+                                }
+                                else
+                                    DownMove();
                                 LeftMove();
                             }
                             else if (k == 0)
@@ -841,7 +899,19 @@ public class FighterMovement : MonoBehaviour
                             }
                             else if (k == 1)
                             {
-                                DownMove();
+                                if (es.Tier == 1)
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        UpMove();
+                                    }
+                                    else
+                                    {
+                                        DownMove();
+                                    }
+                                }
+                                else
+                                    DownMove();
                                 RightMove();
                             }
                             InAttackRangeCount = 1;
@@ -856,7 +926,19 @@ public class FighterMovement : MonoBehaviour
                                 return;
                             }
                             int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
-                            DownMove();
+                            if (es.Tier == 1)
+                            {
+                                if (CurrentSpeed / MovingSpeed < 0.5f)
+                                {
+                                    UpMove();
+                                }
+                                else
+                                {
+                                    DownMove();
+                                }
+                            }
+                            else
+                                DownMove();
                             if (k == -1)
                             {
                                 LeftMove();
