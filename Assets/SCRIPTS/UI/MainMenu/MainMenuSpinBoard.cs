@@ -80,7 +80,7 @@ public class MainMenuSpinBoard : MonoBehaviour
 
     private IEnumerator BiggerModel(float initScaleX, float initScaleY, float initScaleZ)
     {
-        for (int i=0;i<40;i++)
+        for (int i=0;i<39;i++)
         {
             currentSpinModel.transform.localScale =
                 new Vector3(currentSpinModel.transform.localScale.x + initScaleX / 40,

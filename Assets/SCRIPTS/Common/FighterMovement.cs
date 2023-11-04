@@ -190,14 +190,14 @@ public class FighterMovement : MonoBehaviour
         SpeedUp = 0;
     }
 
-    public void LeftMove()
+    public void LeftMove(int scale = 1)
     {
-        RotateDirection = -1;
+        RotateDirection = -1 * scale;
     }
 
-    public void RightMove()
+    public void RightMove(int scale = 1)
     {
-        RotateDirection = 1;
+        RotateDirection = 1 * scale;
     }
 
     public void NoLeftRightMove()
@@ -493,6 +493,21 @@ public class FighterMovement : MonoBehaviour
         {
             ChosenRandom = Random.Range(-100f, 100f);
         }
+        int scale = 1;
+        if (als!=null)
+        {
+            if (als.name.Contains("Zartillery"))
+            {
+                scale = 3;
+            }
+        }
+        if (es != null)
+        {
+            if (es.name.Contains("Ranger"))
+            {
+                scale = 3;
+            }
+        }
         if (LimitString == "Left")
         {
             GameObject go = new GameObject();
@@ -501,17 +516,32 @@ public class FighterMovement : MonoBehaviour
             Destroy(go);
             if (k==1)
             {
-                RightMove();
+                RightMove(scale);
             } else if (k==-1)
             {
-                LeftMove();
+                LeftMove(scale);
             } else if (k==0)
             {
                 UpMove();
                 NoLeftRightMove();
                 LimitString = "";
-                ChosenRandom = -200f;
+                ChosenRandom = -200f; 
+                
                 LimitDelay = 3f;
+                if (als != null)
+                {
+                    if (als.name.Contains("Zartillery"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
+                if (es != null)
+                {
+                    if (es.name.Contains("Ranger"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
             }
         } 
         else if (LimitString == "Right")
@@ -522,11 +552,11 @@ public class FighterMovement : MonoBehaviour
             Destroy(go);
             if (k == 1)
             {
-                RightMove();
+                RightMove(scale);
             }
             else if (k == -1)
             {
-                LeftMove();
+                LeftMove(scale);
             }
             else if (k == 0)
             {
@@ -535,6 +565,20 @@ public class FighterMovement : MonoBehaviour
                 LimitString = "";
                 ChosenRandom = -200f;
                 LimitDelay = 3f;
+                if (als != null)
+                {
+                    if (als.name.Contains("Zartillery"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
+                if (es != null)
+                {
+                    if (es.name.Contains("Ranger"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
             }
         }
         else if (LimitString == "Top")
@@ -545,11 +589,11 @@ public class FighterMovement : MonoBehaviour
             Destroy(go);
             if (k == 1)
             {
-                RightMove();
+                RightMove(scale);
             }
             else if (k == -1)
             {
-                LeftMove();
+                LeftMove(scale);
             }
             else if (k == 0)
             {
@@ -558,6 +602,20 @@ public class FighterMovement : MonoBehaviour
                 LimitString = "";
                 ChosenRandom = -200f;
                 LimitDelay = 3f;
+                if (als != null)
+                {
+                    if (als.name.Contains("Zartillery"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
+                if (es != null)
+                {
+                    if (es.name.Contains("Ranger"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
             }
         }
         else if (LimitString == "Bottom")
@@ -568,11 +626,11 @@ public class FighterMovement : MonoBehaviour
             Destroy(go);
             if (k == 1)
             {
-                RightMove();
+                RightMove(scale);
             }
             else if (k == -1)
             {
-                LeftMove();
+                LeftMove(scale);
             }
             else if (k == 0)
             {
@@ -581,6 +639,20 @@ public class FighterMovement : MonoBehaviour
                 LimitString = "";
                 ChosenRandom = -200f;
                 LimitDelay = 3f;
+                if (als != null)
+                {
+                    if (als.name.Contains("Zartillery"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
+                if (es != null)
+                {
+                    if (es.name.Contains("Ranger"))
+                    {
+                        LimitDelay = 0f;
+                    }
+                }
             }
         }
     }
