@@ -71,6 +71,8 @@ public class SessionSummary : MonoBehaviour
         isFailed = (PlayerPrefs.GetString("isFailed") == "T");
         PlayerPrefs.SetString("isFailed", "");
 
+        FindObjectOfType<AccessDatabase>().UpdateSessionFuelEnergy((int)Data["SessionID"], true, int.Parse(Data["EnemyDestroyed"].ToString()) * 10);
+
         int SZno = (isFailed ? int.Parse(Data["CurrentStage"].ToString()) - 1 : int.Parse(Data["CurrentStage"].ToString()));
         SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text = SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text.Replace("?", "<color=#3bccec>" + SZno.ToString() + "</color>");
         EnemyDestroyed.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + "<color=#3bccec>" + Data["EnemyDestroyed"].ToString() + "</color>";

@@ -186,7 +186,7 @@ public class PersonalArea : MonoBehaviour
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["FuelEnergy"]).ToString();
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
-        CurrentSalary.GetComponent<TMP_Text>().text = Data["DailyIncome"] + " <sprite index='3'> <br><br> " + Data["DailyIncomeShard"] + " <sprite index= '0'> " ;
+        CurrentSalary.GetComponent<TMP_Text>().text = Data["DailyIncome"] + " <sprite index='3'> " + (int.Parse(Data["DailyIncomeShard"].ToString()) == 0 ? "" : Data["DailyIncomeShard"] + " <sprite index='0'> ");
         if ((int)Data["FuelCell"] == 10)
         {
             FuelCell.transform.GetChild(2).gameObject.SetActive(false);
@@ -205,10 +205,10 @@ public class PersonalArea : MonoBehaviour
         Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = Color.green + Color.red;
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
         RankDesc.GetComponent<TMP_Text>().text =  RankCondition;
-        RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>";
+        RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>  " + (int.Parse(RankList[int.Parse(Id) - 1][8]) == 0 ? "" : RankList[int.Parse(Id) - 1][8] + " <sprite index='0'> ");
         if (!isUnranked)
         {
-            CurrentSalary.GetComponent<TMP_Text>().text = PlayerInformation["DailyIncome"] + " <sprite index='3'> <br><br> " + PlayerInformation["DailyIncomeShard"] + " <sprite index='0'> "; ;
+            CurrentSalary.GetComponent<TMP_Text>().text = PlayerInformation["DailyIncome"] + " <sprite index='3'>  " + (int.Parse(PlayerInformation["DailyIncomeShard"].ToString()) == 0 ? "" : PlayerInformation["DailyIncomeShard"] + " <sprite index='0'> ");
         }
     }
     #endregion
