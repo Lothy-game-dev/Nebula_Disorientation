@@ -14,6 +14,7 @@ public class MainMenuBackButton : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject CurrentScene;
     public GameObject BackScene;
+    public OptionMenu OptionMenu;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -41,6 +42,13 @@ public class MainMenuBackButton : MonoBehaviour
     private void OnMouseDown()
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
+        if (CurrentScene.name.Contains("Option"))
+        {
+            FindAnyObjectByType<AccessDatabase>().UpdateOptionSetting(Mathf.RoundToInt(float.Parse(OptionMenu.Master)),
+                                    Mathf.RoundToInt(float.Parse(OptionMenu.Music)), Mathf.RoundToInt(float.Parse(OptionMenu.Sound)), Mathf.RoundToInt(float.Parse(OptionMenu.FpsCounter)), OptionMenu.Resol);
+            OptionMenu.IsSaved = true;
+            Camera.main.GetComponent<SoundController>().CheckSoundVolumeByDB();
+        }
         if (PlayerPrefs.GetInt("BackToUEC") == 1)
         {
             PlayerPrefs.SetInt("BackToUEC", 0);
