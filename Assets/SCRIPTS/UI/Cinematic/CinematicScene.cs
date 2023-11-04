@@ -85,6 +85,7 @@ public class CinematicScene : MonoBehaviour
             Background.transform.localScale = new Vector3(Background.transform.localScale.x - 0.2f / 300f, Background.transform.localScale.y - 0.2f / 300f, Background.transform.localScale.z);
             yield return new WaitForSeconds(duration / 300f);
         }
+        //if the bg animation has stopped that means its ready to go to the next cine
         GenerateBlackFadeClose(2f);
         Part++;
     }
@@ -163,6 +164,7 @@ public class CinematicScene : MonoBehaviour
 
     private IEnumerator BlackFadeClose(GameObject Fade, float duration)
     {
+        isLoading = true;
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;
@@ -171,6 +173,7 @@ public class CinematicScene : MonoBehaviour
             yield return new WaitForSeconds(duration / 50f);
         }
         Destroy(Fade);
+        // When the animation done, open the black fade
         GenerateBlackFadeOpen(transform.position, 3f);
     }
     #endregion
