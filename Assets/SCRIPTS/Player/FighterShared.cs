@@ -699,7 +699,7 @@ public class FighterShared : MonoBehaviour
     }
     #endregion
     #region Calculate Damage Received
-    public void ReceiveDamage(float damage, GameObject DamageSource)
+    public void ReceiveDamage(float damage, GameObject DamageSource, bool isPower=false)
     {
         damage = damage *
             (LOTWEffect != null && !LOTWEffect.LOTWAffectEnvironment ? 1 : HazEnv.HazardNDAllDamageScale) * 
@@ -730,6 +730,10 @@ public class FighterShared : MonoBehaviour
         }
         if (CurrentBarrier > 0)
         {
+            if (isPower)
+            {
+                damage = damage * 50 / 100f;
+            }
             if (GetComponent<PlayerFighter>() == null)
             {
                 Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);

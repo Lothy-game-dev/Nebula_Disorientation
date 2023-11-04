@@ -53,6 +53,10 @@ public class SoundController : MonoBehaviour
         {
             GetComponent<AudioSource>().volume = MasterVolume / 100f * SFXVolume / 100f;
         }
+        if (GetComponent<SoundSFXGeneratorController>()!=null)
+        {
+            GetComponent<SoundSFXGeneratorController>().SetSoundScaleInit(MasterVolume / 100f * SFXVolume / 100f);
+        }
     }
     #endregion
 }

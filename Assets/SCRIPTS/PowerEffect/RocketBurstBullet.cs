@@ -281,7 +281,7 @@ public class RocketBurstBullet : MonoBehaviour
                 float FinalDamage = Damage * LOTWEffectScale;
                 if (col2.GetComponent<FighterShared>() != null)
                 {
-                    col2.GetComponent<FighterShared>().ReceiveDamage(FinalDamage, Fighter);
+                    col2.GetComponent<FighterShared>().ReceiveDamage(FinalDamage, Fighter, true);
                 } else
                 {
                     if (col2.GetComponent<WSShared>() != null)

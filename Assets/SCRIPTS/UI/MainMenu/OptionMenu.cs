@@ -71,8 +71,6 @@ public class OptionMenu : MainMenuSceneShared
         // Save the setting and apply to the application
         if (IsSaved)
         {
-            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                "Save Successfully!", 5f);
             Application.targetFrameRate = int.Parse(FpsCounter);
             if ("FullScreen".Equals(Resol))
             {

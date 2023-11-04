@@ -1,3 +1,7 @@
+
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +29,8 @@ public class BlackHole : MonoBehaviour
     private float centerRadius;
     private float ResetHitTimer;
     private bool alreadyDealDmg;
+    private float ShredTimer;
+    private bool alreadyShred;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -49,13 +55,15 @@ public class BlackHole : MonoBehaviour
             radius = RadiusWhenCreate;
             centerRadius = centerRadius * RadiusWhenCreate/radius;
         }
+        alreadyShred = false;
+        ShredTimer = 6.5f;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
-        transform.Rotate(new Vector3(0, 0, isBlackHole ? -1 : 1));
+        transform.Rotate(new Vector3(0, 0, isBlackHole ? -10 : 1));
         // Deal dmg to all hit layer within range
         /*DealDamageToLayerInRange(HitLayer);*/
         // Reset hit timer
@@ -67,6 +75,15 @@ public class BlackHole : MonoBehaviour
         {
             alreadyDealDmg = false;
             ResetHitTimer = 1f / RateOfHit;
+        }
+        ShredTimer -= Time.deltaTime;
+        if (ShredTimer<=0f)
+        {
+            if (!alreadyShred)
+            {
+                alreadyShred = true;
+                StartCoroutine(BlackholeShred());
+            }
         }
     }
     #endregion
@@ -99,6 +116,23 @@ public class BlackHole : MonoBehaviour
             float ForceX = pullForceCal * vectorDis.x / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
             float ForceY = pullForceCal * vectorDis.y / Mathf.Sqrt(vectorDis.x * vectorDis.x + vectorDis.y * vectorDis.y);
             return new Vector2(ForceX, ForceY);
+        }
+    }
+
+    private IEnumerator BlackholeShred()
+    {
+        float InitScaleX = transform.localScale.x;
+        float InitScaleY = transform.localScale.y;
+        for (int i=0; i<20; i++)
+        {
+            transform.localScale = new Vector3(transform.localScale.x - InitScaleX / 20f, transform.localScale.y - InitScaleY / 20f, transform.localScale.z);
+            Color c = transform.GetComponent<SpriteRenderer>().color;
+            c.a -= 0.05f;
+            transform.GetComponent<SpriteRenderer>().color = c;
+            Color c1 = transform.GetChild(2).GetComponent<SpriteRenderer>().color;
+            c1.a -= 0.05f;
+            transform.GetChild(2).GetComponent<SpriteRenderer>().color = c1;
+            yield return new WaitForSeconds(0.025f);
         }
     }
 
