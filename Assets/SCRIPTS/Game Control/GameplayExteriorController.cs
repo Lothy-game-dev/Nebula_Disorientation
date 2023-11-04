@@ -12,6 +12,7 @@ public class GameplayExteriorController : MonoBehaviour
     public GameObject BlackFade;
     public GameObject LOTWScene;
     public GameObject UECScene;
+    public GameObject LoadingScene;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -42,6 +43,19 @@ public class GameplayExteriorController : MonoBehaviour
         bf.SetActive(true);
         StartCoroutine(BlackFadeOpen(bf, duration));
     }
+
+    public void GenerateLoadingScene(float duration)
+    {
+        GameObject Load = Instantiate(LoadingScene,
+            new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, LoadingScene.transform.position.z), Quaternion.identity);
+        Load.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+        Load.transform.SetParent(Camera.main.transform);
+        Load.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 1002;
+        Load.transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = 1001;
+        Load.transform.GetChild(0).GetComponent<LoadingScene>().LoadingTime = duration;
+        Load.SetActive(true);
+    }
+
 
     private IEnumerator BlackFadeOpen(GameObject Fade, float duration)
     {
@@ -76,7 +90,7 @@ public class GameplayExteriorController : MonoBehaviour
             } else if (PlayerPrefs.GetString("InitTeleport")=="UEC")
             {
                 ChangeToScene(UECScene);
-                GenerateBlackFadeOpen(UECScene.transform.position, 2f);
+                GenerateLoadingScene(2f);
             }
             PlayerPrefs.SetString("InitTeleport","");
         }

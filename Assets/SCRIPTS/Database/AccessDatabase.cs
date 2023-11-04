@@ -2624,6 +2624,37 @@ public class AccessDatabase : MonoBehaviour
         } else
         return data;
     }
+
+    public Dictionary<string, object> GetDataEnemyByName(string enemyName)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select EnemyID, MainTarget, EnemyWeapons, EnemyStats, EnemyPower, DefeatReward, EnemyTier from Enemies WHERE EnemyName='" + enemyName + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("ID", dataReader.GetInt32(0));
+            data.Add("MainTarget", dataReader.GetString(1));
+            data.Add("Weapons", dataReader.GetString(2));
+            data.Add("Stats", dataReader.GetString(3));
+            data.Add("Power", dataReader.GetString(4));
+            data.Add("DefeatReward", dataReader.GetString(5));
+            data.Add("TierColor", dataReader.GetString(6));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
     #endregion
     #region Access Warship
     public List<List<string>> GetAllWarship()
@@ -4215,6 +4246,89 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
+/*    public string AddSessionPrediction(int PlayerID, string Predict)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "INSERT INTO SessionPredictData (SessionID, SessionPrediction)" +
+                " VALUES (" + n + ",'" + Predict +"')";
+            int k = dbCheckCommand.ExecuteNonQuery();
+            dbConnection.Close();
+            if (k!=1)
+            {
+                return "Fail";
+            } else
+            {
+                return "Success";
+            }
+        }
+    }
+
+    public string GetSessionPrediction(int PlayerID)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnection.Close();
+            return "Fail";
+        }
+        else
+        {
+            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT * FROM SessionPredictData WHERE SessionID =" + n;
+            IDataReader reader = dbCheckCommand.ExecuteReader();
+            string Prediction = "";
+            while (reader.Read())
+            {
+                Prediction = reader.GetString(2);
+            }
+            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+            dbCheckCommand1.CommandText = "DELETE FROM SessionPredictData WHERE SessionID =" + n;
+            dbCheckCommand1.ExecuteNonQuery();
+            dbConnection.Close();
+            return Prediction;
+        }
+    }*/
+
     public string UpdateSessionInfo(int PlayerID, string Type, string Value)
     {
         // Open DB
@@ -4569,6 +4683,36 @@ public class AccessDatabase : MonoBehaviour
         {
             check = true;
             data.Add("Name", dataReader.GetString(0));
+            data.Add("MainTarget", dataReader.GetString(1));
+            data.Add("Weapons", dataReader.GetString(2));
+            data.Add("Stats", dataReader.GetString(3));
+            data.Add("Power", dataReader.GetString(4));
+            data.Add("TierColor", dataReader.GetString(5));
+        }
+        dbConnection.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
+            return data;
+    }
+
+    public Dictionary<string, object> GetDataAlliesByName(string Name)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        dbCheckCommand.CommandText = "Select AllyID, MainTarget, AllyWeapons, AllyStats, AllyPower, AllyTier from Allies WHERE AllyName='" + Name + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            data.Add("ID", dataReader.GetInt32(0));
             data.Add("MainTarget", dataReader.GetString(1));
             data.Add("Weapons", dataReader.GetString(2));
             data.Add("Stats", dataReader.GetString(3));
