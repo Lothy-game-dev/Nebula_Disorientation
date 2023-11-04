@@ -77,12 +77,10 @@ public class LaserBeam : Powers
                 //slow down Fighter when firing
                 if (Fighter.GetComponent<PlayerMovement>() != null)
                 {
-                    Fighter.GetComponent<PlayerMovement>().LaserBeamSlowScale = 1f;
                     Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 1;
                 }
                 else if (Fighter.GetComponent<FighterMovement>() != null)
                 {
-                    Fighter.GetComponent<FighterMovement>().LaserBeamSlowScale = 1;
                     Fighter.GetComponent<FighterMovement>().ExteriorROTSpeed = 1;
                 }
             }
@@ -97,12 +95,10 @@ public class LaserBeam : Powers
         //slow down Fighter when firing
         if (Fighter.GetComponent<PlayerMovement>()!=null)
         {
-            Fighter.GetComponent<PlayerMovement>().LaserBeamSlowScale = 0.5f;
             Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
             BeamAngle = Fighter.GetComponent<PlayerMovement>().CurrentRotateAngle;
         } else if (Fighter.GetComponent<FighterMovement>() != null)
         {
-            Fighter.GetComponent<FighterMovement>().LaserBeamSlowScale = 0.5f;
             Fighter.GetComponent<FighterMovement>().ExteriorROTSpeed = 0.5f;
             BeamAngle = Fighter.GetComponent<FighterMovement>().CurrentRotateAngle;
         }

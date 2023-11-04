@@ -86,8 +86,8 @@ public class AccessDatabase : MonoBehaviour
             return "Exist";
         }
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo) " +
-            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0)";
+        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo,DailyIncomeShard) " +
+            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0)";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
@@ -271,6 +271,7 @@ public class AccessDatabase : MonoBehaviour
                     values.Add("CollectedSalaryTime", dataReader.GetString(11));
                 }
                 values.Add("SupremeWarriorNo", dataReader.GetInt32(12));
+                values.Add("DailyIncomeShard", dataReader.GetInt32(13));
 
             }
             dbConnection.Close();
@@ -736,7 +737,7 @@ public class AccessDatabase : MonoBehaviour
             return "Success";
         }
     }
-    public string CollectSalary(int PlayerId, int Cash)
+    public string CollectSalary(int PlayerId, int Cash, int Shard)
     {
         int checkID = 0;
         // Open DB
@@ -761,7 +762,7 @@ public class AccessDatabase : MonoBehaviour
         Debug.Log(collectedDate);
         IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
-            + ", CollectedSalaryTime = '" + collectedDate + "', DailyIncomeReceived = 'Y' WHERE PlayerID=" + PlayerId;
+            + ", CollectedSalaryTime = '" + collectedDate + "', DailyIncomeReceived = 'Y', TimelessShard = TimelessShard + "+Shard+" WHERE PlayerID=" + PlayerId;
         int n = dbCheckCommand2.ExecuteNonQuery();
         dbConnection.Close();
         if (n != 1)
@@ -2403,7 +2404,8 @@ public class AccessDatabase : MonoBehaviour
                         rank.Add("RankCondition2Verb", dataReader.GetString(3));
                     }
                     rank.Add("RankCondition2Num", dataReader.GetInt32(4));
-                    rank.Add("DailyIncome", dataReader.GetInt32(5) + SupremeWarriorNo * 5000);
+                    rank.Add("DailyIncome", dataReader.GetInt32(5) + SupremeWarriorNo * 10000);
+                    rank.Add("DailyIncomeShard", dataReader.GetInt32(8) + SupremeWarriorNo * 5);
                     rank.Add("SupremeWarriorNo", SupremeWarriorNo);
                 } else
                 {
@@ -2420,6 +2422,7 @@ public class AccessDatabase : MonoBehaviour
                     }
                     rank.Add("RankCondition2Num", dataReader.GetInt32(4));
                     rank.Add("DailyIncome", dataReader.GetInt32(5));
+                    rank.Add("DailyIncomeShard", dataReader.GetInt32(8));
                     rank.Add("SupremeWarriorNo", SupremeWarriorNo);
                 }
             }   
@@ -2493,6 +2496,7 @@ public class AccessDatabase : MonoBehaviour
                 RankList.Add(dataReader.GetString(6));
             }           
             RankList.Add(dataReader.GetString(7));
+            RankList.Add(dataReader.GetInt32(8).ToString());
             list.Add(RankList);
         }
         if (!check) return null;
@@ -2508,10 +2512,10 @@ public class AccessDatabase : MonoBehaviour
         string query = "";
         if (int.Parse(data["RankId"].ToString()) == 18)
         {
-            query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + ", SupremeWarriorNo = " + int.Parse(data["SupremeWarriorNo"].ToString()) + " WHERE PlayerID = " + PlayerID + "";
+            query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + ", SupremeWarriorNo = " + int.Parse(data["SupremeWarriorNo"].ToString()) + ", DailyIncomeShard = "+ int.Parse(data["DailyIncomeShard"].ToString()) + " WHERE PlayerID = " + PlayerID + "";
         } else
         {
-            query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + " WHERE PlayerID = " + PlayerID + "";
+            query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + ", DailyIncomeShard = " + int.Parse(data["DailyIncomeShard"].ToString()) + "  WHERE PlayerID = " + PlayerID + "";
         }
         // Queries    
         IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
@@ -4039,7 +4043,7 @@ public class AccessDatabase : MonoBehaviour
             // Queries
             IDbCommand dbCheckCommand = dbConnection.CreateCommand();
             dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt, ConsumablesCD) VALUES " +
-                "(" + id + ",0,1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
+                "(" + id + ",'',1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
                 FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ",0,0, '"+ PowerCD + "');";
             int n = dbCheckCommand.ExecuteNonQuery();
@@ -4268,7 +4272,7 @@ public class AccessDatabase : MonoBehaviour
             while (dataReader2.Read())
             {
                 datas.Add("SessionID", dataReader2.GetInt32(0));
-                datas.Add("TotalPlayedTime", dataReader2.GetInt32(1));
+                datas.Add("TotalPlayedTime", dataReader2.GetString(1));
                 datas.Add("CurrentStage", dataReader2.GetInt32(2));
                 datas.Add("CurrentStageHazard", dataReader2.GetInt32(3));
                 datas.Add("CurrentStageVariant", dataReader2.GetInt32(4));
@@ -4457,6 +4461,47 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = " + amount + " WHERE SessionId=" + SessionID;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
+
+    public string UpdateSessionFuelEnergy(int SessionId, bool IsIncrease, int amount)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET SessionFuelEnergy = SessionFuelEnergy " + (IsIncrease ? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
+        int n = dbCheckCommand3.ExecuteNonQuery();
+        dbConnection.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
+    }
+    public string UpdateSessionPlayTime(int SessionId, string playtime)
+    {
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection.Open();
+        Dictionary<string, object> datas = new Dictionary<string, object>();
+        // Queries
+        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        dbCheckCommand3.CommandText = "UPDATE Session SET TotalPlayedTime = '"+ playtime +"' WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
         dbConnection.Close();
         if (n != 1)

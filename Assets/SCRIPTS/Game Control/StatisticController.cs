@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -40,6 +41,7 @@ public class StatisticController : MonoBehaviour
     public int MissionCompleted;
     public int ShardCollected;
     public int CashCollected;
+    public string SessionPlayTime;
     private Dictionary<string, object> PlayerAchievement;
     private Dictionary<string, object> Achievement;
     private Dictionary<string, string> CurrentAchievement;
@@ -88,12 +90,17 @@ public class StatisticController : MonoBehaviour
         Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
         CurrentFuelCell = (int)ListData["FuelCell"];
         Consumable = new Dictionary<string, int>();
+        SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        if ((string)SessionInformation["TotalPlayedTime"] != "" && !isStart)    
+        {
+            StartTime = DateTime.ParseExact((string)SessionInformation["TotalPlayedTime"], "HH:mm:ss", CultureInfo.InvariantCulture);
+        } 
         if (isStart)
         {
             SetTimer(StartTime);
@@ -119,7 +126,6 @@ public class StatisticController : MonoBehaviour
         }
         CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
-        SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
         SessionID = (int)SessionInformation["SessionID"];
         if (MaxSZReach < CurrentSZNo)
         {
@@ -251,6 +257,7 @@ public class StatisticController : MonoBehaviour
         int oldTime = Playedtime;
         DateTime myDateTime = DateTime.Now;
         TimeSpan currentTimePlayed = myDateTime - startTime;
+        SessionPlayTime = currentTimePlayed.ToString(@"hh\:mm\:ss");
         Playedtime = (int)currentTimePlayed.TotalMinutes;
         if (oldTime < Playedtime)
         {
@@ -268,6 +275,13 @@ public class StatisticController : MonoBehaviour
     {
         CurrentCash = (int.Parse(CurrentCash.Replace("<sprite index='3'>", "")) + cash).ToString();
         CurrentShard = (int.Parse(CurrentShard.Replace("<sprite index='0'>", "")) + shard).ToString();
+    }
+    #endregion
+    #region Session 
+    public void UpdateSessionPlaytime(int SessionID, string PlayedTime)
+    {
+        isStart = false;
+        ad.UpdateSessionPlayTime(SessionID, PlayedTime);
     }
     #endregion
 }

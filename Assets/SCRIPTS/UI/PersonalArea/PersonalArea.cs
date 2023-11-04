@@ -186,7 +186,7 @@ public class PersonalArea : MonoBehaviour
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)Data["FuelEnergy"]).ToString();
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
-        CurrentSalary.GetComponent<TMP_Text>().text = Data["DailyIncome"] + " <sprite index='3'>";
+        CurrentSalary.GetComponent<TMP_Text>().text = Data["DailyIncome"] + " <sprite index='3'> <br><br> " + Data["DailyIncomeShard"] + " <sprite index= '0'> " ;
         if ((int)Data["FuelCell"] == 10)
         {
             FuelCell.transform.GetChild(2).gameObject.SetActive(false);
@@ -208,7 +208,7 @@ public class PersonalArea : MonoBehaviour
         RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>";
         if (!isUnranked)
         {
-            CurrentSalary.GetComponent<TMP_Text>().text = PlayerInformation["DailyIncome"] + " <sprite index='3'>";
+            CurrentSalary.GetComponent<TMP_Text>().text = PlayerInformation["DailyIncome"] + " <sprite index='3'> <br><br> " + PlayerInformation["DailyIncomeShard"] + " <sprite index='0'> "; ;
         }
     }
     #endregion
