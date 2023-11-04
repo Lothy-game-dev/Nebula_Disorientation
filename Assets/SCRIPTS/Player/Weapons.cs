@@ -134,12 +134,19 @@ public class Weapons : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Moving To Location On Player
-        if (WeaponPosition!=null)
+        if (ControllerMain.IsInLoading)
         {
-            transform.position = WeaponPosition.transform.position;
+            Fireable = false;
+            isFire = false;
         }
-        // Rotate the weapon around rotate point clockwise with angle calculated
+        else
+        {
+            // Moving To Location On Player
+            if (WeaponPosition != null)
+            {
+                transform.position = WeaponPosition.transform.position;
+            }
+            // Rotate the weapon around rotate point clockwise with angle calculated
             if (Aim != null)
                 CalAngle = CalculateRotateAngle();
             CurrentAngle %= 360;
@@ -206,106 +213,107 @@ public class Weapons : MonoBehaviour
                     }
                 }
             }
-        // Check rotate Weapon for non-player
-        if (tracking && fm != null)
-        {
-            if (Aim!=null)
+            // Check rotate Weapon for non-player
+            if (tracking && fm != null)
             {
-                Vector2 RotPointToTarget = Aim.transform.position - RotatePoint.transform.position;
-                Vector2 RotPointToShoot = Fighter.transform.position - (fm.GetComponent<EnemyShared>()!=null? fm.GetComponent<EnemyShared>().BackFire.transform.position : fm.GetComponent<AlliesShared>().BackFire.transform.position);
-                float angle = Vector2.Angle(RotPointToTarget, RotPointToShoot);
-                if (angle <= RotateLimitPositive)
+                if (Aim != null)
                 {
-                    Fireable = true;
-                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
+                    Vector2 RotPointToTarget = Aim.transform.position - RotatePoint.transform.position;
+                    Vector2 RotPointToShoot = Fighter.transform.position - (fm.GetComponent<EnemyShared>() != null ? fm.GetComponent<EnemyShared>().BackFire.transform.position : fm.GetComponent<AlliesShared>().BackFire.transform.position);
+                    float angle = Vector2.Angle(RotPointToTarget, RotPointToShoot);
+                    if (angle <= RotateLimitPositive)
+                    {
+                        Fireable = true;
+                        transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, DirMov), CurrentAngle);
+                        CheckIsUpOrDownMovement();
+                        transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle);
+                        CurrentAngle = angle;
+                    }
+                    else
+                    {
+                        Fireable = false;
+                    }
+                }
+            }
+            // Check rotate Weapon for Warship
+            if (tracking && wm != null)
+            {
+                if (Aim != null)
+                {
+                    Vector3 pos = ShootingPosition.transform.position - RotatePoint.transform.position;
+                    Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
+                    float angle = Vector3.Angle(ToEnemy, pos);
                     CheckIsUpOrDownMovement();
-                    transform.RotateAround(RotatePoint.transform.position, new Vector3(0, 0, -DirMov), angle);
+                    if (angle < 5)
+                    {
+                        angle = 0;
+                        isFire = true;
+                    }
+                    else
+                    {
+                        if (!isMainWeapon) isFire = false;
+                    }
+                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
                     CurrentAngle = angle;
                 }
-                else
-                {
-                    Fireable = false;
-                }
             }
-        }
-        // Check rotate Weapon for Warship
-        if (tracking && wm != null)
-        {
-            if (Aim != null)
-            {
-                Vector3 pos = ShootingPosition.transform.position - RotatePoint.transform.position;
-                Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
-                float angle = Vector3.Angle(ToEnemy, pos);
-                CheckIsUpOrDownMovement();
-                if (angle < 5)
-                {
-                    angle = 0;
-                    isFire = true;
-                } else
-                {
-                    if (!isMainWeapon) isFire = false;
-                }  
-                transform.RotateAround(WeaponPoint.transform.position, new Vector3(0,0, -DirMov), 2 * WeaponROTSpeed);
-                CurrentAngle = angle;
-            }
-        }
 
-        // Check rotate Weapon for SpaceStation
-        if (tracking && isSpaceStation)
-        {
-            if (Aim != null)
+            // Check rotate Weapon for SpaceStation
+            if (tracking && isSpaceStation)
             {
-                Vector3 pos = ShootingPosition.transform.position - RotatePoint.transform.position;
-                Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
-                float angle = Vector3.Angle(ToEnemy, pos);
-                CheckIsUpOrDownMovement();
-                if (angle < 5)
+                if (Aim != null)
                 {
-                    angle = 0;
-                    isFire = true;
+                    Vector3 pos = ShootingPosition.transform.position - RotatePoint.transform.position;
+                    Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
+                    float angle = Vector3.Angle(ToEnemy, pos);
+                    CheckIsUpOrDownMovement();
+                    if (angle < 5)
+                    {
+                        angle = 0;
+                        isFire = true;
+                    }
+                    else
+                    {
+                        if (!isMainWeapon) isFire = false;
+                    }
+                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
                 }
-                else
-                {
-                    if (!isMainWeapon) isFire = false;
-                }
-                transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
             }
-        }
-        // Reset thermal hit count per 1/rate of hit second
-        if (HitCountResetTimer > 0f)
-        {
-            HitCountResetTimer -= Time.deltaTime;
-        }
-        else
-        {
-            CurrentHitCount = 0;
-            HitCountResetTimer = 1 / RateOfHit;
-        }
-        // Check weapon overheat
-        if (Fighter.GetComponent<FighterShared>() != null)
-            CheckOverheatStatus();
-        // Remove sound when stop holding for thermal weapon
-        // Kinetic and other type unaffected
-        if (Input.GetMouseButtonUp(MouseInput) && Fighter.GetComponent<PlayerFighter>() != null)
-        {
-            if (!isOverheatted && IsThermalType)
+            // Reset thermal hit count per 1/rate of hit second
+            if (HitCountResetTimer > 0f)
+            {
+                HitCountResetTimer -= Time.deltaTime;
+            }
+            else
+            {
+                CurrentHitCount = 0;
+                HitCountResetTimer = 1 / RateOfHit;
+            }
+            // Check weapon overheat
+            if (Fighter.GetComponent<FighterShared>() != null)
+                CheckOverheatStatus();
+            // Remove sound when stop holding for thermal weapon
+            // Kinetic and other type unaffected
+            if (Input.GetMouseButtonUp(MouseInput) && Fighter.GetComponent<PlayerFighter>() != null)
+            {
+                if (!isOverheatted && IsThermalType)
+                {
+                    EndSound();
+                }
+            }
+            if (IsThermalType && ControllerMain.isLoweringSound)
             {
                 EndSound();
             }
-        }
-        if (IsThermalType && ControllerMain.isLoweringSound)
-        {
-            EndSound();
-        }
-        ResetHitTimer -= Time.deltaTime;
-        if (ResetHitTimer <= 0f)
-        {
-            CurrentHitCount = 0;
-            ResetHitTimer = 1 / RateOfFire;
-        }
+            ResetHitTimer -= Time.deltaTime;
+            if (ResetHitTimer <= 0f)
+            {
+                CurrentHitCount = 0;
+                ResetHitTimer = 1 / RateOfFire;
+            }
 
-        CheckCollide();
-       
+            CheckCollide();
+        }
 
     }
     private void FixedUpdate()

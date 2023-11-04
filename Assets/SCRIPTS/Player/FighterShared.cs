@@ -263,8 +263,8 @@ public class FighterShared : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
         if (GetComponent<FighterMovement>() != null)
         {
-            Destroy(GetComponent<FighterMovement>().HealthBarSlider);
-            Destroy(GetComponent<FighterMovement>().ShieldBarSlider);
+            Destroy(GetComponent<FighterMovement>().HealthBarSlider.transform.parent);
+            Destroy(GetComponent<FighterMovement>().ShieldBarSlider.transform.parent);
         }
         if (name == "Player")
         {
