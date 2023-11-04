@@ -81,15 +81,21 @@ public class LoadOutConsumables : MonoBehaviour
             Consumables[i].GetComponent<SpriteRenderer>().sortingOrder = 4;
         }
         PopUp.GetComponent<LoadOutConsumablePopUp>().ClosePopup();
-        for (int i=0;i<CurrentItems.Count;i++)
+        SaveLoadData();
+    }
+
+    public void SaveLoadData()
+    {
+        for (int i = 0; i < CurrentItems.Count; i++)
         {
-            if (CurrentItems[i] !=null)
+            if (CurrentItems[i] != null)
             {
                 if (Scene.GetComponent<LoadoutScene>().Consumables.ContainsKey(CurrentItems[i].name))
                 {
                     Scene.GetComponent<LoadoutScene>().Consumables[CurrentItems[i].name] = CurrentItemCount[i];
-                } else
-                Scene.GetComponent<LoadoutScene>().Consumables.Add(CurrentItems[i].name, CurrentItemCount[i]);
+                }
+                else
+                    Scene.GetComponent<LoadoutScene>().Consumables.Add(CurrentItems[i].name, CurrentItemCount[i]);
             }
         }
     }

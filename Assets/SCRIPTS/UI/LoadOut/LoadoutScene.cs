@@ -127,6 +127,7 @@ public class LoadoutScene : UECMenuShared
                     }
                 }
             }
+            ConsumableBar.GetComponent<LoadOutConsumables>().SaveLoadData();
         }
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
