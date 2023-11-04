@@ -398,7 +398,6 @@ public class Arsenal : UECMenuShared
         PlayerCash.GetComponent<TextMeshPro>().text = PlayerInformation["Cash"].ToString();
         PlayerShard.GetComponent<TextMeshPro>().text = PlayerInformation["TimelessShard"].ToString();
         InitWeaponBoxPos = Content.transform.parent.parent.parent.parent.position;
-        Debug.Log(InitWeaponBoxPos);
         InitPowerBoxPos = OtherContent.transform.parent.parent.parent.parent.position;
         InitWeaponBtnPos = WeaponButton.transform.position;
         InitPowerBtnPos = PowerButton.transform.position;

@@ -1958,7 +1958,7 @@ public class AccessDatabase : MonoBehaviour
             }
             if (dataReader.IsDBNull(7))
             {
-                weaplist.Add("0");
+                weaplist.Add("N.A");
             }
             else
             {
