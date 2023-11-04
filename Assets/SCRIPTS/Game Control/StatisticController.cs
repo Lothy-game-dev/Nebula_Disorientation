@@ -108,7 +108,7 @@ public class StatisticController : MonoBehaviour
         //CheckDailyMission();
     }
     #endregion
-    #region Update Achievement
+    #region Update Statistic
     // Group all function that serve the same algorithm
     public void UpdateStatistic()
     {
@@ -181,7 +181,7 @@ public class StatisticController : MonoBehaviour
        
         //Update session stat
         ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
-        ad.UpdateSessionFuelEnergy(SessionID, true, (int)SessionInformation["EnemyDestroyed"] * 10);
+        ad.UpdateSessionFuelEnergy(SessionID, true, (int)SessionInformation["EnemyDestroyed"]);
     }
     #endregion
     #region Check daily mission

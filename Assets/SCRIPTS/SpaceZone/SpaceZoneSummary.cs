@@ -98,7 +98,7 @@ public class SpaceZoneSummary : MonoBehaviour
         SessionCash.GetComponent<TextMeshPro>().text = "Session <sprite=3>: <br> <color=#3bccec>" + SessionData["SessionCash"].ToString() + "</color>";
         CurrentShard.GetComponent<TextMeshPro>().text = "<sprite=0> Collected : <br> <color=#3bccec>" + stat.ShardCollected + "</color> + <color=#3bccec>" + stat.CurrentShardReward + "</color>";
         CurrentCash.GetComponent<TextMeshPro>().text = "<sprite=3> Collected : <br> <color=#3bccec>" + stat.CashCollected + "</color> + <color=#3bccec>" + stat.CurrentCashReward + "</color>";
-        FuelEnergy.GetComponent<TextMeshPro>().text = "<sprite=1> Collected : <br> <color=#3bccec>" + stat.TotalEnemyDefeated * 10 + "</color>";
+        FuelEnergy.GetComponent<TextMeshPro>().text = "<sprite=1> Collected : <br> <color=#3bccec>" + stat.TotalEnemyDefeated + "</color>";
         Timer.GetComponent<TextMeshPro>().text = stat.PlayedTime;
 
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;

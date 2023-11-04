@@ -77,7 +77,7 @@ public class SessionSummary : MonoBehaviour
         SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text = SpaceZoneNo.transform.GetChild(0).GetComponent<TextMeshPro>().text.Replace("?", "<color=#3bccec>" + SZno.ToString() + "</color>");
         EnemyDestroyed.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Enemy Destroyed: " + "<color=#3bccec>" + Data["EnemyDestroyed"].ToString() + "</color>";
         DamageDealt.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Damage Dealt: " + "<color=#3bccec>" + Data["DamageDealt"].ToString() + "</color>";
-        FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + "<color=#3bccec>" + int.Parse(Data["EnemyDestroyed"].ToString()) * 10 + "</color>";
+        FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fuel Energy: " + "<color=#3bccec>" + int.Parse(Data["EnemyDestroyed"].ToString()) + "</color>";
         SessionPlayTime.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Session Playtime: " + "<color=#3bccec>" + Data["TotalPlayedTime"].ToString() + "</color>";
 
         //Economy
