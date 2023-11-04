@@ -370,6 +370,8 @@ public class WSShared : MonoBehaviour
         }
         if (IsEnemy)
         {
+            WM.HPSlider.transform.position = new Vector3(WM.HPSlider.transform.position.x, WM.HPSlider.transform.position.y + (270 / 90) * 200, WM.HPSlider.transform.position.z);
+            WM.ShieldSlider.transform.position = new Vector3(WM.ShieldSlider.transform.position.x, WM.ShieldSlider.transform.position.y + (270 / 90) * 200, WM.ShieldSlider.transform.position.z);
             Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
             Vector3 ShieldBarPos = WM.ShieldSlider.transform.position - transform.position;
             transform.Rotate(new Vector3(0, 0, -270));
@@ -381,7 +383,9 @@ public class WSShared : MonoBehaviour
             WM.ShieldSlider.transform.position = transform.position + ShieldBarPos;
             ShieldBar.Position = ShieldBarPos;
         } else
-        {
+        {           
+            WM.HPSlider.transform.position = new Vector3(WM.HPSlider.transform.position.x, WM.HPSlider.transform.position.y + (90 / 90) * 200, WM.HPSlider.transform.position.z);
+            WM.ShieldSlider.transform.position = new Vector3(WM.ShieldSlider.transform.position.x, WM.ShieldSlider.transform.position.y + (90 / 90) * 200, WM.ShieldSlider.transform.position.z);
             Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
             Vector3 ShieldBarPos = WM.ShieldSlider.transform.position - transform.position;
             transform.Rotate(new Vector3(0, 0, -90));
@@ -639,7 +643,7 @@ public class WSShared : MonoBehaviour
             foreach (var enemy in cols)
             {
                 // If weapon is main weap, target enemy ws/ss only
-                if (weapon.GetComponent<Weapons>().isMainWeapon && weapon.GetComponent<Weapons>() != null)
+                if (weapon.GetComponent<Weapons>() != null && weapon.GetComponent<Weapons>().isMainWeapon)
                 {
                     if (enemy.gameObject.tag == "BossEnemy" ||  enemy.gameObject.tag == "AlliesBossFighter")
                     {
