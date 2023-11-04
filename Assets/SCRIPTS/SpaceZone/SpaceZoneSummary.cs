@@ -119,7 +119,7 @@ public class SpaceZoneSummary : MonoBehaviour
         {
             Dictionary<string, object> variantData = FindObjectOfType<AccessDatabase>().GetVariantCountsAndBackgroundByStageValue(SpaceZoneNo % 10);
             int VariantCount = (int)variantData["VariantCounts"];
-            if (SpaceZoneNo < 51)
+            if (SpaceZoneNo < 39)
             {
                 if (SpaceZoneNo % 10 == 0)
                 {
