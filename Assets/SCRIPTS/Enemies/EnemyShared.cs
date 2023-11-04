@@ -143,7 +143,7 @@ public class EnemyShared : FighterShared
                 }*/
                 if (Power1 != "")
                 {
-                    if (Power1CD <= 0f && CurrentBarrier < MaxBarrier)
+                    if (Power1CD <= 0f && CurrentBarrier < MaxBarrier && CurrentBarrier > 0)
                     {
                         UseFirstPower();
                         if (Power1StartCharge)

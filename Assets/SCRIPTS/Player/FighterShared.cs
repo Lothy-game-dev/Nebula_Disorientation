@@ -173,6 +173,13 @@ public class FighterShared : MonoBehaviour
         if (CurrentHP<=0f)
         {
             CurrentHP = 0f;
+            GetComponent<SpriteRenderer>().color = Color.black;
+            transform.Rotate(new Vector3(0, 0, 10));
+            if (GetComponent<FighterMovement>() != null)
+            {
+                GetComponent<FighterMovement>().HealthBarSlider.transform.Rotate(new Vector3(0, 0, -10));
+                GetComponent<FighterMovement>().ShieldBarSlider.transform.Rotate(new Vector3(0, 0, -10));
+            }
             if (!alreadyDestroy)
             {
                 if (GetComponent<PlayerFighter>() == null)
@@ -195,15 +202,21 @@ public class FighterShared : MonoBehaviour
         Destroy(RightWeapon);
         if (GetComponent<PlayerMovement>()!=null)
         {
-            GetComponent<PlayerMovement>().backFire.GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(GetComponent<PlayerMovement>().backFire);
+            /*.GetComponent<SpriteRenderer>().enabled = false;
             GetComponent<PlayerMovement>().backFire.GetComponent<Animator>().enabled = false;
-            GetComponent<PlayerMovement>().backFire.GetComponent<SpriteRenderer>().sprite = null; 
+            GetComponent<PlayerMovement>().backFire.GetComponent<SpriteRenderer>().sprite = null;*/
+            GetComponent<PlayerMovement>().enabled = false;
+            Destroy(transform.GetChild(9).gameObject);
         } else if (GetComponent<FighterMovement>()!=null)
         {
-            GetComponent<FighterMovement>().backFire.GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(GetComponent<FighterMovement>().backFire);
+            /*.GetComponent<SpriteRenderer>().enabled = false;
             GetComponent<FighterMovement>().backFire.GetComponent<Animator>().enabled = false;
-            GetComponent<FighterMovement>().backFire.GetComponent<SpriteRenderer>().sprite = null; 
+            GetComponent<FighterMovement>().backFire.GetComponent<SpriteRenderer>().sprite = null;*/
+            GetComponent<FighterMovement>().enabled = false;
         }
+        GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         Destroy(OnFireGO);
         Destroy(OnFreezeGO);
         GetComponent<SpriteRenderer>().color = Color.black;
@@ -248,6 +261,11 @@ public class FighterShared : MonoBehaviour
         expl10.SetActive(true);
         Destroy(expl10, 0.3f);
         yield return new WaitForSeconds(0.15f);
+        if (GetComponent<FighterMovement>() != null)
+        {
+            Destroy(GetComponent<FighterMovement>().HealthBarSlider);
+            Destroy(GetComponent<FighterMovement>().ShieldBarSlider);
+        }
         if (name == "Player")
         {
             Camera.main.GetComponent<AudioListener>().enabled = true;
@@ -813,7 +831,7 @@ public class FighterShared : MonoBehaviour
                     }
                 }
                 CurrentHP = 0;
-                DeadPushScale = 5;
+                DeadPushScale = 0.125f;
             }
         }
     }

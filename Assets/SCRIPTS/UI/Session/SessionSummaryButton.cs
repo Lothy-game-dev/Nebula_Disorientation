@@ -96,13 +96,16 @@ public class SessionSummaryButton : MonoBehaviour
                     //End Session                
                     if ((SessionSum.ShardCollected || SessionSum.ShardAmount == 0) && (SessionSum.CashCollected || SessionSum.CashAmount == 0))
                     {
-                        Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
-                        foreach (var item in Data)
+                        if (!SessionSum.isFailed)
                         {
-                            FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
-                                "Consumable", item.Value);
-                            FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
-                                "Consumable", item.Value);
+                            Dictionary<string, int> Data = FindObjectOfType<AccessDatabase>().GetSessionOwnedConsumables(PlayerPrefs.GetInt("PlayerID"));
+                            foreach (var item in Data)
+                            {
+                                FindObjectOfType<AccessDatabase>().AddOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
+                                    "Consumable", item.Value);
+                                FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"), item.Key,
+                                    "Consumable", item.Value);
+                            }
                         }
                         ad.EndSession(PlayerPrefs.GetInt("PlayerID"));
                         SceneManager.LoadSceneAsync("UECMainMenu");
