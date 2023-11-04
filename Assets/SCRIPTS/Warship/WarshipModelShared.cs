@@ -19,6 +19,7 @@ public class WarshipModelShared : MonoBehaviour
     public List<int> BackFireSortingOrder;
     public Vector2 HeadPosition;
     public Vector2 HealthBarPosiiton;
+    public Vector2 HealthBarhorizontalPosition;
     public Vector2 MainWeaponScale;
     #endregion
     #region NormalVariables
