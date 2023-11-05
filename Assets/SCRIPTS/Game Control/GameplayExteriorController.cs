@@ -44,6 +44,16 @@ public class GameplayExteriorController : MonoBehaviour
         StartCoroutine(BlackFadeOpen(bf, duration));
     }
 
+    public void GenerateBlackFadeOpenDelay(Vector2 pos, float duration, float Delay)
+    {
+        GameObject bf = Instantiate(BlackFade, new Vector3(pos.x, pos.y, BlackFade.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 1;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.SetActive(true);
+        StartCoroutine(BlackFadeOpenDelay(bf, duration, Delay));
+    }
+
     public void GenerateLoadingScene(float duration)
     {
         GameObject Load = Instantiate(LoadingScene,
@@ -68,7 +78,18 @@ public class GameplayExteriorController : MonoBehaviour
         }
         Destroy(Fade);
     }
-
+    private IEnumerator BlackFadeOpenDelay(GameObject Fade, float duration, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        for (int i = 0; i < 50; i++)
+        {
+            Color c = Fade.GetComponent<SpriteRenderer>().color;
+            c.a -= 1 / 50f;
+            Fade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(duration / 50f);
+        }
+        Destroy(Fade);
+    }
     public void GenerateBlackFadeClose(float duration, float wait)
     {
         GameObject bf = Instantiate(BlackFade, new Vector3(transform.position.x, transform.position.y, BlackFade.transform.position.z), Quaternion.identity);
@@ -91,6 +112,7 @@ public class GameplayExteriorController : MonoBehaviour
             {
                 ChangeToScene(UECScene);
                 GenerateLoadingScene(2f);
+                GenerateBlackFadeOpenDelay(UECScene.transform.position, 1f, 2f);
             }
             PlayerPrefs.SetString("InitTeleport","");
         }

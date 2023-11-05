@@ -83,34 +83,42 @@ public class UECSessionButton : MonoBehaviour
             SceneManager.LoadSceneAsync("MainMenu");
         } else if (Type=="Retreat")
         {
-            Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-            if ((int)Data["FuelCell"] >= 1)
-            {
-                FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
-                FindObjectOfType<GameplayExteriorController>().GenerateLoadingScene(2f);
-                FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 4f);
-                StartCoroutine(MoveToSessionSum());
-            } else
-            {
-                FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Insufficient\nFuel Core.\nCannot retreat!", 3f);
-            }
+            FindObjectOfType<NotificationBoardController>().VoidReturnFunction = Retreat;
+            FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
+                "Retreat already?");
         }
     }
 
     public void Continue()
     {
-        Controller.GenerateBlackFadeClose(0.25f, 3f);
+        Controller.GenerateBlackFadeClose(0.5f, 3f);
         StartCoroutine(MoveToLOTW());
+    }
+
+    public void Retreat()
+    {
+        Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
+        if ((int)Data["FuelCell"] >= 1)
+        {
+            FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
+            FindObjectOfType<GameplayExteriorController>().GenerateLoadingScene(2f);
+            FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 4f);
+            StartCoroutine(MoveToSessionSum());
+        }
+        else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
+                "Insufficient\nFuel Core.\nCannot retreat!", 3f);
+        }
     }
 
     private IEnumerator MoveToLOTW()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Scene.GetComponent<BackgroundBrieflyMoving>().enabled = false;
         FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "LOTW");
-        Controller.ChangeToScene(LOTW);
         Controller.GenerateLoadingScene(2f);
+        Controller.ChangeToScene(LOTW);
         gameObject.SetActive(false);
     }
     

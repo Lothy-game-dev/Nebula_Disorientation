@@ -59,7 +59,7 @@ public class EnemyFighterSpawn : MonoBehaviour
                 int RightLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[0]);
                 int BottomLimit = int.Parse(VectorRangeBottomRight[k].Replace("(", "").Replace(")", "").Split(",")[1]);
                 Vector2 SpawnPos = new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit));
-                StartCoroutine(CreateEnemy(1, SpawnPos, SBBCount, 1, 0, true));
+                StartCoroutine(CreateEnemy(1, SpawnPos, SBBCount, 3, 0, true));
                 SBBCount++;
             }
         }

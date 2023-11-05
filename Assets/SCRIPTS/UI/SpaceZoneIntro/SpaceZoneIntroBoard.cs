@@ -376,7 +376,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                 NotableAlliesName.Add(chosen);
             }
             if (ChosenVariant == 3)
-                NotableAlliesName.Add("SSTP");
+                NotableAlliesName.Add("<color=#00ff00>SSTP</color>");
         }
         if (AllyArmyRating > 0)
         {
@@ -420,15 +420,21 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             } else
             {
                 string[] idList = ((string)FighterGroupData["AlliesFighterC"]).Split(",");
+                int count = AllyFighterCCount;
                 for (int i = idList.Length - 1; i >= 0; i--)
                 {
                     if (NotableAlliesName.Count < 3)
                     {
                         int id = int.Parse(idList[i]);
-                        NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                        NotableAlliesName.Add("<color=#ff0000>" + (string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"] +"</color>");
                         ChosenAllyFC.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
                     }
                     else
+                    {
+                        break;
+                    }
+                    count--;
+                    if (count<=0)
                     {
                         break;
                     }
@@ -450,16 +456,22 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             }
             else
             {
+                int count = AllyFighterBCount;
                 string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
                 for (int i = idList.Length - 1; i >= 0; i--)
                 {
                     if (NotableAlliesName.Count < 3)
                     {
                         int id = int.Parse(idList[i]);
-                        NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                        NotableAlliesName.Add("<color=#0000ff>" + (string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"] + "</color>");
                         ChosenAllyFB.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
                     }
                     else
+                    {
+                        break;
+                    }
+                    count--;
+                    if (count <= 0)
                     {
                         break;
                     }
@@ -481,16 +493,22 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             }
             else
             {
+                int count = AllyFighterACount;
                 string[] idList = ((string)FighterGroupData["AlliesFighterA"]).Split(",");
                 for (int i = idList.Length - 1; i >= 0; i--)
                 {
                     if (NotableAlliesName.Count < 3)
                     {
                         int id = int.Parse(idList[i]);
-                        NotableAlliesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
+                        NotableAlliesName.Add("<color=#00ff00>" + (string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"] + "</color>");
                         ChosenAllyFA.Add((string)FindObjectOfType<AccessDatabase>().GetDataAlliesById(id)["Name"]);
                     }
                     else
+                    {
+                        break;
+                    }
+                    count--;
+                    if (count <= 0)
                     {
                         break;
                     }
@@ -506,7 +524,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             if (!done)
                 for (int j=0; j< AlliesModel.transform.childCount;j++)
                 {
-                    if (AlliesModel.transform.GetChild(j).name.Replace(" ","").ToLower() == NotableAlliesName[i].Replace(" ", "").ToLower())
+                    if (AlliesModel.transform.GetChild(j).name.Replace(" ","").ToLower() == NotableAlliesName[i].Replace(" ", "").Replace("<color=#0000ff>","").Replace("<color=#00ff00>","").Replace("<color=#ff0000>","").Replace("</color>","").ToLower())
                     {
                         GameObject go = Instantiate(AlliesModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
@@ -522,7 +540,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             if (!done)
                 for (int j = 0; j < SpaceStationModel.transform.childCount; j++)
                 {
-                    if (SpaceStationModel.transform.GetChild(j).name.Replace(" ", "").ToLower() == NotableAlliesName[i].Replace(" ", "").ToLower())
+                    if (SpaceStationModel.transform.GetChild(j).name.Replace(" ", "").Replace("_", "-").ToLower() == NotableAlliesName[i].Replace(" ", "").ToLower())
                     {
                         GameObject go = Instantiate(SpaceStationModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
@@ -569,6 +587,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                 {
                     ChosenEnemySS = "NO";
                 }
+                if (ChosenEnemySS!="NO")
                 NotableEnemiesName.Add(ChosenEnemySS);
             }
         }
@@ -615,16 +634,22 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             }
             else
             {
+                int count = EnemyFighterCCount;
                 string[] idList = ((string)FighterGroupData["EnemiesFighterC"]).Split(",");
                 for (int i = idList.Length - 1; i >= 0; i--)
                 {
                     if (NotableEnemiesName.Count < 3)
                     {
                         int id = int.Parse(idList[i]);
-                        NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                        NotableEnemiesName.Add("<color=#ff0000>" + (string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"] + "</color>");
                         ChosenEnemyFC.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
                     }
                     else
+                    {
+                        break;
+                    }
+                    count--;
+                    if (count <= 0)
                     {
                         break;
                     }
@@ -646,16 +671,22 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             }
             else
             {
+                int count = EnemyFighterBCount;
                 string[] idList = ((string)FighterGroupData["EnemiesFighterB"]).Split(",");
                 for (int i = idList.Length - 1; i >= 0; i--)
                 {
                     if (NotableEnemiesName.Count < 3)
                     {
                         int id = int.Parse(idList[i]);
-                        NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                        NotableEnemiesName.Add("<color=#0000ff>" + (string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"] + "</color>");
                         ChosenEnemyFB.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
                     }
                     else
+                    {
+                        break;
+                    }
+                    count--;
+                    if (count <= 0)
                     {
                         break;
                     }
@@ -677,16 +708,22 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             }
             else
             {
+                int count = EnemyFighterACount;
                 string[] idList = ((string)FighterGroupData["EnemiesFighterA"]).Split(",");
                 for (int i = idList.Length - 1; i >= 0; i--)
                 {
                     if (NotableEnemiesName.Count < 3)
                     {
                         int id = int.Parse(idList[i]);
-                        NotableEnemiesName.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
+                        NotableEnemiesName.Add("<color=#00ff00>" + (string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"] + "</color>");
                         ChosenEnemyFA.Add((string)FindObjectOfType<AccessDatabase>().GetDataEnemyById(id)["Name"]);
                     }
                     else
+                    {
+                        break;
+                    }
+                    count--;
+                    if (count <= 0)
                     {
                         break;
                     }
@@ -703,7 +740,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                 for (int j = 0; j < EnemiesModel.transform.childCount; j++)
                 {
 
-                    if (EnemiesModel.transform.GetChild(j).name.Replace(" ", "").ToLower() == NotableEnemiesName[i].Replace(" ", "").ToLower())
+                    if (EnemiesModel.transform.GetChild(j).name.Replace(" ", "").ToLower() == NotableEnemiesName[i].Replace(" ", "").Replace("<color=#0000ff>", "").Replace("<color=#00ff00>", "").Replace("<color=#ff0000>", "").Replace("</color>", "").ToLower())
                     {
                         GameObject go = Instantiate(EnemiesModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
@@ -719,7 +756,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             if (!done)
                 for (int j = 0; j < SpaceStationModel.transform.childCount; j++)
                 {
-                    if (SpaceStationModel.transform.GetChild(j).name.Replace(" ", "").ToLower() == NotableEnemiesName[i].Replace(" ", "").ToLower())
+                    if (SpaceStationModel.transform.GetChild(j).name.Replace(" ", "").Replace("_", "-").ToLower() == NotableEnemiesName[i].Replace(" ", "").ToLower())
                     {
                         GameObject go = Instantiate(SpaceStationModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
