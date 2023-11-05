@@ -30,21 +30,24 @@ public class PersonalAreaCollectButton : MonoBehaviour
     {
         // Initialize variables
         PAController = PersonalArea.GetComponent<PersonalArea>();
-        if (!PAController.IsCollected)
-        {
-            GetComponent<SpriteRenderer>().color = Color.yellow;
-            gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.yellow;
-        } else
-        {
-            GetComponent<SpriteRenderer>().color = Color.white;
-            gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
-        }
+        InitScale = transform.localScale;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        if (!PAController.IsCollected)
+        {
+            GetComponent<SpriteRenderer>().color = Color.yellow;
+            gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.yellow;
+            GetComponent<Animator>().enabled = true;
+        } else
+        {
+            GetComponent<SpriteRenderer>().color = Color.white;
+            gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+            GetComponent<Animator>().enabled = false;
+        }
         
     }
     #endregion
@@ -65,6 +68,8 @@ public class PersonalAreaCollectButton : MonoBehaviour
                 CollectDailyIncome();
                 GetComponent<SpriteRenderer>().color = Color.white;
                 gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().color = Color.white;
+                GetComponent<Animator>().enabled = false;
+                gameObject.transform.localScale = InitScale;
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,

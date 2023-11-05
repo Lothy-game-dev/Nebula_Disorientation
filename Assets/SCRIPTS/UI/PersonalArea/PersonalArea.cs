@@ -258,6 +258,7 @@ public class PersonalArea : MonoBehaviour
         {
             Destroy(CollectButton.GetComponent<CursorUnallowed>());
             CollectButton.transform.GetChild(1).gameObject.SetActive(false);
+            CollectButton.GetComponent<Animator>().enabled = true;
         }
     }
     #endregion
