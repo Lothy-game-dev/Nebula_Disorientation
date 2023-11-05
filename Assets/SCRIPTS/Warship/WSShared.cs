@@ -328,7 +328,7 @@ public class WSShared : MonoBehaviour
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
-                    sup.transform.localScale = new Vector2(0.5f, 0.5f);
+                    sup.transform.localScale = new Vector2(2f, 2f);
                     sup.SetActive(true);
 
 
