@@ -254,7 +254,6 @@ public class StatisticController : MonoBehaviour
         DateTime myDateTime = DateTime.Now;
         currentTimePlayed = myDateTime - startTime;      
         Playedtime = (int)currentTimePlayed.TotalMinutes;
-        Debug.Log(currentTimePlayed);
         if (oldTime < Playedtime)
         {
             isCount = true;
@@ -290,7 +289,7 @@ public class StatisticController : MonoBehaviour
                 SessionPlayTime = currentTimePlayed.ToString(@"hh\:mm\:ss"); 
             }
         }
-        ad.UpdateSessionPlayTime(SessionID, SessionPlayTime);
+        ad.UpdateSessionPlayTime(PlayerID, SessionPlayTime);
     }
     #endregion
 }

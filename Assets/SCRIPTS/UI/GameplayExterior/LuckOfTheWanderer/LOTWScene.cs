@@ -1,3 +1,5 @@
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -41,6 +43,8 @@ public class LOTWScene : MonoBehaviour
     private int SessionId;
     private GameObject chosenCard;
     private Dictionary<string, object> datas;
+    private DateTime StartTime;
+    private TimeSpan SessionPlayedTime;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -66,6 +70,7 @@ public class LOTWScene : MonoBehaviour
         RerollButton.GetComponent<Collider2D>().enabled = false;
         Camera.main.GetComponent<GameplayExteriorController>().GenerateBlackFadeOpenDelay(transform.position, 1f, 2f);
         StartCoroutine(GenerateDelay());
+        StartTime = DateTime.Now;
     }
 
     // Update is called once per frame
@@ -77,6 +82,8 @@ public class LOTWScene : MonoBehaviour
         {
             CardRegenerate.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         }
+        SessionPlayedTime = DateTime.Now - StartTime;
+        Debug.Log(SessionPlayedTime);
     }
     #endregion
     #region LOTW Spawn
@@ -95,13 +102,13 @@ public class LOTWScene : MonoBehaviour
         for (int i=0;i<3;i++)
         {
             int n = 0;
-            float a = Random.Range(0, 100f);
+            float a = UnityEngine.Random.Range(0, 100f);
             int tierChosen = a < 75 ? 3 : a < 97 ? 2 : 1;
             if (tierChosen == 1) ContainRed = true;
             do
             {
                 List<int> ListChosen = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(tierChosen);
-                int k = Random.Range(0, ListChosen.Count);
+                int k = UnityEngine.Random.Range(0, ListChosen.Count);
                 n = ListChosen[k];
             }
             while (ListLOTWChosen.Contains(n));
@@ -253,6 +260,7 @@ public class LOTWScene : MonoBehaviour
     private IEnumerator WaitTeleport()
     {
         yield return new WaitForSeconds(1f);
+        FindAnyObjectByType<AccessDatabase>().UpdateSessionPlayTime(PlayerPrefs.GetInt("PlayerID"), SessionPlayedTime.ToString(@"hh\:mm\:ss"));
         SceneManager.LoadSceneAsync("GameplayInterior");
         SceneManager.UnloadSceneAsync("GameplayExterior");
     }
