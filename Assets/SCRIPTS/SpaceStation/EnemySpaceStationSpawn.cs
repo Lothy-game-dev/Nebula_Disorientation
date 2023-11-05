@@ -50,7 +50,7 @@ public class EnemySpaceStationSpawn : MonoBehaviour
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetSpaceStationById(SpaceStationID);
         for (int i = 0; i < SpaceStationModel.transform.childCount; i++)
         {
-            if (SpaceStationModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["SpaceStationName"].ToString().Replace("-", "").ToLower())
+            if (SpaceStationModel.transform.GetChild(i).name.ToLower() == data["SpaceStationName"].ToString().ToLower())
             {
                 Debug.Log(i);
                 GameObject game = Instantiate(SpaceStationTemplate, new Vector3(randomPos.x, randomPos.y, SpaceStationModel.transform.GetChild(i).position.z), Quaternion.identity);
