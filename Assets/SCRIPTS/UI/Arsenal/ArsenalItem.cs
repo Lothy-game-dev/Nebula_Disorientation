@@ -18,6 +18,7 @@ public class ArsenalItem : MonoBehaviour
     public GameObject BuyButton;
     public GameObject BlackFadeWeapon;
     public GameObject BlackFadePower;
+    public List<GameObject> ItemStatusList;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -30,7 +31,6 @@ public class ArsenalItem : MonoBehaviour
     private string CashColor;
     private string ShardColor;
     private string RankColor;
-    public List<GameObject> ItemStatusList;
     public GameObject Content;
     public bool LockedItem;
     private int RankId;
