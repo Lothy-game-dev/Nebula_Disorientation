@@ -952,15 +952,23 @@ public class AccessDatabase : MonoBehaviour
         dbConnectionSave.Close();
         return id;
     }
-    public void EndSession(int PlayerID)
+    public string EndSession(int PlayerID)
     {
         // Open DB
         dbConnectionSave.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "UPDATE PlayerProfile SET CurrentSession = NULL WHERE PlayerID = " + PlayerID +"";
-        dbCheckCommand.ExecuteNonQuery();
+        int n = dbCheckCommand.ExecuteNonQuery();
         dbConnectionSave.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
     }
 
     public string InputLoadoutSaveData(int PlayerID, string Model, string LeftWeapon, string RightWeapon, string FirstPower, string SecondPower,

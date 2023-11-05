@@ -107,7 +107,7 @@ public class SessionSummaryButton : MonoBehaviour
                                     "Consumable", item.Value);
                             }
                         }
-                        ad.EndSession(PlayerPrefs.GetInt("PlayerID"));
+                        check = ad.EndSession(PlayerPrefs.GetInt("PlayerID"));
                         SceneManager.LoadSceneAsync("UECMainMenu");
                         SceneManager.UnloadSceneAsync("SessionSummary");
                     }                  
