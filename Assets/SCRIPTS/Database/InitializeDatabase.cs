@@ -14,22 +14,34 @@ public class InitializeDatabase : MonoBehaviour
     public void Initialization()
     {
         string check = CheckInitializeData();
-        string check2 = CheckInitializeSave();
         Debug.Log("Data:" + check);
+        if ("No Data".Equals(check))
+        {
+            CreateDataDatabase();
+        } else if ("Data Error".Equals(check))
+        {
+            CreateDataDatabase();
+        } else if ("Not Initialize Yet".Equals(check))
+        {
+            CreateDataDatabase();
+        }
+        string check2 = CheckInitializeSave();
         Debug.Log("Save:" + check2);
-        if ("No Data".Equals(check) && "No Data".Equals(check2))
+        if ("No Data".Equals(check2))
         {
-            CreateDatabase();
-        } else if ("Data Error".Equals(check) && "Data Error".Equals(check2))
+            CreateSaveDatabase();
+        }
+        else if ("Data Error".Equals(check2))
         {
-            CreateDatabase();
-        } else if ("Not Initialize Yet".Equals(check) && "Not Initialize Yet".Equals(check2))
+            CreateSaveDatabase();
+        }
+        else if ("Not Initialize Yet".Equals(check2))
         {
-            CreateDatabase();
+            CreateSaveDatabase();
         }
     }
     // Create database
-    public void CreateDatabase()
+    public void CreateDataDatabase()
     {
         // Data Table
         string DataTable =
@@ -272,161 +284,7 @@ public class InitializeDatabase : MonoBehaviour
                 "Effect INTEGER NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
                 "";
-        // Save Table
-        string SaveTable =
-            // Purchase History
-            "CREATE TABLE IF NOT EXISTS PurchaseHistory" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "ItemType TEXT, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER, " +
-                "BuyOrSell TEXT, " +
-                "PurchaseDate TEXT, " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // Table for Statistic
-            "CREATE TABLE IF NOT EXISTS Statistic" +
-                "(ID INTEGER," +
-                "PlayerID INTEGER," +
-                "EnemyDefeated TEXT NOT NULL," +
-                "MaxSZReach INTEGER NOT NULL," +
-                "TotalShard INTEGER NOT NULL," +
-                "TotalCash INTEGER NOT NULL," +
-                "TotalEnemyDefeated INTEGER NOT NULL," +
-                "TotalDamageDealt INTEGER NOT NULL," +
-                "TotalSalaryReceived INTEGER NOT NULL," +
-                "Rank INTEGER NOT NULL," +
-                "TotalShardSpent INTEGER NOT NULL," +
-                "TotalCashSpent INTEGER NOT NULL," +
-                "TotalDailyMissionDone INTEGER NOT NULL," +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerId)," +
-                "PRIMARY KEY(ID AUTOINCREMENT));" +
-            // Table for SessionCurrentSaveData
-            "CREATE TABLE IF NOT EXISTS SessionCurrentSaveData" +
-                "(ID INTEGER," +
-                "SessionID INTEGER NOT NULL," +
-                "SessionCurrentPlace TEXT NOT NULL," +
-                "PRIMARY KEY(ID AUTOINCREMENT));" +
-            // Table for CollectSalaryHistory
-            "CREATE TABLE IF NOT EXISTS CollectSalaryHistory" +
-                "(Id INTEGER," +
-                "PlayerId INTEGER," +
-                "CollectedTime TEXT," +
-                "PRIMARY KEY(Id AUTOINCREMENT) );" +
-             // Table for option
-             "CREATE TABLE IF NOT EXISTS Option" +
-                "(MasterVolume INTEGER," +
-                "MusicVolume INTEGER," +
-                "SoundFx INTEGER," +
-                "Fps INTEGER," +
-                "Resolution TEXT);" +
-            // Table for current play session
-            "CREATE TABLE IF NOT EXISTS CurrentPlaySession" +
-                "(PlaySessionId INTEGER," +
-                "PlayerId INTEGER," +
-                "SessionStartTime Text," +
-                "SessionEndTime Text," +
-                "FOREIGN KEY(PlayerId) REFERENCES PlayerProfile(PlayerId)," +
-                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );" +
-            // LoadoutSaveData
-            "CREATE TABLE IF NOT EXISTS LoadoutSaveData" +
-                "(LoadOutSaveDataID INTEGER," +
-                "PlayerID INTEGER," +
-                "Model TEXT, " +
-                "LeftWeapon TEXT, " +
-                "RightWeapon TEXT, " +
-                "FirstPower TEXT, " +
-                "SecondPower TEXT, " +
-                "Consumables TEXT, " +
-                "ConsumablesCD TEXT, " +
-                "PRIMARY KEY(LoadOutSaveDataID AUTOINCREMENT) ); " +
-            // Player Ownership
-            "CREATE TABLE IF NOT EXISTS PlayerOwnership" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "ItemType TEXT, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER, " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // PlayerDailyMission
-            "CREATE TABLE IF NOT EXISTS PlayerDailyMission" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "MissionID INTEGER, " +
-                "IsComplete TEXT NOT NULL, " +
-                "MissionDate TEXT NOT NULL, " +
-                "MissionProgess INTEGER NOT NULL, " +
-                "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // Session Ownership
-            "CREATE TABLE IF NOT EXISTS SessionOwnership" +
-                "(ID INTEGER, " +
-                "SessionID INTEGER, " +
-                "ItemType TEXT, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER, " +
-                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // SessionLOTWCards
-            "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
-                "(ID INTEGER, " +
-                "SessionID INTEGER, " +
-                "CardID INTEGER, " +
-                "Duration INTEGER, " +
-                "Stack INTEGER, " +
-                "FOREIGN KEY(CardID) REFERENCES LuckOfTheWandererCards(CardID), " +
-                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // PlayerProfile
-            "CREATE TABLE IF NOT EXISTS PlayerProfile" +
-                "(PlayerID INTEGER, " +
-                "Name TEXT NOT NULL, " +
-                "Rank INTEGER, " +
-                "CurrentSession INTEGER, " +
-                "FuelCell INTEGER NOT NULL, " +
-                "FuelEnergy INTEGER NOT NULL, " +
-                "Cash INTEGER NOT NULL, " +
-                "TimelessShard INTEGER NOT NULL, " +
-                "DailyIncome INTEGER NOT NULL, " +
-                "DailyIncomeReceived TEXT NOT NULL, " +
-                "LastFuelCellUsedTime TEXT," +
-                "CollectedSalaryTime TEXT," +
-                "SupremeWarriorNo INTEGER," +
-                "DailyIncomeShard INTEGER NOT NULL, " +
-                "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
-                "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
-            // Session
-            "CREATE TABLE IF NOT EXISTS Session" +
-                "(SessionID INTEGER, " +
-                "TotalPlayedTime TEXT, " +
-                "CurrentStage INTEGER, " +
-                "CurrentStageHazard INTEGER, " +
-                "CurrentStageVariant INTEGER, " +
-                "CreatedDate TEXT NOT NULL, " +
-                "LastUpdate TEXT NOT NULL, " +
-                "IsCompleted TEXT NOT NULL, " +
-                "SessionCash INTEGER NOT NULL, " +
-                "SessionTimelessShard INTEGER NOT NULL, " +
-                "SessionFuelEnergy INTEGER NOT NULL, " +
-                "Model TEXT, " +
-                "LeftWeapon TEXT, " +
-                "RightWeapon TEXT, " +
-                "FirstPower TEXT, " +
-                "SecondPower TEXT, " +
-                "Consumables TEXT, " +
-                "SessionCurrentHP INTEGER, " +
-                "EnemyDestroyed INTEGER, " +
-                "DamageDealt INTEGER, " +
-                "ConsumablesCD TEXT, " +
-                "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
-            // Table to check if database already Init
-            "CREATE TABLE IF NOT EXISTS DatabaseInitialize" +
-                "(AlreadyInitialize TEXT NOT NULL);" +
-                "";
+        
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +
@@ -564,9 +422,6 @@ public class InitializeDatabase : MonoBehaviour
             "(7, 'CA', 3)," +
             "(8, 'CAA', 1)," +
             "(9, 'B', 2);";
-        // Option
-        string Option = "INSERT INTO Option VALUES " +
-            "(100, 100, 100, 60, '1920x1080');";
         // Tutorial
         string Tutorial = "INSERT INTO Tutorial VALUES "+
             "(1, 'Preparation', 'Basic Playthrough', '<b><u>Preparation</b></u><br><br>   -  Visit the Factory to purchase new Fighters." +
@@ -834,6 +689,173 @@ public class InitializeDatabase : MonoBehaviour
             }
             dbCommandInsertCheck.ExecuteNonQuery();
         }
+        dbConnection.Close();
+    }
+
+    private void CreateSaveDatabase()
+    {
+        // Save Table
+        string SaveTable =
+            // Purchase History
+            "CREATE TABLE IF NOT EXISTS PurchaseHistory" +
+                "(ID INTEGER, " +
+                "PlayerID INTEGER, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "BuyOrSell TEXT, " +
+                "PurchaseDate TEXT, " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // Table for Statistic
+            "CREATE TABLE IF NOT EXISTS Statistic" +
+                "(ID INTEGER," +
+                "PlayerID INTEGER," +
+                "EnemyDefeated TEXT NOT NULL," +
+                "MaxSZReach INTEGER NOT NULL," +
+                "TotalShard INTEGER NOT NULL," +
+                "TotalCash INTEGER NOT NULL," +
+                "TotalEnemyDefeated INTEGER NOT NULL," +
+                "TotalDamageDealt INTEGER NOT NULL," +
+                "TotalSalaryReceived INTEGER NOT NULL," +
+                "Rank INTEGER NOT NULL," +
+                "TotalShardSpent INTEGER NOT NULL," +
+                "TotalCashSpent INTEGER NOT NULL," +
+                "TotalDailyMissionDone INTEGER NOT NULL," +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerId)," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
+            // Table for SessionCurrentSaveData
+            "CREATE TABLE IF NOT EXISTS SessionCurrentSaveData" +
+                "(ID INTEGER," +
+                "SessionID INTEGER NOT NULL," +
+                "SessionCurrentPlace TEXT NOT NULL," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
+            // Table for CollectSalaryHistory
+            "CREATE TABLE IF NOT EXISTS CollectSalaryHistory" +
+                "(Id INTEGER," +
+                "PlayerId INTEGER," +
+                "CollectedTime TEXT," +
+                "PRIMARY KEY(Id AUTOINCREMENT) );" +
+             // Table for option
+             "CREATE TABLE IF NOT EXISTS Option" +
+                "(MasterVolume INTEGER," +
+                "MusicVolume INTEGER," +
+                "SoundFx INTEGER," +
+                "Fps INTEGER," +
+                "Resolution TEXT);" +
+            // Table for current play session
+            "CREATE TABLE IF NOT EXISTS CurrentPlaySession" +
+                "(PlaySessionId INTEGER," +
+                "PlayerId INTEGER," +
+                "SessionStartTime Text," +
+                "SessionEndTime Text," +
+                "FOREIGN KEY(PlayerId) REFERENCES PlayerProfile(PlayerId)," +
+                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );" +
+            // LoadoutSaveData
+            "CREATE TABLE IF NOT EXISTS LoadoutSaveData" +
+                "(LoadOutSaveDataID INTEGER," +
+                "PlayerID INTEGER," +
+                "Model TEXT, " +
+                "LeftWeapon TEXT, " +
+                "RightWeapon TEXT, " +
+                "FirstPower TEXT, " +
+                "SecondPower TEXT, " +
+                "Consumables TEXT, " +
+                "ConsumablesCD TEXT, " +
+                "PRIMARY KEY(LoadOutSaveDataID AUTOINCREMENT) ); " +
+            // Player Ownership
+            "CREATE TABLE IF NOT EXISTS PlayerOwnership" +
+                "(ID INTEGER, " +
+                "PlayerID INTEGER, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // PlayerDailyMission
+            "CREATE TABLE IF NOT EXISTS PlayerDailyMission" +
+                "(ID INTEGER, " +
+                "PlayerID INTEGER, " +
+                "MissionID INTEGER, " +
+                "IsComplete TEXT NOT NULL, " +
+                "MissionDate TEXT NOT NULL, " +
+                "MissionProgess INTEGER NOT NULL, " +
+                "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // Session Ownership
+            "CREATE TABLE IF NOT EXISTS SessionOwnership" +
+                "(ID INTEGER, " +
+                "SessionID INTEGER, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // SessionLOTWCards
+            "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
+                "(ID INTEGER, " +
+                "SessionID INTEGER, " +
+                "CardID INTEGER, " +
+                "Duration INTEGER, " +
+                "Stack INTEGER, " +
+                "FOREIGN KEY(CardID) REFERENCES LuckOfTheWandererCards(CardID), " +
+                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // PlayerProfile
+            "CREATE TABLE IF NOT EXISTS PlayerProfile" +
+                "(PlayerID INTEGER, " +
+                "Name TEXT NOT NULL, " +
+                "Rank INTEGER, " +
+                "CurrentSession INTEGER, " +
+                "FuelCell INTEGER NOT NULL, " +
+                "FuelEnergy INTEGER NOT NULL, " +
+                "Cash INTEGER NOT NULL, " +
+                "TimelessShard INTEGER NOT NULL, " +
+                "DailyIncome INTEGER NOT NULL, " +
+                "DailyIncomeReceived TEXT NOT NULL, " +
+                "LastFuelCellUsedTime TEXT," +
+                "CollectedSalaryTime TEXT," +
+                "SupremeWarriorNo INTEGER," +
+                "DailyIncomeShard INTEGER NOT NULL, " +
+                "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
+                "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
+                "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
+            // Session
+            "CREATE TABLE IF NOT EXISTS Session" +
+                "(SessionID INTEGER, " +
+                "TotalPlayedTime TEXT, " +
+                "CurrentStage INTEGER, " +
+                "CurrentStageHazard INTEGER, " +
+                "CurrentStageVariant INTEGER, " +
+                "CreatedDate TEXT NOT NULL, " +
+                "LastUpdate TEXT NOT NULL, " +
+                "IsCompleted TEXT NOT NULL, " +
+                "SessionCash INTEGER NOT NULL, " +
+                "SessionTimelessShard INTEGER NOT NULL, " +
+                "SessionFuelEnergy INTEGER NOT NULL, " +
+                "Model TEXT, " +
+                "LeftWeapon TEXT, " +
+                "RightWeapon TEXT, " +
+                "FirstPower TEXT, " +
+                "SecondPower TEXT, " +
+                "Consumables TEXT, " +
+                "SessionCurrentHP INTEGER, " +
+                "EnemyDestroyed INTEGER, " +
+                "DamageDealt INTEGER, " +
+                "ConsumablesCD TEXT, " +
+                "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
+            // Table to check if database already Init
+            "CREATE TABLE IF NOT EXISTS DatabaseInitialize" +
+                "(AlreadyInitialize TEXT NOT NULL);" +
+                "";
+        // Option
+        string Option = "INSERT INTO Option VALUES " +
+            "(100, 100, 100, 60, '1920x1080');";
+        // Initialize Data Success
+        string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
+        // Initialize Data Fail
+        string Failure = "INSERT INTO DatabaseInitialize VALUES ('F');";
         // Open DB
         dbConnection = new SqliteConnection("URI=file:SaveTables.db");
         dbConnection.Open();
@@ -859,41 +881,27 @@ public class InitializeDatabase : MonoBehaviour
             {
                 throw new SqliteException();
             }
-            check = "T";
+            checkSave = "T";
         }
         catch (SqliteException e)
         {
             Debug.Log(e.Message);
-            check = "F";
+            checkSave = "F";
         }
-        if (check != null)
+        if (checkSave != null)
         {
-            if (check.Equals("T"))
+            if (checkSave.Equals("T"))
             {
                 dbCommandInsertCheckSave.CommandText = Success;
             }
-            else if (check.Equals("F"))
+            else if (checkSave.Equals("F"))
             {
                 dbCommandInsertCheckSave.CommandText = Failure;
             }
             dbCommandInsertCheckSave.ExecuteNonQuery();
         }
-
-        IDbCommand command = dbConnection.CreateCommand();
-        command.CommandText = "SELECT file FROM pragma_database_list;";
-        IDataReader reader = command.ExecuteReader();
-        string dir = "";
-        while(reader.Read())
-        {
-            dir = reader.GetString(0);
-        }
-        dir = dir.Replace("SaveTables.db", "DataTables.db");
-        IDbCommand command2 = dbConnection.CreateCommand();
-        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
-        int n = command2.ExecuteNonQuery();
         dbConnection.Close();
     }
-
     /*// Drop Database
     public void DropDatabase()
     {
