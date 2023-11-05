@@ -50,13 +50,20 @@ public class SpaceZoneSummaryButton : MonoBehaviour
             Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
             if ((int)ListData["FuelCell"] >= 1)
             {
-                FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
-                FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "UEC");
-                PlayerPrefs.SetString("InitTeleport", "UEC");
-                SceneManager.UnloadSceneAsync("GameplayInterior");
-                SceneManager.LoadSceneAsync("GameplayExterior");
+                FindObjectOfType<GameplayInteriorController>().GenerateBlackFadeClose(1f);
+                StartCoroutine(MoveToUEC());
             }
         }
+    }
+
+    private IEnumerator MoveToUEC()
+    {
+        yield return new WaitForSeconds(1f);
+        FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
+        FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "UEC");
+        PlayerPrefs.SetString("InitTeleport", "UEC");
+        SceneManager.UnloadSceneAsync("GameplayInterior");
+        SceneManager.LoadSceneAsync("GameplayExterior");
     }
 
     private int RandomHazardChoose(List<Dictionary<string, object>> dataDict)

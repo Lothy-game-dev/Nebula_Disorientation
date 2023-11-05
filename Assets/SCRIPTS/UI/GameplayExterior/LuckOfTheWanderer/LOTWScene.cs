@@ -64,7 +64,8 @@ public class LOTWScene : MonoBehaviour
         // disable button reroll
         RerollButton.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
         RerollButton.GetComponent<Collider2D>().enabled = false;
-        GetRandom3Cards();
+        Camera.main.GetComponent<GameplayExteriorController>().GenerateBlackFadeOpenDelay(transform.position, 1f, 2f);
+        StartCoroutine(GenerateDelay());
     }
 
     // Update is called once per frame
@@ -79,6 +80,11 @@ public class LOTWScene : MonoBehaviour
     }
     #endregion
     #region LOTW Spawn
+    private IEnumerator GenerateDelay()
+    {
+        yield return new WaitForSeconds(2.5f);
+        GetRandom3Cards();
+    }
     private void GetRandom3Cards()
     {
         // Disable button pick

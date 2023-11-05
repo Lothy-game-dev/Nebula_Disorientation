@@ -138,7 +138,7 @@ public class WSShared : MonoBehaviour
         TargetRefreshTimer -= Time.deltaTime;
         if (TargetRefreshTimer <= 0f)
         {
-            TargetRefreshTimer = 1f;
+            TargetRefreshTimer = 0.25f;
 
             for (int i = 0; i < SpWps.Count; i++)
             {
@@ -166,7 +166,7 @@ public class WSShared : MonoBehaviour
         }
         if (FindTargetTimer <= 0f)
         {
-            FindTargetTimer = 1f;
+            FindTargetTimer = 0.25f;
             for (int i = 0; i < MainWps.Count; i++)
             {
                 MainWeaponTargetEnemy(MainWps[i]);                   

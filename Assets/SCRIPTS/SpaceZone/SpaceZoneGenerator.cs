@@ -248,6 +248,12 @@ public class SpaceZoneGenerator : MonoBehaviour
             ChosenEnemyFB = new List<string>(Predict.Split("|")[6].Split("~"));
             ChosenEnemyFA = new List<string>(Predict.Split("|")[7].Split("~"));
         }
+        ChosenAllyFC.Remove("");
+        ChosenAllyFB.Remove("");
+        ChosenAllyFA.Remove("");
+        ChosenEnemyFC.Remove("");
+        ChosenEnemyFB.Remove("");
+        ChosenEnemyFA.Remove("");
         PlayerPrefs.SetString("Predict" + PlayerPrefs.GetInt("PlayerID"), "");
         // Enemy Space station Spawn Chance
         float EnemySpaceStationSpawn = 0;
@@ -407,7 +413,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i=0;i<AllyFighterACount;i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterA"]).Split(",");
-            if (ChosenAllyFA.Count > 0)
+            if (ChosenAllyFA.Count > 0 && ChosenAllyFA[0] != "")
             {
                 int ID = (int)FindObjectOfType<AccessDatabase>().GetDataAlliesByName(ChosenAllyFA[0])["ID"];
                 AllyID.Add(ID);
@@ -437,7 +443,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < AllyFighterBCount; i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterB"]).Split(",");
-            if (ChosenAllyFB.Count > 0)
+            if (ChosenAllyFB.Count > 0 && ChosenAllyFB[0] != "")
             {
                 int ID = (int)FindObjectOfType<AccessDatabase>().GetDataAlliesByName(ChosenAllyFB[0])["ID"];
                 AllyID.Add(ID);
@@ -468,7 +474,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < AllyFighterCCount; i++)
         {
             string[] idList = ((string)FighterGroupData["AlliesFighterC"]).Split(",");
-            if (ChosenAllyFC.Count > 0)
+            if (ChosenAllyFC.Count > 0 && ChosenAllyFC[0] != "")
             {
                 int ID = (int)FindObjectOfType<AccessDatabase>().GetDataAlliesByName(ChosenAllyFC[0])["ID"];
                 AllyID.Add(ID);
@@ -547,7 +553,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < EnemyFighterACount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterA"]).Split(",");
-            if (ChosenEnemyFA.Count > 0)
+            if (ChosenEnemyFA.Count > 0 && ChosenEnemyFA[0]!="")
             {
                 int ID = (int)FindObjectOfType<AccessDatabase>().GetDataEnemyByName(ChosenEnemyFA[0])["ID"];
                 EnemyIDA.Add(ID);
@@ -572,7 +578,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < EnemyFighterBCount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterB"]).Split(",");
-            if (ChosenEnemyFB.Count > 0)
+            if (ChosenEnemyFB.Count > 0 && ChosenEnemyFB[0] != "")
             {
                 int ID = (int)FindObjectOfType<AccessDatabase>().GetDataEnemyByName(ChosenEnemyFB[0])["ID"];
                 EnemyIDB.Add(ID);
@@ -598,7 +604,7 @@ public class SpaceZoneGenerator : MonoBehaviour
         for (int i = 0; i < EnemyFighterCCount; i++)
         {
             string[] idList = ((string)FighterGroupData["EnemiesFighterC"]).Split(",");
-            if (ChosenEnemyFC.Count > 0)
+            if (ChosenEnemyFC.Count > 0 && ChosenEnemyFC[0] != "")
             {
                 int ID = (int)FindObjectOfType<AccessDatabase>().GetDataEnemyByName(ChosenEnemyFC[0])["ID"];
                 EnemyIDC.Add(ID);
@@ -971,7 +977,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             int TopLimit = int.Parse(VectorRangeTopLeft[n].Replace("(", "").Replace(")", "").Split(",")[1]);
             int RightLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[0]);
             int BottomLimit = int.Parse(VectorRangeBottomRight[n].Replace("(", "").Replace(")", "").Split(",")[1]);
-            EnemySSSpawner.SpaceStationID = new int[] { 1 };
+            EnemySSSpawner.SpaceStationID = new int[] { 2 };
             EnemySSSpawner.SpaceStationPos = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
             EnemySSSpawner.SpawnEnemySpaceStation();
         }

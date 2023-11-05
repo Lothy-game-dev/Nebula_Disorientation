@@ -81,7 +81,7 @@ public class StatusBoard : MonoBehaviour
     void Start()
     {
         initScale = transform.localScale.x;
-        if (Enemy.GetComponent<FighterShared>() != null)
+/*        if (Enemy.GetComponent<FighterShared>() != null)
         {
             ImageInitScaleX = Enemy.transform.localScale.x * (Enemy.GetComponent<EnemyShared>()!=null? Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard : Enemy.GetComponent<AlliesShared>().ScaleOnStatusBoard) / initScale;
             ImageInitScaleY = Enemy.transform.localScale.y * (Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().ScaleOnStatusBoard : Enemy.GetComponent<AlliesShared>().ScaleOnStatusBoard) / initScale;
@@ -91,7 +91,7 @@ public class StatusBoard : MonoBehaviour
             {
 
             }
-        }
+        }*/
 
         alreadyDelete = false;
     }
@@ -99,9 +99,6 @@ public class StatusBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        // React When Player Zoom out/ close
-        ReactWhenZoom();
         if (!isMouseOutsideRange())
         {
             WeaponPowerSwitchTimer -= Time.deltaTime;
@@ -342,6 +339,7 @@ public class StatusBoard : MonoBehaviour
             TierText.SetActive(true);
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
+            CloneEnemy.transform.localScale = new Vector3(1, 1, 1);
             // Destroy objects need to be destroyed so it wont interact
             for (int i=0;i<CloneEnemy.transform.childCount;i++)
             {
@@ -389,7 +387,7 @@ public class StatusBoard : MonoBehaviour
                 else
                 {
                     NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f, 127 / 255f);
-                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0, 0, 0, 127 / 255f);
+                    NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(1, 1, 1, 127 / 255f);
                 }
                 NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = EnemyObject.FighterName;
             }
@@ -590,6 +588,7 @@ public class StatusBoard : MonoBehaviour
             TierText.SetActive(true);
             // set Clone Enemy's parent as this board
             CloneEnemy.transform.SetParent(transform);
+            CloneEnemy.transform.localScale = new Vector3(1, 1, 1);
             // Destroy objects need to be destroyed so it wont interact
             for (int i = 0; i < CloneEnemy.transform.childCount; i++)
             {
@@ -757,7 +756,7 @@ public class StatusBoard : MonoBehaviour
             else
             {
                 NameBox.GetComponent<SpriteRenderer>().color = new Color(153 / 255f, 173 / 255f, 212 / 255f, 127 / 255f);
-                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(0, 0, 0, 127 / 255f);
+                NameBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color(1, 1, 1, 127 / 255f);
             }
             CloneEnemy.SetActive(true);
         }
