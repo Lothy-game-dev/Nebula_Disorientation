@@ -194,36 +194,7 @@ public class WSMovement : MonoBehaviour
         CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed;
         HPSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed));
         ShieldSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed));
-        float angle = CurrentRotateAngle % 360;
-        if (angle > 0 && angle <= 90)
-        {
-            HPSlider.transform.position = new Vector3(HPSlider.transform.position.x + (angle / 90) * 1 / 6, HPSlider.transform.position.y + (angle / 90) * 1 / 6, HPSlider.transform.position.z);
-            ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x + (angle / 90) * 1 / 6, ShieldSlider.transform.position.y + (angle / 90) * 1 / 6, ShieldSlider.transform.position.z);
-        }
-        else
-        {
-            if (angle > 90 && angle <= 180)
-            {
-                HPSlider.transform.position = new Vector3(HPSlider.transform.position.x - ((angle - 90) / 90) * 1 / 6, HPSlider.transform.position.y - ((angle - 90) / 90) * 1 / 6, HPSlider.transform.position.z);
-                ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x - ((angle - 90) / 90) * 1 / 6, ShieldSlider.transform.position.y - ((angle - 90) / 90) * 1 / 6, ShieldSlider.transform.position.z);
-            }
-            else
-            {
-                if (angle > 180 && angle <= 270)
-                {
-                    HPSlider.transform.position = new Vector3(HPSlider.transform.position.x + ((angle - 180) / 90) * 1 / 6, HPSlider.transform.position.y + ((angle - 180) / 90) * 1 / 6, HPSlider.transform.position.z);
-                    ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x + ((angle - 180) / 90) * 1 / 6, ShieldSlider.transform.position.y + ((angle - 180) / 90) * 1 / 6, ShieldSlider.transform.position.z);
-                }
-                else
-                {
-                    if (angle > 270 && angle <= 360)
-                    {
-                        HPSlider.transform.position = new Vector3(HPSlider.transform.position.x - ((angle - 270) / 90) * 1 / 6, HPSlider.transform.position.y - ((angle - 270) / 90) * 1 / 6, HPSlider.transform.position.z);
-                        ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x - ((angle - 270) / 90) * 1 / 6, ShieldSlider.transform.position.y - ((angle - 270) / 90) * 1 / 6, ShieldSlider.transform.position.z);
-                    }
-                }
-            }
-        }
+       
     }
     private void FighterMoving()
     {
