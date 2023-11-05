@@ -92,7 +92,7 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
         DelaySpawnStar = 0;
         if (HazardID==2)
         {
-            int n = Random.Range(10, 21);
+            int n = Random.Range(10, 51);
             for (int i=0;i<n;i++)
             {
                 int k = Random.Range(0, 2) == 0 ? 0 : 4;
@@ -107,7 +107,7 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
             HazardOverheat = 2;
         } else if (HazardID==4)
         {
-            HazardGammaRayBurstScale = 2;
+            HazardGammaRayBurstScale = 2.5f;
         } else if (HazardID==5)
         {
             DelaySpawnStar = 10f;

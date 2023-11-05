@@ -28,6 +28,7 @@ public class MainMenuCameraController : MonoBehaviour
     {
         db = GetComponent<InitializeDatabase>();
         //db.DropDatabase();
+        if (db!=null)
         db.Initialization();
     }
 

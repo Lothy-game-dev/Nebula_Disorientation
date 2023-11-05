@@ -6,7 +6,8 @@ using System.Data;
 
 public class AccessDatabase : MonoBehaviour
 {
-    private IDbConnection dbConnection;
+    private IDbConnection dbConnectionData;
+    private IDbConnection dbConnectionSave;
     #region Common
     /// <summary>
     /// Get Real name of an item from it no space no capitalize name
@@ -16,14 +17,14 @@ public class AccessDatabase : MonoBehaviour
     /// <returns></returns>
     public string GetItemRealName(string ItemName, string Type)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         string realName = "";
         if (Type=="Weapon")
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
             dbCheckCommand.CommandText = "SELECT WeaponName FROM ArsenalWeapon WHERE replace(replace(lower(WeaponName),' ',''),'-','')='" + ItemName.Replace("-","").Replace(" ","").ToLower() + "'";
             IDataReader reader = dbCheckCommand.ExecuteReader();
             while (reader.Read())
@@ -33,7 +34,7 @@ public class AccessDatabase : MonoBehaviour
         } else if (Type=="Power")
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
             dbCheckCommand.CommandText = "SELECT PowerName FROM ArsenalPower WHERE replace(replace(lower(PowerName),' ',''),'-','')='" + ItemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
             IDataReader reader = dbCheckCommand.ExecuteReader();
             while (reader.Read())
@@ -43,7 +44,7 @@ public class AccessDatabase : MonoBehaviour
         } else if (Type=="Model")
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
             dbCheckCommand.CommandText = "SELECT ModelName FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + ItemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
             IDataReader reader = dbCheckCommand.ExecuteReader();
             while (reader.Read())
@@ -53,7 +54,7 @@ public class AccessDatabase : MonoBehaviour
         } else if (Type=="Consumable")
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
             dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + ItemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
             IDataReader reader = dbCheckCommand.ExecuteReader();
             while (reader.Read())
@@ -63,15 +64,21 @@ public class AccessDatabase : MonoBehaviour
         }
         return realName;
     }
+
+    private void OpenConnection()
+    {
+        dbConnectionData = new SqliteConnection("URI=file:DataTables.db");
+        dbConnectionSave = new SqliteConnection("URI=file:SaveTables.db");
+    }
     #endregion
     #region Access Player Profile
     public string CreateNewPlayerProfile(string name)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE Name='" + name + "'";
         IDataReader reader = dbCheckCommand.ExecuteReader();
         bool check = true;
@@ -82,10 +89,10 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Exist";
         }
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo,DailyIncomeShard) " +
             "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0)";
         int n = dbCommand.ExecuteNonQuery();
@@ -93,17 +100,18 @@ public class AccessDatabase : MonoBehaviour
         {
             return "Fail";
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return "Success";
     }
 
     public bool UpdatePlayerProfileRank(int profileId, int rank)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT RankID FROM RankSystem WHERE RankID=" + rank + "";
         bool check = false;
         IDataReader reader = dbCheckCommand.ExecuteReader();
@@ -114,26 +122,29 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return false;
         }
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "UPDATE PlayerProfile SET Rank=" + rank + " WHERE PlayerId=" + profileId;
         dbCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return true;
     }
 
     public List<List<string>> GetAllNameAndRankFromPlayerProfile()
     {
+        OpenConnection();
         List<List<string>> result = new List<List<string>>();
         List<string> Names = new List<string>();
         List<string> Ranks = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "SELECT Name,Rank FROM PlayerProfile WHERE 1=1";
         IDataReader dataReader = dbCommand.ExecuteReader();
         while (dataReader.Read())
@@ -142,7 +153,7 @@ public class AccessDatabase : MonoBehaviour
             object rankTemp = dataReader.GetValue(1);
             if (rankTemp != null && rankTemp.ToString().Length > 0)
             {
-                IDbCommand dbCommand2 = dbConnection.CreateCommand();
+                IDbCommand dbCommand2 = dbConnectionData.CreateCommand();
                 dbCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankID=" + rankTemp;
                 IDataReader dataReader2 = dbCommand2.ExecuteReader();
                 string rank = "Unranked";
@@ -156,7 +167,8 @@ public class AccessDatabase : MonoBehaviour
                 Ranks.Add("Unranked");
             }
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         result.Add(Names);
         result.Add(Ranks);
         return result;
@@ -164,11 +176,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string DeletePlayerProfileByName(string name)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT PlayerId FROM PlayerProfile WHERE Name='" + name + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -181,18 +193,19 @@ public class AccessDatabase : MonoBehaviour
         {
             return "No Exist";
         }
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "DELETE FROM PlayerProfile WHERE Name='" + name + "'";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
             return "Fail";
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return "Success";
     }
     public Dictionary<string, object> GetPlayerInformationById(int PlayerId)
     {
+        OpenConnection();
         if (PlayerId == -1)
         {
             return null;
@@ -200,10 +213,10 @@ public class AccessDatabase : MonoBehaviour
         {
             Dictionary<string, object> values = new Dictionary<string, object>();
             // Open DB
-            dbConnection = new SqliteConnection("URI=file:Database.db");
-            dbConnection.Open();
+            dbConnectionData.Open();
+            dbConnectionSave.Open();
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE PlayerId =" + PlayerId.ToString();
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             bool check = false;
@@ -220,7 +233,7 @@ public class AccessDatabase : MonoBehaviour
                 } else
                 {
                     values.Add("RankId", dataReader.GetInt32(2));
-                    IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                    IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
                     dbCheckCommand2.CommandText = "SELECT RankName,TierColor FROM RankSystem WHERE RankId=" + dataReader.GetInt32(2);
                     IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
                     string rank = "Unranked";
@@ -274,7 +287,8 @@ public class AccessDatabase : MonoBehaviour
                 values.Add("DailyIncomeShard", dataReader.GetInt32(13));
 
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             if (!check)
             {
                 return null;
@@ -287,11 +301,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string AddFuelCell(int PlayerID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT FuelCell, LastFuelCellUsedTime FROM PlayerProfile WHERE PlayerId =" + PlayerID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int cell = -1;
@@ -309,13 +323,13 @@ public class AccessDatabase : MonoBehaviour
         }
         if (cell==-1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "No Data";
         } else
         {
             if (cell>=10)
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "Full";
             } else 
             {
@@ -330,11 +344,11 @@ public class AccessDatabase : MonoBehaviour
                         FinalStr = LastTime.ToString("dd/MM/yyyy HH:mm:ss");
                     }
                 }
-                IDbCommand dbCheck = dbConnection.CreateCommand();
+                IDbCommand dbCheck = dbConnectionSave.CreateCommand();
                 dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell + 1, LastFuelCellUsedTime ='" + 
                     (cell == 9 ? "" : FinalStr) + "' WHERE PlayerId =" + PlayerID;
                 int n = dbCheck.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 if (n==1)
                 {
                     return "Success";
@@ -348,11 +362,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string ReduceFuelCell(int PlayerID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerId =" + PlayerID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int cell = -1;
@@ -365,25 +379,25 @@ public class AccessDatabase : MonoBehaviour
         }
         if (cell == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "No Data";
         }
         else
         {
             if (cell <= 0)
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "Full";
             }
             else
             {
                 System.DateTime date = System.DateTime.Now;
                 string currentDateTime = date.ToString("dd/MM/yyyy HH:mm:ss");
-                IDbCommand dbCheck = dbConnection.CreateCommand();
+                IDbCommand dbCheck = dbConnectionSave.CreateCommand();
                 dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = FuelCell - 1" +
                     (cell == 10 ? ", LastFuelCellUsedTime = '" + currentDateTime + "'" : "") + " WHERE PlayerId =" + PlayerID;
                 int n = dbCheck.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 if (n == 1)
                 {
                     return "Success";
@@ -398,9 +412,9 @@ public class AccessDatabase : MonoBehaviour
 
     public string CheckIfConvertable(int PlayerId, string ConvertFrom, string ConvertTo, string FromAmount, string ToAmount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
         string from = "";
         string to = "";
@@ -422,7 +436,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (from != "" && to != "")
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             bool check = false;
@@ -433,12 +447,12 @@ public class AccessDatabase : MonoBehaviour
             }
             if (!check)
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "No Exist";
             }
             if (to.Equals("FuelCell"))
             {
-                IDbCommand dbCommand2 = dbConnection.CreateCommand();
+                IDbCommand dbCommand2 = dbConnectionSave.CreateCommand();
                 dbCommand2.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerID=" + PlayerId;
                 IDataReader dataReader3 = dbCommand2.ExecuteReader();
                 bool check2 = false;
@@ -451,19 +465,19 @@ public class AccessDatabase : MonoBehaviour
                 }
                 if (!check2)
                 {
-                    dbConnection.Close();
+                    dbConnectionSave.Close();
                     return "Fail";
                 }
                 else
                 {
                     if (fuelCheck > 10)
                     {
-                        dbConnection.Close();
+                        dbConnectionSave.Close();
                         return "Over Limit";
                     }
                 }
             }
-            IDbCommand dbCommand3 = dbConnection.CreateCommand();
+            IDbCommand dbCommand3 = dbConnectionSave.CreateCommand();
             dbCommand3.CommandText = "SELECT " + from + " FROM PlayerProfile WHERE PlayerID=" + PlayerId;
             IDataReader dataReader4 = dbCommand3.ExecuteReader();
             int k = -int.Parse(FromAmount);
@@ -476,31 +490,31 @@ public class AccessDatabase : MonoBehaviour
             }
             if (!check3)
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "Fail";
             }
             else
             {
                 if (k < 0)
                 {
-                    dbConnection.Close();
+                    dbConnectionSave.Close();
                     return "Not Enough";
                 }
             }
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Success";
         }
         else
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
     }
     public string ConvertCurrencyById(int PlayerId, string ConvertFrom, string ConvertTo, string FromAmount, string ToAmount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
         string from = "";
         string to = "";
@@ -522,7 +536,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (from != "" && to != "")
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Name, FuelCell FROM PlayerProfile WHERE PlayerID='" + PlayerId + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             bool check = false;
@@ -535,16 +549,16 @@ public class AccessDatabase : MonoBehaviour
             }
             if (!check)
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "No Exist";
             } else
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "UPDATE PlayerProfile SET " + from + " = " + from + " - " + FromAmount +
                     "," + to + " = " + to + " + " + ToAmount + (to == "FuelCell" && FuelCell == 9? ", LastFuelCellUsedTime = ''" : "") +
                     " WHERE PlayerID=" + PlayerId;
                 int n = dbCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 if (n != 1)
                 {
                     return "Fail";
@@ -556,18 +570,18 @@ public class AccessDatabase : MonoBehaviour
             }
         } else
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
     }
 
     public string RechargeTimelessShard(int PlayerId, int amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -578,20 +592,19 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "No Exist";
         } else
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "UPDATE PlayerProfile SET TimelessShard = TimelessShard + " + amount.ToString() + " WHERE PlayerID=" + PlayerId;
             int n = dbCommand.ExecuteNonQuery();
+            dbConnectionSave.Close();
             if (n != 1)
             {
-                dbConnection.Close();
                 return "Fail";
             } else
             {
-                dbConnection.Close();
                 return "Success";
             }
         }
@@ -599,11 +612,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string DecreaseCurrencyAfterBuy(int PlayerId, int Cash, int TimelessShard)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Cash, TimelessShard FROM PlayerProfile WHERE " +
             "PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -616,41 +629,40 @@ public class AccessDatabase : MonoBehaviour
         }
         if (cashOwn == -1 || timelessShardOwn == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Exist";
         }
         if (cashOwn < Cash)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Enough Cash";
         }
         if (timelessShardOwn < TimelessShard)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Enough Shard";
         }
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash - " + Cash
             + ", TimelessShard = TimelessShard - " + TimelessShard + " WHERE PlayerID=" + PlayerId;
         int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnectionSave.Close();
         if (n!=1)
         {
-            dbConnection.Close();
             return "Fail";
         } else
         {
-            dbConnection.Close();
             return "Success";
         }
     }
 
     public string IncreaseCurrencyAfterSell(int PlayerId, int Cash, int TimelessShard)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Cash, TimelessShard FROM PlayerProfile WHERE " +
             "PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -663,21 +675,20 @@ public class AccessDatabase : MonoBehaviour
         }
         if (cashOwn == -1 || timelessShardOwn == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Exist";
         }
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
             + ", TimelessShard = TimelessShard + " + TimelessShard + " WHERE PlayerID=" + PlayerId;
         int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnectionSave.Close();
         if (n != 1)
         {
-            dbConnection.Close();
             return "Fail";
         }
         else
         {
-            dbConnection.Close();
             return "Success";
         }
     }
@@ -685,12 +696,12 @@ public class AccessDatabase : MonoBehaviour
 
     public string UpdatePlayerProfileName(int PlayerId, string name)
     {
+        OpenConnection();
         int checkID = 0;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE " +
            "PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -700,15 +711,15 @@ public class AccessDatabase : MonoBehaviour
         }
         if (checkID == 0)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Exist";
         }
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Name = '"+ name +"'" +
             "" +
             " WHERE PlayerID=" + PlayerId;
         int n = dbCheckCommand2.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -720,14 +731,14 @@ public class AccessDatabase : MonoBehaviour
     }
     public string ResetDailyIncome()
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET DailyIncomeReceived = 'N' WHERE 1 = 1";
         int n = dbCheckCommand2.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -739,12 +750,12 @@ public class AccessDatabase : MonoBehaviour
     }
     public string CollectSalary(int PlayerId, int Cash, int Shard)
     {
+        OpenConnection();
         int checkID = 0;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE " +
            "PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -754,17 +765,17 @@ public class AccessDatabase : MonoBehaviour
         }
         if (checkID == 0)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Exist";
         }
         System.DateTime date = System.DateTime.Now;
         string collectedDate = date.ToString("dd/MM/yyyy");
         Debug.Log(collectedDate);
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + Cash
             + ", CollectedSalaryTime = '" + collectedDate + "', DailyIncomeReceived = 'Y', TimelessShard = TimelessShard + "+Shard+" WHERE PlayerID=" + PlayerId;
         int n = dbCheckCommand2.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -778,11 +789,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string UpdateCash(int PlayerId, int amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -793,22 +804,22 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "No Exist";
         }
         else
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "UPDATE PlayerProfile SET Cash = Cash + " + amount.ToString() + " WHERE PlayerID=" + PlayerId;
             int n = dbCommand.ExecuteNonQuery();
             if (n != 1)
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "Fail";
             }
             else
             {
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 return "Success";
             }
         }
@@ -816,11 +827,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string DecreaseCurrencyAfterBuyForSession(int SessionID, int Cash)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT SessionCash FROM Session WHERE " +
             "SessionID=" + SessionID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -831,36 +842,35 @@ public class AccessDatabase : MonoBehaviour
         }
         if (cashOwn == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Exist";
         }
         if (cashOwn < Cash)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Not Enough Cash";
         }       
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE Session SET SessionCash = SessionCash - " + Cash
             + " WHERE SessionID=" + SessionID;
         int n = dbCheckCommand2.ExecuteNonQuery();
+        dbConnectionSave.Close();
         if (n != 1)
         {
-            dbConnection.Close();
             return "Fail";
         }
         else
         {
-            dbConnection.Close();
             return "Success";
         }
     }
     public string UpdateFuelEnergy(int PlayerId, int amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -871,22 +881,21 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "No Exist";
         }
         else
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "UPDATE PlayerProfile SET FuelEnergy = FuelEnergy + " + amount + " WHERE PlayerID=" + PlayerId;
             int n = dbCommand.ExecuteNonQuery();
+            dbConnectionSave.Close();
             if (n != 1)
             {
-                dbConnection.Close();
                 return "Fail";
             }
             else
             {
-                dbConnection.Close();
                 return "Success";
             }
         }
@@ -895,11 +904,11 @@ public class AccessDatabase : MonoBehaviour
     #region Access Current Play Session
     public string AddPlaySession(string PlayerName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT PlayerId FROM PlayerProfile WHERE Name='" + PlayerName + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -913,11 +922,11 @@ public class AccessDatabase : MonoBehaviour
         {
             return "No Exist";
         }
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "INSERT INTO CurrentPlaySession (PlayerId,SessionStartTime,SessionEndTime) VALUES" +
             "(" + id.ToString() + ",datetime('now', '+7 hours'),null)";
         int n = dbCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -928,11 +937,11 @@ public class AccessDatabase : MonoBehaviour
     }
     public int GetCurrentSessionPlayerId()
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT PlayerId FROM CurrentPlaySession ORDER BY SessionStartTime DESC LIMIT 1";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int id = -1;
@@ -940,31 +949,30 @@ public class AccessDatabase : MonoBehaviour
         {
             id = dataReader.GetInt32(0);
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return id;
     }
     public void EndSession(int PlayerID)
     {
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "UPDATE PlayerProfile SET CurrentSession = NULL WHERE PlayerID = " + PlayerID +"";
         dbCheckCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
     }
 
     public string InputLoadoutSaveData(int PlayerID, string Model, string LeftWeapon, string RightWeapon, string FirstPower, string SecondPower,
         string Consumables, string ConsumablesCD)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
         Dictionary<string, object> Data = new();
         // Queries
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = "SELECT * FROM LoadoutSaveData WHERE PlayerID=" + PlayerID;
         IDataReader reader = dbCheckCommand1.ExecuteReader();
         while (reader.Read())
@@ -980,7 +988,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (Data.ContainsKey("ID"))
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "UPDATE LoadoutSaveData SET " +
                 "Model='" + Model + "'" +
                 ", LeftWeapon='" + LeftWeapon + "'" +
@@ -990,7 +998,7 @@ public class AccessDatabase : MonoBehaviour
                 ", Consumables='" + Consumables + "'" +
                 " WHERE LoadoutSaveDataID =" + (int)Data["ID"];
             int n = dbCheckCommand.ExecuteNonQuery();
-            dbConnection.Close();
+            dbConnectionSave.Close();
             if (n != 1)
             {
                 return "Fail";
@@ -1001,11 +1009,11 @@ public class AccessDatabase : MonoBehaviour
             }
         } else
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "INSERT INTO LoadoutSaveData (PlayerID,Model,LeftWeapon,RightWeapon,FirstPower,SecondPower,Consumables, ConsumablesCD) " +
                 "VALUES (" + PlayerID + ",'" + Model + "','" + LeftWeapon + "','" + RightWeapon + "','" + FirstPower + "','" + SecondPower + "','" + Consumables + "', '"+ ConsumablesCD + "')";
             int n = dbCheckCommand.ExecuteNonQuery();
-            dbConnection.Close();
+            dbConnectionSave.Close();
             if (n != 1)
             {
                 return "Fail";
@@ -1019,12 +1027,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetLoadoutSaveData(int PlayerID)
     {
+        OpenConnection();
         Dictionary<string, object> Data = new();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM LoadoutSaveData WHERE PlayerID=" + PlayerID;
         IDataReader reader = dbCheckCommand.ExecuteReader();
         while (reader.Read())
@@ -1038,20 +1046,20 @@ public class AccessDatabase : MonoBehaviour
             Data.Add("SecondPower", reader.GetString(6));
             Data.Add("Consumables", reader.GetString(7));
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return Data;
     }
     #endregion
     #region Access Daily Mission
     public int NumberOfDailyMissionById(int PlayerId)
     {
+        OpenConnection();
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT COUNT(*) FROM PlayerDailyMission WHERE PlayerID =" + PlayerId + " AND MissionDate='" + currentDate + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int count = 0;
@@ -1059,18 +1067,19 @@ public class AccessDatabase : MonoBehaviour
         {
             count = dataReader.GetInt32(0);
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return count;
     }
     public string GenerateDailyMission(int PlayerId, int number)
     {
+        OpenConnection();
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT COUNT(*) FROM DailyMissions";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int numberOfDailyMissions = 0;
@@ -1080,17 +1089,18 @@ public class AccessDatabase : MonoBehaviour
         }
         if (numberOfDailyMissions == 0)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
-        IDbCommand dbCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCommand2 = dbConnectionSave.CreateCommand();
         dbCommand2.CommandText = "SELECT MissionID FROM PlayerDailyMission WHERE PlayerId=" + PlayerId;
         List<int> alreadyMission = new List<int>();
         while (dataReader.Read())
         {
             alreadyMission.Add(dataReader.GetInt32(0));
         }
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         string insertText = "INSERT INTO PlayerDailyMission (PlayerID,MissionID,IsComplete,MissionDate, MissionProgess) VALUES ";
         for (int i = 0; i < number; i++)
         {
@@ -1119,7 +1129,8 @@ public class AccessDatabase : MonoBehaviour
         }
         dbCommand.CommandText = insertText;
         int check = dbCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         if (check == number)
         {
             return "Success";
@@ -1131,15 +1142,16 @@ public class AccessDatabase : MonoBehaviour
 
     public List<List<string>> GetListDailyMissionUndone(int PlayerId)
     {
+        OpenConnection();
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         List<List<string>> dailyMissions = new List<List<string>>();
         List<string> DM;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT MissionId, MissionProgess FROM PlayerDailyMission WHERE PlayerId=" + PlayerId + " AND MissionDate='" + currentDate + "' AND IsComplete='N'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check1 = false;
@@ -1148,7 +1160,7 @@ public class AccessDatabase : MonoBehaviour
             DM = new List<string>();
             check1 = true;
             DM.Add(dataReader.GetInt32(1).ToString());
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionData.CreateCommand();
             dbCommand.CommandText = "SELECT MissionVerb, MissionNumber FROM DailyMissions WHERE MissionId=" + dataReader.GetInt32(0);
             IDataReader dataReader2 = dbCommand.ExecuteReader();
             bool check2 = false;
@@ -1163,16 +1175,18 @@ public class AccessDatabase : MonoBehaviour
             if (!check2) return null;
         }
         if (!check1) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return dailyMissions;
     }
     public void UpdateDailyMissionProgess(int PlayerId, string mission, int amount)   
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
 
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionData.CreateCommand();
         dbCommand.CommandText = "SELECT MissionId FROM DailyMissions WHERE MissionVerb='" + mission + "'";
         IDataReader dataReader2 = dbCommand.ExecuteReader();
         int id = 0;
@@ -1182,18 +1196,20 @@ public class AccessDatabase : MonoBehaviour
         }      
 
         string query = "UPDATE PlayerDailyMission SET MissionProgess = MissionProgess + "+ amount + " WHERE PlayerId=" + PlayerId + " AND MissionId = " + id + "";
-        IDbCommand dbCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCommand2 = dbConnectionSave.CreateCommand();
         dbCommand2.CommandText = query;
         dbCommand2.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
     }
     public void DailyMissionDone(int PlayerID, string mission)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
 
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionData.CreateCommand();
         dbCommand.CommandText = "SELECT MissionId FROM DailyMissions WHERE MissionVerb='" + mission + "'";
         IDataReader dataReader2 = dbCommand.ExecuteReader();
         int id = 0;
@@ -1203,25 +1219,27 @@ public class AccessDatabase : MonoBehaviour
         }
 
         string query = "UPDATE PlayerDailyMission SET IsComplete = 'Y' WHERE PlayerId=" + PlayerID + " AND MissionId = " + id + "";
-        IDbCommand dbCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCommand2 = dbConnectionSave.CreateCommand();
         dbCommand2.CommandText = query;
         dbCommand2.ExecuteNonQuery();
 
         //Update statistic
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = "UPDATE Statistic SET TotalDailyMissionDone = TotalDailyMissionDone + 1 WHERE PlayerID = " + PlayerID + "";
         dbCheckCommand1.ExecuteNonQuery();
 
         //Reward
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "UPDATE PlayerProfile SET FuelEnergy = FuelEnergy + 100, TimelessShard = TimelessShard + 5, Cash = Cash + 2500 WHERE PlayerID = " + PlayerID + "";
         dbCheckCommand2.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         
     }
 
     public List<List<string>> GetListDailyMission(int PlayerId)
     {
+        OpenConnection();
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         List<List<string>> dailyMissions = new List<List<string>>();
@@ -1230,10 +1248,10 @@ public class AccessDatabase : MonoBehaviour
         dailyMissions.Add(new List<string>());
         dailyMissions.Add(new List<string>());
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT MissionId, MissionProgess, IsComplete FROM PlayerDailyMission WHERE PlayerId=" + PlayerId + " AND MissionDate='" + currentDate + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check1 = false;
@@ -1242,7 +1260,7 @@ public class AccessDatabase : MonoBehaviour
             check1 = true;
             dailyMissions[2].Add(dataReader.GetInt32(1).ToString());
             dailyMissions[3].Add(dataReader.GetString(2));
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionData.CreateCommand();
             dbCommand.CommandText = "SELECT MissionVerb, MissionNumber FROM DailyMissions WHERE MissionId=" + dataReader.GetInt32(0);
             IDataReader dataReader2 = dbCommand.ExecuteReader();
             bool check2 = false;
@@ -1256,19 +1274,20 @@ public class AccessDatabase : MonoBehaviour
             if (!check2) return null;
         }
         if (!check1) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return dailyMissions;
     }
     #endregion
     #region Access Option
     public Dictionary<string, object> GetOption()
     {
+        OpenConnection();
         Dictionary<string, object> option = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM Option";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
@@ -1280,16 +1299,16 @@ public class AccessDatabase : MonoBehaviour
             option.Add("Fps", dataReader.GetInt32(3));
             option.Add("Resol", dataReader.GetString(4));
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return option;
     }
     public void UpdateOptionSetting(int MVolume, int Music, int Sound, int Fps, string Resol)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "UPDATE Option SET " +
             "MasterVolume = " + MVolume + ", " +
             "MusicVolume = " + Music + ", " +
@@ -1298,19 +1317,19 @@ public class AccessDatabase : MonoBehaviour
             "Resolution = '" + Resol + "' Where 1=1";
 
         dbCheckCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
     }
     #endregion
     #region Access Arsenal Weapon
     public List<List<string>> GetAllArsenalWeapon()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> weaplist;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM ArsenalWeapon";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
@@ -1344,19 +1363,20 @@ public class AccessDatabase : MonoBehaviour
             weaplist.Add(dataReader.GetString(11));
             list.Add(weaplist);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public string CheckWeaponPowerPrereq(int PlayerID, string ItemName, string Type)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         if (Type == "Weapon")
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
             dbCheckCommand.CommandText = "SELECT PrereqWeapon FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + ItemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             int n = -1;
@@ -1369,12 +1389,12 @@ public class AccessDatabase : MonoBehaviour
             }
             if (n == -1)
             {
-                dbConnection.Close();
+                dbConnectionData.Close();
                 return "No Prereq";
             }
             else
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE ItemID=" + n + " AND ItemType='Weapon' AND PlayerID=" + PlayerID;
                 IDataReader dataReader2 = dbCommand.ExecuteReader();
                 int k = 0;
@@ -1387,12 +1407,13 @@ public class AccessDatabase : MonoBehaviour
                 }
                 if (k > 0)
                 {
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return "Pass";
                 }
                 else
                 {
-                    IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                    IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
                     dbCheckCommand2.CommandText = "SELECT WeaponName, TierColor FROM ArsenalWeapon WHERE WeaponID=" + n;
                     IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
                     string name = "";
@@ -1400,7 +1421,8 @@ public class AccessDatabase : MonoBehaviour
                     {
                         name = "<color=" + dataReader3.GetString(1) + ">" + dataReader3.GetString(0) + "</color>";
                     }
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return name;
                 }
             }
@@ -1408,7 +1430,7 @@ public class AccessDatabase : MonoBehaviour
         else if (Type == "Power")
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
             dbCheckCommand.CommandText = "SELECT PrereqItem FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + ItemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             int n = -1;
@@ -1421,12 +1443,13 @@ public class AccessDatabase : MonoBehaviour
             }
             if (n == -1)
             {
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 return "No Prereq";
             }
             else
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE ItemID=" + n + " AND ItemType='Power' AND PlayerID=" + PlayerID;
                 IDataReader dataReader2 = dbCommand.ExecuteReader();
                 int k = 0;
@@ -1439,12 +1462,13 @@ public class AccessDatabase : MonoBehaviour
                 }
                 if (k > 0)
                 {
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return "Pass";
                 }
                 else
                 {
-                    IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                    IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
                     dbCheckCommand2.CommandText = "SELECT PowerName, TierColor FROM ArsenalPower WHERE PowerID=" + n;
                     IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
                     string name = "";
@@ -1452,59 +1476,79 @@ public class AccessDatabase : MonoBehaviour
                     {
                         name = "<color=" + dataReader3.GetString(1) + ">" + dataReader3.GetString(0) + "</color>";
                     }
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return name;
                 }
             }
         }
-        else return "Unidentified";
-
+        else
+        {
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
+            return "Unidentified";
+        }
     }
 
     public List<string> GetAllWeaponName()
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT WeaponName FROM ArsenalWeapon WHERE 1=1";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public List<string> GetAllOwnedWeapon(int PlayerID)
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ArsenalWeapon.WeaponName FROM ArsenalWeapon " +
-            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Weapon' AND ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY ArsenalWeapon.WeaponID ASC";
+        IDbCommand command = dbConnectionSave.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while (reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnectionSave.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int n = command2.ExecuteNonQuery();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName FROM DataTables.ArsenalWeapon " +
+            "inner join PlayerOwnership WHERE PlayerOwnership.PlayerID=" + PlayerID + " AND PlayerOwnership.ItemType='Weapon' " +
+            "AND DataTables.ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY DataTables.ArsenalWeapon.WeaponID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return list;
     }
 
     public string GetWeaponRealName(string WeaponName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT WeaponName, TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + WeaponName.Replace(" ","").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         string str = "";
@@ -1512,21 +1556,37 @@ public class AccessDatabase : MonoBehaviour
         {
             str = "<color=" + dataReader.GetString(1) + ">" + dataReader.GetString(0) + "</color>";
         }
+        dbConnectionData.Close();
         return str;
     }
     
     public List<string> GetOwnedWeaponExceptForName(int PlayerID, string WeaponName)
     {
+        OpenConnection();
         Dictionary<string, int> DictOwned = new Dictionary<string, int>();
         Dictionary<string, string> NameConversion = new Dictionary<string, string>();
         string checkName = WeaponName.Replace(" ", "").ToLower();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
+
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ArsenalWeapon.WeaponName, Quantity FROM ArsenalWeapon " +
-            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Weapon' AND ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY ArsenalWeapon.WeaponID ASC";
+        IDbCommand command = dbConnectionSave.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while (reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnectionSave.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int n = command2.ExecuteNonQuery();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName, DataTables.ArsenalWeapon.Quantity FROM DataTables.ArsenalWeapon " +
+            "inner join PlayerOwnership WHERE  PlayerOwnership.PlayerID=" + PlayerID + " AND  PlayerOwnership.ItemType='Weapon'" +
+            " AND DataTables.ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY DataTables.ArsenalWeapon.WeaponID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
@@ -1541,17 +1601,19 @@ public class AccessDatabase : MonoBehaviour
                 DictOwned.Remove(NameConversion[checkName]);
             }
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return new List<string>(DictOwned.Keys);
     }
     
     public List<string> GetSessionOwnedWeaponExceptForName(int PlayerID, string WeaponName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader1 = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -1566,7 +1628,8 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return null;
         }
         else
@@ -1575,9 +1638,22 @@ public class AccessDatabase : MonoBehaviour
             Dictionary<string, string> NameConversion = new Dictionary<string, string>();
             string checkName = WeaponName.Replace(" ", "").ToLower();
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT ArsenalWeapon.WeaponName, Quantity FROM ArsenalWeapon " +
-                "inner join SessionOwnership WHERE SessionID=" + n + " AND ItemType='Weapon' AND ArsenalWeapon.WeaponID = SessionOwnership.ItemID ORDER BY ArsenalWeapon.WeaponID ASC";
+            IDbCommand command = dbConnectionSave.CreateCommand();
+            command.CommandText = "SELECT file FROM pragma_database_list;";
+            IDataReader reader = command.ExecuteReader();
+            string dir = "";
+            while (reader.Read())
+            {
+                dir = reader.GetString(0);
+            }
+            dir = dir.Replace("SaveTables.db", "DataTables.db");
+            IDbCommand command2 = dbConnectionSave.CreateCommand();
+            command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+            int sadasdasad = command2.ExecuteNonQuery();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName, DataTables.ArsenalWeapon.Quantity FROM DataTables.ArsenalWeapon " +
+                "inner join SessionOwnership WHERE SessionOwnership.SessionID=" + n + " AND SessionOwnership.ItemType='Weapon'" +
+                " AND DataTables.ArsenalWeapon.WeaponID = SessionOwnership.ItemID ORDER BY DataTables.ArsenalWeapon.WeaponID ASC";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             while (dataReader.Read())
             {
@@ -1592,17 +1668,18 @@ public class AccessDatabase : MonoBehaviour
                     DictOwned.Remove(NameConversion[checkName]);
                 }
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return new List<string>(DictOwned.Keys);
         }
     }
     public string AddStarterGiftWeapons(int PlayerID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Weapon' AND ItemID=1";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int n = 0;
@@ -1615,11 +1692,11 @@ public class AccessDatabase : MonoBehaviour
         }
         if (n==0)
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "INSERT INTO PlayerOwnership (PlayerID,ItemType,ItemID,Quantity) VALUES " +
                 "(" + PlayerID + ",'Weapon',1,2)";
             int check = dbCommand.ExecuteNonQuery();
-            dbConnection.Close();
+            dbConnectionSave.Close();
             if (check==1)
             {
                 return "2";
@@ -1629,11 +1706,11 @@ public class AccessDatabase : MonoBehaviour
             }
         } else if (n==1)
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "UPDATE PlayerOwnership SET Quantity = 2 WHERE " +
                 "PlayerId=" + PlayerID + " AND ItemID=1 AND ItemType='Weapon'";
             int check = dbCommand.ExecuteNonQuery();
-            dbConnection.Close();
+            dbConnectionSave.Close();
             if (check==1)
             {
                 return "1";
@@ -1646,12 +1723,12 @@ public class AccessDatabase : MonoBehaviour
     }
     public Dictionary<string, object> GetWeaponDataByName(string name)
     {
+        OpenConnection();
         Dictionary<string, object> list = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT WeaponName,WeaponType,WeaponDescription,WeaponStats,TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -1665,7 +1742,7 @@ public class AccessDatabase : MonoBehaviour
             list.Add("Color", dataReader.GetString(4));
             break;
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -1677,10 +1754,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string CheckWeaponPowerPrereqForSession(int PlayerID, string ItemName, string Type)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        IDbCommand dbCheckCommand9 = dbConnection.CreateCommand();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
+        IDbCommand dbCheckCommand9 = dbConnectionSave.CreateCommand();
         dbCheckCommand9.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
             "PlayerID=" + PlayerID;
         IDataReader dataReader9 = dbCheckCommand9.ExecuteReader();
@@ -1694,7 +1772,7 @@ public class AccessDatabase : MonoBehaviour
             if (Type == "Weapon")
             {
                 // Queries
-                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
                 dbCheckCommand.CommandText = "SELECT PrereqWeapon FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + ItemName.Replace(" ", "").ToLower() + "'";
                 IDataReader dataReader = dbCheckCommand.ExecuteReader();
                 int n = -1;
@@ -1707,12 +1785,13 @@ public class AccessDatabase : MonoBehaviour
                 }
                 if (n == -1)
                 {
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return "No Prereq";
                 }
                 else
                 {
-                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                     dbCommand.CommandText = "SELECT Quantity FROM SessionOwnership WHERE ItemID=" + n + " AND ItemType='Weapon' AND SessionID=" + SessionID;
                     IDataReader dataReader2 = dbCommand.ExecuteReader();
                     int k = 0;
@@ -1725,12 +1804,13 @@ public class AccessDatabase : MonoBehaviour
                     }
                     if (k > 0)
                     {
-                        dbConnection.Close();
+                        dbConnectionData.Close();
+                        dbConnectionSave.Close();
                         return "Pass";
                     }
                     else
                     {
-                        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                        IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
                         dbCheckCommand2.CommandText = "SELECT WeaponName, TierColor FROM ArsenalWeapon WHERE WeaponID=" + n;
                         IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
                         string name = "";
@@ -1738,7 +1818,8 @@ public class AccessDatabase : MonoBehaviour
                         {
                             name = "<color=" + dataReader3.GetString(1) + ">" + dataReader3.GetString(0) + "</color>";
                         }
-                        dbConnection.Close();
+                        dbConnectionData.Close();
+                        dbConnectionSave.Close();
                         return name;
                     }
                 }
@@ -1746,7 +1827,7 @@ public class AccessDatabase : MonoBehaviour
             else if (Type == "Power")
             {
                 // Queries
-                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
                 dbCheckCommand.CommandText = "SELECT PrereqItem FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + ItemName.Replace(" ", "").ToLower() + "'";
                 IDataReader dataReader = dbCheckCommand.ExecuteReader();
                 int n = -1;
@@ -1759,12 +1840,13 @@ public class AccessDatabase : MonoBehaviour
                 }
                 if (n == -1)
                 {
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return "No Prereq";
                 }
                 else
                 {
-                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                     dbCommand.CommandText = "SELECT Quantity FROM SessionOwnership WHERE ItemID=" + n + " AND ItemType='Power' AND SessionID=" + SessionID;
                     IDataReader dataReader2 = dbCommand.ExecuteReader();
                     int k = 0;
@@ -1777,12 +1859,13 @@ public class AccessDatabase : MonoBehaviour
                     }
                     if (k > 0)
                     {
-                        dbConnection.Close();
+                        dbConnectionData.Close();
+                        dbConnectionData.Close();
                         return "Pass";
                     }
                     else
                     {
-                        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+                        IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
                         dbCheckCommand2.CommandText = "SELECT PowerName, TierColor FROM ArsenalPower WHERE PowerID=" + n;
                         IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
                         string name = "";
@@ -1790,27 +1873,38 @@ public class AccessDatabase : MonoBehaviour
                         {
                             name = "<color=" + dataReader3.GetString(1) + ">" + dataReader3.GetString(0) + "</color>";
                         }
-                        dbConnection.Close();
+                        dbConnectionData.Close();
+                        dbConnectionSave.Close();
                         return name;
                     }
                 }
             }
-            else return "Unidentified";
+            else
+            {
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
+                return "Unidentified";
+            }
         }
-        else return "Unidentified";
+        else
+        {
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
+            return "Unidentified";
+        }
 
     }
     #endregion
     #region Access Factory Fighter/Model
     public List<List<string>> GetAllFighter()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> fighterlist;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM FactoryModel";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
@@ -1834,52 +1928,67 @@ public class AccessDatabase : MonoBehaviour
             fighterlist.Add(dataReader.GetString(7));
             list.Add(fighterlist);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
     public List<string> GetAllModelName()
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT ModelName FROM FactoryModel WHERE 1=1";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public List<string> GetAllOwnedModel(int PlayerID)
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT FactoryModel.ModelName FROM FactoryModel " +
-            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Model' AND FactoryModel.ModelID = PlayerOwnership.ItemID  ORDER BY FactoryModel.ModelID ASC";
+        IDbCommand command = dbConnectionSave.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while (reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnectionSave.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int sadasdasad = command2.ExecuteNonQuery();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT DataTables.FactoryModel.ModelName FROM DataTables.FactoryModel " +
+            "inner join PlayerOwnership WHERE PlayerOwnership.PlayerID=" + PlayerID + " AND PlayerOwnership.ItemType='Model' " +
+            "AND DataTables.FactoryModel.ModelID = PlayerOwnership.ItemID ORDER BY DataTables.FactoryModel.ModelID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return list;
     }
     public string GetFighterStatsByName(string name)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT ModelStats FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -1889,7 +1998,7 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             stats = dataReader.GetString(0);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return "Fail";
@@ -1901,11 +2010,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string GetFighterTierByName(string name)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT TierColor FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -1915,7 +2024,7 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             stats = dataReader.GetString(0);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return "Fail";
@@ -1929,13 +2038,13 @@ public class AccessDatabase : MonoBehaviour
     #region Access Power
     public List<List<string>> GetAllPower()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> weaplist;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM ArsenalPower";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
@@ -1969,49 +2078,65 @@ public class AccessDatabase : MonoBehaviour
             weaplist.Add(dataReader.GetString(10));
             list.Add(weaplist);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public List<string> GetAllPowerName()
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT PowerName FROM ArsenalPower WHERE 1=1";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public List<string> GetAllOwnedPower(int PlayerID)
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ArsenalPower.PowerName FROM ArsenalPower " +
-            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Power' AND ArsenalPower.PowerID = PlayerOwnership.ItemID ORDER BY ArsenalPower.PowerID ASC";
+        IDbCommand command = dbConnectionSave.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while (reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnectionSave.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int sadasdasad = command2.ExecuteNonQuery();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT DataTables.ArsenalPower.PowerName FROM DataTables.ArsenalPower " +
+            "inner join PlayerOwnership WHERE PlayerOwnership.PlayerID=" + PlayerID + " AND PlayerOwnership.ItemType='Power' " +
+            "AND DataTables.ArsenalPower.PowerID = PlayerOwnership.ItemID ORDER BY DataTables.ArsenalPower.PowerID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return list;
     }
 
     public List<string> GetAllOwnedPowerExceptForName(int PlayerID, string Name)
     {
+        OpenConnection();
         List<string> list = new List<string>();
         string check = "";
         if (Name.Replace(" ", "").ToLower().Contains("barrier"))
@@ -2030,13 +2155,26 @@ public class AccessDatabase : MonoBehaviour
         {
             check = "rocket";
         }
-            // Open DB
-            dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        // Open DB
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT ArsenalPower.PowerName FROM ArsenalPower " +
-            "inner join PlayerOwnership WHERE PlayerID=" + PlayerID + " AND ItemType='Power' AND ArsenalPower.PowerID = PlayerOwnership.ItemID ORDER BY ArsenalPower.PowerID ASC";
+        IDbCommand command = dbConnectionSave.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while (reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnectionSave.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int sadasdasad = command2.ExecuteNonQuery();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT DataTables.ArsenalPower.PowerName FROM DataTables.ArsenalPower " +
+            "inner join PlayerOwnership WHERE PlayerOwnership.PlayerID=" + PlayerID + " AND PlayerOwnership.ItemType='Power' " +
+            "AND DataTables.ArsenalPower.PowerID = PlayerOwnership.ItemID ORDER BY DataTables.ArsenalPower.PowerID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
@@ -2051,17 +2189,19 @@ public class AccessDatabase : MonoBehaviour
                 list.Add(dataReader.GetString(0).Replace(" ", ""));
             }
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return list;
     }
 
     public List<string> GetSessionAllOwnedPowerExceptForName(int PlayerID, string Name)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader1 = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -2076,7 +2216,8 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check1)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return null;
         }
         else
@@ -2101,9 +2242,22 @@ public class AccessDatabase : MonoBehaviour
             }
 
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT ArsenalPower.PowerName FROM ArsenalPower " +
-                "inner join SessionOwnership WHERE SessionID=" + n + " AND ItemType='Power' AND ArsenalPower.PowerID = SessionOwnership.ItemID ORDER BY ArsenalPower.PowerID ASC";
+            IDbCommand command = dbConnectionSave.CreateCommand();
+            command.CommandText = "SELECT file FROM pragma_database_list;";
+            IDataReader reader = command.ExecuteReader();
+            string dir = "";
+            while (reader.Read())
+            {
+                dir = reader.GetString(0);
+            }
+            dir = dir.Replace("SaveTables.db", "DataTables.db");
+            IDbCommand command2 = dbConnectionSave.CreateCommand();
+            command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+            int sadasdasad = command2.ExecuteNonQuery();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT DataTables.ArsenalPower.PowerName FROM DataTables.ArsenalPower " +
+                "inner join SessionOwnership WHERE SessionOwnership.SessionID=" + n + " AND SessionOwnership.ItemType='Power'" +
+                " AND DataTables.ArsenalPower.PowerID = SessionOwnership.ItemID ORDER BY DataTables.ArsenalPower.PowerID ASC";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             while (dataReader.Read())
             {
@@ -2119,18 +2273,19 @@ public class AccessDatabase : MonoBehaviour
                     list.Add(dataReader.GetString(0).Replace(" ", ""));
                 }
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return list;
         }
     }
     public Dictionary<string, object> GetPowerDataByName(string name)
     {
+        OpenConnection();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2154,7 +2309,7 @@ public class AccessDatabase : MonoBehaviour
             datas.Add("Stats", dataReader.GetString(3));
             datas.Add("Color", dataReader.GetString(4));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -2167,12 +2322,12 @@ public class AccessDatabase : MonoBehaviour
     #region Access Consumables
     public Dictionary<string, object> GetConsumableDataByName(string itemName)
     {
+        OpenConnection();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT ItemName, ItemDescription, StockPerDays, ItemEffect, EffectDuration, MaxStack, ItemPrice, Cooldown, TierColor FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2203,7 +2358,7 @@ public class AccessDatabase : MonoBehaviour
             }
             datas.Add("Color", dataReader.GetString(8));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -2213,11 +2368,11 @@ public class AccessDatabase : MonoBehaviour
 
     public int GetStackLimitOfConsumableByName(string itemName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT MaxStack FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2227,7 +2382,7 @@ public class AccessDatabase : MonoBehaviour
             check = true;
             n = dataReader.GetInt32(0);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return -1;
@@ -2239,11 +2394,11 @@ public class AccessDatabase : MonoBehaviour
 
     public int GetStocksPerDayOfConsumable(string itemName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT ItemID, StockPerDays FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')=='" + itemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2259,7 +2414,7 @@ public class AccessDatabase : MonoBehaviour
             } else
                 n = dataReader.GetInt32(1);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return -2;
@@ -2276,32 +2431,48 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, int> GetOwnedConsumables(int PlayerID)
     {
+        OpenConnection();
         Dictionary<string, int> data = new Dictionary<string, int>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT SpaceShop.ItemName,PlayerOwnership.Quantity" +
-            " FROM SpaceShop inner join PlayerOwnership WHERE PlayerID=" + PlayerID +
-            " AND ItemType='Consumable' AND SpaceShop.ItemID=PlayerOwnership.ItemID ORDER BY SpaceShop.ItemID ASC";
+        IDbCommand command = dbConnectionSave.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while (reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnectionSave.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int sadasdasad = command2.ExecuteNonQuery();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT DataTables.SpaceShop.ItemName, PlayerOwnership.Quantity" +
+            " FROM DataTables.SpaceShop inner join PlayerOwnership WHERE PlayerOwnership.PlayerID=" + PlayerID +
+            " AND PlayerOwnership.ItemType='Consumable' AND DataTables.SpaceShop.ItemID = PlayerOwnership.ItemID " +
+            "ORDER BY DataTables.SpaceShop.ItemID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             data.Add(dataReader.GetString(0).Replace("-", "").Replace(" ", ""), dataReader.GetInt32(1));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return data;
     }
     
     public Dictionary<string, int> GetSessionOwnedConsumables(int PlayerID)
     {
+        OpenConnection();
         Dictionary<string, int> data = new Dictionary<string, int>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader1 = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -2316,52 +2487,67 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return null;
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT SpaceShop.ItemName,SessionOwnership.Quantity" +
-                " FROM SpaceShop inner join SessionOwnership WHERE SessionID=" + n +
-                " AND ItemType='Consumable' AND SpaceShop.ItemID=SessionOwnership.ItemID ORDER BY SpaceShop.ItemID ASC";
+            IDbCommand command = dbConnectionSave.CreateCommand();
+            command.CommandText = "SELECT file FROM pragma_database_list;";
+            IDataReader reader = command.ExecuteReader();
+            string dir = "";
+            while (reader.Read())
+            {
+                dir = reader.GetString(0);
+            }
+            dir = dir.Replace("SaveTables.db", "DataTables.db");
+            IDbCommand command2 = dbConnectionSave.CreateCommand();
+            command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+            int sadasdasad = command2.ExecuteNonQuery();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT DataTables.SpaceShop.ItemName, SessionOwnership.Quantity" +
+                " FROM DataTables.SpaceShop inner join SessionOwnership WHERE SessionOwnership.SessionID=" + n +
+                " AND SessionOwnership.ItemType='Consumable' AND DataTables.SpaceShop.ItemID = SessionOwnership.ItemID" +
+                " ORDER BY DataTables.SpaceShop.ItemID ASC";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
             while (dataReader.Read())
             {
                 data.Add(dataReader.GetString(0).Replace("-", "").Replace(" ", ""), dataReader.GetInt32(1));
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return data;
         }
     }
 
     public List<string> GetSpaceShopItemNameSearchByName(string name)
     {
+        OpenConnection();
         List<string> list = new List<string>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT ItemName FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','') LIKE '%" + name.Replace(" ", "").Replace("-", "").ToLower() + "%'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetString(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
     public List<List<string>> GetAllConsumable()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> ConsuList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from SpaceShop";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2397,20 +2583,19 @@ public class AccessDatabase : MonoBehaviour
             list.Add(ConsuList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
     #endregion
     #region Access Rank
     public Dictionary<string, object> GetRankById(int id, int SupremeWarriorNo)
     {
-        int PlayerID = GetCurrentSessionPlayerId();
+        OpenConnection();
         Dictionary<string, object> rank = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM RankSystem WHERE RankId=" + id;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check1 = false;
@@ -2465,26 +2650,27 @@ public class AccessDatabase : MonoBehaviour
             }   
         }
         if (!check1) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
  
         return rank;
      }
 
     public List<List<string>> GetAllRank()
     {
+        OpenConnection();
         int PlayerID = GetCurrentSessionPlayerId();
         List<List<string>> list = new List<List<string>>();
         List<string> RankList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from RankSystem";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
         // Queries
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = "Select SupremeWarriorNo from PlayerProfile WHERE PlayerID = " + PlayerID + "";
         IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         bool check = false;
@@ -2537,15 +2723,16 @@ public class AccessDatabase : MonoBehaviour
             list.Add(RankList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
+        dbConnectionSave.Close();
         return list;
     }
 
     public void UpdateRank(int PlayerID, Dictionary<string, object> data)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         string query = "";
         if (int.Parse(data["RankId"].ToString()) == 18)
         {
@@ -2555,23 +2742,23 @@ public class AccessDatabase : MonoBehaviour
             query = "UPDATE PlayerProfile SET Rank = " + int.Parse(data["RankId"].ToString()) + ", DailyIncome = " + int.Parse(data["DailyIncome"].ToString()) + ", DailyIncomeShard = " + int.Parse(data["DailyIncomeShard"].ToString()) + "  WHERE PlayerID = " + PlayerID + "";
         }
         // Queries    
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = query;
         dbCheckCommand1.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
     }
 
     #endregion
     #region Access Enemy
     public List<List<string>> GetAllEnemy()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> EnemyList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from Enemies";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2591,18 +2778,18 @@ public class AccessDatabase : MonoBehaviour
             list.Add(EnemyList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public Dictionary<string,object> GetDataEnemyById(int enemyID)
     {
+        OpenConnection();
         Dictionary<string,object> data = new Dictionary<string,object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select EnemyName, MainTarget, EnemyWeapons, EnemyStats, EnemyPower, DefeatReward, EnemyTier from Enemies WHERE EnemyID=" + enemyID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2617,7 +2804,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("DefeatReward", dataReader.GetString(5));
             data.Add("TierColor", dataReader.GetString(6));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -2627,12 +2814,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetDataEnemyByName(string enemyName)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select EnemyID, MainTarget, EnemyWeapons, EnemyStats, EnemyPower, DefeatReward, EnemyTier from Enemies WHERE EnemyName='" + enemyName + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2647,7 +2834,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("DefeatReward", dataReader.GetString(5));
             data.Add("TierColor", dataReader.GetString(6));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -2659,13 +2846,13 @@ public class AccessDatabase : MonoBehaviour
     #region Access Warship
     public List<List<string>> GetAllWarship()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> WarshipList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from Warship";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2695,17 +2882,17 @@ public class AccessDatabase : MonoBehaviour
             list.Add(WarshipList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public Dictionary<string, object> GetWSById(int ID)
     {
+        OpenConnection();
         Dictionary<string, object> WSDict = new Dictionary<string, object>();
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from Warship Where WSid = " + ID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -2721,17 +2908,19 @@ public class AccessDatabase : MonoBehaviour
             WSDict.Add("Bounty", dataReader.GetString(7));
         }
         if (!check) return null;
+        dbConnectionData.Close();
         return WSDict;
     }
     #endregion
     #region Access Ownership
     public int GetCurrentOwnedNumberOfConsumableByName(int PlayerID, string itemName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionData.CreateCommand();
         dbCheckCommand1.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),'-',''),' ','')='" + itemName.Replace("-","").Replace(" ","").ToLower() + "'";
         IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         int n = 0;
@@ -2741,7 +2930,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (n!=0)
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE " +
                 "PlayerID=" + PlayerID + " AND ItemID=" + n + " AND ItemType='Consumable'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -2750,25 +2939,28 @@ public class AccessDatabase : MonoBehaviour
             {
                 quan = dataReader.GetInt32(0);
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return quan;
         } else
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return 0;
         }
     }
 
     public int GetCurrentOwnershipWeaponPowerModelByName(int PlayerID, string itemName, string Type)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         int id = -1;
         // Queries
         if ("Weapon".Equals(Type))
         {
-            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            IDbCommand dbCheckWeapon = dbConnectionData.CreateCommand();
             dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
             while (dataReaderWeapon.Read())
@@ -2779,7 +2971,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Power".Equals(Type))
         {
-            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            IDbCommand dbCheckPower = dbConnectionData.CreateCommand();
             dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
             while (dataReaderPower.Read())
@@ -2789,7 +2981,7 @@ public class AccessDatabase : MonoBehaviour
             }
         } else if ("Model".Equals(Type))
         {
-            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            IDbCommand dbCheckModel = dbConnectionData.CreateCommand();
             dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-","").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
@@ -2800,7 +2992,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id!=-1)
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE " +
                 "PlayerID=" + PlayerID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -2809,23 +3001,25 @@ public class AccessDatabase : MonoBehaviour
             {
                 quan = dataReader.GetInt32(0);
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return quan;
         }
         else
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return -1;
         }
     }
 
     public int GetCurrentOwnershipWeaponPowerModel(int PlayerID, string Type) 
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Sum(Quantity) FROM PlayerOwnership WHERE " +
             "PlayerID=" + PlayerID + " AND ItemType='" + Type + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -2840,7 +3034,7 @@ public class AccessDatabase : MonoBehaviour
                 quan = dataReader.GetInt32(0);
             }
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return quan;
        
     }
@@ -2853,14 +3047,15 @@ public class AccessDatabase : MonoBehaviour
     /// <param name="Quantity">Count</param>
     public string AddOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         int id = 0;
         // Queries
         if ("Weapon".Equals(Type))
         {
-            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            IDbCommand dbCheckWeapon = dbConnectionData.CreateCommand();
             dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ","").ToLower() + "'";
             IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
             while (dataReaderWeapon.Read())
@@ -2871,7 +3066,7 @@ public class AccessDatabase : MonoBehaviour
         } 
         else if ("Power".Equals(Type))
         {
-            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            IDbCommand dbCheckPower = dbConnectionData.CreateCommand();
             dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ","").ToLower() + "'";
             IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
             while (dataReaderPower.Read())
@@ -2882,7 +3077,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Consumable".Equals(Type))
         {
-            IDbCommand dbCheckCons = dbConnection.CreateCommand();
+            IDbCommand dbCheckCons = dbConnectionData.CreateCommand();
             dbCheckCons.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + itemName.Replace(" ","").Replace("-","").ToLower() + "'";
             IDataReader dataReaderCons = dbCheckCons.ExecuteReader();
             while (dataReaderCons.Read())
@@ -2893,7 +3088,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Model".Equals(Type))
         {
-            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            IDbCommand dbCheckModel = dbConnectionData.CreateCommand();
             dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
@@ -2904,11 +3099,12 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id==0)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return "Not Found";
         } else
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE" +
                 " PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -2919,11 +3115,12 @@ public class AccessDatabase : MonoBehaviour
             }
             if (quantity != -1)
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "UPDATE PlayerOwnership SET Quantity = Quantity + " + Quantity
                         + " WHERE PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
                 int n = dbCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 if (n != 1)
                 {
                     return "Fail";
@@ -2936,11 +3133,12 @@ public class AccessDatabase : MonoBehaviour
             } 
             else
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO PlayerOwnership (PlayerID,ItemType,ItemID,Quantity) VALUES" +
                     "(" + PlayerId + ",'" + Type + "'," + id + "," + Quantity + ")";
                 int n = dbCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 if (n != 1)
                 {
                     return "Fail";
@@ -2956,14 +3154,15 @@ public class AccessDatabase : MonoBehaviour
     }
     public string DecreaseOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         int id = 0;
         // Queries
         if ("Weapon".Equals(Type))
         {
-            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            IDbCommand dbCheckWeapon = dbConnectionData.CreateCommand();
             dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
             while (dataReaderWeapon.Read())
@@ -2974,7 +3173,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Power".Equals(Type))
         {
-            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            IDbCommand dbCheckPower = dbConnectionData.CreateCommand();
             dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
             while (dataReaderPower.Read())
@@ -2985,7 +3184,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Consumable".Equals(Type))
         {
-            IDbCommand dbCheckCons = dbConnection.CreateCommand();
+            IDbCommand dbCheckCons = dbConnectionData.CreateCommand();
             dbCheckCons.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderCons = dbCheckCons.ExecuteReader();
             while (dataReaderCons.Read())
@@ -2997,7 +3196,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Model".Equals(Type))
         {
-            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            IDbCommand dbCheckModel = dbConnectionData.CreateCommand();
             dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
@@ -3008,12 +3207,13 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id == 0)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return "Not Enough Item";
         }
         else
         {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM PlayerOwnership WHERE" +
                 " PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type +"'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3026,11 +3226,12 @@ public class AccessDatabase : MonoBehaviour
             {
                 if (quantity > Quantity)
                 {
-                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                     dbCommand.CommandText = "UPDATE PlayerOwnership SET Quantity = Quantity - " + Quantity
                         + " WHERE PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
                     int n = dbCommand.ExecuteNonQuery();
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     if (n != 1)
                     {
                         return "Fail";
@@ -3042,10 +3243,11 @@ public class AccessDatabase : MonoBehaviour
                     }
                 } else if (quantity == Quantity)
                 {
-                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                     dbCommand.CommandText = "DELETE FROM PlayerOwnership WHERE PlayerID=" + PlayerId + " AND ItemID=" + id + " AND ItemType='" + Type + "'"; ;
                     int n = dbCommand.ExecuteNonQuery();
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     if (n != 1)
                     {
                         return "Fail";
@@ -3057,12 +3259,14 @@ public class AccessDatabase : MonoBehaviour
                     }
                 } else
                 {
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return "Not Enough Item";
                 }
             } else
             {
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 return "Not Enough Item";
             }
         }
@@ -3071,11 +3275,12 @@ public class AccessDatabase : MonoBehaviour
     #region Access Session Ownership
     public int GetSessionCurrentOwnedNumberOfConsumableByName(int PlayerID, string itemName)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionData.CreateCommand();
         dbCheckCommand1.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),'-',''),' ','')='" + itemName.Replace("-", "").Replace(" ", "").ToLower() + "'";
         IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         int n = 0;
@@ -3085,7 +3290,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (n != 0)
         {
-            IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
             dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
                 "PlayerID=" + PlayerID;
             IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
@@ -3094,7 +3299,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 SessionID = dataReader2.GetInt32(0);
             }
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM SessionOwnership WHERE " +
                 "SessionID=" + SessionID + " AND ItemID=" + n + " AND ItemType='Consumable'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3103,26 +3308,29 @@ public class AccessDatabase : MonoBehaviour
             {
                 quan = dataReader.GetInt32(0);
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return quan;
         }
         else
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return 0;
         }
     }
 
     public int GetSessionCurrentOwnershipWeaponPowerModelByName(int PlayerID, string itemName, string Type)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         int id = -1;
         // Queries
         if ("Weapon".Equals(Type))
         {
-            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            IDbCommand dbCheckWeapon = dbConnectionData.CreateCommand();
             dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
             while (dataReaderWeapon.Read())
@@ -3133,7 +3341,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Power".Equals(Type))
         {
-            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            IDbCommand dbCheckPower = dbConnectionData.CreateCommand();
             dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
             while (dataReaderPower.Read())
@@ -3144,7 +3352,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Model".Equals(Type))
         {
-            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            IDbCommand dbCheckModel = dbConnectionData.CreateCommand();
             dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
@@ -3155,7 +3363,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id != -1)
         {
-            IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
             dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
                 "PlayerID=" + PlayerID;
             IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
@@ -3164,7 +3372,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 SessionID = dataReader2.GetInt32(0);
             }
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM SessionOwnership WHERE " +
                 "SessionID=" + SessionID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3173,23 +3381,25 @@ public class AccessDatabase : MonoBehaviour
             {
                 quan = dataReader.GetInt32(0);
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return quan;
         }
         else
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return -1;
         }
     }
 
     public int GetSessionCurrentOwnershipWeaponPowerModel(int PlayerID, string Type)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
             "PlayerID=" + PlayerID;
         IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
@@ -3198,7 +3408,7 @@ public class AccessDatabase : MonoBehaviour
         {
             SessionID = dataReader2.GetInt32(0);
         }
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Sum(Quantity) FROM SessionOwnership WHERE " +
             "SessionID=" + SessionID + " AND ItemType='" + Type + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3214,7 +3424,7 @@ public class AccessDatabase : MonoBehaviour
                 quan = dataReader.GetInt32(0);
             }
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return quan;
 
     }
@@ -3227,14 +3437,15 @@ public class AccessDatabase : MonoBehaviour
     /// <param name="Quantity">Count</param>
     public string AddSessionOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         int id = 0;
         // Queries
         if ("Weapon".Equals(Type))
         {
-            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            IDbCommand dbCheckWeapon = dbConnectionData.CreateCommand();
             dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
             while (dataReaderWeapon.Read())
@@ -3245,7 +3456,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Power".Equals(Type))
         {
-            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            IDbCommand dbCheckPower = dbConnectionData.CreateCommand();
             dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
             while (dataReaderPower.Read())
@@ -3256,7 +3467,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Consumable".Equals(Type))
         {
-            IDbCommand dbCheckCons = dbConnection.CreateCommand();
+            IDbCommand dbCheckCons = dbConnectionData.CreateCommand();
             dbCheckCons.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderCons = dbCheckCons.ExecuteReader();
             while (dataReaderCons.Read())
@@ -3267,7 +3478,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Model".Equals(Type))
         {
-            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            IDbCommand dbCheckModel = dbConnectionData.CreateCommand();
             dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
@@ -3278,12 +3489,13 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id == 0)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return "Not Found";
         }
         else
         {
-            IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
             dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
                 "PlayerID=" + PlayerId;
             IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
@@ -3292,7 +3504,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 SessionID = dataReader2.GetInt32(0);
             }
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM SessionOwnership WHERE" +
                 " SessionID=" + SessionID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3303,11 +3515,12 @@ public class AccessDatabase : MonoBehaviour
             }
             if (quantity != -1)
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "UPDATE SessionOwnership SET Quantity = Quantity + " + Quantity
                         + " WHERE SessionID=" + SessionID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
                 int n = dbCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 if (n != 1)
                 {
                     return "Fail";
@@ -3320,11 +3533,12 @@ public class AccessDatabase : MonoBehaviour
             }
             else
             {
-                IDbCommand dbCommand = dbConnection.CreateCommand();
+                IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO SessionOwnership (SessionID,ItemType,ItemID,Quantity) VALUES" +
                     "(" + SessionID + ",'" + Type + "'," + id + "," + Quantity + ")";
                 int n = dbCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 if (n != 1)
                 {
                     return "Fail";
@@ -3340,14 +3554,15 @@ public class AccessDatabase : MonoBehaviour
     }
     public string DecreaseSessionOwnershipToItem(int PlayerId, string itemName, string Type, int Quantity)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         int id = 0;
         // Queries
         if ("Weapon".Equals(Type))
         {
-            IDbCommand dbCheckWeapon = dbConnection.CreateCommand();
+            IDbCommand dbCheckWeapon = dbConnectionData.CreateCommand();
             dbCheckWeapon.CommandText = "SELECT WeaponID FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderWeapon = dbCheckWeapon.ExecuteReader();
             while (dataReaderWeapon.Read())
@@ -3358,7 +3573,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Power".Equals(Type))
         {
-            IDbCommand dbCheckPower = dbConnection.CreateCommand();
+            IDbCommand dbCheckPower = dbConnectionData.CreateCommand();
             dbCheckPower.CommandText = "SELECT PowerID FROM ArsenalPower WHERE replace(lower(PowerName),' ','')='" + itemName.Replace(" ", "").ToLower() + "'";
             IDataReader dataReaderPower = dbCheckPower.ExecuteReader();
             while (dataReaderPower.Read())
@@ -3369,7 +3584,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Consumable".Equals(Type))
         {
-            IDbCommand dbCheckCons = dbConnection.CreateCommand();
+            IDbCommand dbCheckCons = dbConnectionData.CreateCommand();
             dbCheckCons.CommandText = "SELECT ItemID FROM SpaceShop WHERE replace(replace(lower(ItemName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderCons = dbCheckCons.ExecuteReader();
             while (dataReaderCons.Read())
@@ -3380,7 +3595,7 @@ public class AccessDatabase : MonoBehaviour
         }
         else if ("Model".Equals(Type))
         {
-            IDbCommand dbCheckModel = dbConnection.CreateCommand();
+            IDbCommand dbCheckModel = dbConnectionData.CreateCommand();
             dbCheckModel.CommandText = "SELECT ModelID FROM FactoryModel WHERE replace(replace(lower(ModelName),' ',''),'-','')='" + itemName.Replace(" ", "").Replace("-", "").ToLower() + "'";
             IDataReader dataReaderModel = dbCheckModel.ExecuteReader();
             while (dataReaderModel.Read())
@@ -3391,12 +3606,13 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id == 0)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return "Not Enough Item";
         }
         else
         {
-            IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
             dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
                 "PlayerID=" + PlayerId;
             IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();
@@ -3405,7 +3621,7 @@ public class AccessDatabase : MonoBehaviour
             {
                 SessionID = dataReader2.GetInt32(0);
             }
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT Quantity FROM SessionOwnership WHERE" +
                 " SessionID=" + SessionID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3418,11 +3634,12 @@ public class AccessDatabase : MonoBehaviour
             {
                 if (quantity > Quantity)
                 {
-                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                     dbCommand.CommandText = "UPDATE SessionOwnership SET Quantity = Quantity - " + Quantity
                         + " WHERE SessionID=" + SessionID + " AND ItemID=" + id + " AND ItemType='" + Type + "'";
                     int n = dbCommand.ExecuteNonQuery();
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     if (n != 1)
                     {
                         return "Fail";
@@ -3435,10 +3652,11 @@ public class AccessDatabase : MonoBehaviour
                 }
                 else if (quantity == Quantity)
                 {
-                    IDbCommand dbCommand = dbConnection.CreateCommand();
+                    IDbCommand dbCommand = dbConnectionSave.CreateCommand();
                     dbCommand.CommandText = "DELETE FROM SessionOwnership WHERE SessionID=" + SessionID + " AND ItemID=" + id + " AND ItemType='" + Type + "'"; ;
                     int n = dbCommand.ExecuteNonQuery();
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     if (n != 1)
                     {
                         return "Fail";
@@ -3451,13 +3669,15 @@ public class AccessDatabase : MonoBehaviour
                 }
                 else
                 {
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     return "Not Enough Item";
                 }
             }
             else
             {
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 return "Not Enough Item";
             }
         }
@@ -3466,17 +3686,17 @@ public class AccessDatabase : MonoBehaviour
     #region Access Purchase History
     public string AddPurchaseHistory(int PlayerID, int itemID, string Type, int Quantity, bool isBuy)
     {
+        OpenConnection();
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "INSERT INTO PurchaseHistory (PlayerID, ItemType, ItemID, Quantity, BuyOrSell, PurchaseDate) VALUES " +
             "(" + PlayerID + ",'" + Type + "'," + itemID + "," + Quantity + ",'" + (isBuy ? "Buy" : "Sell") + "','" + currentDate + "')";
         int n = dbCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n!=1)
         {
             return "Fail";
@@ -3488,13 +3708,13 @@ public class AccessDatabase : MonoBehaviour
 
     public int GetTotalBuyOfItemToday(int PlayerID, int ItemID, string Type)
     {
+        OpenConnection();
         System.DateTime date = System.DateTime.Now;
         string currentDate = date.ToString("yyyy-MM-dd");
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "SELECT sum(Quantity) from PurchaseHistory where PlayerId =" + PlayerID + " and ItemID=" + ItemID + 
             " and ItemType='" + Type + "' and BuyOrSell='Buy' and PurchaseDate='" + currentDate +"'";
         IDataReader dataReader = dbCommand.ExecuteReader();
@@ -3509,20 +3729,20 @@ public class AccessDatabase : MonoBehaviour
                 sum = dataReader.GetInt32(0);
             }
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return sum;
     }
     #endregion
     #region Access Tutorial
     public List<List<string>> GetAllTutorial() 
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> TList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM Tutorial";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -3538,7 +3758,7 @@ public class AccessDatabase : MonoBehaviour
             list.Add(TList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
         
     }
@@ -3546,13 +3766,13 @@ public class AccessDatabase : MonoBehaviour
     #region Access SpaceStation
     public List<List<string>> GetAllSpaceStation()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> SpaceStationList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from SpaceStation";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -3583,17 +3803,17 @@ public class AccessDatabase : MonoBehaviour
             list.Add(SpaceStationList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public Dictionary<string, object> GetSpaceStationById(int id)
     {
+        OpenConnection();
         Dictionary<string, object> WSDict = new Dictionary<string, object>();
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from SpaceStation Where SSId = " + id;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -3611,19 +3831,20 @@ public class AccessDatabase : MonoBehaviour
             WSDict.Add("Bounty", dataReader.GetString(9));
         }
         if (!check) return null;
+        dbConnectionData.Close();
         return WSDict;
     }
     #endregion
     #region Access Damage Element
     public List<List<string>> GetAllDMGElement()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> DMGElementList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from DamageElement";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -3637,20 +3858,20 @@ public class AccessDatabase : MonoBehaviour
             list.Add(DMGElementList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
     #endregion
     #region Access Attribute
     public List<List<string>> GetAllAttribute()
     {
+        OpenConnection();
         List<List<string>> list = new List<List<string>>();
         List<string> DMGElementList;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from Attribute";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -3664,22 +3885,22 @@ public class AccessDatabase : MonoBehaviour
             list.Add(DMGElementList);
         }
         if (!check) return null;
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
     #endregion
     #region Access Collect salary history
     public string SalaryCollected(int PlayerId)
     {
+        OpenConnection();
         string date = System.DateTime.Now.ToString("dd/MM/yyyy");
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "INSERT INTO CollectSalaryHistory (PlayerId, CollectedTime) VALUES ( "+PlayerId+" , '"+ date +"')";
         int n = dbCheckCommand2.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -3691,11 +3912,11 @@ public class AccessDatabase : MonoBehaviour
     }
     public int CheckIfCollected(int PlayerId, string date)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT Count(*) FROM CollectSalaryHistory where PlayerId = "+ PlayerId +" and CollectedTime = '"+ date +"'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         int quan = 0;
@@ -3703,7 +3924,7 @@ public class AccessDatabase : MonoBehaviour
         {
             quan = dataReader.GetInt32(0);
         }
-        dbConnection.Close();
+        dbConnectionSave.Close();
         return quan;
     }
 
@@ -3712,30 +3933,30 @@ public class AccessDatabase : MonoBehaviour
     #region Access LOTW
     public List<int> GetListIDAllLOTW(int tier)
     {
+        OpenConnection();
         List<int> list = new List<int>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CardID From LuckOfTheWandererCards WHERE " + (tier > 0 && tier <= 3 ? "CardTier=" + tier : "1==1");
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         while (dataReader.Read())
         {
             list.Add(dataReader.GetInt32(0));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public Dictionary<string, object> GetLOTWInfoByID(int id)
     {
+        OpenConnection();
         Dictionary<string, object> dict = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT * From LuckOfTheWandererCards WHERE CardID=" + id;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         bool check = false;
@@ -3751,7 +3972,7 @@ public class AccessDatabase : MonoBehaviour
             dict.Add("Repeat", dataReader.GetString(7));
             dict.Add("Color", dataReader.GetString(8));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -3760,11 +3981,11 @@ public class AccessDatabase : MonoBehaviour
     }
     public bool CheckLOTWRepetable(int PlayerID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
         IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         bool check = false;
@@ -3779,33 +4000,34 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check || sessionId == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return false;
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=34"; 
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND (CardID=34 OR CardID=26)"; 
             IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
             bool check2 = false;
             while (dataReader2.Read())
             {
                 check2 = true;
             }
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return check2;
         }
     }
 
     public List<Dictionary<string, object>> GetLOTWInfoOwnedByID(int PlayerID)
     {
+        OpenConnection();
         List<Dictionary<string, object>> listFinal = new List<Dictionary<string, object>>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
         IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
         bool check = false;
@@ -3820,18 +4042,31 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check || sessionId == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return null;
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT LuckOfTheWandererCards.CardID, LuckOfTheWandererCards.CardName, " +
-                "LuckOfTheWandererCards.CardEffect, SessionLOTWCards.Duration, SessionLOTWCards.Stack, LuckOfTheWandererCards.CardStackable, " +
-                "LuckOfTheWandererCards.TierColor From SessionLOTWCards INNER JOIN LuckOfTheWandererCards " +
-                "WHERE SessionID=" + sessionId + " AND LuckOfTheWandererCards.CardID = SessionLOTWCards.CardID " +
-                "ORDER BY LuckOfTheWandererCards.CardTier ASC, SessionLOTWCards.Duration DESC, LuckOfTheWandererCards.CardID ASC";
+            IDbCommand command = dbConnectionSave.CreateCommand();
+            command.CommandText = "SELECT file FROM pragma_database_list;";
+            IDataReader reader = command.ExecuteReader();
+            string dir = "";
+            while (reader.Read())
+            {
+                dir = reader.GetString(0);
+            }
+            dir = dir.Replace("SaveTables.db", "DataTables.db");
+            IDbCommand command2 = dbConnectionSave.CreateCommand();
+            command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+            int sadasdasad = command2.ExecuteNonQuery();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+            dbCheckCommand.CommandText = "SELECT DataTables.LuckOfTheWandererCards.CardID, DataTables.LuckOfTheWandererCards.CardName, " +
+                "DataTables.LuckOfTheWandererCards.CardEffect, SessionLOTWCards.Duration, SessionLOTWCards.Stack, " +
+                "DataTables.LuckOfTheWandererCards.CardStackable, DataTables.LuckOfTheWandererCards.TierColor " +
+                "From SessionLOTWCards INNER JOIN DataTables.LuckOfTheWandererCards " +
+                "WHERE SessionLOTWCards.SessionID=" + sessionId + " AND DataTables.LuckOfTheWandererCards.CardID = SessionLOTWCards.CardID " +
+                "ORDER BY DataTables.LuckOfTheWandererCards.CardTier ASC, SessionLOTWCards.Duration DESC, DataTables.LuckOfTheWandererCards.CardID ASC";
             Debug.Log(dbCheckCommand.CommandText);
             IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
             while (dataReader2.Read())
@@ -3846,18 +4081,19 @@ public class AccessDatabase : MonoBehaviour
                 dict.Add("Color", dataReader2.GetString(6));
                 listFinal.Add(dict);
             }
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return listFinal;
         }
     }
     public List<int> GetAllCardIdInCurrentSession(int PlayerID)
     {
+        OpenConnection();
         List<int> list = new List<int>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         bool check = false;
@@ -3872,30 +4108,30 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check || sessionId==-1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return null;
         } else
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "SELECT CardID From SessionLOTWCards WHERE SessionID=" + sessionId;
             IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
             while (dataReader2.Read())
             {
                 list.Add(dataReader2.GetInt32(0));
             }
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return list;
         }
     }
 
     public string UpdateReduceDurationAllCardByPlayerID(int PlayerID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         bool check = false;
@@ -3910,21 +4146,21 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check || sessionId == -1)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "UPDATE SessionLOTWCards SET Duration = Duration - IIF(Duration=1000 OR Duration=-1, 0, 1) WHERE SessionID=" + sessionId;
             int n = dbCheckCommand.ExecuteNonQuery();
             // Queries
-            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
             dbCheckCommand1.CommandText = "DELETE FROM SessionLOTWCards WHERE Duration = 0 AND SessionID=" + sessionId;
             int m = dbCheckCommand1.ExecuteNonQuery();
             Debug.Log("Delete");
-            dbConnection.Close();
+            dbConnectionSave.Close();
             if (m != 1)
             {
                 return "Fail";
@@ -3935,11 +4171,12 @@ public class AccessDatabase : MonoBehaviour
 
     public string AddCardToCurrentSession(int PlayerID, int CardID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerID=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         bool check = false;
@@ -3954,7 +4191,8 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check || sessionId == -1)
         {
-            dbConnection.Close();
+            dbConnectionData.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
         else
@@ -3962,7 +4200,7 @@ public class AccessDatabase : MonoBehaviour
             if (CardID==34)
             {
                 // Queries
-                IDbCommand dbCheckComman = dbConnection.CreateCommand();
+                IDbCommand dbCheckComman = dbConnectionSave.CreateCommand();
                 dbCheckComman.CommandText = "UPDATE Session SET SessionCash = SessionCash * 2 WHERE SessionID=" + sessionId;
                 int n = dbCheckComman.ExecuteNonQuery();
                 if (n!=1)
@@ -3971,7 +4209,7 @@ public class AccessDatabase : MonoBehaviour
                 }
             }
             // Queries
-            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand1 = dbConnectionData.CreateCommand();
             dbCheckCommand1.CommandText = "SELECT CardDuration, CardStackable From LuckOfTheWandererCards WHERE CardID=" + CardID;
             IDataReader dataReader1 = dbCheckCommand1.ExecuteReader();
             int duration = 0;
@@ -3987,10 +4225,11 @@ public class AccessDatabase : MonoBehaviour
             if (stack=="N")
             {
                 // Queries
-                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
                 dbCheckCommand.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
                 int n = dbCheckCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 if (n != 1)
                 {
                     return "Fail";
@@ -4000,7 +4239,7 @@ public class AccessDatabase : MonoBehaviour
             } else 
             {
                 // Queries
-                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
                 dbCheckCommand.CommandText = "SELECT ID FROM SessionLOTWCards WHERE CardID=" + CardID + " AND SessionID=" + sessionId;
                 IDataReader reader = dbCheckCommand.ExecuteReader();
                 int n = 0;
@@ -4013,10 +4252,11 @@ public class AccessDatabase : MonoBehaviour
                     if (duration == 1000)
                     {
                         // Queries
-                        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+                        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
                         dbCheckCommand3.CommandText = "UPDATE SessionLOTWCards SET Stack = Stack + 1 WHERE ID=" + n;
                         int m = dbCheckCommand3.ExecuteNonQuery();
-                        dbConnection.Close();
+                        dbConnectionData.Close();
+                        dbConnectionSave.Close();
                         if (m!=1)
                         {
                             return "Fail";
@@ -4027,10 +4267,11 @@ public class AccessDatabase : MonoBehaviour
                     } else
                     {
                         // Queries
-                        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+                        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
                         dbCheckCommand3.CommandText = "UPDATE SessionLOTWCards SET Stack = Stack + 1, Duration = Duration + " + duration + " WHERE ID=" + n;
                         int m = dbCheckCommand3.ExecuteNonQuery();
-                        dbConnection.Close();
+                        dbConnectionData.Close();
+                        dbConnectionSave.Close();
                         if (m != 1)
                         {
                             return "Fail";
@@ -4043,10 +4284,11 @@ public class AccessDatabase : MonoBehaviour
                 } else
                 {
                     // Queries
-                    IDbCommand dbCheckCommand4 = dbConnection.CreateCommand();
+                    IDbCommand dbCheckCommand4 = dbConnectionSave.CreateCommand();
                     dbCheckCommand4.CommandText = "INSERT INTO SessionLOTWCards (SessionID, CardID, Duration, Stack) VALUES (" + sessionId + "," + CardID + "," + duration + ",1)";
                     int n2 = dbCheckCommand4.ExecuteNonQuery();
-                    dbConnection.Close();
+                    dbConnectionData.Close();
+                    dbConnectionSave.Close();
                     if (n2 != 1)
                     {
                         return "Fail";
@@ -4062,12 +4304,13 @@ public class AccessDatabase : MonoBehaviour
     public string AddNewSession(int PlayerID, string Model, string LeftWeapon, string RightWeapon,
         string FirstPower, string SecondPower, string Consumables, string PowerCD)
     {
+        OpenConnection();
         Debug.Log(Consumables);
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT PlayerId From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         bool check = false;
@@ -4077,14 +4320,14 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "No Exist";
         } else
         {
             System.DateTime date = System.DateTime.Now;
             string currentDate = date.ToString("yyyy-MM-dd");
             // Queries
-            IDbCommand dbGetLastID = dbConnection.CreateCommand();
+            IDbCommand dbGetLastID = dbConnectionSave.CreateCommand();
             dbGetLastID.CommandText = "SELECT SessionID FROM SESSION WHERE 1==1 ORDER BY SessionID DESC LIMIT 1;";
             IDataReader dataReader1 = dbGetLastID.ExecuteReader();
             int id = 1;
@@ -4099,7 +4342,7 @@ public class AccessDatabase : MonoBehaviour
                 }
             }
             // Queries            
-            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand1 = dbConnectionData.CreateCommand();
             dbCheckCommand1.CommandText = "SELECT ModelStats FROM FactoryModel WHERE replace(lower(ModelName),' ','')=='" + Model.Replace(" ", "").ToLower() + "'";
             IDataReader dataReader3 = dbCheckCommand1.ExecuteReader();
             string stats = "";
@@ -4109,7 +4352,7 @@ public class AccessDatabase : MonoBehaviour
             }
             Dictionary<string, object> data = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats);
             // Queries
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
             dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt, ConsumablesCD) VALUES " +
                 "(" + id + ",'',1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
@@ -4117,15 +4360,17 @@ public class AccessDatabase : MonoBehaviour
             int n = dbCheckCommand.ExecuteNonQuery();
             if (n!=1)
             {
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 return "Fail";
             } else
             {
                 // Queries
-                IDbCommand dbUpdCommand = dbConnection.CreateCommand();
+                IDbCommand dbUpdCommand = dbConnectionSave.CreateCommand();
                 dbUpdCommand.CommandText = "UPDATE PlayerProfile SET CurrentSession=" + id + " WHERE PlayerID=" + PlayerID;
                 int k = dbUpdCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionData.Close();
+                dbConnectionSave.Close();
                 if (k!=1)
                 {
                     return "Fail";
@@ -4139,11 +4384,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string AddSessionCurrentSaveData(int PlayerID, string CurrentPlace)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -4158,12 +4403,12 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
         else
         {
-            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
             dbCheckCommand3.CommandText = "SELECT * FROM SessionCurrentSaveData WHERE SessionID=" + n;
             IDataReader reader = dbCheckCommand3.ExecuteReader();
             bool check2 = false;
@@ -4175,11 +4420,11 @@ public class AccessDatabase : MonoBehaviour
             }
             if (!check2)
             {
-                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
                 dbCheckCommand.CommandText = "INSERT INTO SessionCurrentSaveData (SessionID, SessionCurrentPlace) VALUES " +
                     "(" + n + ",'" + CurrentPlace + "')";
                 int k = dbCheckCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 if (k != 1)
                 {
                     return "Fail";
@@ -4190,11 +4435,11 @@ public class AccessDatabase : MonoBehaviour
                 }
             } else
             {
-                IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+                IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
                 dbCheckCommand.CommandText = "UPDATE SessionCurrentSaveData SET SessionCurrentPlace='" + CurrentPlace + "'" +
                     " WHERE ID=" + id;
                 int k = dbCheckCommand.ExecuteNonQuery();
-                dbConnection.Close();
+                dbConnectionSave.Close();
                 if (k != 1)
                 {
                     return "Fail";
@@ -4209,11 +4454,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string GetCurrentPlaceOfSession(int PlayerID)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -4228,12 +4473,12 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "";
         }
         else
         {
-            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
             dbCheckCommand3.CommandText = "SELECT SessionCurrentPlace FROM SessionCurrentSaveData WHERE SessionID=" + n;
             IDataReader reader = dbCheckCommand3.ExecuteReader();
             string place = "";
@@ -4241,101 +4486,18 @@ public class AccessDatabase : MonoBehaviour
             {
                 place = reader.GetString(0);
             }
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return place;
         }
     }
 
-/*    public string AddSessionPrediction(int PlayerID, string Predict)
-    {
-        // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
-        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
-        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
-        int n = 0;
-        bool check = false;
-        while (dataReader.Read())
-        {
-            if (!dataReader.IsDBNull(0))
-            {
-                check = true;
-                n = dataReader.GetInt32(0);
-            }
-        }
-        if (!check)
-        {
-            dbConnection.Close();
-            return "Fail";
-        }
-        else
-        {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SessionPredictData (SessionID, SessionPrediction)" +
-                " VALUES (" + n + ",'" + Predict +"')";
-            int k = dbCheckCommand.ExecuteNonQuery();
-            dbConnection.Close();
-            if (k!=1)
-            {
-                return "Fail";
-            } else
-            {
-                return "Success";
-            }
-        }
-    }
-
-    public string GetSessionPrediction(int PlayerID)
-    {
-        // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
-        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
-        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
-        int n = 0;
-        bool check = false;
-        while (dataReader.Read())
-        {
-            if (!dataReader.IsDBNull(0))
-            {
-                check = true;
-                n = dataReader.GetInt32(0);
-            }
-        }
-        if (!check)
-        {
-            dbConnection.Close();
-            return "Fail";
-        }
-        else
-        {
-            IDbCommand dbCheckCommand = dbConnection.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT * FROM SessionPredictData WHERE SessionID =" + n;
-            IDataReader reader = dbCheckCommand.ExecuteReader();
-            string Prediction = "";
-            while (reader.Read())
-            {
-                Prediction = reader.GetString(2);
-            }
-            IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
-            dbCheckCommand1.CommandText = "DELETE FROM SessionPredictData WHERE SessionID =" + n;
-            dbCheckCommand1.ExecuteNonQuery();
-            dbConnection.Close();
-            return Prediction;
-        }
-    }*/
-
     public string UpdateSessionInfo(int PlayerID, string Type, string Value)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -4350,13 +4512,13 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
             string cmd = "UPDATE Session SET ";
             if (Type == "LeftWeapon")
             {
@@ -4380,7 +4542,7 @@ public class AccessDatabase : MonoBehaviour
             }
             dbCheckCommand3.CommandText = cmd + " WHERE SessionId=" + n;
             int k = dbCheckCommand3.ExecuteNonQuery();
-            dbConnection.Close();
+            dbConnectionSave.Close();
             if (k!=1)
             {
                 return "Fail";
@@ -4391,11 +4553,11 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetSessionInfoByPlayerId(int PlayerId)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerId;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -4410,14 +4572,14 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return null;
         }
         else
         {
             Dictionary<string, object> datas = new Dictionary<string, object>();
             // Queries
-            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
             dbCheckCommand3.CommandText = "SELECT * From Session WHERE SessionId=" + n;
             IDataReader dataReader2 = dbCheckCommand3.ExecuteReader();
             while (dataReader2.Read())
@@ -4444,18 +4606,18 @@ public class AccessDatabase : MonoBehaviour
                 datas.Add("DamageDealt", dataReader2.GetInt32(19));
                 datas.Add("ConsumablesCD", dataReader2.GetString(20));
             }
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return datas;
         }
     }
 
     public string UpdateSessionCurrentHP(int PlayerID, bool isIncrease, int Amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         int n = 0;
@@ -4470,16 +4632,17 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
             return "Fail";
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+            IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
             dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = SessionCurrentHP " + (isIncrease ? "+ " : "- ") 
                 + Amount + " WHERE SessionId=" + n;
             int m = dbCheckCommand3.ExecuteNonQuery();
+            dbConnectionSave.Close();
             if (m != 1)
             {
                 return "Fail";
@@ -4493,16 +4656,16 @@ public class AccessDatabase : MonoBehaviour
 
     public string UpdateSessionStageData(int SessionId, int CurrentStage, int CurrentStageHazard, int CurrentStageVariant)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET CurrentStage = " + CurrentStage + ", CurrentStageHazard = " +
             CurrentStageHazard + ", CurrentStageVariant = " + CurrentStageVariant + " WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -4514,15 +4677,15 @@ public class AccessDatabase : MonoBehaviour
     }
     public string UpdateSessionShard(int SessionId, bool IsIncrease, int amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n!=1)
         {
             return "Fail";
@@ -4534,17 +4697,17 @@ public class AccessDatabase : MonoBehaviour
 
     public string UpdateSessionCashAndShard(int SessionID, bool IsIncrease, int Cash, int Shard)
     {
+        OpenConnection();
         Debug.Log(SessionID + " - " + Cash + " - " + Shard);
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease ? "+ " : "- ") + Shard +
             ", SessionCash = SessionCash " + (IsIncrease ? "+ " : "- ") + Cash + " WHERE SessionId=" + SessionID;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -4557,11 +4720,11 @@ public class AccessDatabase : MonoBehaviour
 
     public string UpdateSessionCashAndShardByPlayerID(int PlayerId, bool IsIncrease, int Cash, int Shard)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand2 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
         dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerId;
         IDataReader dataReader = dbCheckCommand2.ExecuteReader();
         int m = 0;
@@ -4575,11 +4738,11 @@ public class AccessDatabase : MonoBehaviour
             }
         }
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionTimelessShard = SessionTimelessShard " + (IsIncrease ? "+ " : "- ") + Shard +
             ", SessionCash = SessionCash " + (IsIncrease ? "+ " : "- ") + Cash + " WHERE SessionId=" + m;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -4591,29 +4754,29 @@ public class AccessDatabase : MonoBehaviour
     }
 
     public void UpdateSessionStat(int CurrentHP, int Enemy, int Damage, int SessionID, string Cons)
-    {      
+    {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = "+ CurrentHP + ", EnemyDestroyed = EnemyDestroyed + "+ Enemy + ", DamageDealt = DamageDealt + " + Damage + ", Consumables = '"+ Cons + "' WHERE SessionId=" + SessionID;
-        dbCheckCommand3.ExecuteNonQuery();    
-        dbConnection.Close();
+        dbCheckCommand3.ExecuteNonQuery();
+        dbConnectionSave.Close();
     }
 
     public string RepairService(int SessionID, int amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionCurrentHP = " + amount + " WHERE SessionId=" + SessionID;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -4626,16 +4789,16 @@ public class AccessDatabase : MonoBehaviour
 
     public string UpdateSessionFuelEnergy(int SessionId, bool IsIncrease, int amount)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionFuelEnergy = SessionFuelEnergy " + (IsIncrease ? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
         Debug.Log(dbCheckCommand3.CommandText);
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -4647,15 +4810,15 @@ public class AccessDatabase : MonoBehaviour
     }
     public string UpdateSessionPlayTime(int SessionId, string playtime)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
-        IDbCommand dbCheckCommand3 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET TotalPlayedTime = '"+ playtime +"' WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         if (n != 1)
         {
             return "Fail";
@@ -4670,12 +4833,12 @@ public class AccessDatabase : MonoBehaviour
     #region Access Allies
     public Dictionary<string, object> GetDataAlliesById(int allyID)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select AllyName, MainTarget, AllyWeapons, AllyStats, AllyPower, AllyTier from Allies WHERE AllyID=" + allyID;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4689,7 +4852,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("Power", dataReader.GetString(4));
             data.Add("TierColor", dataReader.GetString(5));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4700,12 +4863,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetDataAlliesByName(string Name)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select AllyID, MainTarget, AllyWeapons, AllyStats, AllyPower, AllyTier from Allies WHERE AllyName='" + Name + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4719,7 +4882,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("Power", dataReader.GetString(4));
             data.Add("TierColor", dataReader.GetString(5));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4731,12 +4894,12 @@ public class AccessDatabase : MonoBehaviour
     #region Access Space Zone
     public Dictionary<string,object> GetVariantCountsAndBackgroundByStageValue(int StageValue)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select VariantCount, AvailableBackgrounds, TierColor from SpaceZoneVariants WHERE StageValue=" + StageValue;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4747,7 +4910,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("AvailableBackground", dataReader.GetString(1));
             data.Add("TierColor", dataReader.GetString(2));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4757,12 +4920,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetStageZoneTemplateByStageValueAndVariant(int StageValue, int Variants)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from SpaceZoneTemplate WHERE StageValue=" + StageValue + " AND Variant=" +Variants;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4814,7 +4977,7 @@ public class AccessDatabase : MonoBehaviour
                 data.Add("SpawnIIRate", dataReader.GetInt32(14));
             }
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4825,12 +4988,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetFighterGroupsDataByName(string GroupName)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from FighterGroup WHERE GroupName='" + GroupName + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4844,7 +5007,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("EnemiesFighterB", dataReader.GetString(6));
             data.Add("EnemiesFighterC", dataReader.GetString(7));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4855,12 +5018,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetSpawnPositionDataByType(string PositionType)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select PositionLimitTopLeft, PositionLimitBottomRight from SpaceZonePosition WHERE PositionType='" + PositionType + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4870,7 +5033,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("PositionLimitTopLeft", dataReader.GetString(0));
             data.Add("PositionLimitBottomRight", dataReader.GetString(1));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4881,12 +5044,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetHazardAllDatas(int HazardId)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from HazardEnvironment WHERE HazardID='" + HazardId + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4901,7 +5064,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("HazardStartSpawning", dataReader.GetInt32(6));
             data.Add("HazardBackground", dataReader.GetString(7));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4912,12 +5075,12 @@ public class AccessDatabase : MonoBehaviour
 
     public List<Dictionary<string,object>> GetAvailableHazards(int SpaceZoneNo)
     {
+        OpenConnection();
         List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select HazardID, HazardChance from HazardEnvironment WHERE HazardStartSpawning<=" + SpaceZoneNo;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4929,7 +5092,7 @@ public class AccessDatabase : MonoBehaviour
             dataTemp.Add("HazardChance", dataReader.GetInt32(1));
             data.Add(dataTemp);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4940,12 +5103,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string, object> GetWarshipMilestoneBySpaceZoneNo(int SpaceZoneNo)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from WarshipMilestone WHERE MilestoneNumber<=" + SpaceZoneNo + " ORDER BY MilestoneNumber DESC LIMIT 1";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4961,7 +5124,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("MilestoneEnemyClassB", dataReader.GetInt32(6));
             data.Add("MilestoneEnemyClassC", dataReader.GetInt32(7));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -4972,12 +5135,12 @@ public class AccessDatabase : MonoBehaviour
 
     public Dictionary<string,object> GetMissionDataByValueAndVariant(int SpaceZoneValue, int SpaceZoneVariant)
     {
+        OpenConnection();
         Dictionary<string, object> data = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from SpaceZoneMission WHERE SpaceZoneValue=" + SpaceZoneValue + " AND Variant=" + SpaceZoneVariant;
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -4991,7 +5154,7 @@ public class AccessDatabase : MonoBehaviour
             data.Add("VictoryCondition", dataReader.GetString(4));
             data.Add("DefeatCondition", dataReader.GetString(5));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         if (!check)
         {
             return null;
@@ -5003,12 +5166,12 @@ public class AccessDatabase : MonoBehaviour
     #region Access Statistic
     public void CreateNewPlayerStatistic(string name)
     {
+        OpenConnection();
         int PlayerId = 0;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM PlayerProfile WHERE Name='" + name + "'";
         IDataReader reader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -5019,24 +5182,24 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
         } else
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "INSERT INTO Statistic (PlayerID,EnemyDefeated,MaxSZReach,TotalShard,TotalCash,TotalEnemyDefeated,TotalDamageDealt,TotalSalaryReceived,Rank,TotalShardSpent,TotalCashSpent,TotalDailyMissionDone) " +
                 "VALUES (" + PlayerId + ",'EI-0|EII-0|EIII-0|WS-0',0,5,500,0,0,0,0,0,0,0)";
-            dbCommand.ExecuteNonQuery();          
-            dbConnection.Close();
+            dbCommand.ExecuteNonQuery();
+            dbConnectionSave.Close();
         }        
     }
 
     public Dictionary<string, object> GetPlayerAchievement(int id)
     {
+        OpenConnection();
         Dictionary<string, object> PA = new Dictionary<string, object>();
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM Statistic WHERE PlayerID='" + id + "'";
         IDataReader reader = dbCheckCommand.ExecuteReader();
         bool check = false;
@@ -5052,25 +5215,26 @@ public class AccessDatabase : MonoBehaviour
         }
         if (!check)
         {
-            dbConnection.Close();
+            dbConnectionSave.Close();
         }
         return PA;
     }
 
     public void UpdateGameplayStatistic(Dictionary<string, object> data)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbConnectionSave.Open();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "UPDATE Statistic SET " +
             "EnemyDefeated = '" + data["EnemyDefeated"].ToString() + "', MaxSZReach = " + int.Parse(data["SZMaxReach"].ToString()) + " WHERE PlayerID = "+ int.Parse(data["PlayerID"].ToString()) + "";
         dbCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
     }
 
     public void UpdateEconomyStatistic(int id, int shard, int cash, string type) 
     {
+        OpenConnection();
         string query = "";
         switch(type)
         {
@@ -5088,36 +5252,35 @@ public class AccessDatabase : MonoBehaviour
                    "TotalCashSpent = TotalCashSpent + " + cash + ",  TotalShardSpent = TotalShardSpent + " + shard + " WHERE PlayerID = " + id + ""; break;
         }
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbConnectionSave.Open();
+        IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = query;
         dbCommand.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
     }
     public void UpdateDailyMissionStatistic(int playerId)
     {
+        OpenConnection();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionSave.Open();
         // Queries    
-        IDbCommand dbCheckCommand1 = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
         dbCheckCommand1.CommandText = "UPDATE Statistic SET TotalDailyMissionDone = TotalDailyMissionDone + 1 WHERE PlayerID = " + playerId + "";
         dbCheckCommand1.ExecuteNonQuery();
-        dbConnection.Close();
+        dbConnectionSave.Close();
         
     }
     #endregion
     #region Access ArsenalService
     public List<Dictionary<string, object>> GetAllArsenalService()
     {
+        OpenConnection();
         List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
         Dictionary<string, object> service;
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM ArsenalService";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
@@ -5130,18 +5293,18 @@ public class AccessDatabase : MonoBehaviour
             service.Add("Effect", dataReader.GetInt32(3));
             list.Add(service);
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return list;
     }
 
     public Dictionary<string, object> GetArsenalServiceById(int id)
     {
+        OpenConnection();
         Dictionary<string, object> service = new Dictionary<string, object>();
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
+        dbConnectionData.Open();
         // Queries
-        IDbCommand dbCheckCommand = dbConnection.CreateCommand();
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "SELECT * FROM ArsenalService WHERE ID = "+ id +"";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
 
@@ -5152,7 +5315,7 @@ public class AccessDatabase : MonoBehaviour
             service.Add("Price", dataReader.GetString(2));
             service.Add("Effect", dataReader.GetInt32(3));
         }
-        dbConnection.Close();
+        dbConnectionData.Close();
         return service;
     }
     #endregion

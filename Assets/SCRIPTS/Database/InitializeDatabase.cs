@@ -13,76 +13,26 @@ public class InitializeDatabase : MonoBehaviour
     // Call to this function for init DB
     public void Initialization()
     {
-        string check = CheckInitialize();
-        Debug.Log(check);
-        if ("No Data".Equals(check))
+        string check = CheckInitializeData();
+        string check2 = CheckInitializeSave();
+        Debug.Log("Data:" + check);
+        Debug.Log("Save:" + check2);
+        if ("No Data".Equals(check) && "No Data".Equals(check2))
         {
             CreateDatabase();
-        } else if ("Data Error".Equals(check))
+        } else if ("Data Error".Equals(check) && "Data Error".Equals(check2))
         {
-            DropDatabase();
             CreateDatabase();
-        } else if ("Not Initialize Yet".Equals(check))
+        } else if ("Not Initialize Yet".Equals(check) && "Not Initialize Yet".Equals(check2))
         {
-            DropDatabase();
             CreateDatabase();
         }
     }
     // Create database
     public void CreateDatabase()
     {
-        // Initialize Tables
-        string TableInitialize =
-            // Purchase History
-            "CREATE TABLE IF NOT EXISTS PurchaseHistory" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "ItemType TEXT, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER, " +
-                "BuyOrSell TEXT, " +
-                "PurchaseDate TEXT, " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // Player Ownership
-            "CREATE TABLE IF NOT EXISTS PlayerOwnership" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "ItemType TEXT, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER, " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // PlayerDailyMission
-            "CREATE TABLE IF NOT EXISTS PlayerDailyMission" +
-                "(ID INTEGER, " +
-                "PlayerID INTEGER, " +
-                "MissionID INTEGER, " +
-                "IsComplete TEXT NOT NULL, " +
-                "MissionDate TEXT NOT NULL, " +
-                "MissionProgess INTEGER NOT NULL, " +
-                "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
-                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // Player Ownership
-            "CREATE TABLE IF NOT EXISTS SessionOwnership" +
-                "(ID INTEGER, " +
-                "SessionID INTEGER, " +
-                "ItemType TEXT, " +
-                "ItemID INTEGER, " +
-                "Quantity INTEGER, " +
-                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
-            // SessionLOTWCards
-            "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
-                "(ID INTEGER, " +
-                "SessionID INTEGER, " +
-                "CardID INTEGER, " +
-                "Duration INTEGER, " +
-                "Stack INTEGER, " +
-                "FOREIGN KEY(CardID) REFERENCES LuckOfTheWandererCards(CardID), " +
-                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+        // Data Table
+        string DataTable =
             // ArsenalPower
             "CREATE TABLE IF NOT EXISTS ArsenalPower" +
                 "(PowerID INTEGER, " +
@@ -165,25 +115,6 @@ public class InitializeDatabase : MonoBehaviour
                 "CardRepeatable TEXT NOT NULL, " +
                 "TierColor TEXT NOT NULL, " +
                 "PRIMARY KEY(CardID AUTOINCREMENT) ); " +
-            // PlayerProfile
-            "CREATE TABLE IF NOT EXISTS PlayerProfile" +
-                "(PlayerID INTEGER, " +
-                "Name TEXT NOT NULL, " +
-                "Rank INTEGER, " +
-                "CurrentSession INTEGER, " +
-                "FuelCell INTEGER NOT NULL, " +
-                "FuelEnergy INTEGER NOT NULL, " +
-                "Cash INTEGER NOT NULL, " +
-                "TimelessShard INTEGER NOT NULL, " +
-                "DailyIncome INTEGER NOT NULL, " +
-                "DailyIncomeReceived TEXT NOT NULL, " +
-                "LastFuelCellUsedTime TEXT," +
-                "CollectedSalaryTime TEXT," +
-                "SupremeWarriorNo INTEGER," +
-                "DailyIncomeShard INTEGER NOT NULL, " +
-                "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
-                "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
-                "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
             // RankSystem
             "CREATE TABLE IF NOT EXISTS RankSystem" +
                 "(RankID INTEGER, " +
@@ -196,42 +127,6 @@ public class InitializeDatabase : MonoBehaviour
                 "TierColor TEXT NOT NULL, " +
                 "DailyIncomeShard INTEGER NOT NULL, " +
                 "PRIMARY KEY(RankID AUTOINCREMENT) ); " +
-            // Session
-            "CREATE TABLE IF NOT EXISTS Session" +
-                "(SessionID INTEGER, " +
-                "TotalPlayedTime TEXT, " +
-                "CurrentStage INTEGER, " +
-                "CurrentStageHazard INTEGER, " +
-                "CurrentStageVariant INTEGER, " +
-                "CreatedDate TEXT NOT NULL, " +
-                "LastUpdate TEXT NOT NULL, " +
-                "IsCompleted TEXT NOT NULL, " +
-                "SessionCash INTEGER NOT NULL, " +
-                "SessionTimelessShard INTEGER NOT NULL, " +
-                "SessionFuelEnergy INTEGER NOT NULL, " +
-                "Model TEXT, " +
-                "LeftWeapon TEXT, " +
-                "RightWeapon TEXT, " +
-                "FirstPower TEXT, " +
-                "SecondPower TEXT, " +
-                "Consumables TEXT, " +
-                "SessionCurrentHP INTEGER, " +
-                "EnemyDestroyed INTEGER, " +
-                "DamageDealt INTEGER, " +
-                "ConsumablesCD TEXT, " +
-                "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
-            // LoadoutSaveData
-            "CREATE TABLE IF NOT EXISTS LoadoutSaveData" +
-                "(LoadOutSaveDataID INTEGER," +
-                "PlayerID INTEGER," +
-                "Model TEXT, " +
-                "LeftWeapon TEXT, " +
-                "RightWeapon TEXT, " +
-                "FirstPower TEXT, " +
-                "SecondPower TEXT, " +
-                "Consumables TEXT, " +
-                "ConsumablesCD TEXT, " +
-                "PRIMARY KEY(LoadOutSaveDataID AUTOINCREMENT) ); " +
             // SpaceShop
             "CREATE TABLE IF NOT EXISTS SpaceShop" +
                 "(ItemID INTEGER, " +
@@ -250,21 +145,6 @@ public class InitializeDatabase : MonoBehaviour
             // Table to check if database already Init
             "CREATE TABLE IF NOT EXISTS DatabaseInitialize" +
                 "(AlreadyInitialize TEXT NOT NULL);" +
-            // Table for current play session
-            "CREATE TABLE IF NOT EXISTS CurrentPlaySession" +
-                "(PlaySessionId INTEGER," +
-                "PlayerId INTEGER," +
-                "SessionStartTime Text," +
-                "SessionEndTime Text," +
-                "FOREIGN KEY(PlayerId) REFERENCES PlayerProfile(PlayerId)," +
-                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );" +
-             // Table for option
-             "CREATE TABLE IF NOT EXISTS Option" +
-                "(MasterVolume INTEGER," +
-                "MusicVolume INTEGER," +
-                "SoundFx INTEGER," +
-                "Fps INTEGER," +
-                "Resolution TEXT);" +
             // Table for Warship
             "CREATE TABLE IF NOT EXISTS Warship" +
                 "(WSId INTEGER," +
@@ -308,12 +188,6 @@ public class InitializeDatabase : MonoBehaviour
                 "ATName TEXT," +
                 "ATDesc TEXT," +
                 "PRIMARY KEY(ATId AUTOINCREMENT) );" +
-            // Table for CollectSalaryHistory
-            "CREATE TABLE IF NOT EXISTS CollectSalaryHistory" +
-                "(Id INTEGER," +
-                "PlayerId INTEGER," +
-                "CollectedTime TEXT," +
-                "PRIMARY KEY(Id AUTOINCREMENT) );" +
             // Table for FighterGroup
             "CREATE TABLE IF NOT EXISTS FighterGroup" +
                 "(GroupId INTEGER," +
@@ -381,6 +255,36 @@ public class InitializeDatabase : MonoBehaviour
                 "MilestoneEnemyClassB INTEGER NOT NULL," +
                 "MilestoneEnemyClassC INTEGER NOT NULL," +
                 "PRIMARY KEY(MilestoneID AUTOINCREMENT) );" +
+            // Table for SpaceZoneMission
+            "CREATE TABLE IF NOT EXISTS SpaceZoneMission" +
+                "(ID INTEGER," +
+                "SpaceZoneValue INTEGER," +
+                "Variant INTEGER NOT NULL," +
+                "Mission TEXT NOT NULL," +
+                "VictoryCondition TEXT NOT NULL," +
+                "DefeatCondition TEX NOT NULL," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
+            // Table for ArsenalService
+            "CREATE TABLE IF NOT EXISTS ArsenalService" +
+                "(ID INTEGER," +
+                "Name TEXT NOT NULL," +
+                "Price TEXT NOT NULL," +
+                "Effect INTEGER NOT NULL," +
+                "PRIMARY KEY(ID AUTOINCREMENT));" +
+                "";
+        // Save Table
+        string SaveTable =
+            // Purchase History
+            "CREATE TABLE IF NOT EXISTS PurchaseHistory" +
+                "(ID INTEGER, " +
+                "PlayerID INTEGER, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "BuyOrSell TEXT, " +
+                "PurchaseDate TEXT, " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
             // Table for Statistic
             "CREATE TABLE IF NOT EXISTS Statistic" +
                 "(ID INTEGER," +
@@ -398,34 +302,130 @@ public class InitializeDatabase : MonoBehaviour
                 "TotalDailyMissionDone INTEGER NOT NULL," +
                 "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerId)," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
-            // Table for SpaceZoneMission
-            "CREATE TABLE IF NOT EXISTS SpaceZoneMission" +
-                "(ID INTEGER," +
-                "SpaceZoneValue INTEGER," +
-                "Variant INTEGER NOT NULL," +
-                "Mission TEXT NOT NULL," +
-                "VictoryCondition TEXT NOT NULL," +
-                "DefeatCondition TEX NOT NULL," +
-                "PRIMARY KEY(ID AUTOINCREMENT));" +
-            // Table for ArsenalService
-            "CREATE TABLE IF NOT EXISTS ArsenalService" +
-                "(ID INTEGER," +
-                "Name TEXT NOT NULL," +
-                "Price TEXT NOT NULL," +
-                "Effect INTEGER NOT NULL," +
-                "PRIMARY KEY(ID AUTOINCREMENT));" +
             // Table for SessionCurrentSaveData
             "CREATE TABLE IF NOT EXISTS SessionCurrentSaveData" +
                 "(ID INTEGER," +
                 "SessionID INTEGER NOT NULL," +
                 "SessionCurrentPlace TEXT NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
-/*            // Table for SessionPredictData
-            "CREATE TABLE IF NOT EXISTS SessionPredictData" +
-                "(ID INTEGER," +
-                "SessionID INTEGER NOT NULL," +
-                "SessionPrediction TEXT NOT NULL," +
-                "PRIMARY KEY(ID AUTOINCREMENT));" +*/
+            // Table for CollectSalaryHistory
+            "CREATE TABLE IF NOT EXISTS CollectSalaryHistory" +
+                "(Id INTEGER," +
+                "PlayerId INTEGER," +
+                "CollectedTime TEXT," +
+                "PRIMARY KEY(Id AUTOINCREMENT) );" +
+             // Table for option
+             "CREATE TABLE IF NOT EXISTS Option" +
+                "(MasterVolume INTEGER," +
+                "MusicVolume INTEGER," +
+                "SoundFx INTEGER," +
+                "Fps INTEGER," +
+                "Resolution TEXT);" +
+            // Table for current play session
+            "CREATE TABLE IF NOT EXISTS CurrentPlaySession" +
+                "(PlaySessionId INTEGER," +
+                "PlayerId INTEGER," +
+                "SessionStartTime Text," +
+                "SessionEndTime Text," +
+                "FOREIGN KEY(PlayerId) REFERENCES PlayerProfile(PlayerId)," +
+                "PRIMARY KEY(PlaySessionId AUTOINCREMENT) );" +
+            // LoadoutSaveData
+            "CREATE TABLE IF NOT EXISTS LoadoutSaveData" +
+                "(LoadOutSaveDataID INTEGER," +
+                "PlayerID INTEGER," +
+                "Model TEXT, " +
+                "LeftWeapon TEXT, " +
+                "RightWeapon TEXT, " +
+                "FirstPower TEXT, " +
+                "SecondPower TEXT, " +
+                "Consumables TEXT, " +
+                "ConsumablesCD TEXT, " +
+                "PRIMARY KEY(LoadOutSaveDataID AUTOINCREMENT) ); " +
+            // Player Ownership
+            "CREATE TABLE IF NOT EXISTS PlayerOwnership" +
+                "(ID INTEGER, " +
+                "PlayerID INTEGER, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // PlayerDailyMission
+            "CREATE TABLE IF NOT EXISTS PlayerDailyMission" +
+                "(ID INTEGER, " +
+                "PlayerID INTEGER, " +
+                "MissionID INTEGER, " +
+                "IsComplete TEXT NOT NULL, " +
+                "MissionDate TEXT NOT NULL, " +
+                "MissionProgess INTEGER NOT NULL, " +
+                "FOREIGN KEY(MissionID) REFERENCES DailyMissions(MissionID), " +
+                "FOREIGN KEY(PlayerID) REFERENCES PlayerProfile(PlayerID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // Session Ownership
+            "CREATE TABLE IF NOT EXISTS SessionOwnership" +
+                "(ID INTEGER, " +
+                "SessionID INTEGER, " +
+                "ItemType TEXT, " +
+                "ItemID INTEGER, " +
+                "Quantity INTEGER, " +
+                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // SessionLOTWCards
+            "CREATE TABLE IF NOT EXISTS SessionLOTWCards" +
+                "(ID INTEGER, " +
+                "SessionID INTEGER, " +
+                "CardID INTEGER, " +
+                "Duration INTEGER, " +
+                "Stack INTEGER, " +
+                "FOREIGN KEY(CardID) REFERENCES LuckOfTheWandererCards(CardID), " +
+                "FOREIGN KEY(SessionID) REFERENCES Session(SessionID), " +
+                "PRIMARY KEY(ID AUTOINCREMENT) ); " +
+            // PlayerProfile
+            "CREATE TABLE IF NOT EXISTS PlayerProfile" +
+                "(PlayerID INTEGER, " +
+                "Name TEXT NOT NULL, " +
+                "Rank INTEGER, " +
+                "CurrentSession INTEGER, " +
+                "FuelCell INTEGER NOT NULL, " +
+                "FuelEnergy INTEGER NOT NULL, " +
+                "Cash INTEGER NOT NULL, " +
+                "TimelessShard INTEGER NOT NULL, " +
+                "DailyIncome INTEGER NOT NULL, " +
+                "DailyIncomeReceived TEXT NOT NULL, " +
+                "LastFuelCellUsedTime TEXT," +
+                "CollectedSalaryTime TEXT," +
+                "SupremeWarriorNo INTEGER," +
+                "DailyIncomeShard INTEGER NOT NULL, " +
+                "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
+                "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
+                "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
+            // Session
+            "CREATE TABLE IF NOT EXISTS Session" +
+                "(SessionID INTEGER, " +
+                "TotalPlayedTime TEXT, " +
+                "CurrentStage INTEGER, " +
+                "CurrentStageHazard INTEGER, " +
+                "CurrentStageVariant INTEGER, " +
+                "CreatedDate TEXT NOT NULL, " +
+                "LastUpdate TEXT NOT NULL, " +
+                "IsCompleted TEXT NOT NULL, " +
+                "SessionCash INTEGER NOT NULL, " +
+                "SessionTimelessShard INTEGER NOT NULL, " +
+                "SessionFuelEnergy INTEGER NOT NULL, " +
+                "Model TEXT, " +
+                "LeftWeapon TEXT, " +
+                "RightWeapon TEXT, " +
+                "FirstPower TEXT, " +
+                "SecondPower TEXT, " +
+                "Consumables TEXT, " +
+                "SessionCurrentHP INTEGER, " +
+                "EnemyDestroyed INTEGER, " +
+                "DamageDealt INTEGER, " +
+                "ConsumablesCD TEXT, " +
+                "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
+            // Table to check if database already Init
+            "CREATE TABLE IF NOT EXISTS DatabaseInitialize" +
+                "(AlreadyInitialize TEXT NOT NULL);" +
                 "";
         // Initialize Data
         // ArsenalWeapon
@@ -519,18 +519,18 @@ public class InitializeDatabase : MonoBehaviour
             "(11, 'Emergency Auto-Repair Module', 'An emergency module that quickly repair your Fighter during battle. ', 10, 'RMH-50', 3, 'T', 3, 5000, 60, '#bf2600', 'An emergency module that quickly repair your Fighter during battle. ')," +
             "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though...', 2, 'FC', 3, 'T', 1, 20000, null, '#bf2600', 'Fuel Core for sale'' but only 1 in stock per day.');";
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
-            "(1, 'Structural Upgrader I', 'DEF', 'HP-3', 3, 1000, 'Y', 'Y', '#03c800')," +
-            "(2, 'Structural Upgrader II', 'DEF', 'HP-5', 3, 1000, 'Y', 'Y', '#03c800')," +
-            "(3, 'Structural Upgrader III', 'DEF', 'HP-7', 2, 1000, 'Y', 'Y', '#0800ff')," +
+            "(1, 'Structural Upgrader I', 'DEF', 'HP-5', 3, 1000, 'Y', 'Y', '#03c800')," +
+            "(2, 'Structural Upgrader II', 'DEF', 'HP-7.5', 3, 1000, 'Y', 'Y', '#03c800')," +
+            "(3, 'Structural Upgrader III', 'DEF', 'HP-10', 2, 1000, 'Y', 'Y', '#0800ff')," +
             "(4, 'Engine Booster I', 'DEF', 'MS-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(5, 'Engine Booster II', 'DEF', 'MS-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(6, 'Engine Booster III', 'DEF', 'MS-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
             "(7, 'Multi-layer Barrier I', 'DEF', 'RD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(8, 'Multi-layer Barrier II', 'DEF', 'RD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(9, 'Multi-layer Barrier III', 'DEF', 'RD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(10, 'Gun Extension I', 'OFF', 'AWD-2', 3, 5, 'N', 'Y', '#03c800')," +
+            "(10, 'Gun Extension I', 'OFF', 'AWD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(11, 'Gun Extension II', 'OFF', 'AWD-5', 3, 5, 'N', 'Y', '#03c800')," +
-            "(12, 'Gun Extension III', 'OFF', 'AWD-2', 2, 1000, 'Y', 'Y', '#0800ff')," +
+            "(12, 'Gun Extension III', 'OFF', 'AWD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
             "(13, 'Gun Heater I', 'OFF', 'TWD-7.5', 3, 5, 'N', 'Y', '#03c800')," +
             "(14, 'Gun Heater II', 'OFF', 'TWD-15', 3, 5, 'N', 'Y', '#03c800')," +
             "(15, 'Gun Heater III', 'OFF', 'TWD-7.5', 2, 1000, 'Y', 'Y', '#0800ff')," +
@@ -543,14 +543,14 @@ public class InitializeDatabase : MonoBehaviour
             "(22, 'Power Cooler I', 'SPE', 'PCD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(23, 'Power Cooler II', 'SPE', 'PCD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(24, 'Power Cooler III', 'SPE', 'PCD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(25, 'Reformation Structure', 'DEF', 'R-100', 2, 5, 'Y', 'Y', '#0800ff')," +
-            "(26, 'Hazard Protection Coat', 'DEF', 'HAZ', 2, 5, 'Y', 'Y', '#0800ff')," +
-            "(27, 'Berserk Enchantment', 'OFF', 'BS-15-25', 2, 5, 'Y', 'Y', '#0800ff')," +
-            "(28, 'Consumable Cloner', 'SPE', 'CONS', 2, 5, 'Y', 'Y', '#0800ff')," +
-            "(29, 'Foreign Fund', 'SPE', 'C-100', 2, 5, 'Y', 'Y', '#0800ff')," +
+            "(25, 'Reformation Structure', 'DEF', 'R-100', 2, 3, 'Y', 'Y', '#0800ff')," +
+            "(26, 'Hazard Protection Coat', 'DEF', 'HAZ', 2, 1000, 'Y', 'N', '#0800ff')," +
+            "(27, 'Berserk Enchantment', 'OFF', 'BS-15-25', 2, 3, 'Y', 'Y', '#0800ff')," +
+            "(28, 'Consumable Cloner', 'SPE', 'CONS', 2, 3, 'Y', 'Y', '#0800ff')," +
+            "(29, 'Foreign Fund', 'SPE', 'C-100', 2, 3, 'Y', 'Y', '#0800ff')," +
             "(30, 'Power Supercharger', 'SPE', 'PCD-50', 1, 5, 'N', 'Y', '#ff0000')," +
             "(31, 'Power Enchanter', 'SPE', 'PCD-15', 1, 1000, 'Y', 'Y', '#ff0000')," +
-            "(32, 'Weapon Supercharger', 'OFF', 'WROF-25', 1, 5, 'N', 'Y', '#ff0000')," +
+            "(32, 'Weapon Supercharger', 'OFF', 'WROF-25', 1, 5, 'Y', 'Y', '#ff0000')," +
             "(33, 'Weapon Enchanter', 'OFF', 'AWD-10', 1, 1000, 'Y', 'Y', '#ff0000')," +
             "(34, 'Franklin Effect', 'SPE', 'C-x2', 1, -1, 'N', 'N', '#ff0000');";
         // Daily Missions
@@ -742,11 +742,11 @@ public class InitializeDatabase : MonoBehaviour
         // Insert Hazard Environment
         string HazardEnvironment = "INSERT INTO HazardEnvironment VALUES " +
             "(1, 'N', 'None', '#ffffff', 'Ordinary Environment', 65, 0, '')," +
-            "(2, 'SR', 'Unknown Asteroids', '#2898bd', 'Leftovers of destroyed planets around the galaxies', 10, 11, '')," +
-            "(3, 'O', 'Overloaded', '#fea362', 'Unexpected Heat from unknown sources', 10, 31, 'OVL')," +
-            "(4, 'GR', 'Gamma Ray Burst', '#22a06b', 'Deadly burst that intensively affects Fighter’s survival abilities', 5, 51, 'GAM')," +
-            "(5, 'RS', 'Rogue Star', '#ae2e24', 'Random comets wander the nebula', 5, 71, '')," +
-            "(6, 'ND', 'Nebula Disorientation', '#5e4db2', 'One of the Origins of the ongoing galaxy war', 5, 101, 'NEB');";
+            "(2, 'SR', 'Unknown Asteroids', '#2898bd', 'Leftovers of destroyed planets around the galaxies', 25, 1, '')," +
+            "(3, 'O', 'Overloaded', '#fea362', 'Unexpected Heat from unknown sources', 10, 11, 'OVL')," +
+            "(4, 'GR', 'Gamma Ray Burst', '#22a06b', 'Deadly burst that intensively affects Fighter’s survival abilities', 10, 21, 'GAM')," +
+            "(5, 'RS', 'Rogue Star', '#ae2e24', 'Random comets wander the nebula', 5, 21, '')," +
+            "(6, 'ND', 'Nebula Disorientation', '#5e4db2', 'One of the Origins of the ongoing galaxy war', 5, 51, 'NEB');";
         // Insert WarshipMilestone
         string WarshipMilestone = "INSERT INTO WarshipMilestone VALUES " +
             "(1, 0, 7, 8, 9, 1, 2, 3)," +
@@ -788,18 +788,18 @@ public class InitializeDatabase : MonoBehaviour
         // Initialize Data Fail
         string Failure = "INSERT INTO DatabaseInitialize VALUES ('F');";
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection = new SqliteConnection("URI=file:DataTables.db");
         dbConnection.Open();
         // Queries
         // Create Table Query
         IDbCommand dbCommandCreateTable = dbConnection.CreateCommand();
-        dbCommandCreateTable.CommandText = TableInitialize;
+        dbCommandCreateTable.CommandText = DataTable;
         // Insert Data Query
         IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
         // Order: Rank > Other
         dbCommandInsertValue.CommandText = 
             RankSystem + SpaceShop + ArsenalPower + ArsenalWeapon + FactoryModel
-            + LOTWCards + DailyMissions + Option + Tutorial + DElement 
+            + LOTWCards + DailyMissions + Tutorial + DElement 
             + Attribute + Enemy + Warship + SpaceStation + Allies + FighterGroup
             + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition + HazardEnvironment
             + WarshipMilestone + SpaceZoneMission + ArsenalService;
@@ -834,10 +834,67 @@ public class InitializeDatabase : MonoBehaviour
             }
             dbCommandInsertCheck.ExecuteNonQuery();
         }
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:SaveTables.db");
+        dbConnection.Open();
+        // Queries
+        // Create Save Query
+        IDbCommand dbCommandCreateSave = dbConnection.CreateCommand();
+        dbCommandCreateSave.CommandText = SaveTable;
+        // Insert Data Query
+        IDbCommand dbCommandInsertSave = dbConnection.CreateCommand();
+        // Order: Rank > Other
+        dbCommandInsertSave.CommandText = Option;
+        // Insert Check Data Query
+        IDbCommand dbCommandInsertCheckSave = dbConnection.CreateCommand();
+        // Check Variable
+        string checkSave = null;
+        try
+        {
+            // Create Table
+            int CreateCheck = dbCommandCreateSave.ExecuteNonQuery();
+            // Insert Data
+            int InsertCheck = dbCommandInsertSave.ExecuteNonQuery();
+            if (InsertCheck == 0)
+            {
+                throw new SqliteException();
+            }
+            check = "T";
+        }
+        catch (SqliteException e)
+        {
+            Debug.Log(e.Message);
+            check = "F";
+        }
+        if (check != null)
+        {
+            if (check.Equals("T"))
+            {
+                dbCommandInsertCheckSave.CommandText = Success;
+            }
+            else if (check.Equals("F"))
+            {
+                dbCommandInsertCheckSave.CommandText = Failure;
+            }
+            dbCommandInsertCheckSave.ExecuteNonQuery();
+        }
+
+        IDbCommand command = dbConnection.CreateCommand();
+        command.CommandText = "SELECT file FROM pragma_database_list;";
+        IDataReader reader = command.ExecuteReader();
+        string dir = "";
+        while(reader.Read())
+        {
+            dir = reader.GetString(0);
+        }
+        dir = dir.Replace("SaveTables.db", "DataTables.db");
+        IDbCommand command2 = dbConnection.CreateCommand();
+        command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
+        int n = command2.ExecuteNonQuery();
         dbConnection.Close();
     }
 
-    // Drop Database
+    /*// Drop Database
     public void DropDatabase()
     {
         // Drop Tables
@@ -850,10 +907,10 @@ public class InitializeDatabase : MonoBehaviour
             "DROP TABLE IF EXISTS PlayerSpaceShopItem;" +
             // PlayerDailyMission
             "DROP TABLE IF EXISTS PlayerDailyMission;" +
-            /*// SessionArsenalPower
+            *//*// SessionArsenalPower
             "DROP TABLE IF EXISTS SessionArsenalPower;" +
             // SessionArsenalWeapons
-            "DROP TABLE IF EXISTS SessionArsenalWeapons;" +*/
+            "DROP TABLE IF EXISTS SessionArsenalWeapons;" +*//*
             // SessionLOTWCards
             "DROP TABLE IF EXISTS SessionLOTWCards;" +
             // PlayerModelOwnership
@@ -891,12 +948,12 @@ public class InitializeDatabase : MonoBehaviour
         dbCommandDropTable.CommandText = DropTable;
         dbCommandDropTable.ExecuteNonQuery();
         dbConnection.Close();
-    }
+    }*/
     // Check if already init
-    public string CheckInitialize()
+    public string CheckInitializeData()
     {
         // Open Connection
-        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection = new SqliteConnection("URI=file:DataTables.db");
         dbConnection.Open();
         IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
         dbCommandReadValues.CommandText = "SELECT * FROM DatabaseInitialize";
@@ -955,64 +1012,68 @@ public class InitializeDatabase : MonoBehaviour
         dbConnection.Close();
         return "Data Error";
     }
-    // Template Select Data
-    public Weapons SelectData()
+    
+    public string CheckInitializeSave()
     {
-        Weapons weapon = new Weapons();
-        dbConnection = new SqliteConnection("URI=file:Database.db");
+        // Open Connection
+        dbConnection = new SqliteConnection("URI=file:SaveTables.db");
         dbConnection.Open();
-        IDbCommand dbCommandReadValues = dbConnection.CreateCommand(); // 15
-        dbCommandReadValues.CommandText = "SELECT * FROM PlayerProfile"; // 16
-        IDataReader dataReader = dbCommandReadValues.ExecuteReader(); // 17
-
-        while (dataReader.Read()) // 18
+        IDbCommand dbCommandReadValues = dbConnection.CreateCommand();
+        dbCommandReadValues.CommandText = "SELECT * FROM DatabaseInitialize";
+        IDataReader dataReader = null;
+        try
         {
-            // The `id` has index 0, our `hits` have the index 1.
-            weapon.name = dataReader.GetString(1); // 19
+            dataReader = dbCommandReadValues.ExecuteReader();
+        } catch (SqliteException)
+        {
+            return "No Data";
         }
-
-        // Remember to always close the connection at the end.
-        dbConnection.Close(); // 20
-        return weapon;
-    }
-
-    // Template Insert Data
-    public void InsertData(Weapons weapons)
-    {
-        // Open connection
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
-        dbCommandInsertValue.CommandText = "INSERT INTO PlayerProfile (name) VALUES (" + weapons.name + ")";
-        dbCommandInsertValue.ExecuteNonQuery();
-
+        if (dataReader != null)
+        {
+            // Count check
+            int count = 0;
+            // Get Final Result
+            string check = "";
+            // Count and Read the Final Result
+            while (dataReader.Read())
+            {
+                count++;
+                check = dataReader.GetString(0);
+            }
+            // Case Count = 0 -> No Data
+            if (count == 0)
+            {
+                return "No Data";
+            }
+            // Case Count > 1 -> Error in Input
+            else if (count > 1)
+            {
+                return "Data Error";
+            }
+            // Case Count = 1 -> Right case
+            else if (count == 1)
+            {
+                // Case return value = empty -> Error in Input
+                if (check == "")
+                {
+                    return "Data Error";
+                }
+                // Case return value = T -> Already Init
+                else if (check == "T")
+                {
+                    return "Already Initialize";
+                }
+                // Case return value = F -> Not Init Yet
+                else if (check == "F")
+                {
+                    return "Not Initialize Yet";
+                }
+                // Otherwise Error in Input
+                else return "Data Error";
+            }
+        }
         dbConnection.Close();
-    }
-
-    // Template Update Data
-    public void UpdateData(Weapons weapons)
-    {
-        // Open connection
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
-        dbCommandInsertValue.CommandText = "Update PlayerProfile SET ( name = " + weapons.name + ")";
-        dbCommandInsertValue.ExecuteNonQuery();
-
-        dbConnection.Close();
-    }
-
-    // Template Delete Data
-    public void DeleteData(Weapons weapons)
-    {
-        // Open connection
-        dbConnection = new SqliteConnection("URI=file:Database.db");
-        dbConnection.Open();
-        IDbCommand dbCommandInsertValue = dbConnection.CreateCommand();
-        dbCommandInsertValue.CommandText = "Delete from PlayerProfile where name = "+ weapons.name +"";
-        dbCommandInsertValue.ExecuteNonQuery();
-
-        dbConnection.Close();
+        return "Data Error";
     }
     #endregion
 }
