@@ -51,7 +51,7 @@ public class SpawnEnemyWarship : MonoBehaviour
         Dictionary<string, object> data = FindObjectOfType<AccessDatabase>().GetWSById(WarshipID);
         for (int i = 0; i < WarshipModel.transform.childCount; i++)
         {
-            if (WarshipModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["WarshipName"].ToString().Replace("-","").ToLower())
+            if (WarshipModel.transform.GetChild(i).name.ToLower() == data["WarshipName"].ToString().ToLower())
             {
                 GameObject game = Instantiate(WSTemplate, new Vector3(randomPos.x, randomPos.y, WarshipModel.transform.GetChild(i).position.z), Quaternion.identity);
                 game.GetComponent<SpriteRenderer>().sprite = WarshipModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;

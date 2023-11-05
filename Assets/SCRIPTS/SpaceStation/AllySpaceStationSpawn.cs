@@ -49,7 +49,7 @@ public class AllySpaceStationSpawn : MonoBehaviour
         //Debug.Log(SpaceStationModel.transform.childCount);
         for (int i = 0; i < SpaceStationModel.transform.childCount; i++)
         {
-            if (SpaceStationModel.transform.GetChild(i).name.Replace("_", "").ToLower() == data["SpaceStationName"].ToString().Replace("-", "").ToLower())
+            if (SpaceStationModel.transform.GetChild(i).name.ToLower() == data["SpaceStationName"].ToString().ToLower())
             {
                 GameObject game = Instantiate(SpaceStationTemplate, new Vector3(randomPos.x, randomPos.y, SpaceStationModel.transform.GetChild(i).position.z), Quaternion.identity);
                 game.GetComponent<SpriteRenderer>().sprite = SpaceStationModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
