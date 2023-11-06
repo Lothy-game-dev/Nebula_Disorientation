@@ -12,6 +12,8 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
     public GameObject[] HazardRocks;
     public GameObject HazardStar;
     public GameplayInteriorController ControllerMain;
+    public LayerMask PlayerMask;
+    public LayerMask EnemyMask;
     #endregion
     #region NormalVariables
     public int HazardID;
@@ -28,7 +30,7 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        InitializeHazard();
+        
     }
 
     // Update is called once per frame
@@ -97,7 +99,34 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
             {
                 int k = Random.Range(0, 2) == 0 ? 0 : 4;
                 GameObject ChosenRock = HazardRocks[k];
-                GameObject Rock = Instantiate(ChosenRock, new Vector2(Random.Range(-4500f, 4500f), Random.Range(-4500f, 4500f)), Quaternion.identity);
+                Vector2 Spawn = new Vector2(0,0);
+                bool check = false;
+                while (!check)
+                {
+                    Spawn = new Vector2(Random.Range(-4500f, 4500f), Random.Range(-4500f, 4500f));
+                    check = true;
+                    Collider2D[] cols = Physics2D.OverlapCircleAll(Spawn, 200f, PlayerMask);
+                    foreach (var col in cols)
+                    {
+                        if (col.GetComponent<WSShared>()!=null)
+                        {
+                            check = false;
+                            Debug.Log("Overlap");
+                            break;
+                        }
+                    }
+                    Collider2D[] cols2 = Physics2D.OverlapCircleAll(Spawn, 200f, EnemyMask);
+                    foreach (var col in cols2)
+                    {
+                        if (col.GetComponent<WSShared>() != null)
+                        {
+                            check = false;
+                            Debug.Log("Overlap");
+                            break;
+                        }
+                    }
+                }
+                GameObject Rock = Instantiate(ChosenRock, Spawn, Quaternion.identity);
                 Rock.name = "SR" + i;
                 Rock.SetActive(true);
             }

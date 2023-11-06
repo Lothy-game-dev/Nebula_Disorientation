@@ -94,9 +94,11 @@ public class SpaceZoneGenerator : MonoBehaviour
             if ((string)HazardData["HazardBackground"] != "")
             {
                 ChosenBG = (string)HazardData["HazardBackground"];
+            } else
+            {
+                ChosenBG = (string)variantData["AvailableBackground"];
             }
             Hazard.HazardID = HazardId;
-            Hazard.InitializeHazard();
         }
         else
         ChosenBG = (string)variantData["AvailableBackground"];
@@ -1038,6 +1040,7 @@ public class SpaceZoneGenerator : MonoBehaviour
                 Mission.CreateMissionBossV2(EnemyFighterCCount);
             }
         }
+        Hazard.InitializeHazard();
     }
 
     #endregion
