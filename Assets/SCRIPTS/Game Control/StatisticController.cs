@@ -114,13 +114,7 @@ public class StatisticController : MonoBehaviour
         MaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
         CurrentShard = Shard.text;
         CurrentCash = Cash.text;
-        if (!Timer.transform.parent.gameObject.GetComponent<SpaceZoneTimer>().Countdown)
-        {
-            PlayedTime = Timer.text;
-        } else
-        {
-            PlayedTime = "1:00";
-        }
+        PlayedTime = currentTimePlayed.ToString(@"mm\:ss");     
         CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
         SessionID = (int)SessionInformation["SessionID"];
