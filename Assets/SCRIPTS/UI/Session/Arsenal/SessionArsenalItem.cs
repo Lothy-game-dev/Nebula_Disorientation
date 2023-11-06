@@ -40,7 +40,7 @@ public class SessionArsenalItem : MonoBehaviour
     private string TextGenerated;
     public string ItemPreReq;
     public bool IsRanked;
-    public bool IsZeroShard;
+    public bool IsOwned;
     private string ItemReq;
     #endregion
     #region Start & Update
@@ -243,6 +243,7 @@ public class SessionArsenalItem : MonoBehaviour
         BuyButton.GetComponent<SessionArsenalBuyButton>().PreReqName = ItemPreReq;
         BuyButton.GetComponent<SessionArsenalBuyButton>().isEnoughMoney = ar.EnoughPrice;
         BuyButton.GetComponent<SessionArsenalBuyButton>().ItemId = Id;
+        BuyButton.GetComponent<SessionArsenalBuyButton>().isOwned = IsOwned;
     }
     public void StartTextRunning(string text)
     {
