@@ -27,6 +27,7 @@ public class LOTWScene : MonoBehaviour
     public GameObject PopupBG;
     public GameObject LOTWNoText;
     public GameObject SessionShardText;
+    public GameSavedText SaveText;
     #endregion
     #region NormalVariables
     private List<int> ListAllLOTW;
@@ -52,6 +53,9 @@ public class LOTWScene : MonoBehaviour
     {
         // Initialize variables
         FindObjectOfType<UECSessionScene>().gameObject.SetActive(false);
+        SaveText.gameObject.SetActive(true);
+        SaveText.FadingCountDown = 5f;
+        SaveText.AlreadySetCountDown = true;
         // Get Stage Info
         SetStageInfoData();
         // Get All Cards Data

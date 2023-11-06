@@ -20,6 +20,7 @@ public class GameplayInteriorController : MonoBehaviour
     public GameObject SZSummary;
     public GameObject LoadingScene;
     public GameObject Template;
+    public GameSavedText SaveText;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -43,6 +44,9 @@ public class GameplayInteriorController : MonoBehaviour
     {
         // Initialize variables
         GenerateLoadingScene(5f);
+        SaveText.gameObject.SetActive(true);
+        SaveText.FadingCountDown = 5f;
+        SaveText.AlreadySetCountDown = true;
         GenerateBlackFadeOpen(transform.position, 5f, 0.5f);
         CurrentStageCash = 0;
         CurrentStageShard = 0;

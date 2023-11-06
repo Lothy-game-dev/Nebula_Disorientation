@@ -27,6 +27,7 @@ public class SpaceZoneSummary : MonoBehaviour
     public GameObject SessionCash;
     public GameObject SessionShard;
     public GameObject FuelEnergy;
+    public GameSavedText SaveText;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -152,6 +153,9 @@ public class SpaceZoneSummary : MonoBehaviour
         // Update
         FindObjectOfType<AccessDatabase>().UpdateSessionStageData((int)SessionData["SessionID"], SpaceZoneNo, ChosenHazard, ChosenVariant);
         FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "LOTW");
+        SaveText.gameObject.SetActive(true);
+        SaveText.FadingCountDown = 5f;
+        SaveText.AlreadySetCountDown = true;
         FindObjectOfType<AccessDatabase>().UpdateReduceDurationAllCardByPlayerID(PlayerPrefs.GetInt("PlayerID"));
     }
     #endregion
