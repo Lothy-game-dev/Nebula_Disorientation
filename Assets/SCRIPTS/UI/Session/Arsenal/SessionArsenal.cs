@@ -161,7 +161,7 @@ public class SessionArsenal : MonoBehaviour
                 Game.GetComponent<SessionArsenalItem>().LockedItem = true;
                 Game.GetComponent<SessionArsenalItem>().ItemPreReq = n;
                 Game.GetComponent<SessionArsenalItem>().IsRanked = false;
-                Game.GetComponent<SessionArsenalItem>().IsZeroShard = false;
+                Game.GetComponent<SessionArsenalItem>().IsOwned = false;
             }
         }
         // Already bought
@@ -177,7 +177,7 @@ public class SessionArsenal : MonoBehaviour
                     Game.GetComponent<SessionArsenalItem>().LockedItem = true;
                     Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<SessionArsenalItem>().IsRanked = false;
-                    Game.GetComponent<SessionArsenalItem>().IsZeroShard = false;
+                    Game.GetComponent<SessionArsenalItem>().IsOwned = true;
 
                 }
             }
@@ -191,7 +191,8 @@ public class SessionArsenal : MonoBehaviour
                     Game.GetComponent<SessionArsenalItem>().LockedItem = true;
                     Game.GetComponent<SessionArsenalItem>().ItemPreReq = "";
                     Game.GetComponent<SessionArsenalItem>().IsRanked = false;
-                    Game.GetComponent<SessionArsenalItem>().IsZeroShard = false;
+                    Game.GetComponent<SessionArsenalItem>().IsOwned = true;
+
 
                 }
             }
