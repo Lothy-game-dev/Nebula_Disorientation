@@ -3363,7 +3363,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id != -1)
         {
-            IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
+            IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
             dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
                 "PlayerID=" + PlayerID;
             IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();

@@ -118,7 +118,7 @@ public class SpaceStationShared : MonoBehaviour
         TargetRefreshTimer -= Time.deltaTime;
         if (TargetRefreshTimer <= 0f)
         {
-            TargetRefreshTimer = Random.Range(0.5f, 1f);
+            TargetRefreshTimer = 0.25f;
 
             for (int i = 0; i < SpWps.Count; i++)
             {
@@ -146,7 +146,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         if (FindTargetTimer <= 0f)
         {
-            FindTargetTimer = Random.Range(0.5f, 1f);
+            FindTargetTimer = 0.25f;
             for (int i = 0; i < MainWps.Count; i++)
             {
                 MainWeaponTargetEnemy(MainWps[i]);
