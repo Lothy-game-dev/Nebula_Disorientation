@@ -302,6 +302,7 @@ public class WSShared : MonoBehaviour
         DelayTimer = new float[MainWps.Count];
 
         //Sup Weapon
+        Debug.Log(data["SupWeapon"].ToString());
         if (data["SupWeapon"].ToString().Contains("|"))
         {
             string[] weapons = data["SupWeapon"].ToString().Split("|");
@@ -354,6 +355,7 @@ public class WSShared : MonoBehaviour
                     sup.AddComponent<WSSupportWeaponMLAgent>();
                     sup.AddComponent<DecisionRequester>();
                     SpWps.Add(sup);
+                    break;
                 }
             }
             

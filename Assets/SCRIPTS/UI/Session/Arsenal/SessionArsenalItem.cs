@@ -41,6 +41,7 @@ public class SessionArsenalItem : MonoBehaviour
     public string ItemPreReq;
     public bool IsRanked;
     public bool IsZeroShard;
+    private string ItemReq;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -170,6 +171,13 @@ public class SessionArsenalItem : MonoBehaviour
         //ar.ItemTimelessShard.GetComponentInChildren<TextMeshPro>().text = "<color=" + ShardColor + ">" + ItemList[int.Parse(Id) - 1][6] + "</color>";
         ar.ItemCash.GetComponentInChildren<TextMeshPro>().text = "<color=" + CashColor + ">" + ItemList[int.Parse(Id) - 1][5] + "</color>";
         ar.Rank.GetComponentInChildren<TextMeshPro>().text = "<color=grey>Rank Required</color><br><color=grey>" + (string)RankSys["RankName"] + "</color>";
+
+        //Check item req
+        ItemReq = "";
+        if (ItemList[int.Parse(ItemID) - 1][7] != "N.A")
+        {
+            ItemReq = "<br><br>Prerequisite "+ ar.CurrentTab +": <color=#3bccec>" + ItemList[(int.Parse(ItemList[int.Parse(ItemID) - 1][7])) - 1][2] + "</color>";
+        }
         StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
 
         LockItem();
@@ -207,6 +215,7 @@ public class SessionArsenalItem : MonoBehaviour
             ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
             yield return new WaitForSeconds(0.05f);
         }
+        ar.DescContent.GetComponent<TMP_Text>().text += ItemReq;
 
     }
 

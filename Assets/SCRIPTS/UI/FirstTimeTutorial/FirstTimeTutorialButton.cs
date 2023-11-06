@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class FirstTimeTutorialButton : MonoBehaviour
+{
+    #region ComponentVariables
+    // Variables used for calling componenets attached to the game object only
+    // Can be public or private
+    #endregion
+    #region InitializeVariables
+    // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
+    // Must be public
+    // All importants number related to how a game object behave will be declared in this part
+    public GameObject Tutorial;
+    #endregion
+    #region NormalVariables
+    // All other variables apart from the two aforementioned types
+    // Can be public or private, prioritize private if possible
+    private FirstTimeTutorial ftt;
+    #endregion
+    #region Start & Update
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Initialize variables
+        ftt = Tutorial.GetComponent<FirstTimeTutorial>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Call function and timer only if possible
+    }
+    #endregion
+    #region Check mouse
+    // Group all function that serve the same algorithm
+    private void OnMouseDown()
+    {
+        ftt.Part = 0;
+        ftt.Tutorial();
+    }
+    #endregion
+    #region Function group ...
+    // Group all function that serve the same algorithm
+    #endregion
+}
