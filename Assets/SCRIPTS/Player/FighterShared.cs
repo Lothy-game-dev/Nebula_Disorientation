@@ -829,9 +829,9 @@ public class FighterShared : MonoBehaviour
                                 EnemyData = FindAnyObjectByType<AccessDatabase>().GetDataEnemyById(GetComponent<EnemyShared>().EnemyID);
                                 switch (EnemyData["TierColor"])
                                 {
-                                    case "#36b37e": Statistic.EnemyTierI += 1; break;
+                                    case "#36b37e": Statistic.EnemyTierIII += 1; break;
                                     case "#4c9aff": Statistic.EnemyTierII += 1; break;
-                                    case "#bf2600": Statistic.EnemyTierIII += 1; break;
+                                    case "#bf2600": Statistic.EnemyTierI += 1; break;
                                 }
                                 Statistic.TotalEnemyDefeated += 1;
                                 Statistic.KillEnemy = true;

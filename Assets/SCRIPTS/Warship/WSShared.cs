@@ -302,6 +302,7 @@ public class WSShared : MonoBehaviour
         DelayTimer = new float[MainWps.Count];
 
         //Sup Weapon
+        Debug.Log(data["SupWeapon"].ToString());
         if (data["SupWeapon"].ToString().Contains("|"))
         {
             string[] weapons = data["SupWeapon"].ToString().Split("|");
@@ -324,7 +325,7 @@ public class WSShared : MonoBehaviour
             for (int j = 0; j < Weapons.transform.childCount; j++)
             {
                 //Find model
-                if (Weapons.transform.GetChild(j).name.Replace(" ", "").ToLower().Contains(SupWeapon[i].Replace(" ", "").ToLower()))
+                if (Weapons.transform.GetChild(j).name.Replace(" ", "").Replace((IsEnemy ? "Zaturi" : "UEC"), "").ToLower() == (SupWeapon[i].Replace(" ", "").ToLower()))
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
@@ -354,6 +355,7 @@ public class WSShared : MonoBehaviour
                     sup.AddComponent<WSSupportWeaponMLAgent>();
                     sup.AddComponent<DecisionRequester>();
                     SpWps.Add(sup);
+                    break;
                 }
             }
             
@@ -669,7 +671,7 @@ public class WSShared : MonoBehaviour
     {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaxEffectiveDistance, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaximumDistance + 100, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             // Find the nearest first, if a fighter is found, target it instead
