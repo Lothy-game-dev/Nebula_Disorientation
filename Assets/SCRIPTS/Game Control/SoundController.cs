@@ -41,6 +41,10 @@ public class SoundController : MonoBehaviour
         {
             GetComponent<AudioSource>().volume = (int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f;
         }
+        if (GetComponent<SoundSFXGeneratorController>() != null)
+        {
+            GetComponent<SoundSFXGeneratorController>().SetSoundScaleInit((int)Data["MVolume"] / 100f * (int)Data["Sfx"] / 100f);
+        }
     }
 
     public void CheckSoundVolumeByNumber(float MasterVolume, float MusicVolume, float SFXVolume)

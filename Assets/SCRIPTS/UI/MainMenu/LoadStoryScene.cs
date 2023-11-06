@@ -66,7 +66,7 @@ public class LoadStoryScene : MainMenuSceneShared
         // Delete All Data
         DeleteCurrentList();
         // Get Data from DB
-        List<List<string>> NameAndRank = FindObjectOfType<AccessDatabase>().GetAllNameAndRankFromPlayerProfile();
+        List<List<string>> NameAndRank = FindObjectOfType<AccessDatabase>().GetAllNameRankSessionFromPlayerProfile();
         maximumHeight = (Mathf.Abs(distanceToTop) + Mathf.Abs(distanceToBottom)) * NameAndRank[0].Count;
         ScrollRect.vertical = false;
         BoardContent.GetComponent<RectTransform>().sizeDelta
@@ -81,7 +81,7 @@ public class LoadStoryScene : MainMenuSceneShared
         for (int i = 0; i < count; i++)
         {
             GameObject boardClone = Instantiate(ItemBoxInitPos, currentClonePos, Quaternion.identity);
-            boardClone.GetComponent<PilotNameBar>().SetText(i + 1, NameAndRank[0][i], NameAndRank[1][i]);
+            boardClone.GetComponent<PilotNameBar>().SetText(i + 1, NameAndRank[0][i], NameAndRank[1][i], NameAndRank[2][i]);
             boardClone.GetComponent<PilotNameBar>().Scene = gameObject;
             boardClone.transform.SetParent(BoardContent.transform);
             currentPilotList.Add(boardClone);

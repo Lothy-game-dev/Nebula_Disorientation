@@ -29,6 +29,7 @@ public class SoundSFXGeneratorController : MonoBehaviour
     {
         // Initialize variables
         SoundScale = 1f;
+        GetComponent<SoundController>().CheckSoundVolumeByDB();
     }
 
     // Update is called once per frame

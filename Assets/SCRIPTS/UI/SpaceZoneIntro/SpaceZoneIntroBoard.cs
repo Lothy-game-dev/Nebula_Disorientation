@@ -21,6 +21,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
     public GameObject NotableAllies;
     public GameObject NotableEnemies;
     public GameObject Weapons;
+    public List<GameObject> DisableColliders;
     #endregion
     #region NormalVariables
     private Dictionary<string, object> SessionData;
@@ -61,6 +62,13 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         ChosenEnemyFC = new();
         ChosenEnemyFB = new();
         ChosenEnemyFA = new();
+        if (DisableColliders.Count > 0)
+        {
+            foreach (var col in DisableColliders)
+            {
+                col.GetComponent<Collider2D>().enabled = false;
+            }
+        }
         GenerateData();
     }
 
@@ -411,7 +419,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             {
                 foreach (var str in ChosenAllyFC)
                 {
-                    NotableAlliesName.Add(str);
+                    NotableAlliesName.Add("<color=#ff0000>" + str + "</color>");
                     if (NotableAlliesName.Count >= 3)
                     {
                         break;
@@ -447,7 +455,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             {
                 foreach (var str in ChosenAllyFB)
                 {
-                    NotableAlliesName.Add(str);
+                    NotableAlliesName.Add("<color=#0000ff>" + str + "</color>");
                     if (NotableAlliesName.Count >= 3)
                     {
                         break;
@@ -484,7 +492,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             {
                 foreach (var str in ChosenAllyFA)
                 {
-                    NotableAlliesName.Add(str);
+                    NotableAlliesName.Add("<color=#00ff00>" + str + "</color>");
                     if (NotableAlliesName.Count >= 3)
                     {
                         break;
@@ -519,12 +527,11 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         for (int i=0; i<NotableAlliesName.Count;i++)
         {
             GameObject Place = NotableAllies.transform.GetChild(i + 1).gameObject;
-            Place.SetActive(true);
             bool done = false;
             if (!done)
                 for (int j=0; j< AlliesModel.transform.childCount;j++)
                 {
-                    if (AlliesModel.transform.GetChild(j).name.Replace(" ","").ToLower() == NotableAlliesName[i].Replace(" ", "").Replace("<color=#0000ff>","").Replace("<color=#00ff00>","").Replace("<color=#ff0000>","").Replace("</color>","").ToLower())
+                    if (AlliesModel.transform.GetChild(j).name.Replace(" ", "").ToLower() == NotableAlliesName[i].Replace(" ", "").Replace("<color=#0000ff>","").Replace("<color=#00ff00>","").Replace("<color=#ff0000>","").Replace("</color>","").ToLower())
                     {
                         GameObject go = Instantiate(AlliesModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
@@ -533,6 +540,9 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         go.SetActive(true);
                         ListNotableAlliesGO.Add(go);
                         Place.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = NotableAlliesName[i];
+                        Place.GetComponent<SpaceZoneIntroBox>().ObjectName = AlliesModel.transform.GetChild(j).name;
+                        Place.GetComponent<SpaceZoneIntroBox>().Type = "Ally";
+                        Place.GetComponent<SpaceZoneIntroBox>().GenerateValue();
                         done = true;
                         break;
                     }
@@ -549,6 +559,9 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         go.SetActive(true);
                         ListNotableAlliesGO.Add(go);
                         Place.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = NotableAlliesName[i];
+                        Place.GetComponent<SpaceZoneIntroBox>().ObjectName = SpaceStationModel.transform.GetChild(j).name;
+                        Place.GetComponent<SpaceZoneIntroBox>().Type = "SpaceStation";
+                        Place.GetComponent<SpaceZoneIntroBox>().GenerateValue();
                         done = true;
                         break;
                     }
@@ -565,10 +578,14 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         go.SetActive(true);
                         ListNotableAlliesGO.Add(go);
                         Place.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = NotableAlliesName[i];
+                        Place.GetComponent<SpaceZoneIntroBox>().ObjectName = WarshipModel.transform.GetChild(j).name;
+                        Place.GetComponent<SpaceZoneIntroBox>().Type = "Warship";
+                        Place.GetComponent<SpaceZoneIntroBox>().GenerateValue();
                         done = true;
                         break;
                     }
                 }
+            Place.SetActive(true);
         }
         if (SpaceZoneNo%50==0 && SpaceZoneNo>0)
         {
@@ -619,13 +636,36 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         int EnemyFighterACount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadX / 5);
         int EnemyFighterBCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadY / 10);
         int EnemyFighterCCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadZ / 30);
+        if ((SpaceZoneNo % 10 == 1 || SpaceZoneNo % 10 == 3 || SpaceZoneNo % 10 == 5 || SpaceZoneNo % 10 == 7) && ChosenVariant == 2)
+        {
+            if (EnemyFighterCCount > 0)
+            {
+                Mission.transform.GetChild(1).GetChild(0).GetComponent<TextMeshPro>().text = ((string)MissionData["Mission"]).Replace("Target", "<color=#ff0000>Class C</color>");
+            } 
+            else if (EnemyFighterBCount > 0)
+            {
+                Mission.transform.GetChild(1).GetChild(0).GetComponent<TextMeshPro>().text = ((string)MissionData["Mission"]).Replace("Target", "<color=#0000ff>Class B</color>");
+            }
+            else if(EnemyFighterACount > 0)
+            {
+                Mission.transform.GetChild(1).GetChild(0).GetComponent<TextMeshPro>().text = ((string)MissionData["Mission"]).Replace("Target", "<color=#00ff00>Class A</color>");
+            }
+        }
+        // ZatSBB
+        /*if (SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6)
+        {
+
+        } else if (SpaceZoneNo % 10 == 8 || SpaceZoneNo % 10 == 9)
+        {
+
+        }*/
         if (EnemyFighterCCount > 0 && NotableEnemiesName.Count < 3)
         {
             if (ChosenEnemyFC.Count > 0)
             {
                 foreach (var str in ChosenEnemyFC)
                 {
-                    NotableEnemiesName.Add(str);
+                    NotableEnemiesName.Add("<color=#ff0000>" + str + "</color>");
                     if (NotableEnemiesName.Count >= 3)
                     {
                         break;
@@ -662,7 +702,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             {
                 foreach (var str in ChosenEnemyFB)
                 {
-                    NotableEnemiesName.Add(str);
+                    NotableEnemiesName.Add("<color=#0000ff>" + str + "</color>");
                     if (NotableEnemiesName.Count >= 3)
                     {
                         break;
@@ -699,7 +739,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             {
                 foreach (var str in ChosenEnemyFA)
                 {
-                    NotableEnemiesName.Add(str);
+                    NotableEnemiesName.Add("<color=#00ff00>" + str + "</color>");
                     if (NotableEnemiesName.Count >= 3)
                     {
                         break;
@@ -734,7 +774,6 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         for (int i = 0; i < NotableEnemiesName.Count; i++)
         {
             GameObject Place = NotableEnemies.transform.GetChild(i + 1).gameObject;
-            Place.SetActive(true);
             bool done = false;
                 if (!done)
                 for (int j = 0; j < EnemiesModel.transform.childCount; j++)
@@ -749,6 +788,9 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         go.SetActive(true);
                         ListNotableEnemiesGO.Add(go);
                         Place.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = NotableEnemiesName[i];
+                        Place.GetComponent<SpaceZoneIntroBox>().ObjectName = EnemiesModel.transform.GetChild(j).name;
+                        Place.GetComponent<SpaceZoneIntroBox>().Type = "Enemy";
+                        Place.GetComponent<SpaceZoneIntroBox>().GenerateValue();
                         done = true;
                         break;
                     }
@@ -765,6 +807,9 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         go.SetActive(true);
                         ListNotableEnemiesGO.Add(go);
                         Place.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = NotableEnemiesName[i];
+                        Place.GetComponent<SpaceZoneIntroBox>().ObjectName = SpaceStationModel.transform.GetChild(j).name;
+                        Place.GetComponent<SpaceZoneIntroBox>().Type = "SpaceStation";
+                        Place.GetComponent<SpaceZoneIntroBox>().GenerateValue();
                         done = true;
                         break;
                     }
@@ -781,10 +826,14 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                         go.SetActive(true);
                         ListNotableEnemiesGO.Add(go);
                         Place.transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>().text = NotableEnemiesName[i];
+                        Place.GetComponent<SpaceZoneIntroBox>().ObjectName = WarshipModel.transform.GetChild(j).name;
+                        Place.GetComponent<SpaceZoneIntroBox>().Type = "Warship";
+                        Place.GetComponent<SpaceZoneIntroBox>().GenerateValue();
                         done = true;
                         break;
                     }
                 }
+            Place.SetActive(true);
         }
         // Add Data
         if (PlayerPrefs.GetString("Predict" + PlayerPrefs.GetInt("PlayerID"))=="")
@@ -891,6 +940,13 @@ public class SpaceZoneIntroBoard : MonoBehaviour
     private void OnDisable()
     {
         Destroy(ModelGO);
+        if (DisableColliders.Count > 0)
+        {
+            foreach (var col in DisableColliders)
+            {
+                col.GetComponent<Collider2D>().enabled = true;
+            }
+        }
         int n = 0;
         while (n < ListNotableAlliesGO.Count)
         {

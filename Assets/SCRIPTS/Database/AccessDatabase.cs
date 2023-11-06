@@ -134,18 +134,19 @@ public class AccessDatabase : MonoBehaviour
         return true;
     }
 
-    public List<List<string>> GetAllNameAndRankFromPlayerProfile()
+    public List<List<string>> GetAllNameRankSessionFromPlayerProfile()
     {
         OpenConnection();
         List<List<string>> result = new List<List<string>>();
         List<string> Names = new List<string>();
         List<string> Ranks = new List<string>();
+        List<string> Session = new List<string>();
         // Open DB
         dbConnectionData.Open();
         dbConnectionSave.Open();
         // Queries
         IDbCommand dbCommand = dbConnectionSave.CreateCommand();
-        dbCommand.CommandText = "SELECT Name,Rank FROM PlayerProfile WHERE 1=1";
+        dbCommand.CommandText = "SELECT Name, Rank, CurrentSession FROM PlayerProfile WHERE 1=1";
         IDataReader dataReader = dbCommand.ExecuteReader();
         while (dataReader.Read())
         {
@@ -166,11 +167,25 @@ public class AccessDatabase : MonoBehaviour
             {
                 Ranks.Add("Unranked");
             }
+            if (!dataReader.IsDBNull(2))
+            {
+                IDbCommand dbCommand2 = dbConnectionSave.CreateCommand();
+                dbCommand2.CommandText = "SELECT CurrentStage FROM Session WHERE SessionID=" + dataReader.GetInt32(2);
+                IDataReader dataReader2 = dbCommand2.ExecuteReader();
+                while (dataReader2.Read())
+                {
+                    Session.Add(dataReader2.GetInt32(0).ToString());
+                }
+            } else
+            {
+                Session.Add("None");
+            }
         }
         dbConnectionData.Close();
         dbConnectionSave.Close();
         result.Add(Names);
         result.Add(Ranks);
+        result.Add(Session);
         return result;
     }
 
@@ -2326,6 +2341,24 @@ public class AccessDatabase : MonoBehaviour
             return datas;
         }
     }
+
+    public string GetPowerRealName(string name)
+    {
+        OpenConnection();
+        // Open DB
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT PowerType, PowerName, PowerDescription, PowerStats, TierColor FROM ArsenalPower WHERE replace(lower(PowerName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        string s = "";
+        while (dataReader.Read())
+        {
+            s = "<color=" + dataReader.GetString(4) + ">" + dataReader.GetString(1) + "</color>";
+        }
+        dbConnectionData.Close();
+        return s;
+    }
     #endregion
     #region Access Consumables
     public Dictionary<string, object> GetConsumableDataByName(string itemName)
@@ -2902,6 +2935,32 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from Warship Where WSid = " + ID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            WSDict.Add("WarshipID", dataReader.GetInt32(0).ToString());
+            WSDict.Add("WarshipName", dataReader.GetString(1));
+            WSDict.Add("WarshipStat", dataReader.GetString(3));
+            WSDict.Add("Tier", dataReader.GetString(4));
+            WSDict.Add("MainWeapon", dataReader.GetString(5));
+            WSDict.Add("SupWeapon", dataReader.GetString(6));
+            WSDict.Add("Bounty", dataReader.GetString(7));
+        }
+        if (!check) return null;
+        dbConnectionData.Close();
+        return WSDict;
+    }
+
+    public Dictionary<string, object> GetWSByName(string Name)
+    {
+        OpenConnection();
+        Dictionary<string, object> WSDict = new Dictionary<string, object>();
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Warship Where WSName = '" + Name.Replace("_","-") +"'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
@@ -3823,6 +3882,34 @@ public class AccessDatabase : MonoBehaviour
         // Queries
         IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
         dbCheckCommand.CommandText = "Select * from SpaceStation Where SSId = " + id;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            WSDict.Add("SpaceStationID", dataReader.GetInt32(0).ToString());
+            WSDict.Add("SpaceStationName", dataReader.GetString(1));
+            WSDict.Add("SpaceStationEffect", dataReader.GetString(3));
+            WSDict.Add("Tier", dataReader.GetString(4));
+            WSDict.Add("MainWeapon", dataReader.GetString(5));
+            WSDict.Add("SupWeapon", dataReader.GetString(6));
+            WSDict.Add("AuraRange", dataReader.GetString(7));
+            WSDict.Add("BaseHP", dataReader.GetString(8));
+            WSDict.Add("Bounty", dataReader.GetString(9));
+        }
+        if (!check) return null;
+        dbConnectionData.Close();
+        return WSDict;
+    }
+
+    public Dictionary<string, object> GetSpaceStationByName(string Name)
+    {
+        OpenConnection();
+        Dictionary<string, object> WSDict = new Dictionary<string, object>();
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from SpaceStation Where SSName ='" + Name.Replace("_", "-") +"'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
