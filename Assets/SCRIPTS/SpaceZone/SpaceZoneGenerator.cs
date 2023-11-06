@@ -284,8 +284,8 @@ public class SpaceZoneGenerator : MonoBehaviour
             EnemyMaxHP = EnemyFighterSpawn.EnemyMaxHPScale;
             EnemyBountyScale = EnemyFighterSpawn.EnemyBountyScale;
 
-            AllySquadRating *= (1 + Scale20Odd / 10f);
-            EnemySquadRating *= (1 + Scale20Odd / 10f);
+            AllySquadRating *= (1 + Scale20Odd / 7.5f);
+            EnemySquadRating *= (1 + Scale20Odd / 7.5f);
         }
         int Scale20Even = SpaceZoneNo / 20;
         if (Scale20Even >= 1)
