@@ -91,7 +91,7 @@ public class SpaceZoneSummary : MonoBehaviour
 
 
         Consumable = new Dictionary<string, int>();  
-        TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed: <color=#3bccec>" + stat.TotalEnemyDefeated + "</color>";
+        TotalEnemyDefeated.GetComponent<TextMeshPro>().text = "Enemy Destroyed:<br> <color=#3bccec>" + stat.TotalEnemyDefeated + "</color>";
         TotalDamageDealt.GetComponent<TextMeshPro>().text = "Damage Dealt: <color=#3bccec>" + stat.DamageDealt + "</color>";
         SZNo.GetComponent<TextMeshPro>().text = "Space Zone No. <color=#3bccec>" + stat.CurrentSZNo + "</color> Completed!";
         SessionShard.GetComponent<TextMeshPro>().text = "Session <sprite=0>: <br> <color=#3bccec>" + SessionData["SessionTimelessShard"].ToString() + "</color>";
