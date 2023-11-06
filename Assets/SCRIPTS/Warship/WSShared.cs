@@ -27,6 +27,7 @@ public class WSShared : MonoBehaviour
     public GameObject Explosion;
     public bool IsEnemy;
     public NNModel MLBrain;
+    public SpaceZoneHazardEnvironment HazEnv;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -202,7 +203,6 @@ public class WSShared : MonoBehaviour
             }
         }
         CheckBarrierAndHealth();
-        
     }
     #endregion
     #region Init data
@@ -435,6 +435,7 @@ public class WSShared : MonoBehaviour
         {
             RealDamage = Damage;
         }
+        RealDamage *= HazEnv.HazardNDAllDamageScale;
         if (HitByPlayer)
         {
             Statistic.DamageDealt += RealDamage;
@@ -511,9 +512,81 @@ public class WSShared : MonoBehaviour
         }
     }
 
+    public void ReceiveTrueDamage(float Damage, Vector2 BulletHitPos)
+    {
+        float RealDamage = Damage;
+        RealDamage *= HazEnv.HazardNDAllDamageScale;
+        if (CurrentBarrier > 0)
+        {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("BarrierHit", gameObject);
+            if (CurrentBarrier > RealDamage)
+            {
+                CurrentBarrier -= RealDamage;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 120f;
+                BarrierRegenAmount = 2500f;
+            }
+            else
+            {
+                float afterDamage = (RealDamage - CurrentBarrier);
+                CurrentBarrier = 0;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
+                if (BarrierEffectDelay <= 0f)
+                {
+                    BarrierEffectDelay = 0.25f;
+                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                    br.SetActive(true);
+                    br.transform.SetParent(transform);
+                    Destroy(br, 0.25f);
+                }
+                BarrierRegenTimer = 120f;
+                BarrierRegenAmount = 2500f;
+                CurrentHP -= afterDamage;
+                HPBar.SetValue(CurrentHP, MaxHP, true);
+            }
+        }
+        else
+        {
+            Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
+            if (BarrierEffectDelay <= 0f)
+            {
+                BarrierEffectDelay = 0.25f;
+                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+                BRBreak.SetActive(true);
+                BRBreak.transform.SetParent(transform);
+                Destroy(BRBreak, 0.5f);
+            }
+            if (CurrentHP >= RealDamage)
+            {
+                CurrentHP -= RealDamage;
+                isHit = true;
+                HPBar.SetValue(CurrentHP, MaxHP, isHit);
+            }
+            else
+            {
+                CurrentHP = 0;
+                if (Killer == Controller.Player)
+                {
+                    Statistic.Warship += 1;
+                    Statistic.TotalEnemyDefeated += 1;
+                    Statistic.KillBossEnemy = true;
+                }
+            }
+        }
+    }
+
     public void ReceivePowerDamage(float Damage, GameObject Power, GameObject FighterCast, Vector2 BulletHitPos)
     {
         float RealDamage = Damage * 10f /100;
+        RealDamage *= HazEnv.HazardNDAllDamageScale;
         if (FighterCast.GetComponent<PlayerFighter>()!=null)
         {
             HitByPlayer = true;

@@ -104,6 +104,8 @@ public class SpawnAlliesFighter : MonoBehaviour
             }
         }
         AudioSource aus = Ally.AddComponent<AudioSource>();
+        aus.playOnAwake = false;
+        Ally.AddComponent<SoundController>();
         aus.clip = SpawnSoundEffect;
         aus.spatialBlend = 1;
         aus.rolloffMode = AudioRolloffMode.Linear;
@@ -112,6 +114,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         aus.priority = 256;
         aus.dopplerLevel = 0;
         aus.spread = 360;
+        aus.Play();
         Destroy(aus, 4f);
         Ally.name = ChosenModel.name + " |" + spawnPos.x + " - " + spawnPos.y + " - " + count;
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;

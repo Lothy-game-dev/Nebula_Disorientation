@@ -187,6 +187,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionBackButton.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopLoading.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Arsenal\ArsenalButton.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\OptionMenu.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionPowerBox.cs" />
     <Compile Include="Assets\SCRIPTS\Bullets\AreaOfEffect.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroInfoBoard.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECController.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\GameController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\MainMenu\LoadStoryScene.cs" />

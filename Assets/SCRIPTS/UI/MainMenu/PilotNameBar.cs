@@ -15,6 +15,7 @@ public class PilotNameBar : MonoBehaviour
     public GameObject Scene;
     public string PilotName;
     public string PilotRank;
+    public string Session;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -30,12 +31,18 @@ public class PilotNameBar : MonoBehaviour
     }
     #endregion
     #region Set Text
-    public void SetText(int count, string Name, string Rank)
+    public void SetText(int count, string Name, string Rank, string SessionData)
     {
         PilotName = Name;
         PilotRank = Rank;
+        Session = SessionData;
+        string Text = "Pilot " + count.ToString() + " - Name: " + Name + "\nRank: " + Rank;
+        if (SessionData != "None")
+        {
+            Text += "\n<color=#00ff00>Currently in session</color> - Stage <color=#3bccec>" + SessionData + "</color>";
+        }
         transform.GetChild(0).GetComponent<TextMeshProUGUI>().text
-            = "Pilot " + count.ToString() + " - Name: " + Name + "\nRank: " + Rank;
+            = Text;
     }
     #endregion
     #region Mouse Check

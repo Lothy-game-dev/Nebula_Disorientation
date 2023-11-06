@@ -83,7 +83,6 @@ public class LOTWScene : MonoBehaviour
             CardRegenerate.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         }
         SessionPlayedTime = DateTime.Now - StartTime;
-        Debug.Log(SessionPlayedTime);
     }
     #endregion
     #region LOTW Spawn
@@ -239,7 +238,7 @@ public class LOTWScene : MonoBehaviour
             string Model = (string)FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"))["Model"];
             string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(Model);
             int MaxHP = int.Parse((string)FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats)["HP"]);
-            int Scale = int.Parse(chosenCard.GetComponent<LOTWCard>().DataDictionary["Effect"].ToString().Replace("HP-",""));
+            float Scale = float.Parse(chosenCard.GetComponent<LOTWCard>().DataDictionary["Effect"].ToString().Replace("HP-",""));
             FindObjectOfType<AccessDatabase>().UpdateSessionCurrentHP(PlayerPrefs.GetInt("PlayerID"), true, (int)(MaxHP * Scale / 100f));
         }
         FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "Gameplay");
