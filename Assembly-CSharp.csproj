@@ -187,6 +187,7 @@
     <Compile Include="Assets\SCRIPTS\UI\UEC\UECButtons.cs" />
     <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutPowerPopUp.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionBackButton.cs" />
+    <Compile Include="Assets\SCRIPTS\Common\GameSavedText.cs" />
     <Compile Include="Assets\SCRIPTS\UI\SpaceZoneIntro\SpaceZoneIntroBox.cs" />
     <Compile Include="Assets\SCRIPTS\UI\UEC\ConvertBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Spaceshop\SpaceShopLoading.cs" />

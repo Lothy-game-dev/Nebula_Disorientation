@@ -66,7 +66,8 @@ public class UECSessionConsumableBox : MonoBehaviour
     {
         foreach (var col in DisableColliders)
         {
-            col.GetComponent<Collider2D>().enabled = false;
+            if (col.GetComponent<Collider2D>() != null)
+                col.GetComponent<Collider2D>().enabled = false;
         }
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
@@ -245,7 +246,8 @@ public class UECSessionConsumableBox : MonoBehaviour
     {
         foreach (var col in DisableColliders)
         {
-            col.GetComponent<Collider2D>().enabled = true;
+            if (col.GetComponent<Collider2D>() != null)
+                col.GetComponent<Collider2D>().enabled = true;
         }
         Item.SetActive(false);
         int n = 0;

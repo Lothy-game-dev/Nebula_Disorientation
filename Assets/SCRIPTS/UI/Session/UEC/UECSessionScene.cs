@@ -31,6 +31,7 @@ public class UECSessionScene : MonoBehaviour
     public GameObject CurrentHPSlider;
     public GameObject CurrentHPText;
     public UECSessionShopIcon[] Icons;
+    public GameSavedText SaveText;
     #endregion
     #region NormalVariables
     private Dictionary<string, object> SessionData;
@@ -54,6 +55,9 @@ public class UECSessionScene : MonoBehaviour
     {
         // Initialize variables
         GenerateData();
+        SaveText.gameObject.SetActive(true);
+        SaveText.FadingCountDown = 5f;
+        SaveText.AlreadySetCountDown = true;
         StopMovingIcon = false;
     }
 
@@ -208,7 +212,7 @@ public class UECSessionScene : MonoBehaviour
         {
             SecondPower.GetComponent<SpriteRenderer>().color = new Color(50 / 255f, 50 / 255f, 50 / 255f);
             SecondPower.transform.GetChild(0).gameObject.SetActive(false);
-            SecondPower.GetComponent<Collider2D>().enabled = false;
+            Destroy(SecondPower.GetComponent<Collider2D>());
         }
         int SC = int.Parse((string)statsDict["SC"]);
         // Consumables
