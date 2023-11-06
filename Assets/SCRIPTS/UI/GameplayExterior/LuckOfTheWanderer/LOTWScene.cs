@@ -263,6 +263,16 @@ public class LOTWScene : MonoBehaviour
     private IEnumerator WaitTeleport()
     {
         yield return new WaitForSeconds(1f);
+        if (FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID")) != null)
+        {
+            if ((string)FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"))["TotalPlayedTime"] != "")
+            {
+                TimeSpan oldTime = TimeSpan.Parse((string)FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"))["TotalPlayedTime"]);
+                TimeSpan newTime = oldTime.Add(SessionPlayedTime);
+                SessionPlayedTime = newTime;
+
+            }           
+        }
         FindAnyObjectByType<AccessDatabase>().UpdateSessionPlayTime(PlayerPrefs.GetInt("PlayerID"), SessionPlayedTime.ToString(@"hh\:mm\:ss"));
         SceneManager.LoadSceneAsync("GameplayInterior");
         SceneManager.UnloadSceneAsync("GameplayExterior");
