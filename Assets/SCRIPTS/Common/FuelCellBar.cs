@@ -111,9 +111,10 @@ public class FuelCellBar : MonoBehaviour
                         if (transform.childCount > 2)
                             transform.GetChild(2).gameObject.SetActive(true);
                     }
-                    System.TimeSpan t = System.TimeSpan.FromSeconds(Result);
-                    System.DateTime final = new System.DateTime().Add(t);
-                    RegenFuelTime = "Restore 1 in<br>" + final.ToString("HH:mm:ss");
+                    int hour = (int)Result / 3600;
+                    int minute = (int)(Result - hour*3600) / 60;
+                    int second = (int)(Result - hour * 3600 - minute * 60);
+                    RegenFuelTime = "Restore 1 in<br>" + "0" + hour + ":" + minute + ":" + second;
                 }
             }
             if (FuelCellInfo != null)

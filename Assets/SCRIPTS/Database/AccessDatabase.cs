@@ -1592,7 +1592,7 @@ public class AccessDatabase : MonoBehaviour
         command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
         int n = command2.ExecuteNonQuery();
         IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName, DataTables.ArsenalWeapon.Quantity FROM DataTables.ArsenalWeapon " +
+        dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName, PlayerOwnership.Quantity FROM DataTables.ArsenalWeapon " +
             "inner join PlayerOwnership WHERE  PlayerOwnership.PlayerID=" + PlayerID + " AND  PlayerOwnership.ItemType='Weapon'" +
             " AND DataTables.ArsenalWeapon.WeaponID = PlayerOwnership.ItemID ORDER BY DataTables.ArsenalWeapon.WeaponID ASC";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -1659,7 +1659,7 @@ public class AccessDatabase : MonoBehaviour
             command2.CommandText = "ATTACH DATABASE \"" + dir + "\" as DataTables;";
             int sadasdasad = command2.ExecuteNonQuery();
             IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName, DataTables.ArsenalWeapon.Quantity FROM DataTables.ArsenalWeapon " +
+            dbCheckCommand.CommandText = "SELECT DataTables.ArsenalWeapon.WeaponName, SessionOwnership.Quantity FROM DataTables.ArsenalWeapon " +
                 "inner join SessionOwnership WHERE SessionOwnership.SessionID=" + n + " AND SessionOwnership.ItemType='Weapon'" +
                 " AND DataTables.ArsenalWeapon.WeaponID = SessionOwnership.ItemID ORDER BY DataTables.ArsenalWeapon.WeaponID ASC";
             IDataReader dataReader = dbCheckCommand.ExecuteReader();
@@ -3371,7 +3371,7 @@ public class AccessDatabase : MonoBehaviour
         }
         if (id != -1)
         {
-            IDbCommand dbCheckCommand2 = dbConnectionData.CreateCommand();
+            IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
             dbCheckCommand2.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE " +
                 "PlayerID=" + PlayerID;
             IDataReader dataReader2 = dbCheckCommand2.ExecuteReader();

@@ -54,17 +54,20 @@ public class Consumable : MonoBehaviour
         
         switch (Effect.Split("-")[0])
         {
-            case "RED": 
+            case "RED":
+                gameObject.GetComponent<AudioSource>().volume = Camera.main.GetComponent<GameplayInteriorController>().MasterVolumeScale / 100f * Camera.main.GetComponent<GameplayInteriorController>().SFXVolumeScale / 100f;
                 gameObject.GetComponent<WingShield>().WingmanShieldEffect(); 
                 break;
-            case "AER": 
+            case "AER":
+                gameObject.GetComponent<AudioSource>().volume = Camera.main.GetComponent<GameplayInteriorController>().MasterVolumeScale / 100f * Camera.main.GetComponent<GameplayInteriorController>().SFXVolumeScale / 100f;
                 gameObject.GetComponent<EngineBooster>().BoosterEffect(); 
                 break;
             case "RMH":
-                gameObject.GetComponent<AudioSource>().volume = 0.5f;
+                gameObject.GetComponent<AudioSource>().volume = Camera.main.GetComponent<GameplayInteriorController>().MasterVolumeScale / 100f * Camera.main.GetComponent<GameplayInteriorController>().SFXVolumeScale / 100f * 0.5f;
                 gameObject.GetComponent<AutoRepair>().ActivateAutoRepair(); 
                 break;
-            case "INV": 
+            case "INV":
+                gameObject.GetComponent<AudioSource>().volume = Camera.main.GetComponent<GameplayInteriorController>().MasterVolumeScale / 100f * Camera.main.GetComponent<GameplayInteriorController>().SFXVolumeScale / 100f;
                 gameObject.GetComponent<NanoCoat>().NanoCoatActivated(); 
                 break;
             case "FC": 
