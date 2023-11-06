@@ -857,6 +857,10 @@ public class FighterShared : MonoBehaviour
     public void ReceiveHealing(float HealAmount)
     {
        CurrentHP += HealAmount * LOTWEffect.LOTWRepairEffectScale;
+        if (CurrentHP + HealAmount >= MaxHP)
+        {
+            CurrentHP = MaxHP;
+        }
         if (GetComponent<PlayerFighter>()!=null)
         {
             GetComponent<PlayerFighter>().GenerateHealingEffect(HealAmount * LOTWEffect.LOTWRepairEffectScale / MaxHP >= 0.1f ? 1 :
