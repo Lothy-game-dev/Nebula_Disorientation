@@ -952,15 +952,23 @@ public class AccessDatabase : MonoBehaviour
         dbConnectionSave.Close();
         return id;
     }
-    public void EndSession(int PlayerID)
+    public string EndSession(int PlayerID)
     {
         // Open DB
         dbConnectionSave.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
         dbCheckCommand.CommandText = "UPDATE PlayerProfile SET CurrentSession = NULL WHERE PlayerID = " + PlayerID +"";
-        dbCheckCommand.ExecuteNonQuery();
+        int n = dbCheckCommand.ExecuteNonQuery();
         dbConnectionSave.Close();
+        if (n != 1)
+        {
+            return "Fail";
+        }
+        else
+        {
+            return "Success";
+        }
     }
 
     public string InputLoadoutSaveData(int PlayerID, string Model, string LeftWeapon, string RightWeapon, string FirstPower, string SecondPower,
@@ -4797,7 +4805,6 @@ public class AccessDatabase : MonoBehaviour
         IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
         dbCheckCommand3.CommandText = "UPDATE Session SET SessionFuelEnergy = SessionFuelEnergy " + (IsIncrease ? "+ " : "- ") + amount + " WHERE SessionId=" + SessionId;
         int n = dbCheckCommand3.ExecuteNonQuery();
-        Debug.Log(dbCheckCommand3.CommandText);
         dbConnectionSave.Close();
         if (n != 1)
         {
@@ -4808,15 +4815,24 @@ public class AccessDatabase : MonoBehaviour
             return "Success";
         }
     }
-    public string UpdateSessionPlayTime(int SessionId, string playtime)
+    public string UpdateSessionPlayTime(int PlayerId, string playtime)
     {
         OpenConnection();
         // Open DB
         dbConnectionSave.Open();
         Dictionary<string, object> datas = new Dictionary<string, object>();
         // Queries
+        IDbCommand dbCheckCommand1 = dbConnectionSave.CreateCommand();
+        dbCheckCommand1.CommandText = "SELECT CurrentSession FROM PlayerProfile WHERE PlayerID = " + PlayerId;
+        IDataReader dataReader = dbCheckCommand1.ExecuteReader();
+        int SessionID = 0;
+        while(dataReader.Read())
+        {
+            SessionID = dataReader.GetInt32(0);
+        }
+        // Queries
         IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
-        dbCheckCommand3.CommandText = "UPDATE Session SET TotalPlayedTime = '"+ playtime +"' WHERE SessionId=" + SessionId;
+        dbCheckCommand3.CommandText = "UPDATE Session SET TotalPlayedTime = '"+ playtime +"' WHERE SessionId=" + SessionID;
         int n = dbCheckCommand3.ExecuteNonQuery();
         dbConnectionSave.Close();
         if (n != 1)

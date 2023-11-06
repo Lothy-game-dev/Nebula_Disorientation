@@ -46,7 +46,7 @@ public class StatisticController : MonoBehaviour
     private Dictionary<string, object> Achievement;
     private Dictionary<string, string> CurrentAchievement;
     private List<string> AchievementName;
-    private Dictionary<string, object> SessionInformation;
+    public Dictionary<string, object> SessionInformation;
     public bool KillEnemy;
     public bool KillBossEnemy;
     private AccessDatabase ad;
@@ -62,6 +62,7 @@ public class StatisticController : MonoBehaviour
     private Dictionary<string, int> Consumable;
     public int CurrentShardReward;
     public int CurrentCashReward;
+    private TimeSpan currentTimePlayed;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -97,10 +98,6 @@ public class StatisticController : MonoBehaviour
     void Update()
     {
         // Call function and timer only if possible
-        if ((string)SessionInformation["TotalPlayedTime"] != "" && !isStart)    
-        {
-            StartTime = DateTime.ParseExact((string)SessionInformation["TotalPlayedTime"], "HH:mm:ss", CultureInfo.InvariantCulture);
-        } 
         if (isStart)
         {
             SetTimer(StartTime);
@@ -255,8 +252,7 @@ public class StatisticController : MonoBehaviour
     {
         int oldTime = Playedtime;
         DateTime myDateTime = DateTime.Now;
-        TimeSpan currentTimePlayed = myDateTime - startTime;
-        SessionPlayTime = currentTimePlayed.ToString(@"hh\:mm\:ss");
+        currentTimePlayed = myDateTime - startTime;      
         Playedtime = (int)currentTimePlayed.TotalMinutes;
         if (oldTime < Playedtime)
         {
@@ -277,10 +273,23 @@ public class StatisticController : MonoBehaviour
     }
     #endregion
     #region Session 
-    public void UpdateSessionPlaytime(int SessionID, string PlayedTime)
+    public void UpdateSessionPlaytime()
     {
         isStart = false;
-        ad.UpdateSessionPlayTime(SessionID, PlayedTime);
+        if (SessionInformation != null)
+        {
+            if ((string)SessionInformation["TotalPlayedTime"] != "")
+            {
+                TimeSpan oldTime = TimeSpan.Parse((string)SessionInformation["TotalPlayedTime"]);
+                TimeSpan newTime = oldTime.Add(currentTimePlayed);
+                SessionPlayTime = newTime.ToString(@"hh\:mm\:ss");
+
+            } else 
+            {
+                SessionPlayTime = currentTimePlayed.ToString(@"hh\:mm\:ss"); 
+            }
+        }
+        ad.UpdateSessionPlayTime(PlayerID, SessionPlayTime);
     }
     #endregion
 }

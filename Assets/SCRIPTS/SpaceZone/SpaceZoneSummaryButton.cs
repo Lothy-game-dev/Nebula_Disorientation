@@ -41,7 +41,7 @@ public class SpaceZoneSummaryButton : MonoBehaviour
             NextSZInfo.SetActive(true);
         } else if (Type=="Continue")
         {
-            stat.UpdateSessionPlaytime(stat.SessionID, stat.SessionPlayTime);
+            stat.UpdateSessionPlaytime();
             PlayerPrefs.SetString("InitTeleport", "LOTW");
             SceneManager.UnloadSceneAsync("GameplayInterior");
             SceneManager.LoadSceneAsync("GameplayExterior");
@@ -50,8 +50,13 @@ public class SpaceZoneSummaryButton : MonoBehaviour
             Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
             if ((int)ListData["FuelCell"] >= 1)
             {
-                FindObjectOfType<GameplayInteriorController>().GenerateBlackFadeClose(1f);
-                StartCoroutine(MoveToUEC());
+                /*FindObjectOfType<GameplayInteriorController>().GenerateBlackFadeClose(1f);
+                StartCoroutine(MoveToUEC());*/
+                FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
+                FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "UEC");
+                PlayerPrefs.SetString("InitTeleport", "UEC");
+                SceneManager.UnloadSceneAsync("GameplayInterior");
+                SceneManager.LoadSceneAsync("GameplayExterior");
             }
         }
     }

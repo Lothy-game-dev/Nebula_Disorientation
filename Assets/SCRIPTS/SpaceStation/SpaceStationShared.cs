@@ -214,7 +214,7 @@ public class SpaceStationShared : MonoBehaviour
                 {
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos.x, transform.position.y + WPPos.y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
-                    main.transform.localScale = new Vector2(0.5f, 0.5f);
+                    main.transform.localScale = new Vector2(2f, 2f);
                     main.SetActive(true);
 
                     Weapons wp = main.GetComponent<Weapons>();
@@ -254,7 +254,7 @@ public class SpaceStationShared : MonoBehaviour
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
-                    sup.transform.localScale = new Vector2(0.5f, 0.5f);
+                    sup.transform.localScale = new Vector2(2f, 2f);
                     sup.SetActive(true);
 
 
