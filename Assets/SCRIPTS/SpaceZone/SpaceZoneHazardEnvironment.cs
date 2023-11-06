@@ -113,12 +113,23 @@ public class SpaceZoneHazardEnvironment : MonoBehaviour
                             check = false;
                             Debug.Log("Overlap");
                             break;
+                        } else if (col.GetComponent<SpaceStationShared>()!=null)
+                        {
+                            check = false;
+                            Debug.Log("Overlap");
+                            break;
                         }
                     }
                     Collider2D[] cols2 = Physics2D.OverlapCircleAll(Spawn, 200f, EnemyMask);
                     foreach (var col in cols2)
                     {
                         if (col.GetComponent<WSShared>() != null)
+                        {
+                            check = false;
+                            Debug.Log("Overlap");
+                            break;
+                        }
+                        else if (col.GetComponent<SpaceStationShared>() != null)
                         {
                             check = false;
                             Debug.Log("Overlap");

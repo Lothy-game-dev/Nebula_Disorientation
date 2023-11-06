@@ -208,7 +208,7 @@ public class UECSessionScene : MonoBehaviour
         {
             SecondPower.GetComponent<SpriteRenderer>().color = new Color(50 / 255f, 50 / 255f, 50 / 255f);
             SecondPower.transform.GetChild(0).gameObject.SetActive(false);
-            SecondPower.GetComponent<Collider2D>().enabled = false;
+            Destroy(SecondPower.GetComponent<Collider2D>());
         }
         int SC = int.Parse((string)statsDict["SC"]);
         // Consumables

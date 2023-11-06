@@ -109,10 +109,6 @@ public class UECSessionWeaponBox : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (var col in DisableColliders)
-        {
-            col.GetComponent<Collider2D>().enabled = true;
-        }
         int n = 0;
         while (n<ListItem.Count)
         {
@@ -144,6 +140,11 @@ public class UECSessionWeaponBox : MonoBehaviour
 
     public void BackgroundMouseDown()
     {
+        foreach (var col in DisableColliders)
+        {
+            if (col.GetComponent<Collider2D>() != null)
+                col.GetComponent<Collider2D>().enabled = true;
+        }
         gameObject.SetActive(false);
         if (!CurrentChosen.name.Replace(" ","").Replace("-","").ToLower().Equals(ChosenWeapon.Replace(" ","").Replace("-","").ToLower()))
         {

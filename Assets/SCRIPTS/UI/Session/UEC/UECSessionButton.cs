@@ -73,7 +73,8 @@ public class UECSessionButton : MonoBehaviour
             NextSZInfo.SetActive(true);
             foreach (var col in DisableColliders)
             {
-                col.GetComponent<Collider2D>().enabled = false;
+                if (col.GetComponent<Collider2D>() != null)
+                    col.GetComponent<Collider2D>().enabled = false;
             }
         } else if (Type=="SaveQuit")
         {

@@ -84,6 +84,7 @@ public class UECSessionPowerBox : MonoBehaviour
     {
         foreach (var col in DisableColliders)
         {
+            if (col.GetComponent<Collider2D>()!=null)
             col.GetComponent<Collider2D>().enabled = false;
         }
         transform.GetChild(0).gameObject.SetActive(false);
@@ -111,7 +112,8 @@ public class UECSessionPowerBox : MonoBehaviour
     {
         foreach (var col in DisableColliders)
         {
-            col.GetComponent<Collider2D>().enabled = true;
+            if (col.GetComponent<Collider2D>() != null)
+                col.GetComponent<Collider2D>().enabled = true;
         }
         int n = 0;
         while (n < ListItem.Count)
@@ -145,7 +147,7 @@ public class UECSessionPowerBox : MonoBehaviour
     public void BackgroundMouseDown()
     {
         gameObject.SetActive(false);
-        if (!CurrentChosen.name.Replace(" ", "").Replace("-", "").ToLower().Equals(ChosenPower.Replace(" ", "").Replace("-", "").ToLower()))
+        if (CurrentChosen != null && !CurrentChosen.name.Replace(" ", "").Replace("-", "").ToLower().Equals(ChosenPower.Replace(" ", "").Replace("-", "").ToLower()))
         {
             // Update Db
             FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), Type, CurrentChosen.name.Replace("(Clone)", "").Replace(" ", ""));
