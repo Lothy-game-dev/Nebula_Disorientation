@@ -181,7 +181,7 @@ public class ArsenalItem : MonoBehaviour
         ItemReq = "";
         if (ItemList[int.Parse(ItemID) - 1][7] != "N.A")
         {
-            ItemReq = "<br><br>Prerequisite Weapon: <color=#3bccec>" + ItemList[(int.Parse(ItemList[int.Parse(ItemID) - 1][7])) - 1][2] + "</color>";
+            ItemReq = "<br><br>Prerequisite "+ ar.CurrentTab +": <color=#3bccec>" + ItemList[(int.Parse(ItemList[int.Parse(ItemID) - 1][7])) - 1][2] + "</color>";
         }
              
         StartTextRunning(ItemList[int.Parse(ItemID) - 1][3]);
