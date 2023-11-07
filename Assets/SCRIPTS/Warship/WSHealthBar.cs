@@ -55,7 +55,7 @@ public class WSHealthBar : MonoBehaviour
             isHit = false;
             slider.gameObject.SetActive(false);
         }
-        slider.gameObject.transform.position = transform.parent.position + Position;
+        //slider.transform.position = transform.parent.position + Position;
     }
     #endregion
     #region Public Set Value

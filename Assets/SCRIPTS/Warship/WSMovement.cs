@@ -53,6 +53,7 @@ public class WSMovement : MonoBehaviour
     private float WaitTimer;
     public float HPDistance;
     public Vector2 HPBarVerticalPos;
+    public float angle;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -209,32 +210,32 @@ public class WSMovement : MonoBehaviour
         }
         HPSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed));
         ShieldSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed));
-        float angle = CurrentRotateAngle % 360;
+        angle = CurrentRotateAngle % 360;
         if (angle > 0 && angle <= 90)
         {
-            HPSlider.transform.position = new Vector3(HPBarVerticalPos.x, HPBarVerticalPos.y + (angle / 90) * HPDistance, HPSlider.transform.position.z);
-            ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x, ShieldSlider.transform.position.y + (angle / 90) * HPDistance, ShieldSlider.transform.position.z);
+            HPSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y + (angle / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
+            ShieldSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y + (angle / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
         }
         else
         {
             if (angle > 90 && angle <= 180)
             {
-                HPSlider.transform.position = new Vector3(HPBarVerticalPos.x, HPBarVerticalPos.y - ((angle - 90) / 90 + 0.05f) * HPDistance, HPSlider.transform.position.z);
-                ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x , ShieldSlider.transform.position.y - ((angle - 90) / 90) * HPDistance, ShieldSlider.transform.position.z);
+                HPSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y - ((angle - 90) / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
+                ShieldSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y - ((angle - 90) / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
             }
             else
             {
                 if (angle > 180 && angle <= 270)
                 {
-                    HPSlider.transform.position = new Vector3(HPBarVerticalPos.x, HPBarVerticalPos.y + ((angle - 180) / 90 - 0.05f) * HPDistance, HPSlider.transform.position.z);
-                    ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x, ShieldSlider.transform.position.y + ((angle - 180) / 90) * HPDistance, ShieldSlider.transform.position.z);
+                    HPSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y + ((angle - 180) / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
+                    ShieldSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y + ((angle - 180) / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
                 }
                 else
                 {
                     if (angle > 270 && angle <= 360)
                     {
-                        HPSlider.transform.position = new Vector3(HPBarVerticalPos.x, HPBarVerticalPos.y - ((angle - 270) / 90) * HPDistance, HPSlider.transform.position.z);
-                        ShieldSlider.transform.position = new Vector3(ShieldSlider.transform.position.x, ShieldSlider.transform.position.y - ((angle - 270) / 90) * HPDistance, ShieldSlider.transform.position.z);
+                        HPSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y - ((angle - 270) / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
+                        ShieldSlider.transform.position = new Vector3(transform.position.x + HPBarVerticalPos.x, (transform.position.y + HPBarVerticalPos.y - ((angle - 270) / 90) * HPDistance), transform.position.z + HPSlider.transform.position.z);
                     }
                 }
             }

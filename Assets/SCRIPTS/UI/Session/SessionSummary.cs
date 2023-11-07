@@ -67,6 +67,7 @@ public class SessionSummary : MonoBehaviour
     // Group all function that serve the same algorithm
     public void SetData()
     {
+        Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
         Data = ad.GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         isFailed = (PlayerPrefs.GetString("isFailed") == "T");
         PlayerPrefs.SetString("isFailed", "");
