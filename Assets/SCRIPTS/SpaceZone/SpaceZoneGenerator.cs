@@ -935,23 +935,74 @@ public class SpaceZoneGenerator : MonoBehaviour
             if (ChosenSZD1=="")
             {
                 float k = Random.Range(0, 100f);
-                if (k <= 50)
+                if (k <= 50f)
                 {
-                    AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    int r = Random.Range(0, 2);
+                    if (r == 0)
+                    {
+                        //UEC-Frigate
+                        AllyWarshipSpawner.SpawnImmobileWS(7, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    }
+                    else if (r == 1)
+                    {
+                        //UEC-Carrier
+                        AllyWarshipSpawner.SpawnImmobileWS(8, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    }
                 }
-                else if (k <= 85)
+                else if (k <= 80f)
                 {
-                    AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    int r = Random.Range(0, 2);
+                    if (r == 0)
+                    {
+                        //UEC-Cruiser
+                        AllyWarshipSpawner.SpawnImmobileWS(9, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    }
+                    else if (r == 1)
+                    {
+                        //UEC-Battleship
+                        AllyWarshipSpawner.SpawnImmobileWS(10, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    }
+                }
+                else if (n <= 95f)
+                {
+                    int r = Random.Range(0, 2);
+                    if (r == 0)
+                    {
+                        //UEC-Dreadnaught
+                        AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    }
+                    else if (r == 1)
+                    {
+                        //UEC-Flagship
+                        AllyWarshipSpawner.SpawnImmobileWS(12, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                    }
                 }
                 else
                 {
+                    //UEC-Station
                     AllySSSpawner.SpaceStationID = new int[] { 1 };
                     AllySSSpawner.SpaceStationPosition = new Vector2[] { new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)) };
                     AllySSSpawner.SpawnAllySpaceStation();
                 }
             } else
             {
-                if (ChosenSZD1 == "UEC-Dreadnaught")
+                if (ChosenSZD1 == "UEC-Frigate")
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(7, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (ChosenSZD1 == "UEC-Carrier")
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(8, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (ChosenSZD1 == "UEC-Cruiser")
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(9, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (ChosenSZD1 == "UEC-Battleship")
+                {
+                    AllyWarshipSpawner.SpawnImmobileWS(10, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
+                }
+                else if (ChosenSZD1 == "UEC-Dreadnaught")
                 {
                     AllyWarshipSpawner.SpawnImmobileWS(11, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
                 }
