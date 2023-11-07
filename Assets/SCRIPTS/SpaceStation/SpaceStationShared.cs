@@ -43,6 +43,7 @@ public class SpaceStationShared : MonoBehaviour
     private List<GameObject> SpWps;
     private List<GameObject> MainWps;
     private float FindTargetTimer;
+    private float FindMainTargetTimer;
     private bool doneInitWeapon;
     private float DelayTimer;
     public LayerMask MainWeaponTarget;
@@ -139,26 +140,45 @@ public class SpaceStationShared : MonoBehaviour
 
         }
 
-
-        if (Target == null || SpWeaponTargets.ContainsValue(null))
+        try
+        {
+            foreach (var target in SpWeaponTargets)
+            {
+                target.Value.GetComponent<Transform>();
+            }
+        }
+        catch (MissingReferenceException)
         {
             FindTargetTimer -= Time.deltaTime;
         }
+        catch (System.NullReferenceException)
+        {
+            FindTargetTimer -= Time.deltaTime;
+        }
+
         if (FindTargetTimer <= 0f)
         {
             FindTargetTimer = 0.25f;
-            for (int i = 0; i < MainWps.Count; i++)
-            {
-                MainWeaponTargetEnemy(MainWps[i]);
-            }
 
             for (int i = 0; i < SpWps.Count; i++)
             {
                 SpWeaponTargets[SpWps[i]] = TargetEnemy(SpWps[i]);
             }
-
         }
 
+        if (Target == null)
+        {
+            FindMainTargetTimer -= Time.deltaTime;
+        }
+
+        if (FindMainTargetTimer <= 0f)
+        {
+            FindMainTargetTimer = 0.25f;
+            for (int i = 0; i < MainWps.Count; i++)
+            {
+                MainWeaponTargetEnemy(MainWps[i]);
+            }
+        }
         CheckBarrierAndHealth();
         
 

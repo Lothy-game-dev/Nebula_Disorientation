@@ -244,9 +244,9 @@ public class Weapons : MonoBehaviour
                     Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
                     float angle = Vector3.Angle(ToEnemy, pos);
                     CheckIsUpOrDownMovement();
-                    if (angle < 5)
+                    Debug.Log(DirMov + name);
+                    if (angle < 15)
                     {
-                        angle = 0;
                         isFire = true;
                     }
                     else
@@ -254,7 +254,6 @@ public class Weapons : MonoBehaviour
                         if (!isMainWeapon) isFire = false;
                     }
                     transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
-                    CurrentAngle = angle;
                 }
             }
 
@@ -267,7 +266,7 @@ public class Weapons : MonoBehaviour
                     Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
                     float angle = Vector3.Angle(ToEnemy, pos);
                     CheckIsUpOrDownMovement();
-                    if (angle < 5)
+                    if (angle < 10)
                     {
                         angle = 0;
                         isFire = true;
@@ -276,7 +275,7 @@ public class Weapons : MonoBehaviour
                     {
                         if (!isMainWeapon) isFire = false;
                     }
-                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
+                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 8 : 2) * WeaponROTSpeed);
                 }
             }
             // Reset thermal hit count per 1/rate of hit second
