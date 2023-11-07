@@ -85,6 +85,7 @@ public class SpaceZoneSummary : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Summarize()
     {
+        Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
         Time.timeScale = 0;
         stat = FindAnyObjectByType<StatisticController>();
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(stat.SessionID, true, stat.CurrentCashReward, stat.CurrentShardReward);

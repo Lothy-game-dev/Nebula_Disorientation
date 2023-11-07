@@ -70,9 +70,9 @@ public class GameplayInteriorController : MonoBehaviour
         aus = GetComponent<AudioSource>();
         isLoweringSound = false;
         SoundVolume();
+        Camera.main.transparencySortAxis = new Vector3(0, 1, 0);
 
-        
-        
+
     }
 
     // Update is called once per frame
