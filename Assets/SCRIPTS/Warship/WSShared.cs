@@ -311,7 +311,7 @@ public class WSShared : MonoBehaviour
                     main.transform.SetParent(gameObject.transform);
                     main.SetActive(true);
 
-                    if (MainWeapon[i] != "CarrierHatch")
+                    if (MainWeapon[i] != "Carrier Hatch")
                     {
                         main.transform.localScale = WPScale;
                         Weapons wp = main.GetComponent<Weapons>();
@@ -323,7 +323,7 @@ public class WSShared : MonoBehaviour
                         TargetRange = wp.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
                     } else
                     {
-                        main.transform.localScale = new Vector2(0.25f, 0.25f);
+                        main.transform.localScale = WPScale;
                     }
                     MainWps.Add(main);
 
@@ -362,7 +362,7 @@ public class WSShared : MonoBehaviour
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
-                    sup.transform.localScale = new Vector2(2f, 2f);
+                    sup.transform.localScale = new Vector2(3f, 3f);
                     sup.SetActive(true);
 
 
@@ -405,32 +405,34 @@ public class WSShared : MonoBehaviour
         }
         if (IsEnemy)
         {
-            WM.HPSlider.transform.position = new Vector3(WM.HPSlider.transform.position.x, WM.HPSlider.transform.position.y + 200, WM.HPSlider.transform.position.z);
-            WM.ShieldSlider.transform.position = new Vector3(WM.ShieldSlider.transform.position.x, WM.ShieldSlider.transform.position.y + 200, WM.ShieldSlider.transform.position.z);
             Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
             Vector3 ShieldBarPos = WM.ShieldSlider.transform.position - transform.position;
+            float HPDistance = Mathf.Abs((model.GetComponent<WarshipModelShared>().HPBarHorizontalPosition - model.GetComponent<WarshipModelShared>().HealthBarPosiiton).magnitude);
+            WM.HPDistance = HPDistance;
             transform.Rotate(new Vector3(0, 0, -270));
             WM.CurrentRotateAngle += 270;
             WM.HPSlider.transform.Rotate(new Vector3(0, 0, 270));
-            WM.HPSlider.transform.position = transform.position + HealthBarPos;
-            HPBar.Position = HealthBarPos;
+            WM.HPSlider.transform.position = transform.position + new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
+            HPBar.Position = new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
             WM.ShieldSlider.transform.Rotate(new Vector3(0, 0, 270));
-            WM.ShieldSlider.transform.position = transform.position + ShieldBarPos;
-            ShieldBar.Position = ShieldBarPos;
+            WM.ShieldSlider.transform.position = transform.position + new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
+            ShieldBar.Position = new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
+            WM.HPBarVerticalPos = model.GetComponent<WarshipModelShared>().HealthBarPosiiton;
         } else
-        {           
-            WM.HPSlider.transform.position = new Vector3(WM.HPSlider.transform.position.x, WM.HPSlider.transform.position.y + 200, WM.HPSlider.transform.position.z);
-            WM.ShieldSlider.transform.position = new Vector3(WM.ShieldSlider.transform.position.x, WM.ShieldSlider.transform.position.y + 200, WM.ShieldSlider.transform.position.z);
+        {      
             Vector3 HealthBarPos = WM.HPSlider.transform.position - transform.position;
             Vector3 ShieldBarPos = WM.ShieldSlider.transform.position - transform.position;
+            float HPDistance = Mathf.Abs((model.GetComponent<WarshipModelShared>().HPBarHorizontalPosition - model.GetComponent<WarshipModelShared>().HealthBarPosiiton).magnitude);
+            WM.HPDistance = HPDistance;
             transform.Rotate(new Vector3(0, 0, -90));
             WM.CurrentRotateAngle += 90;
             WM.HPSlider.transform.Rotate(new Vector3(0, 0, 90));
-            WM.HPSlider.transform.position = transform.position + HealthBarPos;
-            HPBar.Position = HealthBarPos;
+            WM.HPSlider.transform.position = transform.position + new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
+            HPBar.Position = new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
             WM.ShieldSlider.transform.Rotate(new Vector3(0, 0, 90));
-            WM.ShieldSlider.transform.position = transform.position + ShieldBarPos;
-            ShieldBar.Position = ShieldBarPos;
+            WM.ShieldSlider.transform.position = transform.position + new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
+            ShieldBar.Position = new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
+            WM.HPBarVerticalPos = model.GetComponent<WarshipModelShared>().HealthBarPosiiton;
         }
 
         doneInitWeapon = true;

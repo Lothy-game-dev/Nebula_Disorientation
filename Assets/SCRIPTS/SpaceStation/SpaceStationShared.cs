@@ -368,7 +368,7 @@ public class SpaceStationShared : MonoBehaviour
             BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
             for (int i = 0; i < SpWeaponTargets.Count; i++)
             {
-                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaximumDistance + 100 || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                 {
                     weapon.GetComponent<Weapons>().Aim = null;
                     SpWeaponTargets[weapon] = null;
@@ -378,7 +378,7 @@ public class SpaceStationShared : MonoBehaviour
         else
         {
             BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();           
-            if (Target != null && (Mathf.Abs((Target.transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || Target.layer == LayerMask.NameToLayer("Untargetable")))
+            if (Target != null && (Mathf.Abs((Target.transform.position - weapon.transform.position).magnitude) > bul.MaximumDistance + 100 || Target.layer == LayerMask.NameToLayer("Untargetable")))
             {
                 weapon.GetComponent<Weapons>().Aim = null;
                 Target = null;
