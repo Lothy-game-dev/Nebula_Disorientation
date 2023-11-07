@@ -671,7 +671,7 @@ public class WSShared : MonoBehaviour
     {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaximumDistance + 100, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (bul.MaxEffectiveDistance), (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             // Find the nearest first, if a fighter is found, target it instead
@@ -782,7 +782,7 @@ public class WSShared : MonoBehaviour
                 BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
                 for (int i = 0; i < SpWeaponTargets.Count; i++)
                 {
-                    if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                    if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaxEffectiveDistance) || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                     {                   
                         weapon.GetComponent<Weapons>().Aim = null;
                         SpWeaponTargets[weapon] = null;
@@ -793,7 +793,7 @@ public class WSShared : MonoBehaviour
                 BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
                 for (int i = 0; i < MainTarget.Count; i++)
                 {
-                    if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaxEffectiveDistance || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                    if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaximumDistance + 100) || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                     {
                         weapon.GetComponent<Weapons>().Aim = null;
                         MainTarget[weapon] = null;
