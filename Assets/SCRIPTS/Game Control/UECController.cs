@@ -19,6 +19,7 @@ public class UECController : UECMenuShared
     public GameObject NameRankBox;
     public GameObject DailyMissionBar;
     public GameObject EnterBattleButton;
+    public GameObject[] Planets;
     #endregion
     #region NormalVariables
     public bool isPlanetMoving;
@@ -48,10 +49,19 @@ public class UECController : UECMenuShared
     {
         // Call function and timer only if possible
         CheckDailyMission();
-        
     }
     #endregion
     #region Data
+    public void CheckClickablePlanets()
+    {
+        foreach (var item in Planets)
+        {
+            if (item.GetComponent<UECPlanets>()!=null)
+            {
+                item.GetComponent<UECPlanets>().CheckRanking();
+            }
+        }
+    }
     public void SetDataToView(Dictionary<string, object> datas)
     {
         currentId = (int)datas["ID"];
@@ -290,6 +300,7 @@ public class UECController : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         isPlanetMoving = true;
+        CheckClickablePlanets();
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
     }
     public override void OnExitAnimation()

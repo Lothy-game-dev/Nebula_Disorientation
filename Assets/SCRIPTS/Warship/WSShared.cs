@@ -50,7 +50,8 @@ public class WSShared : MonoBehaviour
     private float TargetRefreshTimer;
     public List<GameObject> SpWps;
     public List<GameObject> MainWps;
-    private float FindTargetTimer;
+    public float FindTargetTimer;
+    public float FindMainTargetTimer;
     private bool doneInitWeapon;
     private float[] DelayTimer;
     private float SpawnTimer;
@@ -84,6 +85,7 @@ public class WSShared : MonoBehaviour
     private GameObject Killer;
     public GameObject NearestTarget;
     private float PlayerDamageReceive;
+    public List<GameObject> Targets;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -108,6 +110,7 @@ public class WSShared : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Targets = new List<GameObject>(SpWeaponTargets.Values);
         // Weapon action
         if (doneInitWeapon)
         {
@@ -160,24 +163,54 @@ public class WSShared : MonoBehaviour
 
         }
 
-
-        if (MainTarget.ContainsValue(null) || SpWeaponTargets.ContainsValue(null))
+        try
+        {
+            foreach (var target in SpWeaponTargets)
+            {
+                target.Value.GetComponent<Transform>();
+            }
+        }
+        catch (MissingReferenceException)
         {
             FindTargetTimer -= Time.deltaTime;
         }
+        catch (System.NullReferenceException)
+        {
+            FindTargetTimer -= Time.deltaTime;
+        }
+
         if (FindTargetTimer <= 0f)
         {
             FindTargetTimer = 0.25f;
-            for (int i = 0; i < MainWps.Count; i++)
-            {
-                MainWeaponTargetEnemy(MainWps[i]);                   
-            }
-                       
             for (int i = 0; i < SpWps.Count; i++)
             {
-                SpWeaponTargets[SpWps[i]] = TargetEnemy(SpWps[i]);                                   
+                SpWeaponTargets[SpWps[i]] = TargetEnemy(SpWps[i]);
             }
-            
+        }
+
+        try
+        {
+            foreach (var target in MainTarget)
+            {
+                target.Value.GetComponent<Transform>();
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            FindMainTargetTimer -= Time.deltaTime;
+        }
+        catch (System.NullReferenceException)
+        {
+            FindMainTargetTimer -= Time.deltaTime;
+        }
+
+        if (FindMainTargetTimer <= 0f)
+        {
+            FindMainTargetTimer = 0.25f;
+            for (int i = 0; i < MainWps.Count; i++)
+            {
+                MainWeaponTargetEnemy(MainWps[i]);
+            }
         }
 
         // This is for the non-weapon warship 
@@ -673,7 +706,7 @@ public class WSShared : MonoBehaviour
     {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (bul.MaxEffectiveDistance), (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100), (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             // Find the nearest first, if a fighter is found, target it instead
@@ -784,7 +817,7 @@ public class WSShared : MonoBehaviour
                 BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
                 for (int i = 0; i < SpWeaponTargets.Count; i++)
                 {
-                    if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaxEffectiveDistance) || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                    if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100) || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                     {                   
                         weapon.GetComponent<Weapons>().Aim = null;
                         SpWeaponTargets[weapon] = null;
@@ -795,7 +828,7 @@ public class WSShared : MonoBehaviour
                 BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
                 for (int i = 0; i < MainTarget.Count; i++)
                 {
-                    if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaximumDistance + 100) || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                    if (MainTarget[weapon] != null && (Mathf.Abs((MainTarget[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100) || MainTarget[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                     {
                         weapon.GetComponent<Weapons>().Aim = null;
                         MainTarget[weapon] = null;

@@ -66,6 +66,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         {
             foreach (var col in DisableColliders)
             {
+                if (col.GetComponent<Collider2D>()!=null)
                 col.GetComponent<Collider2D>().enabled = false;
             }
         }
@@ -944,7 +945,8 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         {
             foreach (var col in DisableColliders)
             {
-                col.GetComponent<Collider2D>().enabled = true;
+                if (col.GetComponent<Collider2D>() != null)
+                    col.GetComponent<Collider2D>().enabled = true;
             }
         }
         int n = 0;

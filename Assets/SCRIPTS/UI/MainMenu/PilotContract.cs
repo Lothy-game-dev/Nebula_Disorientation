@@ -13,6 +13,7 @@ public class PilotContract : MonoBehaviour
     public GameObject[] EULAList;
     public GameObject LeftButton;
     public GameObject RightButton;
+    public GameObject PilotContractText;
     public GameObject TOSButton;
     public GameObject counter;
     #endregion
@@ -30,7 +31,11 @@ public class PilotContract : MonoBehaviour
         InitX = transform.localScale.x;
         InitY = transform.localScale.y;
         transform.localScale = new Vector3(transform.localScale.x / 5f, transform.localScale.y / 5f, transform.localScale.z);
+        Color c = GetComponent<SpriteRenderer>().color;
+        c.a = 0f;
+        GetComponent<SpriteRenderer>().color = c;
         EULAList[0].SetActive(false);
+        PilotContractText.SetActive(false);
         StartCoroutine(PlayAnim());
     }
 
@@ -111,17 +116,16 @@ public class PilotContract : MonoBehaviour
     #region Animation
     private IEnumerator PlayAnim()
     {
-        for (int i=0;i<4;i++)
+        for (int i=0;i<20;i++)
         {
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y + InitY / 5f, transform.localScale.z);
-            yield return new WaitForSeconds(0.1f);
-        }
-        for (int i = 0; i <4; i++)
-        {
-            transform.localScale = new Vector3(transform.localScale.x + InitX / 5f, transform.localScale.y, transform.localScale.z);
-            yield return new WaitForSeconds(0.1f);
+            transform.localScale = new Vector3(transform.localScale.x + InitX / 25f, transform.localScale.y + InitY / 25f, transform.localScale.z);
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.a += 1/20f;
+            GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.025f);
         }
         EULAList[0].SetActive(true);
+        PilotContractText.SetActive(true);
         TOSButton.SetActive(true);
     }
     #endregion
