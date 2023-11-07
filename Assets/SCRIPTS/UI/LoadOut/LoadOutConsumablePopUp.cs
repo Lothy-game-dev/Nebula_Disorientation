@@ -83,6 +83,7 @@ public class LoadOutConsumablePopUp : MonoBehaviour
     #region Set Data
     public void OpenPopup(Dictionary<string, int> ListConsumes, Dictionary<string, int> ChosenConsumes)
     {
+        Background.SetActive(true);
         // Set trans
         Color c = GetComponent<SpriteRenderer>().color;
         currentTransparency = 180 / 255f;
@@ -131,9 +132,6 @@ public class LoadOutConsumablePopUp : MonoBehaviour
         {
             line.SetActive(true);
         }
-        BGWaitTimer = 1f;
-        Background.GetComponent<Collider2D>().enabled = false;
-        Background.SetActive(true);
         SetData(ListConsumes, ChosenConsumes);
     }
 

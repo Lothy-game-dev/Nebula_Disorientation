@@ -101,7 +101,18 @@ public class LoadoutScene : UECMenuShared
         {
             // Do you want to move to factory
         }
+        int SP = 0;
+        if (Model == "")
+        {
+            string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(ListReplaceSpace(ListOwnedModel)[0]);
+            SP = int.Parse((string)FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionary(stats)["SP"]);
+        } else
+        {
+            string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(Model);
+            SP = int.Parse((string)FindObjectOfType<GlobalFunctionController>().ConvertModelStatsToDictionary(stats)["SP"]);
+        }
         Power1Bar.GetComponent<LoadOutPowerBar>().SetItem(FirstPower);
+        if (SP==2)
         Power2Bar.GetComponent<LoadOutPowerBar>().SetItem(SecondPower);
         ConsumableBar.GetComponent<LoadOutConsumables>().SetInitData(
             FindObjectOfType<AccessDatabase>().GetOwnedConsumables(FindObjectOfType<UECMainMenuController>().PlayerId));
