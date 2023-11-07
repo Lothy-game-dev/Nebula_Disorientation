@@ -275,7 +275,7 @@ public class Weapons : MonoBehaviour
                     {
                         if (!isMainWeapon) isFire = false;
                     }
-                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 8 : 2) * WeaponROTSpeed);
+                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 16 : 4) * WeaponROTSpeed);
                 }
             }
             // Reset thermal hit count per 1/rate of hit second
