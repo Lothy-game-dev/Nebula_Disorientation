@@ -23,6 +23,7 @@ public class UECPlanets : MonoBehaviour
     private float initScale;
     private float initCameraSize;
     private bool alreadyZoom;
+    private bool isLocked;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -66,6 +67,31 @@ public class UECPlanets : MonoBehaviour
         }
     }
     #endregion
+    #region Check Ranking
+    public void CheckRanking()
+    {
+        
+        string Rank = (string)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId)["Rank"];
+        Debug.Log(Rank);
+        if (Rank== "Unranked")
+        {
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.r = 1 / 4f;
+            c.b = 1 / 4f;
+            c.g = 1 / 4f;
+            GetComponent<SpriteRenderer>().color = c;
+            isLocked = true;
+        } else
+        {
+            Color c = GetComponent<SpriteRenderer>().color;
+            c.r = 1;
+            c.b = 1;
+            c.g = 1;
+            GetComponent<SpriteRenderer>().color = c;
+            isLocked = false;
+        }
+    }
+    #endregion
     #region Moving
     private void ConfigureNextPlace()
     {
@@ -91,8 +117,11 @@ public class UECPlanets : MonoBehaviour
     #region Mouse check
     private void OnMouseEnter()
     {
-        alreadyZoom = false;
-        transform.localScale = new Vector2(transform.localScale.x * 1.2f, transform.localScale.y * 1.2f);
+        if (!isLocked)
+        {
+            alreadyZoom = false;
+            transform.localScale = new Vector2(transform.localScale.x * 1.2f, transform.localScale.y * 1.2f);
+        }
         FindObjectOfType<NotificationBoardController>().CreateNormalInformationBoard(gameObject, InfoText);
     }
     private void OnMouseExit()
@@ -103,12 +132,19 @@ public class UECPlanets : MonoBehaviour
     private void OnMouseDown()
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
-        if (!alreadyZoom)
+        if (!isLocked)
         {
-            alreadyZoom = true;
-            Controller.isPlanetMoving = false;
-            rb.velocity = new Vector2(0, 0);
-            StartCoroutine(ZoomOutWhenClick());
+            if (!alreadyZoom)
+            {
+                alreadyZoom = true;
+                Controller.isPlanetMoving = false;
+                rb.velocity = new Vector2(0, 0);
+                StartCoroutine(ZoomOutWhenClick());
+            }
+        } else
+        {
+            FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Controller.transform.position,
+                "Buy a Fighter in the Factory first", 5f);
         }
     }
     private IEnumerator ZoomOutWhenClick()

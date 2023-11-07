@@ -58,6 +58,7 @@ public class UECMainMenuController : MonoBehaviour
     {
         PlayerPrefs.SetInt("PlayerID", 0);
         PlayerId = ad.GetCurrentSessionPlayerId();
+        controller.CheckClickablePlanets();
         Dictionary<string,object> ListData = ad.GetPlayerInformationById(PlayerId);
         if (ListData!=null)
         {
