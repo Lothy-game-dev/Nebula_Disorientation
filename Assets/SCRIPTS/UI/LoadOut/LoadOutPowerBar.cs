@@ -96,7 +96,7 @@ public class LoadOutPowerBar : MonoBehaviour
                 }
             }
         }
-        StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(name);
+        StatusBoard.GetComponent<LoadOutStatusBoard>().SetData(name, true);
     }
 
     private void OnDisable()
