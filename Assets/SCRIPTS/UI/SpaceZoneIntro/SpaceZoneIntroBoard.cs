@@ -367,12 +367,39 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                 {
                     if (n <= 50f)
                     {
-                        chosen = ("UEC-Dreadnaught");
+                        int r = Random.Range(0, 2);
+                        if (r==0)
+                        {
+                            chosen = ("UEC-Frigate");
+                        } else if (r==1)
+                        {
+                            chosen = ("UEC-Carrier");
+                        }
                     }
-                    else if (n <= 85f)
+                    else if (n <= 80f)
                     {
-                        chosen = ("UEC-Flagship");
+                        int r = Random.Range(0, 2);
+                        if (r == 0)
+                        {
+                            chosen = ("UEC-Cruiser");
+                        }
+                        else if (r == 1)
+                        {
+                            chosen = ("UEC-Battleship");
+                        }
                     }
+                    else if (n<=95f)
+                    {
+                        int r = Random.Range(0, 2);
+                        if (r == 0)
+                        {
+                            chosen = ("UEC-Dreadnaught");
+                        }
+                        else if (r == 1)
+                        {
+                            chosen = ("UEC-Flagship");
+                        }
+                    } 
                     else
                     {
                         chosen = ("UEC-Station");
@@ -574,7 +601,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                     {
                         GameObject go = Instantiate(WarshipModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
-                        go.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                        go.transform.localScale = new Vector3(0.225f, 0.225f, 0.225f);
                         go.GetComponent<SpriteRenderer>().sortingOrder = 5003;
                         go.SetActive(true);
                         ListNotableAlliesGO.Add(go);
@@ -822,7 +849,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                     {
                         GameObject go = Instantiate(WarshipModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
-                        go.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                        go.transform.localScale = new Vector3(0.225f, 0.225f, 0.225f);
                         go.GetComponent<SpriteRenderer>().sortingOrder = 5003;
                         go.SetActive(true);
                         ListNotableEnemiesGO.Add(go);

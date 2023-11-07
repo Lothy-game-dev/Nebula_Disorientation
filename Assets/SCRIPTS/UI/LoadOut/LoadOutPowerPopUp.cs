@@ -63,6 +63,8 @@ public class LoadOutPowerPopUp : MonoBehaviour
     public void OpenPopUp(List<string> ListPower, string chosenPower)
     {
         // Open popup
+        Background.SetActive(true);
+        Background.GetComponent<SpriteRenderer>().sortingOrder = 18;
         // Calculate Width of each box
         BoxWidth = Mathf.Abs(Left.transform.position.x - Right.transform.position.x);
         // Clear old list power
@@ -106,9 +108,6 @@ public class LoadOutPowerPopUp : MonoBehaviour
             yield return new WaitForSeconds(0.025f);
         }
         DisableBG = true;
-        Background.GetComponent<Collider2D>().enabled = false;
-        Background.SetActive(true);
-        Background.GetComponent<SpriteRenderer>().sortingOrder = 18;
         // Disable scroll until data are loaded
         ScrollRect.GetComponent<ScrollRect>().horizontal = false;
         SetData(ListPower, chosenPower);

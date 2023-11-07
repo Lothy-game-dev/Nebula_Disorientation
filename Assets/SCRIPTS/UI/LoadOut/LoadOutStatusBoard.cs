@@ -75,13 +75,20 @@ public class LoadOutStatusBoard : MonoBehaviour
     }
     #endregion
     #region Set Data
-    public void SetData(string itemName)
+    public void SetData(string itemName, bool isInit = false)
     {
         ad = FindObjectOfType<AccessDatabase>();
+        NameText.SetActive(false);
+        StatsText.SetActive(false);
+        InfoText.SetActive(false);
         Item = itemName;
         GetComponent<Collider2D>().enabled = true;
         bool spin = false;
-        if (ItemName != null && itemName != "") { spin = true; }
+        if (ItemName != null && itemName != "") 
+        {
+            if (!isInit)
+            spin = true; 
+        }
         else
         {
             ItemName = "!!!ERROR!!!";
