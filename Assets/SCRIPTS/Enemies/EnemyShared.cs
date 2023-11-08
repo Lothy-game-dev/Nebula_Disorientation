@@ -315,6 +315,7 @@ public class EnemyShared : FighterShared
             LW.RotateLimitNegative = float.Parse((string)StatsDataDict["AOFNegative"]);
             LW.RotateLimitPositive = float.Parse((string)StatsDataDict["AOFPositive"]);
             LW.FighterWeaponDamageMod = float.Parse((string)StatsDataDict["DM"]);
+            LW.ChangeToZatSprite();
             if (LW.IsThermalType)
             {
                 LW.FighterWeaponAoEMod = 0;
@@ -336,6 +337,7 @@ public class EnemyShared : FighterShared
             RW.RotateLimitNegative = float.Parse((string)StatsDataDict["AOFNegative"]);
             RW.RotateLimitPositive = float.Parse((string)StatsDataDict["AOFPositive"]);
             RW.FighterWeaponDamageMod = float.Parse((string)StatsDataDict["DM"]);
+            RW.ChangeToZatSprite();
             if (RW.IsThermalType)
             {
                 RW.FighterWeaponAoEMod = 0;

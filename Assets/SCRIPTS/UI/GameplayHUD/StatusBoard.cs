@@ -454,7 +454,7 @@ public class StatusBoard : MonoBehaviour
         if (ModelLeftWeapon != null)
         {
             ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-            = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
+            = Enemy.GetComponent<EnemyShared>() != null ? ModelLeftWeapon.GetComponent<Weapons>().ZatIconSprite : ModelLeftWeapon.GetComponent<Weapons>().IconSprite;
             ItemBox1.transform.GetChild(0).localScale = WeaponScale;
             ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
         }
@@ -467,7 +467,7 @@ public class StatusBoard : MonoBehaviour
         if (ModelRightWeapon != null)
         {
             ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-            = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
+            = Enemy.GetComponent<EnemyShared>() != null ? ModelRightWeapon.GetComponent<Weapons>().ZatIconSprite : ModelRightWeapon.GetComponent<Weapons>().IconSprite;
             ItemBox2.transform.GetChild(0).localScale = WeaponScale;
             ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
         }
@@ -699,7 +699,7 @@ public class StatusBoard : MonoBehaviour
                 if (ModelLeftWeapon!=null)
                 {
                     ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-                    = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
+                    = Enemy.GetComponent<EnemyShared>() != null ? ModelLeftWeapon.GetComponent<Weapons>().ZatIconSprite : ModelLeftWeapon.GetComponent<Weapons>().IconSprite;
                     ItemBox1.transform.GetChild(0).localScale = WeaponScale;
                     ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
                 } else
@@ -711,7 +711,7 @@ public class StatusBoard : MonoBehaviour
                 if (ModelRightWeapon!=null)
                 {
                     ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-                    = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
+                    = Enemy.GetComponent<EnemyShared>() != null ? ModelRightWeapon.GetComponent<Weapons>().ZatIconSprite : ModelRightWeapon.GetComponent<Weapons>().IconSprite;
                     ItemBox2.transform.GetChild(0).localScale = WeaponScale;
                     ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
                 } else

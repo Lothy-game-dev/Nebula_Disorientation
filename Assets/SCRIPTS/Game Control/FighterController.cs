@@ -199,10 +199,11 @@ public class FighterController : MonoBehaviour
         GameObject LeftWeaponIcon = Instantiate(CurrentLeftWeapon, ClonePosLeft, Quaternion.identity);
         GameObject RightWeaponIcon = Instantiate(CurrentRightWeapon, ClonePosRight, Quaternion.identity);
         LeftWeaponIcon.SetActive(true);
+        LeftWeaponIcon.GetComponent<SpriteRenderer>().sprite = LeftWeaponIcon.GetComponent<Weapons>().IconSprite;
         LeftWeaponIcon.GetComponent<Weapons>().enabled = false;
         LeftWeaponIcon.transform.localScale =
-            new Vector3(LeftWeaponIcon.transform.localScale.x * LeftClonseScale,
-            LeftWeaponIcon.transform.localScale.y * LeftClonseScale,
+            new Vector3(LeftWeaponIcon.transform.localScale.x * LeftClonseScale/4,
+            LeftWeaponIcon.transform.localScale.y * LeftClonseScale/4,
             LeftWeaponIcon.transform.localScale.z);
         LeftWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 201;
         Color lc = LeftWeaponIcon.GetComponent<SpriteRenderer>().color;
@@ -218,10 +219,11 @@ public class FighterController : MonoBehaviour
             CurrentLeftWeapon.GetComponent<Weapons>().
             Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
         RightWeaponIcon.SetActive(true);
+        RightWeaponIcon.GetComponent<SpriteRenderer>().sprite = RightWeaponIcon.GetComponent<Weapons>().IconSprite;
         RightWeaponIcon.GetComponent<Weapons>().enabled = false;
         RightWeaponIcon.transform.localScale =
-            new Vector3(RightWeaponIcon.transform.localScale.x * RightClonseScale,
-            RightWeaponIcon.transform.localScale.y * RightClonseScale,
+            new Vector3(RightWeaponIcon.transform.localScale.x * RightClonseScale /4,
+            RightWeaponIcon.transform.localScale.y * RightClonseScale/4,
             RightWeaponIcon.transform.localScale.z);
         RightWeaponIcon.GetComponent<SpriteRenderer>().sortingOrder = 201;
         RightWeaponIcon.transform.SetParent(RightOverheatImage.transform);
