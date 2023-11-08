@@ -362,7 +362,7 @@ public class WSShared : MonoBehaviour
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
-                    sup.transform.localScale = new Vector2(3f, 3f);
+                    sup.transform.localScale = new Vector2(2.6f, 2.6f);
                     sup.SetActive(true);
 
 
@@ -412,11 +412,11 @@ public class WSShared : MonoBehaviour
             transform.Rotate(new Vector3(0, 0, -270));
             WM.CurrentRotateAngle += 270;
             WM.HPSlider.transform.Rotate(new Vector3(0, 0, 270));
-            WM.HPSlider.transform.position = transform.position + new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
-            HPBar.Position = new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
+            WM.HPSlider.transform.position = transform.position + new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 150, HealthBarPos.z);
+            HPBar.Position = new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 150, HealthBarPos.z);
             WM.ShieldSlider.transform.Rotate(new Vector3(0, 0, 270));
-            WM.ShieldSlider.transform.position = transform.position + new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
-            ShieldBar.Position = new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
+            WM.ShieldSlider.transform.position = transform.position + new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 150, ShieldBarPos.z);
+            ShieldBar.Position = new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 150, ShieldBarPos.z);
             WM.HPBarVerticalPos = model.GetComponent<WarshipModelShared>().HealthBarPosiiton;
         } else
         {      
@@ -427,11 +427,11 @@ public class WSShared : MonoBehaviour
             transform.Rotate(new Vector3(0, 0, -90));
             WM.CurrentRotateAngle += 90;
             WM.HPSlider.transform.Rotate(new Vector3(0, 0, 90));
-            WM.HPSlider.transform.position = transform.position + new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
-            HPBar.Position = new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 100, HealthBarPos.z);
+            WM.HPSlider.transform.position = transform.position + new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 150, HealthBarPos.z);
+            HPBar.Position = new Vector3(HealthBarPos.x, HealthBarPos.y - HPDistance - 150, HealthBarPos.z);
             WM.ShieldSlider.transform.Rotate(new Vector3(0, 0, 90));
-            WM.ShieldSlider.transform.position = transform.position + new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
-            ShieldBar.Position = new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 100, ShieldBarPos.z);
+            WM.ShieldSlider.transform.position = transform.position + new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 150, ShieldBarPos.z);
+            ShieldBar.Position = new Vector3(ShieldBarPos.x, ShieldBarPos.y - HPDistance - 150, ShieldBarPos.z);
             WM.HPBarVerticalPos = model.GetComponent<WarshipModelShared>().HealthBarPosiiton;
         }
 
