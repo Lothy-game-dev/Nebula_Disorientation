@@ -16,7 +16,7 @@ public class SessionArsenalButton : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject Item;
     public GameObject Content;
-    public List<SpriteRenderer> WeaponImage;
+    public GameObject WeaponImage;
     public List<SpriteRenderer> PowerImage;
     public GameObject OtherButton;
     public List<GameObject> WeaponStatus;
@@ -74,21 +74,7 @@ public class SessionArsenalButton : MonoBehaviour
                 g.GetComponent<SessionArsenalItem>().ItemStatusList = WeaponStatus;
                 g.GetComponent<SessionArsenalItem>().Content = Content;
                 g.GetComponent<SessionArsenalItem>().ArItemList = ArsenalController.WeaponList;
-                if (ArsenalController.WeaponList[i][2] == "Star Blaster")
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
-                }
-                else
-                {
-                    if (ArsenalController.WeaponList[i][2].Contains("Nano Flame Thrower") || ArsenalController.WeaponList[i][2].Contains("Freezing Blaster"))
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                    }
-                    else
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => ArsenalController.WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
-                    }
-                }
+                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 // check owned item
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 g.name, "Weapon");

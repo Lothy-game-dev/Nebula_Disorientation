@@ -15,7 +15,7 @@ public class EncycButton : MonoBehaviour
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public GameObject EncyclMenu;
-    public List<SpriteRenderer> WeapImage;
+    public GameObject WeapImage;
     public List<SpriteRenderer> FighterImage;
     public List<SpriteRenderer> PowerImage;
     public List<SpriteRenderer> EnemyImage;
@@ -89,24 +89,9 @@ public class EncycButton : MonoBehaviour
         Menu = EncyclMenu.GetComponent<EncycMenu>();
         if (ItemType == "Weapon")
         {
-            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(2f, 2f, 0f), 11);
+            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(0.4f, 0.4f, 0f), 11);
             ChangeColorWhenChoosen(Id.ToString());
-            if (wlist[2] == "Star Blaster")
-            {
-                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WeapImage[WeapImage.FindIndex(item => item.name == "Star")].sprite;
-            }
-            else
-            {
-                if (wlist[2].Contains("Nano Flame Thrower"))
-                {
-                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WeapImage[WeapImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                }
-                else
-                {
-                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WeapImage[WeapImage.FindIndex(item => wlist[2].ToLower().Contains(item.name.ToLower()))].sprite;
-                }
-            }
-
+            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WeapImage.transform.GetChild(Id - 1).GetComponent<SpriteRenderer>().sprite;
 
         }
         else
