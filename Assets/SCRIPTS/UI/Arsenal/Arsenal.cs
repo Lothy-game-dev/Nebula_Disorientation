@@ -18,7 +18,7 @@ public class Arsenal : UECMenuShared
     // All importants number related to how a game object behave will be declared in this part
     public GameObject Item;
     public GameObject Content;
-    public List<SpriteRenderer> WeaponImage;
+    public GameObject WeaponImage;
     public List<GameObject> WeaponStatus;
     public List<GameObject> PowerStatus;
     public GameObject DescContent;
@@ -95,21 +95,7 @@ public class Arsenal : UECMenuShared
             g.GetComponent<ArsenalItem>().Content = Content;
             g.GetComponent<ArsenalItem>().ArItemList = WeaponList;
             // set item image
-            if (WeaponList[i][2] == "Star Blaster")
-            {
-                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
-            }
-            else
-            {
-                if (WeaponList[i][2].Contains("Nano Flame Thrower") || WeaponList[i][2].Contains("Freezing Blaster"))
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                }
-                else
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
-                }
-            }
+            g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
             // check owned item
             int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
                 g.name, "Weapon");
@@ -443,21 +429,7 @@ public class Arsenal : UECMenuShared
                 g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
                 g.GetComponent<ArsenalItem>().Content = Content;
                 g.GetComponent<ArsenalItem>().ArItemList = WeaponList;
-                if (WeaponList[i][2] == "Star Blaster")
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
-                }
-                else
-                {
-                    if (WeaponList[i][2].Contains("Nano Flame Thrower") || WeaponList[i][2].Contains("Freezing Blaster"))
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                    }
-                    else
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
-                    }
-                }
+                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
                 g.name, "Weapon");
                 if (n != -1)
