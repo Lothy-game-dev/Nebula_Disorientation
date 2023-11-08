@@ -118,7 +118,7 @@ public class UECSessionScene : MonoBehaviour
                 FirstWeaponGO.transform.SetParent(FirstWeapon.transform);
                 FirstWeaponGO.transform.localScale = new Vector3(2, 2, 2);
                 Destroy(FirstWeaponGO.transform.GetChild(0).GetComponent<BoxCollider2D>());
-                Destroy(FirstWeaponGO.transform.GetChild(0).GetComponent<LoadOutBox>());
+                FirstWeaponGO.transform.GetChild(0).GetComponent<LoadOutBox>().enabled = false;
                 FirstWeaponGO.SetActive(true);
                 FirstWeapon.transform.GetChild(1).GetComponent<UECSessionWeaponBox>().ChosenWeapon = ChosenFirstWeapon;
                 FirstWeapon.transform.GetChild(1).GetComponent<UECSessionWeaponBox>().OtherChosen = ChosenSecondWeapon;
@@ -135,7 +135,7 @@ public class UECSessionScene : MonoBehaviour
                 SecondWeaponGO.transform.SetParent(SecondWeapon.transform);
                 SecondWeaponGO.transform.localScale = new Vector3(2, 2, 2);
                 Destroy(SecondWeaponGO.transform.GetChild(0).GetComponent<BoxCollider2D>());
-                Destroy(SecondWeaponGO.transform.GetChild(0).GetComponent<LoadOutBox>());
+                SecondWeaponGO.transform.GetChild(0).GetComponent<LoadOutBox>().enabled = false;
                 SecondWeaponGO.SetActive(true);
                 SecondWeapon.transform.GetChild(1).GetComponent<UECSessionWeaponBox>().ChosenWeapon = ChosenSecondWeapon;
                 SecondWeapon.transform.GetChild(1).GetComponent<UECSessionWeaponBox>().OtherChosen = ChosenFirstWeapon;
@@ -157,11 +157,11 @@ public class UECSessionScene : MonoBehaviour
                 ModelGO.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                 if (FirstWeaponGO != null) 
                 {
-                    ModelGO.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = FirstWeaponGO.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite;
+                    ModelGO.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = FirstWeaponGO.transform.GetChild(0).GetComponent<LoadOutBox>().IngameSprite;
                 }
                 if (SecondWeaponGO != null)
                 {
-                    ModelGO.transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = SecondWeaponGO.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite;
+                    ModelGO.transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = SecondWeaponGO.transform.GetChild(0).GetComponent<LoadOutBox>().IngameSprite;
                 }
                 ModelGO.transform.GetChild(0).gameObject.SetActive(true);
                 break;

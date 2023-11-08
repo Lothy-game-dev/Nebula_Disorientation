@@ -16,6 +16,7 @@ public class LoadOutBox : MonoBehaviour
     public GameObject background;
     public string WeaponName;
     public bool detectMouse;
+    public Sprite IngameSprite;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
