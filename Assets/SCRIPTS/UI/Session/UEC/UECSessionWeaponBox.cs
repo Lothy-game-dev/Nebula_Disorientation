@@ -146,7 +146,7 @@ public class UECSessionWeaponBox : MonoBehaviour
                 col.GetComponent<Collider2D>().enabled = true;
         }
         gameObject.SetActive(false);
-        if (!CurrentChosen.name.Replace(" ","").Replace("-","").ToLower().Equals(ChosenWeapon.Replace(" ","").Replace("-","").ToLower()))
+        if (CurrentChosen!=null && !CurrentChosen.name.Replace(" ","").Replace("-","").ToLower().Equals(ChosenWeapon.Replace(" ","").Replace("-","").ToLower()))
         {
             // Update Db
             FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), Type, CurrentChosen.name.Replace("(Clone)","").Replace(" ", ""));

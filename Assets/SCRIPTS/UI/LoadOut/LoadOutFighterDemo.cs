@@ -289,10 +289,10 @@ public class LoadOutFighterDemo : MonoBehaviour
                 .Equals(WeaponName.Replace(" ","").ToLower())) {
                 if (isLeftWeapon)
                 {
-                    LeftWeapon = WeaponList.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Image>().sprite;
+                    LeftWeapon = WeaponList.transform.GetChild(i).GetChild(0).GetComponent<LoadOutBox>().IngameSprite;
                 } else
                 {
-                    RightWeapon = WeaponList.transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Image>().sprite;
+                    RightWeapon = WeaponList.transform.GetChild(i).GetChild(0).GetComponent<LoadOutBox>().IngameSprite;
                 }
             }
         }
