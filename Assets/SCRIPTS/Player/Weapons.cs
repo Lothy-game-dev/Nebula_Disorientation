@@ -42,6 +42,9 @@ public class Weapons : MonoBehaviour
     public GameObject ChargingPosition;
     public GameplayInteriorController ControllerMain;
     public LOTWEffect LOTWEffect;
+    public Sprite ZatSprite;
+    public Sprite IconSprite;
+    public Sprite ZatIconSprite;
     #endregion
     #region NormalVariables
     public bool tracking;
@@ -1179,6 +1182,19 @@ public class Weapons : MonoBehaviour
             }
         }
         GetComponent<SpriteRenderer>().color = c;
+    }
+    #endregion
+    #region Sprite Changing
+    public void ChangeToZatSprite()
+    {
+        if (ZatSprite!=null)
+        GetComponent<SpriteRenderer>().sprite = ZatSprite;
+    }
+
+    public void ChangeToIconSprite()
+    {
+        if (IconSprite!=null)
+        GetComponent<SpriteRenderer>().sprite = IconSprite;
     }
     #endregion
 }
