@@ -18,7 +18,7 @@ public class SessionArsenal : MonoBehaviour
     // All importants number related to how a game object behave will be declared in this part
     public GameObject Item;
     public GameObject Content;
-    public List<SpriteRenderer> WeaponImage;
+    public GameObject WeaponImage;
     public List<GameObject> WeaponStatus;
     public List<GameObject> PowerStatus;
     public GameObject DescContent;
@@ -99,21 +99,7 @@ public class SessionArsenal : MonoBehaviour
             g.GetComponent<SessionArsenalItem>().Content = Content;
             g.GetComponent<SessionArsenalItem>().ArItemList = WeaponList;
             // set item image
-            if (WeaponList[i][2] == "Star Blaster")
-            {
-                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
-            }
-            else
-            {
-                if (WeaponList[i][2].Contains("Nano Flame Thrower") || WeaponList[i][2].Contains("Freezing Blaster"))
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                }
-                else
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
-                }
-            }
+            g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
             // check weapon has picked in Loadout
             int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 g.name, "Weapon");
@@ -388,21 +374,7 @@ public class SessionArsenal : MonoBehaviour
                 g.GetComponent<SessionArsenalItem>().ItemStatusList = WeaponStatus;
                 g.GetComponent<SessionArsenalItem>().Content = Content;
                 g.GetComponent<SessionArsenalItem>().ArItemList = WeaponList;
-                if (WeaponList[i][2] == "Star Blaster")
-                {
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "Star")].sprite;
-                }
-                else
-                {
-                    if (WeaponList[i][2].Contains("Nano Flame Thrower") || WeaponList[i][2].Contains("Freezing Blaster"))
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => item.name == "NanoFlame")].sprite;
-                    }
-                    else
-                    {
-                        g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage[WeaponImage.FindIndex(item => WeaponList[i][2].ToLower().Contains(item.name.ToLower()))].sprite;
-                    }
-                }
+                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"),
                 g.name, "Weapon");
                 if (n != -1)
