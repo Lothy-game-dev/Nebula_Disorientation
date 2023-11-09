@@ -65,7 +65,9 @@ public class LOTWScene : MonoBehaviour
         if (check)
         {
             if (ListAllLOTW.Contains(34))
-            ListAllLOTW.Remove(34);
+                ListAllLOTW.Remove(34);
+            if (ListAllLOTW.Contains(26))
+                ListAllLOTW.Remove(26);
         }
         // Random to get 3 cards
         ListLOTWChosen = new List<int>();
