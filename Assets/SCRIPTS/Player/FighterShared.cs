@@ -328,7 +328,10 @@ public class FighterShared : MonoBehaviour
         {
             isOverloadded = false;
             isBurned = false;
-            isSlowed = true;
+            if (currentTemperature <= 20)
+                isSlowed = true;
+            else
+                isSlowed = false;
             c.r = (currentTemperature - 0) / (50 - 10);
             c.g = (currentTemperature - 0) / (50 - 10);
         } 
@@ -432,8 +435,8 @@ public class FighterShared : MonoBehaviour
             // if Slowed, reduce move and rotate spd
             if (!isImmuneFrozenSlow)
             {
-                SlowedMoveSpdScale = (1 - (50 - currentTemperature) * NanoTempScale / 50)
-                    < 0.1f ? 0.1f : (1 - (50 - currentTemperature) * NanoTempScale / 50);
+                SlowedMoveSpdScale = (1 - (20 - currentTemperature) * NanoTempScale / 20)
+                    < 0.1f ? 0.1f : (1 - (20 - currentTemperature) * NanoTempScale / 20);
             } else
             {
                 SlowedMoveSpdScale = 1;
