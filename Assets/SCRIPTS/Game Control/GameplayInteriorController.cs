@@ -36,6 +36,7 @@ public class GameplayInteriorController : MonoBehaviour
     private Dictionary<string, object> OptionSetting;
     public bool isEnding;
     public bool isLoweringSound;
+    public bool isPausing;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -234,11 +235,7 @@ public class GameplayInteriorController : MonoBehaviour
         FindObjectOfType<AccessDatabase>().UpdateSessionCashAndShard(SessionID, true, CurrentStageCash, CurrentStageShard);
     }
 
-    public void PauseMenuOn()
-    {
-        PauseMenu.SetActive(true);
-        DoneLightUp = false;
-    }
+    
 
     public void ShowCashAndShardEffect(int CashVal, int ShardVal, GameObject go)
     {
@@ -253,6 +250,14 @@ public class GameplayInteriorController : MonoBehaviour
             
             Destroy(CashUp, 2f);
         }
+    }
+    #endregion
+    #region Pause
+    public void PauseMenuOn()
+    {
+        PauseMenu.SetActive(true);
+        DoneLightUp = false;
+        isPausing = true;
     }
 
     public void PauseMenuOff()
@@ -274,6 +279,7 @@ public class GameplayInteriorController : MonoBehaviour
         Color c2 = PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
         c2.a = 0;
         PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c2;
+        isPausing = false;
     }
     #endregion
     #region SpaceZone Summary Menu

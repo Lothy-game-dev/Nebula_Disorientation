@@ -50,6 +50,8 @@ public class PlayerFighter : FighterShared
     public List<GameObject> ConsumableObject;
     public float audioScale;
     private float HealEffDelay;
+    private bool LightUp;
+    private float KeepTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -390,6 +392,7 @@ public class PlayerFighter : FighterShared
             }
         }
         ShowInfo();
+        LightUpAttackRange();
     }
     #endregion
     #region Play Sound
@@ -553,6 +556,63 @@ public class PlayerFighter : FighterShared
             HealEff.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 100f);
             Destroy(HealEff, 1f);
             yield return new WaitForSeconds(0.3f);
+        }
+    }
+    #endregion
+    #region
+    public void ShowAttackRange()
+    {
+        if (!LightUp)
+        {
+            LightUp = true;
+            Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+            c.a = 0f;
+            transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
+            Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+            c1.a = 0f;
+            transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+            transform.GetChild(14).gameObject.SetActive(true);
+            transform.GetChild(15).gameObject.SetActive(true);
+            KeepTimer = 1f;
+        } else
+        {
+            KeepTimer = 1f;
+        }
+    }
+
+    private void LightUpAttackRange()
+    {
+        if (LightUp)
+        {
+            if (transform.GetChild(14).GetComponent<SpriteRenderer>().color.a < 1)
+            {
+                Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+                c.a += Time.deltaTime;
+                transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
+                Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+                c1.a += Time.deltaTime;
+                transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+            } else
+            {
+                if (KeepTimer <= 0)
+                {
+                    LightUp = false;
+                } else
+                {
+                    KeepTimer -= Time.deltaTime;
+                }
+            }
+        } else
+        {
+            if (transform.GetChild(14).GetComponent<SpriteRenderer>().color.a > 0)
+            {
+                Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+                c.a -= Time.deltaTime;
+                transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
+                Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+                c1.a -= Time.deltaTime;
+                transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+            }
         }
     }
     #endregion

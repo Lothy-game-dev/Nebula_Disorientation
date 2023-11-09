@@ -92,7 +92,8 @@ public class CameraController : MonoBehaviour
     }
     private void LateUpdate()
     {
-        SetCameraPosition();
+        if (!InteriorController.isEnding && !InteriorController.isPausing)
+            SetCameraPosition();
     }
     #endregion
     #region Camera Position

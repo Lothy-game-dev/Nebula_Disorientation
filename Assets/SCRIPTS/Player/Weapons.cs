@@ -336,6 +336,10 @@ public class Weapons : MonoBehaviour
                     FireFlamethrowerOrb();
                     FireTimer = 1 / RateOfFire;
                 }
+                if (Fighter!=null && Fighter.GetComponent<PlayerFighter>()!=null)
+                {
+                    Fighter.GetComponent<PlayerFighter>().ShowAttackRange();
+                }
             }
         }
         if (ReloadBar!=null)
