@@ -32,6 +32,8 @@ public class CameraController : MonoBehaviour
     private float zoomTimer;
     private bool isPausing;
     private GameplayInteriorController InteriorController;
+    private Vector2 FollowPos;
+    private float LimitRange;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -74,19 +76,35 @@ public class CameraController : MonoBehaviour
         // Calculate Height And Width
         CameraHeight = 2 * cam.orthographicSize;
         CameraWidth = CameraHeight * cam.aspect;
-        SetCameraPosition();
+        if (FollowObject!=null && FollowObject.GetComponent<FighterShared>()!=null)
+        {
+            float LeftRange = FollowObject.GetComponent<FighterShared>().LeftWeapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaximumDistance == 0 ?
+               FollowObject.GetComponent<FighterShared>().LeftWeapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaxEffectiveDistance : 
+               FollowObject.GetComponent<FighterShared>().LeftWeapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaximumDistance;
+            float RightRange = FollowObject.GetComponent<FighterShared>().RightWeapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaximumDistance == 0 ?
+               FollowObject.GetComponent<FighterShared>().RightWeapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaxEffectiveDistance :
+               FollowObject.GetComponent<FighterShared>().RightWeapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaximumDistance;
+            LimitRange = LeftRange > RightRange ? LeftRange : RightRange;
+        }
+        
+    
 
+    }
+    private void LateUpdate()
+    {
+        SetCameraPosition();
     }
     #endregion
     #region Camera Position
     private void SetCameraPosition()
     {
+        GetPosition();
         // Follow Player And Limit In Boundary
         // Calculate Top Bottom Left Right position of the Camera
-        TopYPosition = FollowObject.transform.position.y + CameraHeight / 2;
-        BottomYPosition = FollowObject.transform.position.y - CameraHeight / 2;
-        LeftXPosition = FollowObject.transform.position.x - CameraWidth / 2;
-        RightXPosition = FollowObject.transform.position.x + CameraWidth / 2;
+        TopYPosition = FollowPos.y + CameraHeight / 2;
+        BottomYPosition = FollowPos.y - CameraHeight / 2;
+        LeftXPosition = FollowPos.x - CameraWidth / 2;
+        RightXPosition = FollowPos.x + CameraWidth / 2;
         // If those aforementioned position run off the boundary, set it back to the boundary
         if (TopYPosition > TopBoundary.transform.position.y)
         {
@@ -98,7 +116,7 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            PosY = FollowObject.transform.position.y;
+            PosY = FollowPos.y;
         }
         if (LeftXPosition < LeftBoundary.transform.position.x)
         {
@@ -110,10 +128,28 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            PosX = FollowObject.transform.position.x;
+            PosX = FollowPos.x;
         }
         // Set Position of Camera
         transform.position = new Vector3(PosX, PosY, transform.position.z);
+    }
+
+    private void GetPosition()
+    {
+        if (FollowObject!=null && FollowObject.GetComponent<PlayerFighter>()!=null && FollowObject.GetComponent<PlayerFighter>().Aim != null)
+        {
+            Vector2 TestPos = new Vector2((FollowObject.transform.position.x + FollowObject.GetComponent<PlayerFighter>().Aim.transform.position.x) / 2,
+            (FollowObject.transform.position.y + FollowObject.GetComponent<PlayerFighter>().Aim.transform.position.y) / 2);
+            if ((TestPos - new Vector2(FollowObject.transform.position.x,FollowObject.transform.position.y)).magnitude > LimitRange * 1.25f)
+            {
+                TestPos = new Vector2(FollowObject.transform.position.x, FollowObject.transform.position.y)
+                    + (TestPos - new Vector2(FollowObject.transform.position.x, FollowObject.transform.position.y)) * LimitRange * 1.25f / (TestPos - new Vector2(FollowObject.transform.position.x, FollowObject.transform.position.y)).magnitude;
+            }
+            FollowPos = TestPos;
+        } else
+        {
+            FollowPos = FollowObject.transform.position;
+        }
     }
     #endregion
     #region Main Gameplay Popup Screen

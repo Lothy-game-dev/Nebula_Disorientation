@@ -706,7 +706,7 @@ public class StatusBoard : MonoBehaviour
 
             //Setting to show current tempurature
             TemperText.gameObject.SetActive(true);
-            TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "ï¿½C";
+            TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
         } else
         {
             if (CloneEnemy.GetComponent<WSShared>() != null)
@@ -1154,11 +1154,19 @@ public class StatusBoard : MonoBehaviour
                                 ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
                             }
 
-                                           
-                            ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-                            = null;
-                            ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
-                            
+                            if (ModelRightWeapon != null)
+                            {
+                                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                                = null;
+                                ItemBox2.transform.GetChild(0).localScale = WeaponScale / 2;
+                                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+                            }
+                            else
+                            {
+                                ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
+                                = null;
+                                ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = "";
+                            }
                         }
                     }
                 }
@@ -1204,7 +1212,7 @@ public class StatusBoard : MonoBehaviour
                 }
 
                 //Setting to show current tempurature
-                TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "ï¿½C";
+                TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "°C";
             } else
             {
                 if (Enemy.GetComponent<WSShared>() != null)
@@ -1333,7 +1341,7 @@ public class StatusBoard : MonoBehaviour
                 if (ModelLeftWeapon != null)
                 {
                     ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-                    = Enemy.GetComponent<EnemyShared>() != null ? ModelLeftWeapon.GetComponent<Weapons>().ZatIconSprite : ModelLeftWeapon.GetComponent<Weapons>().IconSprite;
+                    = ModelLeftWeapon.GetComponent<SpriteRenderer>().sprite;
                     ItemBox1.transform.GetChild(0).localScale = WeaponScale;
                     ItemBox1.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(LeftWeaponName, "Weapon");
                 }
@@ -1346,7 +1354,7 @@ public class StatusBoard : MonoBehaviour
                 if (ModelRightWeapon != null)
                 {
                     ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite
-                    = Enemy.GetComponent<EnemyShared>() != null ? ModelRightWeapon.GetComponent<Weapons>().ZatIconSprite : ModelRightWeapon.GetComponent<Weapons>().IconSprite;
+                    = ModelRightWeapon.GetComponent<SpriteRenderer>().sprite;
                     ItemBox2.transform.GetChild(0).localScale = WeaponScale;
                     ItemBox2.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(RightWeaponName, "Weapon");
                 }

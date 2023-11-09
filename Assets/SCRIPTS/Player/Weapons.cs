@@ -935,8 +935,11 @@ public class Weapons : MonoBehaviour
             if (isOverheatted)
             {
                 isOverheatted = false;
-                ReloadBar.SetActive(true);
-                ReloadBar.GetComponent<Image>().fillAmount = 0;
+                if (ReloadBar!=null)
+                {
+                    ReloadBar.SetActive(true);
+                    ReloadBar.GetComponent<Image>().fillAmount = 0;
+                }
                 isWarning = false;
                 EndSound();
                 currentOverheat = 0f;

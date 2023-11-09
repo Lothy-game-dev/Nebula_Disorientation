@@ -17,6 +17,7 @@ public class PauseMenuOption : MonoBehaviour
     public Slider MusicVolumnSlider;
     public Slider SFXSlider;
     public GameplayInteriorController Interior;
+    public SoundSFXGeneratorController SFXGen;
     public GameObject FuelCell;
     #endregion
     #region NormalVariables
@@ -75,6 +76,7 @@ public class PauseMenuOption : MonoBehaviour
         Sound = SFXSlider.value.ToString();
         Interior.SFXVolumeScale = float.Parse(Sound);
         Interior.SoundVolume();
+        SFXGen.SoundScale = float.Parse(Master) / 100f * float.Parse(Sound) / 100f;
     }
 
     public void SaveData()
@@ -83,7 +85,7 @@ public class PauseMenuOption : MonoBehaviour
                                     Mathf.RoundToInt(float.Parse(Music)), Mathf.RoundToInt(float.Parse(Sound)), 
                                     Mathf.RoundToInt(float.Parse(Fps)), Resol);
         Application.targetFrameRate = int.Parse(Fps);
-        if ("FullScreen".Equals(Resol))
+        if ("fullscreen".Equals(Resol.ToLower()))
         {
             Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
         }

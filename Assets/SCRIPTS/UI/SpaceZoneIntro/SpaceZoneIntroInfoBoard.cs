@@ -45,10 +45,7 @@ public class SpaceZoneIntroInfoBoard : MonoBehaviour
             Item.transform.SetParent(transform);
             Item.transform.localScale = Template.transform.localScale;
             Item.transform.GetChild(4).GetComponent<TextMeshPro>().text = Data[i];
-            if (Data[i].Contains("power") || Data[i].Contains("weapon"))
-            {
-                Item.transform.GetChild(4).GetComponent<TextMeshPro>().horizontalAlignment = HorizontalAlignmentOptions.Center;
-            }
+            Item.transform.GetChild(4).GetComponent<TextMeshPro>().horizontalAlignment = HorizontalAlignmentOptions.Center;
             Item.transform.GetChild(2).gameObject.SetActive(false);
             Item.transform.GetChild(3).gameObject.SetActive(false);
             if (i==0)
