@@ -32,6 +32,7 @@ public class Arsenal : UECMenuShared
     public GameObject PowerButton;
     public GameObject WeaponButton;
     public GameObject BuyButton;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -400,6 +401,7 @@ public class Arsenal : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
+        Tutorial.SetActive(true);
         SetFirstData();
     }
 
@@ -407,6 +409,7 @@ public class Arsenal : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        Tutorial.SetActive(false);
         ResetData();
     }
     #endregion

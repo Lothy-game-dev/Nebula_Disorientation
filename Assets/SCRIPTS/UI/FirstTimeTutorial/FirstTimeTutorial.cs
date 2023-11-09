@@ -22,12 +22,12 @@ public class FirstTimeTutorial : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     public int Part;
+    public bool isShowAgain;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        // Initialize variables
         Part = 0;
         Tutorial();
     }
@@ -37,7 +37,8 @@ public class FirstTimeTutorial : MonoBehaviour
     {
         // Call function and timer only if possible
         if (Input.GetMouseButtonDown(0))
-        {          
+        {
+            Part++;
             Tutorial();
         }
     }
@@ -46,9 +47,8 @@ public class FirstTimeTutorial : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Tutorial()
     {
-        if (/*PlayerPrefs.GetString(Screen) == "T"*/ 1==1)
-        {
-            Part++;
+        if (PlayerPrefs.GetString(Screen) == "T" || isShowAgain)
+        {          
             for (int i = 0; i < Textbox.Count; i++)
             {
                 Color c = Textbox[i].GetComponent<SpriteRenderer>().color;
@@ -77,6 +77,7 @@ public class FirstTimeTutorial : MonoBehaviour
                 default:                   
                     PlayerPrefs.SetString(Screen, "F");
                     Part = 0;
+                    isShowAgain = false;
                     break;
             }
         }
@@ -84,10 +85,18 @@ public class FirstTimeTutorial : MonoBehaviour
 
     public void StartTutorial()
     {
-        Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Part - 1];
-        Textbox[Part - 1].SetActive(true);
-        BlackBG[Part - 1].SetActive(true);
-        StartCoroutine(StartAnimation());
+        if (Textbox.Count > Part - 1 && BlackBG.Count > Part - 1)
+        {
+            Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Part - 1];
+            Textbox[Part - 1].SetActive(true);
+            BlackBG[Part - 1].SetActive(true);
+            StartCoroutine(StartAnimation());
+        } else
+        {
+            PlayerPrefs.SetString(Screen, "F");
+            Part = 0;
+            isShowAgain = false;
+        }
        
     }
     #endregion

@@ -20,6 +20,7 @@ public class UECController : UECMenuShared
     public GameObject DailyMissionBar;
     public GameObject EnterBattleButton;
     public GameObject[] Planets;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     public bool isPlanetMoving;
@@ -302,12 +303,14 @@ public class UECController : UECMenuShared
         isPlanetMoving = true;
         CheckClickablePlanets();
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
+        Tutorial.SetActive(true);
     }
     public override void OnExitAnimation()
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
         isPlanetMoving = false;
+        Tutorial.SetActive(false);
     }
     #endregion
 }

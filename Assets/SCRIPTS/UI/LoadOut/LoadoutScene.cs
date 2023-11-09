@@ -21,6 +21,7 @@ public class LoadoutScene : UECMenuShared
     public GameObject FuelCell;
     public GameObject Factory;
     public GameObject BlackFade;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     public string LeftWeapon;
@@ -72,6 +73,7 @@ public class LoadoutScene : UECMenuShared
         Power2Bar.SetActive(true);
         ConsumableBar.SetActive(true);
         FighterDemo.SetActive(true);
+        Tutorial.SetActive(true);
         GetData();
     }
     public override void OnExitAnimation()
@@ -84,6 +86,7 @@ public class LoadoutScene : UECMenuShared
         Power2Bar.SetActive(false);
         ConsumableBar.SetActive(false);
         FighterDemo.SetActive(false);
+        Tutorial.SetActive(false);
     }
     #endregion
     #region On Enable Get Data
