@@ -156,6 +156,8 @@ public class SpaceZoneIntroBox : MonoBehaviour
             ItemNameFinal.Add("--main weapon--");
         }
         NewBoard = Instantiate(Board, transform.position, Quaternion.identity);
+        NewBoard.transform.localScale = new Vector3(NewBoard.transform.localScale.x * Camera.main.transform.localScale.x,
+            NewBoard.transform.localScale.y * Camera.main.transform.localScale.y, NewBoard.transform.localScale.z);
         NewBoard.GetComponent<SpaceZoneIntroInfoBoard>().Data = ItemNameFinal;
         NewBoard.GetComponent<SpaceZoneIntroInfoBoard>().GenerateData();
     }

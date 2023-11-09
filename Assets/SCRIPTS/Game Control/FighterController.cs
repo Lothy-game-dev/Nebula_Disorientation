@@ -358,10 +358,12 @@ public class FighterController : MonoBehaviour
             LeftWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
             LeftWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
             LeftWeaponGO.GetComponent<Weapons>().RateOfFire *= LOTWEffect.LOTWWeaponROFScale;
+            PlayerFighter.transform.GetChild(14).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFPositive"]));
             RightWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
             RightWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
             RightWeaponGO.GetComponent<Weapons>().RateOfFire *= LOTWEffect.LOTWWeaponROFScale;
             LeftWeaponGO.GetComponent<Weapons>().FighterWeaponDamageMod = float.Parse((string)statsDict["DM"]);
+            PlayerFighter.transform.GetChild(15).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFNegative"]));
             if (!LeftWeaponGO.GetComponent<Weapons>().IsThermalType)
             {
                 LeftWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = float.Parse((string)statsDict["AM"]);

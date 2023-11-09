@@ -50,6 +50,7 @@ public class PlayerFighter : FighterShared
     public List<GameObject> ConsumableObject;
     public float audioScale;
     private float HealEffDelay;
+    private Coroutine LightUpEffect;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -555,5 +556,47 @@ public class PlayerFighter : FighterShared
             yield return new WaitForSeconds(0.3f);
         }
     }
+    #endregion
+    #region
+    public void ShowAttackRange()
+    {
+        Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+        c.a = 0f;
+        transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
+        Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+        c1.a = 0f;
+        transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+        transform.GetChild(14).gameObject.SetActive(true);
+        transform.GetChild(15).gameObject.SetActive(true);
+        StartCoroutine(LightUp());
+    }
+
+    private IEnumerator LightUp()
+    {
+        for (int i=0; i<10;i++)
+        {
+            Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+            c.a += 0.1f;
+            transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
+            Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+            c1.a += 0.1f;
+            transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(1f);
+        for (int i=0; i<10; i++)
+        {
+            Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+            c.a -= 0.1f;
+            transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
+            Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+            c1.a -= 0.1f;
+            transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+            yield return new WaitForSeconds(0.1f);
+        }
+        transform.GetChild(14).gameObject.SetActive(false);
+        transform.GetChild(15).gameObject.SetActive(false);
+    }
+
     #endregion
 }
