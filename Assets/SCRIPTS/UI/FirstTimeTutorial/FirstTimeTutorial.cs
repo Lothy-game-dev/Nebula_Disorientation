@@ -13,16 +13,9 @@ public class FirstTimeTutorial : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject Textbox;
-    public GameObject BlackBG;
-    public GameObject FirstSectionPos;
-    public GameObject SecondSectionPos;
-    public GameObject ThirdSectionPos;
-    public GameObject FourthSectionPos;
-    public GameObject FirstSectionTextPos;
-    public GameObject SecondSectionTextPos;
-    public GameObject ThirdSectionTextPos;
-    public GameObject FourthSectionTextPos;
+    public string Screen;
+    public List<GameObject> Textbox;
+    public List<GameObject> BlackBG;
     public string[] Text;
     #endregion
     #region NormalVariables
@@ -35,7 +28,7 @@ public class FirstTimeTutorial : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        Part = 1;
+        Part = 0;
         Tutorial();
     }
 
@@ -44,8 +37,7 @@ public class FirstTimeTutorial : MonoBehaviour
     {
         // Call function and timer only if possible
         if (Input.GetMouseButtonDown(0))
-        {
-            Part++;
+        {          
             Tutorial();
         }
     }
@@ -54,40 +46,49 @@ public class FirstTimeTutorial : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Tutorial()
     {
-        Color c = Textbox.GetComponent<SpriteRenderer>().color;
-        c.a = 0;
-        Textbox.GetComponent<SpriteRenderer>().color = c;
-
-        Color c1 = Textbox.transform.GetChild(0).GetComponent<TextMeshPro>().color;
-        c1.a = 0;
-        Textbox.transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
-        
-        StopAllCoroutines();
-        
-        switch(Part)
+        if (/*PlayerPrefs.GetString(Screen) == "T"*/ 1==1)
         {
-            case 1: StartTutorial(FirstSectionPos, FirstSectionTextPos); break;
-            case 2: StartTutorial(SecondSectionPos, SecondSectionTextPos); break;
-            case 3: StartTutorial(ThirdSectionPos, ThirdSectionTextPos); break;
-            case 4: StartTutorial(FourthSectionPos, FourthSectionTextPos); break;
-            default:
-                Textbox.SetActive(false);
-                BlackBG.SetActive(false);
-                break;
+            Part++;
+            for (int i = 0; i < Textbox.Count; i++)
+            {
+                Color c = Textbox[i].GetComponent<SpriteRenderer>().color;
+                c.a = 0;
+                Textbox[i].GetComponent<SpriteRenderer>().color = c;
+
+                Color c1 = Textbox[i].transform.GetChild(0).GetComponent<TextMeshPro>().color;
+                c1.a = 0;
+                Textbox[i].transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
+                Textbox[i].SetActive(false);
+            }
+
+            for (int i = 0; i < BlackBG.Count; i++)
+            {
+                BlackBG[i].SetActive(false);
+            }
+        
+            StopAllCoroutines();
+        
+            switch(Part)
+            {
+                case 1: StartTutorial(); break;
+                case 2: StartTutorial(); break;
+                case 3: StartTutorial(); break;
+                case 4: StartTutorial(); break;
+                default:                   
+                    PlayerPrefs.SetString(Screen, "F");
+                    Part = 0;
+                    break;
+            }
         }
     }
 
-    public void StartTutorial(GameObject BlackBGPos, GameObject TextPos)
+    public void StartTutorial()
     {
-        Textbox.transform.position = TextPos.transform.position;
-        Textbox.transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Part - 1];
-        Textbox.SetActive(true);
+        Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Part - 1];
+        Textbox[Part - 1].SetActive(true);
+        BlackBG[Part - 1].SetActive(true);
         StartCoroutine(StartAnimation());
-        if (Part >= 2)
-        {
-            BlackBG.transform.position = BlackBGPos.transform.position;
-            BlackBG.SetActive(true);
-        }
+       
     }
     #endregion
     #region Animation
@@ -96,12 +97,12 @@ public class FirstTimeTutorial : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            Color c = Textbox.GetComponent<SpriteRenderer>().color;
+            Color c = Textbox[Part - 1].GetComponent<SpriteRenderer>().color;
             c.a += 0.1f;
-            Textbox.GetComponent<SpriteRenderer>().color = c;
-            Color c1 = Textbox.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+            Textbox[Part - 1].GetComponent<SpriteRenderer>().color = c;
+            Color c1 = Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color;
             c1.a += 0.1f;
-            Textbox.transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
+            Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
             yield return new WaitForSeconds(0.05f);
         }
     }

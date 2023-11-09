@@ -126,6 +126,11 @@ public class CinematicScene : MonoBehaviour
         {
             Destroy(bf);
             PlayerPrefs.DeleteKey("NewPilot");
+            PlayerPrefs.SetString("MainUEC", "T");
+            PlayerPrefs.SetString("Loadout", "T");
+            PlayerPrefs.SetString("Factory", "T");
+            PlayerPrefs.SetString("Arsenal", "T");
+            PlayerPrefs.SetString("SpaceShop", "T");
             UEC.SetActive(true);
             gameObject.SetActive(false);
         } else
