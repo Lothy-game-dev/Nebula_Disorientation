@@ -37,6 +37,7 @@ public class SpaceZoneIntroBackButton : MonoBehaviour
         Board.SetActive(false);
         foreach (var col in EnableColliders)
         {
+            if (col.GetComponent<Collider2D>())
             col.GetComponent<Collider2D>().enabled = true;
         }
     }

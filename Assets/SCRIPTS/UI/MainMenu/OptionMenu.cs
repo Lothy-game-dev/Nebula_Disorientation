@@ -72,7 +72,7 @@ public class OptionMenu : MainMenuSceneShared
         if (IsSaved)
         {
             Application.targetFrameRate = int.Parse(FpsCounter);
-            if ("FullScreen".Equals(Resol))
+            if ("fullscreen".Equals(Resol.ToLower()))
             {
                 Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
             } else
