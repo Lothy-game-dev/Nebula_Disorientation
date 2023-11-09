@@ -31,6 +31,7 @@ public class PlayerFighter : FighterShared
     public float TotalHealing;
     public GameplayInteriorController ControllerMain;
     public GameObject HealEffect;
+    public GameObject Aim;
     #endregion
     #region NormalVariables
     private float[] PowerAndConsCD;
