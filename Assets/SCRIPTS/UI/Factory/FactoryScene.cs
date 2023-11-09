@@ -14,6 +14,7 @@ public class FactoryScene : UECMenuShared
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
     public Factory FactoryController;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -42,6 +43,7 @@ public class FactoryScene : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
+        Tutorial.SetActive(true);
         FactoryController.SetFirstData();      
     }
 
@@ -49,6 +51,7 @@ public class FactoryScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        Tutorial.SetActive(false);
         FactoryController.ResetData();
     }
     #endregion

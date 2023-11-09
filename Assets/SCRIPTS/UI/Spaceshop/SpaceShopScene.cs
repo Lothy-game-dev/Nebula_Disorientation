@@ -12,6 +12,7 @@ public class SpaceShopScene : UECMenuShared
     #region InitializeVariables
     public GameObject Cash;
     public GameObject ListItem;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     private int CurrentCash;
@@ -37,6 +38,7 @@ public class SpaceShopScene : UECMenuShared
         ListItem.SetActive(true);
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
         CurrentCash = 0;
+        Tutorial.SetActive(true);
         SetData();
     }
 
@@ -44,6 +46,7 @@ public class SpaceShopScene : UECMenuShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+        Tutorial.SetActive(false);
         ListItem.SetActive(false);
     }
     #endregion
