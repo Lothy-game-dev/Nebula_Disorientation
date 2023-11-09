@@ -35,6 +35,7 @@ public class SpaceStationShared : MonoBehaviour
     public float CurrentBarrier;
     public float MaxBarrier;
     public float AuraRange;
+    public string SpaceStationName;
     public List<string> MainWeapon;
     public List<string> SupWeapon;
     public GameObject Weapons;
@@ -85,6 +86,7 @@ public class SpaceStationShared : MonoBehaviour
             aus.dopplerLevel = 0;
             aus.spread = 360;
         }
+        Status = StatusBoard.GetComponent<StatusBoard>();
     }
 
     // Update is called once per frame
@@ -208,6 +210,7 @@ public class SpaceStationShared : MonoBehaviour
             BountyShard = int.Parse(Bounty.Split("|")[1]);
         }
 
+        SpaceStationName = name;
         /*HPBar.SetPostion(new Vector3(transform.position.x + model.GetComponent<SpaceStationModelShared>().HPBarPosition.x, transform.position.y + model.GetComponent<SpaceStationModelShared>().HPBarPosition.y, transform.position.z));*/ 
         //Main Weapon
         if (data["MainWeapon"].ToString().Contains("|"))
@@ -234,7 +237,7 @@ public class SpaceStationShared : MonoBehaviour
                 {
                     GameObject main = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + WPPos.x, transform.position.y + WPPos.y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     main.transform.SetParent(gameObject.transform);
-                    main.transform.localScale = new Vector2(2f, 2f);
+                    main.transform.localScale = new Vector2(0.5f, 0.5f);
                     main.SetActive(true);
 
                     Weapons wp = main.GetComponent<Weapons>();
@@ -274,7 +277,7 @@ public class SpaceStationShared : MonoBehaviour
                 {
                     GameObject sup = Instantiate(Weapons.transform.GetChild(j).gameObject, new Vector3(transform.position.x + SupWPPos[i].x, transform.position.y + SupWPPos[i].y, Weapons.transform.GetChild(i).position.z), Quaternion.identity);
                     sup.transform.SetParent(gameObject.transform);
-                    sup.transform.localScale = new Vector2(2f, 2f);
+                    sup.transform.localScale = new Vector2(0.7f, 0.7f);
                     sup.SetActive(true);
 
 
@@ -470,7 +473,7 @@ public class SpaceStationShared : MonoBehaviour
     }
     #endregion
     #region check mouse
-    /*private void OnMouseOver()
+    private void OnMouseOver()
     {
         Status.Timer = 5f;
         Status.StartShowing(gameObject);
@@ -478,7 +481,7 @@ public class SpaceStationShared : MonoBehaviour
     private void OnMouseExit()
     {
         Status.CheckOnDestroy();
-    }*/
+    }
     #endregion
     #region Receive Damage
     public void ReceiveBombingDamage(float Damage, Vector2 BulletHitPos)
