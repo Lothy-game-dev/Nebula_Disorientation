@@ -28,6 +28,7 @@ public class WSShared : MonoBehaviour
     public bool IsEnemy;
     public NNModel MLBrain;
     public SpaceZoneHazardEnvironment HazEnv;
+    public GameObject WarshipStatus;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -38,6 +39,8 @@ public class WSShared : MonoBehaviour
     public float MaxBarrier;
     public float BaseSpeed;
     public float RotationSpd;
+    public string WarshipName;
+    public string Tier;
     private Dictionary<string, object> WsStat;
     private WSMovement WM;
     private float resetMovetimer;
@@ -86,6 +89,7 @@ public class WSShared : MonoBehaviour
     public GameObject NearestTarget;
     private float PlayerDamageReceive;
     public List<GameObject> Targets;
+    private StatusBoard Status;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -105,6 +109,7 @@ public class WSShared : MonoBehaviour
         Statistic = FindAnyObjectByType<StatisticController>();
         ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
         HPBar.SetValue(CurrentHP, MaxHP, true);
+        Status = WarshipStatus.GetComponent<StatusBoard>();
     }
 
     // Update is called once per frame
@@ -260,6 +265,12 @@ public class WSShared : MonoBehaviour
             }
         }
 
+        WarshipName = name;
+        switch (data["Tier"].ToString())
+        {
+            case "#4c9aff": Tier = "Tier II"; break;
+            case "#bf2600": Tier = "Tier I"; break;
+        }
         //Set head object
         Vector2 headpos = model.GetComponent<WarshipModelShared>().HeadPosition;
         GameObject headclone = Instantiate(Head, new Vector3(transform.position.x + headpos.x, transform.position.y + headpos.y, transform.position.z), Quaternion.identity);
@@ -1061,6 +1072,18 @@ public class WSShared : MonoBehaviour
                 }
             }
         }
+    }
+    #endregion
+    #region Check mouse
+    private void OnMouseOver()
+    {
+        Status.Timer = 5f;
+        Status.StartShowing(gameObject);
+    }
+
+    private void OnMouseExit()
+    {
+        Status.CheckOnDestroy();
     }
     #endregion
 }
