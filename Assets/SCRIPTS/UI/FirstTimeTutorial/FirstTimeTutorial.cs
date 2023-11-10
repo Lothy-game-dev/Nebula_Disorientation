@@ -30,6 +30,7 @@ public class FirstTimeTutorial : MonoBehaviour
     {
         Part = 0;
         Tutorial();
+        Debug.Log(PlayerPrefs.GetString(Screen));
     }
 
     // Update is called once per frame
