@@ -583,6 +583,9 @@ public class StatusBoard : MonoBehaviour
                             alreadyRight = true;
                             ModelRightWeapon = WsSsWeaponList[i];                          
                         }
+                    } else
+                    {
+                        ModelRightWeapon = null;
                     }
                 }
 
@@ -817,7 +820,7 @@ public class StatusBoard : MonoBehaviour
                 if (CloneEnemy.GetComponent<WSShared>().Tier == "Tier I")
                 {
                     TierText.GetComponent<TextMeshPro>().text = "Tier I";
-                    TierText.GetComponent<TextMeshPro>().color = new Color(0, 1, 0, 127 / 255f);
+                    TierText.GetComponent<TextMeshPro>().color = new Color(1, 0, 0, 127 / 255f);
                 }
                 else if (CloneEnemy.GetComponent<WSShared>().Tier == "Tier II")
                 {
@@ -1072,6 +1075,9 @@ public class StatusBoard : MonoBehaviour
                                 alreadyRight = true;
                                 ModelRightWeapon = WsSsWeaponList[i];
                             }
+                        } else
+                        {
+                            ModelRightWeapon = null;
                         }
                     }
 
