@@ -140,12 +140,9 @@ public class PlayerMovement : MonoBehaviour
         pf.CalculateVelocity(speedVector);
         CheckLimit();
         ShowAE();
-        if (LOTWEffect.LOTWAffectEnvironment)
+        if (HazEnv.HazardID == 2 || HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
         {
-            if (HazEnv.HazardID == 2 || HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
-            {
-                CheckForHazard();
-            }
+            CheckForHazard();
         }
         if (AccelEngineSpeedUpTimer > 0f)
         {

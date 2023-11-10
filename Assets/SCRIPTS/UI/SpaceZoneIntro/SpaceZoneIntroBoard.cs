@@ -620,7 +620,8 @@ public class SpaceZoneIntroBoard : MonoBehaviour
             int n = SpaceZoneNo / 50;
             if (ChosenEnemySS!="")
             {
-                NotableEnemiesName.Add(ChosenEnemySS);
+                if (ChosenEnemySS != "NO")
+                    NotableEnemiesName.Add(ChosenEnemySS);
             } else
             {
                 float k = Random.Range(1, 100f);

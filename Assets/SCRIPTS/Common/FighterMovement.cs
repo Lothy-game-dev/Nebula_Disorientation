@@ -686,48 +686,6 @@ public class FighterMovement : MonoBehaviour
             } else
             if (!als.Escort || als.EscortObject==null)
             {
-                if (als.Defend && als.DefendObject != null)
-                {
-                    if (als.LeftTarget != null && als.RightTarget != null)
-                    {
-                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
-                        {
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
-                    } else
-                    {
-                        GameObject DefendPlace = new GameObject();
-                        DefendPlace.transform.position = new Vector3(als.DefendObject.transform.position.x + xRandom,
-                            transform.position.y > als.DefendObject.transform.position.y ? transform.position.y + 500f : transform.position.y - 500f,
-                            transform.position.z);
-                        int k = CheckIsUpOrDownMovement(DefendPlace, HeadObject, gameObject);
-                        Destroy(DefendPlace);
-                        if (k == -1)
-                        {
-                            DownMove();
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            DownMove();
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            DownMove();
-                            RightMove();
-                        }
-                    }
-                }  else 
                 {
                     if (als.LeftTarget != null && als.RightTarget != null)
                     {
@@ -742,7 +700,7 @@ public class FighterMovement : MonoBehaviour
                                     if (CurrentSpeed / MovingSpeed < 0.5f)
                                     {
                                         UpMove();
-                                    } else
+                                    } else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                     {
                                         DownMove();
                                     }
@@ -759,7 +717,7 @@ public class FighterMovement : MonoBehaviour
                                     {
                                         UpMove();
                                     }
-                                    else
+                                    else if (CurrentSpeed / MovingSpeed >= 0.0f)
                                     {
                                         DownMove();
                                     }
@@ -781,7 +739,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else
+                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                 {
                                     DownMove();
                                 }
@@ -876,7 +834,7 @@ public class FighterMovement : MonoBehaviour
                 {
                     UpMove();
                 }
-                else
+                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                 {
                     DownMove();
                 }
@@ -931,7 +889,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else
+                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                 {
                                     DownMove();
                                 }
@@ -948,7 +906,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else
+                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                 {
                                     DownMove();
                                 }
@@ -970,7 +928,7 @@ public class FighterMovement : MonoBehaviour
                             {
                                 UpMove();
                             }
-                            else
+                            else if (CurrentSpeed / MovingSpeed >= 0.9f)
                             {
                                 DownMove();
                             }
