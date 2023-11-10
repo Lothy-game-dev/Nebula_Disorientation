@@ -355,15 +355,25 @@ public class FighterController : MonoBehaviour
             PlayerFighter.GetComponent<PlayerMovement>().MovingSpeed = int.Parse((string)statsDict["SPD"]) * LOTWEffect.LOTWMoveSpeedScale;
             PlayerFighter.GetComponent<PlayerMovement>().RotateSpeed = float.Parse((string)statsDict["ROT"]);
             PlayerFighter.GetComponent<PlayerMovement>().LOTWEffect = LOTWEffect;
+
             LeftWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
             LeftWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
             LeftWeaponGO.GetComponent<Weapons>().RateOfFire *= LOTWEffect.LOTWWeaponROFScale;
-            PlayerFighter.transform.GetChild(14).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFPositive"]));
             RightWeaponGO.GetComponent<Weapons>().RotateLimitNegative = int.Parse((string)statsDict["AOFNegative"]);
             RightWeaponGO.GetComponent<Weapons>().RotateLimitPositive = int.Parse((string)statsDict["AOFPositive"]);
             RightWeaponGO.GetComponent<Weapons>().RateOfFire *= LOTWEffect.LOTWWeaponROFScale;
+
+            if (int.Parse((string)statsDict["AOFPositive"]) < 180)
+            {
+                PlayerFighter.transform.GetChild(14).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFPositive"]));
+                PlayerFighter.transform.GetChild(15).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFNegative"]));
+            } else
+            {
+                PlayerFighter.transform.GetChild(14).localScale = new Vector3(0, 0, 0);
+                PlayerFighter.transform.GetChild(15).localScale = new Vector3(0, 0, 0);
+            }
+
             LeftWeaponGO.GetComponent<Weapons>().FighterWeaponDamageMod = float.Parse((string)statsDict["DM"]);
-            PlayerFighter.transform.GetChild(15).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFNegative"]));
             if (!LeftWeaponGO.GetComponent<Weapons>().IsThermalType)
             {
                 LeftWeaponGO.GetComponent<Weapons>().FighterWeaponAoEMod = float.Parse((string)statsDict["AM"]);

@@ -607,10 +607,10 @@ public class PlayerFighter : FighterShared
             if (transform.GetChild(14).GetComponent<SpriteRenderer>().color.a > 0)
             {
                 Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
-                c.a -= Time.deltaTime;
+                c.a -= 0.75f * Time.deltaTime;
                 transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
                 Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
-                c1.a -= Time.deltaTime;
+                c1.a -= 0.75f * Time.deltaTime;
                 transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
             }
         }
