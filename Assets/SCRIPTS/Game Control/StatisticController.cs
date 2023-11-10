@@ -167,7 +167,7 @@ public class StatisticController : MonoBehaviour
         {
             CurrentShardReward = 0;
         }
-        CurrentCashReward = 500 * (((CurrentSZNo - 1) / 10) + 1);
+        CurrentCashReward = 500 * (((CurrentSZNo / 20 + (CurrentSZNo / 10) % 2) / 2) / 2 + 1);
        
         //Update session stat
         ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);

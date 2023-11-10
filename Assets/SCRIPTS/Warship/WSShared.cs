@@ -474,7 +474,7 @@ public class WSShared : MonoBehaviour
             {
                 if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
                 {
-                    RealDamage = Damage * 10 / 100f;
+                    RealDamage = Damage * 1 / 100f;
                 }
                 else
                 {
@@ -483,7 +483,7 @@ public class WSShared : MonoBehaviour
             }
             else
             {
-                RealDamage = Damage * 10 / 100f;
+                RealDamage = Damage * 1 / 100f;
             }
         }
         else
