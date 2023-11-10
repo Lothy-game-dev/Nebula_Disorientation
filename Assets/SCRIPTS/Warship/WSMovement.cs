@@ -153,13 +153,7 @@ public class WSMovement : MonoBehaviour
                 GetAwayFromLimit();
             }
         }
-        if (HazEnv != null)
-        {
-            if (HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
-            {
-                CheckForHazard();
-            }
-        }
+        
     }
     private void FixedUpdate()
     {
@@ -906,27 +900,6 @@ public class WSMovement : MonoBehaviour
             }
         }
         return DirMov;
-    }
-    #endregion
-    #region Hazard
-    private void CheckForHazard()
-    {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (HeadObject.transform.position - transform.position).magnitude, HazardMask);
-        if (cols.Length > 0)
-        {
-            foreach (var col in cols)
-            {
-                if (col.name.Contains("RS"))
-                {
-                    if (wss != null)
-                    {
-                        wss.ReceiveTrueDamage(wss.MaxHP * 10 / 100f, col.transform.position);
-                        col.GetComponent<Collider2D>().enabled = false;
-                        col.GetComponent<SpaceZoneStar>().currentHP = 0;
-                    }
-                }
-            }
-        }
     }
     #endregion
     #region Sound

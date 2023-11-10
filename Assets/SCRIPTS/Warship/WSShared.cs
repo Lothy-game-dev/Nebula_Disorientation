@@ -13,6 +13,7 @@ public class WSShared : MonoBehaviour
     // Can be public or private
     private StatisticController Statistic;
     private GameController Controller;
+    private WSMovement wm;
     #endregion
     #region InitializeVariables
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
@@ -103,6 +104,7 @@ public class WSShared : MonoBehaviour
         EnemiesTier = FindObjectOfType<SpaceZoneGenerator>().EnemiesTier;
         FindAnyObjectByType<WSSSDetected>().DectectWSSS();
         WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
+        wm = GetComponent<WSMovement>();
         Order = WSSSDict[gameObject];
         isFighting = false;
         Controller = FindObjectOfType<GameController>();
@@ -241,6 +243,13 @@ public class WSShared : MonoBehaviour
             }
         }
         CheckBarrierAndHealth();
+        if (HazEnv != null)
+        {
+            if (HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
+            {
+                CheckForHazard();
+            }
+        }
     }
     #endregion
     #region Init data
@@ -1033,6 +1042,24 @@ public class WSShared : MonoBehaviour
     private void OnMouseExit()
     {
         Status.CheckOnDestroy();
+    }
+    #endregion
+    #region Hazard
+    private void CheckForHazard()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, (wm.HeadObject.transform.position - transform.position).magnitude, wm.HazardMask);
+        if (cols.Length > 0)
+        {
+            foreach (var col in cols)
+            {
+                if (col.name.Contains("RS"))
+                {
+                    ReceiveTrueDamage(MaxHP * 10 / 100f, col.transform.position);
+                    col.GetComponent<Collider2D>().enabled = false;
+                    col.GetComponent<SpaceZoneStar>().currentHP = 0;
+                }
+            }
+        }
     }
     #endregion
 }
