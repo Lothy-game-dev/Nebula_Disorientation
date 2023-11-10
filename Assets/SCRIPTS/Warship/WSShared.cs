@@ -493,33 +493,26 @@ public class WSShared : MonoBehaviour
             if (CurrentBarrier > RealDamage)
             {
                 CurrentBarrier -= RealDamage;
-                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
-                if (BarrierEffectDelay <= 0f)
-                {
-                    BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
-                    br.SetActive(true);
-                    br.transform.SetParent(transform);
-                    Destroy(br, 0.25f);
-                }
-                BarrierRegenTimer = 120f;
-                BarrierRegenAmount = 2500f;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);                
+                BarrierEffectDelay = 0.25f;
+                GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                br.SetActive(true);
+                br.transform.SetParent(transform);
+                Destroy(br, 0.25f);
+
             }
             else
             {
                 float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
-                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
-                if (BarrierEffectDelay <= 0f)
-                {
-                    BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);                
-                    br.SetActive(true);
-                    br.transform.SetParent(transform);
-                    Destroy(br, 0.25f);
-                }
-                BarrierRegenTimer = 120f;
-                BarrierRegenAmount = 2500f;
+                ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);              
+       
+                GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);                
+                br.SetActive(true);
+                br.transform.SetParent(transform);
+                Destroy(br, 0.25f);
+                
+
                 CurrentHP -= afterDamage;
                 HPBar.SetValue(CurrentHP, MaxHP, true);
             }
@@ -527,14 +520,12 @@ public class WSShared : MonoBehaviour
         else
         {
             Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
-            if (BarrierEffectDelay <= 0f)
-            {
-                BarrierEffectDelay = 0.25f;
-                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
-                BRBreak.SetActive(true);
-                BRBreak.transform.SetParent(transform);
-                Destroy(BRBreak, 0.5f);
-            }
+                            
+            GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+            BRBreak.SetActive(true);
+            BRBreak.transform.SetParent(transform);
+            Destroy(BRBreak, 0.5f);
+            
             if (CurrentHP >= RealDamage)
             {
                 CurrentHP -= RealDamage;
@@ -569,32 +560,24 @@ public class WSShared : MonoBehaviour
             {
                 CurrentBarrier -= RealDamage;
                 ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
-                if (BarrierEffectDelay <= 0f)
-                {
-                    BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
-                    br.SetActive(true);
-                    br.transform.SetParent(transform);
-                    Destroy(br, 0.25f);
-                }
-                BarrierRegenTimer = 120f;
-                BarrierRegenAmount = 2500f;
+                GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                br.SetActive(true);
+                br.transform.SetParent(transform);
+                Destroy(br, 0.25f);               
             }
             else
             {
                 float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
                 ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
-                if (BarrierEffectDelay <= 0f)
-                {
-                    BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
-                    br.SetActive(true);
-                    br.transform.SetParent(transform);
-                    Destroy(br, 0.25f);
-                }
-                BarrierRegenTimer = 120f;
-                BarrierRegenAmount = 2500f;
+
+ 
+                GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                br.SetActive(true);
+                br.transform.SetParent(transform);
+                Destroy(br, 0.25f);
+                
+
                 CurrentHP -= afterDamage;
                 HPBar.SetValue(CurrentHP, MaxHP, true);
             }
@@ -602,14 +585,12 @@ public class WSShared : MonoBehaviour
         else
         {
             Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
-            if (BarrierEffectDelay <= 0f)
-            {
-                BarrierEffectDelay = 0.25f;
-                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
-                BRBreak.SetActive(true);
-                BRBreak.transform.SetParent(transform);
-                Destroy(BRBreak, 0.5f);
-            }
+              
+            GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+            BRBreak.SetActive(true);
+            BRBreak.transform.SetParent(transform);
+            Destroy(BRBreak, 0.5f);
+            
             if (CurrentHP >= RealDamage)
             {
                 CurrentHP -= RealDamage;
@@ -648,32 +629,23 @@ public class WSShared : MonoBehaviour
             {
                 CurrentBarrier -= RealDamage;
                 ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
-                if (BarrierEffectDelay <= 0f)
-                {
-                    BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
-                    br.SetActive(true);
-                    br.transform.SetParent(transform);
-                    Destroy(br, 0.25f);
-                }
-                BarrierRegenTimer = 120f;
-                BarrierRegenAmount = 2500f;
+
+                GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                br.SetActive(true);
+                br.transform.SetParent(transform);
+                Destroy(br, 0.25f);
+
             }
             else
             {
                 float afterDamage = (RealDamage - CurrentBarrier);
                 CurrentBarrier = 0;
                 ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
-                if (BarrierEffectDelay <= 0f)
-                {
-                    BarrierEffectDelay = 0.25f;
-                    GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
-                    br.SetActive(true);
-                    br.transform.SetParent(transform);
-                    Destroy(br, 0.25f);
-                }
-                BarrierRegenTimer = 120f;
-                BarrierRegenAmount = 2500f;
+                GameObject br = Instantiate(Barrier, BulletHitPos, Quaternion.identity);
+                br.SetActive(true);
+                br.transform.SetParent(transform);
+                Destroy(br, 0.25f);
+ 
                 CurrentHP -= afterDamage;
                 HPBar.SetValue(CurrentHP, MaxHP, true);
             }
@@ -681,14 +653,12 @@ public class WSShared : MonoBehaviour
         else
         {
             Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSSSHit", gameObject);
-            if (BarrierEffectDelay <= 0f)
-            {
-                BarrierEffectDelay = 0.25f;
-                GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
-                BRBreak.SetActive(true);
-                BRBreak.transform.SetParent(transform);
-                Destroy(BRBreak, 0.5f);
-            }
+          
+            GameObject BRBreak = Instantiate(BarrierBreak, BulletHitPos, Quaternion.identity);
+            BRBreak.SetActive(true);
+            BRBreak.transform.SetParent(transform);
+            Destroy(BRBreak, 0.5f);
+            
             if (CurrentHP >= RealDamage)
             {
                 CurrentHP -= RealDamage;
@@ -920,27 +890,6 @@ public class WSShared : MonoBehaviour
     #region Check barrier and health
     public void CheckBarrierAndHealth()
     {
-        //Check barrier and regen barrier
-        /*BarrierRegenTimer -= Time.deltaTime;
-        BarrierRegenDelay -= Time.deltaTime;
-        BarrierEffectDelay -= Time.deltaTime;
-        if (BarrierRegenTimer <= 0f)
-        {
-            if (BarrierRegenDelay <= 0f && CurrentBarrier < MaxBarrier)
-            {
-                if (CurrentBarrier <= MaxBarrier - BarrierRegenAmount)
-                {
-                    CurrentBarrier += BarrierRegenAmount;
-                    BarrierRegenDelay = 1f;
-                }
-                else
-                {
-                    CurrentBarrier = MaxBarrier;
-                    BarrierRegenDelay = 1f;
-                }
-            }
-
-        }*/
 
         if (CurrentHP <= 0)
         {

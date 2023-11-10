@@ -43,6 +43,7 @@ public class UECController : UECMenuShared
         ad = FindObjectOfType<AccessDatabase>();
         controller = FindAnyObjectByType<UECMainMenuController>();
         CheckDailyMission();
+        Tutorial.SetActive(true);
     }
 
     // Update is called once per frame

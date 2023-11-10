@@ -574,16 +574,14 @@ public class StatusBoard : MonoBehaviour
                     if (WsSsWeaponList[i].name.Replace(" ", "").ToLower().Contains(LeftWeaponName.Replace(" ", "").ToLower()))
                     {                       
                         alreadyLeft = true;
-                        ModelLeftWeapon = WsSsWeaponList[i];
-                        Debug.Log(LeftWeaponName);
+                        ModelLeftWeapon = WsSsWeaponList[i];                     
                     }
                     if (RightWeaponName != "")
                     {
                         if (WsSsWeaponList[i].name.Replace(" ", "").ToLower().Contains(RightWeaponName.Replace(" ", "").ToLower()))
                         {
                             alreadyRight = true;
-                            ModelRightWeapon = WsSsWeaponList[i];
-                            Debug.Log(RightWeaponName);
+                            ModelRightWeapon = WsSsWeaponList[i];                          
                         }
                     }
                 }

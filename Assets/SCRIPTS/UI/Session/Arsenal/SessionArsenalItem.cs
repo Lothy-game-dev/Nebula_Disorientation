@@ -213,7 +213,7 @@ public class SessionArsenalItem : MonoBehaviour
         for (int i = 0; i < text.Length; i++)
         {
             ar.DescContent.GetComponent<TMP_Text>().text += text.Substring(i, 1);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.02f);
         }
         ar.DescContent.GetComponent<TMP_Text>().text += ItemReq;
 
