@@ -100,8 +100,7 @@ public class UECSessionScene : MonoBehaviour
         Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)SessionData["SessionCash"]).ToString();
         TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)SessionData["SessionTimelessShard"]).ToString();
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
-        Dictionary<string, object> datas = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)datas["FuelCell"];
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)SessionData["SessionFuelCore"];
         Consumables = new();
         // First Weapon
         FirstWeaponGO = new();
@@ -298,8 +297,7 @@ public class UECSessionScene : MonoBehaviour
         Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)SessionData["SessionCash"]).ToString();
         TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)SessionData["SessionTimelessShard"]).ToString();
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
-        Dictionary<string, object> datas = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)datas["FuelCell"];
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)SessionData["SessionFuelCore"];
         // Model
         string Model = (string)SessionData["Model"];
         string stats = FindObjectOfType<AccessDatabase>().GetFighterStatsByName(Model);

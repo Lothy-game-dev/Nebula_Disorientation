@@ -17,6 +17,7 @@ public class SpaceZoneSummaryButton : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     private StatisticController stat;
+    private bool alreadyFunction;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -36,23 +37,26 @@ public class SpaceZoneSummaryButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        if (Type=="NextSZInfo")
+        if (Type=="NextSZInfo" && !alreadyFunction)
         {
+            alreadyFunction = true;
             NextSZInfo.SetActive(true);
-        } else if (Type=="Continue")
+        } else if (Type=="Continue" && !alreadyFunction)
         {
+            alreadyFunction = true;
             stat.UpdateSessionPlaytime();
             PlayerPrefs.SetString("InitTeleport", "LOTW");
             SceneManager.UnloadSceneAsync("GameplayInterior");
             SceneManager.LoadSceneAsync("GameplayExterior");
-        } else if (Type=="BackToUEC")
+        } else if (Type=="BackToUEC" && !alreadyFunction)
         {
-            Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-            if ((int)ListData["FuelCell"] >= 1)
+            alreadyFunction = true;
+            Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+            if ((int)ListData["SessionFuelCore"] >= 1)
             {
                 /*FindObjectOfType<GameplayInteriorController>().GenerateBlackFadeClose(1f);
                 StartCoroutine(MoveToUEC());*/
-                FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
+                FindObjectOfType<AccessDatabase>().UpdateSessionFuelCore(PlayerPrefs.GetInt("PlayerID"), false);
                 FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(PlayerPrefs.GetInt("PlayerID"), "UEC");
                 PlayerPrefs.SetString("InitTeleport", "UEC");
                 SceneManager.UnloadSceneAsync("GameplayInterior");

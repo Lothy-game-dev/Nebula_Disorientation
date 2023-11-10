@@ -20,6 +20,7 @@ public class UECSessionButton : MonoBehaviour
     #region NormalVariables
     private float InitScaleX;
     private float InitScaleY;
+    private bool alreadyFunction;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -62,28 +63,32 @@ public class UECSessionButton : MonoBehaviour
     private void OnMouseDown()
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
-        if (Type=="Continue")
+        if (Type=="Continue" && !alreadyFunction)
         {
+            alreadyFunction = true;
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = Continue;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
                 "Ready to continue?");
  
-        } else if (Type=="NextSZInfo")
+        } else if (Type=="NextSZInfo" && !alreadyFunction)
         {
+            alreadyFunction = true;
             NextSZInfo.SetActive(true);
             foreach (var col in DisableColliders)
             {
                 if (col.GetComponent<Collider2D>() != null)
                     col.GetComponent<Collider2D>().enabled = false;
             }
-        } else if (Type=="SaveQuit")
+        } else if (Type=="SaveQuit" && !alreadyFunction)
         {
+            alreadyFunction = true;
             // Quit To MainMenu
             PlayerPrefs.SetFloat("CreateLoading", 1f);
             SceneManager.UnloadSceneAsync("GameplayExterior");
             SceneManager.LoadSceneAsync("MainMenu");
-        } else if (Type=="Retreat")
+        } else if (Type=="Retreat" && !alreadyFunction)
         {
+            alreadyFunction = true;
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = Retreat;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
                 "Retreat already?");
@@ -98,10 +103,10 @@ public class UECSessionButton : MonoBehaviour
 
     public void Retreat()
     {
-        Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-        if ((int)Data["FuelCell"] >= 1)
+        Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
+        if ((int)Data["SessionFuelCore"] >= 1)
         {
-            FindObjectOfType<AccessDatabase>().ReduceFuelCell(PlayerPrefs.GetInt("PlayerID"));
+            FindObjectOfType<AccessDatabase>().UpdateSessionFuelCore(PlayerPrefs.GetInt("PlayerID"), false);
             FindObjectOfType<GameplayExteriorController>().GenerateLoadingScene(2f);
             FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 4f);
             StartCoroutine(MoveToSessionSum());

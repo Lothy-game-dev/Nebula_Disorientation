@@ -54,9 +54,9 @@ public class PauseMenuOption : MonoBehaviour
 
         // Set data to fuel cell bar
         Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>()
-            .GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
+            .GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
-        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)ListData["FuelCell"];
+        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)ListData["SessionFuelCore"];
     }
 
     // Update is called once per frame

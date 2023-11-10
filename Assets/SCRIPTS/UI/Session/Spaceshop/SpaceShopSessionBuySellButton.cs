@@ -90,7 +90,7 @@ public class SpaceShopSessionBuySellButton : MonoBehaviour
                 {
                     if ((int)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"))["FuelCell"] <= 9)
                     {
-                        string checkCell = FindObjectOfType<AccessDatabase>().AddFuelCell(PlayerPrefs.GetInt("PlayerID"));
+                        string checkCell = FindObjectOfType<AccessDatabase>().UpdateSessionFuelCore(PlayerPrefs.GetInt("PlayerID"), true);
                         if ("No Data".Equals(checkCell))
                         {
                             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,

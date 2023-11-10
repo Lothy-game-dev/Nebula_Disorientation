@@ -88,10 +88,9 @@ public class StatisticController : MonoBehaviour
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
         TotalEnemyDefeated = 0;
         // Set data to fuel cell bar
-        Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-        CurrentFuelCell = (int)ListData["FuelCell"];
         Consumable = new Dictionary<string, int>();
         SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
+        CurrentFuelCell = (int)SessionInformation["SessionFuelCore"];
     }
 
     // Update is called once per frame

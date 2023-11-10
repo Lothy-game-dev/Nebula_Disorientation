@@ -80,7 +80,8 @@ public class SessionSummary : MonoBehaviour
         DamageDealt.transform.GetChild(0).GetComponent<TextMeshPro>().text = "<color=#3bccec>" + Data["DamageDealt"].ToString() + "</color>";
         FuelEnergy.transform.GetChild(0).GetComponent<TextMeshPro>().text = "<color=#3bccec>" + int.Parse(Data["EnemyDestroyed"].ToString()) + "</color>";
         SessionPlayTime.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Session Playtime: " + "<color=#3bccec>" + Data["TotalPlayedTime"].ToString() + "</color>";
-
+        string s = ad.ReturnrFuelCell(PlayerPrefs.GetInt("PlayerID"), (int)Data["SessionFuelCore"]);
+        Debug.Log("return cell:" + s);
         //Economy
         ShardAmount = (isFailed ? (int.Parse(Data["SessionTimelessShard"].ToString()) / 2) : int.Parse(Data["SessionTimelessShard"].ToString()));
         ShardAmount = (int.Parse(Data["SessionTimelessShard"].ToString()) % 2 == 1 ? ShardAmount + 1 : ShardAmount);
