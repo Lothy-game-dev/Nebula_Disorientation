@@ -55,7 +55,8 @@ public class AllySpaceStationSpawn : MonoBehaviour
                 game.GetComponent<SpriteRenderer>().sprite = SpaceStationModel.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
                 game.transform.localScale = SpaceStationModel.transform.GetChild(i).localScale;
                 game.name = data["SpaceStationName"].ToString();
-                game.AddComponent<PolygonCollider2D>();
+                game.AddComponent<CircleCollider2D>();
+                game.GetComponent<CircleCollider2D>().radius = SpaceStationModel.transform.GetChild(i).GetComponent<CircleCollider2D>().radius;
                 game.GetComponent<SpaceStationShared>().InitData(SpaceStationModel.transform.GetChild(i).gameObject, data);
             }
         }
