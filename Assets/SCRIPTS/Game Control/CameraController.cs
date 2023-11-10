@@ -141,7 +141,7 @@ public class CameraController : MonoBehaviour
         {
             Vector2 TestPos = new Vector2((FollowObject.transform.position.x + FollowObject.GetComponent<PlayerFighter>().Aim.transform.position.x) / 2,
             (FollowObject.transform.position.y + FollowObject.GetComponent<PlayerFighter>().Aim.transform.position.y) / 2);
-            LimitRange = isClose ? 50 : 200;
+            LimitRange = isClose ? 50 : 100;
             if ((TestPos - new Vector2(FollowObject.transform.position.x,FollowObject.transform.position.y)).magnitude > LimitRange)
             {
                 TestPos = new Vector2(FollowObject.transform.position.x, FollowObject.transform.position.y)
