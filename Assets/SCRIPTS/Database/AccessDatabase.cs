@@ -4074,7 +4074,7 @@ public class AccessDatabase : MonoBehaviour
         } else
         return dict;
     }
-    public bool CheckLOTWRepetable(int PlayerID)
+    public string CheckLOTWRepetable(int PlayerID)
     {
         OpenConnection();
         // Open DB
@@ -4096,21 +4096,44 @@ public class AccessDatabase : MonoBehaviour
         if (!check || sessionId == -1)
         {
             dbConnectionSave.Close();
-            return false;
+            return "Not Found";
         }
         else
         {
             // Queries
             IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND (CardID=34 OR CardID=26)"; 
+            dbCheckCommand.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=34"; 
             IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
             bool check2 = false;
             while (dataReader2.Read())
             {
                 check2 = true;
             }
-            dbConnectionSave.Close();
-            return check2;
+            
+            if (check2)
+            {
+                dbConnectionSave.Close();
+                return "34";
+            } else
+            {
+                // Queries
+                IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
+                dbCheckCommand2.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=26";
+                IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
+                while (dataReader3.Read())
+                {
+                    check2 = true;
+                }
+                if (check2)
+                {
+                    dbConnectionSave.Close();
+                    return "26";
+                } else
+                {
+                    dbConnectionSave.Close();
+                    return "";
+                }
+            }
         }
     }
 

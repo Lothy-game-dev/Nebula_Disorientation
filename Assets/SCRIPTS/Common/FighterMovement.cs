@@ -80,6 +80,8 @@ public class FighterMovement : MonoBehaviour
         {
             if (es.Escort)
                 StartMovingDelay = 3f;
+            else if (es.isBomb)
+                StartMovingDelay = Random.Range(3f, 6f);
             else
                 StartMovingDelay = 4f;
         }
@@ -130,7 +132,7 @@ public class FighterMovement : MonoBehaviour
                     {
                         if (CheckMovingDelay <= 0f)
                         {
-                            CheckMovingDelay = Random.Range(0.5f, 1f);
+                            CheckMovingDelay = Random.Range(0.25f, 0.5f);
                             CheckOnMoving();
                         }
                         else
@@ -684,48 +686,6 @@ public class FighterMovement : MonoBehaviour
             } else
             if (!als.Escort || als.EscortObject==null)
             {
-                if (als.Defend && als.DefendObject != null)
-                {
-                    if (als.LeftTarget != null && als.RightTarget != null)
-                    {
-                        int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
-                        if (k == -1)
-                        {
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            RightMove();
-                        }
-                    } else
-                    {
-                        GameObject DefendPlace = new GameObject();
-                        DefendPlace.transform.position = new Vector3(als.DefendObject.transform.position.x + xRandom,
-                            transform.position.y > als.DefendObject.transform.position.y ? transform.position.y + 500f : transform.position.y - 500f,
-                            transform.position.z);
-                        int k = CheckIsUpOrDownMovement(DefendPlace, HeadObject, gameObject);
-                        Destroy(DefendPlace);
-                        if (k == -1)
-                        {
-                            DownMove();
-                            LeftMove();
-                        }
-                        else if (k == 0)
-                        {
-                            DownMove();
-                            NoLeftRightMove();
-                        }
-                        else if (k == 1)
-                        {
-                            DownMove();
-                            RightMove();
-                        }
-                    }
-                }  else 
                 {
                     if (als.LeftTarget != null && als.RightTarget != null)
                     {
@@ -740,7 +700,7 @@ public class FighterMovement : MonoBehaviour
                                     if (CurrentSpeed / MovingSpeed < 0.5f)
                                     {
                                         UpMove();
-                                    } else
+                                    } else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                     {
                                         DownMove();
                                     }
@@ -757,7 +717,7 @@ public class FighterMovement : MonoBehaviour
                                     {
                                         UpMove();
                                     }
-                                    else
+                                    else if (CurrentSpeed / MovingSpeed >= 0.0f)
                                     {
                                         DownMove();
                                     }
@@ -767,19 +727,12 @@ public class FighterMovement : MonoBehaviour
                             }
                             else
                             {
-                                int test = InAttackRangeCount / 4;
-                                if (test > 5)
-                                {
-                                    als.TargetLeftEnemy();
-                                    als.TargetRightEnemy();
-                                    return;
-                                }
                                 int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
                                 if (CurrentSpeed / MovingSpeed < 0.5f)
                                 {
                                     UpMove();
                                 }
-                                else
+                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                 {
                                     DownMove();
                                 }
@@ -874,7 +827,7 @@ public class FighterMovement : MonoBehaviour
                 {
                     UpMove();
                 }
-                else
+                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                 {
                     DownMove();
                 }
@@ -897,7 +850,7 @@ public class FighterMovement : MonoBehaviour
             {
                 if (es.ForceTargetGO!=null)
                 {
-                    int k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject);
+                    int k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject, true);
                     UpMove();
                     if (k == -1)
                     {
@@ -929,7 +882,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else
+                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                 {
                                     DownMove();
                                 }
@@ -946,7 +899,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else
+                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                 {
                                     DownMove();
                                 }
@@ -956,19 +909,12 @@ public class FighterMovement : MonoBehaviour
                         }
                         else
                         {
-                            int test = InAttackRangeCount / 4;
-                            if (test > 5)
-                            {
-                                es.TargetLeftEnemy();
-                                es.TargetRightEnemy();
-                                return;
-                            }
                             int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
                             if (CurrentSpeed / MovingSpeed < 0.5f)
                             {
                                 UpMove();
                             }
-                            else
+                            else if (CurrentSpeed / MovingSpeed >= 0.9f)
                             {
                                 DownMove();
                             }
@@ -1059,7 +1005,7 @@ public class FighterMovement : MonoBehaviour
         }
     }
 
-    private int CheckIsUpOrDownMovement(GameObject Aim, GameObject ShootingPosition, GameObject RotatePoint)
+    private int CheckIsUpOrDownMovement(GameObject Aim, GameObject ShootingPosition, GameObject RotatePoint, bool LowAngle = false)
     {
         int DirMov = 0;
         Vector2 HeadToTarget = Aim.transform.position - ShootingPosition.transform.position;
@@ -1068,7 +1014,7 @@ public class FighterMovement : MonoBehaviour
         float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
         Vector2 TempPos = new Vector2(RotatePoint.transform.position.x, RotatePoint.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
         Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
-        float compareAngle = 45;
+        float compareAngle = LowAngle ? 5 : 45;
         if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
         {
             if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)

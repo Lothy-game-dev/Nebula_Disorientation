@@ -65,7 +65,7 @@ public class AlliesFighterMLAgent : Agent
             if (als.DelayTimer < 0f && !als.LeftFire)
             {
                 als.LeftFire = true;
-                LeftWeapon.AIShootBullet(fm.RotateDirection * actions.ContinuousActions[0] * 15);
+                LeftWeapon.AIShootBullet(als.LeftTarget.GetComponent<PlayerMovement>()!=null ? als.LeftTarget.GetComponent<PlayerMovement>().RotateDirection : als.LeftTarget.GetComponent<FighterMovement>().RotateDirection * actions.ContinuousActions[0] * 15);
                 als.DelayTimer = als.DelayBetween2Weap;
             }
         }
@@ -74,7 +74,7 @@ public class AlliesFighterMLAgent : Agent
             if (als.DelayTimer < 0f && als.LeftFire)
             {
                 als.LeftFire = false;
-                RightWeapon.AIShootBullet(fm.RotateDirection * actions.ContinuousActions[0] * 15);
+                RightWeapon.AIShootBullet(als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().RotateDirection : als.LeftTarget.GetComponent<FighterMovement>().RotateDirection * actions.ContinuousActions[0] * 15);
                 als.DelayTimer = als.DelayBetween2Weap;
             }
         }

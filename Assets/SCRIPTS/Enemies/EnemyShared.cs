@@ -391,7 +391,7 @@ public class EnemyShared : FighterShared
                 DelayBetween2Weap = (1 / LW.RateOfFire) / 2;
             }
             // Set Target
-            TargetRange = LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance >= RW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance ? LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance : LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
+            TargetRange = LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance <= RW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance ? LW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance : RW.Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
             TargetLeftEnemy();
             TargetRightEnemy();
             // Power
@@ -862,6 +862,14 @@ public class EnemyShared : FighterShared
                 check = true;
             }
         }
+        else if (DamageDealer != null)
+        {
+            LeftTarget = DamageDealer;
+            LeftWeapon.GetComponent<Weapons>().Aim = DamageDealer;
+            RightTarget = DamageDealer;
+            RightWeapon.GetComponent<Weapons>().Aim = DamageDealer;
+            check = false;
+        } 
         else check = true;
         if (check)
         {

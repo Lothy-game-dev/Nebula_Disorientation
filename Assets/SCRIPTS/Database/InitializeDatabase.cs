@@ -386,9 +386,9 @@ public class InitializeDatabase : MonoBehaviour
             "(7, 'Multi-layer Barrier I', 'DEF', 'RD-5', 3, 5, 'N', 'Y', '#03c800')," +
             "(8, 'Multi-layer Barrier II', 'DEF', 'RD-10', 3, 5, 'N', 'Y', '#03c800')," +
             "(9, 'Multi-layer Barrier III', 'DEF', 'RD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
-            "(10, 'Gun Extension I', 'OFF', 'AWD-5', 3, 5, 'N', 'Y', '#03c800')," +
+            "(10, 'Gun Extension I', 'OFF', 'AWD-2.5', 3, 5, 'N', 'Y', '#03c800')," +
             "(11, 'Gun Extension II', 'OFF', 'AWD-5', 3, 5, 'N', 'Y', '#03c800')," +
-            "(12, 'Gun Extension III', 'OFF', 'AWD-5', 2, 1000, 'Y', 'Y', '#0800ff')," +
+            "(12, 'Gun Extension III', 'OFF', 'AWD-2.5', 2, 1000, 'Y', 'Y', '#0800ff')," +
             "(13, 'Gun Heater I', 'OFF', 'TWD-7.5', 3, 5, 'N', 'Y', '#03c800')," +
             "(14, 'Gun Heater II', 'OFF', 'TWD-15', 3, 5, 'N', 'Y', '#03c800')," +
             "(15, 'Gun Heater III', 'OFF', 'TWD-7.5', 2, 1000, 'Y', 'Y', '#0800ff')," +

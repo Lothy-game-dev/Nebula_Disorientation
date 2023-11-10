@@ -79,7 +79,7 @@ public class FighterShared : MonoBehaviour
     public float DeadPushScale;
     //Statistic
     private Dictionary<string, object> EnemyData;
-    private GameObject DamageDealer;
+    public GameObject DamageDealer;
     private float PlayerDamageReceive;
     //LOTW
     public LOTWEffect LOTWEffect;
