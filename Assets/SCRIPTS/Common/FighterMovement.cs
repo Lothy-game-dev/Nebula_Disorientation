@@ -727,13 +727,6 @@ public class FighterMovement : MonoBehaviour
                             }
                             else
                             {
-                                int test = InAttackRangeCount / 4;
-                                if (test > 5)
-                                {
-                                    als.TargetLeftEnemy();
-                                    als.TargetRightEnemy();
-                                    return;
-                                }
                                 int k = CheckIsUpOrDownMovement(als.LeftTarget, HeadObject, gameObject);
                                 if (CurrentSpeed / MovingSpeed < 0.5f)
                                 {
@@ -916,13 +909,6 @@ public class FighterMovement : MonoBehaviour
                         }
                         else
                         {
-                            int test = InAttackRangeCount / 4;
-                            if (test > 5)
-                            {
-                                es.TargetLeftEnemy();
-                                es.TargetRightEnemy();
-                                return;
-                            }
                             int k = CheckIsUpOrDownMovement(es.LeftTarget, HeadObject, gameObject);
                             if (CurrentSpeed / MovingSpeed < 0.5f)
                             {
