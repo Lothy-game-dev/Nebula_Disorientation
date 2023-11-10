@@ -529,9 +529,9 @@ public class PlayerFighter : FighterShared
             MaxBarrier = 2000;
         } else
         {
-            MaxBarrier = MaxHP * br / 100;
-        }
-        
+            float baseHP = float.Parse(FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(FindAnyObjectByType<AccessDatabase>().GetFighterStatsByName(FighterName))["HP"].ToString());
+            MaxBarrier = baseHP * br / 100;
+        }      
         CurrentBarrier = MaxBarrier;
     }
 
