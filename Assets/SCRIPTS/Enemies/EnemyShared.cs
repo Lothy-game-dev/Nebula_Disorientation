@@ -100,6 +100,7 @@ public class EnemyShared : FighterShared
     {
         Status = EnemyStatus.GetComponent<StatusBoard>();
         InitializeFighter();
+        ShieldPassive();
     }
 
     private void Update()
@@ -435,12 +436,40 @@ public class EnemyShared : FighterShared
                     alreadySecond = true;
                 }
             }
+            
         }
         
         gameObject.SetActive(true);
         StartCoroutine(WaitForDoneInit());
     }
 
+    public void ShieldPassive()
+    {
+        float br = 0;
+        if (CurrentFirstPower != null)
+        {
+            if (CurrentFirstPower.GetComponent<Powers>().BR > 0)
+            {
+                br = CurrentFirstPower.GetComponent<Powers>().BR;
+            }
+        }
+        if (CurrentSecondPower != null)
+        {
+            if (CurrentSecondPower.GetComponent<Powers>().BR > 0)
+            {
+                br = CurrentSecondPower.GetComponent<Powers>().BR;
+            }
+        }
+        if (br == 0)
+        {
+            MaxBarrier = 2000;
+        }
+        else
+        {
+            MaxBarrier = float.Parse((string)StatsDataDict["HP"]) * br / 100;
+        }
+        CurrentBarrier = MaxBarrier;
+    }
     private void UseFirstPower()
     {
         if (Power1CD <= 0f && !isFrozen && !isSFBFreeze)
