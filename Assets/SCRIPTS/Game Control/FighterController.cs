@@ -84,6 +84,8 @@ public class FighterController : MonoBehaviour
             }
         }
         CurrentHP = (int)dataDict["SessionCurrentHP"];
+        PlayerFighter.GetComponent<PlayerFighter>().FighterName = DatabaseModel;
+
     }
     private void InitData()
     {
@@ -100,6 +102,8 @@ public class FighterController : MonoBehaviour
                 break;
             }
         }
+
+       
         // Change sprite on the model
         PlayerFighter.GetComponent<SpriteRenderer>().sprite = CurrentModel.GetComponent<SpriteRenderer>().sprite;
         // Calculate Weapon Pos based on Model
