@@ -80,6 +80,8 @@ public class FighterMovement : MonoBehaviour
         {
             if (es.Escort)
                 StartMovingDelay = 3f;
+            else if (es.isBomb)
+                StartMovingDelay = Random.Range(3f, 6f);
             else
                 StartMovingDelay = 4f;
         }
@@ -130,7 +132,7 @@ public class FighterMovement : MonoBehaviour
                     {
                         if (CheckMovingDelay <= 0f)
                         {
-                            CheckMovingDelay = Random.Range(0.5f, 1f);
+                            CheckMovingDelay = Random.Range(0.25f, 0.5f);
                             CheckOnMoving();
                         }
                         else
@@ -897,7 +899,7 @@ public class FighterMovement : MonoBehaviour
             {
                 if (es.ForceTargetGO!=null)
                 {
-                    int k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject);
+                    int k = CheckIsUpOrDownMovement(es.ForceTargetGO, HeadObject, gameObject, true);
                     UpMove();
                     if (k == -1)
                     {
@@ -1059,7 +1061,7 @@ public class FighterMovement : MonoBehaviour
         }
     }
 
-    private int CheckIsUpOrDownMovement(GameObject Aim, GameObject ShootingPosition, GameObject RotatePoint)
+    private int CheckIsUpOrDownMovement(GameObject Aim, GameObject ShootingPosition, GameObject RotatePoint, bool LowAngle = false)
     {
         int DirMov = 0;
         Vector2 HeadToTarget = Aim.transform.position - ShootingPosition.transform.position;
@@ -1068,7 +1070,7 @@ public class FighterMovement : MonoBehaviour
         float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
         Vector2 TempPos = new Vector2(RotatePoint.transform.position.x, RotatePoint.transform.position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
         Vector2 CheckPos = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + (TempPos - new Vector2(Aim.transform.position.x, Aim.transform.position.y)) * 2;
-        float compareAngle = 45;
+        float compareAngle = LowAngle ? 5 : 45;
         if (ShootingPosition.transform.position.x == RotatePoint.transform.position.x)
         {
             if (ShootingPosition.transform.position.y > RotatePoint.transform.position.y)
