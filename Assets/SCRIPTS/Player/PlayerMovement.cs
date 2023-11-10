@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     public float CurrentRotateAngle;
     private string CurrentKeyRotate;
     private string CurrentKeyMove;
-    private int RotateDirection;
+    public int RotateDirection;
     public float CurrentSpeed;
     private int SpeedUp;
     private bool Dashing;

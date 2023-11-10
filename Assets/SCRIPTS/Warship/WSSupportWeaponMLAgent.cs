@@ -60,7 +60,7 @@ public class WSSupportWeaponMLAgent : Agent
     {
         if (SPWeapon != null)
         {
-            SPWeapon.AIShootBullet((WS!=null ? WS.GetComponent<WSMovement>().RotateDirection : Random.Range(-1,2)) * actions.ContinuousActions[0] * 30);
+            SPWeapon.AIShootBullet((SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection : Random.Range(-1,2f)) * actions.ContinuousActions[0] * 15);
         }
     }
     #endregion
