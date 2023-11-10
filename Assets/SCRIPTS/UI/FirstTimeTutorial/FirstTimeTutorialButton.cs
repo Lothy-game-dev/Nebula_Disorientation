@@ -37,8 +37,8 @@ public class FirstTimeTutorialButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
+        ftt.isShowAgain = true;
         ftt.Part = 0;
-        ftt.Tutorial();
     }
     #endregion
     #region Function group ...
