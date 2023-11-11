@@ -774,7 +774,9 @@ public class Weapons : MonoBehaviour
         bul.EnemyLayer = EnemyLayer;
         bul.LOTWEffect = LOTWEffect;
         bulletFire.SetActive(true);
-        GenerateEffect();
+        
+            GenerateEffect();
+        
         if (Fighter.GetComponent<FighterShared>() != null) 
         // Increase overheat bar for each shot, increasing with themral status overloadded
         currentOverheat += OverheatIncreasePerShot * 
@@ -844,6 +846,21 @@ public class Weapons : MonoBehaviour
         if (Effect!=null)
         {
             GameObject Eff = Instantiate(Effect, ShootingPosition.transform.position, Quaternion.identity);
+            Eff.transform.localScale = Eff.transform.localScale * 30f;
+            Color c = Eff.transform.GetComponent<SpriteRenderer>().color;
+            c.a = 1f;
+            Eff.transform.GetComponent<SpriteRenderer>().color = c;
+            Eff.transform.SetParent(transform);
+            Eff.SetActive(true);
+            StartCoroutine(ShowEffect(Eff));
+        }
+    }
+
+    private void GenerateEffectForWS()
+    {
+        if (Effect != null)
+        {
+            GameObject Eff = Instantiate(Effect, ShootingPosition.transform.position * 10, Quaternion.identity);
             Eff.transform.localScale = Eff.transform.localScale * 30f;
             Color c = Eff.transform.GetComponent<SpriteRenderer>().color;
             c.a = 1f;
