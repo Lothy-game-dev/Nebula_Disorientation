@@ -104,6 +104,75 @@ public class LoadoutScene : UECMenuShared
         {
             // Do you want to move to factory
         }
+        bool newLeftWeapon = false;
+        bool newRightWeapon = false;
+        List<string> ListWeapon = FindObjectOfType<AccessDatabase>().GetAllOwnedWeapon(FindObjectOfType<UECMainMenuController>().PlayerId);
+        if (ListWeapon.Count > 0)
+        {
+            if (LeftWeapon == "")
+            {
+                newLeftWeapon = true;
+            }
+            else
+            {
+                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon, "Weapon");
+                if (n==0)
+                {
+                    newLeftWeapon = true;
+                } else if (n==1)
+                {
+                    if (RightWeapon!=null && RightWeapon == LeftWeapon)
+                    {
+                        newLeftWeapon = false;
+                        newRightWeapon = true;
+                    }
+                } else
+                {
+                    newLeftWeapon = false;
+                }
+            }
+            if (newLeftWeapon)
+            {
+                LeftWeapon = ListWeapon[0];
+                Weapon1Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, LeftWeapon, true);
+            } else
+            {
+                Weapon1Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, LeftWeapon, true);
+            }
+            if (RightWeapon=="")
+            {
+                newRightWeapon = true;
+            } else
+            {
+                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId, RightWeapon, "Weapon");
+                if (n == 0)
+                {
+                    newRightWeapon = true;
+                }
+                else if (n == 1)
+                {
+                    if (LeftWeapon != null && RightWeapon == LeftWeapon)
+                    {
+                        newLeftWeapon = false;
+                        newRightWeapon = true;
+                    }
+                }
+                else
+                {
+                    newRightWeapon = false;
+                }
+            }
+            if (newRightWeapon)
+            {
+                RightWeapon = ListWeapon[0];
+                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
+            } else
+            {
+                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
+            }
+        }
+        
+        
         int SP = 0;
         if (Model == "")
         {

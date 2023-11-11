@@ -17,7 +17,6 @@ public class SpaceZoneSummaryButton : MonoBehaviour
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
     private StatisticController stat;
-    private bool alreadyFunction;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -37,20 +36,17 @@ public class SpaceZoneSummaryButton : MonoBehaviour
     // Group all function that serve the same algorithm
     private void OnMouseDown()
     {
-        if (Type=="NextSZInfo" && !alreadyFunction)
+        if (Type=="NextSZInfo")
         {
-            alreadyFunction = true;
             NextSZInfo.SetActive(true);
-        } else if (Type=="Continue" && !alreadyFunction)
+        } else if (Type=="Continue")
         {
-            alreadyFunction = true;
             stat.UpdateSessionPlaytime();
             PlayerPrefs.SetString("InitTeleport", "LOTW");
             SceneManager.UnloadSceneAsync("GameplayInterior");
             SceneManager.LoadSceneAsync("GameplayExterior");
-        } else if (Type=="BackToUEC" && !alreadyFunction)
+        } else if (Type=="BackToUEC")
         {
-            alreadyFunction = true;
             Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
             if ((int)ListData["SessionFuelCore"] >= 1)
             {
