@@ -708,6 +708,11 @@ public class WSShared : MonoBehaviour
                 {
                     if (enemy.GetComponent<FighterShared>() != null)
                     {
+                        Nearest = enemy.gameObject;
+                        break;                       
+                    }
+                    else
+                    {
                         float distanceTest = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
                         if (distanceTest < distance)
                         {
@@ -715,17 +720,20 @@ public class WSShared : MonoBehaviour
                             Nearest = enemy.gameObject;
                         }
                     }
-                    else
-                    {
-                        continue;
-                    }
                 } else
                 {
-                    float distanceTest = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
-                    if (distanceTest < distance)
+                    if (enemy.GetComponent<WSShared>() != null)
                     {
-                        distance = distanceTest;
                         Nearest = enemy.gameObject;
+                        break;
+                    } else
+                    {
+                        float distanceTest = Mathf.Abs((enemy.transform.position - weapon.transform.position).magnitude);
+                        if (distanceTest < distance)
+                        {
+                            distance = distanceTest;
+                            Nearest = enemy.gameObject;
+                        }
                     }
                 }
             }
