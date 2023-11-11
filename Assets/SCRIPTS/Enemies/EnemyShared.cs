@@ -818,6 +818,19 @@ public class EnemyShared : FighterShared
                         RightWeapon.GetComponent<Weapons>().Aim = null;
                     }
                     check = true;
+                } else
+                {
+                    if (LeftTarget == ForceTargetGO)
+                    {
+                        LeftTarget = null;
+                        LeftWeapon.GetComponent<Weapons>().Aim = null;
+                    }
+                    if (RightTarget == ForceTargetGO)
+                    {
+                        RightTarget = null;
+                        RightWeapon.GetComponent<Weapons>().Aim = null;
+                    }
+                    check = true;
                 }
             }
         }

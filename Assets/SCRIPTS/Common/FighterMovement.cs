@@ -49,6 +49,7 @@ public class FighterMovement : MonoBehaviour
     private float StartMovingDelay;
     private float xRandom;
     private float yRandom;
+    private bool NoEscorting;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -60,6 +61,7 @@ public class FighterMovement : MonoBehaviour
         es = GetComponent<EnemyShared>();
         BackFireInitScale = backFire.transform.localScale.x;
         Movable = true;
+        NoEscorting = true;
         ExteriorROTSpeed = 1;
         LaserBeamSlowScale = 1;
         UpMove();
@@ -662,8 +664,10 @@ public class FighterMovement : MonoBehaviour
 
     private void CheckOnMoving()
     {
-        if (als!=null)
+        // Allies
+        if (als != null)
         {
+            // SSTP
             if (als.IsEscorting)
             {
                 GameObject go = new();
@@ -683,9 +687,29 @@ public class FighterMovement : MonoBehaviour
                 {
                     RightMove();
                 }
-            } else
-            if (!als.Escort || als.EscortObject==null)
+            }
+            // Other allies
+            else
             {
+                // Escort Map
+                if (als.Escort && als.EscortObject != null)
+                {
+                    if ((als.transform.position - als.EscortObject.transform.position).magnitude <= 500f)
+                    {
+                        NoEscorting = true;
+                    }
+                    else if ((als.transform.position - als.EscortObject.transform.position).magnitude >= 4000f)
+                    {
+                        NoEscorting = false;
+                    }
+                }
+                // No Escort
+                else if (!als.Escort || als.EscortObject == null)
+                {
+                    NoEscorting = true;
+                }
+                // Check based on cases
+                if (NoEscorting)
                 {
                     if (als.LeftTarget != null && als.RightTarget != null)
                     {
@@ -700,7 +724,8 @@ public class FighterMovement : MonoBehaviour
                                     if (CurrentSpeed / MovingSpeed < 0.5f)
                                     {
                                         UpMove();
-                                    } else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                                    }
+                                    else if (CurrentSpeed / MovingSpeed >= 0.9f)
                                     {
                                         DownMove();
                                     }
@@ -820,28 +845,29 @@ public class FighterMovement : MonoBehaviour
                         }
                     }
                 }
-            } else
-            {
-                int k = CheckIsUpOrDownMovement(als.EscortObject, HeadObject, gameObject);
-                if (CurrentSpeed / MovingSpeed < 0.5f)
+                else
                 {
-                    UpMove();
-                }
-                else if (CurrentSpeed / MovingSpeed >= 0.9f)
-                {
-                    DownMove();
-                }
-                if (k == -1)
-                {
-                    LeftMove();
-                }
-                else if (k == 0)
-                {
-                    NoLeftRightMove();
-                }
-                else if (k == 1)
-                {
-                    RightMove();
+                    int k = CheckIsUpOrDownMovement(als.EscortObject, HeadObject, gameObject, true);
+                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                    {
+                        UpMove();
+                    }
+                    else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                    {
+                        DownMove();
+                    }
+                    if (k == -1)
+                    {
+                        LeftMove();
+                    }
+                    else if (k == 0)
+                    {
+                        NoLeftRightMove();
+                    }
+                    else if (k == 1)
+                    {
+                        RightMove();
+                    }
                 }
             }
         } else if (es != null)
