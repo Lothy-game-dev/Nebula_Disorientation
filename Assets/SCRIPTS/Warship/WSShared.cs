@@ -922,7 +922,7 @@ public class WSShared : MonoBehaviour
 
     private IEnumerator DestroySelf()
     {       
-        Explosion.transform.localScale = transform.localScale / 1.5f;
+        Explosion.transform.localScale = transform.localScale * 3;
         Explosion.GetComponent<SpriteRenderer>().sortingOrder = 3;
         /* GetComponent<SpriteRenderer>().color = Color.black;*/
         GetComponent<PolygonCollider2D>().enabled = false;
@@ -941,23 +941,23 @@ public class WSShared : MonoBehaviour
         {
             GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
             expl.SetActive(true);
-            Destroy(expl, 0.3f);
+            Destroy(expl, 0.6f);
             yield return new WaitForSeconds(0.05f);
-            GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 400), transform.position.y + Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 300), transform.position.y + Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl2.SetActive(true);
-            Destroy(expl2, 0.3f);
+            Destroy(expl2, 0.6f);
             yield return new WaitForSeconds(0.05f);
-            GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 400), transform.position.y + Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 300), transform.position.y + Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl3.SetActive(true);
-            Destroy(expl3, 0.3f);
+            Destroy(expl3, 0.6f);
             yield return new WaitForSeconds(0.05f);
-            GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 400), transform.position.y - Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 300), transform.position.y - Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl4.SetActive(true);
-            Destroy(expl4, 0.3f);
+            Destroy(expl4, 0.6f);
             yield return new WaitForSeconds(0.05f);
-            GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 400), transform.position.y - Random.Range(100, 500), transform.position.z), Quaternion.identity);
+            GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 300), transform.position.y - Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl5.SetActive(true);
-            Destroy(expl5, 0.3f);
+            Destroy(expl5, 0.6f);
         }
     
 
