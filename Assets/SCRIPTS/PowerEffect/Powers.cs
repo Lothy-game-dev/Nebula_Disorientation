@@ -31,6 +31,7 @@ public class Powers : MonoBehaviour
     public float CD;
     public float BR;
     public float BRx;
+    public string Type;
     public AudioClip SoundEffect;
     public AudioClip ChargingSoundEffect;
     public GameplayInteriorController ControllerMain;
@@ -79,7 +80,9 @@ public class Powers : MonoBehaviour
                 if (PowerStats.ContainsKey("BRx"))
                 {
                     BRx = float.Parse(PowerStats["BRx"].ToString());
-                } break;
+                }
+                Type = "DEF";
+                break;
             case "Offensive":
                 DPH = float.Parse(PowerStats["DPH"].ToString());
                 AoH = int.Parse(PowerStats["AOH"].ToString());
@@ -88,10 +91,12 @@ public class Powers : MonoBehaviour
                 Range = float.Parse(PowerStats["R"].ToString());
                 Duration = float.Parse(PowerStats["Dur"].ToString());
                 CD = float.Parse(PowerStats["CD"].ToString()) * (LOTWEffect != null ? 1 / LOTWEffect.LOTWPowerCDScale : 1);
+                Type = "OFF";
                 break;
             case "Movement":
                 Range = float.Parse(PowerStats["R"].ToString());
                 CD = float.Parse(PowerStats["CD"].ToString()) * (LOTWEffect != null ? 1 / LOTWEffect.LOTWPowerCDScale : 1);
+                Type = "MOV";
                 break;
         }
 
