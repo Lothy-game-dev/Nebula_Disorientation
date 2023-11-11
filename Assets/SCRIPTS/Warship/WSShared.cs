@@ -73,6 +73,7 @@ public class WSShared : MonoBehaviour
     private bool AlreadyDestroy;
     public Dictionary<GameObject, GameObject> MainTarget;
     public float TargetRange;
+    public float SPTargetRange;
     public GameObject Head;
     public WSHealthBar HPBar;
     public WSHealthBar ShieldBar;
@@ -407,6 +408,11 @@ public class WSShared : MonoBehaviour
                     sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec = act;
                     sup.AddComponent<WSSupportWeaponMLAgent>();
                     sup.AddComponent<DecisionRequester>();
+
+                    if (i == 0)
+                    {
+                        SPTargetRange = wp.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>().MaxEffectiveDistance;
+                    }
                     SpWps.Add(sup);
                     break;
                 }
@@ -692,7 +698,7 @@ public class WSShared : MonoBehaviour
     }
     #endregion
     #region Target
-    private GameObject TargetEnemy(GameObject weapon)
+    public GameObject TargetEnemy(GameObject weapon)
     {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
