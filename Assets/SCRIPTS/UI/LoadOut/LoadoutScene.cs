@@ -209,8 +209,9 @@ public class LoadoutScene : UECMenuShared
             ConsText = ConsText.Substring(0, ConsText.Length - 1);
         }
 
+        int FuelCore = (int)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId)["FuelCell"];
         string check = FindObjectOfType<AccessDatabase>().AddNewSession(FindObjectOfType<UECMainMenuController>().PlayerId,
-            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, ConsCDText) ;
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, ConsCDText, FuelCore - 1);
         FindObjectOfType<AccessDatabase>().InputLoadoutSaveData(FindObjectOfType<UECMainMenuController>().PlayerId,
             Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, ConsCDText);
         if ("Success".Equals(check))
@@ -263,7 +264,7 @@ public class LoadoutScene : UECMenuShared
             BlackFade.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(2 / 50f);
         }
-        FindObjectOfType<AccessDatabase>().ReduceFuelCell(FindObjectOfType<UECMainMenuController>().PlayerId);
+        FindObjectOfType<AccessDatabase>().ClearFuelCell(FindObjectOfType<UECMainMenuController>().PlayerId);
         PlayerPrefs.SetInt("PlayerID", FindObjectOfType<UECMainMenuController>().PlayerId);
         PlayerPrefs.SetString("InitTeleport", "LOTW");
         SceneManager.UnloadSceneAsync("UECMainMenu");

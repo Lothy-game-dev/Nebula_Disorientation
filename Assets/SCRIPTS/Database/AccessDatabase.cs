@@ -425,6 +425,97 @@ public class AccessDatabase : MonoBehaviour
         }
     }
 
+    public string ClearFuelCell(int PlayerID)
+    {
+        OpenConnection();
+        // Open DB
+        dbConnectionSave.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerId =" + PlayerID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int cell = -1;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                cell = dataReader.GetInt32(0);
+            }
+        }
+        if (cell == -1)
+        {
+            dbConnectionSave.Close();
+            return "No Data";
+        }
+        else
+        {
+            if (cell <= 0)
+            {
+                dbConnectionSave.Close();
+                return "Full";
+            }
+            else
+            {
+                System.DateTime date = System.DateTime.Now;
+                string currentDateTime = date.ToString("dd/MM/yyyy HH:mm:ss");
+                IDbCommand dbCheck = dbConnectionSave.CreateCommand();
+                dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell = 0" +
+                    (cell == 10 ? ", LastFuelCellUsedTime = '" + currentDateTime + "'" : "") + " WHERE PlayerId =" + PlayerID;
+                int n = dbCheck.ExecuteNonQuery();
+                dbConnectionSave.Close();
+                if (n == 1)
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Fail";
+                }
+            }
+        }
+    }
+
+    public string ReturnrFuelCell(int PlayerID, int Count)
+    {
+        OpenConnection();
+        // Open DB
+        dbConnectionSave.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT FuelCell FROM PlayerProfile WHERE PlayerId =" + PlayerID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        int cell = -1;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                cell = dataReader.GetInt32(0);
+            }
+        }
+        if (cell == -1)
+        {
+            dbConnectionSave.Close();
+            return "No Data";
+        }
+        else
+        {
+            System.DateTime date = System.DateTime.Now;
+            string currentDateTime = date.ToString("dd/MM/yyyy HH:mm:ss");
+            IDbCommand dbCheck = dbConnectionSave.CreateCommand();
+            dbCheck.CommandText = "UPDATE PlayerProfile SET FuelCell =" + Count + " WHERE PlayerId =" + PlayerID;
+            int n = dbCheck.ExecuteNonQuery();
+            dbConnectionSave.Close();
+            if (n == 1)
+            {
+                return "Success";
+            }
+            else
+            {
+                return "Fail";
+            }
+        }
+    }
+
     public string CheckIfConvertable(int PlayerId, string ConvertFrom, string ConvertTo, string FromAmount, string ToAmount)
     {
         OpenConnection();
@@ -4420,7 +4511,7 @@ public class AccessDatabase : MonoBehaviour
     #endregion
     #region Access Session
     public string AddNewSession(int PlayerID, string Model, string LeftWeapon, string RightWeapon,
-        string FirstPower, string SecondPower, string Consumables, string PowerCD)
+        string FirstPower, string SecondPower, string Consumables, string PowerCD, int FuelCore)
     {
         OpenConnection();
         Debug.Log(Consumables);
@@ -4471,10 +4562,10 @@ public class AccessDatabase : MonoBehaviour
             Dictionary<string, object> data = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats);
             // Queries
             IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt, ConsumablesCD) VALUES " +
+            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt, ConsumablesCD, SessionFuelCore) VALUES " +
                 "(" + id + ",'',1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
-                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ",0,0, '"+ PowerCD + "');";
+                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ",0,0, '"+ PowerCD + "'," + FuelCore + ");";
             int n = dbCheckCommand.ExecuteNonQuery();
             if (n!=1)
             {
@@ -4723,10 +4814,55 @@ public class AccessDatabase : MonoBehaviour
                 datas.Add("EnemyDestroyed", dataReader2.GetInt32(18));
                 datas.Add("DamageDealt", dataReader2.GetInt32(19));
                 datas.Add("ConsumablesCD", dataReader2.GetString(20));
+                datas.Add("SessionFuelCore", dataReader2.GetInt32(21));
             }
             dbConnectionSave.Close();
             return datas;
         }
+    }
+
+    public string UpdateSessionFuelCore(int PlayerID, bool isIncrease)
+    {
+        OpenConnection();
+        // Open DB
+        dbConnectionSave.Open();
+        // Queries
+        IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
+        dbCheckCommand2.CommandText = "SELECT CurrentSession From PlayerProfile WHERE PlayerId=" + PlayerID;
+        IDataReader dataReader = dbCheckCommand2.ExecuteReader();
+        int n = 0;
+        bool check = false;
+        while (dataReader.Read())
+        {
+            if (!dataReader.IsDBNull(0))
+            {
+                check = true;
+                n = dataReader.GetInt32(0);
+            }
+        }
+        if (!check)
+        {
+            dbConnectionSave.Close();
+            return "Fail";
+        }
+        else
+        {
+            // Queries
+            IDbCommand dbCheckCommand3 = dbConnectionSave.CreateCommand();
+            dbCheckCommand3.CommandText = "UPDATE Session SET SessionFuelCore = SessionFuelCore " + (isIncrease ? "+ " : "- ")
+                + "1 WHERE SessionId=" + n;
+            int m = dbCheckCommand3.ExecuteNonQuery();
+            dbConnectionSave.Close();
+            if (m != 1)
+            {
+                return "Fail";
+            }
+            else
+            {
+                return "Success";
+            }
+        }
+
     }
 
     public string UpdateSessionCurrentHP(int PlayerID, bool isIncrease, int Amount)

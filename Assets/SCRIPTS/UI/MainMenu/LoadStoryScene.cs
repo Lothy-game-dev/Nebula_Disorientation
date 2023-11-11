@@ -42,7 +42,7 @@ public class LoadStoryScene : MainMenuSceneShared
     void Update()
     {
         // Call function and timer only if possible
-        CheckShowArrows();
+        /*CheckShowArrows();*/
         CheckPilotList();
     }
     #endregion

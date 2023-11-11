@@ -557,7 +557,7 @@ public class SpaceStationShared : MonoBehaviour
         {
             if (!Bullet.GetComponent<UsualKineticBullet>().isGravitationalLine)
             {
-                RealDamage = Damage * 10 / 100f;
+                RealDamage = Damage * 1 / 100f;
             }
             else
             {
@@ -566,7 +566,7 @@ public class SpaceStationShared : MonoBehaviour
         }
         else
         {
-            RealDamage = Damage * 10 / 100f;
+            RealDamage = Damage * 1 / 100f;
         }
         if (CurrentBarrier > 0)
         {

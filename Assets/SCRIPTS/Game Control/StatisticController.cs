@@ -88,10 +88,9 @@ public class StatisticController : MonoBehaviour
         InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
         TotalEnemyDefeated = 0;
         // Set data to fuel cell bar
-        Dictionary<string, object> ListData = ad.GetPlayerInformationById(PlayerPrefs.GetInt("PlayerID"));
-        CurrentFuelCell = (int)ListData["FuelCell"];
         Consumable = new Dictionary<string, int>();
         SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
+        CurrentFuelCell = (int)SessionInformation["SessionFuelCore"];
     }
 
     // Update is called once per frame
@@ -168,7 +167,7 @@ public class StatisticController : MonoBehaviour
         {
             CurrentShardReward = 0;
         }
-        CurrentCashReward = 500 * (((CurrentSZNo - 1) / 10) + 1);
+        CurrentCashReward = 500 * (((CurrentSZNo / 20 + (CurrentSZNo / 10) % 2) / 2) / 2 + 1);
        
         //Update session stat
         ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);

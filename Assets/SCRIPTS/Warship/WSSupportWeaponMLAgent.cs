@@ -60,7 +60,10 @@ public class WSSupportWeaponMLAgent : Agent
     {
         if (SPWeapon != null)
         {
-            SPWeapon.AIShootBullet((SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection : Random.Range(-1,2f)) * actions.ContinuousActions[0] * 15);
+            SPWeapon.AIShootBullet((float)(SPWeapon.Aim != null && SPWeapon.Aim.GetComponent<SpaceStationShared>() == null ?
+                    (SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection
+                    : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection
+                    : SPWeapon.Aim.GetComponent<WSMovement>() != null ? SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection : GetComponent<WSMovement>().RotateDirection) : GetComponent<WSMovement>().RotateDirection) * actions.ContinuousActions[0] * 15);
         }
     }
     #endregion
