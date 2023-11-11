@@ -77,6 +77,7 @@ public class StatusBoard : MonoBehaviour
     private SpaceStationShared SpaceStation;
     private WSShared Warship;
     private bool isTextTranUp;
+    private bool Showing;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -96,6 +97,14 @@ public class StatusBoard : MonoBehaviour
         }*/
 
         alreadyDelete = false;
+    }
+
+    private void OnEnable()
+    {
+        if (Showing)
+        {
+            StartCoroutine(DelayShow());
+        }
     }
 
     // Update is called once per frame
@@ -280,6 +289,7 @@ public class StatusBoard : MonoBehaviour
 
     private IEnumerator DelayShow()
     {
+        Showing = true;
         LastEnemy = Enemy;
         ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
         ItemBox2.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
@@ -477,7 +487,10 @@ public class StatusBoard : MonoBehaviour
             RightWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName2 : Enemy.GetComponent<AlliesShared>().weaponName2;
             FirstPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power1 : Enemy.GetComponent<AlliesShared>().Power1;
             SecondPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power2 : Enemy.GetComponent<AlliesShared>().Power2;
-
+            ModelLeftWeapon = null;
+            ModelRightWeapon = null;
+            ModelFirstPower = null;
+            ModelSecondPower = null;
             bool alreadyLeft = false;
             bool alreadyRight = false;
             for (int i=0;i<WeaponList.transform.childCount;i++)
@@ -757,10 +770,31 @@ public class StatusBoard : MonoBehaviour
         }
         startCounting = true;
         isShow = true;
+        Showing = false;
     }
 
     public void UpdateStatus()
     {
+        if (!NameBox.activeSelf)
+            NameBox.SetActive(true);
+        if (!ItemBox1.activeSelf)
+            ItemBox1.SetActive(true);
+        if (!ItemBox2.activeSelf)
+            ItemBox2.SetActive(true);
+        if (!HealthText.gameObject.activeSelf)
+            HealthText.gameObject.SetActive(true);
+        if (!HPBar.activeSelf)
+            HPBar.SetActive(true);
+        if (!BarrierText.gameObject.activeSelf)
+            BarrierText.gameObject.SetActive(true);
+        if (!BarrierBar.activeSelf)
+            BarrierBar.SetActive(true);
+        if (!TemperText.gameObject.activeSelf)
+            TemperText.gameObject.SetActive(true);
+        if (!TempBar.activeSelf)
+            TempBar.SetActive(true);
+        if (!TierText.activeSelf)
+            TierText.SetActive(true);
         if (Enemy != LastEnemy)
         {
             ItemBox1.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
@@ -878,7 +912,10 @@ public class StatusBoard : MonoBehaviour
                 RightWeaponName = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().weaponName2 : Enemy.GetComponent<AlliesShared>().weaponName2;
                 FirstPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power1 : Enemy.GetComponent<AlliesShared>().Power1;
                 SecondPower = Enemy.GetComponent<EnemyShared>() != null ? Enemy.GetComponent<EnemyShared>().Power2 : Enemy.GetComponent<AlliesShared>().Power2;
-
+                ModelLeftWeapon = null;
+                ModelRightWeapon = null;
+                ModelFirstPower = null;
+                ModelSecondPower = null;
                 bool alreadyLeft = false;
                 bool alreadyRight = false;
                 if (LeftWeaponName == null || LeftWeaponName == "Transport" || LeftWeaponName== "SuicideBombing")

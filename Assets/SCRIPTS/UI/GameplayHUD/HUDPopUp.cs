@@ -42,5 +42,10 @@ public class HUDPopUp : MonoBehaviour
     {
         showTimer = 1f;
     }
+
+    private void OnDisable()
+    {
+        Popup.SetActive(false);
+    }
     #endregion
 }

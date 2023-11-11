@@ -373,6 +373,11 @@ public class PlayerFighter : FighterShared
             {
                 FindObjectOfType<CameraController>().PauseGame();
             }
+            // Pause
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                ControllerMain.HideHUD();
+            }
         }
         // Timer Decrease
         for (int i=0;i<6;i++)
