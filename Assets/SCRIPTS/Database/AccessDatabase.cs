@@ -93,8 +93,8 @@ public class AccessDatabase : MonoBehaviour
             return "Exist";
         }
         IDbCommand dbCommand = dbConnectionSave.CreateCommand();
-        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo,DailyIncomeShard) " +
-            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0)";
+        dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo,DailyIncomeShard,NewPilotTutorial) " +
+            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0, 'Cinematic|MainUEC|Arsenal|Factory|SpaceShop|Loadout|LOTW|Gameplay|SSSum|UECS|ArsenalS|SpaceShopS|Service|SSum|PA')";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
@@ -300,6 +300,7 @@ public class AccessDatabase : MonoBehaviour
                 }
                 values.Add("SupremeWarriorNo", dataReader.GetInt32(12));
                 values.Add("DailyIncomeShard", dataReader.GetInt32(13));
+                values.Add("NewPilotTutorial", dataReader.GetString(14));
 
             }
             dbConnectionData.Close();
@@ -994,6 +995,42 @@ public class AccessDatabase : MonoBehaviour
         {
             IDbCommand dbCommand = dbConnectionSave.CreateCommand();
             dbCommand.CommandText = "UPDATE PlayerProfile SET FuelEnergy = FuelEnergy + " + amount + " WHERE PlayerID=" + PlayerId;
+            int n = dbCommand.ExecuteNonQuery();
+            dbConnectionSave.Close();
+            if (n != 1)
+            {
+                return "Fail";
+            }
+            else
+            {
+                return "Success";
+            }
+        }
+    }
+    public string UpdateTutorialProgress(int PlayerId, string progress)
+    {
+        OpenConnection();
+        // Open DB
+        dbConnectionSave.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT Name FROM PlayerProfile WHERE PlayerID=" + PlayerId;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            break;
+        }
+        if (!check)
+        {
+            dbConnectionSave.Close();
+            return "No Exist";
+        }
+        else
+        {
+            IDbCommand dbCommand = dbConnectionSave.CreateCommand();
+            dbCommand.CommandText = "UPDATE PlayerProfile SET NewPilotTutorial = '"+progress+"' WHERE PlayerID=" + PlayerId;
             int n = dbCommand.ExecuteNonQuery();
             dbConnectionSave.Close();
             if (n != 1)
