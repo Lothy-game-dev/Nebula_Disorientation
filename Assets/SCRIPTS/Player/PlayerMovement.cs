@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask HazardMask;
     public GameplayInteriorController ControllerMain;
     public SpaceZoneHazardEnvironment HazEnv;
+    public GameObject Indicator;
     #endregion
     #region NormalVariables
     public GameObject PlayerIcon;
@@ -76,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.GetChild(13).transform.position = transform.position + new Vector3(-1.8f, 79.5f, 0f);
+        Indicator.transform.position = transform.position + new Vector3(-1.8f, 79.5f, 0f);
         if (DelayAERechargeTimer <= 0f)
         {
             if (AEEnergy < 100f)
@@ -225,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
         // Fire and Freeze eff not rotate
         FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
         FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
-        transform.GetChild(13).Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
+        Indicator.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
     }
     // Detect Player's Input Cases for W and S
     void DetectWSButton()

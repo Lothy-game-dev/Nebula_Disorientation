@@ -22,6 +22,7 @@ public class GameplayInteriorController : MonoBehaviour
     public GameObject Template;
     public GameSavedText SaveText;
     public GameObject HUDMain;
+    public GameObject PlayerHUD;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -291,10 +292,12 @@ public class GameplayInteriorController : MonoBehaviour
         {
             isHidingHUD = false;
             HUDMain.SetActive(true);
+            PlayerHUD.SetActive(true);
         } else
         {
             isHidingHUD = true;
             HUDMain.SetActive(false);
+            PlayerHUD.SetActive(false);
         }
     }
     #endregion
