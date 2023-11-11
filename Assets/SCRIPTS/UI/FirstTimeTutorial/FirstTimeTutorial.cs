@@ -21,26 +21,46 @@ public class FirstTimeTutorial : MonoBehaviour
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
-    public int Part;
+    public int Section;
     public bool isShowAgain;
+    private Dictionary<string, object> PlayerInformation;
+    private int PlayerID;
+    private bool isNew;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     private void OnEnable()
     {
-        Part = 0;
+        PlayerID = FindAnyObjectByType<UECMainMenuController>().PlayerId;
+        PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerID);
+
+        string[] UpdatedProgress = PlayerInformation["NewPilotTutorial"].ToString().Split("|");
+        List<string> ProgressList = new List<string>(UpdatedProgress);
+        
+        if (ProgressList.IndexOf(Screen) != -1)
+        {
+            isNew = true;
+            ProgressList.RemoveAt(ProgressList.IndexOf(Screen));
+            string newProgress = string.Join("|", ProgressList);
+            FindAnyObjectByType<AccessDatabase>().UpdateTutorialProgress(PlayerID, newProgress);
+        }
+
+        
+        Section = 1;
         Tutorial();
-        Debug.Log(PlayerPrefs.GetString(Screen));
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
-        if (Input.GetMouseButtonDown(0))
+        if (gameObject.activeSelf)
         {
-            Part++;
-            Tutorial();
+            if (Input.GetMouseButtonDown(0))
+            {
+                Section++;
+                Tutorial();
+            }
         }
     }
     #endregion
@@ -48,8 +68,9 @@ public class FirstTimeTutorial : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Tutorial()
     {
-        if (PlayerPrefs.GetString(Screen) == "T" || isShowAgain)
+        if (isNew || isShowAgain)
         {          
+            // turn off all textbox and black background
             for (int i = 0; i < Textbox.Count; i++)
             {
                 Color c = Textbox[i].GetComponent<SpriteRenderer>().color;
@@ -68,35 +89,25 @@ public class FirstTimeTutorial : MonoBehaviour
             }
         
             StopAllCoroutines();
-        
-            switch(Part)
-            {
-                case 1: StartTutorial(); break;
-                case 2: StartTutorial(); break;
-                case 3: StartTutorial(); break;
-                case 4: StartTutorial(); break;
-                default:                   
-                    PlayerPrefs.SetString(Screen, "F");
-                    Part = 0;
-                    isShowAgain = false;
-                    break;
-            }
+            StartTutorial();
         }
     }
 
     public void StartTutorial()
     {
-        if (Textbox.Count > Part - 1 && BlackBG.Count > Part - 1)
+        if (Textbox.Count > Section - 1 && BlackBG.Count > Section - 1)
         {
-            Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Part - 1];
-            Textbox[Part - 1].SetActive(true);
-            BlackBG[Part - 1].SetActive(true);
+            Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Section - 1];
+            Textbox[Section - 1].SetActive(true);
+            BlackBG[Section - 1].SetActive(true);
             StartCoroutine(StartAnimation());
         } else
         {
-            PlayerPrefs.SetString(Screen, "F");
-            Part = 0;
+            PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerID);           
+            Section = 0;
             isShowAgain = false;
+            isNew = false;
+            
         }
        
     }
@@ -107,12 +118,12 @@ public class FirstTimeTutorial : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            Color c = Textbox[Part - 1].GetComponent<SpriteRenderer>().color;
+            Color c = Textbox[Section - 1].GetComponent<SpriteRenderer>().color;
             c.a += 0.1f;
-            Textbox[Part - 1].GetComponent<SpriteRenderer>().color = c;
-            Color c1 = Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color;
+            Textbox[Section - 1].GetComponent<SpriteRenderer>().color = c;
+            Color c1 = Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color;
             c1.a += 0.1f;
-            Textbox[Part - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
+            Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
             yield return new WaitForSeconds(0.05f);
         }
     }
