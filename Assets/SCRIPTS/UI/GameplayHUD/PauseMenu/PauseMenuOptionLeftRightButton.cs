@@ -46,7 +46,7 @@ public class PauseMenuOptionLeftRightButton : MonoBehaviour
         if (Contents.Contains(Text.text))
         {
             available = true;
-            currentIndex = Contents.IndexOf(Text.text);
+            currentIndex = Contents.IndexOf(Text.text.ToLower());
         }
     }
 
