@@ -632,7 +632,18 @@ public class WSMovement : MonoBehaviour
                         int k = CheckIsUpOrDownMovement(wss.MainTarget[wss.MainWps[0]], HeadObject, gameObject);
                         if (k == -1)
                         {
-                            DownMove();
+                            if (CurrentSpeed / MovingSpeed >= 1f)
+                            {
+                                Debug.Log("Khangdeptrai");
+                                DownMove();
+                            } else
+                            {
+                                if (CurrentSpeed / MovingSpeed < 0.5f)
+                                {
+                                    Debug.Log("Khangdeptrai1");
+                                    UpMove();
+                                }
+                            }
                             LeftMove();
                         }
                         else if (k == 0)
@@ -642,7 +653,14 @@ public class WSMovement : MonoBehaviour
                         }
                         else if (k == 1)
                         {
-                            DownMove();
+                            if (CurrentSpeed / MovingSpeed >= 1f)
+                            {
+                                DownMove();
+                            }
+                            else
+                            {
+                                UpMove();
+                            }
                             RightMove();
                         }
                         InAttackRangeCount = 1;
@@ -700,7 +718,19 @@ public class WSMovement : MonoBehaviour
                         int k = CheckIsUpOrDownMovement(wss.MainTarget[wss.MainWps[0]], HeadObject, gameObject);
                         if (k == -1)
                         {
-                            DownMove();
+                            if (CurrentSpeed / MovingSpeed >= 1f)
+                            {
+                                Debug.Log("Khangdeptrai");
+                                DownMove();
+                            }
+                            else
+                            {
+                                if (CurrentSpeed / MovingSpeed < 0.5f)
+                                {
+                                    Debug.Log("Khangdeptrai1");
+                                    UpMove();
+                                }
+                            }
                             LeftMove();
                         }
                         else if (k == 0)
@@ -710,7 +740,19 @@ public class WSMovement : MonoBehaviour
                         }
                         else if (k == 1)
                         {
-                            DownMove();
+                            if (CurrentSpeed / MovingSpeed >= 1f)
+                            {
+                                Debug.Log("Khangdeptrai");
+                                DownMove();
+                            }
+                            else
+                            {
+                                if (CurrentSpeed / MovingSpeed < 0.5f)
+                                {
+                                    Debug.Log("Khangdeptrai1");
+                                    UpMove();
+                                }
+                            }
                             RightMove();
                         }
                     }
@@ -719,21 +761,166 @@ public class WSMovement : MonoBehaviour
             }
             else
             {
-                int k = 0;
-                wss.TargetNearestTarget();
-                k = CheckIsUpOrDownMovement(wss.NearestTarget, HeadObject, gameObject);
-                UpMove();
-                if (k == -1)
+                if (wss.SpWeaponTargets[wss.SpWps[0]] != null)
                 {
-                    LeftMove();
-                }
-                else if (k == 0)
+                    wss.NearestTarget = null;
+                    if ((wss.SpWeaponTargets[wss.SpWps[0]].transform.position - transform.position).magnitude <= wss.SPTargetRange / 2)
+                    {
+                        if (!inAttackRange)
+                        {
+                            int k = CheckIsUpOrDownMovement(wss.SpWeaponTargets[wss.SpWps[0]], HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                if (CurrentSpeed / MovingSpeed >= 1f)
+                                {
+                                    Debug.Log("Khangdeptrai");
+                                    DownMove();
+                                }
+                                else
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        Debug.Log("Khangdeptrai1");
+                                        UpMove();
+                                    }
+                                }
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                UpMove();
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                if (CurrentSpeed / MovingSpeed >= 1f)
+                                {
+                                    Debug.Log("Khangdeptrai");
+                                    DownMove();
+                                }
+                                else
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        Debug.Log("Khangdeptrai1");
+                                        UpMove();
+                                    }
+                                }
+                                RightMove();
+                            }
+                            InAttackRangeCount = 1;
+                        }
+                        else
+                        {
+                            int test = InAttackRangeCount / 4;
+                            if (test > 5)
+                            {
+                                foreach (var weapon in wss.SpWps)
+                                {
+                                    wss.SpWeaponTargets[wss.SpWps[0]] = wss.TargetEnemy(weapon);
+                                }
+                                return;
+                            }
+                            int k = CheckIsUpOrDownMovement(wss.SpWeaponTargets[wss.SpWps[0]], HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
+                            InAttackRangeCount++;
+                        }
+                        inAttackRange = true;
+                    }
+                    else
+                    {
+                        if (inAttackRange)
+                        {
+                            UpMove();
+                            int k = CheckIsUpOrDownMovement(wss.SpWeaponTargets[wss.SpWps[0]], HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                RightMove();
+                            }
+                        }
+                        else
+                        {
+                            UpMove();
+                            int k = CheckIsUpOrDownMovement(wss.SpWeaponTargets[wss.SpWps[0]], HeadObject, gameObject);
+                            if (k == -1)
+                            {
+                                if (CurrentSpeed / MovingSpeed >= 1f)
+                                {
+                                    Debug.Log("Khangdeptrai");
+                                    DownMove();
+                                }
+                                else
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        Debug.Log("Khangdeptrai1");
+                                        UpMove();
+                                    }
+                                }
+                                LeftMove();
+                            }
+                            else if (k == 0)
+                            {
+                                UpMove();
+                                NoLeftRightMove();
+                            }
+                            else if (k == 1)
+                            {
+                                if (CurrentSpeed / MovingSpeed >= 1f)
+                                {
+                                    Debug.Log("Khangdeptrai");
+                                    DownMove();
+                                }
+                                else
+                                {
+                                    if (CurrentSpeed / MovingSpeed < 0.5f)
+                                    {
+                                        Debug.Log("Khangdeptrai1");
+                                        UpMove();
+                                    }
+                                }
+                                RightMove();
+                            }
+                        }
+                        inAttackRange = false;
+                    }
+                } else
                 {
-                    NoLeftRightMove();
-                }
-                else if (k == 1)
-                {
-                    RightMove();
+                    int k = 0;
+                    wss.TargetNearestTarget();
+                    k = CheckIsUpOrDownMovement(wss.NearestTarget, HeadObject, gameObject);
+                    UpMove();
+                    if (k == -1)
+                    {
+                        LeftMove();
+                    }
+                    else if (k == 0)
+                    {
+                        NoLeftRightMove();
+                    }
+                    else if (k == 1)
+                    {
+                        RightMove();
+                    }
                 }
             }
         }       
