@@ -72,5 +72,22 @@ public class HUDShowRange : MonoBehaviour
             RangeMiniMap.gameObject.SetActive(false);
         }
     }
+
+    private void OnDisable()
+    {
+        if (RangeShow.activeSelf)
+        {
+            RangeShow.transform.localScale = new Vector3(
+                InitScale,
+                InitScale,
+                RangeShow.transform.localScale.z);
+            RangeShow.gameObject.SetActive(false);
+            RangeMiniMap.transform.localScale = new Vector3(
+                InitScaleMinimap,
+                InitScaleMinimap,
+                RangeMiniMap.transform.localScale.z);
+            RangeMiniMap.gameObject.SetActive(false);
+        }
+    }
     #endregion
 }

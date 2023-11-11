@@ -50,5 +50,10 @@ public class HUDCreateInfoBoard : MonoBehaviour
     {
         FindObjectOfType<NotificationBoardController>().DestroyAllCurrentHUDSmallBoard();
     }
+
+    private void OnDisable()
+    {
+        FindObjectOfType<NotificationBoardController>().DestroyAllCurrentHUDSmallBoard();
+    }
     #endregion
 }

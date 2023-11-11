@@ -175,6 +175,16 @@ public class SessionArsenalBuyButton : MonoBehaviour
                         break;
                     case "Success":
                         // if success, reload data to UI
+                        if (Ar.CurrentTab == "Weapon")
+                        {
+                            int Prereq = (int)FindObjectOfType<AccessDatabase>().GetWeaponDataByName(Ar.ItemName)["Prereq"];
+                            if (Prereq != -1)
+                            {
+                                string name = (string)FindObjectOfType<AccessDatabase>().GetWeaponDataByID(Prereq)["Name"];
+                                FindObjectOfType<AccessDatabase>().DecreaseSessionOwnershipToItem(PlayerPrefs.GetInt("PlayerID"),
+                                    name, Ar.CurrentTab, 1);
+                            }
+                        }
                         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("EconomySpend");
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalItem.transform.position,
                     "Purchased Successfully.\n", 5f);

@@ -725,7 +725,7 @@ public class FighterMovement : MonoBehaviour
                                     {
                                         UpMove();
                                     }
-                                    else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                                    else if (CurrentSpeed / MovingSpeed >= 1f)
                                     {
                                         DownMove();
                                     }
@@ -742,7 +742,7 @@ public class FighterMovement : MonoBehaviour
                                     {
                                         UpMove();
                                     }
-                                    else if (CurrentSpeed / MovingSpeed >= 0.0f)
+                                    else if (CurrentSpeed / MovingSpeed >= 1f)
                                     {
                                         DownMove();
                                     }
@@ -757,7 +757,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                                else if (CurrentSpeed / MovingSpeed >= 1f)
                                 {
                                     DownMove();
                                 }
@@ -852,7 +852,7 @@ public class FighterMovement : MonoBehaviour
                     {
                         UpMove();
                     }
-                    else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                    else if (CurrentSpeed / MovingSpeed >= 1f)
                     {
                         DownMove();
                     }
@@ -908,7 +908,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                                else if (CurrentSpeed / MovingSpeed >=1f)
                                 {
                                     DownMove();
                                 }
@@ -925,7 +925,7 @@ public class FighterMovement : MonoBehaviour
                                 {
                                     UpMove();
                                 }
-                                else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                                else if (CurrentSpeed / MovingSpeed >= 1f)
                                 {
                                     DownMove();
                                 }
@@ -940,7 +940,7 @@ public class FighterMovement : MonoBehaviour
                             {
                                 UpMove();
                             }
-                            else if (CurrentSpeed / MovingSpeed >= 0.9f)
+                            else if (CurrentSpeed / MovingSpeed >= 1f)
                             {
                                 DownMove();
                             }

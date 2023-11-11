@@ -369,12 +369,12 @@ public class FighterController : MonoBehaviour
 
             if (int.Parse((string)statsDict["AOFPositive"]) < 180)
             {
-                PlayerFighter.transform.GetChild(14).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFPositive"]));
-                PlayerFighter.transform.GetChild(15).RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFNegative"]));
+                PlayerFighter.GetComponent<PlayerFighter>().LeftRange.transform.RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFPositive"]));
+                PlayerFighter.GetComponent<PlayerFighter>().RightRange.transform.RotateAround(PlayerFighter.transform.position, Vector3.back, int.Parse((string)statsDict["AOFNegative"]));
             } else
             {
-                PlayerFighter.transform.GetChild(14).localScale = new Vector3(0, 0, 0);
-                PlayerFighter.transform.GetChild(15).localScale = new Vector3(0, 0, 0);
+                PlayerFighter.GetComponent<PlayerFighter>().LeftRange.transform.localScale = new Vector3(0, 0, 0);
+                PlayerFighter.GetComponent<PlayerFighter>().RightRange.transform.localScale = new Vector3(0, 0, 0);
             }
 
             LeftWeaponGO.GetComponent<Weapons>().FighterWeaponDamageMod = float.Parse((string)statsDict["DM"]);

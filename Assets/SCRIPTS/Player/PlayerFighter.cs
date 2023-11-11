@@ -32,6 +32,8 @@ public class PlayerFighter : FighterShared
     public GameplayInteriorController ControllerMain;
     public GameObject HealEffect;
     public GameObject Aim;
+    public GameObject LeftRange;
+    public GameObject RightRange;
     #endregion
     #region NormalVariables
     private float[] PowerAndConsCD;
@@ -373,6 +375,11 @@ public class PlayerFighter : FighterShared
             {
                 FindObjectOfType<CameraController>().PauseGame();
             }
+            // Pause
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                ControllerMain.HideHUD();
+            }
         }
         // Timer Decrease
         for (int i=0;i<6;i++)
@@ -591,20 +598,20 @@ public class PlayerFighter : FighterShared
         }
     }
     #endregion
-    #region
+    #region ShowAttackRange
     public void ShowAttackRange()
     {
         if (!LightUp)
         {
             LightUp = true;
-            Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+            Color c = LeftRange.GetComponent<SpriteRenderer>().color;
             c.a = 0f;
-            transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
-            Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+            LeftRange.GetComponent<SpriteRenderer>().color = c;
+            Color c1 = RightRange.GetComponent<SpriteRenderer>().color;
             c1.a = 0f;
-            transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
-            transform.GetChild(14).gameObject.SetActive(true);
-            transform.GetChild(15).gameObject.SetActive(true);
+            RightRange.GetComponent<SpriteRenderer>().color = c1;
+            LeftRange.gameObject.SetActive(true);
+            RightRange.gameObject.SetActive(true);
             KeepTimer = 1f;
         } else
         {
@@ -616,14 +623,14 @@ public class PlayerFighter : FighterShared
     {
         if (LightUp)
         {
-            if (transform.GetChild(14).GetComponent<SpriteRenderer>().color.a < 0.75f)
+            if (LeftRange.GetComponent<SpriteRenderer>().color.a < 0.75f)
             {
-                Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+                Color c = LeftRange.GetComponent<SpriteRenderer>().color;
                 c.a += 0.75f * Time.deltaTime;
-                transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
-                Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+                LeftRange.GetComponent<SpriteRenderer>().color = c;
+                Color c1 = RightRange.GetComponent<SpriteRenderer>().color;
                 c1.a += 0.75f * Time.deltaTime;
-                transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+                RightRange.GetComponent<SpriteRenderer>().color = c1;
             } else
             {
                 if (KeepTimer <= 0)
@@ -636,14 +643,14 @@ public class PlayerFighter : FighterShared
             }
         } else
         {
-            if (transform.GetChild(14).GetComponent<SpriteRenderer>().color.a > 0)
+            if (LeftRange.GetComponent<SpriteRenderer>().color.a > 0)
             {
-                Color c = transform.GetChild(14).GetComponent<SpriteRenderer>().color;
+                Color c = LeftRange.GetComponent<SpriteRenderer>().color;
                 c.a -= 0.75f * Time.deltaTime;
-                transform.GetChild(14).GetComponent<SpriteRenderer>().color = c;
-                Color c1 = transform.GetChild(15).GetComponent<SpriteRenderer>().color;
+                LeftRange.GetComponent<SpriteRenderer>().color = c;
+                Color c1 = RightRange.GetComponent<SpriteRenderer>().color;
                 c1.a -= 0.75f * Time.deltaTime;
-                transform.GetChild(15).GetComponent<SpriteRenderer>().color = c1;
+                RightRange.GetComponent<SpriteRenderer>().color = c1;
             }
         }
     }

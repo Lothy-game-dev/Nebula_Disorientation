@@ -1880,7 +1880,7 @@ public class AccessDatabase : MonoBehaviour
         dbConnectionData.Open();
         // Queries
         IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
-        dbCheckCommand.CommandText = "SELECT WeaponName,WeaponType,WeaponDescription,WeaponStats,TierColor FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
+        dbCheckCommand.CommandText = "SELECT WeaponName,WeaponType,WeaponDescription,WeaponStats,TierColor,PrereqWeapon FROM ArsenalWeapon WHERE replace(lower(WeaponName),' ','')=='" + name.Replace(" ", "").ToLower() + "'";
         IDataReader dataReader = dbCheckCommand.ExecuteReader();
         bool check = false;
         while (dataReader.Read())
@@ -1891,6 +1891,13 @@ public class AccessDatabase : MonoBehaviour
             list.Add("Description", dataReader.GetString(2));
             list.Add("Stats", dataReader.GetString(3));
             list.Add("Color", dataReader.GetString(4));
+            if (dataReader.IsDBNull(5))
+            {
+                list.Add("Prereq", -1);
+            } else
+            {
+                list.Add("Prereq", dataReader.GetInt32(5));
+            }
             break;
         }
         dbConnectionData.Close();
@@ -1898,6 +1905,46 @@ public class AccessDatabase : MonoBehaviour
         {
             return null;
         } else
+        {
+            return list;
+        }
+    }
+
+    public Dictionary<string, object> GetWeaponDataByID(int ID)
+    {
+        OpenConnection();
+        Dictionary<string, object> list = new Dictionary<string, object>();
+        // Open DB
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "SELECT WeaponName,WeaponType,WeaponDescription,WeaponStats,TierColor,PrereqWeapon FROM ArsenalWeapon WHERE WeaponID==" + ID;
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            check = true;
+            list.Add("Name", dataReader.GetString(0));
+            list.Add("Type", dataReader.GetString(1));
+            list.Add("Description", dataReader.GetString(2));
+            list.Add("Stats", dataReader.GetString(3));
+            list.Add("Color", dataReader.GetString(4));
+            if (dataReader.IsDBNull(5))
+            {
+                list.Add("Prereq", -1);
+            }
+            else
+            {
+                list.Add("Prereq", dataReader.GetInt32(5));
+            }
+            break;
+        }
+        dbConnectionData.Close();
+        if (!check)
+        {
+            return null;
+        }
+        else
         {
             return list;
         }

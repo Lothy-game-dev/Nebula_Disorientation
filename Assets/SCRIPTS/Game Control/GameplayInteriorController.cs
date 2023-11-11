@@ -21,6 +21,8 @@ public class GameplayInteriorController : MonoBehaviour
     public GameObject LoadingScene;
     public GameObject Template;
     public GameSavedText SaveText;
+    public GameObject HUDMain;
+    public GameObject PlayerHUD;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -37,6 +39,7 @@ public class GameplayInteriorController : MonoBehaviour
     public bool isEnding;
     public bool isLoweringSound;
     public bool isPausing;
+    public bool isHidingHUD;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -280,6 +283,22 @@ public class GameplayInteriorController : MonoBehaviour
         c2.a = 0;
         PauseMenu.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = c2;
         isPausing = false;
+    }
+    #endregion
+    #region Hide HUD
+    public void HideHUD()
+    {
+        if (isHidingHUD)
+        {
+            isHidingHUD = false;
+            HUDMain.SetActive(true);
+            PlayerHUD.SetActive(true);
+        } else
+        {
+            isHidingHUD = true;
+            HUDMain.SetActive(false);
+            PlayerHUD.SetActive(false);
+        }
     }
     #endregion
     #region SpaceZone Summary Menu
