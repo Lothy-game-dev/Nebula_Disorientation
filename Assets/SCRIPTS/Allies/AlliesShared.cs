@@ -836,6 +836,20 @@ public class AlliesShared : FighterShared
                     }
                     check = true;
                 }
+                else
+                {
+                    if (LeftTarget == ForceTargetGO)
+                    {
+                        LeftTarget = null;
+                        LeftWeapon.GetComponent<Weapons>().Aim = null;
+                    }
+                    if (RightTarget == ForceTargetGO)
+                    {
+                        RightTarget = null;
+                        RightWeapon.GetComponent<Weapons>().Aim = null;
+                    }
+                    check = true;
+                }
             }
         }
         else if (GravTarget != null)
@@ -881,11 +895,14 @@ public class AlliesShared : FighterShared
         }
         else if (DamageDealer != null)
         {
-            LeftTarget = DamageDealer;
-            LeftWeapon.GetComponent<Weapons>().Aim = DamageDealer;
-            RightTarget = DamageDealer;
-            RightWeapon.GetComponent<Weapons>().Aim = DamageDealer;
-            check = false;
+            if ((DamageDealer.transform.position - transform.position).magnitude <= TargetRange)
+            {
+                LeftTarget = DamageDealer;
+                LeftWeapon.GetComponent<Weapons>().Aim = DamageDealer;
+                RightTarget = DamageDealer;
+                RightWeapon.GetComponent<Weapons>().Aim = DamageDealer;
+            }
+            check = true;
         }
         else check = true;
         if (check)

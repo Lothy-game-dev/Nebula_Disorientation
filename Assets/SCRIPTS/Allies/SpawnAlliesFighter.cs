@@ -120,7 +120,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
         Ally.GetComponent<AlliesShared>().HPScale = AllyMaxHPScale;
         if (Escort)
-        Ally.GetComponent<AlliesShared>().Escort = false;
+        Ally.GetComponent<AlliesShared>().Escort = Escort;
         Ally.GetComponent<AlliesShared>().Class = Class;
         Ally.GetComponent<AlliesShared>().Defend = false;
         Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
