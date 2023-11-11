@@ -38,7 +38,7 @@ public class FirstTimeTutorialButton : MonoBehaviour
     private void OnMouseDown()
     {
         ftt.isShowAgain = true;
-        ftt.Part = 0;
+        ftt.Section = 0;
     }
     #endregion
     #region Function group ...
