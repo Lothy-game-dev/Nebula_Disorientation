@@ -79,8 +79,8 @@ public class PersonalArea : MonoBehaviour
         WeapOwned = FindAnyObjectByType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModel(PlayerId, "Weapon");
         ModelOwned = FindAnyObjectByType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModel(PlayerId, "Model");
         PlayerName.GetComponent<TextMeshPro>().text = (string)PlayerInformation["Name"];
-        WeaponOwned.GetComponent<TextMeshPro>().text = "Weapons Owned: "+ WeapOwned + "";
-        FighterOwned.GetComponent<TextMeshPro>().text = "Fighters Owned: " + ModelOwned + "";
+        WeaponOwned.GetComponent<TextMeshPro>().text = "Weapons Owned: <color=#3bccec>" + WeapOwned + "</color>";
+        FighterOwned.GetComponent<TextMeshPro>().text = "Fighters Owned: <color=#3bccec>" + ModelOwned + "</color>";
         PlayerAchievement = FindAnyObjectByType<AccessDatabase>().GetPlayerAchievement(PlayerId);
         Achievement = FindAnyObjectByType<GlobalFunctionController>().ConvertEnemyDefeated(PlayerAchievement["EnemyDefeated"].ToString());
         SetData(PlayerInformation);
@@ -142,10 +142,10 @@ public class PersonalArea : MonoBehaviour
         {
             if (i == 0)
             {
-                Achievements[i].GetComponent<TextMeshPro>().text += PlayerAchievement[Achievements[i].name].ToString();
+                Achievements[i].GetComponent<TextMeshPro>().text += "<color=#3bccec>" +PlayerAchievement[Achievements[i].name].ToString() + "</color>";
             } else
             {
-                Achievements[i].GetComponent<TextMeshPro>().text += Achievement[Achievements[i].name];
+                Achievements[i].GetComponent<TextMeshPro>().text += "<color=#3bccec>" + Achievement[Achievements[i].name] + "</color>";
             }
         }
         
@@ -174,7 +174,7 @@ public class PersonalArea : MonoBehaviour
             }
             else
             {
-                Achievements[i].GetComponent<TextMeshPro>().text = Achievements[i].GetComponent<TextMeshPro>().text.Remove(Achievements[i].GetComponent<TextMeshPro>().text.IndexOf(Achievement[Achievements[i].name]));
+                Achievements[i].GetComponent<TextMeshPro>().text = Achievements[i].GetComponent<TextMeshPro>().text.Remove(Achievements[i].GetComponent<TextMeshPro>().text.IndexOf("<color=#3bccec>" + Achievement[Achievements[i].name] + "</color>"));
             }           
         }
     }
@@ -241,7 +241,7 @@ public class PersonalArea : MonoBehaviour
         timeRemaining = ResetDateTime - CollectedTime;
         formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         TimeRemaining.GetComponent<TextMeshPro>().text = formattedTime;
-        if (CollectedTime.Hour == 6 && CollectedTime.Minute == 0 && CollectedTime.Second == 0 && check == 0)
+        if (CollectedTime.Hour >= 6 && CollectedTime.Minute >= 0 && CollectedTime.Second >= 0 && check == 0)
         {
             ResetDaily();
             IsCollected = false;
