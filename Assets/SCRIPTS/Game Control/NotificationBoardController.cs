@@ -170,6 +170,10 @@ public class NotificationBoardController : MonoBehaviour
             {
                 go.GetComponent<FuelCellBar>().FuelCellInfo = infoBoard;
             }
+            if (go.name.Contains("DailyMission"))
+            {
+                go.GetComponent<UECDailyMissions>().DMInfo = infoBoard;
+            }
         }
     }
 

@@ -217,9 +217,9 @@ public class PersonalArea : MonoBehaviour
     {
         for (int i = 0; i < Content.transform.childCount; i++)
         {
-            Content.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+            Content.transform.GetChild(i).GetComponent<Image>().color = new Color(1, 1, 1, 123/255f);
         }
-        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = Color.yellow;
+        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = new Color(1, 1, 0 , 123 / 255f);
     }
     #endregion
     #region Lock item
