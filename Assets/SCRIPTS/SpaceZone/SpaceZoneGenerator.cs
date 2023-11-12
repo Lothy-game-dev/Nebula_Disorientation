@@ -49,7 +49,7 @@ public class SpaceZoneGenerator : MonoBehaviour
     public float AllyMaxHP;
     public float EnemyMaxHP;
     public List<int> AllyFighterIDs;
-    public int[] EnemyFighterIDs;
+    public List<int> EnemyFighterIDs;
     public float EnemyBountyScale;
     public float AllyBountyScale;
     public int[] EnemiesTier;
@@ -401,7 +401,16 @@ public class SpaceZoneGenerator : MonoBehaviour
         }
         // Get Data Fighter Group
         Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo>350? "350":""));
-        
+
+        for (int i = 0; i < FighterGroupData["AlliesFighterB"].ToString().Split(",").Length; i++)
+        {
+            AllyFighterIDs.Add(int.Parse(FighterGroupData["AlliesFighterB"].ToString().Split(",")[i]));
+        }
+
+        for (int i = 0; i < FighterGroupData["EnemiesFighterB"].ToString().Split(",").Length; i++)
+        {
+            EnemyFighterIDs.Add(int.Parse(FighterGroupData["EnemiesFighterB"].ToString().Split(",")[i]));
+        }
         // Count Number Of Ally By Type
         AllyFighterACount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadX / 5);
         AllyFighterBCount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadY / 10);
@@ -455,7 +464,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             {
                 AllyID.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
             }
-            AllyFighterIDs.Add(int.Parse(idList[Random.Range(0, idList.Length)]));
+            
             string Spawnstr = "AB";
             if ((SpaceZoneNo % 10 == 2 || SpaceZoneNo % 10 == 4 || SpaceZoneNo % 10 == 6) && ChosenVariant == 3)
             {
@@ -768,7 +777,6 @@ public class SpaceZoneGenerator : MonoBehaviour
             TierTotal.AddRange(EnemyTier);
         }
         EnemyFighterSpawn.EnemySpawnID = IDTotal.ToArray();
-        EnemyFighterIDs = EnemyIDB.ToArray();
         EnemyFighterSpawn.EnemySpawnPosition = SpawnTotal.ToArray();
         EnemyFighterSpawn.EnemyTier = TierTotal.ToArray();
         EnemiesTier = TierTotal.ToArray();

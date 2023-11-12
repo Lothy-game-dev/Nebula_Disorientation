@@ -167,8 +167,6 @@ public class SessionSummary : MonoBehaviour
     private IEnumerator BlackFadeOpen(GameObject Fade, float delay, float duration)
     {
         yield return new WaitForSeconds(delay);
-        //Check rank up
-        FindAnyObjectByType<RankController>().CheckToRankUp();
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;
