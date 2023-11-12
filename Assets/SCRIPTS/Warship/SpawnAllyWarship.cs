@@ -91,6 +91,7 @@ public class SpawnAllyWarship : MonoBehaviour
                 game.name = data["WarshipName"].ToString();
                 game.transform.GetChild(6).gameObject.SetActive(true);
                 game.AddComponent<PolygonCollider2D>();
+                game.GetComponent<PolygonCollider2D>().points = WarshipModel.transform.GetChild(i).GetComponent<PolygonCollider2D>().points;
                 game.GetComponent<WSShared>().isStation = true;
                 game.GetComponent<WSShared>().InitData(data, WarshipModel.transform.GetChild(i).gameObject);
                 game.GetComponent<WSMovement>().enabled = false;

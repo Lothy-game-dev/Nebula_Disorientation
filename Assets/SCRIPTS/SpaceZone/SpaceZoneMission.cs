@@ -12,6 +12,7 @@ public class SpaceZoneMission : MonoBehaviour
     #region InitializeVariables
     public TextMeshPro MissionText;
     public SpaceZoneMissionText TextGO;
+    public SpaceZoneTimer Timer;
     #endregion
     #region NormalVariables
     public int ObjectiveNumber;
@@ -189,17 +190,25 @@ public class SpaceZoneMission : MonoBehaviour
 
     public void TimerEnd()
     {
-        if (MissionStageName=="D1" || MissionStageName=="D2")
+        if (!alreadyComplete)
         {
-            CompleteMission();
+            if (MissionStageName == "D1" || MissionStageName == "D2")
+            {
+                alreadyComplete = true;
+                CompleteMission();
+            }
         }
     }
 
     public void AllySpaceStationDestroy()
     {
-        if (MissionStageName=="D1")
+        if (!alreadyComplete)
         {
-            FailMission();
+            if (MissionStageName == "D1")
+            {
+                alreadyComplete = true;
+                FailMission();
+            }
         }
     }
 
@@ -233,12 +242,15 @@ public class SpaceZoneMission : MonoBehaviour
     public void FailMission()
     {
         alreadyComplete = true;
+        Timer.DoneSetupTimer = false;
         stat.UpdateStatistic();
         TextGO.CreateText("Mission Failed!", Color.red);
     }
 
     public void PlayerDestroyed()
     {
+        Timer.DoneSetupTimer = false;
+        alreadyComplete = true;
         stat.UpdateStatistic();
         TextGO.CreateText("Mission Failed!", Color.red);
     }
@@ -246,6 +258,7 @@ public class SpaceZoneMission : MonoBehaviour
     public void CompleteMission()
     {
         alreadyComplete = true;
+        Timer.DoneSetupTimer = false;
         //CheckDailyMission();
         stat.UpdateStatistic();
         TextGO.CreateText("Mission Accomplished!", Color.green);
