@@ -134,7 +134,7 @@ public class SpaceZoneMissionText : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
 
             }
-            FindAnyObjectByType<RankController>().CheckToRankUp();
+            
             Black2.SetActive(false);
             Black3.SetActive(false);
             Black4.SetActive(false);

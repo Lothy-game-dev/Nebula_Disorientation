@@ -21,6 +21,7 @@ public class RankController : MonoBehaviour
     private NotificationBoardController nc;
     private Dictionary<string, object> ListData;
     private Dictionary<string, object> RankStat;
+    private List<List<string>> RankList;
     private bool FirstCondition;
     private bool SecondCondition;
     private int PlayerID;
@@ -36,6 +37,7 @@ public class RankController : MonoBehaviour
     private Dictionary<string, string> CurrentAchievement;
     private float Timer;
     public float ShowTime;
+    private int RankUpId;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -56,6 +58,8 @@ public class RankController : MonoBehaviour
         SecondCondition = false;
         glc = FindAnyObjectByType<GlobalFunctionController>();
         nc = FindAnyObjectByType<NotificationBoardController>();
+        RankList = ad.GetAllRank();
+        RankUpId = -1;
     }
 
     // Update is called once per frame
@@ -68,7 +72,6 @@ public class RankController : MonoBehaviour
     // Group all function that serve the same algorithm
     public void CheckToRankUp()
     {
-        RankStat = ad.GetRankById(int.Parse(ListData["RankId"].ToString()) + 1, int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
         PlayerAchievement = ad.GetPlayerAchievement(PlayerID);
         CurrentAchievement = glc.ConvertEnemyDefeated(PlayerAchievement["EnemyDefeated"].ToString());
        
@@ -81,12 +84,18 @@ public class RankController : MonoBehaviour
 
         ArsenalItem = ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Weapon") + ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Power");
         FactoryItem = ad.GetCurrentOwnershipWeaponPowerModel(PlayerID, "Model");
-        if (RankStat != null)
+        for (int i = 0; i < RankList.Count; i++)
+        {
+            RankStat = ad.GetRankById(int.Parse(RankList[i][0].ToString()), int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
+            if (RankStat != null)
         {
             // Check space zone condition
             if (int.Parse(RankStat["RankConditionSZ"].ToString()) <= MaxSZReach)
             {
                 FirstCondition = true;
+            } else
+            {
+                FirstCondition = false;
             }
             // Check the second condition
             switch(RankStat["RankCondition2Verb"].ToString())
@@ -95,59 +104,97 @@ public class RankController : MonoBehaviour
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= MissionCompleted)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 case "D-I":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= EnemyTierI)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 case "D-II":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= EnemyTierII)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 case "D-III":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= EnemyTierIII)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 case "D-WS":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= Warship)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 case "PA":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) < ArsenalItem)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 case "O":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= FactoryItem)
                     {
                         SecondCondition = true;
-                    }
+                    } else
+                        {
+                            SecondCondition = false;
+                        }
                     break;
                 default: SecondCondition = true; break;
             }
 
-            if (FirstCondition && SecondCondition)
+            if (ListData["Rank"].ToString() != "Unranked")
             {
-                ad.UpdateRank(PlayerID, RankStat);
-                nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 1f);
-                ListData = ad.GetPlayerInformationById(PlayerID);
-                if (FindAnyObjectByType<UECMainMenuController>() != null)
+                if ((!FirstCondition && !SecondCondition) || (!FirstCondition && RankStat["RankCondition2Verb"].ToString() == "Null"))
                 {
-                    FindAnyObjectByType<UECMainMenuController>().GetData();
+                    RankUpId = int.Parse(RankList[i][0].ToString()) - 1;
+                    break;
                 }
-                FirstCondition = false;
-                SecondCondition = false;
+            } else
+            {
+                if ((FirstCondition && SecondCondition))
+                {
+                    RankUpId = int.Parse(RankList[i][0].ToString());
+                    break;
+                }
             }
+        }
+
+        }
+        if (RankUpId != -1 && int.Parse(ListData["RankId"].ToString()) < RankUpId)
+        {
+            RankStat = ad.GetRankById(RankUpId, int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
+            ad.UpdateRank(PlayerID, RankStat);
+            nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 3f);
+            ListData = ad.GetPlayerInformationById(PlayerID);
+            if (FindAnyObjectByType<UECMainMenuController>() != null)
+            {
+                FindAnyObjectByType<UECMainMenuController>().GetData();
+            }
+            RankUpId = -1;
         }
     }
     #endregion

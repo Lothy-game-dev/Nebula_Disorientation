@@ -97,6 +97,28 @@ public class NotificationBoardController : MonoBehaviour
     
     }
 
+    private IEnumerator RankUpBoardAnim(float autoCloseTimer, GameObject go) {
+        for (int i = 0; i < 20; i++)
+        {
+            go.transform.localScale = new Vector2(go.transform.localScale.x + InitScale * 4.5f / 100, go.transform.localScale.y + InitScale * 4.5f / 100);
+            yield return new WaitForSeconds(0.01f);
+        }
+        yield return new WaitForSeconds(autoCloseTimer);
+        for (int i = 0; i < 20; i++)
+        {
+            Color c1 = go.transform.parent.gameObject.GetComponent<SpriteRenderer>().color;
+            c1.a -= 1 / 20f;
+            go.transform.parent.gameObject.GetComponent<SpriteRenderer>().color = c1;
+            Color c = go.GetComponent<TextMeshPro>().color;
+            c.a -= 1 / 20f;
+            go.GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.01f);
+        }
+        Destroy(go.transform.parent.gameObject);
+            
+        
+    }
+
     public void CreateNormalConfirmBoard(Vector2 Position, string text)
     {
         GameObject notiBoard = Instantiate(ConfirmationBoard, new Vector3(Position.x, Position.y, ConfirmationBoard.transform.position.z), Quaternion.identity);
@@ -215,7 +237,7 @@ public class NotificationBoardController : MonoBehaviour
         {          
             notiBoard.transform.SetParent(Camera.main.transform);
         }
-        StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
+        StartCoroutine(RankUpBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
 
     public void DestroyCurrentInfoBoard()

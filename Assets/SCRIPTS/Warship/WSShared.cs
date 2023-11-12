@@ -62,7 +62,7 @@ public class WSShared : MonoBehaviour
     public GameObject AllyModel;
     private GameObject ChosenModel;
     public GameObject AllyTemplate;
-    private int[] FightersId;
+    private List<int> FightersId;
     private int Count;
     private int[] EnemiesTier;
     private bool Spawned;
@@ -101,7 +101,8 @@ public class WSShared : MonoBehaviour
         CurrentHP = MaxHP;
         Count = 0;
         SpawnTimer = 10f;
-        FightersId = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindAnyObjectByType<SpaceZoneGenerator>().EnemyFighterIDs : FindAnyObjectByType<SpaceZoneGenerator>().AllyFighterIDs.ToArray());
+        FightersId = (gameObject.layer == LayerMask.NameToLayer("Enemy") ? FindAnyObjectByType<SpaceZoneGenerator>().EnemyFighterIDs : FindAnyObjectByType<SpaceZoneGenerator>().AllyFighterIDs);
+        Debug.Log(FightersId.Count);
         EnemiesTier = FindObjectOfType<SpaceZoneGenerator>().EnemiesTier;
         FindAnyObjectByType<WSSSDetected>().DectectWSSS();
         WSSSDict = FindAnyObjectByType<WSSSDetected>().PrioritizeDict;
@@ -222,7 +223,7 @@ public class WSShared : MonoBehaviour
         }
 
         // This is for the non-weapon warship 
-        if (MainWps[0].GetComponent<Weapons>() == null && FightersId.Length > 0)
+        if (MainWps[0].GetComponent<Weapons>() == null && FightersId.Count > 0)
         {
             
             SpawnTimer -= Time.deltaTime;
@@ -233,8 +234,9 @@ public class WSShared : MonoBehaviour
                 Spawned = false;
             }
             if (SpawnTimer < 0f)
-            {   
-                int random = Random.Range(0, FightersId.Length);
+            {
+                Debug.Log("Spawn");
+                int random = Random.Range(0, FightersId.Count);
                 Animation.SetBool("isSpawn", true);
                 SpawnFighter(FightersId[random], EnemiesTier[random]);
                 Spawned = true;
@@ -899,6 +901,7 @@ public class WSShared : MonoBehaviour
             Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
             Ally.GetComponent<AlliesShared>().HPScale = HPScale;
             Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
+
         }
         
     }

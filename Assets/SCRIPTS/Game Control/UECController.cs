@@ -33,6 +33,7 @@ public class UECController : UECMenuShared
     // Start is called before the first frame update
     private void OnEnable()
     {
+        FindAnyObjectByType<RankController>().CheckToRankUp();
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingScene(1f);
     }
     void Start()
@@ -230,7 +231,6 @@ public class UECController : UECMenuShared
                                 {
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
                                     controller.GetData();
-                                    FindAnyObjectByType<RankController>().CheckToRankUp();
                                     FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Play for at least " + listDM[1][i] + " minutes.", 2f);
                                 }
                             } else
