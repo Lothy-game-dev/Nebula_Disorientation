@@ -973,6 +973,7 @@ public class Weapons : MonoBehaviour
             if (OverheatDecreaseTimer > 0f)
             {
                 OverheatDecreaseTimer -= Time.deltaTime;
+                UpdateVolume();
             }
             else
             {
@@ -1024,6 +1025,10 @@ public class Weapons : MonoBehaviour
         }
     }
 
+    public void UpdateVolume()
+    {
+        aus.volume = 1 * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
+    }
 
     public void ThermalSound()
     {
