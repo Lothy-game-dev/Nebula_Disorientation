@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UECDailyMissions : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class UECDailyMissions : MonoBehaviour
     private bool BGGoingTo;
     public int MissionUndone;
     private string DMDone;
+    private TimeSpan ResetTime;
+    public GameObject DMInfo;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -62,6 +65,10 @@ public class UECDailyMissions : MonoBehaviour
                 DMBG.transform.position = new Vector3(DMBGBeforePos.transform.position.x, DMBGBeforePos.transform.position.y, DMBG.transform.position.z);
             }
         }
+        ResetTime = System.DateTime.Now.AddDays(1).Date + new TimeSpan(0, 0, 0) - System.DateTime.Now;
+        Debug.Log(string.Format("{0:D2}:{1:D2}:{2:D2}", ResetTime.Hours, ResetTime.Minutes, ResetTime.Seconds));
+        InfoText = "Reward for each mission <br><br> 2500 <sprite=3>  5 <sprite=0>  100 <sprite=1> <br><br> Total Reset in " + string.Format("{0:D2}:{1:D2}:{2:D2}", ResetTime.Hours, ResetTime.Minutes, ResetTime.Seconds) + "";
+        DMInfo.transform.GetChild(1).GetComponent<TextMeshPro>().text = InfoText;
     }
     #endregion
     #region Check Daily Mission
