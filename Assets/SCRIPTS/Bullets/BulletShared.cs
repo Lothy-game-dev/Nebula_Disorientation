@@ -22,6 +22,7 @@ public class BulletShared : MonoBehaviour
     public int LavaBurnCount;
     public GameObject HitBoxRange;
     public LOTWEffect LOTWEffect;
+    public AreaOfEffect AoEEffect;
 
     protected Rigidbody2D rb;
     protected float Distance;
@@ -29,7 +30,6 @@ public class BulletShared : MonoBehaviour
     protected Vector2 RealVelocity;
     protected float DistanceTravel;
 
-    private AreaOfEffect AoEEffect;
     private float WeaponDamageModScale;
     private float WeaponAoEModScale;
     private float RealDamage;
@@ -44,7 +44,6 @@ public class BulletShared : MonoBehaviour
     #region Shared Functions
     public void InitializeBullet()
     {
-        gameObject.AddComponent<LimitRendering>();
         if (MaximumDistance==0f)
         {
             MaximumDistance = MaxEffectiveDistance;
@@ -53,7 +52,6 @@ public class BulletShared : MonoBehaviour
         if (HitBoxRange!=null)
         HitBox = Mathf.Abs((HitBoxRange.transform.position - transform.position).magnitude);
         CalculateWeaponStats();
-        AoEEffect = FindObjectOfType<AreaOfEffect>();
     }
     public void UpdateBullet()
     {

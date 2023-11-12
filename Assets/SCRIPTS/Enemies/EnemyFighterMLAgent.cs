@@ -66,10 +66,6 @@ public class EnemyFighterMLAgent : Agent
     }
     public override void OnActionReceived(ActionBuffers actions)
     {
-        Debug.Log("Angle:" + (float)(als.LeftTarget != null && als.LeftTarget.GetComponent<SpaceStationShared>() == null ?
-                    (als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().RotateDirection
-                    : als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().RotateDirection
-                    : als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().RotateDirection : fm.RotateDirection) : fm.RotateDirection) * actions.ContinuousActions[0]);
         if (LeftWeapon != null)
         {
             if (als.DelayTimer < 0f && !als.LeftFire)

@@ -182,6 +182,7 @@ public class FighterShared : MonoBehaviour
             }
             if (!alreadyDestroy)
             {
+                alreadyDestroy = true;
                 if (GetComponent<PlayerFighter>() == null)
                 {
                     Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterExplo", gameObject);
@@ -189,8 +190,18 @@ public class FighterShared : MonoBehaviour
                 {
                     Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterExplo", transform.GetChild(12).gameObject);
                 }
-               
-                alreadyDestroy = true;
+                if (name == "Player")
+                {
+                    misson.PlayerDestroyed();
+                }
+                else if (GetComponent<AlliesShared>() != null)
+                {
+                    misson.AllyFighterDestroy(name);
+                }
+                else if (GetComponent<EnemyShared>() != null)
+                {
+                    misson.EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
+                }
                 StartCoroutine(DestroySelf());
             }
         }
@@ -269,13 +280,6 @@ public class FighterShared : MonoBehaviour
         if (name == "Player")
         {
             Camera.main.GetComponent<AudioListener>().enabled = true;
-            misson.PlayerDestroyed();
-        } else if (GetComponent<AlliesShared>()!=null)
-        {
-            misson.AllyFighterDestroy(name);
-        } else if (GetComponent<EnemyShared>()!=null)
-        {
-            misson.EnemyFighterDestroy(name, GetComponent<EnemyShared>().Tier);
         }
         GetComponent<SpriteRenderer>().sprite = null;
         Destroy(gameObject, 1f);

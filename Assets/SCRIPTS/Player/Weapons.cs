@@ -278,7 +278,7 @@ public class Weapons : MonoBehaviour
                     {
                         if (!isMainWeapon) isFire = false;
                     }
-                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 16 : 4) * WeaponROTSpeed);
+                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 8 : 2) * WeaponROTSpeed);
                 }
             }
             // Reset thermal hit count per 1/rate of hit second
@@ -973,6 +973,7 @@ public class Weapons : MonoBehaviour
             if (OverheatDecreaseTimer > 0f)
             {
                 OverheatDecreaseTimer -= Time.deltaTime;
+                UpdateVolume();
             }
             else
             {
@@ -1024,6 +1025,10 @@ public class Weapons : MonoBehaviour
         }
     }
 
+    public void UpdateVolume()
+    {
+        aus.volume = 1 * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
+    }
 
     public void ThermalSound()
     {

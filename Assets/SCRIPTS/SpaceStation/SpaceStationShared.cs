@@ -727,7 +727,14 @@ public class SpaceStationShared : MonoBehaviour
                 Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("SSExplo", gameObject);
                 AlreadyDestroy = true;
                 StartCoroutine(DestroySelf());
-
+                if (isEnemy)
+                {
+                    FindObjectOfType<SpaceZoneMission>().EnemySpaceStationDestroy();
+                }
+                else
+                {
+                    FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+                }
             }
         }
     }
@@ -770,10 +777,6 @@ public class SpaceStationShared : MonoBehaviour
             {
                 FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard, gameObject);
             }
-            FindObjectOfType<SpaceZoneMission>().EnemySpaceStationDestroy();
-        } else
-        {
-            FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
         }
         GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
         

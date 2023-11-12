@@ -20,7 +20,6 @@ public class UECSessionButton : MonoBehaviour
     #region NormalVariables
     private float InitScaleX;
     private float InitScaleY;
-    private bool alreadyFunction;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -63,32 +62,28 @@ public class UECSessionButton : MonoBehaviour
     private void OnMouseDown()
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
-        if (Type=="Continue" && !alreadyFunction)
+        if (Type=="Continue")
         {
-            alreadyFunction = true;
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = Continue;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
                 "Ready to continue?");
  
-        } else if (Type=="NextSZInfo" && !alreadyFunction)
+        } else if (Type=="NextSZInfo")
         {
-            alreadyFunction = true;
             NextSZInfo.SetActive(true);
             foreach (var col in DisableColliders)
             {
                 if (col.GetComponent<Collider2D>() != null)
                     col.GetComponent<Collider2D>().enabled = false;
             }
-        } else if (Type=="SaveQuit" && !alreadyFunction)
+        } else if (Type=="SaveQuit")
         {
-            alreadyFunction = true;
             // Quit To MainMenu
             PlayerPrefs.SetFloat("CreateLoading", 1f);
             SceneManager.UnloadSceneAsync("GameplayExterior");
             SceneManager.LoadSceneAsync("MainMenu");
-        } else if (Type=="Retreat" && !alreadyFunction)
+        } else if (Type=="Retreat")
         {
-            alreadyFunction = true;
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = Retreat;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(Scene.transform.position,
                 "Retreat already?");

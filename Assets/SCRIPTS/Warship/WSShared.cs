@@ -919,9 +919,21 @@ public class WSShared : MonoBehaviour
             if (!AlreadyDestroy)
             {
                 Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
-                AlreadyDestroy = true;               
+                AlreadyDestroy = true;
+                if (IsEnemy)
+                {
+                    FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
+                }
+                else
+                {
+                    if (isStation)
+                    {
+                        FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+                    }
+                    else
+                        FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
+                }
                 StartCoroutine(DestroySelf());
-
             }
         }
     }
@@ -974,14 +986,6 @@ public class WSShared : MonoBehaviour
             {
                 FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard, gameObject);
             }
-            FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
-        } else
-        {
-            if (isStation)
-            {
-                FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
-            } else
-            FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
         }
         
         GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);

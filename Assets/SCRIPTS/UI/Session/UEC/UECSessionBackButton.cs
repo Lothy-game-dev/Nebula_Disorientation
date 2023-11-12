@@ -46,6 +46,7 @@ public class UECSessionBackButton : MonoBehaviour
         if (ToScene.GetComponent<UECSessionScene>()!=null)
         {
             ToScene.GetComponent<UECSessionScene>().ResetEconomyData();
+            ToScene.GetComponent<UECSessionScene>().RegenerateAllData();
         }
     }
     #endregion

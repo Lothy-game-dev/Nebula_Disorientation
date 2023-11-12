@@ -102,12 +102,36 @@ public class UECSessionScene : MonoBehaviour
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)SessionData["SessionFuelCore"];
         Consumables = new();
+        List<string> ListWeapon = FindObjectOfType<AccessDatabase>().GetSessionOwnedWeaponExceptForName(PlayerPrefs.GetInt("PlayerID"), "");
+        int inter = 0;
         // First Weapon
         FirstWeaponGO = new();
         ChosenFirstWeapon = (string)SessionData["LeftWeapon"];
+        Debug.Log(ChosenFirstWeapon);
+        int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"), ChosenFirstWeapon, "Weapon");
+        if (n==0)
+        {
+            ChosenFirstWeapon = ListWeapon[inter];
+            Debug.Log(ChosenFirstWeapon);
+            inter++;
+            FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "LeftWeapon", ChosenFirstWeapon.Replace(" ",""));
+        }
         // Second Weapon
         SecondWeaponGO = new();
         ChosenSecondWeapon = (string)SessionData["RightWeapon"];
+        int m = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"), ChosenFirstWeapon, "Weapon");
+        if (m == 0)
+        {
+            ChosenSecondWeapon = ListWeapon[inter];
+            FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "RightWeapon", ChosenSecondWeapon.Replace(" ", ""));
+        } else if (m==1)
+        {
+            if (ChosenSecondWeapon == ChosenFirstWeapon)
+            {
+                ChosenSecondWeapon = ListWeapon[inter];
+                FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "RightWeapon", ChosenSecondWeapon.Replace(" ", ""));
+            }
+        }
         // First Weapon Gen
         for (int i=0; i< WeaponList.transform.childCount;i++)
         {

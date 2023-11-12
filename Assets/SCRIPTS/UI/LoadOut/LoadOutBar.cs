@@ -66,14 +66,6 @@ public class LoadOutBar : MonoBehaviour
         AllowScroll = false;
         // Preset data
         AfterGenerateList = new List<GameObject>();
-        List<string> ListWeapon = FindObjectOfType<AccessDatabase>().GetAllOwnedWeapon(FindObjectOfType<UECMainMenuController>().PlayerId);
-        if (ListWeapon.Count>0)
-        {
-            SetItem(
-            ListWeapon,
-            Type == "LeftWeapon" ? (Scene.GetComponent<LoadoutScene>().LeftWeapon == "" ? ListWeapon[0] : Scene.GetComponent<LoadoutScene>().LeftWeapon)
-            : (Scene.GetComponent<LoadoutScene>().RightWeapon == "" ? ListWeapon[0] : Scene.GetComponent<LoadoutScene>().RightWeapon), true);
-        }
     }
 
     // Update is called once per frame

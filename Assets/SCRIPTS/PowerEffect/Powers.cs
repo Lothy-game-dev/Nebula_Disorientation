@@ -148,9 +148,9 @@ public class Powers : MonoBehaviour
         sound.clip = sfx;
         sound.loop = false;
         sound.Play();
-        sound.volume = 
-            (GetComponent<Barrier>()!=null ? 1f : 0.175f) 
-            * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale/100f ;
+        sound.volume =
+            (GetComponent<Barrier>() != null ? (Fighter.GetComponent<PlayerFighter>() == null ? 0f : 1f) : 0.175f)
+            * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
     }  
     public void EndSound()
     {
