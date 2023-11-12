@@ -52,6 +52,7 @@ public class SpaceZoneMissionText : MonoBehaviour
     public void CreateText(string strText, Color color)
     {
         controller.isEnding = true;
+        stat.CheckDailyMission();
         Black2.SetActive(false);
         Black3.SetActive(false);
         Black4.SetActive(false);

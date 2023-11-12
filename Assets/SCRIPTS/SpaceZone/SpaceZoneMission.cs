@@ -246,7 +246,7 @@ public class SpaceZoneMission : MonoBehaviour
     public void CompleteMission()
     {
         alreadyComplete = true;
-        //CheckDailyMission();
+        stat.StageName = MissionStageName;
         stat.UpdateStatistic();
         TextGO.CreateText("Mission Accomplished!", Color.green);
         

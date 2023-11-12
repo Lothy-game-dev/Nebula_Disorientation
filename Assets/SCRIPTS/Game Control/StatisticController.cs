@@ -63,6 +63,7 @@ public class StatisticController : MonoBehaviour
     public int CurrentShardReward;
     public int CurrentCashReward;
     private TimeSpan currentTimePlayed;
+    private int SessionTotalMinutes;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -176,60 +177,102 @@ public class StatisticController : MonoBehaviour
     #endregion
     #region Check daily mission
     // Group all function that serve the same algorithm
-    private void CheckDailyMission()
+    public void CheckDailyMission()
     {       
         List<List<string>> listDM = ad.GetListDailyMissionUndone(PlayerID);
         if (listDM != null)
         {
-            for (int i = 0; i < listDM[0].Count; i++)
+            for (int i = 0; i < listDM.Count; i++)
             {
+                Debug.Log(listDM[i][0] + "," + listDM[i][1] + "," + listDM[i][2]);
                 string mission = "";
-                switch (listDM[0][i])
+                switch (listDM[i][1])
                 {
                     case "KE":
-                        mission = "Kill " + listDM[1][i] + " enemy(s).";
-                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
+                        mission = "Eliminate  " + listDM[i][2] + " enemy(s).";
+                        ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], TotalEnemyDefeated);
+                        if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + TotalEnemyDefeated)
                         {
-                            if (KillEnemy)
-                            {
-                                ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
-                            }
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(PlayerID, listDM[0][i]);                          
-                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
-                        }
-                        break;
-                    case "KB":
-                        mission = "Kill " + listDM[1][i] + " boss enemy.";
-                        if (int.Parse(listDM[1][i]) > int.Parse(listDM[2][i]))
-                        {
-                            if (KillBossEnemy)
-                            {
-                                ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
-                            }
-                        }
-                        else
-                        {
-                            ad.DailyMissionDone(PlayerID, listDM[0][i]);
+                            ad.DailyMissionDone(PlayerID, listDM[i][1]);                          
                             FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                         }
                         break;
                     case "P":
-                        mission = "Play for at least " + listDM[1][i] + " minute(s).";
-                        if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
-                        {                           
-                            if (isCount)
+                        mission = "Play for at least " + listDM[i][2] + " minute(s).";
+                        if (SessionInformation != null && (string)SessionInformation["TotalPlayedTime"] != "")
+                        {
+                            string timeString = (string)SessionInformation["TotalPlayedTime"];
+                            string[] timeParts = timeString.Split(':');
+                            int hours = int.Parse(timeParts[0]);
+                            int minutes = int.Parse(timeParts[1]);
+                            int seconds = int.Parse(timeParts[2]);
+                            SessionTotalMinutes = hours * 60 + minutes + seconds / 60;
+                        }
+                        ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], SessionTotalMinutes);                                                        
+                        if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + SessionTotalMinutes)                       
+                        {
+                            ad.DailyMissionDone(PlayerID, listDM[i][1]);
+                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                        }
+                        break;
+                    case "C":
+                        mission = "Complete " + listDM[i][2] + " Space Zones.";
+                        if (StageName != null && StageName != "")
+                        {
+                            if (StageName.Contains("D") || StageName.Contains("A") || StageName.Contains("O"))
                             {
-                                ad.UpdateDailyMissionProgess(PlayerID, listDM[0][i], 1);
-                                
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], 1);                                                        
+                            }
+                            if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)                       
+                            {
+                                ad.DailyMissionDone(PlayerID, listDM[i][1]);
+                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
                             }
                         }
-                        else
+                        break;
+                    case "CD":
+                        mission = "Complete " + listDM[i][2] + " Defend Space Zones.";
+                        if (StageName != null && StageName != "")
                         {
-                            ad.DailyMissionDone(PlayerID, listDM[0][i]);
-                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                            if (StageName.Contains("D"))
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], 1);
+                                if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
+                                {
+                                    ad.DailyMissionDone(PlayerID, listDM[i][0]);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
+                            }
+                        }
+                        break;
+                    case "CA":
+                        mission = "Complete " + listDM[i][2] + " Assault Space Zones.";
+                        if (StageName != null && StageName != "")
+                        {
+                            if (StageName.Contains("A"))
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], 1);
+                                if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
+                                {
+                                    ad.DailyMissionDone(PlayerID, listDM[i][1]);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
+                            }
+                        }
+                        break;
+                    case "CAA":
+                        mission = "Complete " + listDM[i][2] + " Onslaught Space Zones.";
+                        if (StageName != null && StageName != "")
+                        {
+                            if (StageName.Contains("O"))
+                            {
+                                ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], 1);
+                                if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
+                                {
+                                    ad.DailyMissionDone(PlayerID, listDM[i][1]);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                }
+                            }
                         }
                         break;
                     default: break;
