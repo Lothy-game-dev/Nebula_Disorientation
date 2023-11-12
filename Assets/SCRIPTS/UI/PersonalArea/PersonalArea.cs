@@ -125,7 +125,7 @@ public class PersonalArea : MonoBehaviour
             }
         }
         // check if time system has changed to collect salary
-        if (FindAnyObjectByType<AccessDatabase>().CheckIfCollected(PlayerId, System.DateTime.Now.ToString("dd/MM/yyyy")) == 0)
+        /*if (FindAnyObjectByType<AccessDatabase>().CheckIfCollected(PlayerId, System.DateTime.Now.ToString("dd/MM/yyyy")) == 0)
         {
             IsCollected = false;
         } else
@@ -136,7 +136,7 @@ public class PersonalArea : MonoBehaviour
                 CollectButton.AddComponent<CursorUnallowed>();
             }
             IsCollected = true;
-        }
+        }*/
 
         for (int i = 0; i < Achievements.Count; i++)
         {
@@ -242,7 +242,7 @@ public class PersonalArea : MonoBehaviour
         formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeRemaining.Hours, timeRemaining.Minutes, timeRemaining.Seconds);
         TimeRemaining.GetComponent<TextMeshPro>().text = formattedTime;
         if (CollectedTime.Hour >= 6 && CollectedTime.Minute >= 0 && CollectedTime.Second >= 0 && check == 0)
-        {
+        {          
             ResetDaily();
             IsCollected = false;
         }
