@@ -69,6 +69,10 @@ public class LoadOutDetailStatus : MonoBehaviour
         {
             AoFImage.transform.GetChild(0).GetChild(3).gameObject.SetActive(true);
         }
+        else if ("60".Equals(AoFDemo))
+        {
+            AoFImage.transform.GetChild(0).GetChild(4).gameObject.SetActive(true);
+        }
 
     }
     #endregion
