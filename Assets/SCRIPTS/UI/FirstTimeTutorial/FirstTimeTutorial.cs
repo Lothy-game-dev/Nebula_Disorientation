@@ -26,6 +26,7 @@ public class FirstTimeTutorial : MonoBehaviour
     private Dictionary<string, object> PlayerInformation;
     private int PlayerID;
     private bool isNew;
+    public bool isStart;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -58,6 +59,11 @@ public class FirstTimeTutorial : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                if (isStart)
+                {
+                    isStart = false;
+                    Section = 0;
+                }
                 Section++;
                 Tutorial();
             }
@@ -69,7 +75,8 @@ public class FirstTimeTutorial : MonoBehaviour
     public void Tutorial()
     {
         if (isNew || isShowAgain)
-        {          
+        {
+            GetComponent<BoxCollider2D>().enabled = true;
             // turn off all textbox and black background
             for (int i = 0; i < Textbox.Count; i++)
             {
@@ -107,7 +114,7 @@ public class FirstTimeTutorial : MonoBehaviour
             Section = 0;
             isShowAgain = false;
             isNew = false;
-            
+            GetComponent<BoxCollider2D>().enabled = false;
         }
        
     }
