@@ -60,17 +60,17 @@ public class LOTWScene : MonoBehaviour
         SetStageInfoData();
         // Get All Cards Data
         ListAllLOTW = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(0);
-        // Get Owned Cards Data
-        string check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetable(PlayerPrefs.GetInt("PlayerID"));
-        if (check == "34")
+        // Get Nonrepeatable Cards Data
+        List<string> check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetableAlreadyOwn(PlayerPrefs.GetInt("PlayerID"));
+        if (check!=null)
         {
-            if (ListAllLOTW.Contains(34))
-                ListAllLOTW.Remove(34);
-        }
-        if (check == "26") 
-        {
-            if (ListAllLOTW.Contains(26))
-                ListAllLOTW.Remove(26);
+            foreach (var item in check)
+            {
+                if (ListAllLOTW.Contains(int.Parse(item)))
+                {
+                    ListAllLOTW.Remove(int.Parse(item));
+                }
+            }
         }
         // Random to get 3 cards
         ListLOTWChosen = new List<int>();
@@ -116,19 +116,17 @@ public class LOTWScene : MonoBehaviour
             do
             {
                 List<int> ListChosen = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(tierChosen);
-                // Get Owned Cards Data
-                string check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetable(PlayerPrefs.GetInt("PlayerID"));
-                if (check == "34")
+                // Get Nonrepeatable Cards Data
+                List<string> check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetableAlreadyOwn(PlayerPrefs.GetInt("PlayerID"));
+                if (check != null)
                 {
-                    Debug.Log("34");
-                    if (ListChosen.Contains(34))
-                        ListChosen.Remove(34);
-                }
-                if (check == "26")
-                {
-                    Debug.Log("26");
-                    if (ListChosen.Contains(26))
-                        ListChosen.Remove(26);
+                    foreach (var item in check)
+                    {
+                        if (ListAllLOTW.Contains(int.Parse(item)))
+                        {
+                            ListAllLOTW.Remove(int.Parse(item));
+                        }
+                    }
                 }
                 int k = UnityEngine.Random.Range(0, ListChosen.Count);
                 n = ListChosen[k];

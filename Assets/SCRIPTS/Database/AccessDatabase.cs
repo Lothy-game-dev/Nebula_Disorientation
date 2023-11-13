@@ -4249,8 +4249,9 @@ public class AccessDatabase : MonoBehaviour
         } else
         return dict;
     }
-    public string CheckLOTWRepetable(int PlayerID)
+    public List<string> CheckLOTWRepetableAlreadyOwn(int PlayerID)
     {
+        List<string> Data = new();
         OpenConnection();
         // Open DB
         dbConnectionSave.Open();
@@ -4271,44 +4272,65 @@ public class AccessDatabase : MonoBehaviour
         if (!check || sessionId == -1)
         {
             dbConnectionSave.Close();
-            return "Not Found";
+            return null;
         }
         else
         {
             // Queries
-            IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-            dbCheckCommand.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=34"; 
-            IDataReader dataReader2 = dbCheckCommand.ExecuteReader();
-            bool check2 = false;
-            while (dataReader2.Read())
+            IDbCommand dbCheckCommand34 = dbConnectionSave.CreateCommand();
+            dbCheckCommand34.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=34"; 
+            IDataReader dataReader34 = dbCheckCommand34.ExecuteReader();
+            bool check34 = false;
+            while (dataReader34.Read())
             {
-                check2 = true;
+                check34 = true;
             }
             
-            if (check2)
+            if (check34)
             {
-                dbConnectionSave.Close();
-                return "34";
-            } else
-            {
-                // Queries
-                IDbCommand dbCheckCommand2 = dbConnectionSave.CreateCommand();
-                dbCheckCommand2.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=26";
-                IDataReader dataReader3 = dbCheckCommand2.ExecuteReader();
-                while (dataReader3.Read())
-                {
-                    check2 = true;
-                }
-                if (check2)
-                {
-                    dbConnectionSave.Close();
-                    return "26";
-                } else
-                {
-                    dbConnectionSave.Close();
-                    return "";
-                }
+                Data.Add("34");
             }
+            // Queries
+            IDbCommand dbCheckCommand26 = dbConnectionSave.CreateCommand();
+            dbCheckCommand26.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=26";
+            IDataReader dataReader26 = dbCheckCommand26.ExecuteReader();
+            bool check26 = false;
+            while (dataReader26.Read())
+            {
+                check26 = true;
+            }
+            if (check26)
+            {
+                Data.Add("25");
+            }
+            // Queries
+            IDbCommand dbCheckCommand9 = dbConnectionSave.CreateCommand();
+            dbCheckCommand9.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=9 AND Stack >= 10";
+            IDataReader dataReader9 = dbCheckCommand9.ExecuteReader();
+            bool check9 = false;
+            while (dataReader9.Read())
+            {
+                check9 = true;
+            }
+            if (check9)
+            {
+                Data.Add("9");
+            }
+            // Queries
+            IDbCommand dbCheckCommand31 = dbConnectionSave.CreateCommand();
+            dbCheckCommand31.CommandText = "SELECT * FROM SessionLOTWCards WHERE SessionID=" + sessionId + " AND CardID=31 AND Stack >= 4";
+            IDataReader dataReader31 = dbCheckCommand31.ExecuteReader();
+            bool check31 = false;
+            while (dataReader31.Read())
+            {
+                check31 = true;
+            }
+            if (check31)
+            {
+                Data.Add("31");
+            }
+            dbConnectionSave.Close();
+            return Data;
         }
     }
 
