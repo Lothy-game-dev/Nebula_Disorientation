@@ -184,7 +184,7 @@ public class RankController : MonoBehaviour
         }
 
         }
-        if (RankUpId != -1 && int.Parse(ListData["RankId"].ToString()) < RankUpId)
+        if (RankUpId != -1 && int.Parse(ListData["RankId"].ToString()) < RankUpId - 1 || ListData["Rank"].ToString() == "Unranked")
         {
             RankStat = ad.GetRankById(RankUpId, int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
             ad.UpdateRank(PlayerID, RankStat);
