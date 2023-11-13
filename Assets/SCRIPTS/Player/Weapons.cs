@@ -940,6 +940,7 @@ public class Weapons : MonoBehaviour
             // Hide reload bar
             ReloadBar.gameObject.SetActive(false);
             EndOverheatWarningSound();
+            audioScale = 0.2f;
             OverheatedSound();
             // Set overheat rate to 100 for exact animation
             currentOverheat = 100;
@@ -962,6 +963,7 @@ public class Weapons : MonoBehaviour
                     ReloadBar.GetComponent<Image>().fillAmount = 0;
                 }
                 isWarning = false;
+                audioScale = 0.5f;
                 EndSound();
                 currentOverheat = 0f;
             }
@@ -1047,7 +1049,6 @@ public class Weapons : MonoBehaviour
         aus.clip = WeaponShootSound;
         aus.loop = false;
         aus.Play();
-        aus.volume = 1f * audioScale * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
     }
 
     public void LaserBeamChargingSound()
@@ -1086,7 +1087,6 @@ public class Weapons : MonoBehaviour
         aus.clip = Fighter.GetComponent<PlayerFighter>().Overheated;
         aus.loop = true;
         aus.Play();
-        aus.volume = 0.08f * audioScale * ControllerMain.MasterVolumeScale/100f * ControllerMain.SFXVolumeScale/100f;
     }
     #endregion
     #region Check direction
