@@ -566,9 +566,9 @@ public class InitializeDatabase : MonoBehaviour
             "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '40|50', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '40|45', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '40|45', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '150|175', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '150|160', '9-1-0', '8-2-0', null, null, null, null, null)," +
             "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '175|150', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
-            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '160|190', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '160|170', '9-1-0', '8-2-0', null, null, null, null, null)," +
             "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '190|160', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
             "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '100|75',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0', null, null)," +
             "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '50|60', '8-2-0', '8-1-1', null, null, null, null, null);";
