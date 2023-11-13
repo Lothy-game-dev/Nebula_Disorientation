@@ -19,6 +19,7 @@ public class PersonalAreaItem : MonoBehaviour
     // Can be public or private, prioritize private if possible
     private PersonalArea PAController;
     public string ItemId;
+    public bool isLocked;
     #endregion
     #region Start & Update
     // Start is called before the first frame update

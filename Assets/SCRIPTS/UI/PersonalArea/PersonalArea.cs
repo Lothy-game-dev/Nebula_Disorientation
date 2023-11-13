@@ -103,8 +103,13 @@ public class PersonalArea : MonoBehaviour
             {              
                 ShowRankInfo(RankList[i][0]);
             }
-            
-            LockItem(game, RankList[i][0]);
+
+            if (int.Parse(PlayerInformation["RankId"].ToString()) < int.Parse(RankList[i][0]))
+            {
+                game.GetComponent<PersonalAreaItem>().isLocked = true;
+                game.transform.GetChild(1).gameObject.SetActive(true);
+                game.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1);
+            }
         }
         // check daily
         if ((string)PlayerInformation["DailyIncomeReceived"] == "N")
@@ -202,7 +207,7 @@ public class PersonalArea : MonoBehaviour
     public void ShowRankInfo(string Id)
     {
         CurrentItem(Id);
-        Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = Color.green + Color.red;
+        Content.transform.GetChild((int)PlayerInformation["RankId"]).GetComponent<Image>().color = new Color(0, 1, 1, 1);
         string RankCondition = FindAnyObjectByType<GlobalFunctionController>().ConvertRankUpConditions(RankList[int.Parse(Id) - 1][2], RankList[int.Parse(Id) - 1][3], RankList[int.Parse(Id) - 1][4]);
         RankDesc.GetComponent<TMP_Text>().text =  RankCondition;
         RankSalary.GetComponent<TMP_Text>().text = RankList[int.Parse(Id) - 1][5] + " <sprite index='3'>  " + (int.Parse(RankList[int.Parse(Id) - 1][8]) == 0 ? "" : RankList[int.Parse(Id) - 1][8] + " <sprite index='0'> ");
@@ -217,9 +222,13 @@ public class PersonalArea : MonoBehaviour
     {
         for (int i = 0; i < Content.transform.childCount; i++)
         {
-            Content.transform.GetChild(i).GetComponent<Image>().color = new Color(1, 1, 1, 123/255f);
+            Content.transform.GetChild(i).GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1);
+            if (Content.transform.GetChild(i).GetComponent<PersonalAreaItem>().isLocked)
+            {
+                Content.transform.GetChild(i).GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1);
+            }
         }
-        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = new Color(1, 1, 0 , 123 / 255f);
+        Content.transform.GetChild(int.Parse(Id)).GetComponent<Image>().color = new Color(1, 1, 0 , 1);
     }
     #endregion
     #region Lock item
@@ -228,6 +237,7 @@ public class PersonalArea : MonoBehaviour
         if (int.Parse(PlayerInformation["RankId"].ToString()) < int.Parse(RankList[int.Parse(Id) - 1][0]))
         {
             game.transform.GetChild(1).gameObject.SetActive(true);
+            game.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f,1);
         }
     }
     #endregion
