@@ -31,6 +31,7 @@ public class PersonalArea : MonoBehaviour
     public GameObject WeaponOwned;
     public GameObject FighterOwned;
     public List<GameObject> Achievements;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
