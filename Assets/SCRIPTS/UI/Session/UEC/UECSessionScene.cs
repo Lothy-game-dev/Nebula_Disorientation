@@ -119,7 +119,7 @@ public class UECSessionScene : MonoBehaviour
         // Second Weapon
         SecondWeaponGO = new();
         ChosenSecondWeapon = (string)SessionData["RightWeapon"];
-        int m = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"), ChosenFirstWeapon, "Weapon");
+        int m = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"), ChosenSecondWeapon, "Weapon");
         if (m == 0)
         {
             ChosenSecondWeapon = ListWeapon[inter];
@@ -132,6 +132,7 @@ public class UECSessionScene : MonoBehaviour
                 FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "RightWeapon", ChosenSecondWeapon.Replace(" ", ""));
             }
         }
+        Debug.Log(ChosenSecondWeapon);
         // First Weapon Gen
         for (int i=0; i< WeaponList.transform.childCount;i++)
         {
