@@ -64,6 +64,7 @@ public class Powers : MonoBehaviour
         sound.minDistance = 1000;
         sound.dopplerLevel = 0;
         sound.priority = 256;
+        sound.playOnAwake = false;
         audioScale = 1f;
         //Get power stat from DB
         Power = FindAnyObjectByType<AccessDatabase>().GetPowerDataByName(name.Replace("(Clone)", ""));
