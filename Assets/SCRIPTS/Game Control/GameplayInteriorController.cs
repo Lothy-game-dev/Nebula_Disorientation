@@ -23,6 +23,7 @@ public class GameplayInteriorController : MonoBehaviour
     public GameSavedText SaveText;
     public GameObject HUDMain;
     public GameObject PlayerHUD;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -167,6 +168,7 @@ public class GameplayInteriorController : MonoBehaviour
         Intro.SetActive(true);
         Intro.GetComponent<SpaceZoneIntro>().RunAnimation();
         Destroy(Fade);
+        Tutorial.SetActive(true);
     }
 
     public void GenerateBlackFadeOpenNoDelay(Vector2 pos,  float duration)
