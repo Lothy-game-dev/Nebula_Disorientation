@@ -552,17 +552,17 @@ public class InitializeDatabase : MonoBehaviour
             "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '25|30', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '25|30', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(3, 2, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 200)," +
-            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|50', '10-0-0', '9-1-0', null, null, null, 400, null)," +
+            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|50', '10-0-0', '9-1-0', null, null, null, 500, null)," +
             "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '30|40', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '30|35', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '30|35', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(8, 4, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '110|165', '10-0-0', '9-1-0', null, null, null, 300, 200)," +
-            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|55', '10-0-0', '9-1-0', null, null, null, 400, null)," +
+            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|55', '10-0-0', '9-1-0', null, null, null, 500, null)," +
             "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '35|45', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '35|40', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '35|40', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(13, 6, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '120|180', '10-0-0', '9-1-0', null, null, null, 300, 200)," +
-            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|60', '10-0-0', '9-1-0', null, null, null, 400, null)," +
+            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|60', '10-0-0', '9-1-0', null, null, null, 500, null)," +
             "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '40|50', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '40|45', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '40|45', '10-0-0', '9-1-0', null, null, null, null, null)," +
