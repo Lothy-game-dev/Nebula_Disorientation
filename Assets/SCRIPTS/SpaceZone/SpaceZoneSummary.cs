@@ -28,6 +28,7 @@ public class SpaceZoneSummary : MonoBehaviour
     public GameObject SessionShard;
     public GameObject FuelEnergy;
     public GameSavedText SaveText;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -85,6 +86,8 @@ public class SpaceZoneSummary : MonoBehaviour
     // Group all function that serve the same algorithm
     public void Summarize()
     {
+        FindAnyObjectByType<GameplayInteriorController>().Tutorial.SetActive(false);
+        Tutorial.SetActive(true);
         Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
         Time.timeScale = 0;
         stat = FindAnyObjectByType<StatisticController>();

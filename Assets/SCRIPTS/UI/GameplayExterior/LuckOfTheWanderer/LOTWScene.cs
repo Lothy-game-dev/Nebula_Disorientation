@@ -28,6 +28,7 @@ public class LOTWScene : MonoBehaviour
     public GameObject LOTWNoText;
     public GameObject SessionShardText;
     public GameSavedText SaveText;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     private List<int> ListAllLOTW;
@@ -80,6 +81,7 @@ public class LOTWScene : MonoBehaviour
         Camera.main.GetComponent<GameplayExteriorController>().GenerateBlackFadeOpenDelay(transform.position, 1f, 2f);
         StartCoroutine(GenerateDelay());
         StartTime = DateTime.Now;
+        Tutorial.SetActive(true);
     }
 
     // Update is called once per frame
@@ -273,6 +275,7 @@ public class LOTWScene : MonoBehaviour
 
     public void EnterGameplay()
     {
+        Tutorial.SetActive(false);
         FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 6f);
         StartCoroutine(WaitTeleport());
     }

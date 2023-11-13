@@ -157,7 +157,7 @@ public class CameraController : MonoBehaviour
     #region Main Gameplay Popup Screen
     public bool PauseGame()
     {
-        if (!InteriorController.isEnding)
+        if (!InteriorController.isEnding && !FindAnyObjectByType<FirstTimeTutorial>().isInTutorial)
         {
             if (!isPausing)
             {

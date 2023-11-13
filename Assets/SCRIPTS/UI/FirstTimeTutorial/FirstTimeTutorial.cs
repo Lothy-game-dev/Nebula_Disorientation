@@ -17,6 +17,7 @@ public class FirstTimeTutorial : MonoBehaviour
     public List<GameObject> Textbox;
     public List<GameObject> BlackBG;
     public string[] Text;
+    public GameObject StatusBoard;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -27,12 +28,21 @@ public class FirstTimeTutorial : MonoBehaviour
     private int PlayerID;
     private bool isNew;
     public bool isStart;
+    public bool isInTutorial;
+    private bool IsShow;
+    public bool isInGameplay;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
     private void OnEnable()
     {
-        PlayerID = FindAnyObjectByType<UECMainMenuController>().PlayerId;
+        if (FindAnyObjectByType<UECMainMenuController>() != null)
+        {
+            PlayerID = FindAnyObjectByType<UECMainMenuController>().PlayerId;
+        } else
+        {
+            PlayerID = PlayerPrefs.GetInt("PlayerID");
+        }
         PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerID);
 
         string[] UpdatedProgress = PlayerInformation["NewPilotTutorial"].ToString().Split("|");
@@ -67,6 +77,19 @@ public class FirstTimeTutorial : MonoBehaviour
                 Section++;
                 Tutorial();
             }
+
+            if (IsShow && Textbox.Count > Section - 1 && BlackBG.Count > Section - 1)
+            {
+                if (Textbox[Section - 1].GetComponent<SpriteRenderer>().color.a < 1 && Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color.a < 1)
+                {
+                    Color c = Textbox[Section - 1].GetComponent<SpriteRenderer>().color;
+                    c.a += 1/60f;
+                    Textbox[Section - 1].GetComponent<SpriteRenderer>().color = c;
+                    Color c1 = Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color;
+                    c1.a += 1 / 60f;
+                    Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().color = c1;
+                } 
+            }
         }
     }
     #endregion
@@ -95,7 +118,10 @@ public class FirstTimeTutorial : MonoBehaviour
                 BlackBG[i].SetActive(false);
             }
         
-            StopAllCoroutines();
+            if (!isInGameplay)
+            {
+                StopAllCoroutines();
+            }
             StartTutorial();
         }
     }
@@ -107,14 +133,36 @@ public class FirstTimeTutorial : MonoBehaviour
             Textbox[Section - 1].transform.GetChild(0).GetComponent<TextMeshPro>().text = Text[Section - 1];
             Textbox[Section - 1].SetActive(true);
             BlackBG[Section - 1].SetActive(true);
-            StartCoroutine(StartAnimation());
+            if (!isInGameplay)
+            {
+                StartCoroutine(StartAnimation());
+            } else
+            {
+                if (StatusBoard != null)
+                {
+                    StatusBoard.SetActive(true);
+                }
+                Time.timeScale = 0;
+                isInTutorial = true;
+                IsShow = true;
+            }
         } else
         {
             PlayerInformation = FindAnyObjectByType<AccessDatabase>().GetPlayerInformationById(PlayerID);           
             Section = 0;
             isShowAgain = false;
-            isNew = false;
+            isNew = false; 
+            IsShow = false;
             GetComponent<BoxCollider2D>().enabled = false;
+            if (StatusBoard != null)
+            {
+                StatusBoard.SetActive(false);               
+            }
+            if (Screen == "Gameplay")
+            {
+                Time.timeScale = 1;
+            }
+            isInTutorial = false;
         }
        
     }
