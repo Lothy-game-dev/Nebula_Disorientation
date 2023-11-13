@@ -104,7 +104,6 @@ public class Barrier : Powers
 
             Fighter.GetComponent<FighterShared>().MaxBarrier *= BRx;
             Fighter.GetComponent<FighterShared>().CurrentBarrier += IncreaseMaxBarrierAmount;
-         
         }
         
     }

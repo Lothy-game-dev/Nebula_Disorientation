@@ -248,46 +248,47 @@ public class FighterController : MonoBehaviour
 
 
         // set 1st power 
-        for (int i = 0; i < PowerModel.transform.childCount; i++)
+        if (DatabaseFirstPower != null && DatabaseFirstPower !="")
         {
-           
-            if (DatabaseFirstPower != null && DatabaseFirstPower !="")
+            for (int i = 0; i < PowerModel.transform.childCount; i++)
             {
                 if (PowerModel.transform.GetChild(i).name.Equals(DatabaseFirstPower))
                 {
                     FirstPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, FirstPowerImage.transform.GetChild(0).position, Quaternion.identity);
                     FirstPower.SetActive(true);
-                    FirstPower.transform.SetParent(FirstPowerImage.transform);
+                    FirstPower.transform.SetParent(PlayerFighter.transform);
                     FirstPowerImage.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(DatabaseFirstPower, "Power");
-                    FirstPower.transform.localScale = new Vector2(FirstPowerImage.transform.GetChild(0).localScale.x, FirstPowerImage.transform.GetChild(0).localScale.y);
-                    FirstPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                    FirstPowerImage.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = FirstPower.GetComponent<SpriteRenderer>().sprite;
+                    FirstPowerImage.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 201;
+                    FirstPowerImage.transform.GetChild(0).gameObject.SetActive(true);
+                    FirstPower.GetComponent<SpriteRenderer>().enabled = false;
                     PlayerFighter.GetComponent<PlayerFighter>().FirstPower = FirstPower;
                     FirstPower.GetComponent<Powers>().EnemyLayer = EnemyLayer;
                     FirstPower.GetComponent<Powers>().LOTWEffect = LOTWEffect;
                     FirstPower.GetComponent<Powers>().InitData(FirstPower.name);
                     break;
                 }
-            } else
-            {
-                Destroy(FirstPowerImage.GetComponent<HUDCreateInfoBoard>());
-                FirstPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
-                break;
-            }           
-        }
-        //set 2nd power
-        for (int i = 0; i < PowerModel.transform.childCount; i++)
+            }
+        } else
         {
-
-            if (DatabaseSecondPower != null && DatabaseSecondPower != "")
+            Destroy(FirstPowerImage.GetComponent<HUDCreateInfoBoard>());
+            FirstPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
+        }           
+        //set 2nd power
+        if (DatabaseSecondPower != null && DatabaseSecondPower != "")
+        {
+            for (int i = 0; i < PowerModel.transform.childCount; i++)
             {
                 if (PowerModel.transform.GetChild(i).name.Equals(DatabaseSecondPower))
                 {
                     SecondPower = Instantiate(PowerModel.transform.GetChild(i).gameObject, SecondPowerImage.transform.GetChild(0).position, Quaternion.identity);
                     SecondPower.SetActive(true);
-                    SecondPower.transform.SetParent(SecondPowerImage.transform);
+                    SecondPower.transform.SetParent(PlayerFighter.transform);
                     SecondPowerImage.GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(DatabaseSecondPower, "Power");
-                    SecondPower.transform.localScale = new Vector2(SecondPowerImage.transform.GetChild(0).localScale.x, SecondPowerImage.transform.GetChild(0).localScale.y);
-                    SecondPower.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                    SecondPowerImage.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = SecondPower.GetComponent<SpriteRenderer>().sprite;
+                    SecondPowerImage.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 201;
+                    SecondPowerImage.transform.GetChild(0).gameObject.SetActive(true);
+                    SecondPower.GetComponent<SpriteRenderer>().enabled = false;
                     PlayerFighter.GetComponent<PlayerFighter>().SecondPower = SecondPower;
                     SecondPower.GetComponent<Powers>().EnemyLayer = EnemyLayer;
                     SecondPower.GetComponent<Powers>().LOTWEffect = LOTWEffect;
@@ -296,14 +297,12 @@ public class FighterController : MonoBehaviour
 
                 }
             }
-            else
-            {
-                Destroy(SecondPowerImage.GetComponent<HUDCreateInfoBoard>());
-                SecondPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
-                break;
-            }
         }
-
+        else
+        {
+            Destroy(SecondPowerImage.GetComponent<HUDCreateInfoBoard>());
+            SecondPowerImage.transform.GetChild(1).GetChild(0).GetComponent<Image>().fillAmount = 1;
+        }
         //set consumable
         int checkCount = 0;
         if (DatabaseConsumables.Count > 0)
@@ -320,7 +319,7 @@ public class FighterController : MonoBehaviour
                     {
                         GameObject cons = Instantiate(ConsumableModel.transform.GetChild(i).gameObject, ConsumableImages[count].transform.GetChild(0).position, Quaternion.identity);
                         cons.SetActive(true);
-                        cons.transform.SetParent(ConsumableImages[count].transform);
+                        cons.transform.SetParent(PlayerFighter.transform);
                         ConsumableImages[count].GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(ConsumableModel.transform.GetChild(i).name, "Consumable");
                         cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
                         cons.GetComponent<SpriteRenderer>().sortingOrder = 201;
