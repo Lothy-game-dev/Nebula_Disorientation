@@ -321,8 +321,10 @@ public class FighterController : MonoBehaviour
                         cons.SetActive(true);
                         cons.transform.SetParent(PlayerFighter.transform);
                         ConsumableImages[count].GetComponent<HUDCreateInfoBoard>().Text[0] = FindObjectOfType<AccessDatabase>().GetItemRealName(ConsumableModel.transform.GetChild(i).name, "Consumable");
-                        cons.transform.localScale = new Vector2(ConsumableImages[count].transform.GetChild(0).localScale.x, ConsumableImages[count].transform.GetChild(0).localScale.y);
-                        cons.GetComponent<SpriteRenderer>().sortingOrder = 201;
+                        ConsumableImages[count].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = cons.GetComponent<SpriteRenderer>().sprite;
+                        ConsumableImages[count].transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = 201;
+                        ConsumableImages[count].transform.GetChild(0).gameObject.SetActive(true);
+                        cons.GetComponent<SpriteRenderer>().enabled = false;
                         cons.GetComponent<Consumable>().InitData(ConsumableModel.transform.GetChild(i).name);
                         ConsumableName.Add(cons);
                         count++;
