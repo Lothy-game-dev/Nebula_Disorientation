@@ -214,6 +214,7 @@ public class SessionArsenalService : MonoBehaviour
                     {
                         if (100 - CurrentHPPercent < 100 && 100 - CurrentHPPercent > 50)
                         {
+                            Debug.Log("aaa");
                             Item[i].transform.GetChild(1).gameObject.SetActive(false);
                             Item[i - 1].transform.GetChild(1).gameObject.SetActive(false);
                             Item[i - 2].transform.GetChild(1).gameObject.SetActive(false);
