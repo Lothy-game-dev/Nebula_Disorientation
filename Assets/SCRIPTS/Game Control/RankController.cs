@@ -24,6 +24,7 @@ public class RankController : MonoBehaviour
     private List<List<string>> RankList;
     private bool FirstCondition;
     private bool SecondCondition;
+    private List<int> RankUpList;
     private int PlayerID;
     private int EnemyTierI;
     private int EnemyTierII;
@@ -60,6 +61,7 @@ public class RankController : MonoBehaviour
         nc = FindAnyObjectByType<NotificationBoardController>();
         RankList = ad.GetAllRank();
         RankUpId = -1;
+        RankUpList = new List<int>();
     }
 
     // Update is called once per frame
@@ -103,6 +105,7 @@ public class RankController : MonoBehaviour
                 case "C":
                     if (int.Parse(RankStat["RankCondition2Num"].ToString()) <= MissionCompleted)
                     {
+                        
                         SecondCondition = true;
                     } else
                         {
@@ -166,27 +169,16 @@ public class RankController : MonoBehaviour
                 default: SecondCondition = true; break;
             }
 
-            if (ListData["Rank"].ToString() != "Unranked")
-            {
-                if ((!FirstCondition && !SecondCondition) || (!FirstCondition && RankStat["RankCondition2Verb"].ToString() == "Null"))
+            if (FirstCondition && SecondCondition)
                 {
-                    RankUpId = int.Parse(RankList[i][0].ToString()) - 1;
-                    break;
+                    RankUpList.Add(int.Parse(RankList[i][0].ToString()));
                 }
-            } else
-            {
-                if ((FirstCondition && SecondCondition))
-                {
-                    RankUpId = int.Parse(RankList[i][0].ToString());
-                    break;
-                }
-            }
         }
 
         }
-        if (RankUpId != -1 && int.Parse(ListData["RankId"].ToString()) < RankUpId - 1 || ListData["Rank"].ToString() == "Unranked")
+        if (RankUpList.Count > 0 && int.Parse(ListData["RankId"].ToString()) < RankUpList[RankUpList.Count - 1])
         {
-            RankStat = ad.GetRankById(RankUpId, int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
+            RankStat = ad.GetRankById(RankUpList[RankUpList.Count - 1], int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);
             ad.UpdateRank(PlayerID, RankStat);
             nc.CreateRankUpNotiBoard(RankStat["RankName"].ToString(), 3f);
             ListData = ad.GetPlayerInformationById(PlayerID);
@@ -194,7 +186,7 @@ public class RankController : MonoBehaviour
             {
                 FindAnyObjectByType<UECMainMenuController>().GetData();
             }
-            RankUpId = -1;
+            RankUpList = new List<int>();
         }
     }
     #endregion
