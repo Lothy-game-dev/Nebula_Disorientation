@@ -110,6 +110,7 @@
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\UECSessionBlackBackground.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\InformationBoard.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Session\UEC\ConvertSessionBoard.cs" />
+    <Compile Include="Assets\SCRIPTS\UI\LoadOut\LoadOutTextRed.cs" />
     <Compile Include="Assets\SCRIPTS\UI\GameplayHUD\MiniMap.cs" />
     <Compile Include="Assets\SCRIPTS\Game Control\UECMainMenuController.cs" />
     <Compile Include="Assets\SCRIPTS\UI\Common\NotificationBoard.cs" />
