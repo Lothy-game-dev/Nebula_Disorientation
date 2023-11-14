@@ -571,7 +571,7 @@ public class InitializeDatabase : MonoBehaviour
             "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '160|170', '9-1-0', '8-2-0', null, null, null, null, null)," +
             "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '190|160', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
             "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '100|75',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0', null, null)," +
-            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '50|60', '8-2-0', '8-1-1', null, null, null, null, null);";
+            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '75|50', '8-2-0', '8-1-1', null, null, null, null, null);";
         // Insert SpaceZonePosition
         string SpaceZonePosition = "INSERT INTO SpaceZonePosition VALUES " +
             "(1, 'PN', '(-3500,-700)', '(-2100,700)')," +
