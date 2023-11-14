@@ -109,9 +109,9 @@ public class SpaceZoneSummary : MonoBehaviour
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = stat.CurrentFuelCell;
       
-        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP (" + Mathf.CeilToInt(stat.CurrentHP / stat.MaxHP * 100) + "%)";
+        CurrentFighterHP.GetComponent<TextMeshPro>().text = "Current Fighter HP (" + Mathf.CeilToInt(int.Parse(SessionData["SessionCurrentHP"].ToString()) / stat.MaxHP * 100) + "%)";
         HPSlider.GetComponent<Slider>().maxValue = Mathf.RoundToInt(stat.MaxHP);
-        HPSlider.GetComponent<Slider>().value = Mathf.RoundToInt(stat.CurrentHP);
+        HPSlider.GetComponent<Slider>().value = Mathf.RoundToInt(int.Parse(SessionData["SessionCurrentHP"].ToString()));
 
         // Load data for next
         // Get Next Stage Number, Variant and Hazard
