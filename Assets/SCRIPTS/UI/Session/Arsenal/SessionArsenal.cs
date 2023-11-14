@@ -32,6 +32,7 @@ public class SessionArsenal : MonoBehaviour
     public GameObject PowerButton;
     public GameObject WeaponButton;
     public GameObject BuyButton;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -71,6 +72,7 @@ public class SessionArsenal : MonoBehaviour
     void OnEnable()
     {
         SetFirstData();
+        Tutorial.SetActive(true);
     }  
     // Update is called once per frame
     void Update()
@@ -80,6 +82,7 @@ public class SessionArsenal : MonoBehaviour
     private void OnDisable()
     {
         ResetData();
+        Tutorial.SetActive(false);
     }
     #endregion
     #region Generate first weapon category

@@ -25,6 +25,7 @@ public class SessionArsenalService : MonoBehaviour
     public GameObject ModelBox;
     public GameObject PlayerCash;
     public GameObject OrderButton;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -51,6 +52,7 @@ public class SessionArsenalService : MonoBehaviour
     {
         // Initialize variables
         GetData();
+        Tutorial.SetActive(true);
     }
 
     // Update is called once per frame
@@ -242,6 +244,7 @@ public class SessionArsenalService : MonoBehaviour
     private void OnDisable()
     {
         Destroy(ModelGO);
+        Tutorial.SetActive(false);
     }
     #endregion
 }

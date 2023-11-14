@@ -49,96 +49,7 @@ public class ArsenalButton : MonoBehaviour
     private void OnMouseDown()
     {
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
-        if ("Weapon" == gameObject.name)
-        {
-            DeleteAllChild();
-            //Start animation
-            if (ArsenalController.CurrentTab != "Weapon")
-            {
-                ArsenalController.CurrentTab = "Weapon";
-                ArsenalController.CurrentCoroutine = StartCoroutine(StartAnimation());
-            }
-            StatusContent.SetActive(true);
-            OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-            //Generate item
-            for (int i = 0; i < ArsenalController.WeaponList.Count; i++)
-            {
-                GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                g.name = ArsenalController.WeaponList[i][2];
-                g.transform.SetParent(Content.transform);
-                g.transform.localScale = new Vector3(1, 1, 0);
-                g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + ArsenalController.WeaponList[i][9].ToUpper() + ">" + ArsenalController.WeaponList[i][2] + "</color>";
-                g.GetComponent<ArsenalItem>().Id = ArsenalController.WeaponList[i][0];
-                g.GetComponent<ArsenalItem>().Type = "Weapon";
-                g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
-                g.GetComponent<ArsenalItem>().Content = Content;
-                g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.WeaponList;
-                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
-                // check owned item
-                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
-                g.name, "Weapon");
-                if (n != -1)
-                {
-                    if (n >= 2)
-                    {
-                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "2/2";
-                    }
-                    else if (n >= 0)
-                    {
-                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
-                    }
-                }
-                ArsenalController.LockItem(g, ArsenalController.WeaponList[i][8], ArsenalController.WeaponList[i][0]);
-                g.SetActive(true);
-                if (i == 0) 
-                {
-                    g.GetComponent<ArsenalItem>().ArsenalInformation(ArsenalController.WeaponList, "1");
-
-                }              
-
-            }
-        }
-        else
-        {
-            if ("Power" == gameObject.name)
-            {
-                DeleteAllChild();
-                //Start animation
-                if (ArsenalController.CurrentTab != "Power")
-                {
-                    ArsenalController.CurrentTab = "Power";
-                    ArsenalController.CurrentCoroutine = StartCoroutine(StartAnimation());
-
-                }
-                StatusContent.SetActive(true);
-                OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
-                gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-                //Generate item
-                for (int i = 0; i < ArsenalController.PowerList.Count; i++)
-                {
-                    GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                    g.name = ArsenalController.PowerList[i][2];
-                    g.transform.SetParent(Content.transform);
-                    g.transform.localScale = new Vector3(1, 1, 0);
-                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + ArsenalController.PowerList[i][9].ToUpper() + ">" + ArsenalController.PowerList[i][2] + "</color>";
-                    g.GetComponent<ArsenalItem>().Id = ArsenalController.PowerList[i][0];
-                    g.GetComponent<ArsenalItem>().Type = "Power";
-                    g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
-                    g.GetComponent<ArsenalItem>().Content = Content;
-                    g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.PowerList;
-                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower() == (item.name.ToLower()))].sprite;
-                    g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                    g.SetActive(true);
-                    ArsenalController.LockItem(g, ArsenalController.PowerList[i][8], ArsenalController.PowerList[i][0]);
-                    if (i == 0)
-                    {
-                        g.GetComponent<ArsenalItem>().ArsenalInformation(ArsenalController.PowerList, "1");
-                    }
-                }
-
-            }
-        }
+        Switch(gameObject.name);
     }
     #endregion
     #region Delete all item before generating a new list
@@ -175,7 +86,7 @@ public class ArsenalButton : MonoBehaviour
     }
     #endregion
     #region Animation
-    private IEnumerator StartAnimation()
+    public IEnumerator StartAnimation()
     {
         // get the color of the object
         GameObject game = Content.transform.parent.parent.parent.parent.gameObject;
@@ -259,6 +170,101 @@ public class ArsenalButton : MonoBehaviour
             // and enable the col of the object
             gameObject.GetComponent<Collider2D>().enabled = true;
             OtherButton.GetComponent<Collider2D>().enabled = true;
+    }
+    #endregion
+    #region Switch category
+    public void Switch(string category)
+    {
+        if ("Weapon" == category)
+        {
+            DeleteAllChild();
+            //Start animation
+            if (ArsenalController.CurrentTab != "Weapon")
+            {
+                ArsenalController.CurrentTab = "Weapon";
+                ArsenalController.CurrentCoroutine = StartCoroutine(StartAnimation());
+            }
+            StatusContent.SetActive(true);
+            OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+            //Generate item
+            for (int i = 0; i < ArsenalController.WeaponList.Count; i++)
+            {
+                GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                g.name = ArsenalController.WeaponList[i][2];
+                g.transform.SetParent(Content.transform);
+                g.transform.localScale = new Vector3(1, 1, 0);
+                g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + ArsenalController.WeaponList[i][9].ToUpper() + ">" + ArsenalController.WeaponList[i][2] + "</color>";
+                g.GetComponent<ArsenalItem>().Id = ArsenalController.WeaponList[i][0];
+                g.GetComponent<ArsenalItem>().Type = "Weapon";
+                g.GetComponent<ArsenalItem>().ItemStatusList = WeaponStatus;
+                g.GetComponent<ArsenalItem>().Content = Content;
+                g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.WeaponList;
+                g.transform.GetChild(0).GetComponent<Image>().sprite = WeaponImage.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
+                // check owned item
+                int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId,
+                g.name, "Weapon");
+                if (n != -1)
+                {
+                    if (n >= 2)
+                    {
+                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = "2/2";
+                    }
+                    else if (n >= 0)
+                    {
+                        g.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = n + "/2";
+                    }
+                }
+                ArsenalController.LockItem(g, ArsenalController.WeaponList[i][8], ArsenalController.WeaponList[i][0]);
+                g.SetActive(true);
+                if (i == 0)
+                {
+                    g.GetComponent<ArsenalItem>().ArsenalInformation(ArsenalController.WeaponList, "1");
+
+                }
+
+            }
+        }
+        else
+        {
+            if ("Power" == category)
+            {
+                DeleteAllChild();
+                //Start animation
+                if (ArsenalController.CurrentTab != "Power")
+                {
+                    ArsenalController.CurrentTab = "Power";
+                    ArsenalController.CurrentCoroutine = StartCoroutine(StartAnimation());
+
+                }
+                StatusContent.SetActive(true);
+                OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
+                gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+                //Generate item
+                for (int i = 0; i < ArsenalController.PowerList.Count; i++)
+                {
+                    GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);
+                    g.name = ArsenalController.PowerList[i][2];
+                    g.transform.SetParent(Content.transform);
+                    g.transform.localScale = new Vector3(1, 1, 0);
+                    g.transform.GetChild(1).GetComponent<TMP_Text>().text = "<color=" + ArsenalController.PowerList[i][9].ToUpper() + ">" + ArsenalController.PowerList[i][2] + "</color>";
+                    g.GetComponent<ArsenalItem>().Id = ArsenalController.PowerList[i][0];
+                    g.GetComponent<ArsenalItem>().Type = "Power";
+                    g.GetComponent<ArsenalItem>().ItemStatusList = PowerStatus;
+                    g.GetComponent<ArsenalItem>().Content = Content;
+                    g.GetComponent<ArsenalItem>().ArItemList = ArsenalController.PowerList;
+                    g.transform.GetChild(0).GetComponent<Image>().sprite = PowerImage[PowerImage.FindIndex(item => ArsenalController.PowerList[i][2].Replace(" ", "").ToLower() == (item.name.ToLower()))].sprite;
+                    g.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                    g.SetActive(true);
+                    ArsenalController.LockItem(g, ArsenalController.PowerList[i][8], ArsenalController.PowerList[i][0]);
+                    if (i == 0)
+                    {
+                        g.GetComponent<ArsenalItem>().ArsenalInformation(ArsenalController.PowerList, "1");
+                    }
+                }
+
+            }
+        }
     }
     #endregion
 }

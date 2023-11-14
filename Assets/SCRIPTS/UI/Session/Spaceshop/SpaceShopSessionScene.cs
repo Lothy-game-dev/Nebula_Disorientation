@@ -12,6 +12,7 @@ public class SpaceShopSessionScene : MonoBehaviour
     #region InitializeVariables
     public GameObject Cash;
     public GameObject ListItem;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     private int CurrentCash;
@@ -24,6 +25,12 @@ public class SpaceShopSessionScene : MonoBehaviour
         ListItem.SetActive(true);
         CurrentCash = 0;
         SetData();
+        Tutorial.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        Tutorial.SetActive(false);
     }
 
     // Update is called once per frame

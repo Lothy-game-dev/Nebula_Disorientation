@@ -32,6 +32,7 @@ public class UECSessionScene : MonoBehaviour
     public GameObject CurrentHPText;
     public UECSessionShopIcon[] Icons;
     public GameSavedText SaveText;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     private Dictionary<string, object> SessionData;
@@ -59,6 +60,7 @@ public class UECSessionScene : MonoBehaviour
         SaveText.FadingCountDown = 5f;
         SaveText.AlreadySetCountDown = true;
         StopMovingIcon = false;
+        Tutorial.SetActive(true);
     }
 
     // Update is called once per frame

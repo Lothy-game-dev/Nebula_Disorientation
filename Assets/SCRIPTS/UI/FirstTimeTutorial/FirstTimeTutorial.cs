@@ -18,6 +18,7 @@ public class FirstTimeTutorial : MonoBehaviour
     public List<GameObject> BlackBG;
     public string[] Text;
     public GameObject StatusBoard;
+    public GameObject ArsenalCategory;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -135,6 +136,10 @@ public class FirstTimeTutorial : MonoBehaviour
             BlackBG[Section - 1].SetActive(true);
             if (!isInGameplay)
             {
+                if (ArsenalCategory != null)
+                {
+                    ArsenalCategory.GetComponent<ArsenalButton>().Switch("Power");
+                }
                 StartCoroutine(StartAnimation());
             } else
             {
