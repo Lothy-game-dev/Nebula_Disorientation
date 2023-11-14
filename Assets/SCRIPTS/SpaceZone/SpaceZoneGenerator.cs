@@ -318,7 +318,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             AllyArmyRating *= (1 + (float)Scale50SSC / 4);
             EnemyArmyRating *= (1 + (float)Scale50SSC / 4);
         }
-        if (SpaceZoneNo<350)
+        if (SpaceZoneNo<200)
         {
             int Scale50 = SpaceZoneNo / 50;
             if (Scale50 >= 1)
@@ -354,15 +354,17 @@ public class SpaceZoneGenerator : MonoBehaviour
         } else
         {
             AllySquadX = 0;
-            AllySquadY = 7;
-            AllySquadZ = 3;
+            AllySquadY = 8;
+            AllySquadZ = 2;
             EnemySquadX = 0;
-            EnemySquadY = 7;
-            EnemySquadZ = 3;
+            EnemySquadY = 8;
+            EnemySquadZ = 2;
         }
         
         // Squad for (10n)*10
         int SquadScale = SpaceZoneNo / 100;
+
+        int XLimit = 6;
         if (SquadScale >= 1)
         {
             if (SpaceZoneNo%10 != 0 || ChosenVariant != 1)
@@ -370,10 +372,10 @@ public class SpaceZoneGenerator : MonoBehaviour
                 float realScaleAllyArmy = 0;
                 if (AllyArmyX > 0)
                 {
-                    if (AllyArmyX - (float)SquadScale / 2 < 5)
+                    if (AllyArmyX - (float)SquadScale / 2 < XLimit)
                     {
-                        realScaleAllyArmy = AllyArmyX - 5;
-                        AllyArmyX = 5;
+                        realScaleAllyArmy = AllyArmyX - XLimit;
+                        AllyArmyX = XLimit;
                     }
                     else
                     {
@@ -385,10 +387,10 @@ public class SpaceZoneGenerator : MonoBehaviour
                 if (EnemyArmyX > 0)
                 {
                     float realScaleEnemyArmy = 0;
-                    if (EnemyArmyX - (float)SquadScale / 2 < 5)
+                    if (EnemyArmyX - (float)SquadScale / 2 < XLimit)
                     {
-                        realScaleEnemyArmy = EnemyArmyX - 5;
-                        EnemyArmyX = 5;
+                        realScaleEnemyArmy = EnemyArmyX - XLimit;
+                        EnemyArmyX = XLimit;
                     }
                     else
                     {
@@ -400,7 +402,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             }
         }
         // Get Data Fighter Group
-        Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo>350? "350":""));
+        Dictionary<string, object> FighterGroupData = FindObjectOfType<AccessDatabase>().GetFighterGroupsDataByName((string)TemplateData["FighterGroup"] + (SpaceZoneNo>200? "200":""));
 
         for (int i = 0; i < FighterGroupData["AlliesFighterB"].ToString().Split(",").Length; i++)
         {
