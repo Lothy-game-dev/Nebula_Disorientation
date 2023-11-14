@@ -34,6 +34,7 @@ public class SessionSummary : MonoBehaviour
     public AudioClip Retreat;
     public AudioClip Failed;
     public GameObject SessionPlayTime;
+    public GameObject Tutorial;
     #endregion
     #region NormalVariables
     // All other variables apart from the two aforementioned types
@@ -55,6 +56,7 @@ public class SessionSummary : MonoBehaviour
         ad = FindAnyObjectByType<AccessDatabase>();
         SetData();
         GenerateBlackFadeOpen(transform.position,3f, 1f);
+        Tutorial.SetActive(true);
     }
 
     // Update is called once per frame
