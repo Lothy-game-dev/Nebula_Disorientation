@@ -739,7 +739,10 @@ public class FighterShared : MonoBehaviour
         {
             if (isPower)
             {
-                damage = damage * 50 / 100f;
+                damage = damage * 75 / 100f;
+            } else
+            {
+                damage = damage * 25 / 100f;
             }
             if (GetComponent<PlayerFighter>() == null)
             {
