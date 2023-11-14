@@ -190,7 +190,7 @@ public class FighterShared : MonoBehaviour
                 {
                     Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("FighterExplo", transform.GetChild(12).gameObject);
                 }
-                if (name == "Player")
+                if (name == "Player" && !misson.alreadyComplete)
                 {
                     misson.PlayerDestroyed();
                 }

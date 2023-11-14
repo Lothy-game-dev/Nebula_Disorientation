@@ -894,12 +894,13 @@ public class WSShared : MonoBehaviour
             Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
             Ally.GetComponent<EnemyShared>().HPScale = HPScale;
             Ally.GetComponent<EnemyShared>().CashBountyScale = BountyScale;
-            Ally.GetComponent<EnemyShared>().Tier = tier;
+            Ally.GetComponent<EnemyShared>().Tier = 2;
             Ally.GetComponent<EnemyShared>().InitData(DataDict, ChosenModel);
         } else
         {
             Ally.GetComponent<SpriteRenderer>().sprite = ChosenModel.GetComponent<SpriteRenderer>().sprite;
-            Ally.GetComponent<AlliesShared>().HPScale = HPScale;
+            Ally.GetComponent<AlliesShared>().HPScale = HPScale; 
+            Ally.GetComponent<AlliesShared>().Class = "B";
             Ally.GetComponent<AlliesShared>().InitData(DataDict, ChosenModel);
 
         }
