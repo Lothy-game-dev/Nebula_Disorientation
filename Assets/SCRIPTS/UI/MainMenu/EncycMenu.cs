@@ -31,13 +31,15 @@ public class EncycMenu : MainMenuSceneShared
     public List<List<string>> WeaponList;
     public List<List<string>> FighterList;
     public List<List<string>> PowerList;
-    private List<GameObject> OthersCategory;
     public List<List<string>> EnemyList;
     public List<List<string>> ConsumList;
     public List<List<string>> WarshipList;
     public List<List<string>> SStationList;
     public List<List<string>> DmgElementList;
     public List<List<string>> AttributeList;
+    public List<string> Story;
+    public List<string> StoryName;
+    public GameObject CurrentItem;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -63,150 +65,6 @@ public class EncycMenu : MainMenuSceneShared
     }
     #endregion
     #region Generate list for each category
-    private void OnMouseDown()
-    {
-    
-        if ("Weapon".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
-        {
-            ResetAll();
-            ChangeColorWhenChoosen("Weapon");
-            for (int i = 0; i < WeaponList.Count; i++)
-            {
-                GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                game.transform.SetParent(Content.transform);
-                game.transform.localScale = new Vector3(2, 7, 0);
-                game.transform.GetChild(0).GetComponent<TMP_Text>().text = WeaponList[i][2];
-                game.GetComponent<EncycButton>().Type = "Weapon";
-                game.GetComponent<EncycButton>().Id = int.Parse(WeaponList[i][0]);
-                game.name = WeaponList[i][2];
-                game.SetActive(true);
-
-            }
-        } else
-        {
-            if ("Fighter".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
-            {
-                ResetAll();
-                ChangeColorWhenChoosen("Fighter");
-                for (int i = 0; i < FighterList.Count + EnemyList.Count; i++)
-                {
-                    GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                    game.transform.SetParent(Content.transform);
-                    game.transform.localScale = new Vector3(2, 7, 0);
-                    if (i < FighterList.Count)
-                    {
-                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = FighterList[i][1];
-                        game.GetComponent<EncycButton>().Type = "Fighter";
-                        game.GetComponent<EncycButton>().Id = int.Parse(FighterList[i][0]);
-                        game.name = FighterList[i][1];
-                    } else
-                    {
-                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = EnemyList[i - FighterList.Count][1];
-                        game.GetComponent<EncycButton>().Type = "Enemy";
-                        game.GetComponent<EncycButton>().Id = int.Parse(EnemyList[i - FighterList.Count][0]);
-                        game.name = EnemyList[i - FighterList.Count][1];
-
-                    }
-                    game.SetActive(true);
-                }
-            } else
-            {
-                if ("WS & SS".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
-                {
-                    ResetAll();
-                    ChangeColorWhenChoosen("WS & SS");
-                    Debug.Log(WarshipList.Count);
-                    for (int i = 0; i < WarshipList.Count + SStationList.Count; i++)
-                    {
-                        GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                        game.transform.SetParent(Content.transform);
-                        game.transform.localScale = new Vector3(2, 7, 0);
-                        if (i < WarshipList.Count)
-                        {
-                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = WarshipList[i][1];
-                            game.GetComponent<EncycButton>().Type = "Warship";
-                            game.GetComponent<EncycButton>().Id = int.Parse(WarshipList[i][0]);
-                            game.name = WarshipList[i][1];
-
-                        }
-                        else
-                        {
-                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = SStationList[i - WarshipList.Count][1];
-                            game.GetComponent<EncycButton>().Type = "SpaceStation";
-                            game.GetComponent<EncycButton>().Id = int.Parse(SStationList[i - WarshipList.Count][0]);
-                            game.name = SStationList[i - WarshipList.Count][1];
-                        }
-                        game.SetActive(true);
-                    }
-
-                } else
-                {
-                    if ("Power & Consumable".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
-                    {
-                        ResetAll();
-                        ChangeColorWhenChoosen("Power & Consumable");
-                        for (int i = 0; i < PowerList.Count + ConsumList.Count; i++)
-                        {
-                            GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                            game.transform.SetParent(Content.transform);
-                            game.transform.localScale = new Vector3(2, 7, 0);
-                            if (i < PowerList.Count)
-                            {
-                                game.transform.GetChild(0).GetComponent<TMP_Text>().text = PowerList[i][2];
-                                game.GetComponent<EncycButton>().Type = "Power";
-                                game.GetComponent<EncycButton>().Id = int.Parse(PowerList[i][0]);
-                                game.name = PowerList[i][2];
-
-                            } else
-                            {
-                                game.transform.GetChild(0).GetComponent<TMP_Text>().text = ConsumList[i - PowerList.Count][1];
-                                game.GetComponent<EncycButton>().Type = "Consumable";
-                                game.GetComponent<EncycButton>().Id = int.Parse(ConsumList[i - PowerList.Count][0]);
-                                game.name = ConsumList[i - PowerList.Count][1];
-                            }
-                            game.SetActive(true);
-                        } 
-                    } else
-                    {
-                        if ("Damage Element".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
-                        {
-                            ResetAll();
-                            ChangeColorWhenChoosen("Damage Element");
-                            for (int i = 0; i < DmgElementList.Count; i++)
-                            {
-                                GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                                game.transform.SetParent(Content.transform);
-                                game.transform.localScale = new Vector3(2, 7, 0);
-                                game.transform.GetChild(0).GetComponent<TMP_Text>().text = DmgElementList[i][1];
-                                game.GetComponent<EncycButton>().Type = "DMG";
-                                game.GetComponent<EncycButton>().Id = int.Parse(DmgElementList[i][0]);
-                                game.name = DmgElementList[i][1];
-                                game.SetActive(true);
-                            }
-                        } else
-                        {
-                            if ("Attribute".Equals(gameObject.GetComponentInChildren<TMP_Text>().text))
-                            {
-                                ResetAll();
-                                ChangeColorWhenChoosen("Attribute");
-                                for (int i = 0; i < AttributeList.Count; i++)
-                                {
-                                    GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-                                    game.transform.SetParent(Content.transform);
-                                    game.transform.localScale = new Vector3(2, 7, 0);
-                                    game.transform.GetChild(0).GetComponent<TMP_Text>().text = AttributeList[i][1];
-                                    game.GetComponent<EncycButton>().Type = "ATT";
-                                    game.GetComponent<EncycButton>().Id = int.Parse(AttributeList[i][0]);
-                                    game.name = AttributeList[i][1];
-                                    game.SetActive(true);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
     #endregion
     #region Delete the item before generating a new list
     // Group all function that serve the same algorithm
@@ -234,20 +92,13 @@ public class EncycMenu : MainMenuSceneShared
     }
     #endregion
     #region Change color when choosen
-    public void ChangeColorWhenChoosen(string ObjectName)
+    public void ChangeColorWhenChoosen()
     {
-
         for (int i = 0; i < CategoryContent.transform.childCount; i++)
         {
-            if (ObjectName != CategoryContent.transform.GetChild(i).GetComponentInChildren<TMP_Text>().text) 
-            {
-                CategoryContent.transform.GetChild(i).GetComponent<Image>().color = Color.white;
-
-            } else
-            {
-                CategoryContent.transform.GetChild(i).GetComponent<Image>().color = Color.green;
-            }
+            CategoryContent.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(54/255f ,140/255f, 224/255f, 1);
         }
+        CurrentItem.GetComponent<SpriteRenderer>().color = Color.green;
     }
     #endregion
     #region Animation
@@ -277,51 +128,260 @@ public class EncycMenu : MainMenuSceneShared
         SStationList = FindAnyObjectByType<AccessDatabase>().GetAllSpaceStation();
         DmgElementList = FindAnyObjectByType<AccessDatabase>().GetAllDMGElement();
         AttributeList = FindAnyObjectByType<AccessDatabase>().GetAllAttribute();
-        for (int i = 0; i < Category.Length; i++)
-        {
-            GameObject g = Instantiate(CateTemplate, CateTemplate.transform.position, Quaternion.identity);
-            g.transform.SetParent(CategoryContent.transform);
-            g.transform.GetChild(0).GetComponent<TMP_Text>().text = Category[i];
-            g.SetActive(true);
-        }
-        ChangeColorWhenChoosen("Fighter");
-        for (int i = 0; i < FighterList.Count + EnemyList.Count; i++)
-        {
-            GameObject game = Instantiate(Item, Item.transform.position, Quaternion.identity);
-            game.transform.SetParent(Content.transform);
-            game.transform.localScale = new Vector3(2, 7, 0);
-            if (i < FighterList.Count)
-            {
-                game.transform.GetChild(0).GetComponent<TMP_Text>().text = FighterList[i][1];
-                game.GetComponent<EncycButton>().Type = "Fighter";
-                game.GetComponent<EncycButton>().Id = int.Parse(FighterList[i][0]);
-                game.name = FighterList[i][1];
-                if (i == 0)
-                {
-                    game.GetComponent<EncycButton>().ShowTheCurrentItem("Fighter");
-                }
-            }
-            else
-            {
-                game.transform.GetChild(0).GetComponent<TMP_Text>().text = EnemyList[i - FighterList.Count][1];
-                game.GetComponent<EncycButton>().Type = "Enemy";
-                game.GetComponent<EncycButton>().Id = int.Parse(EnemyList[i - FighterList.Count][0]);
-                game.name = EnemyList[i - FighterList.Count][1];
-
-            }
-            game.SetActive(true);
-        }
+        string[] text = new string[3] { "Story", "Attributes - Fighters", "Attributes - Weapons & Powers" };
+        CurrentItem = CategoryContent.transform.GetChild(0).gameObject;
+        GenerateEncyc("Basic", text);
     }
     public void ResetData()
     {
-        if (CategoryContent.transform.childCount > 0)
-        {
-            for (int i = 1; i < CategoryContent.transform.childCount; i++)
-            {
-                Destroy(CategoryContent.transform.GetChild(i).gameObject);
-            }
-        }
+        
         ResetAll();
+    }
+    #endregion
+    #region Gen encyc
+    public void GenerateEncyc(string Type, string[] GroupName)
+    {
+        ResetAll();
+        ChangeColorWhenChoosen();
+        int count = 0;
+        switch (Type)
+        {
+            case "Basic": 
+                for (int i = 0; i < Story.Count; i++)
+                {
+                    // Create group
+                    if (i == 0 || i == 12)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    //Create item 
+                    GameObject g = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    g.transform.SetParent(Content.transform);
+                    g.transform.GetChild(0).GetComponent<TMP_Text>().text = StoryName[i];
+                    g.name = StoryName[i];
+                    g.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    g.GetComponent<EncycButton>().Id = i + 1;
+                    g.GetComponent<EncycButton>().Type = "STR";
+                    g.SetActive(true);
+                }
+                for (int i = 0; i < AttributeList.Count; i++)
+                {
+                    // Create group
+                    if (i == 0 || i == 11)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    //Create item 
+                    GameObject g = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    g.transform.SetParent(Content.transform);
+                    g.transform.GetChild(0).GetComponent<TMP_Text>().text = AttributeList[i][1];
+                    g.name = AttributeList[i][1];
+                    g.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    g.GetComponent<EncycButton>().Id = i + 1;
+                    g.GetComponent<EncycButton>().Type = "ATT";
+                    g.SetActive(true);
+                }
+                break;
+            case "Vehicle":
+                // Fighter
+                for (int i = 0; i < FighterList.Count + EnemyList.Count; i++)
+                {
+                    // Create group
+                    if (i == 0)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;                      
+                    }
+                    //Create item 
+                    GameObject game = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    game.transform.SetParent(Content.transform);
+                    game.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    if (i == 0)
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = "SSTP";
+                        game.GetComponent<EncycButton>().Type = "Fighter";
+                        game.GetComponent<EncycButton>().Id = 666;
+                        game.name = "SSTP";
+                    } else
+                    {
+                        if (i < FighterList.Count + 1)
+                        {
+                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = FighterList[i - 1][1];
+                            game.GetComponent<EncycButton>().Type = "Fighter";
+                            game.GetComponent<EncycButton>().Id = int.Parse(FighterList[i - 1][0]);                        
+                            game.name = FighterList[i - 1][1];
+                        
+                        }
+                        else
+                        {
+                            game.transform.GetChild(0).GetComponent<TMP_Text>().text = EnemyList[i - FighterList.Count][1];
+                            game.GetComponent<EncycButton>().Type = "Enemy";
+                            game.GetComponent<EncycButton>().Id = int.Parse(EnemyList[i - FighterList.Count][0]);
+                            game.name = EnemyList[i - FighterList.Count][1];
+                        }
+                    }
+                    
+                    game.SetActive(true);
+                }
+                // Warship && SS
+                for (int i = 0; i < WarshipList.Count + SStationList.Count; i++)
+                {
+                    Debug.Log("g");
+                    // Create group
+                    if (i == 0)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    //Create item 
+                    GameObject game = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    game.transform.SetParent(Content.transform);
+                    game.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    if (i < WarshipList.Count)
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = WarshipList[i][1];
+                        game.GetComponent<EncycButton>().Type = "Warship";
+                        game.GetComponent<EncycButton>().Id = int.Parse(WarshipList[i][0]);
+                        game.name = WarshipList[i][1];
+
+                    }
+                    else
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = SStationList[i - WarshipList.Count][1];
+                        game.GetComponent<EncycButton>().Type = "SpaceStation";
+                        game.GetComponent<EncycButton>().Id = int.Parse(SStationList[i - WarshipList.Count][0]);
+                        game.name = SStationList[i - WarshipList.Count][1];
+                    }
+                    game.SetActive(true);
+                }
+                break;
+            case "DE":
+                for (int i = 0; i < DmgElementList.Count; i++)
+                {
+                    // Create group
+                    if (i == 0)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    GameObject game = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    game.transform.SetParent(Content.transform);
+                    game.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    if (DmgElementList[i][1].Contains("Nano"))
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = "Weapon Details - " + DmgElementList[i][1];
+                    } else
+                    {
+                        game.transform.GetChild(0).GetComponent<TMP_Text>().text = "Damage Elements - " + DmgElementList[i][1];
+                    }
+                    game.GetComponent<EncycButton>().Type = "DMG";
+                    game.GetComponent<EncycButton>().Id = i + 1;
+                    game.name = DmgElementList[i][1];
+                    game.SetActive(true);
+                }
+                break;
+            case "Shop":
+                // Weapon
+                for (int i = 0; i < WeaponList.Count; i++)
+                {
+                    // Create group
+                    if (i == 0)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    GameObject game = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    game.transform.SetParent(Content.transform);
+                    game.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    game.transform.GetChild(0).GetComponent<TMP_Text>().text = WeaponList[i][2];
+                    game.GetComponent<EncycButton>().Type = "Weapon";
+                    game.GetComponent<EncycButton>().Id = int.Parse(WeaponList[i][0]);
+                    game.name = WeaponList[i][2];
+                    game.SetActive(true);
+
+                }
+                // Power
+                for (int i = 0; i < PowerList.Count; i++)
+                {
+                    // Create group
+                    if (i == 0)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    GameObject game = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    game.transform.SetParent(Content.transform);
+                    game.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    game.transform.GetChild(0).GetComponent<TMP_Text>().text = PowerList[i][2];
+                    game.GetComponent<EncycButton>().Type = "Power";
+                    game.GetComponent<EncycButton>().Id = int.Parse(PowerList[i][0]);
+                    game.name = PowerList[i][2];
+                    game.SetActive(true);
+
+                }
+                // Power
+                for (int i = 0; i < ConsumList.Count; i++)
+                {
+                    // Create group
+                    if (i == 0)
+                    {
+                        GameObject group = Instantiate(Item.transform.GetChild(0).gameObject, Item.transform.GetChild(0).gameObject.transform.position, Quaternion.identity);
+                        group.transform.SetParent(Content.transform);
+                        group.transform.localScale = new Vector2(1, 1);
+                        group.transform.GetChild(0).GetComponent<TMP_Text>().text = GroupName[count];
+                        group.name = GroupName[count];
+                        group.SetActive(true);
+                        count++;
+                    }
+                    GameObject game = Instantiate(Item.transform.GetChild(1).gameObject, Item.transform.GetChild(1).gameObject.transform.position, Quaternion.identity);
+                    game.transform.SetParent(Content.transform);
+                    game.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
+                    game.transform.GetChild(0).GetComponent<TMP_Text>().text = ConsumList[i][1];
+                    game.GetComponent<EncycButton>().Type = "Consumable";
+                    game.GetComponent<EncycButton>().Id = int.Parse(ConsumList[i][0]);
+                    game.name = ConsumList[i][1];
+                    game.SetActive(true);
+
+                }
+                break;
+        }
     }
     #endregion
 }
