@@ -23,6 +23,7 @@ public class EncycButton : MonoBehaviour
     public List<SpriteRenderer> WarshipImage;
     public List<SpriteRenderer> SpaceStationImage;
     public List<GameObject> AttributeImage;
+    public GameObject NoImage;
     public GameObject Content;
     #endregion
     #region NormalVariables
@@ -65,6 +66,7 @@ public class EncycButton : MonoBehaviour
     {
         Menu.ItemImage.transform.localScale = ImageScale;
         wlist = list[Id - 1];
+        Tier = "---";
         if (TierIndex > 0)
         {
             switch(wlist[TierIndex])
@@ -79,11 +81,11 @@ public class EncycButton : MonoBehaviour
                                 break;
                 default: Tier = "Special"; break;
             }
-            Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";           
         } else
         {
             wlist[TierIndex] = "white";
         }
+        Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";           
         Menu.ItemDesc.GetComponent<TMP_Text>().text = wlist[DescIndex];
         Menu.ItemName.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] +">"  + wlist[NameIndex] + "</color>";
 
@@ -127,7 +129,7 @@ public class EncycButton : MonoBehaviour
                 {
                     Menu.ItemDesc.GetComponent<TMP_Text>().text = "Transporting goodies between Space Stations is extremely crucial for the people of UEC to survive during the war. Always accompanied by a squad of fighters.";
                     Menu.ItemName.GetComponent<TMP_Text>().text = "<color=#36b37e>SSTP</color>";
-                    Menu.ItemTier.GetComponent<TMP_Text>().text = "";
+                    Menu.ItemTier.GetComponent<TMP_Text>().text = "---";
                     Menu.ItemImage.transform.localScale = new Vector3(0.9f, 0.9f, 0f);
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = FighterImage[FighterImage.FindIndex(item => item.name == "UECZ_Transporter")].sprite;               }
             }
@@ -193,28 +195,30 @@ public class EncycButton : MonoBehaviour
                                 {
                                     if (ItemType == "DMG")
                                     {
-                                        ShowInforOfItem(Menu.DmgElementList, 1, 0, new Vector2(0.2f, 0.2f), 2);
+                                        ShowInforOfItem(Menu.DmgElementList, 1, 0, new Vector2(1f, 1f), 2);
                                         ChangeColorWhenChoosen();
+                                        Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
                                     }
                                     else
                                     {
                                         if (ItemType == "ATT")
                                         {
+                                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = null;
                                             if (Menu.ItemImage.transform.parent.childCount > 1)
                                             {
                                                 Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
                                             }
-                                            ShowInforOfItem(Menu.AttributeList, 1, 0, new Vector2(0.5f, 0.5f), 2);
+                                            ShowInforOfItem(Menu.AttributeList, 1, 0, new Vector2(1f, 1f), 2);
                                             ChangeColorWhenChoosen();
                                             if (wlist[1].Contains("Slot") | wlist[1].Contains("PoE") | wlist[1].Contains("(AE)"))
                                             {
-                                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = null;
+                                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
                                             }
                                             else
                                             {
                                                 GameObject g = AttributeImage[AttributeImage.FindIndex(item => wlist[1].Replace(" ", "").ToLower().Contains(item.name.ToLower()))];
                                                 GameObject clone = Instantiate(g, Menu.ItemImage.transform.position, Quaternion.identity);
-                                                clone.GetComponent<SpriteRenderer>().sortingOrder = 3;
+                                                clone.GetComponent<SpriteRenderer>().sortingOrder = 4;
                                                 clone.transform.SetParent(Menu.ItemImage.transform.parent);
 
                                             }
@@ -226,9 +230,11 @@ public class EncycButton : MonoBehaviour
                                                 Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
                                             }
                                             ChangeColorWhenChoosen();
+                                            Menu.ItemTier.GetComponent<TMP_Text>().text = "---";
                                             Menu.ItemDesc.GetComponent<TMP_Text>().text = Menu.Story[Id - 1];
                                             Menu.ItemName.GetComponent<TMP_Text>().text = Menu.StoryName[Id - 1];
-                                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = null;
+                                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
+                                            Menu.ItemImage.transform.localScale = new Vector3(1f, 1f, 0);
                                         }
                                         
 
