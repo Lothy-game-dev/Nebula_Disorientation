@@ -720,7 +720,7 @@ public class StatusBoard : MonoBehaviour
 
             //Setting to show current tempurature
             TemperText.gameObject.SetActive(true);
-            TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "�C";
+            TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "\u00B0C";
         } else
         {
             if (CloneEnemy.GetComponent<WSShared>() != null)
@@ -1245,7 +1245,7 @@ public class StatusBoard : MonoBehaviour
                 }
 
                 //Setting to show current tempurature
-                TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "�C";
+                TemperText.text = Mathf.Round(EnemyObject.currentTemperature * 10) / 10 + "\u00B0C";
             } else
             {
                 if (Enemy.GetComponent<WSShared>() != null)
