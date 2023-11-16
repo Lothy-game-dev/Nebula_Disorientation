@@ -1073,7 +1073,7 @@ public class SpaceZoneGenerator : MonoBehaviour
                 {
                     Mission.MissionTextString = "Eliminate Class B Enemies";
                     Mission.CreateMissionAssaultV2(EnemyFighterBCount, 2);
-                } else if (EnemyFighterCCount > 0)
+                } else if (EnemyFighterACount > 0)
                 {
                     Mission.MissionTextString = "Eliminate Class A Enemies";
                     Mission.CreateMissionAssaultV2(EnemyFighterACount, 3);
