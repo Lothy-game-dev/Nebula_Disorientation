@@ -164,14 +164,15 @@ public class LoadoutScene : UECMenuShared
                     newRightWeapon = false;
                 }
             }
+            List<string> WeaponTemp = FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon);
+
             if (newRightWeapon)
             {
-                List<string> WeaponTemp = FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon);
                 RightWeapon = WeaponTemp[0];
-                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
+                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(WeaponTemp, RightWeapon, true);
             } else
             {
-                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
+                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(WeaponTemp, RightWeapon, true);
             }
         }
         
