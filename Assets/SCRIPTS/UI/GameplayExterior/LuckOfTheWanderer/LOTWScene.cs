@@ -115,21 +115,21 @@ public class LOTWScene : MonoBehaviour
             float a = UnityEngine.Random.Range(0, 100f);
             int tierChosen = a < 75 ? 3 : a < 97 ? 2 : 1;
             if (tierChosen == 1) ContainRed = true;
-            do
+            List<int> ListChosen = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(tierChosen);
+            // Get Nonrepeatable Cards Data
+            List<string> check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetableAlreadyOwn(PlayerPrefs.GetInt("PlayerID"));
+            if (check != null)
             {
-                List<int> ListChosen = FindObjectOfType<AccessDatabase>().GetListIDAllLOTW(tierChosen);
-                // Get Nonrepeatable Cards Data
-                List<string> check = FindObjectOfType<AccessDatabase>().CheckLOTWRepetableAlreadyOwn(PlayerPrefs.GetInt("PlayerID"));
-                if (check != null)
+                foreach (var item in check)
                 {
-                    foreach (var item in check)
+                    if (ListChosen.Contains(int.Parse(item)))
                     {
-                        if (ListChosen.Contains(int.Parse(item)))
-                        {
-                            ListChosen.Remove(int.Parse(item));
-                        }
+                        ListChosen.Remove(int.Parse(item));
                     }
                 }
+            }
+            do
+            {
                 int k = UnityEngine.Random.Range(0, ListChosen.Count);
                 n = ListChosen[k];
             }
