@@ -535,25 +535,25 @@ public class FighterMovement : MonoBehaviour
     {
         if (LimitString == "Left")
         {
-            FighterForceRotate((CurrentRotateAngle - 90) * 2);
+            FighterForceRotate((180- CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
         } 
         else if (LimitString == "Right")
         {
-            FighterForceRotate((CurrentRotateAngle -270) * 2);
+            FighterForceRotate((0 - CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
         }
         else if (LimitString == "Top")
         {
-            FighterForceRotate((CurrentRotateAngle - 180) * 2);
+            FighterForceRotate((270 - CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
         }
         else if (LimitString == "Bottom")
         {
-            FighterForceRotate((CurrentRotateAngle - 0) * 2);
+            FighterForceRotate((90 - CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
         }
