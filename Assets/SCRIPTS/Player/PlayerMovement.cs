@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
     public float AccelEngineRoTUpScale;
     private bool PressDash;
     private float DelayAERechargeTimer;
-    private bool autoPilot;
+    public bool autoPilot;
     private float DelayCheckLimit;
     #endregion
     #region Start & Update
@@ -141,13 +141,8 @@ public class PlayerMovement : MonoBehaviour
         DetectWSButton();
         if (!Dashing && Movable) PlayerMoving();
         pf.CalculateVelocity(speedVector);
-        if (DelayCheckLimit > 0f)
-        {
-            DelayCheckLimit -= Time.deltaTime;
-        } else
-        {
-            CheckLimit();
-        }
+        if (!autoPilot) CheckLimit();
+        else CheckLimitDone();
         ShowAE();
         if (HazEnv.HazardID == 2 || HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
         {
@@ -411,7 +406,7 @@ public class PlayerMovement : MonoBehaviour
                 AorD = true;
             }
         }
-        if (transform.position.y >= LimitTopY && CurrentRotateAngle > 270 || CurrentRotateAngle < 90)
+        if (transform.position.y >= LimitTopY && (CurrentRotateAngle > 270 || CurrentRotateAngle < 90))
         {
             check++;
             autoPilot = true;
@@ -446,11 +441,40 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void CheckLimitDone()
+    {
+        float LimitTopY = TopBorder.transform.position.y;
+        float LimitBottomY = BottomBorder.transform.position.y;
+        float LimitLeftX = LeftBorder.transform.position.x;
+        float LimitRightX = RightBorder.transform.position.x;
+        LimitSpeedScale = 1;
+        int check = 0;
+        if (transform.position.x >= LimitRightX)
+        {
+            check++;
+        }
+        if (transform.position.x <= LimitLeftX)
+        {
+            check++;
+        }
+        if (transform.position.y >= LimitTopY)
+        {
+            check++;
+        }
+        if (transform.position.y <= LimitBottomY)
+        {
+            check++;
+        }
+        if (check == 0)
+        {
+            autoPilot = false;
+        }
+    }
+
     private void AutoPilot(bool AorD, int check)
     {
         autoPilot = true;
         SpeedUp = 1;
-        DelayCheckLimit = check > 1 ? (270 / (RotateSpeed * 120f)) : (180 / (RotateSpeed * 120f));
         if (AorD)
         {
             RotateDirection = -1;

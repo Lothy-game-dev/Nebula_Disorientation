@@ -29,6 +29,11 @@ public class SpawnAlliesFighter : MonoBehaviour
     public bool Escort;
     public string Priority;
     public bool Defend;
+    public float DelayBetweenSpawn;
+    public float RandomSpawnXUpper;
+    public float RandomSpawnXLower;
+    public float RandomSpawnYUpper;
+    public float RandomSpawnYLower;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -47,9 +52,15 @@ public class SpawnAlliesFighter : MonoBehaviour
     public void SpawnAlly()
     {
         Allies = new List<GameObject>();
-        for (int i = 0; i < AllySpawnID.Length; i++)
+        if (DelayBetweenSpawn>0)
         {
-            StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0,2f), AllyClass[i]));
+            StartCoroutine(SpawnAllyByTime());
+        } else
+        {
+            for (int i = 0; i < AllySpawnID.Length; i++)
+            {
+                StartCoroutine(CreateAlly(AllySpawnID[i], AllySpawnPosition[i], i, Random.Range(0, 2f), AllyClass[i]));
+            }
         }
         if (EscortSpawnNumber>0)
         {
@@ -63,6 +74,17 @@ public class SpawnAlliesFighter : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator SpawnAllyByTime()
+    {
+        for (int i = 0; i < AllySpawnID.Length; i++)
+        {
+            StartCoroutine(CreateAlly(AllySpawnID[i], new Vector2(Random.Range(RandomSpawnXLower, RandomSpawnXUpper), Random.Range(RandomSpawnYLower, RandomSpawnYUpper)), i, Random.Range(0, 2f), AllyClass[i]));
+            yield return new WaitForSeconds(DelayBetweenSpawn);
+        }
+        SpawnAlly();
+    }
+
     private IEnumerator CreateAlly(int id, Vector2 spawnPos, int count, float delay, string Class)
     {
         yield return new WaitForSeconds(delay);

@@ -36,7 +36,7 @@ public class PilotNameBar : MonoBehaviour
         PilotName = Name;
         PilotRank = Rank;
         Session = SessionData;
-        string Text = "Pilot " + count.ToString() + " - Name: " + Name + "\nRank: " + Rank;
+        string Text = "Pilot " + count.ToString() + " - " + Name + "\nRank: " + Rank;
         if (SessionData != "None")
         {
             Text += "\n<color=#00ff00>Currently in session</color> - Stage <color=#3bccec>" + SessionData + "</color>";
