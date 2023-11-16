@@ -452,9 +452,14 @@ public class PlayerFighter : FighterShared
             go.GetComponent<SpriteRenderer>().color = c;
             yield return new WaitForSeconds(0.005f);
         }
-        Color c2 = go.GetComponent<SpriteRenderer>().color;
-        c2.a = 0f;
-        go.GetComponent<SpriteRenderer>().color = c2;
+        yield return new WaitForSeconds(2f);
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = go.GetComponent<SpriteRenderer>().color;
+            c.a -= 0.1f;
+            go.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.005f);
+        }
     }
     #endregion
     #region Play Sound
