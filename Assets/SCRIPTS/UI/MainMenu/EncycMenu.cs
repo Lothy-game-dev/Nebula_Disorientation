@@ -168,6 +168,10 @@ public class EncycMenu : MainMenuSceneShared
                     g.transform.localScale = Item.transform.GetChild(1).gameObject.transform.localScale;
                     g.GetComponent<EncycButton>().Id = i + 1;
                     g.GetComponent<EncycButton>().Type = "STR";
+                    if (i == 0)
+                    {
+                        g.GetComponent<EncycButton>().ShowTheCurrentItem("STR");
+                    }
                     g.SetActive(true);
                 }
                 for (int i = 0; i < AttributeList.Count; i++)
@@ -237,7 +241,10 @@ public class EncycMenu : MainMenuSceneShared
                             game.name = EnemyList[i - FighterList.Count][1];
                         }
                     }
-                    
+                    if (i == 0)
+                    {
+                        game.GetComponent<EncycButton>().ShowTheCurrentItem("Fighter");
+                    }
                     game.SetActive(true);
                 }
                 // Warship && SS
@@ -274,6 +281,7 @@ public class EncycMenu : MainMenuSceneShared
                         game.GetComponent<EncycButton>().Id = int.Parse(SStationList[i - WarshipList.Count][0]);
                         game.name = SStationList[i - WarshipList.Count][1];
                     }
+                    
                     game.SetActive(true);
                 }
                 break;
@@ -304,6 +312,10 @@ public class EncycMenu : MainMenuSceneShared
                     game.GetComponent<EncycButton>().Type = "DMG";
                     game.GetComponent<EncycButton>().Id = i + 1;
                     game.name = DmgElementList[i][1];
+                    if (i == 0)
+                    {
+                        game.GetComponent<EncycButton>().ShowTheCurrentItem("DMG");
+                    }
                     game.SetActive(true);
                 }
                 break;
@@ -329,6 +341,10 @@ public class EncycMenu : MainMenuSceneShared
                     game.GetComponent<EncycButton>().Type = "Weapon";
                     game.GetComponent<EncycButton>().Id = int.Parse(WeaponList[i][0]);
                     game.name = WeaponList[i][2];
+                    if (i == 0)
+                    {
+                        game.GetComponent<EncycButton>().ShowTheCurrentItem("Weapon");
+                    }
                     game.SetActive(true);
 
                 }
