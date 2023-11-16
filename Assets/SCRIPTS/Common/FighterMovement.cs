@@ -118,7 +118,6 @@ public class FighterMovement : MonoBehaviour
         {
             PreventReachLimit = true;
             PreventReachLimitTimer -= Time.deltaTime;
-            PreventReachingLimit();
         }
         if (!ControllerMain.IsInLoading)
         {
