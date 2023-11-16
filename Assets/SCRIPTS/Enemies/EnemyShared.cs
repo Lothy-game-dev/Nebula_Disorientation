@@ -462,7 +462,13 @@ public class EnemyShared : FighterShared
         }
         if (br == 0)
         {
-            MaxBarrier = 2000;
+            if (!name.Contains("ZatSBB"))
+            {
+                MaxBarrier = 2000;
+            } else
+            {
+                MaxBarrier = 0;
+            }
         }
         else
         {
