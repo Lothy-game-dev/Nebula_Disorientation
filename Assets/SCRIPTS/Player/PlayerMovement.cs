@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     private bool PressDash;
     private float DelayAERechargeTimer;
     private bool autoPilot;
+    private float DelayCheckLimit;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -140,7 +141,13 @@ public class PlayerMovement : MonoBehaviour
         DetectWSButton();
         if (!Dashing && Movable) PlayerMoving();
         pf.CalculateVelocity(speedVector);
-        CheckLimit();
+        if (DelayCheckLimit > 0f)
+        {
+            DelayCheckLimit -= Time.deltaTime;
+        } else
+        {
+            CheckLimit();
+        }
         ShowAE();
         if (HazEnv.HazardID == 2 || HazEnv.HazardID == 5 || HazEnv.HazardID == 6)
         {
@@ -372,14 +379,16 @@ public class PlayerMovement : MonoBehaviour
     #region Check Limit
     private void CheckLimit()
     {
-        float LimitTopY = TopBorder.transform.position.y - 100;
-        float LimitBottomY = BottomBorder.transform.position.y + 100;
-        float LimitLeftX = LeftBorder.transform.position.x + 100;
-        float LimitRightX = RightBorder.transform.position.x - 100;
+        float LimitTopY = TopBorder.transform.position.y;
+        float LimitBottomY = BottomBorder.transform.position.y;
+        float LimitLeftX = LeftBorder.transform.position.x;
+        float LimitRightX = RightBorder.transform.position.x;
         LimitSpeedScale = 1;
+        int check = 0;
         bool AorD = false;
-        if (transform.position.x >= LimitRightX)
+        if (transform.position.x >= LimitRightX && CurrentRotateAngle > 0 && CurrentRotateAngle < 180)
         {
+            check++;
             autoPilot = true;
             if (CurrentRotateAngle > 90)
             {
@@ -389,8 +398,9 @@ public class PlayerMovement : MonoBehaviour
                 AorD = true;
             }
         }
-        else if (transform.position.x <= LimitLeftX)
+        if (transform.position.x <= LimitLeftX && CurrentRotateAngle > 180 && CurrentRotateAngle < 360)
         {
+            check++;
             autoPilot = true;
             if (CurrentRotateAngle > 270)
             {
@@ -401,8 +411,22 @@ public class PlayerMovement : MonoBehaviour
                 AorD = true;
             }
         }
-        else if (transform.position.y >= LimitTopY)
+        if (transform.position.y >= LimitTopY && CurrentRotateAngle > 270 || CurrentRotateAngle < 90)
         {
+            check++;
+            autoPilot = true;
+            if (CurrentRotateAngle > 0)
+            {
+                AorD = false;
+            }
+            else if (CurrentRotateAngle < 360)
+            {
+                AorD = true;
+            }
+        }
+        if (transform.position.y <= LimitBottomY && CurrentRotateAngle > 90 && CurrentRotateAngle < 270)
+        {
+            check++;
             autoPilot = true;
             if (CurrentRotateAngle > 180)
             {
@@ -413,27 +437,20 @@ public class PlayerMovement : MonoBehaviour
                 AorD = true;
             }
         }
-        else if (transform.position.y <= LimitBottomY)
+        if (check >= 1)
         {
-            autoPilot = true;
-            if (CurrentRotateAngle > 0)
-            {
-                AorD = false;
-            }
-            else
-            {
-                AorD = true;
-            }
-        }
-        if (autoPilot)
+            AutoPilot(AorD, check);
+        } else
         {
-            AutoPilot(AorD);
+            autoPilot = false;
         }
     }
 
-    private void AutoPilot(bool AorD)
+    private void AutoPilot(bool AorD, int check)
     {
         autoPilot = true;
+        SpeedUp = 1;
+        DelayCheckLimit = check > 1 ? (270 / (RotateSpeed * 120f)) : (180 / (RotateSpeed * 120f));
         if (AorD)
         {
             RotateDirection = -1;
