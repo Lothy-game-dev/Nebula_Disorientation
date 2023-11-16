@@ -353,9 +353,9 @@ public class InitializeDatabase : MonoBehaviour
             "(7, 'Duelist II', 50, 'D-II', 50, 30000, null, '#00b8db',5)," +
             "(8, 'Duelist III', 65, 'D-II', 100, 35000, null, '#00b8db',5)," +
             "(9, 'Remakable Warrior of the UEC', 75, 'PA', 3, 40000, 'UF-2', '#00aad4',10)," +
-            "(10, 'Master Duelist I', 95, 'D-I', 95, 45000, 'UF-2', '#ffc400',10)," +
-            "(11, 'Master Duelist II', 115, 'D-I', 115, 50000, null, '#ffc401',10)," +
-            "(12, 'Master Duelist III', 130, 'D-I', 130, 55000, null, '#ffc402',10)," +
+            "(10, 'Master Duelist I', 95, 'D-I', 10, 45000, 'UF-2', '#ffc400',10)," +
+            "(11, 'Master Duelist II', 115, 'D-I', 20, 50000, null, '#ffc401',10)," +
+            "(12, 'Master Duelist III', 130, 'D-I', 30, 55000, null, '#ffc402',10)," +
             "(13, 'Honored Warrior of the UEC', 150, 'O', 3, 60000, 'UA-1', '#ff991f',25)," +
             "(14, 'Legendary Falcon I', 160, 'D-WS', 5, 70000, null, '#ff5631',25)," +
             "(15, 'Legendary Falcon II', 170, 'D-WS', 15, 80000, null, '#ff5631',25)," +
