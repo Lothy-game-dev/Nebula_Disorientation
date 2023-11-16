@@ -124,9 +124,9 @@ public class LOTWScene : MonoBehaviour
                 {
                     foreach (var item in check)
                     {
-                        if (ListAllLOTW.Contains(int.Parse(item)))
+                        if (ListChosen.Contains(int.Parse(item)))
                         {
-                            ListAllLOTW.Remove(int.Parse(item));
+                            ListChosen.Remove(int.Parse(item));
                         }
                     }
                 }
