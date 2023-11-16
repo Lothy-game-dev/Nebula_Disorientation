@@ -925,7 +925,21 @@ public class WSShared : MonoBehaviour
             {
                 if (!AlreadyDestroy)
                 {
-                    AlreadyDestroy = true;                    
+                    AlreadyDestroy = true;
+                    
+                    if (IsEnemy)
+                    {
+                        FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
+                    }
+                    else
+                    {
+                        if (isStation)
+                        {
+                            FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+                        }
+                        else
+                            FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
+                    }
                     StartCoroutine(DestroySelf());
                 }
             }
@@ -953,23 +967,23 @@ public class WSShared : MonoBehaviour
         {
             GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
             expl.SetActive(true);
-            Destroy(expl, 0.6f);
-            yield return new WaitForSeconds(0.05f);
+            Destroy(expl, 0.3f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 300), transform.position.y + Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl2.SetActive(true);
-            Destroy(expl2, 0.6f);
-            yield return new WaitForSeconds(0.05f);
+            Destroy(expl2, 0.3f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 300), transform.position.y + Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl3.SetActive(true);
-            Destroy(expl3, 0.6f);
-            yield return new WaitForSeconds(0.05f);
+            Destroy(expl3, 0.3f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 300), transform.position.y - Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl4.SetActive(true);
-            Destroy(expl4, 0.6f);
-            yield return new WaitForSeconds(0.05f);
+            Destroy(expl4, 0.3f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 300), transform.position.y - Random.Range(100, 350), transform.position.z), Quaternion.identity);
             expl5.SetActive(true);
-            Destroy(expl5, 0.6f);
+            Destroy(expl5, 0.3f);
         }
     
 
@@ -982,7 +996,7 @@ public class WSShared : MonoBehaviour
             }
         }
         
-        GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
+        GenerateFlash(Flash.transform.parent.position, 0.5f, 0.5f);
 
 
     }
@@ -990,7 +1004,7 @@ public class WSShared : MonoBehaviour
     #region Flash
     public void GenerateFlash(Vector2 pos, float delay, float duration)
     {
-
+        Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
         GameObject bf = Instantiate(Flash, new Vector3(pos.x, pos.y, Flash.transform.position.z), Quaternion.identity);
         Color c = bf.GetComponent<SpriteRenderer>().color;
         c.a = 1;
@@ -1009,8 +1023,6 @@ public class WSShared : MonoBehaviour
 
     private IEnumerator FlashOpen(GameObject Fade, float delay, float duration)
     {
-        yield return new WaitForSeconds(delay);       
-        Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;
@@ -1019,20 +1031,7 @@ public class WSShared : MonoBehaviour
             yield return new WaitForSeconds(duration / 50f);
         }
         Destroy(Fade);
-        if (IsEnemy)
-        {
-            FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
-        }
-        else
-        {
-            if (isStation)
-            {
-                FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
-            }
-            else
-                FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
-        }
-        Destroy(gameObject,2f);
+        Destroy(gameObject);
 
     }
     #endregion
