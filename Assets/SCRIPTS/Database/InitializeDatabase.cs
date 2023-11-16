@@ -552,26 +552,26 @@ public class InitializeDatabase : MonoBehaviour
             "(1, 1, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '25|30', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(2, 1, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '25|30', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(3, 2, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '100|150', '10-0-0', '9-1-0', null, null, null, 300, 200)," +
-            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|50', '10-0-0', '9-1-0', null, null, null, 500, null)," +
+            "(4, 2, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|50', '10-0-0', '9-1-0', null, null, null, 700, null)," +
             "(5, 2, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '30|40', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(6, 3, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '30|35', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(7, 3, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '30|35', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(8, 4, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '110|165', '10-0-0', '9-1-0', null, null, null, 300, 200)," +
-            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|55', '10-0-0', '9-1-0', null, null, null, 500, null)," +
+            "(9, 4, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|55', '10-0-0', '9-1-0', null, null, null, 700, null)," +
             "(10, 4, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '35|45', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(11, 5, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '35|40', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(12, 5, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '35|40', '10-0-0', '9-1-0', null, null, null, null, null)," +
             "(13, 6, 1, 'Defend', 'Defend a Strategic Infrastructure for an amount of time', 'A1', 60, '120|180', '10-0-0', '9-1-0', null, null, null, 300, 200)," +
-            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|60', '10-0-0', '9-1-0', null, null, null, 500, null)," +
+            "(14, 6, 2, 'Defend', 'Survive for an amount of time', 'A1', 120, '10|60', '10-0-0', '9-1-0', null, null, null, 700, null)," +
             "(15, 6, 3, 'Defend', 'Escort Allies from A to B on the map', 'A1', null, '40|50', '10-0-0', '10-0-0', null, null, null, 400, null)," +
             "(16, 7, 1, 'Assault', 'Eliminate All Enemies', 'A1', null, '40|45', '10-0-0', '10-0-0', null, null, null, null, null)," +
             "(17, 7, 2, 'Assault', 'Eliminate Target Enemies', 'A1', null, '40|45', '10-0-0', '9-1-0', null, null, null, null, null)," +
-            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '150|160', '9-1-0', '8-2-0', null, null, null, null, null)," +
-            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '175|150', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
-            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '160|170', '9-1-0', '8-2-0', null, null, null, null, null)," +
-            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '190|160', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
+            "(18, 8, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '100|105', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(19, 8, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '125|100', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
+            "(20, 9, 1, 'Onslaught', 'Eliminate a whole Zaturi Strike Forces', 'A2', null, '110|120', '9-1-0', '8-2-0', null, null, null, null, null)," +
+            "(21, 9, 2, 'Onslaught', 'Join the UEC Warship(s) to defeat Zaturi Warship(s)', 'B1', null, '140|115', '9-1-0', '8-2-0', '15|15', '8-2-0', '8-2-0', 1000, 500)," +
             "(22, 0, 1, 'Boss Encounter', 'Defeat Zaturi Warship(s)', 'B2', null, '100|75',  '8-2-0',  '8-2-0', '0|5', null, '1-0-0', null, null)," +
-            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '75|50', '8-2-0', '8-1-1', null, null, null, null, null);";
+            "(23, 0, 2, 'Boss Encounter', 'Defeat Zaturi Elite Fighter(s)', 'A3', null, '65|50', '8-2-0', '8-1-1', null, null, null, null, null);";
         // Insert SpaceZonePosition
         string SpaceZonePosition = "INSERT INTO SpaceZonePosition VALUES " +
             "(1, 'PN', '(-3500,-700)', '(-2100,700)')," +

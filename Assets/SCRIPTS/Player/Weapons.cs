@@ -944,7 +944,7 @@ public class Weapons : MonoBehaviour
             if (OverHeatImage != null)
             {
                 OverHeatImage.transform.GetChild(4).gameObject.SetActive(true);
-                OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "overheatted";
+                OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "overheated";
                 OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.red;
             }
             audioScale = 0.2f;
