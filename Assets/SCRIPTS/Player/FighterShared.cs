@@ -490,7 +490,7 @@ public class FighterShared : MonoBehaviour
     // Receive Thermal Damage
     public void ReceiveThermalDamage(bool isHeat)
     {
-        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 2f * NanoTempScale;
+        if (!isImmuneFrozenSlow) currentTemperature += (isHeat ? 1 : -1) * 0.25f * NanoTempScale;
         isRegenThermal = false;
         RegenDelayTimer = 2f;
     }
