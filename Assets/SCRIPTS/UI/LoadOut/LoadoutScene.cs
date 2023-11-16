@@ -82,6 +82,7 @@ public class LoadoutScene : UECMenuShared
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
         Weapon1Bar.SetActive(false);
         Weapon2Bar.SetActive(false);
+        ModelBoard.SetActive(false);
         Power1Bar.SetActive(false);
         Power2Bar.SetActive(false);
         ConsumableBar.SetActive(false);
