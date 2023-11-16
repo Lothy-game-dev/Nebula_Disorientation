@@ -709,8 +709,11 @@ public class BulletShared : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.ReceiveDamage(CalculateFinalDamage(BaseDamagePerHit, true, enemy.gameObject), gameObject);
-                    // Inflict lava burned
-                    enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
+                    // Inflict grav slow
+                    if (InflictGravitationalSlow)
+                    {
+                        enemy.InflictGravitationalSlow(GravitationalSlowScale, GravitationalSlowTime);
+                    }
                 }
                 else if (Warship != null)
                 {
