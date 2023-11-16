@@ -219,6 +219,8 @@ public class FighterMovement : MonoBehaviour
         float RotateScale = 2;
         transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed;
+        if (CurrentRotateAngle < 0) CurrentRotateAngle += 360;
+        CurrentRotateAngle %= 360;
         // Fire and Freeze eff not rotate
         FireEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         FreezeEffect.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
@@ -231,6 +233,8 @@ public class FighterMovement : MonoBehaviour
     {
         transform.Rotate(new Vector3(0, 0, -angle));
         CurrentRotateAngle += angle;
+        if (CurrentRotateAngle < 0) CurrentRotateAngle += 360;
+        CurrentRotateAngle %= 360;
         // Fire and Freeze eff not rotate
         FireEffect.transform.Rotate(new Vector3(0, 0, angle));
         FreezeEffect.transform.Rotate(new Vector3(0, 0, angle));
@@ -360,17 +364,17 @@ public class FighterMovement : MonoBehaviour
         int PreventX = 0;
         int PreventY = 0;
         float Distance = 0;
-        if (transform.position.x >= (LimitRightX - 1200) && CurrentRotateAngle % 360 > 0 && CurrentRotateAngle % 360 <= 180)
+        if (transform.position.x >= (LimitRightX - 1200) && CurrentRotateAngle % 360 > 0 && CurrentRotateAngle % 360 < 180)
         {
             PreventX = -1;
             Distance = Mathf.Abs(LimitRightX - transform.position.x);
         }
-        if (transform.position.x <= (LimitLeftX + 1200) && CurrentRotateAngle % 360 > 180 && CurrentRotateAngle % 360 <= 360)
+        if (transform.position.x <= (LimitLeftX + 1200) && CurrentRotateAngle % 360 > 180 && CurrentRotateAngle % 360 < 360)
         {
             PreventX = 1;
             Distance = Mathf.Abs(LimitLeftX - transform.position.x);
         }
-        if (transform.position.y >= (LimitTopY - 1200) && (CurrentRotateAngle % 360 > 270 || CurrentRotateAngle % 360 <= 90))
+        if (transform.position.y >= (LimitTopY - 1200) && (CurrentRotateAngle % 360 > 270 || CurrentRotateAngle % 360 < 90))
         {
             PreventY = -1;
             if (Mathf.Abs(LimitTopY - transform.position.y) < Distance)
@@ -378,7 +382,7 @@ public class FighterMovement : MonoBehaviour
                 Distance = Mathf.Abs(LimitTopY - transform.position.y);
             }
         }
-        if (transform.position.y <= (LimitBottomY + 1200) && CurrentRotateAngle % 360 > 90 && CurrentRotateAngle % 360 <= 270)
+        if (transform.position.y <= (LimitBottomY + 1200) && CurrentRotateAngle % 360 > 90 && CurrentRotateAngle % 360 < 270)
         {
             PreventY = 1;
             if (Mathf.Abs(LimitTopY - transform.position.y) < Distance)
@@ -533,21 +537,25 @@ public class FighterMovement : MonoBehaviour
         {
             FighterForceRotate((CurrentRotateAngle - 90) * 2);
             LimitString = "";
+            PreventReachLimitTimer = 0f;
         } 
         else if (LimitString == "Right")
         {
             FighterForceRotate((CurrentRotateAngle -270) * 2);
             LimitString = "";
+            PreventReachLimitTimer = 0f;
         }
         else if (LimitString == "Top")
         {
             FighterForceRotate((CurrentRotateAngle - 180) * 2);
             LimitString = "";
+            PreventReachLimitTimer = 0f;
         }
         else if (LimitString == "Bottom")
         {
             FighterForceRotate((CurrentRotateAngle - 0) * 2);
             LimitString = "";
+            PreventReachLimitTimer = 0f;
         }
     }
 

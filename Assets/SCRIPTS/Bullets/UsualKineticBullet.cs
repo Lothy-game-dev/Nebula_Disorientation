@@ -31,7 +31,7 @@ public class UsualKineticBullet : BulletShared
     {
         // Call function and timer only if possible
         DistanceTravel += Time.deltaTime * rb.velocity.magnitude;
-        CheckDistanceTravel();
+        CheckDistanceTravel(isGravitationalLine);
         CalculateDamage();
         CheckHitAsteroidAndRock();
     }

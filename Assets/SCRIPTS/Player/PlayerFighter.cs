@@ -41,6 +41,7 @@ public class PlayerFighter : FighterShared
     private float[] PowerAndConsDuration;
     private float[] PowerAndConsDurationTimer;
     private bool[] PowerAndConsActivation;
+    private bool[] PowerAndConsActivated;
     private float[] ChargingPower;
     private float[] ChargingPowerReq;
     private int[] ConsCount;
@@ -75,6 +76,7 @@ public class PlayerFighter : FighterShared
         PowerAndConsDuration = new float[6] {1f, 0.5f, 3f, 3f, 3f, 3f};
         PowerAndConsDurationTimer = new float[6];
         PowerAndConsActivation = new bool[6];
+        PowerAndConsActivated = new bool[6];
         ChargingPower = new float[2];
         ChargingPowerReq = new float[2] { 1.14f, 1.14f };
         ConsCount = new int[4] { 10, 5, 2, 1 };
@@ -402,6 +404,8 @@ public class PlayerFighter : FighterShared
             }
             if (PowerAndConsCDTimer[i]>0f)
             {
+                if (!PowerAndConsActivated[i])
+                PowerAndConsActivated[i] = true;
                 if (i>=2)
                 {
                     if (ConsCount[i-2]>0)
@@ -427,11 +431,35 @@ public class PlayerFighter : FighterShared
                 }
             } else
             {
-                PowerAndConsCDText[i].SetActive(false);
+                if (PowerAndConsActivated[i])
+                {
+                    PowerAndConsActivated[i] = false;
+                    PowerAndConsCDText[i].SetActive(false);
+                    StartCoroutine(Flash(i < 2 ? PowerAndConsCDImage[i].transform.parent.parent.GetChild(4).gameObject : PowerAndConsCDImage[i].transform.parent.parent.GetChild(7).gameObject));
+                } 
             }
         }
         ShowInfo();
         LightUpAttackRange();
+    }
+
+    private IEnumerator Flash(GameObject go)
+    {
+        for (int i=0;i<10;i++)
+        {
+            Color c = go.GetComponent<SpriteRenderer>().color;
+            c.a += 0.1f;
+            go.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.005f);
+        }
+        yield return new WaitForSeconds(2f);
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = go.GetComponent<SpriteRenderer>().color;
+            c.a -= 0.1f;
+            go.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(0.005f);
+        }
     }
     #endregion
     #region Play Sound

@@ -615,7 +615,7 @@ public class BulletShared : MonoBehaviour
         Destroy(bh, timer);
     }
     // Check distance the bulllet travel, for setting the damage
-    public void CheckDistanceTravel()
+    public void CheckDistanceTravel(bool isGravitational = false)
     {
         // Case Range is set for flamethrower type
         if (Range!=0f)
@@ -640,6 +640,34 @@ public class BulletShared : MonoBehaviour
         if (DistanceTravel >= MaximumDistance)
         {
             RealDamage = 0;
+            if (isGravitational)
+            {
+                AoEEffect.CreateAreaOfEffect(transform.position, AoE);
+                Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
+                foreach (var col2 in cols2)
+                {
+                    FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                    WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+                    SpaceStationShared SpaceStation = col2.gameObject.GetComponent<SpaceStationShared>();
+                    if (enemy != null)
+                    {
+                        enemy.ReceiveDamage(CalculateFinalDamage(BaseDamagePerHit/2, true, enemy.gameObject), gameObject);
+                        // Inflict lava burned
+                        enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
+                    }
+                    else if (Warship != null)
+                    {
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(BaseDamagePerHit / 2, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
+                    }
+                    else
+                    {
+                        if (SpaceStation != null)
+                        {
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(BaseDamagePerHit / 2, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
+                        }
+                    }
+                }
+            }
             Destroy(gameObject);
             PunishML();
         }
@@ -680,20 +708,19 @@ public class BulletShared : MonoBehaviour
                 SpaceStationShared SpaceStation = col2.gameObject.GetComponent<SpaceStationShared>();
                 if (enemy != null)
                 {
-                    Debug.Log(RealDamage);
-                    enemy.ReceiveDamage(CalculateFinalDamage(RealDamage, true, enemy.gameObject), gameObject);
+                    enemy.ReceiveDamage(CalculateFinalDamage(BaseDamagePerHit, true, enemy.gameObject), gameObject);
                     // Inflict lava burned
                     enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
                 }
                 else if (Warship != null)
                 {
-                    Warship.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
+                    Warship.ReceiveBulletDamage(CalculateFinalDamage(BaseDamagePerHit, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
                 }
                 else
                 {
                     if (SpaceStation != null)
                     {
-                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(RealDamage, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
+                        SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(BaseDamagePerHit, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
                     }
                 }
             }
