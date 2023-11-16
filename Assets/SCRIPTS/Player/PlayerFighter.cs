@@ -435,7 +435,7 @@ public class PlayerFighter : FighterShared
                 {
                     PowerAndConsActivated[i] = false;
                     PowerAndConsCDText[i].SetActive(false);
-                    StartCoroutine(Flash(PowerAndConsCDImage[i].transform.GetChild(4).gameObject));
+                    StartCoroutine(Flash(i < 2 ? PowerAndConsCDImage[i].transform.parent.parent.GetChild(4).gameObject : PowerAndConsCDImage[i].transform.parent.parent.GetChild(7).gameObject));
                 } 
             }
         }
@@ -450,9 +450,8 @@ public class PlayerFighter : FighterShared
             Color c = go.GetComponent<SpriteRenderer>().color;
             c.a += 0.1f;
             go.GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.005f);
         }
-        yield return new WaitForSeconds(0.1f);
         Color c2 = go.GetComponent<SpriteRenderer>().color;
         c2.a = 0f;
         go.GetComponent<SpriteRenderer>().color = c2;
