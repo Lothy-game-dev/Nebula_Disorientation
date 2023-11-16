@@ -925,21 +925,7 @@ public class WSShared : MonoBehaviour
             {
                 if (!AlreadyDestroy)
                 {
-                    Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
-                    AlreadyDestroy = true;
-                    if (IsEnemy)
-                    {
-                        FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
-                    }
-                    else
-                    {
-                        if (isStation)
-                        {
-                            FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
-                        }
-                        else
-                            FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
-                    }
+                    AlreadyDestroy = true;                    
                     StartCoroutine(DestroySelf());
                 }
             }
@@ -1024,6 +1010,7 @@ public class WSShared : MonoBehaviour
     private IEnumerator FlashOpen(GameObject Fade, float delay, float duration)
     {
         yield return new WaitForSeconds(delay);       
+        Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
         for (int i = 0; i < 50; i++)
         {
             Color c = Fade.GetComponent<SpriteRenderer>().color;
@@ -1032,7 +1019,20 @@ public class WSShared : MonoBehaviour
             yield return new WaitForSeconds(duration / 50f);
         }
         Destroy(Fade);
-        Destroy(gameObject);
+        if (IsEnemy)
+        {
+            FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
+        }
+        else
+        {
+            if (isStation)
+            {
+                FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+            }
+            else
+                FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
+        }
+        Destroy(gameObject,2f);
 
     }
     #endregion
