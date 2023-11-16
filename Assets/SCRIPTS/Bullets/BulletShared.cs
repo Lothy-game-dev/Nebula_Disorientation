@@ -642,7 +642,31 @@ public class BulletShared : MonoBehaviour
             RealDamage = 0;
             if (isGravitational)
             {
-
+                AoEEffect.CreateAreaOfEffect(transform.position, AoE);
+                Collider2D[] cols2 = Physics2D.OverlapCircleAll(transform.position, AoE, EnemyLayer);
+                foreach (var col2 in cols2)
+                {
+                    FighterShared enemy = col2.gameObject.GetComponent<FighterShared>();
+                    WSShared Warship = col2.gameObject.GetComponent<WSShared>();
+                    SpaceStationShared SpaceStation = col2.gameObject.GetComponent<SpaceStationShared>();
+                    if (enemy != null)
+                    {
+                        enemy.ReceiveDamage(CalculateFinalDamage(BaseDamagePerHit/2, true, enemy.gameObject), gameObject);
+                        // Inflict lava burned
+                        enemy.InflictLavaBurned(enemy.MaxHP * 0.1f / 100, LavaBurnCount);
+                    }
+                    else if (Warship != null)
+                    {
+                        Warship.ReceiveBulletDamage(CalculateFinalDamage(BaseDamagePerHit / 2, false, Warship.gameObject), gameObject, false, gameObject.transform.position);
+                    }
+                    else
+                    {
+                        if (SpaceStation != null)
+                        {
+                            SpaceStation.ReceiveBulletDamage(CalculateFinalDamage(BaseDamagePerHit / 2, false, SpaceStation.gameObject), gameObject, gameObject.transform.position);
+                        }
+                    }
+                }
             }
             Destroy(gameObject);
             PunishML();
