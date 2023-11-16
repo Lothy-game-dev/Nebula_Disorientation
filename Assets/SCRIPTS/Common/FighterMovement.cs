@@ -112,13 +112,13 @@ public class FighterMovement : MonoBehaviour
             if (PreventReachLimit)
             {
                 PreventReachLimit = false;
-                NoLeftRightMove();
             }
         }
         else
         {
             PreventReachLimit = true;
             PreventReachLimitTimer -= Time.deltaTime;
+            PreventReachingLimit();
         }
         if (!ControllerMain.IsInLoading)
         {
@@ -141,18 +141,22 @@ public class FighterMovement : MonoBehaviour
                         {
                             CheckMovingDelay -= Time.deltaTime;
                         }
-                    } else
+                    } 
+                    else
                     if (!PreventReachLimit)
                     {
                         PreventReachingLimit();
-                        if (CheckMovingDelay <= 0f)
+                        if (!PreventReachLimit)
                         {
-                            CheckMovingDelay = Random.Range(0.25f, 0.5f);
-                            CheckOnMoving();
-                        }
-                        else
-                        {
-                            CheckMovingDelay -= Time.deltaTime;
+                            if (CheckMovingDelay <= 0f)
+                            {
+                                CheckMovingDelay = Random.Range(0.25f, 0.5f);
+                                CheckOnMoving();
+                            }
+                            else
+                            {
+                                CheckMovingDelay -= Time.deltaTime;
+                            }
                         }
                     }
                 }
@@ -221,6 +225,17 @@ public class FighterMovement : MonoBehaviour
         HealthBarSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         ShieldBarSlider.transform.Rotate(new Vector3(0, 0, RotateScale * RotateDirection * RotateSpeed * fs.SlowedMoveSpdScale * ExteriorROTSpeed));
         
+    }
+
+    private void FighterForceRotate(float angle)
+    {
+        transform.Rotate(new Vector3(0, 0, -angle));
+        CurrentRotateAngle += angle;
+        // Fire and Freeze eff not rotate
+        FireEffect.transform.Rotate(new Vector3(0, 0, angle));
+        FreezeEffect.transform.Rotate(new Vector3(0, 0, angle));
+        HealthBarSlider.transform.Rotate(new Vector3(0, 0, angle));
+        ShieldBarSlider.transform.Rotate(new Vector3(0, 0, angle));
     }
     private void FighterMoving()
     {
@@ -316,25 +331,21 @@ public class FighterMovement : MonoBehaviour
         if (transform.position.x >= (LimitRightX + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
-            NoUpDownMove();
             LimitString = "Right";
         }
         else if (transform.position.x <= (LimitLeftX - 50))
         {
             StartCoroutine(TeleportBack(new Vector2(LimitLeftX, transform.position.y)));
-            NoUpDownMove();
             LimitString = "Left";
         }
         else if (transform.position.y >= (LimitTopY + 50))
         {
             StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitTopY)));
-            NoUpDownMove();
             LimitString = "Top";
         }
         else if (transform.position.y <= (LimitBottomY - 50))
         {
             StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitBottomY)));
-            NoUpDownMove();
             LimitString = "Bottom";
         }
     }
@@ -348,26 +359,51 @@ public class FighterMovement : MonoBehaviour
         // Prevent Reach Limit
         int PreventX = 0;
         int PreventY = 0;
-        if (transform.position.x >= (LimitRightX - MovingSpeed * 1.5f) && CurrentRotateAngle % 360 > 45 && CurrentRotateAngle % 360 <= 135)
+        float Distance = 0;
+        if (transform.position.x >= (LimitRightX - 1200) && CurrentRotateAngle % 360 > 0 && CurrentRotateAngle % 360 <= 180)
         {
             PreventX = -1;
+            Distance = Mathf.Abs(LimitRightX - transform.position.x);
         }
-        if (transform.position.x <= (LimitLeftX + MovingSpeed * 1.5f) && CurrentRotateAngle % 360 > 225 && CurrentRotateAngle % 360 <= 315)
+        if (transform.position.x <= (LimitLeftX + 1200) && CurrentRotateAngle % 360 > 180 && CurrentRotateAngle % 360 <= 360)
         {
             PreventX = 1;
+            Distance = Mathf.Abs(LimitLeftX - transform.position.x);
         }
-        if (transform.position.y >= (LimitTopY - MovingSpeed * 1.5f) && (CurrentRotateAngle % 360 > 315 || CurrentRotateAngle % 360 <= 45))
+        if (transform.position.y >= (LimitTopY - 1200) && (CurrentRotateAngle % 360 > 270 || CurrentRotateAngle % 360 <= 90))
         {
             PreventY = -1;
+            if (Mathf.Abs(LimitTopY - transform.position.y) < Distance)
+            {
+                Distance = Mathf.Abs(LimitTopY - transform.position.y);
+            }
         }
-        if (transform.position.y <= (LimitBottomY + MovingSpeed * 1.5f) && CurrentRotateAngle % 360 > 135 && CurrentRotateAngle % 360 <= 225)
+        if (transform.position.y <= (LimitBottomY + 1200) && CurrentRotateAngle % 360 > 90 && CurrentRotateAngle % 360 <= 270)
         {
             PreventY = 1;
+            if (Mathf.Abs(LimitTopY - transform.position.y) < Distance)
+            {
+                Distance = Mathf.Abs(LimitBottomY - transform.position.y);
+            }
         }
         if (PreventX != 0 || PreventY != 0)
         {
-            PreventReachLimitTimer = 180 / (RotateSpeed * 120f) + Random.Range(-0.25f, 0.25f);
+            PreventReachLimitTimer = 180 / (RotateSpeed * 120f) + Random.Range(0, 0.25f);
             PreventReachLimit = true;
+            if (CurrentSpeed * PreventReachLimitTimer > Distance)
+            {
+                if (CurrentSpeed / MovingSpeed < 0.5f)
+                {
+                    UpMove();
+                }
+                else if (CurrentSpeed / MovingSpeed >= 1f)
+                {
+                    DownMove();
+                }
+            } else
+            {
+                UpMove();
+            }
             if (PreventY == 1)
             {
                 if (PreventX == 1)
@@ -489,176 +525,29 @@ public class FighterMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         transform.position = new Vector3(Position.x, Position.y, transform.position.z);
-        CurrentSpeed = 0f;
     }
 
     private void GetAwayFromLimit()
     {
-        if (ChosenRandom==-200f)
-        {
-            ChosenRandom = Random.Range(-100f, 100f);
-        }
-        int scale = 1;
-        if (als!=null)
-        {
-            if (als.name.Contains("Zartillery"))
-            {
-                scale = 3;
-            }
-        }
-        if (es != null)
-        {
-            if (es.name.Contains("Ranger"))
-            {
-                scale = 3;
-            }
-        }
         if (LimitString == "Left")
         {
-            GameObject go = new GameObject();
-            go.transform.position = new Vector3(transform.position.x + 1000f, transform.position.y, transform.position.z);
-            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
-            Destroy(go);
-            if (k==1)
-            {
-                RightMove(scale);
-            } else if (k==-1)
-            {
-                LeftMove(scale);
-            } else if (k==0)
-            {
-                UpMove();
-                NoLeftRightMove();
-                LimitString = "";
-                ChosenRandom = -200f; 
-                
-                LimitDelay = 3f;
-                if (als != null)
-                {
-                    if (als.name.Contains("Zartillery"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-                if (es != null)
-                {
-                    if (es.name.Contains("Ranger"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-            }
+            FighterForceRotate((CurrentRotateAngle - 90) * 2);
+            LimitString = "";
         } 
         else if (LimitString == "Right")
         {
-            GameObject go = new GameObject();
-            go.transform.position = new Vector3(transform.position.x - 1000f, transform.position.y, transform.position.z);
-            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
-            Destroy(go);
-            if (k == 1)
-            {
-                RightMove(scale);
-            }
-            else if (k == -1)
-            {
-                LeftMove(scale);
-            }
-            else if (k == 0)
-            {
-                UpMove();
-                NoLeftRightMove();
-                LimitString = "";
-                ChosenRandom = -200f;
-                LimitDelay = 3f;
-                if (als != null)
-                {
-                    if (als.name.Contains("Zartillery"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-                if (es != null)
-                {
-                    if (es.name.Contains("Ranger"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-            }
+            FighterForceRotate((CurrentRotateAngle -270) * 2);
+            LimitString = "";
         }
         else if (LimitString == "Top")
         {
-            GameObject go = new GameObject();
-            go.transform.position = new Vector3(transform.position.x , transform.position.y - 1000f, transform.position.z);
-            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
-            Destroy(go);
-            if (k == 1)
-            {
-                RightMove(scale);
-            }
-            else if (k == -1)
-            {
-                LeftMove(scale);
-            }
-            else if (k == 0)
-            {
-                UpMove();
-                NoLeftRightMove();
-                LimitString = "";
-                ChosenRandom = -200f;
-                LimitDelay = 3f;
-                if (als != null)
-                {
-                    if (als.name.Contains("Zartillery"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-                if (es != null)
-                {
-                    if (es.name.Contains("Ranger"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-            }
+            FighterForceRotate((CurrentRotateAngle - 180) * 2);
+            LimitString = "";
         }
         else if (LimitString == "Bottom")
         {
-            GameObject go = new GameObject();
-            go.transform.position = new Vector3(transform.position.x, transform.position.y + 1000f, transform.position.z);
-            int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
-            Destroy(go);
-            if (k == 1)
-            {
-                RightMove(scale);
-            }
-            else if (k == -1)
-            {
-                LeftMove(scale);
-            }
-            else if (k == 0)
-            {
-                UpMove();
-                NoLeftRightMove();
-                LimitString = "";
-                ChosenRandom = -200f;
-                LimitDelay = 3f;
-                if (als != null)
-                {
-                    if (als.name.Contains("Zartillery"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-                if (es != null)
-                {
-                    if (es.name.Contains("Ranger"))
-                    {
-                        LimitDelay = 0f;
-                    }
-                }
-            }
+            FighterForceRotate((CurrentRotateAngle - 0) * 2);
+            LimitString = "";
         }
     }
 

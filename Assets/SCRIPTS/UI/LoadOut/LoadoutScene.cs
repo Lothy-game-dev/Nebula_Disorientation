@@ -116,6 +116,7 @@ public class LoadoutScene : UECMenuShared
             else
             {
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon, "Weapon");
+                Debug.Log("Left:" + n);
                 if (n==0)
                 {
                     newLeftWeapon = true;
@@ -145,6 +146,7 @@ public class LoadoutScene : UECMenuShared
             } else
             {
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId, RightWeapon, "Weapon");
+                Debug.Log("Right:" + n);
                 if (n == 0)
                 {
                     newRightWeapon = true;
@@ -164,7 +166,8 @@ public class LoadoutScene : UECMenuShared
             }
             if (newRightWeapon)
             {
-                RightWeapon = ListWeapon[0];
+                List<string> WeaponTemp = FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon);
+                RightWeapon = WeaponTemp[0];
                 Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
             } else
             {

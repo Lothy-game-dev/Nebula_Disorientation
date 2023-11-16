@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -923,12 +924,22 @@ public class Weapons : MonoBehaviour
             if (currentOverheat < 80 && !isOverheatted && isWarning)
             {
                 EndOverheatWarningSound();
+                if (OverHeatImage!=null)
+                {
+                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "Ready to use";
+                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.green;
+                }
                 isWarning = false;
             }
             // If overheat rate >= 80% then play overheat warning sounds
             if (currentOverheat >= 80 && !isOverheatted)
             {
                 OverheatSound80Percent(((currentOverheat - 75) * 2) / 100);
+                if (OverHeatImage != null)
+                {
+                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "!Warning!";
+                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = new Color(255, 127, 0, 255);
+                }
                 isWarning = true;
             }
         }
@@ -940,6 +951,11 @@ public class Weapons : MonoBehaviour
             // Hide reload bar
             ReloadBar.gameObject.SetActive(false);
             EndOverheatWarningSound();
+            if (OverHeatImage != null)
+            {
+                OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "overheatted";
+                OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.red;
+            }
             audioScale = 0.2f;
             OverheatedSound();
             // Set overheat rate to 100 for exact animation
@@ -961,6 +977,11 @@ public class Weapons : MonoBehaviour
                 {
                     ReloadBar.SetActive(true);
                     ReloadBar.GetComponent<Image>().fillAmount = 0;
+                }
+                if (OverHeatImage != null)
+                {
+                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "Ready to use";
+                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.green;
                 }
                 isWarning = false;
                 audioScale = 0.5f;
