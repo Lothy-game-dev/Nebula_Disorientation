@@ -74,10 +74,6 @@ public class LoadOutModelBoard : MonoBehaviour
                 CurrentSelectedModel = model;
             }
         }
-        maximumHeight = Size * (ListOfModel.Count) * 0.8f;
-        Contents.GetComponent<RectTransform>().sizeDelta
-            = new Vector2(Contents.GetComponent<RectTransform>().sizeDelta.x,
-            maximumHeight);
         // Add data to scene controller
         Scene.GetComponent<LoadoutScene>().Model = currentModel;
         if (gameObject.activeSelf)
@@ -94,8 +90,8 @@ public class LoadOutModelBoard : MonoBehaviour
         {
             GameObject go = Instantiate(BoxTemplate, new Vector3(currentPosLeft.x,
                 currentPosLeft.y, BoxTemplate.transform.position.z), Quaternion.identity);
-            currentPosLeft = new Vector2(currentPosLeft.x, currentPosLeft.y - Size);
             go.transform.SetParent(Contents.transform);
+            go.transform.localScale = BoxTemplate.transform.localScale;
             go.name = ListOfModel[i].name;
             if (go.name.Replace(" ","").ToLower().Equals(currentModel.Replace(" ", "").ToLower()))
             {
@@ -103,7 +99,6 @@ public class LoadOutModelBoard : MonoBehaviour
                 CurrentSelectedModel = go;
             }
             ListOfModelAfterGen.Add(go);
-            go.transform.localScale = new Vector2(BoxTemplate.transform.localScale.x, BoxTemplate.transform.localScale.y);
             go.GetComponent<LoadOutModelBox>().board = gameObject;
             go.transform.GetChild(0).GetComponent<Image>().sprite = ListOfModel[i].GetComponent<Image>().sprite;
             go.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = ListOfModel[i].name;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -940,6 +941,12 @@ public class Weapons : MonoBehaviour
             // Hide reload bar
             ReloadBar.gameObject.SetActive(false);
             EndOverheatWarningSound();
+            if (OverHeatImage != null)
+            {
+                OverHeatImage.transform.GetChild(4).gameObject.SetActive(true);
+                OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "overheated";
+                OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.red;
+            }
             audioScale = 0.2f;
             OverheatedSound();
             // Set overheat rate to 100 for exact animation
@@ -961,6 +968,11 @@ public class Weapons : MonoBehaviour
                 {
                     ReloadBar.SetActive(true);
                     ReloadBar.GetComponent<Image>().fillAmount = 0;
+                }
+                if (OverHeatImage != null)
+                {
+                    StartCoroutine(ReadyToUse());
+                    
                 }
                 isWarning = false;
                 audioScale = 0.5f;
@@ -1010,6 +1022,28 @@ public class Weapons : MonoBehaviour
                 OverheatDecreaseTimer = 1 / 20f;
             }
         }
+    }
+
+    private IEnumerator ReadyToUse()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color;
+            c.a -= 0.05f;
+            OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.05f);
+        }
+        OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "Ready to use";
+        OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.green;
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color;
+            c.a += 0.05f;
+            OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.05f);
+        }
+        yield return new WaitForSeconds(2f);
+        OverHeatImage.transform.GetChild(4).gameObject.SetActive(false);
     }
     #endregion
     #region Weapon Sound

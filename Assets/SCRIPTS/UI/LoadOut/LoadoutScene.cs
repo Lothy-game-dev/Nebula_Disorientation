@@ -82,6 +82,7 @@ public class LoadoutScene : UECMenuShared
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
         Weapon1Bar.SetActive(false);
         Weapon2Bar.SetActive(false);
+        ModelBoard.SetActive(false);
         Power1Bar.SetActive(false);
         Power2Bar.SetActive(false);
         ConsumableBar.SetActive(false);
@@ -116,6 +117,7 @@ public class LoadoutScene : UECMenuShared
             else
             {
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon, "Weapon");
+                Debug.Log("Left:" + n);
                 if (n==0)
                 {
                     newLeftWeapon = true;
@@ -145,6 +147,7 @@ public class LoadoutScene : UECMenuShared
             } else
             {
                 int n = FindObjectOfType<AccessDatabase>().GetCurrentOwnershipWeaponPowerModelByName(FindObjectOfType<UECMainMenuController>().PlayerId, RightWeapon, "Weapon");
+                Debug.Log("Right:" + n);
                 if (n == 0)
                 {
                     newRightWeapon = true;
@@ -162,13 +165,15 @@ public class LoadoutScene : UECMenuShared
                     newRightWeapon = false;
                 }
             }
+            List<string> WeaponTemp = FindObjectOfType<AccessDatabase>().GetOwnedWeaponExceptForName(FindObjectOfType<UECMainMenuController>().PlayerId, LeftWeapon);
+
             if (newRightWeapon)
             {
-                RightWeapon = ListWeapon[0];
-                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
+                RightWeapon = WeaponTemp[0];
+                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(WeaponTemp, RightWeapon, true);
             } else
             {
-                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(ListWeapon, RightWeapon, true);
+                Weapon2Bar.GetComponent<LoadOutBar>().SetItem(WeaponTemp, RightWeapon, true);
             }
         }
         

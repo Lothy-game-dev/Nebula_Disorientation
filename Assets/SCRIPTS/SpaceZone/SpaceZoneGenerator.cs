@@ -414,8 +414,8 @@ public class SpaceZoneGenerator : MonoBehaviour
             EnemyFighterIDs.Add(int.Parse(FighterGroupData["EnemiesFighterB"].ToString().Split(",")[i]));
         }
         // Count Number Of Ally By Type
-        AllyFighterACount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadX / 5);
-        AllyFighterBCount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadY / 10);
+        AllyFighterACount = (int)((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadX / 5);
+        AllyFighterBCount = (int)((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadY / 10);
         AllyFighterCCount = (int)Mathf.Ceil((float)AllySquadRating / (AllySquadX + AllySquadY + AllySquadZ) * AllySquadZ / 30);
         // Spawn Ally
         List<int> AllyID = new List<int>();
@@ -538,8 +538,8 @@ public class SpaceZoneGenerator : MonoBehaviour
         AllyFighterSpawn.SpawnAlly();
 
         // Count Number Of Enemy By Type
-        EnemyFighterACount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadX / 5);
-        EnemyFighterBCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadY / 10);
+        EnemyFighterACount = (int)((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadX / 5);
+        EnemyFighterBCount = (int)((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadY / 10);
         EnemyFighterCCount = (int)Mathf.Ceil((float)EnemySquadRating / (EnemySquadX + EnemySquadY + EnemySquadZ) * EnemySquadZ / 30);
         // Spawn Enemy
         bool SpawningByTime = false;

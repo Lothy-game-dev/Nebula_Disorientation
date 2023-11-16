@@ -113,9 +113,8 @@ public class UECSessionScene : MonoBehaviour
         int n = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"), ChosenFirstWeapon, "Weapon");
         if (n==0)
         {
-            ChosenFirstWeapon = ListWeapon[inter];
+            ChosenFirstWeapon = ListWeapon[0];
             Debug.Log(ChosenFirstWeapon);
-            inter++;
             FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "LeftWeapon", ChosenFirstWeapon.Replace(" ",""));
         }
         // Second Weapon
@@ -124,13 +123,15 @@ public class UECSessionScene : MonoBehaviour
         int m = FindObjectOfType<AccessDatabase>().GetSessionCurrentOwnershipWeaponPowerModelByName(PlayerPrefs.GetInt("PlayerID"), ChosenSecondWeapon, "Weapon");
         if (m == 0)
         {
-            ChosenSecondWeapon = ListWeapon[inter];
+            List<string> WeaponTemp = FindObjectOfType<AccessDatabase>().GetSessionOwnedWeaponExceptForName(PlayerPrefs.GetInt("PlayerID"), ChosenFirstWeapon);
+            ChosenSecondWeapon = WeaponTemp[0];
             FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "RightWeapon", ChosenSecondWeapon.Replace(" ", ""));
         } else if (m==1)
         {
             if (ChosenSecondWeapon == ChosenFirstWeapon)
             {
-                ChosenSecondWeapon = ListWeapon[inter];
+                List<string> WeaponTemp = FindObjectOfType<AccessDatabase>().GetSessionOwnedWeaponExceptForName(PlayerPrefs.GetInt("PlayerID"), ChosenFirstWeapon);
+                ChosenSecondWeapon = WeaponTemp[0];
                 FindObjectOfType<AccessDatabase>().UpdateSessionInfo(PlayerPrefs.GetInt("PlayerID"), "RightWeapon", ChosenSecondWeapon.Replace(" ", ""));
             }
         }
