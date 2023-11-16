@@ -924,22 +924,12 @@ public class Weapons : MonoBehaviour
             if (currentOverheat < 80 && !isOverheatted && isWarning)
             {
                 EndOverheatWarningSound();
-                if (OverHeatImage!=null)
-                {
-                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "Ready to use";
-                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.green;
-                }
                 isWarning = false;
             }
             // If overheat rate >= 80% then play overheat warning sounds
             if (currentOverheat >= 80 && !isOverheatted)
             {
                 OverheatSound80Percent(((currentOverheat - 75) * 2) / 100);
-                if (OverHeatImage != null)
-                {
-                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "!Warning!";
-                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = new Color(255, 127, 0, 255);
-                }
                 isWarning = true;
             }
         }
@@ -953,6 +943,7 @@ public class Weapons : MonoBehaviour
             EndOverheatWarningSound();
             if (OverHeatImage != null)
             {
+                OverHeatImage.transform.GetChild(4).gameObject.SetActive(true);
                 OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "overheatted";
                 OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.red;
             }
@@ -980,8 +971,8 @@ public class Weapons : MonoBehaviour
                 }
                 if (OverHeatImage != null)
                 {
-                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "Ready to use";
-                    OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.green;
+                    StartCoroutine(ReadyToUse());
+                    
                 }
                 isWarning = false;
                 audioScale = 0.5f;
@@ -1031,6 +1022,28 @@ public class Weapons : MonoBehaviour
                 OverheatDecreaseTimer = 1 / 20f;
             }
         }
+    }
+
+    private IEnumerator ReadyToUse()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color;
+            c.a -= 0.05f;
+            OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.05f);
+        }
+        OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().text = "Ready to use";
+        OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = Color.green;
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color;
+            c.a += 0.05f;
+            OverHeatImage.transform.GetChild(4).GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.05f);
+        }
+        yield return new WaitForSeconds(2f);
+        OverHeatImage.transform.GetChild(4).gameObject.SetActive(false);
     }
     #endregion
     #region Weapon Sound
