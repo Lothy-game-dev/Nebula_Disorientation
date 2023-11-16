@@ -48,6 +48,8 @@ public class GameplayInteriorController : MonoBehaviour
     void Start()
     {
         // Initialize variables
+        Camera.main.transparencySortAxis = new Vector3(0f, 1f, 0f);
+        Debug.Log(Camera.main.transparencySortAxis);
         GenerateLoadingScene(5f);
         SaveText.gameObject.SetActive(true);
         SaveText.FadingCountDown = 5f;
@@ -75,9 +77,7 @@ public class GameplayInteriorController : MonoBehaviour
         aus = GetComponent<AudioSource>();
         isLoweringSound = false;
         SoundVolume();
-        Camera.main.transparencySortAxis = new Vector3(0, 1, 0);
-
-
+        
     }
 
     // Update is called once per frame

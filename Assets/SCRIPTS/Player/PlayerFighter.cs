@@ -125,7 +125,7 @@ public class PlayerFighter : FighterShared
                         new Color(0, 95 / 255f, 1, 149 / 255f);
                     if (Input.GetKeyDown(KeyCode.Q) && !PowerAndConsActivation[0])
                     {
-                        if (FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower.GetComponent<Powers>().Type == "OFF")
+                        if (FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower != null && SecondPower.GetComponent<Powers>().Type == "OFF")
                         {
                             PowerAndConsCDTimer[1] = PowerAndConsDuration[0];
                         }
@@ -151,7 +151,7 @@ public class PlayerFighter : FighterShared
                         PowerAndConsDurationSlider[0].maxValue = ChargingPowerReq[0];
                         if (ChargingPower[0] < ChargingPowerReq[0])
                         {
-                            if (!PowerAndConsActivation[1] && PowerAndConsCDTimer[1] <= 0 && FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower.GetComponent<Powers>().Type == "OFF")
+                            if (!PowerAndConsActivation[1] && PowerAndConsCDTimer[1] <= 0 && FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower != null && SecondPower.GetComponent<Powers>().Type == "OFF")
                             {
                                 PowerAndConsCDTimer[1] = DelayTimer;
                             }
@@ -215,7 +215,7 @@ public class PlayerFighter : FighterShared
                         new Color(0, 95 / 255f, 1, 149 / 255f);
                     if (Input.GetKeyDown(KeyCode.E) && !PowerAndConsActivation[1])
                     {
-                        if (FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower.GetComponent<Powers>().Type == "OFF")
+                        if (FirstPower != null && FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower.GetComponent<Powers>().Type == "OFF")
                         {
                             PowerAndConsCDTimer[0] = PowerAndConsDuration[1];
                         }
@@ -242,7 +242,7 @@ public class PlayerFighter : FighterShared
                         PowerAndConsDurationSlider[1].maxValue = ChargingPowerReq[1];
                         if (ChargingPower[1] < ChargingPowerReq[1])
                         {
-                            if (!PowerAndConsActivation[0] && PowerAndConsCDTimer[0] <= 0 && FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower.GetComponent<Powers>().Type == "OFF")
+                            if (!PowerAndConsActivation[0] && PowerAndConsCDTimer[0] <= 0 && FirstPower != null && FirstPower.GetComponent<Powers>().Type == "OFF" && SecondPower.GetComponent<Powers>().Type == "OFF")
                             {
                                 PowerAndConsCDTimer[0] = DelayTimer;
                             }
