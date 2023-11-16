@@ -56,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
     public float AccelEngineRoTUpScale;
     private bool PressDash;
     private float DelayAERechargeTimer;
+    private bool autoPilot;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -103,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
             Movable = true;
         }
         // Rotate Left Right
-        DetectADButton();
+        if (!autoPilot) DetectADButton();
         // Dash using Spacebar
         // Timer for Dashing
         if (DashingTimer>0f)
@@ -219,6 +220,11 @@ public class PlayerMovement : MonoBehaviour
         float RotateScale = 2;
         transform.Rotate(new Vector3(0,0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
         CurrentRotateAngle += RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale;
+        if (CurrentRotateAngle < 0)
+        {
+            CurrentRotateAngle += 360;
+        }
+        CurrentRotateAngle %= 360;
         if (PlayerIcon!=null)
         {
             PlayerIcon.transform.Rotate(new Vector3(0, 0, -RotateScale * RotateDirection * RotateSpeed * pf.SlowedMoveSpdScale * ExteriorROTSpeed * AccelEngineRoTUpScale));
@@ -370,39 +376,70 @@ public class PlayerMovement : MonoBehaviour
         float LimitBottomY = BottomBorder.transform.position.y + 100;
         float LimitLeftX = LeftBorder.transform.position.x + 100;
         float LimitRightX = RightBorder.transform.position.x - 100;
+        LimitSpeedScale = 1;
+        bool AorD = false;
         if (transform.position.x >= LimitRightX)
         {
-            LimitSpeedScale = (60 - (transform.position.x - LimitRightX)) / 50;
+            autoPilot = true;
+            if (CurrentRotateAngle > 90)
+            {
+                AorD = false;
+            } else
+            {
+                AorD = true;
+            }
         }
         else if (transform.position.x <= LimitLeftX)
         {
-            LimitSpeedScale = (60 - (LimitLeftX - transform.position.x)) / 50;
+            autoPilot = true;
+            if (CurrentRotateAngle > 270)
+            {
+                AorD = false;
+            }
+            else
+            {
+                AorD = true;
+            }
         }
         else if (transform.position.y >= LimitTopY)
         {
-            LimitSpeedScale = (60 - (transform.position.y - LimitTopY)) / 50;
+            autoPilot = true;
+            if (CurrentRotateAngle > 180)
+            {
+                AorD = false;
+            }
+            else
+            {
+                AorD = true;
+            }
         }
         else if (transform.position.y <= LimitBottomY)
         {
-            LimitSpeedScale = (60 - (LimitBottomY - transform.position.y)) / 50;
+            autoPilot = true;
+            if (CurrentRotateAngle > 0)
+            {
+                AorD = false;
+            }
+            else
+            {
+                AorD = true;
+            }
         }
-        else LimitSpeedScale = 1;
-        if (LimitSpeedScale<0f)
+        if (autoPilot)
         {
-            LimitSpeedScale = 0f;
+            AutoPilot(AorD);
         }
-        if (transform.position.x >= (LimitRightX + 50)) 
+    }
+
+    private void AutoPilot(bool AorD)
+    {
+        autoPilot = true;
+        if (AorD)
         {
-            StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
-        } else if (transform.position.x <= (LimitLeftX - 50))
+            RotateDirection = -1;
+        } else
         {
-            StartCoroutine(TeleportBack(new Vector2(LimitLeftX, transform.position.y)));
-        } else if (transform.position.y >= (LimitTopY + 50))
-        {
-            StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitTopY)));
-        } else if (transform.position.y <= (LimitBottomY - 50))
-        {
-            StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitBottomY)));
+            RotateDirection = 1;
         }
     }
 

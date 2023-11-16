@@ -50,6 +50,7 @@ public class FighterMovement : MonoBehaviour
     private float xRandom;
     private float yRandom;
     private bool NoEscorting;
+    private float delayCheckLimit;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -106,7 +107,7 @@ public class FighterMovement : MonoBehaviour
         AccelerateSpeed();
         if (Movable) FighterMoving();
         fs.CalculateVelocity(speedVector);
-        CheckLimit();
+
         if (PreventReachLimitTimer <= 0f)
         {
             if (PreventReachLimit)
@@ -174,6 +175,13 @@ public class FighterMovement : MonoBehaviour
             }
         }
         if (Movable) FighterRotate();
+        if (delayCheckLimit>0f)
+        {
+            delayCheckLimit -= Time.deltaTime;
+        } else
+        {
+            CheckLimit();
+        }
     }
     private void FixedUpdate()
     {
@@ -534,24 +542,29 @@ public class FighterMovement : MonoBehaviour
     {
         if (LimitString == "Left")
         {
+            delayCheckLimit = 1f;
             FighterForceRotate((180- CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
+            
         } 
         else if (LimitString == "Right")
         {
+            delayCheckLimit = 1f;
             FighterForceRotate((0 - CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
         }
         else if (LimitString == "Top")
         {
+            delayCheckLimit = 1f;
             FighterForceRotate((270 - CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
         }
         else if (LimitString == "Bottom")
         {
+            delayCheckLimit = 1f;
             FighterForceRotate((90 - CurrentRotateAngle) * 2);
             LimitString = "";
             PreventReachLimitTimer = 0f;
