@@ -92,6 +92,7 @@ public class WSShared : MonoBehaviour
     private float PlayerDamageReceive;
     public List<GameObject> Targets;
     private StatusBoard Status;
+    private GameplayInteriorController controller;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -114,6 +115,7 @@ public class WSShared : MonoBehaviour
         ShieldBar.SetValue(CurrentBarrier, MaxBarrier, true);
         HPBar.SetValue(CurrentHP, MaxHP, true);
         Status = WarshipStatus.GetComponent<StatusBoard>();
+        controller = FindAnyObjectByType<GameplayInteriorController>();
     }
 
     // Update is called once per frame
@@ -917,27 +919,29 @@ public class WSShared : MonoBehaviour
     #region Check barrier and health
     public void CheckBarrierAndHealth()
     {
-
-        if (CurrentHP <= 0)
+        if (!controller.isEnding)
         {
-            if (!AlreadyDestroy)
+            if (CurrentHP <= 0)
             {
-                Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
-                AlreadyDestroy = true;
-                if (IsEnemy)
+                if (!AlreadyDestroy)
                 {
-                    FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
-                }
-                else
-                {
-                    if (isStation)
+                    Camera.main.GetComponent<GameplaySoundSFXController>().GenerateSound("WSExplo", gameObject);
+                    AlreadyDestroy = true;
+                    if (IsEnemy)
                     {
-                        FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+                        FindObjectOfType<SpaceZoneMission>().EnemyWarshipDestroy();
                     }
                     else
-                        FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
+                    {
+                        if (isStation)
+                        {
+                            FindObjectOfType<SpaceZoneMission>().AllySpaceStationDestroy();
+                        }
+                        else
+                            FindObjectOfType<SpaceZoneMission>().AllyWarshipDestroy();
+                    }
+                    StartCoroutine(DestroySelf());
                 }
-                StartCoroutine(DestroySelf());
             }
         }
     }
