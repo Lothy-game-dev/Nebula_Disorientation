@@ -452,18 +452,34 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.x >= LimitRightX)
         {
             check++;
+            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitRightX && CurrentRotateAngle > 260 && CurrentRotateAngle < 280)
+            {
+                RotateDirection = 0;
+            }
         }
         if (transform.position.x <= LimitLeftX)
         {
-            check++;
+            check++; 
+            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitLeftX && CurrentRotateAngle > 80 && CurrentRotateAngle < 100)
+            {
+                RotateDirection = 0;
+            }
         }
         if (transform.position.y >= LimitTopY)
         {
             check++;
+            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitTopY && CurrentRotateAngle > 170 && CurrentRotateAngle < 190)
+            {
+                RotateDirection = 0;
+            }
         }
         if (transform.position.y <= LimitBottomY)
         {
             check++;
+            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitBottomY && (CurrentRotateAngle > 350 || CurrentRotateAngle < 10))
+            {
+                RotateDirection = 0;
+            }
         }
         if (check == 0)
         {
@@ -474,7 +490,7 @@ public class PlayerMovement : MonoBehaviour
     private void AutoPilot(bool AorD, int check)
     {
         autoPilot = true;
-        SpeedUp = 1;
+        CurrentSpeed = MovingSpeed;
         if (AorD)
         {
             RotateDirection = -1;

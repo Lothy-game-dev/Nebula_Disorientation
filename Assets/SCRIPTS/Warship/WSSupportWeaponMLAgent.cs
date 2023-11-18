@@ -61,9 +61,9 @@ public class WSSupportWeaponMLAgent : Agent
         if (SPWeapon != null)
         {
             SPWeapon.AIShootBullet((float)(SPWeapon.Aim != null && SPWeapon.Aim.GetComponent<SpaceStationShared>() == null ?
-                    (SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection
-                    : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection
-                    : SPWeapon.Aim.GetComponent<WSMovement>() != null ? SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection : GetComponent<WSMovement>().RotateDirection) : GetComponent<WSMovement>().RotateDirection) * actions.ContinuousActions[0] * 15);
+                    (SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection : 0
+                    : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection : 0
+                    : SPWeapon.Aim.GetComponent<WSMovement>() != null ? SPWeapon.Aim.GetComponent<WSMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection : 0 : GetComponent<WSMovement>().RotateDirection) : GetComponent<WSMovement>().RotateDirection) * actions.ContinuousActions[0] * 15);
         }
     }
     #endregion
