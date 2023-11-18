@@ -452,33 +452,61 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.x >= LimitRightX)
         {
             check++;
-            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitRightX && CurrentRotateAngle > 260 && CurrentRotateAngle < 280)
+            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitRightX)
             {
+                if (CurrentRotateAngle > 260 && CurrentRotateAngle < 280)
                 RotateDirection = 0;
+                else if (CurrentRotateAngle > 350 || CurrentRotateAngle < 10)
+                    RotateDirection = -1;
+                else if (CurrentRotateAngle > 170 && CurrentRotateAngle < 190)
+                {
+                    RotateDirection = 1;
+                }
             }
         }
         if (transform.position.x <= LimitLeftX)
         {
             check++; 
-            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitLeftX && CurrentRotateAngle > 80 && CurrentRotateAngle < 100)
+            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitLeftX)
             {
+                if (CurrentRotateAngle > 80 && CurrentRotateAngle < 100)
                 RotateDirection = 0;
+                else if (CurrentRotateAngle > 350 || CurrentRotateAngle < 10)
+                    RotateDirection = 1;
+                else if (CurrentRotateAngle > 170 && CurrentRotateAngle < 190)
+                {
+                    RotateDirection = -1;
+                }
             }
         }
         if (transform.position.y >= LimitTopY)
         {
             check++;
-            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitTopY && CurrentRotateAngle > 170 && CurrentRotateAngle < 190)
+            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitTopY )
             {
+                if (CurrentRotateAngle > 170 && CurrentRotateAngle < 190)
                 RotateDirection = 0;
+                else if (CurrentRotateAngle > 80 && CurrentRotateAngle < 100)
+                    RotateDirection = 1;
+                else if (CurrentRotateAngle > 260 && CurrentRotateAngle < 280)
+                {
+                    RotateDirection = -1;
+                }
             }
         }
         if (transform.position.y <= LimitBottomY)
         {
             check++;
-            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitBottomY && (CurrentRotateAngle > 350 || CurrentRotateAngle < 10))
+            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitBottomY)
             {
+                if ((CurrentRotateAngle > 350 || CurrentRotateAngle < 10))
                 RotateDirection = 0;
+                else if (CurrentRotateAngle > 80 && CurrentRotateAngle < 100)
+                    RotateDirection = -1;
+                else if (CurrentRotateAngle > 260 && CurrentRotateAngle < 280)
+                {
+                    RotateDirection = 1;
+                }
             }
         }
         if (check == 0)

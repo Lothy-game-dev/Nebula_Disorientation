@@ -341,22 +341,18 @@ public class FighterMovement : MonoBehaviour
         // Reach Limit
         if (transform.position.x >= (LimitRightX + 50))
         {
-            StartCoroutine(TeleportBack(new Vector2(LimitRightX, transform.position.y)));
             LimitString = "Right";
         }
         else if (transform.position.x <= (LimitLeftX - 50))
         {
-            StartCoroutine(TeleportBack(new Vector2(LimitLeftX, transform.position.y)));
             LimitString = "Left";
         }
         else if (transform.position.y >= (LimitTopY + 50))
         {
-            StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitTopY)));
             LimitString = "Top";
         }
         else if (transform.position.y <= (LimitBottomY - 50))
         {
-            StartCoroutine(TeleportBack(new Vector2(transform.position.x, LimitBottomY)));
             LimitString = "Bottom";
         }
     }
@@ -531,11 +527,6 @@ public class FighterMovement : MonoBehaviour
                 }
             }
         }
-    }
-    private IEnumerator TeleportBack(Vector2 Position)
-    {
-        yield return new WaitForSeconds(0.1f);
-        transform.position = new Vector3(Position.x, Position.y, transform.position.z);
     }
 
     private void GetAwayFromLimit()
