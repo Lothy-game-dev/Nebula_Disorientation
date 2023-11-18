@@ -253,7 +253,6 @@ public class LoadoutScene : UECMenuShared
             foreach (var item in Consumables)
             {
                 ConsText += item.Key + "-" + item.Value + "|";
-                ConsCDText += item.Key + "-" + FindAnyObjectByType<AccessDatabase>().GetConsumableDataByName(item.Key)["Cooldown"] + "|";
             }
             if (ConsText.Length > 0)
             {
@@ -261,7 +260,7 @@ public class LoadoutScene : UECMenuShared
             }
         }
         FindObjectOfType<AccessDatabase>().InputLoadoutSaveData(FindObjectOfType<UECMainMenuController>().PlayerId,
-            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, ConsCDText);
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
     }
 
     public void BuyFighter()
@@ -275,8 +274,7 @@ public class LoadoutScene : UECMenuShared
         string ConsCDText = "";
         foreach (var item in Consumables)
         {
-            ConsText += item.Key + "-" + item.Value + "|";
-            ConsCDText += item.Key + "-" + FindAnyObjectByType<AccessDatabase>().GetConsumableDataByName(item.Key)["Cooldown"] + "|";
+            ConsText += item.Key + "-" + item.Value + "|";           
         }
         if (ConsText.Length>0)
         {
@@ -285,9 +283,9 @@ public class LoadoutScene : UECMenuShared
 
         int FuelCore = (int)FindObjectOfType<AccessDatabase>().GetPlayerInformationById(FindObjectOfType<UECMainMenuController>().PlayerId)["FuelCell"];
         string check = FindObjectOfType<AccessDatabase>().AddNewSession(FindObjectOfType<UECMainMenuController>().PlayerId,
-            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, ConsCDText, FuelCore - 1);
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, FuelCore - 1);
         FindObjectOfType<AccessDatabase>().InputLoadoutSaveData(FindObjectOfType<UECMainMenuController>().PlayerId,
-            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText, ConsCDText);
+            Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, ConsText);
         if ("Success".Equals(check))
         {
             FindObjectOfType<AccessDatabase>().AddSessionCurrentSaveData(FindObjectOfType<UECMainMenuController>().PlayerId, "LOTW");

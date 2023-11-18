@@ -170,9 +170,9 @@ public class RankController : MonoBehaviour
             }
 
             if (FirstCondition && SecondCondition)
-                {
-                    RankUpList.Add(int.Parse(RankList[i][0].ToString()));
-                }
+            {
+                RankUpList.Add(int.Parse(RankList[i][0].ToString()));
+            }
         }
 
         }

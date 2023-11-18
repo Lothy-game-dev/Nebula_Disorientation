@@ -1115,7 +1115,7 @@ public class AccessDatabase : MonoBehaviour
     }
 
     public string InputLoadoutSaveData(int PlayerID, string Model, string LeftWeapon, string RightWeapon, string FirstPower, string SecondPower,
-        string Consumables, string ConsumablesCD)
+        string Consumables)
     {
         OpenConnection();
         // Open DB
@@ -1161,8 +1161,8 @@ public class AccessDatabase : MonoBehaviour
         } else
         {
             IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO LoadoutSaveData (PlayerID,Model,LeftWeapon,RightWeapon,FirstPower,SecondPower,Consumables, ConsumablesCD) " +
-                "VALUES (" + PlayerID + ",'" + Model + "','" + LeftWeapon + "','" + RightWeapon + "','" + FirstPower + "','" + SecondPower + "','" + Consumables + "', '"+ ConsumablesCD + "')";
+            dbCheckCommand.CommandText = "INSERT INTO LoadoutSaveData (PlayerID,Model,LeftWeapon,RightWeapon,FirstPower,SecondPower,Consumables) " +
+                "VALUES (" + PlayerID + ",'" + Model + "','" + LeftWeapon + "','" + RightWeapon + "','" + FirstPower + "','" + SecondPower + "','" + Consumables + "')";
             int n = dbCheckCommand.ExecuteNonQuery();
             dbConnectionSave.Close();
             if (n != 1)
@@ -4617,7 +4617,7 @@ public class AccessDatabase : MonoBehaviour
     #endregion
     #region Access Session
     public string AddNewSession(int PlayerID, string Model, string LeftWeapon, string RightWeapon,
-        string FirstPower, string SecondPower, string Consumables, string PowerCD, int FuelCore)
+        string FirstPower, string SecondPower, string Consumables, int FuelCore)
     {
         OpenConnection();
         Debug.Log(Consumables);
@@ -4668,10 +4668,10 @@ public class AccessDatabase : MonoBehaviour
             Dictionary<string, object> data = FindAnyObjectByType<GlobalFunctionController>().ConvertModelStatsToDictionaryForGameplay(stats);
             // Queries
             IDbCommand dbCheckCommand = dbConnectionSave.CreateCommand();
-            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt, ConsumablesCD, SessionFuelCore) VALUES " +
+            dbCheckCommand.CommandText = "INSERT INTO SESSION (SessionID, TotalPlayedTime, CurrentStage, CurrentStageHazard, CurrentStageVariant, CreatedDate, LastUpdate, IsCompleted, SessionCash, SessionTimelessShard, SessionFuelEnergy, Model, LeftWeapon, RightWeapon, FirstPower, SecondPower, Consumables, SessionCurrentHP, EnemyDestroyed, DamageDealt, SessionFuelCore) VALUES " +
                 "(" + id + ",'',1,1,1,'" + currentDate + "','" + currentDate + "','N',0,0,0,'" + 
                 Model + "','" + LeftWeapon + "','" + RightWeapon + "','" +
-                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ",0,0, '"+ PowerCD + "'," + FuelCore + ");";
+                FirstPower + "','" + SecondPower + "','" + Consumables + "', "+ int.Parse(data["HP"].ToString()) + ",0,0," + FuelCore + ");";
             int n = dbCheckCommand.ExecuteNonQuery();
             if (n!=1)
             {
@@ -4919,8 +4919,7 @@ public class AccessDatabase : MonoBehaviour
                 datas.Add("SessionCurrentHP", dataReader2.GetInt32(17));
                 datas.Add("EnemyDestroyed", dataReader2.GetInt32(18));
                 datas.Add("DamageDealt", dataReader2.GetInt32(19));
-                datas.Add("ConsumablesCD", dataReader2.GetString(20));
-                datas.Add("SessionFuelCore", dataReader2.GetInt32(21));
+                datas.Add("SessionFuelCore", dataReader2.GetInt32(20));
             }
             dbConnectionSave.Close();
             return datas;
