@@ -844,7 +844,6 @@ public class InitializeDatabase : MonoBehaviour
                 "SessionCurrentHP INTEGER, " +
                 "EnemyDestroyed INTEGER, " +
                 "DamageDealt INTEGER, " +
-                "ConsumablesCD TEXT, " +
                 "SessionFuelCore INTEGER, " +
                 "PRIMARY KEY(SessionID AUTOINCREMENT) ); " +
             // Table to check if database already Init

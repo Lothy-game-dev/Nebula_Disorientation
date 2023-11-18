@@ -169,9 +169,17 @@ public class StatisticController : MonoBehaviour
             CurrentShardReward = 0;
         }
         CurrentCashReward = 500 * (((CurrentSZNo / 20 + (CurrentSZNo / 10) % 2) / 2) / 2 + 1);
-       
+
         //Update session stat
-        ad.UpdateSessionStat(Mathf.RoundToInt(CurrentHP), TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
+        int newCurrentHp = 0;
+        if (CurrentHP >= MaxHP)
+        {
+            newCurrentHp = Mathf.RoundToInt(CurrentHP);
+        } else
+        {
+            newCurrentHp = Mathf.RoundToInt(CurrentHP + Fighter.GetComponent<PlayerFighter>().TotalHealing);
+        }
+        ad.UpdateSessionStat(newCurrentHp, TotalEnemyDefeated, Mathf.RoundToInt(DamageDealt), (int)SessionInformation["SessionID"], Cons);
         ad.UpdateSessionFuelEnergy(SessionID, true, (int)SessionInformation["EnemyDestroyed"]);
     }
     #endregion
