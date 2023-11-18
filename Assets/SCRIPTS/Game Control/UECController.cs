@@ -149,6 +149,7 @@ public class UECController : UECMenuShared
             List<List<string>> listDMUndone = ad.GetListDailyMissionUndone(currentId);
             List<List<string>> listDM = ad.GetListDailyMission(currentId);
             List<string> Missions = new List<string>();
+            int missionDone = 0; 
             if (listDM != null)
             {
                 for (int i = 0; i < listDM[0].Count; i++)
@@ -177,9 +178,10 @@ public class UECController : UECMenuShared
                                 }
                                 else
                                 {
-                                    ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    ad.DailyMissionDone(currentId, listDM[0][i]); 
+                                    missionDone++;
                                     controller.GetData();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Spend " + listDM[1][i] + " timeless shard.", 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti("Spend " + listDM[1][i] + " timeless shard.", 2f, missionDone);
                                 }
                             } else
                             {
@@ -192,7 +194,7 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " spacezones.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Space Zones.";
                             break;
                         case "SC":
                             if (listDM[3][i] == "N")
@@ -208,8 +210,9 @@ public class UECController : UECMenuShared
                                 else
                                 {
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    missionDone++;
                                     controller.GetData();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Spend " + listDM[1][i] + " cash.", 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti("Spend " + listDM[1][i] + " cash.", 2f, missionDone);
                                 }
                             } else
                             {
@@ -230,8 +233,9 @@ public class UECController : UECMenuShared
                                 else
                                 {
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
+                                    missionDone++;
                                     controller.GetData();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Play for at least " + listDM[1][i] + " minutes.", 2f);
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti("Play for at least " + listDM[1][i] + " minutes.", 2f, missionDone);
                                 }
                             } else
                             {
@@ -244,21 +248,21 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Defend/Escort Spacezones.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Defend/Escort Space Zones.";
                             break;
                         case "CA":
                             if (listDM[3][i] == "Y")
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Assault Spacezones.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Assault Space Zones.";
                             break;
                         case "CAA":
                             if (listDM[3][i] == "Y")
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Assault Advanced Spacezone.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Onslaught Space Zone.";
                             break;
                         case "B":
                             if (listDM[3][i] == "N")
@@ -274,8 +278,8 @@ public class UECController : UECMenuShared
                                 {
                                     ad.DailyMissionDone(currentId, listDM[0][i]);
                                     controller.GetData();
-                                    FindAnyObjectByType<RankController>().CheckToRankUp();
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard("Purchase " + listDM[1][i] + " items.", 2f);
+                                    missionDone++;
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti("Purchase " + listDM[1][i] + " items.", 2f, missionDone);
                                 }
                             } else
                             {

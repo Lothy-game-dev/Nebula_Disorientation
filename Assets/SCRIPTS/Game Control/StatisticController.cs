@@ -180,11 +180,11 @@ public class StatisticController : MonoBehaviour
     public void CheckDailyMission()
     {       
         List<List<string>> listDM = ad.GetListDailyMissionUndone(PlayerID);
+        int missionDone = 0;
         if (listDM != null)
         {
             for (int i = 0; i < listDM.Count; i++)
             {
-                Debug.Log(listDM[i][0] + "," + listDM[i][1] + "," + listDM[i][2]);
                 string mission = "";
                 switch (listDM[i][1])
                 {
@@ -193,8 +193,9 @@ public class StatisticController : MonoBehaviour
                         ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], TotalEnemyDefeated);
                         if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + TotalEnemyDefeated)
                         {
-                            ad.DailyMissionDone(PlayerID, listDM[i][1]);                          
-                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                            ad.DailyMissionDone(PlayerID, listDM[i][1]);
+                            missionDone++;
+                            FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                         }
                         break;
                     case "P":
@@ -212,7 +213,8 @@ public class StatisticController : MonoBehaviour
                         if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + SessionTotalMinutes)                       
                         {
                             ad.DailyMissionDone(PlayerID, listDM[i][1]);
-                            FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                            missionDone++;
+                            FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                         }
                         break;
                     case "C":
@@ -226,7 +228,8 @@ public class StatisticController : MonoBehaviour
                             if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)                       
                             {
                                 ad.DailyMissionDone(PlayerID, listDM[i][1]);
-                                FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                missionDone++;
+                                FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                             }
                         }
                         break;
@@ -240,7 +243,8 @@ public class StatisticController : MonoBehaviour
                                 if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
                                 {
                                     ad.DailyMissionDone(PlayerID, listDM[i][0]);
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    missionDone++;
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                                 }
                             }
                         }
@@ -255,13 +259,14 @@ public class StatisticController : MonoBehaviour
                                 if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
                                 {
                                     ad.DailyMissionDone(PlayerID, listDM[i][1]);
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    missionDone++;
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                                 }
                             }
                         }
                         break;
                     case "CAA":
-                        mission = "Complete " + listDM[i][2] + " Onslaught Space Zones.";
+                        mission = "Complete " + listDM[i][2] + " Onslaught Space Zone.";
                         if (StageName != null && StageName != "")
                         {
                             if (StageName.Contains("O"))
@@ -270,7 +275,8 @@ public class StatisticController : MonoBehaviour
                                 if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
                                 {
                                     ad.DailyMissionDone(PlayerID, listDM[i][1]);
-                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionCompletedNotiBoard(mission, 2f);
+                                    missionDone++;
+                                    FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                                 }
                             }
                         }
