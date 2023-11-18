@@ -244,6 +244,19 @@ public class NotificationBoardController : MonoBehaviour
         StartCoroutine(RankUpBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
 
+    public void CreateMissionDoneNoti(string text, float autoCloseTimer, int missionDone)
+    {
+        StartCoroutine(MissionNotiDelay(text, autoCloseTimer, missionDone));
+    }
+
+    private IEnumerator MissionNotiDelay(string text, float autoCloseTimer, int missionDone)
+    {
+        if (missionDone > 1)
+        {
+            yield return new WaitForSeconds(autoCloseTimer * missionDone - (autoCloseTimer - 0.5f));
+        }
+        CreateMissionCompletedNotiBoard(text, autoCloseTimer);
+    }
     public void DestroyCurrentInfoBoard()
     {
         currentInfoBoard.GetComponent<InformationBoard>().Close();
