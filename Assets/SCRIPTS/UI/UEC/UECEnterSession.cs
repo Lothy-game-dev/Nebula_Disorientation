@@ -72,6 +72,7 @@ public class UECEnterSession : MonoBehaviour
 
     public void MoveToFactory()
     {
+        FactoryScene.GetComponent<FactoryScene>().FromLoadout = true;
         FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, FactoryScene);
     }
     #endregion

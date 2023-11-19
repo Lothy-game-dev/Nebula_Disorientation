@@ -73,8 +73,8 @@ public class LoadoutScene : UECMenuShared
         Power2Bar.SetActive(true);
         ConsumableBar.SetActive(true);
         FighterDemo.SetActive(true);
-        Tutorial.SetActive(true);
         GetData();
+        Tutorial.SetActive(true);
     }
     public override void OnExitAnimation()
     {

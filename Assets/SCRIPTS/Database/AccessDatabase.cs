@@ -94,7 +94,7 @@ public class AccessDatabase : MonoBehaviour
         }
         IDbCommand dbCommand = dbConnectionSave.CreateCommand();
         dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo,DailyIncomeShard,NewPilotTutorial) " +
-            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0, 'Cinematic|MainUEC|Arsenal|Factory|SpaceShop|Loadout|LOTW|Gameplay|SSSum|UECS|ArsenalS|SpaceShopS|Service|SSum|PA')";
+            "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0, 'Cinematic|MainUEC|Arsenal|Factory|SpaceShop|Loadout|LOTW|Gameplay|SZSum|UECS|ArsenalS|SpaceShopS|Service|SSum|PA')";
         int n = dbCommand.ExecuteNonQuery();
         if (n == 0)
         {
