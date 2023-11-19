@@ -24,6 +24,8 @@ public class GameplayInteriorController : MonoBehaviour
     public GameObject HUDMain;
     public GameObject PlayerHUD;
     public GameObject Tutorial;
+    public GameObject EyeClose;
+    public GameObject EyeOpen;
     #endregion
     #region NormalVariables
     public bool IsInLoading;
@@ -295,11 +297,15 @@ public class GameplayInteriorController : MonoBehaviour
             isHidingHUD = false;
             HUDMain.SetActive(true);
             PlayerHUD.SetActive(true);
+            EyeClose.SetActive(true);
+            EyeOpen.SetActive(false);
         } else
         {
             isHidingHUD = true;
             HUDMain.SetActive(false);
             PlayerHUD.SetActive(false);
+            EyeOpen.SetActive(true);
+            EyeClose.SetActive(false);
         }
     }
     #endregion
