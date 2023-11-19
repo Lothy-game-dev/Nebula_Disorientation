@@ -401,8 +401,8 @@ public class Arsenal : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
-        Tutorial.SetActive(true);
         SetFirstData();
+        Tutorial.SetActive(true);
     }
 
     public override void OnExitAnimation()

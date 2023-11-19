@@ -53,7 +53,7 @@ public class LOTWScene : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        FindObjectOfType<UECSessionScene>().gameObject.SetActive(false);
+        //FindObjectOfType<UECSessionScene>().gameObject.SetActive(false);
         SaveText.gameObject.SetActive(true);
         SaveText.FadingCountDown = 5f;
         SaveText.AlreadySetCountDown = true;
