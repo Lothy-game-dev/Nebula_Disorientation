@@ -172,9 +172,9 @@ public class StatisticController : MonoBehaviour
 
         //Update session stat
         int newCurrentHp = 0;
-        if (CurrentHP >= MaxHP)
+        if (CurrentHP + Fighter.GetComponent<PlayerFighter>().TotalHealing >= MaxHP)
         {
-            newCurrentHp = Mathf.RoundToInt(CurrentHP);
+            newCurrentHp = Mathf.RoundToInt(MaxHP);
         } else
         {
             newCurrentHp = Mathf.RoundToInt(CurrentHP + Fighter.GetComponent<PlayerFighter>().TotalHealing);
