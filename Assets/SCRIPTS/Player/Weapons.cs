@@ -237,6 +237,10 @@ public class Weapons : MonoBehaviour
                     else
                     {
                         Fireable = false;
+                        if (!isWarning && !isOverheatted && aus.clip != null && IsThermalType)
+                        {
+                            EndSound();
+                        }
                     }
                 }
             }
@@ -250,13 +254,17 @@ public class Weapons : MonoBehaviour
                     float angle = Vector3.Angle(ToEnemy, pos);
                     CheckIsUpOrDownMovement();
                     Debug.Log(DirMov + name);
-                    if (angle < 15)
+                    if (angle < 2)
                     {
                         isFire = true;
                     }
                     else
                     {
                         if (!isMainWeapon) isFire = false;
+                        if (aus.clip != null && IsThermalType)
+                        {
+                            EndSound();
+                        }
                     }
                     transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
                 }
@@ -279,6 +287,10 @@ public class Weapons : MonoBehaviour
                     else
                     {
                         if (!isMainWeapon) isFire = false;
+                        if (aus.clip != null && IsThermalType)
+                        {
+                            EndSound();
+                        }
                     }
                     transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 8 : 2) * WeaponROTSpeed);
                 }
