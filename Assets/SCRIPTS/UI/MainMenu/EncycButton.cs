@@ -62,12 +62,17 @@ public class EncycButton : MonoBehaviour
     #endregion
     #region Show item's information
     // Group all function that serve the same algorithm
-    private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale, int DescIndex)
+    private void ShowInforOfItem(List<List<string>> list, int NameIndex, int TierIndex, Vector3 ImageScale, int DescIndex, bool hasTier)
     {
+        if (Menu.ItemImage.transform.parent.childCount > 1)
+        {
+            Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
+        }
+        Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = null;
         Menu.ItemImage.transform.localScale = ImageScale;
         wlist = list[Id - 1];
         Tier = "---";
-        if (TierIndex > 0)
+        if (hasTier)
         {
             switch(wlist[TierIndex])
             {
@@ -83,7 +88,10 @@ public class EncycButton : MonoBehaviour
             }
         } else
         {
-            wlist[TierIndex] = "white";
+            if (TierIndex == 0)
+            {
+                wlist[TierIndex] = "white";
+            }
         }
         Menu.ItemTier.GetComponent<TMP_Text>().text = "<color=" + wlist[TierIndex] + ">" + Tier + "</color>";           
         Menu.ItemDesc.GetComponent<TMP_Text>().text = wlist[DescIndex];
@@ -96,7 +104,7 @@ public class EncycButton : MonoBehaviour
         CurrentItem = gameObject;
         if (ItemType == "Weapon")
         {
-            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(0.4f, 0.4f, 0f), 3);
+            ShowInforOfItem(Menu.WeaponList, 2, 9, new Vector3(0.4f, 0.4f, 0f), 3, true);
             ChangeColorWhenChoosen();
             Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WeapImage.transform.GetChild(Id - 1).GetComponent<SpriteRenderer>().sprite;
 
@@ -109,7 +117,7 @@ public class EncycButton : MonoBehaviour
                 ChangeColorWhenChoosen();
                 if (Id != 666)
                 {
-                    ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f), 7);
+                    ShowInforOfItem(Menu.FighterList, 1, 6, new Vector3(0.5f, 0.5f, 0f), 7, true);
                     if (wlist[1] == "SSS-MKL")
                     {
                         Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = FighterImage[FighterImage.FindIndex(item => item.name == "SSSL")].sprite;
@@ -138,7 +146,7 @@ public class EncycButton : MonoBehaviour
                 //Power
                 if (ItemType == "Power")
                 {
-                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.7f, 0.7f, 0f), 3);
+                    ShowInforOfItem(Menu.PowerList, 2, 9, new Vector3(0.7f, 0.7f, 0f), 3, true);
                     ChangeColorWhenChoosen();
                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = PowerImage[PowerImage.FindIndex(item => wlist[2].Replace(" ", "").ToLower() == item.name.ToLower())].sprite;
                 }
@@ -148,7 +156,7 @@ public class EncycButton : MonoBehaviour
                     if (ItemType == "Enemy")
                     {
 
-                        ShowInforOfItem(Menu.EnemyList, 1, 8, new Vector3(0.5f, 0.5f, 0f), 7);
+                        ShowInforOfItem(Menu.EnemyList, 1, 8, new Vector3(0.5f, 0.5f, 0f), 7, true);
                         ChangeColorWhenChoosen();
                         if (wlist[1] == "ZatWR-MKL")
                         {
@@ -171,7 +179,7 @@ public class EncycButton : MonoBehaviour
                     {
                         if (ItemType == "Consumable")
                         {
-                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.7f, 0.7f, 0f), 2);
+                            ShowInforOfItem(Menu.ConsumList, 1, 10, new Vector3(0.7f, 0.7f, 0f), 2, true);
                             ChangeColorWhenChoosen();
                             Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = ConsumableImage[ConsumableImage.FindIndex(item => wlist[1].Replace(" ", "").Replace("-", "").ToLower() == (item.name.ToLower()))].sprite;
                         }
@@ -179,7 +187,7 @@ public class EncycButton : MonoBehaviour
                         {
                             if (ItemType == "Warship")
                             {
-                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.065f, 0.065f), 2);
+                                ShowInforOfItem(Menu.WarshipList, 1, 4, new Vector2(0.065f, 0.065f), 2, true);
                                 ChangeColorWhenChoosen();
                                 Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = WarshipImage[WarshipImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
                             }
@@ -187,7 +195,7 @@ public class EncycButton : MonoBehaviour
                             {
                                 if (ItemType == "SpaceStation")
                                 {
-                                    ShowInforOfItem(Menu.SStationList, 1, 4, new Vector2(0.065f, 0.065f), 2);
+                                    ShowInforOfItem(Menu.SStationList, 1, 4, new Vector2(0.065f, 0.065f), 2, true);
                                     ChangeColorWhenChoosen();
                                     Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = SpaceStationImage[SpaceStationImage.FindIndex(item => wlist[1].ToLower().Contains(item.name.ToLower()))].sprite;
                                 }
@@ -195,7 +203,7 @@ public class EncycButton : MonoBehaviour
                                 {
                                     if (ItemType == "DMG")
                                     {
-                                        ShowInforOfItem(Menu.DmgElementList, 1, 0, new Vector2(1f, 1f), 2);
+                                        ShowInforOfItem(Menu.DmgElementList, 1, 0, new Vector2(1f, 1f), 2, false);
                                         ChangeColorWhenChoosen();
                                         Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
                                     }
@@ -208,7 +216,7 @@ public class EncycButton : MonoBehaviour
                                             {
                                                 Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
                                             }
-                                            ShowInforOfItem(Menu.AttributeList, 1, 0, new Vector2(1f, 1f), 2);
+                                            ShowInforOfItem(Menu.AttributeList, 1, 0, new Vector2(1f, 1f), 2, false);
                                             ChangeColorWhenChoosen();
                                             if (wlist[1].Contains("Slot") | wlist[1].Contains("PoE") | wlist[1].Contains("(AE)"))
                                             {
@@ -225,16 +233,32 @@ public class EncycButton : MonoBehaviour
                                         }
                                         else
                                         {
-                                            if (Menu.ItemImage.transform.parent.childCount > 1)
+                                            if (ItemType == "HE")
                                             {
-                                                Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
+                                                ShowInforOfItem(Menu.HazardEnviroment, 1, 3, new Vector2(1f, 1f), 2, false);
+                                                ChangeColorWhenChoosen();
+                                                Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
+                                            } else
+                                            {
+                                                if (ItemType == "SZMT")
+                                                {
+                                                    ShowInforOfItem(Menu.SpaceZoneMissionType, 1, 3, new Vector2(1f, 1f), 2, false);
+                                                    ChangeColorWhenChoosen();
+                                                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
+                                                } else
+                                                {
+                                                    if (Menu.ItemImage.transform.parent.childCount > 1)
+                                                    {
+                                                        Destroy(Menu.ItemImage.transform.parent.GetChild(1).gameObject);
+                                                    }
+                                                    ChangeColorWhenChoosen();
+                                                    Menu.ItemTier.GetComponent<TMP_Text>().text = "---";
+                                                    Menu.ItemDesc.GetComponent<TMP_Text>().text = Menu.Story[Id - 1];
+                                                    Menu.ItemName.GetComponent<TMP_Text>().text = Menu.StoryName[Id - 1];
+                                                    Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
+                                                    Menu.ItemImage.transform.localScale = new Vector3(1f, 1f, 0);
+                                                }
                                             }
-                                            ChangeColorWhenChoosen();
-                                            Menu.ItemTier.GetComponent<TMP_Text>().text = "---";
-                                            Menu.ItemDesc.GetComponent<TMP_Text>().text = Menu.Story[Id - 1];
-                                            Menu.ItemName.GetComponent<TMP_Text>().text = Menu.StoryName[Id - 1];
-                                            Menu.ItemImage.GetComponent<SpriteRenderer>().sprite = NoImage.GetComponent<SpriteRenderer>().sprite;
-                                            Menu.ItemImage.transform.localScale = new Vector3(1f, 1f, 0);
                                         }
                                         
 

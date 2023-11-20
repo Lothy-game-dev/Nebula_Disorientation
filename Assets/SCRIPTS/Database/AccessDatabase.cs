@@ -4105,7 +4105,7 @@ public class AccessDatabase : MonoBehaviour
         return WSDict;
     }
     #endregion
-    #region Access Damage Element
+    #region Access Encyclopedia
     public List<List<string>> GetAllDMGElement()
     {
         OpenConnection();
@@ -4131,8 +4131,6 @@ public class AccessDatabase : MonoBehaviour
         dbConnectionData.Close();
         return list;
     }
-    #endregion
-    #region Access Attribute
     public List<List<string>> GetAllAttribute()
     {
         OpenConnection();
@@ -4159,6 +4157,58 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
     #endregion
+    public List<List<string>> GetAllSpaceZoneMissionType()
+    {
+        OpenConnection();
+        List<List<string>> list = new List<List<string>>();
+        List<string> Encyc;
+        // Open DB
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Encyclopedia WHERE Type = 'SZMT'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            Encyc = new List<string>();
+            check = true;
+            Encyc.Add(dataReader.GetInt32(0).ToString());
+            Encyc.Add(dataReader.GetString(2));
+            Encyc.Add(dataReader.GetString(3));
+            Encyc.Add(dataReader.GetString(4));
+            list.Add(Encyc);
+        }
+        if (!check) return null;
+        dbConnectionData.Close();
+        return list;
+    }
+    public List<List<string>> GetAllHazardEnviroment()
+    {
+        OpenConnection();
+        List<List<string>> list = new List<List<string>>();
+        List<string> Encyc;
+        // Open DB
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Encyclopedia WHERE Type = 'HE'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            Encyc = new List<string>();
+            check = true;
+            Encyc.Add(dataReader.GetInt32(0).ToString());
+            Encyc.Add(dataReader.GetString(2));
+            Encyc.Add(dataReader.GetString(3));
+            Encyc.Add(dataReader.GetString(4));
+            list.Add(Encyc);
+        }
+        if (!check) return null;
+        dbConnectionData.Close();
+        return list;
+    }
     #region Access Collect salary history
     public string SalaryCollected(int PlayerId)
     {
