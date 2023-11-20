@@ -111,7 +111,7 @@ public class LOTWScene : MonoBehaviour
         ContainRed = false;
         for (int i=0;i<3;i++)
         {
-            /*int n = 0;
+            int n = 0;
             float a = UnityEngine.Random.Range(0, 100f);
             int tierChosen = a < 75 ? 3 : a < 97 ? 2 : 1;
             if (tierChosen == 1) ContainRed = true;
@@ -134,8 +134,7 @@ public class LOTWScene : MonoBehaviour
                 n = ListChosen[k];
             }
             while (ListLOTWChosen.Contains(n));
-            ListLOTWChosen.Add(n);*/
-            ListLOTWChosen = new List<int>(new int[] { 33, 34, 32 });
+            ListLOTWChosen.Add(n);
         }
         GenerateCards();
     }
