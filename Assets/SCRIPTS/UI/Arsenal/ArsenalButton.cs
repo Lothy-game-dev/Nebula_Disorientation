@@ -241,6 +241,7 @@ public class ArsenalButton : MonoBehaviour
                 OtherButton.GetComponent<SpriteRenderer>().color = Color.white;
                 gameObject.GetComponent<SpriteRenderer>().color = Color.green;
                 //Generate item
+                Debug.Log(ArsenalController);
                 for (int i = 0; i < ArsenalController.PowerList.Count; i++)
                 {
                     GameObject g = Instantiate(Item, Item.transform.position, Quaternion.identity);

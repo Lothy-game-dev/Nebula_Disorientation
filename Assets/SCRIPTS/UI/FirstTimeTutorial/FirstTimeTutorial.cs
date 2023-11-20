@@ -70,11 +70,6 @@ public class FirstTimeTutorial : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (isStart)
-                {
-                    isStart = false;
-                    Section = 0;
-                }
                 Section++;
                 Tutorial();
             }

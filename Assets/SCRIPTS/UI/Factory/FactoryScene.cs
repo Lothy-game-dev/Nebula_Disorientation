@@ -19,6 +19,7 @@ public class FactoryScene : UECMenuShared
     #region NormalVariables
     // All other variables apart from the two aforementioned types
     // Can be public or private, prioritize private if possible
+    public bool FromLoadout;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -43,8 +44,13 @@ public class FactoryScene : UECMenuShared
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
         FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(transform.position, 1f);
-        Tutorial.SetActive(true);
         FactoryController.SetFirstData();      
+        Tutorial.SetActive(true);
+        if (FromLoadout)
+        {
+            Tutorial.GetComponent<FirstTimeTutorial>().Section = 0;
+            FromLoadout = false;
+        }
     }
 
     public override void OnExitAnimation()
