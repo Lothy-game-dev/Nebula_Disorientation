@@ -283,8 +283,16 @@ public class InitializeDatabase : MonoBehaviour
                 "Price TEXT NOT NULL," +
                 "Effect INTEGER NOT NULL," +
                 "PRIMARY KEY(ID AUTOINCREMENT));" +
-                "";
-        
+                "" +
+            // Table for Encyclopedia
+            "CREATE TABLE IF NOT EXISTS Encyclopedia" +
+                "(ID INTEGER," +
+                "Type TEXT," +
+                "Name TEXT," +
+                "Description TEXT," +
+                "TextColor TEXT," +
+                "PRIMARY KEY(ID AUTOINCREMENT) );";
+
         // Initialize Data
         // ArsenalWeapon
         string ArsenalWeapon = "INSERT INTO ArsenalWeapon VALUES " +
@@ -638,6 +646,19 @@ public class InitializeDatabase : MonoBehaviour
             "(1, 'Repairing I', 'Grade3-1000|Grade2-3000|Grade1-5000', '25')," +
             "(2, 'Repairing II', 'Grade3-2000|Grade2-6000|Grade1-10000', '50')," +
             "(3, 'Repairing III', 'Grade3-3500|Grade2-10500|Grade1-17500', '100');";
+        //Insert Encyclopedia
+        string Encyclopedia = "INSERT INTO Encyclopedia VALUES " +
+            "(1, 'SZMT', 'Explanation', 'The missions of each Space Zone are randomized based on the current value of the Space Zone Number. Details below.', '#FFFFFF')," +
+            "(2, 'SZMT', 'Assault', 'Appearance No:<br><br>xx1; xx3; xx5; xx7<br><br>Available Variants:<br>1. Eliminate All Enemies.<br>2. Eliminate Target Enemies.', '#a54800')," +
+            "(3, 'SZMT', 'Defend', 'Appearance No:<br><br>xx2; xx4; xx6<br><br>Available Variants:<br>1. Defend a Strategic Infrastructure for an amount of time.<br>2. Survive for an amount of time.<br>3. Escort Allies from A to B on the map.', '#42b2d7')," +
+            "(4, 'SZMT', 'Onslaught', 'Appearance No:<br><br>xx8; xx9<br><br>Available Variants:<br>1. Eliminate a whole Zaturi Strike Forces.<br>2. Join the UEC Warship(s) to defeat Zaturi Warship(s).', '#fd9891')," +
+            "(5, 'SZMT', 'Boss Encounter', 'Appearance No:<br><br>xx0<br><br>Available Variants:<br>1. Defeat Zaturi Warship(s).<br>2. Defeat Zaturi Elite Fighter(s).', '#b8acf6')," +
+            "(6, 'HE', 'What is Hazardous Environment(HE)?', 'Dangerous environments that players can stumble on during the journey. Based on the current Space Zone, there is always a chance for players to encounter certain environments below.', '#FFFFFF')," +
+            "(7, 'HE', 'HE: Unknown Asteroids', '<align=right><i>Leftovers of destroyed planets around the galaxies.</i></align><br><br><color=#3bccec>Chance of appearing: 25%<br><br>Available from: Space Zone 1<br><br>Details:</color><br><br><color=#2a7eff>10-50 Rocks will spawn at random places on the map. Base HP = 1.  Can be shot at.<br><br>Upon colliding:<br><br>• Deal 10% Max HP of a Fighter and push it back on hit.<br>• Warship: No effect.<br>• The collided Asteroid will be destroyed, spawning two small asteroids:<br><br>  ∘ Deal 10% Max HP of a Fighter and push it back on hit.<br>  ∘ Warship: No effect.<br>  ∘ Upon colliding/shooting at: destroyed.', '#388bff')," +
+            "(8, 'HE', 'HE: Overloaded', '<align=right><i>Unexpected Heat from unknown sources.</i></align><br><br><color=#3bccec>Chance of appearing: 10%<br><br>Available from: Space Zone 11<br><br>Details:</color><br><br><color=#2a7eff>Effects on all Fighter: Dmg from Thermal Status - Burned x2. Weapon Overheat Rate x2.', '#a54800')," +
+            "(9, 'HE', 'HE: Gamma Ray Burst', '<align=right><i>Deadly burst that intensively affects Fighter’s survival abilities.</i></align><br><br><color=#3bccec>Chance of appearing: 10%<br><br>Available from: Space Zone 21<br><br>Details:</color><br><br><color=#2a7eff>All Fighter Shields will receive 250% DMG from all sources.', '#2abb7f')," +
+            "(10, 'HE', 'HE: Rogue Star', '<align=right><i>Random comets wander the nebula.</i></align><br><br><color=#3bccec>Chance of appearing: 5%<br><br>Available from: Space Zone 21<br><br>Details:</color><br><br><color=#2a7eff>Massive stars will cut through the map in an unexpected direction at a random border location.<br><br>Spawning Rate: 1 Star per 10 seconds.<br><br>Movement Speed = 500. Base HP = 30000. Can be shot at.<br><br>Upon colliding:<br> •Deal 50% Max HP of a Fighter and push it back on hit. The Star still move in the same direction.<br> •Deal 10% Max HP of a target Warship/Space Station on Hit. The Star will be destroyed.', '#e2483d')," +
+            "(11, 'HE', 'HE: Nebula Disorientation', '<align=right><i>One of the Origins of the ongoing galaxy war.</i></align><br><br><color=#3bccec>Chance of appearing: 5%<br><br>Available from: Space Zone 51<br><br>Details:</color><br><br><color=#2a7eff>All Fighters, Warships, and Space Stations receive 200% DMG from all sources.<br><br>Also include effects from Unknown Asteroid and Rogue Star.', '#8f7ee7')";
         // Initialize Data Success
         string Success = "INSERT INTO DatabaseInitialize VALUES ('T');";
         // Initialize Data Fail
@@ -657,7 +678,7 @@ public class InitializeDatabase : MonoBehaviour
             + LOTWCards + DailyMissions + Tutorial + DElement 
             + Attribute + Enemy + Warship + SpaceStation + Allies + FighterGroup
             + SpaceZoneVariants + SpaceZoneTemplate + SpaceZonePosition + HazardEnvironment
-            + WarshipMilestone + SpaceZoneMission + ArsenalService;
+            + WarshipMilestone + SpaceZoneMission + ArsenalService + Encyclopedia;
         // Insert Check Data Query
         IDbCommand dbCommandInsertCheck = dbConnection.CreateCommand();
         // Check Variable
