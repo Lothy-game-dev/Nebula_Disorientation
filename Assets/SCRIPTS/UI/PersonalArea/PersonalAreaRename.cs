@@ -40,7 +40,7 @@ public class PersonalAreaRename : MonoBehaviour
         if (TextInput.text.Length < 6)
         {
             FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(gameObject.transform.position,
-               "Your name must have more than 6 characters!", 5f);
+               "Your name must have more than 5 characters!", 5f);
         } else
         {
             int PlayerId = FindAnyObjectByType<UECMainMenuController>().PlayerId;

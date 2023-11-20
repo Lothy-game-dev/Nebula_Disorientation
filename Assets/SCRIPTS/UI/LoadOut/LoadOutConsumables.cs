@@ -169,7 +169,7 @@ public class LoadOutConsumables : MonoBehaviour
         if (ItemSelectedDecrease(ItemName) == 0)
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "Error!\nNothing to decrease here!", 5f);
+                "Subtracting Error!\nPlease try again!", 5f);
             return -1;
         } else
         {
