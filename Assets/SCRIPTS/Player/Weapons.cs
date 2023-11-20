@@ -56,6 +56,7 @@ public class Weapons : MonoBehaviour
     public float currentOverheat;
     public float FighterWeaponDamageMod;
     public float FighterWeaponAoEMod;
+    public GameObject OverheatSound;
 
     private bool isOverheatted;
     private float OverheatCDTimer;
@@ -930,6 +931,7 @@ public class Weapons : MonoBehaviour
             if (currentOverheat >= 80 && !isOverheatted)
             {
                 OverheatSound80Percent(((currentOverheat - 75) * 2) / 100);
+                UpdateVolume();
                 isWarning = true;
             }
         }
@@ -1101,19 +1103,20 @@ public class Weapons : MonoBehaviour
 
     public void OverheatSound80Percent(float volume)
     {
-        if (OverHeatImage.GetComponent<AudioSource>().clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
+        if (OverheatSound!=null && OverheatSound.GetComponent<AudioSource>().clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
         {
-            OverHeatImage.GetComponent<AudioSource>().clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
-            OverHeatImage.GetComponent<AudioSource>().loop = true;
-            OverHeatImage.GetComponent<AudioSource>().Play();
+            OverheatSound.GetComponent<AudioSource>().clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
+            OverheatSound.GetComponent<AudioSource>().loop = true;
+            OverheatSound.GetComponent<AudioSource>().Play();
         }
-        OverHeatImage.GetComponent<AudioSource>().volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
-        OverHeatImage.GetComponent<AudioSource>().priority = 10;
+        OverheatSound.GetComponent<AudioSource>().volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
+        OverheatSound.GetComponent<AudioSource>().priority = 10;
     }
 
     public void EndOverheatWarningSound()
     {
-        OverHeatImage.GetComponent<AudioSource>().clip = null;
+        if (OverheatSound != null)
+        OverheatSound.GetComponent<AudioSource>().clip = null;
     }
 
     public void OverheatedSound()

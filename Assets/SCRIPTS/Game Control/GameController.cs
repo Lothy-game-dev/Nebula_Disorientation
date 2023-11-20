@@ -22,9 +22,6 @@ public class GameController : MonoBehaviour
     void Start()
     {
         // Initialize variables
-        db = GetComponent<InitializeDatabase>();
-        //db.DropDatabase();
-        db.Initialization();
         InitGame();
         Application.targetFrameRate = 120;
         for (int i = 0; i < 8; i++)

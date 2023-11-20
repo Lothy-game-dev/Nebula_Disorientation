@@ -28,6 +28,8 @@ public class FighterController : MonoBehaviour
     public GameObject FighterModel;
     public GameObject PowerModel;
     public GameObject ConsumableModel;
+    public GameObject LeftOverheatSound;
+    public GameObject RightOverheatSound;
     public LayerMask EnemyLayer;
     public List<GameObject> ConsumableImages;
     public LOTWEffect LOTWEffect;
@@ -161,6 +163,7 @@ public class FighterController : MonoBehaviour
         LW.EnemyLayer = EnemyLayer;
         LW.ControllerMain = PlayerFighter.GetComponent<PlayerFighter>().ControllerMain;
         LW.LOTWEffect = LOTWEffect;
+        LW.OverheatSound = LeftOverheatSound;
         RightWeapon.SetActive(true);
         Weapons RW = RightWeapon.GetComponent<Weapons>();
         RW.Fighter = PlayerFighter;
@@ -170,6 +173,7 @@ public class FighterController : MonoBehaviour
         RW.EnemyLayer = EnemyLayer;
         RW.ControllerMain = PlayerFighter.GetComponent<PlayerFighter>().ControllerMain;
         RW.LOTWEffect = LOTWEffect;
+        RW.OverheatSound = RightOverheatSound;
         Aim.GetComponent<TargetCursor>().LeftWeapon = LeftWeapon;
         Aim.GetComponent<TargetCursor>().RightWeapon = RightWeapon;
         LeftWeapon.GetComponent<Weapons>().OverHeatImage = LeftOverheatImage;
