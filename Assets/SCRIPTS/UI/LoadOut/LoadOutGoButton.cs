@@ -59,7 +59,7 @@ public class LoadOutGoButton : MonoBehaviour
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                "More Fuel Cell required!", 5f);
+                "More Fuel Core required!", 5f);
         }
 
     }

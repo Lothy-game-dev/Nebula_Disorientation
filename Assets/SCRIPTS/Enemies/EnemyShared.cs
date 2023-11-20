@@ -887,7 +887,7 @@ public class EnemyShared : FighterShared
             LeftWeapon.GetComponent<Weapons>().Aim = DamageDealer;
             RightTarget = DamageDealer;
             RightWeapon.GetComponent<Weapons>().Aim = DamageDealer;
-            check = false;
+            check = true;
         } 
         else check = true;
         if (check)

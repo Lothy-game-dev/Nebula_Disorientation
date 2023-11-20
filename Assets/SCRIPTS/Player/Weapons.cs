@@ -56,6 +56,7 @@ public class Weapons : MonoBehaviour
     public float currentOverheat;
     public float FighterWeaponDamageMod;
     public float FighterWeaponAoEMod;
+    public GameObject OverheatSound;
 
     private bool isOverheatted;
     private float OverheatCDTimer;
@@ -236,6 +237,10 @@ public class Weapons : MonoBehaviour
                     else
                     {
                         Fireable = false;
+                        if (!isWarning && !isOverheatted && aus.clip != null && IsThermalType)
+                        {
+                            EndSound();
+                        }
                     }
                 }
             }
@@ -249,13 +254,17 @@ public class Weapons : MonoBehaviour
                     float angle = Vector3.Angle(ToEnemy, pos);
                     CheckIsUpOrDownMovement();
                     Debug.Log(DirMov + name);
-                    if (angle < 15)
+                    if (angle < 2)
                     {
                         isFire = true;
                     }
                     else
                     {
                         if (!isMainWeapon) isFire = false;
+                        if (aus.clip != null && IsThermalType)
+                        {
+                            EndSound();
+                        }
                     }
                     transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
                 }
@@ -278,6 +287,10 @@ public class Weapons : MonoBehaviour
                     else
                     {
                         if (!isMainWeapon) isFire = false;
+                        if (aus.clip != null && IsThermalType)
+                        {
+                            EndSound();
+                        }
                     }
                     transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 8 : 2) * WeaponROTSpeed);
                 }
@@ -930,6 +943,7 @@ public class Weapons : MonoBehaviour
             if (currentOverheat >= 80 && !isOverheatted)
             {
                 OverheatSound80Percent(((currentOverheat - 75) * 2) / 100);
+                UpdateVolume();
                 isWarning = true;
             }
         }
@@ -1101,19 +1115,20 @@ public class Weapons : MonoBehaviour
 
     public void OverheatSound80Percent(float volume)
     {
-        if (OverHeatImage.GetComponent<AudioSource>().clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
+        if (OverheatSound!=null && OverheatSound.GetComponent<AudioSource>().clip != Fighter.GetComponent<PlayerFighter>().OverheatWarning)
         {
-            OverHeatImage.GetComponent<AudioSource>().clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
-            OverHeatImage.GetComponent<AudioSource>().loop = true;
-            OverHeatImage.GetComponent<AudioSource>().Play();
+            OverheatSound.GetComponent<AudioSource>().clip = Fighter.GetComponent<PlayerFighter>().OverheatWarning;
+            OverheatSound.GetComponent<AudioSource>().loop = true;
+            OverheatSound.GetComponent<AudioSource>().Play();
         }
-        OverHeatImage.GetComponent<AudioSource>().volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
-        OverHeatImage.GetComponent<AudioSource>().priority = 10;
+        OverheatSound.GetComponent<AudioSource>().volume = volume * ControllerMain.MasterVolumeScale / 100f * ControllerMain.SFXVolumeScale / 100f;
+        OverheatSound.GetComponent<AudioSource>().priority = 10;
     }
 
     public void EndOverheatWarningSound()
     {
-        OverHeatImage.GetComponent<AudioSource>().clip = null;
+        if (OverheatSound != null)
+        OverheatSound.GetComponent<AudioSource>().clip = null;
     }
 
     public void OverheatedSound()
