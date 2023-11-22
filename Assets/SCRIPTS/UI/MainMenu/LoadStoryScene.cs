@@ -210,13 +210,13 @@ public class LoadStoryScene : MainMenuSceneShared
         if ("Success".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Delete pilot contract successfully!", 5f);
+            "Pilot contract deleted.", 5f);
             CurrentPressPilot = null;
         }
         else if ("Fail".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-            "Delete pilot contract fail. Please try again!", 5f);
+            "Deleting pilot contract failed! Please try again!", 5f);
         }
         else if ("No Exist".Equals(check))
         {

@@ -144,7 +144,7 @@ public class UECPlanets : MonoBehaviour
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Controller.transform.position,
-                "Buy a Fighter in the Factory first", 5f);
+                "Get a Fighter in the factory first.", 5f);
         }
     }
     private IEnumerator ZoomOutWhenClick()

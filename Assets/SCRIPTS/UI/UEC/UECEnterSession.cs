@@ -52,7 +52,7 @@ public class UECEnterSession : MonoBehaviour
         {
             FindObjectOfType<NotificationBoardController>().VoidReturnFunction = MoveToFactory;
             FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(UECScene.transform.position,
-                "You don't own a fighter yet. Get your first one in the Factory!");
+                "Get a Fighter in the factory first.");
         }
     }
 
