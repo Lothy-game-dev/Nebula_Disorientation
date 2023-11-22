@@ -73,7 +73,7 @@ public class PersonalAreaCollectButton : MonoBehaviour
             } else
             {
                 FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
-                        "You have already collected salary!", 5f);
+                        "Today's salary has already been collected!", 5f);
                 
             }
         }
@@ -90,7 +90,7 @@ public class PersonalAreaCollectButton : MonoBehaviour
                     "Can not fetch data about your pilot.\nplease contact our email.", 5f); break;
             case "Fail":
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(PersonalArea.transform.position,
-                    "Collect Failed.\nPlease try again later.", 5f); break;
+                    "Collecting Salary Failed!\nPlease try again!", 5f); break;
             case "Success":
                 FindObjectOfType<UECMainMenuController>().GetData();
                 gameObject.AddComponent<CursorUnallowed>();
