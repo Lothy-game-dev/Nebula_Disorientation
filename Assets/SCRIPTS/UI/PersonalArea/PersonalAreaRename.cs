@@ -40,7 +40,7 @@ public class PersonalAreaRename : MonoBehaviour
         if (TextInput.text.Length < 6)
         {
             FindAnyObjectByType<NotificationBoardController>().CreateNormalNotiBoard(gameObject.transform.position,
-               "Your name must have more than 5 characters!", 5f);
+               "Pilot Name must have at least 6 characters.", 5f);
         } else
         {
             int PlayerId = FindAnyObjectByType<UECMainMenuController>().PlayerId;
@@ -52,10 +52,10 @@ public class PersonalAreaRename : MonoBehaviour
                         "Can not fetch data about your pilot.\nplease contact our email.", 5f); break;
                 case "Fail":
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(gameObject.transform.position,
-                        "Rename Failed.\nPlease try again later.", 5f); break;
+                        "Renaming Failed!\nPlease try again later!", 5f); break;
                 case "Success":
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(gameObject.transform.position,
-                        "Rename Successfully!", 5f);
+                        "Successfully Renamed.", 5f);
                     FindObjectOfType<UECMainMenuController>().GetData();
                     Destroy(gameObject.transform.parent.gameObject);
                     break;

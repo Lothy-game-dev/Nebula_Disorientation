@@ -235,7 +235,7 @@ public class NotificationBoardController : MonoBehaviour
         }
         GameObject notiBoard = Instantiate(RankUpBoard, new Vector3(Position.x, Position.y + pos, RankUpBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 2f, notiBoard.transform.GetChild(0).localScale.y / 2f);
-        notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Congratulation! <br>You have reach " + text;
+        notiBoard.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Congratulation! <br>You have reached " + text;
         notiBoard.SetActive(true);
         if (FindAnyObjectByType<UECMainMenuController>() == null)
         {          
