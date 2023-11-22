@@ -32,7 +32,8 @@ public class RechargeBoard : MonoBehaviour
         // Recharge
         if (CurrentShardRecharging>0)
         {
-            InsertData();
+            /*InsertData();*/
+            ServiceUnavailable();
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
@@ -59,6 +60,13 @@ public class RechargeBoard : MonoBehaviour
             FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(id, CurrentShardRecharging, 0, "ConvertShard");
             Destroy(transform.parent.gameObject);
         }
+    }
+
+    private void ServiceUnavailable()
+    {
+        FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
+                "Service currently unavailable!\nPlease try again later!", 5f);
+        Destroy(transform.parent.gameObject);
     }
     #endregion
 }
