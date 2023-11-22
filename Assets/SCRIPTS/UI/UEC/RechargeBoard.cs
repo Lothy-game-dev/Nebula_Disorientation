@@ -37,7 +37,7 @@ public class RechargeBoard : MonoBehaviour
         } else
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                "Recharge Failed!\nPlease choose one item to recharge.", 5f);
+                "Recharging Failed!\nPlease select one option first!", 5f);
         }   
     }
     private void InsertData()
@@ -47,14 +47,14 @@ public class RechargeBoard : MonoBehaviour
         if ("Fail".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                "Recharged failed!\nPlease try again.", 5f);
+                "Recharging Failed!\nPlease try again!", 5f);
         } else if ("No Exist".Equals(check))
         {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Cannot fetch Pilot's Data!\nPlease log-in again.", 5f);
         } else if ("Success".Equals(check)) {
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
-                CurrentShardRecharging.ToString() + " <sprite index='0'>\nSuccessfully Recharged." +
+                CurrentShardRecharging.ToString() + " <sprite index='0'>\nRecharged Successfully." +
                 "\nEnjoy!", 5f);
             FindObjectOfType<UECMainMenuController>().GetData();
             FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(id, CurrentShardRecharging, 0, "ConvertShard");

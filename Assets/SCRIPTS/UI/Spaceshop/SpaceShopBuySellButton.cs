@@ -40,7 +40,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
             if (GetComponent<CursorUnallowed>()!=null)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                   "Can not buy this item anymore today!\nPlease come back tommorrow!", 5f);
+                   "Item daily stock ran out.\nCome back tomorrow!", 5f);
             } else
             if (Scene.GetComponent<SpaceShopScene>().CheckEnoughMoney(CurrentValue))
             {
@@ -71,12 +71,12 @@ public class SpaceShopBuySellButton : MonoBehaviour
             if (currentStocks == 0)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Can not buy this item anymore today!\nPlease come back tommorrow!", 5f);
+                    "Item daily stock ran out.\nCome back tomorrow!", 5f);
                 return;
             } else if (currentStocks < Quantity && currentStocks!=-1)
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Can not buy more than stocks in shop!\nPlease re-input!", 5f);
+                    "Not enough items in stock.\nPlease consider another quantity.", 5f);
                 return;
             } else
             {
@@ -221,7 +221,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
             else if ("Not Enough Item".Equals(check))
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "You don't have enough item to sell!\nPlease buy some more!", 5f);
+                    "Not enough items in storage.\nUnable to sell.", 5f);
             }
             else if ("Success".Equals(check))
             {
@@ -243,7 +243,7 @@ public class SpaceShopBuySellButton : MonoBehaviour
                     case "Success":
                         // if success, reload data to UI
                         FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(Scene.transform.position,
-                    "Sold Successfully.\n", 5f);
+                    "Successfully Sold!\n", 5f);
                         FindObjectOfType<UECMainMenuController>().GetData();
                         FindAnyObjectByType<AccessDatabase>().UpdateEconomyStatistic(FindObjectOfType<UECMainMenuController>().PlayerId, 0, CurrentValue, "ConvertCash");
                         break;

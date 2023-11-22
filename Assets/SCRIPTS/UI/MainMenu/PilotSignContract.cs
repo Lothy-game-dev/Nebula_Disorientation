@@ -119,7 +119,7 @@ public class PilotSignContract : MonoBehaviour
                 if ("Success".Equals(check2))
                 {
                     FindObjectOfType<NotificationBoardController>().CreateUECMovingNotiBoard(ScenePos.transform.position,
-                    "CONTRACT SIGNED SUCCESSFULLY.\nMOVING TO THE UEC MAIN HALL IN 5 SECONDS...", 5f);
+                    "CONTRACT SIGNED SUCCESSFULLY.\nMOVING TO THE UEC MAIN HALL...", 5f);
                     ad.CreateNewPlayerStatistic(InputField.text.ToUpper());
                     PlayerPrefs.SetString("NewPilot", "T");
                 } else if ("No Exist".Equals(check2))
@@ -136,12 +136,12 @@ public class PilotSignContract : MonoBehaviour
             } else if ("Exist".Equals(check))
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
-                    "Contract signed failed!\nPilot's Name has already existed.", 5f);
+                    "Contract signing failed.\nPilot name already existed!", 5f);
                 alreadySign = false;
             } else if ("Fail".Equals(check))
             {
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ScenePos.transform.position,
-                    "Contract signed failed!\nPlease try again.", 5f);
+                    "Contract signing failed.\nPlease try again!", 5f);
                 alreadySign = false;
             }
         }
