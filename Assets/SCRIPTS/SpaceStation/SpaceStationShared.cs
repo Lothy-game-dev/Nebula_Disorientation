@@ -745,7 +745,7 @@ public class SpaceStationShared : MonoBehaviour
         {
             gameObject.transform.GetChild(i).gameObject.SetActive(false);
         }
-        Explosion.transform.localScale = transform.localScale / 1.5f;
+        Explosion.transform.localScale = transform.localScale * 3;
         Explosion.GetComponent<SpriteRenderer>().sortingOrder = 3;
        /* GetComponent<SpriteRenderer>().color = Color.black;*/
         GetComponent<PolygonCollider2D>().enabled = false;
@@ -754,19 +754,19 @@ public class SpaceStationShared : MonoBehaviour
             GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);
             expl.SetActive(true);
             Destroy(expl, 0.3f);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl2 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 700), transform.position.y + Random.Range(100, 700), transform.position.z), Quaternion.identity);
             expl2.SetActive(true);
             Destroy(expl2, 0.3f);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl3 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 700), transform.position.y + Random.Range(100, 700), transform.position.z), Quaternion.identity);
             expl3.SetActive(true);
             Destroy(expl3, 0.3f);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl4 = Instantiate(Explosion, new Vector3(transform.position.x - Random.Range(100, 700), transform.position.y - Random.Range(100, 700), transform.position.z), Quaternion.identity);
             expl4.SetActive(true);
             Destroy(expl4, 0.3f);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.025f);
             GameObject expl5 = Instantiate(Explosion, new Vector3(transform.position.x + Random.Range(100, 700), transform.position.y - Random.Range(100, 700), transform.position.z), Quaternion.identity);
             expl5.SetActive(true);
             Destroy(expl5, 0.3f);
@@ -778,7 +778,7 @@ public class SpaceStationShared : MonoBehaviour
                 FindObjectOfType<GameplayInteriorController>().AddCashAndShard(BountyCash, BountyShard, gameObject);
             }
         }
-        GenerateFlash(Flash.transform.parent.position, 0.5f, 1f);
+        GenerateFlash(Flash.transform.parent.position, 0.5f, 0.5f);
         
     }
     #endregion
