@@ -92,7 +92,7 @@ public class PlayerFighter : FighterShared
         UpdateFighter();
         // For thermal test only, increase temp by pressing N and decrease by pressing M
         // Will be deleted
-        if (testTimer <= 0f)
+        /*if (testTimer <= 0f)
         {
             if (Input.GetKey(KeyCode.M))
             {
@@ -107,7 +107,7 @@ public class PlayerFighter : FighterShared
         } else
         {
             testTimer -= Time.deltaTime;
-        }
+        }*/
         HealEffDelay -= Time.deltaTime;
         if (!ControllerMain.IsInLoading && !ControllerMain.isEnding)
         {
