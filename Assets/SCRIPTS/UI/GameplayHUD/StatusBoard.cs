@@ -414,7 +414,7 @@ public class StatusBoard : MonoBehaviour
                 SpaceStation = CloneEnemy.GetComponent<SpaceStationShared>();
                 SpaceStation.enabled = false;
                 // turn off component
-                CloneEnemyColl = SpaceStation.GetComponent<PolygonCollider2D>();
+                CloneEnemyColl = SpaceStation.GetComponent<Collider2D>();
                 CloneEnemyColl.enabled = false;
                 Destroy(CloneEnemy.GetComponent<AudioSource>());
             }

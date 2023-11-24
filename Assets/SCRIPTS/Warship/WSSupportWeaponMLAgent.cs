@@ -61,19 +61,27 @@ public class WSSupportWeaponMLAgent : Agent
     {
         if (SPWeapon != null)
         {
+            float angleLimit = 0;
+            if (WS!=null)
+            {
+                angleLimit = 15;
+            } else if (SS!=null)
+            {
+                angleLimit = 2;
+            }
             float Rotate = (SPWeapon.Aim != null && SPWeapon.Aim.GetComponent<SpaceStationShared>() == null ?
                     (SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection == 0 ? OldRotate : SPWeapon.Aim.GetComponent<PlayerMovement>().RotateDirection : 0
                     : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection == 0 ? OldRotate : SPWeapon.Aim.GetComponent<FighterMovement>().RotateDirection : 0
-                    : SPWeapon.Aim.GetComponent<WSMovement>() != null ? SPWeapon.Aim.GetComponent<WSMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection == 0 ? OldRotate : SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection : 0 : GetComponent<WSMovement>().RotateDirection) : GetComponent<WSMovement>().RotateDirection);
+                    : SPWeapon.Aim.GetComponent<WSMovement>() != null ? SPWeapon.Aim.GetComponent<WSMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection == 0 ? OldRotate : SPWeapon.Aim.GetComponent<WSMovement>().RotateDirection : 0 : GetComponent<WSMovement>() != null ? GetComponent<WSMovement>().RotateDirection : 0) : GetComponent<WSMovement>() != null ? GetComponent<WSMovement>().RotateDirection : 0);
             float Speed = SPWeapon.Aim != null && SPWeapon.Aim.GetComponent<SpaceStationShared>() == null ?
                     (SPWeapon.Aim.GetComponent<PlayerMovement>() != null ? SPWeapon.Aim.GetComponent<PlayerMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<PlayerMovement>().CurrentSpeed : 400
                     : SPWeapon.Aim.GetComponent<FighterMovement>() != null ? SPWeapon.Aim.GetComponent<FighterMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<FighterMovement>().CurrentSpeed : 400
                     : SPWeapon.Aim.GetComponent<WSMovement>() != null ? SPWeapon.Aim.GetComponent<WSMovement>().CurrentSpeed > 0 ? SPWeapon.Aim.GetComponent<WSMovement>().CurrentSpeed : 400 : 400) : 400;
-            SPWeapon.AIShootBullet((float)Rotate * actions.ContinuousActions[0] * Speed / 350 * 15);
-            if ((SPWeapon.Aim.transform.position - transform.position).magnitude < 1500f)
+            SPWeapon.AIShootBullet((float)Rotate * actions.ContinuousActions[0] * Speed / 350 * angleLimit);
+            if (SPWeapon.Aim!= null && (SPWeapon.Aim.transform.position - transform.position).magnitude < 1500f)
                 OldRotate = Rotate;
             else
-                OldRotate = actions.ContinuousActions[0] * Rotate / Mathf.Abs(Rotate);
+                OldRotate = actions.ContinuousActions[0] * Rotate > 0 ? 1 : Rotate < 0 ? -1 : 0;
         }
     }
     #endregion

@@ -279,9 +279,8 @@ public class Weapons : MonoBehaviour
                     Vector3 ToEnemy = Aim.transform.position - ShootingPosition.transform.position;
                     float angle = Vector3.Angle(ToEnemy, pos);
                     CheckIsUpOrDownMovement();
-                    if (angle < 10)
+                    if (angle < 3)
                     {
-                        angle = 0;
                         isFire = true;
                     }
                     else
@@ -292,7 +291,7 @@ public class Weapons : MonoBehaviour
                             EndSound();
                         }
                     }
-                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), (angle > 10 ? 8 : 2) * WeaponROTSpeed);
+                    transform.RotateAround(WeaponPoint.transform.position, new Vector3(0, 0, -DirMov), 2 * WeaponROTSpeed);
                 }
             }
             // Reset thermal hit count per 1/rate of hit second
@@ -645,7 +644,7 @@ public class Weapons : MonoBehaviour
                         FireTimer = 1 / RateOfFire;
                     }
                 }
-            } else if (Fighter.GetComponent<WSShared>() != null)
+            } else if (Fighter.GetComponent<WSShared>() != null || Fighter.GetComponent<SpaceStationShared>() != null)
             {
                 if (FireTimer <= 0f && isFire && !isMainWeapon)
                 {
@@ -692,7 +691,7 @@ public class Weapons : MonoBehaviour
         // Set bullet's properties required
         Vector2 OldAim = Aim.transform.position - ShootingPosition.transform.position;
         Vector2 perpen = Vector2.Perpendicular(OldAim);
-        Vector2 Dest = new Vector2(Aim.transform.position.x,Aim.transform.position.y) + perpen / perpen.magnitude * (angle > 0 ? -1 : 1) * Mathf.Tan(Mathf.Abs(angle) * Mathf.Deg2Rad) * OldAim.magnitude;
+        Vector2 Dest = new Vector2(Aim.transform.position.x, Aim.transform.position.y) + perpen / perpen.magnitude * (angle > 0 ? -1 : 1) * Mathf.Tan(Mathf.Abs(angle) * Mathf.Deg2Rad) * OldAim.magnitude;
         bul.Destination = Dest;
         bul.WeaponShoot = this;
         bul.EnemyLayer = EnemyLayer;

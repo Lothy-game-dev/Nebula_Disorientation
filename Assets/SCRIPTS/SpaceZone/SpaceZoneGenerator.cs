@@ -957,7 +957,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             // Chance
             if (ChosenSZD1=="")
             {
-                float k = Random.Range(0, 100f);
+                float k = /*Random.Range(0, 100f)*/100f;
                 if (k <= 50f)
                 {
                     int r = Random.Range(0, 2);
@@ -986,7 +986,7 @@ public class SpaceZoneGenerator : MonoBehaviour
                         AllyWarshipSpawner.SpawnImmobileWS(10, new Vector2(Random.Range(LeftLimit, RightLimit), Random.Range(BottomLimit, TopLimit)));
                     }
                 }
-                else if (n <= 95f)
+                else if (k <= 95f)
                 {
                     int r = Random.Range(0, 2);
                     if (r == 0)
