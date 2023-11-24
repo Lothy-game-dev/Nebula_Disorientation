@@ -83,9 +83,10 @@ public class FuelCellBar : MonoBehaviour
                 }
                 else
                 {
-                    while (Result > 7200)
+                    int minutes = 15;
+                    while (Result > minutes*60)
                     {
-                        Result = Result - 7200;
+                        Result = Result - minutes * 60;
                         // Add Fuel cell
                         ad.AddFuelCell(PlayerID);
                         Data = ad.GetPlayerInformationById(PlayerID);
@@ -94,7 +95,7 @@ public class FuelCellBar : MonoBehaviour
                             break;
                         }
                     }
-                    Result = (int)(7200 - Result);
+                    Result = (int)(minutes * 60 - Result);
                     if (Result == 0)
                     {
                         // Add Fuel cell

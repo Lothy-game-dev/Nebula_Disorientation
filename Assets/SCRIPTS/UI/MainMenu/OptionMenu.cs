@@ -35,7 +35,7 @@ public class OptionMenu : MainMenuSceneShared
     #endregion
     #region Start & Update
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         OptionSetting = FindAnyObjectByType<AccessDatabase>().GetOption();
         // Initialize variables

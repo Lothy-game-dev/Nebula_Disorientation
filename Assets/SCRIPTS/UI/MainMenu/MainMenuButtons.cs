@@ -94,16 +94,28 @@ public class MainMenuButtons : MonoBehaviour
         FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("ButtonClick");
         if (!alreadySelect)
         {
-            alreadySelect = true;
-            foreach (var but in OtherButtons)
+            
+            if (name== "ExitButton")
             {
-                but.GetComponent<MainMenuButtons>().ExitView();
+                FindObjectOfType<NotificationBoardController>().VoidReturnFunction = QuitGame;
+                FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(transform.parent.position, "Exit Already?");
+            } else
+            {
+                alreadySelect = true;
+                foreach (var but in OtherButtons)
+                {
+                    but.GetComponent<MainMenuButtons>().ExitView();
+                }
+                StartCoroutine(DelayTransfer());
             }
-            StartCoroutine(DelayTransfer());
         }
     }
     #endregion
     #region Enter and Exit
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
     private IEnumerator DelayTransfer()
     {
         bool isDown = true;
