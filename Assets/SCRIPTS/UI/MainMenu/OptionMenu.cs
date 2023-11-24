@@ -56,6 +56,8 @@ public class OptionMenu : MainMenuSceneShared
 
         SFXSlider.value = int.Parse(OptionSetting["Sfx"].ToString());
         Sound = OptionSetting["Sfx"].ToString();
+
+        SetData();
     }
 
     // Update is called once per frame
@@ -116,6 +118,32 @@ public class OptionMenu : MainMenuSceneShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = false;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = false;
+    }
+    #endregion
+    #region Set first data
+    public void SetData()
+    {
+        if (OptionSetting != null)
+        {
+            Camera.main.GetComponent<SoundController>().CheckSoundVolumeByNumber(MasterVolumnSlider.value, MusicVolumnSlider.value, SFXSlider.value);
+            Camera.main.transform.GetChild(1).GetComponent<SoundController>().CheckSoundVolumeByNumber(MasterVolumnSlider.value, MusicVolumnSlider.value, SFXSlider.value);
+            Application.targetFrameRate = int.Parse(FpsCounter);
+            if ("fullscreen".Equals(Resol.ToLower()))
+            {
+                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
+            }
+            else
+            {
+                if ("1920x1080".Equals(Resol))
+                {
+                    Screen.SetResolution(int.Parse(Resol.Substring(0, 4)), int.Parse(Resol.Substring(5, 4)), true);
+                }
+                else
+                {
+                    Screen.SetResolution(int.Parse(Resol.Substring(0, 4)), int.Parse(Resol.Substring(5, 3)), false);
+                }
+            }
+        }
     }
     #endregion
 }
