@@ -109,13 +109,13 @@ public class SpaceStationShared : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < SpWps.Count; i++)
+            /*for (int i = 0; i < SpWps.Count; i++)
             {
                 if (SpWps[i] != null)
                 {
                     SpWps[i].GetComponent<Weapons>().WSShootBullet();
                 }
-            }
+            }*/
         }
         //Reset Target
         TargetRefreshTimer -= Time.deltaTime;
@@ -286,9 +286,11 @@ public class SpaceStationShared : MonoBehaviour
                     wp.EnemyLayer = SupWeaponTarget;
                     wp.tracking = true;
                     wp.isMainWeapon = false;
+                    wp.RotateLimitPositive = 360;
+                    wp.RotateLimitNegative = -360;
                     wp.isSpaceStation = true;
 
-                    /*sup.AddComponent<BehaviorParameters>();
+                    sup.AddComponent<BehaviorParameters>();
                     sup.GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = 4;
 
                     sup.GetComponent<BehaviorParameters>().BehaviorType = BehaviorType.InferenceOnly;
@@ -299,7 +301,7 @@ public class SpaceStationShared : MonoBehaviour
                     act.BranchSizes = null;
                     sup.GetComponent<BehaviorParameters>().BrainParameters.ActionSpec = act;
                     sup.AddComponent<WSSupportWeaponMLAgent>();
-                    sup.AddComponent<DecisionRequester>();*/
+                    sup.AddComponent<DecisionRequester>();
                     SpWps.Add(sup);
                 }
             }
@@ -326,7 +328,7 @@ public class SpaceStationShared : MonoBehaviour
     {        
         GameObject game = null;
         BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, bul.MaximumDistance + 100, (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100), (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
             // Find the nearest first, if a fighter is found, target it instead
@@ -371,7 +373,7 @@ public class SpaceStationShared : MonoBehaviour
             BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();
             for (int i = 0; i < SpWeaponTargets.Count; i++)
             {
-                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > bul.MaximumDistance + 100 || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
+                if (SpWeaponTargets[weapon] != null && (Mathf.Abs((SpWeaponTargets[weapon].transform.position - weapon.transform.position).magnitude) > (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100) || SpWeaponTargets[weapon].layer == LayerMask.NameToLayer("Untargetable")))
                 {
                     weapon.GetComponent<Weapons>().Aim = null;
                     SpWeaponTargets[weapon] = null;
@@ -381,7 +383,7 @@ public class SpaceStationShared : MonoBehaviour
         else
         {
             BulletShared bul = weapon.GetComponent<Weapons>().Bullet.GetComponent<BulletShared>();           
-            if (Target != null && (Mathf.Abs((Target.transform.position - weapon.transform.position).magnitude) > bul.MaximumDistance + 100 || Target.layer == LayerMask.NameToLayer("Untargetable")))
+            if (Target != null && (Mathf.Abs((Target.transform.position - weapon.transform.position).magnitude) > (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100) || Target.layer == LayerMask.NameToLayer("Untargetable")))
             {
                 weapon.GetComponent<Weapons>().Aim = null;
                 Target = null;
@@ -748,7 +750,7 @@ public class SpaceStationShared : MonoBehaviour
         Explosion.transform.localScale = transform.localScale * 3;
         Explosion.GetComponent<SpriteRenderer>().sortingOrder = 3;
        /* GetComponent<SpriteRenderer>().color = Color.black;*/
-        GetComponent<PolygonCollider2D>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
         for (int i = 0; i < 10; i++)
         {
             GameObject expl = Instantiate(Explosion, transform.position, Quaternion.identity);

@@ -363,7 +363,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         {
             if (ChosenVariant == 1)
             {
-                float n = Random.Range(0, 100f);
+                float n =/* Random.Range(0, 100f)*/100f;
                 string chosen = "";
                 if (ChosenSZD1=="")
                 {
@@ -584,7 +584,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                     {
                         GameObject go = Instantiate(SpaceStationModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
-                        go.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                        go.transform.localScale = new Vector3(0.225f, 0.225f, 0.225f);
                         go.GetComponent<SpriteRenderer>().sortingOrder = 5003;
                         go.SetActive(true);
                         ListNotableAlliesGO.Add(go);
@@ -833,7 +833,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
                     {
                         GameObject go = Instantiate(SpaceStationModel.transform.GetChild(j).gameObject, Place.transform.position, Quaternion.identity);
                         go.transform.SetParent(Place.transform);
-                        go.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+                        go.transform.localScale = new Vector3(0.225f, 0.225f, 0.225f);
                         go.GetComponent<SpriteRenderer>().sortingOrder = 5003;
                         go.SetActive(true);
                         ListNotableEnemiesGO.Add(go);
