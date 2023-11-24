@@ -363,7 +363,7 @@ public class SpaceZoneIntroBoard : MonoBehaviour
         {
             if (ChosenVariant == 1)
             {
-                float n =/* Random.Range(0, 100f)*/100f;
+                float n = Random.Range(0, 100f);
                 string chosen = "";
                 if (ChosenSZD1=="")
                 {
