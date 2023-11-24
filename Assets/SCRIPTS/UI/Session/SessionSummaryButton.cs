@@ -90,7 +90,7 @@ public class SessionSummaryButton : MonoBehaviour
                 if (isLocked)
                 {
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(SSController.transform.position,
-                "Please collect all the reward before ending the session!", 5f);
+                "Please collect all the reward before ending the session.", 5f);
                 } else
                 {
                     //End Session                
@@ -123,7 +123,7 @@ public class SessionSummaryButton : MonoBehaviour
                 "Can not fetch data about your pilot.\nplease contact our email.", 5f); break;
                 case "Fail":                
                     FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(SSController.transform.position,
-                "Collect Failed.\nPlease contact our email.", 5f); break;
+                "Collecting Failed.\nPlease contact our email.", 5f); break;
             }
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -709,7 +710,7 @@ public class WSShared : MonoBehaviour
         Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (bul.MaximumDistance == 0 ? bul.MaxEffectiveDistance + 100 : bul.MaximumDistance + 100), (weapon.GetComponent<Weapons>().isMainWeapon == true ? MainWeaponTarget : SupWeaponTarget));
         if (cols.Length > 0)
         {
-            // Find the nearest first, if a fighter is found, target it instead
+            // Find the nearest first, if a fighter is found, target it 
             GameObject Nearest = cols[0].gameObject;
             float distance = Mathf.Abs((cols[0].transform.position - weapon.transform.position).magnitude);
             foreach (var enemy in cols)
@@ -718,7 +719,7 @@ public class WSShared : MonoBehaviour
                 {
                     if (enemy.GetComponent<FighterShared>() != null)
                     {
-                        Nearest = enemy.gameObject;
+                        Nearest = enemy.gameObject;                       
                         break;                       
                     }
                     else
@@ -734,7 +735,7 @@ public class WSShared : MonoBehaviour
                 {
                     if (enemy.GetComponent<WSShared>() != null)
                     {
-                        Nearest = enemy.gameObject;
+                        Nearest = enemy.gameObject;                        
                         break;
                     } else
                     {
@@ -755,6 +756,8 @@ public class WSShared : MonoBehaviour
     public GameObject MainWeaponTargetEnemy(GameObject weapon)
     {
         GameObject game = null;
+        List<float> DistanceList = new List<float>();
+        List<GameObject> EnemyList = new List<GameObject>();
         Collider2D[] cols = Physics2D.OverlapCircleAll(weapon.transform.position, (isFighting == true ? TargetRange : 10000f), MainWeaponTarget);
         if (cols.Length > 0)
         {
@@ -764,23 +767,17 @@ public class WSShared : MonoBehaviour
                 if (weapon.GetComponent<Weapons>() != null && weapon.GetComponent<Weapons>().isMainWeapon)
                 {
                     if (enemy.gameObject.tag == "BossEnemy" ||  enemy.gameObject.tag == "AlliesBossFighter")
-                    {
-                        GameObject Nearest = enemy.gameObject;
-                        float distance = Mathf.Abs((Nearest.transform.position - weapon.transform.position).magnitude);
-                        float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);
-                        if (distanceTest < distance)
-                        {
-                            distance = distanceTest;
-                            Nearest = enemy.gameObject;
-                        }
-                        game = Nearest;
+                    {                      
+                        float distanceTest = Mathf.Abs((enemy.gameObject.transform.position - weapon.transform.position).magnitude);                       
                         Distance = distanceTest;
-                    } else
-                    {
-                        continue;
-                    }
+                        DistanceList.Add(distanceTest);
+                        EnemyList.Add(enemy.gameObject);
+                    } 
                 }
-
+            }
+            if (DistanceList.Count > 0)
+            {
+                game = EnemyList[DistanceList.IndexOf(DistanceList.Min())];
             }
             // If the distance between 2 ws is too far, expand the search area to 10000f,
             // and will turn back to the weapon range if 2 ws are in the weapon range

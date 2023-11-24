@@ -77,7 +77,7 @@ public class SessionArsenalServiceButton : MonoBehaviour
             case "Success":
                 FindObjectOfType<SoundSFXGeneratorController>().GenerateSound("Repair");
                 FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(ArsenalServiceController.transform.position,
-                "Repair Successfully!.", 5f); 
+                "Successfully Repaired.", 5f); 
                 FindAnyObjectByType<AccessDatabase>().DecreaseCurrencyAfterBuyForSession(service.SessionID, service.PriceToRepair);
                 service.ResetAfterRepair();
                 break;

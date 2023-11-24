@@ -250,7 +250,7 @@ public class StatisticController : MonoBehaviour
                                 ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], 1);
                                 if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + 1)
                                 {
-                                    ad.DailyMissionDone(PlayerID, listDM[i][0]);
+                                    ad.DailyMissionDone(PlayerID, listDM[i][1]);
                                     missionDone++;
                                     FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
                                 }
