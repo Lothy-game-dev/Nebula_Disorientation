@@ -174,7 +174,6 @@ public class FighterMovement : MonoBehaviour
                 CheckForHazard();
             }
         }
-        if (Movable) FighterRotate();
         if (delayCheckLimit>0f)
         {
             delayCheckLimit -= Time.deltaTime;
@@ -185,7 +184,7 @@ public class FighterMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        
+        if (Movable) FighterRotate();
     }
     #endregion
     #region Moving Calling Fuction
