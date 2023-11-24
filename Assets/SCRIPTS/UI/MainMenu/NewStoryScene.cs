@@ -52,7 +52,7 @@ public class NewStoryScene : MainMenuSceneShared
     {
         GetComponent<BackgroundBrieflyMoving>().enabled = true;
         transform.GetChild(0).GetComponent<Rigidbody2D>().simulated = true;
-        /*foreach (var go2 in StartAnimOff)
+        foreach (var go2 in StartAnimOff)
         {
             go2.SetActive(false);
         }
@@ -66,7 +66,7 @@ public class NewStoryScene : MainMenuSceneShared
         foreach (var go in StartAnimOn)
         {
             go.SetActive(true);
-        }*/
+        }
         NameField.text = "";
     }
 

@@ -99,11 +99,20 @@ public class MainMenuButtons : MonoBehaviour
             {
                 but.GetComponent<MainMenuButtons>().ExitView();
             }
+            if (name== "ExitButton")
+            {
+                FindObjectOfType<NotificationBoardController>().VoidReturnFunction = QuitGame;
+                FindObjectOfType<NotificationBoardController>().CreateNormalConfirmBoard(transform.parent.position, "Exit Already?");
+            } else
             StartCoroutine(DelayTransfer());
         }
     }
     #endregion
     #region Enter and Exit
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
     private IEnumerator DelayTransfer()
     {
         bool isDown = true;
