@@ -383,7 +383,7 @@ public class InitializeDatabase : MonoBehaviour
             "(9, 'Superior Auto-Repair Module', 'A module that can repair your Fighter efficiently during battle.', 30, 'RMH-25', 15, 'T', 5, 1800, 15, '#4c9aff', 'A module that can repair your Fighter efficiently during battle.')," +
             "(10, 'Nano-Reflective Coat', 'A Nano-tech Coat that grants Invisibility & Invulnerability to your Fighter for a few seconds after using.', 10, 'INV', 10, 'T', 3, 5000, 60, '#bf2600', 'A Nano-tech Coat that grants Invisibility & Invulnerability to your Fighter for a few seconds after using.')," +
             "(11, 'Emergency Auto-Repair Module', 'An emergency module that quickly repair your Fighter during battle. ', 10, 'RMH-50', 3, 'T', 3, 5000, 60, '#bf2600', 'An emergency module that quickly repair your Fighter during battle. ')," +
-            "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though...', 2, 'FC', 3, 'T', 1, 20000, null, '#bf2600', 'Fuel Core for sale'' but only 1 in stock per day.');";
+            "(12, 'Fuel Core', 'Fuel Core for sale! Quite expensive though...', 5, 'FC', 3, 'T', 1, 20000, null, '#bf2600', 'Fuel Core for sale'' but only 1 in stock per day.');";
         string LOTWCards = "INSERT INTO LuckOfTheWandererCards VALUES " +
             "(1, 'Structural Upgrader I', 'DEF', 'HP-5', 3, 1000, 'Y', 'Y', '#03c800')," +
             "(2, 'Structural Upgrader II', 'DEF', 'HP-7.5', 3, 1000, 'Y', 'Y', '#03c800')," +
