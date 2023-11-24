@@ -957,7 +957,7 @@ public class SpaceZoneGenerator : MonoBehaviour
             // Chance
             if (ChosenSZD1=="")
             {
-                float k = /*Random.Range(0, 100f)*/100f;
+                float k = Random.Range(0, 100f);
                 if (k <= 50f)
                 {
                     int r = Random.Range(0, 2);
