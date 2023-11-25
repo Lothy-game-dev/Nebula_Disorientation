@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.MLAgents;
@@ -741,6 +741,17 @@ public class StatusBoard : MonoBehaviour
                 BarrierSlider.value = Warship.CurrentBarrier;
 
                 BarrierText.text = Mathf.Round(Warship.CurrentBarrier) + "/" + Warship.MaxBarrier;
+
+                //Setting slider base on current temperature
+                TempBar.SetActive(true);
+                TemperSlider.maxValue = 100;
+                TemperSlider.value = 50;
+                TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+                
+
+                //Setting to show current tempurature
+                TemperText.gameObject.SetActive(true);
+                TemperText.text = "-";
             } else
             {
                 if (CloneEnemy.GetComponent<SpaceStationShared>() != null)
@@ -761,6 +772,17 @@ public class StatusBoard : MonoBehaviour
                     BarrierSlider.value = SpaceStation.CurrentBarrier;
 
                     BarrierText.text = Mathf.Round(SpaceStation.CurrentBarrier) + "/" + SpaceStation.MaxBarrier;
+
+                    //Setting slider base on current temperature
+                    TempBar.SetActive(true);
+                    TemperSlider.maxValue = 100;
+                    TemperSlider.value = 50;
+                    TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+
+
+                    //Setting to show current tempurature
+                    TemperText.gameObject.SetActive(true);
+                    TemperText.text = "-";
                 }
             }
         }
@@ -1266,6 +1288,17 @@ public class StatusBoard : MonoBehaviour
                     BarrierSlider.value = Warship.CurrentBarrier;
 
                     BarrierText.text = Mathf.Round(Warship.CurrentBarrier) + "/" + Warship.MaxBarrier;
+
+                    //Setting slider base on current temperature
+                    TempBar.SetActive(true);
+                    TemperSlider.maxValue = 100;
+                    TemperSlider.value = 50;
+                    TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+
+
+                    //Setting to show current tempurature
+                    TemperText.gameObject.SetActive(true);
+                    TemperText.text = "-";
                 } else
                 {
                     if (Enemy.GetComponent<SpaceStationShared>() != null)
@@ -1286,6 +1319,17 @@ public class StatusBoard : MonoBehaviour
                         BarrierSlider.value = SpaceStation.CurrentBarrier;
 
                         BarrierText.text = Mathf.Round(SpaceStation.CurrentBarrier) + "/" + SpaceStation.MaxBarrier;
+
+                        //Setting slider base on current temperature
+                        TempBar.SetActive(true);
+                        TemperSlider.maxValue = 100;
+                        TemperSlider.value = 50;
+                        TemperSlider.fillRect.GetComponentInChildren<Image>().color = Color.green;
+
+
+                        //Setting to show current tempurature
+                        TemperText.gameObject.SetActive(true);
+                        TemperText.text = "-";
                     }
                 }
             }
