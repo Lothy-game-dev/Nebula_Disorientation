@@ -145,7 +145,14 @@ public class FighterMovement : MonoBehaviour
                     else
                     if (!PreventReachLimit)
                     {
-                        PreventReachingLimit();
+                        if (als!=null && als.IsEscorting)
+                        {
+
+                        }
+                        else
+                        {
+                            PreventReachingLimit();
+                        }
                         if (!PreventReachLimit)
                         {
                             if (CheckMovingDelay <= 0f)
@@ -571,7 +578,7 @@ public class FighterMovement : MonoBehaviour
             {
                 GameObject go = new();
                 go.transform.position = als.EscortTargetPosition;
-                int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject);
+                int k = CheckIsUpOrDownMovement(go, HeadObject, gameObject, true);
                 Destroy(go);
                 UpMove();
                 if (k == -1)

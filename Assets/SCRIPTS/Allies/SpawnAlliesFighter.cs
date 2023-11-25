@@ -13,6 +13,7 @@ public class SpawnAlliesFighter : MonoBehaviour
     public GameObject AllyTemplate;
     public GameObject SpawnHole;
     public AudioClip SpawnSoundEffect;
+    public GameplayInteriorController controller;
     #endregion
     #region NormalVariables
     // will do delay later
@@ -129,6 +130,7 @@ public class SpawnAlliesFighter : MonoBehaviour
         aus.playOnAwake = false;
         Ally.AddComponent<SoundController>();
         aus.clip = SpawnSoundEffect;
+        aus.volume = controller.MasterVolumeScale / 100f * controller.SFXVolumeScale;
         aus.spatialBlend = 1;
         aus.rolloffMode = AudioRolloffMode.Linear;
         aus.maxDistance = 1000;

@@ -71,12 +71,6 @@ public class UECController : UECMenuShared
         Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["Cash"]).ToString();
         TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["TimelessShard"]).ToString();
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["FuelEnergy"]).ToString();
-        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
-        FuelCell.transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)datas["FuelCell"];
-        if ((int)datas["FuelCell"]==10)
-        {
-            FuelCell.transform.GetChild(2).gameObject.SetActive(false);
-        }
         NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = GenerateNameRankText((string)datas["Name"], (string)datas["Rank"], (datas.ContainsKey("RankColor")? (string)datas["RankColor"]:"") );
     }
 

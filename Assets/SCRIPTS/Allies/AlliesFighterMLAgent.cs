@@ -64,16 +64,21 @@ public class AlliesFighterMLAgent : Agent
         {
             if (als.DelayTimer < 0f && !als.LeftFire)
             {
+                float speedScale = 350;
+                if (als.Class == "C")
+                {
+                    speedScale = (als.LeftTarget != null && als.LeftTarget.GetComponent<SpaceStationShared>() == null ?
+                    (als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().CurrentSpeed 
+                    : als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed
+                    : als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().CurrentSpeed : 400) : 400);
+                }
                 als.LeftFire = true;
                 LeftWeapon.AIShootBullet((float)(als.LeftTarget != null && als.LeftTarget.GetComponent<SpaceStationShared>() == null ?
                     (als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().CurrentSpeed > 200 ? als.LeftTarget.GetComponent<PlayerMovement>().RotateDirection : 0
                     : als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed > 200 ? als.LeftTarget.GetComponent<FighterMovement>().RotateDirection : 0
                     : als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().CurrentSpeed > 200 ? als.LeftTarget.GetComponent<WSMovement>().RotateDirection : 0 : fm.RotateDirection) : fm.RotateDirection)
                     * actions.ContinuousActions[0]
-                    * (als.LeftTarget != null && als.LeftTarget.GetComponent<SpaceStationShared>() == null ?
-                    (als.LeftTarget.GetComponent<PlayerMovement>() != null ? als.LeftTarget.GetComponent<PlayerMovement>().CurrentSpeed > 0 ? als.LeftTarget.GetComponent<PlayerMovement>().CurrentSpeed : 400
-                    : als.LeftTarget.GetComponent<FighterMovement>() != null ? als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed > 0 ? als.LeftTarget.GetComponent<FighterMovement>().CurrentSpeed : 400
-                    : als.LeftTarget.GetComponent<WSMovement>() != null ? als.LeftTarget.GetComponent<WSMovement>().CurrentSpeed > 0 ? als.LeftTarget.GetComponent<WSMovement>().CurrentSpeed : 400 : 400) : 400) / 350f
+                    * speedScale / 350f
                     * 15);
                 als.DelayTimer = als.DelayBetween2Weap;
             }
@@ -82,16 +87,21 @@ public class AlliesFighterMLAgent : Agent
         {
             if (als.DelayTimer < 0f && als.LeftFire)
             {
+                float speedScale = 350;
+                if (als.Class == "C")
+                {
+                    speedScale = (als.RightTarget != null && als.RightTarget.GetComponent<SpaceStationShared>() == null ?
+                    (als.RightTarget.GetComponent<PlayerMovement>() != null ? als.RightTarget.GetComponent<PlayerMovement>().CurrentSpeed
+                    : als.RightTarget.GetComponent<FighterMovement>() != null ? als.RightTarget.GetComponent<FighterMovement>().CurrentSpeed
+                    : als.RightTarget.GetComponent<WSMovement>() != null ? als.RightTarget.GetComponent<WSMovement>().CurrentSpeed : 400) : 400);
+                }
                 als.LeftFire = false;
                 RightWeapon.AIShootBullet((float)(als.RightTarget != null && als.RightTarget.GetComponent<SpaceStationShared>() == null ?
                     (als.RightTarget.GetComponent<PlayerMovement>() != null ? als.RightTarget.GetComponent<PlayerMovement>().CurrentSpeed > 200 ? als.RightTarget.GetComponent<PlayerMovement>().RotateDirection : 0
                     : als.RightTarget.GetComponent<FighterMovement>() != null ? als.RightTarget.GetComponent<FighterMovement>().CurrentSpeed > 200 ? als.RightTarget.GetComponent<FighterMovement>().RotateDirection : 0
                     : als.RightTarget.GetComponent<WSMovement>() != null ? als.RightTarget.GetComponent<WSMovement>().CurrentSpeed > 200 ? als.RightTarget.GetComponent<WSMovement>().RotateDirection : 0 : fm.RotateDirection) : fm.RotateDirection)
                     * actions.ContinuousActions[0]
-                    * (als.RightTarget != null && als.RightTarget.GetComponent<SpaceStationShared>() == null ?
-                    (als.RightTarget.GetComponent<PlayerMovement>() != null ? als.RightTarget.GetComponent<PlayerMovement>().CurrentSpeed
-                    : als.RightTarget.GetComponent<FighterMovement>() != null ? als.RightTarget.GetComponent<FighterMovement>().CurrentSpeed
-                    : als.RightTarget.GetComponent<WSMovement>() != null ? als.RightTarget.GetComponent<WSMovement>().CurrentSpeed : 400) : 400) / 350f
+                    * speedScale / 350f
                     * 15);
                 als.DelayTimer = als.DelayBetween2Weap;
             }

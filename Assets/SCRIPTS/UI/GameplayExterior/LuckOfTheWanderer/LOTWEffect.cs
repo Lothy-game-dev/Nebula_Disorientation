@@ -119,7 +119,11 @@ public class LOTWEffect : MonoBehaviour
         }
         else if (str.Contains("PCD-"))
         {
-            LOTWPowerCDScale += float.Parse(str.Replace("PCD-", "")) * stack / 100f;
+            LOTWPowerCDScale -= float.Parse(str.Replace("PCD-", "")) * stack / 100f;
+            if (LOTWPowerCDScale < 0f)
+            {
+                LOTWPowerCDScale = 0f;
+            }
         }
         else if (str.Contains("R-"))
         {

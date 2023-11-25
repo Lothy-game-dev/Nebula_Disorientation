@@ -33,6 +33,7 @@ public class FuelCellBar : MonoBehaviour
     {
         // Initialize variables
         ad = FindObjectOfType<AccessDatabase>();
+        transform.GetChild(0).GetChild(0).GetComponent<Slider>().maxValue = 10;
         if (PlayerPrefs.GetInt("PlayerID")==0)
         {
             PlayerID = FindObjectOfType<UECMainMenuController>().PlayerId;
@@ -101,17 +102,6 @@ public class FuelCellBar : MonoBehaviour
                         // Add Fuel cell
                         ad.AddFuelCell(PlayerID);
                     }
-                    Data = ad.GetPlayerInformationById(PlayerID);
-                    transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
-                    if ((int)Data["FuelCell"] == 10)
-                    {
-                        if (transform.childCount > 2)
-                        transform.GetChild(2).gameObject.SetActive(false);
-                    } else
-                    {
-                        if (transform.childCount > 2)
-                            transform.GetChild(2).gameObject.SetActive(true);
-                    }
                     int hour = (int)Result / 3600;
                     int minute = (int)(Result - hour*3600) / 60;
                     int second = (int)(Result - hour * 3600 - minute * 60);
@@ -125,6 +115,18 @@ public class FuelCellBar : MonoBehaviour
                      "Fuel Core. Players need Fuel Core to traverse their journey back and forth.<br>" + RegenFuelTime
                      : "Fuel Core. Players need Fuel Core to traverse their journey back and forth.");
             }
+        }
+        Data = ad.GetPlayerInformationById(PlayerID);
+        transform.GetChild(0).GetChild(0).GetComponent<Slider>().value = (int)Data["FuelCell"];
+        if ((int)Data["FuelCell"] == 10)
+        {
+            if (transform.childCount > 2)
+                transform.GetChild(2).gameObject.SetActive(false);
+        }
+        else
+        {
+            if (transform.childCount > 2)
+                transform.GetChild(2).gameObject.SetActive(true);
         }
     }
     #endregion
