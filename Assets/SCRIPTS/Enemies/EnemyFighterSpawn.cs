@@ -13,6 +13,7 @@ public class EnemyFighterSpawn : MonoBehaviour
     public GameObject EnemyTemplate;
     public GameObject SpawnHole;
     public AudioClip SpawnSoundEffect;
+    public GameplayInteriorController controller;
     #endregion
     #region NormalVariables
     // will do delay later
@@ -143,6 +144,7 @@ public class EnemyFighterSpawn : MonoBehaviour
         SpawnEffect.SetActive(true);
         Destroy(SpawnEffect, 1.5f);
         AudioSource aus = Enemy.AddComponent<AudioSource>();
+        aus.volume = controller.MasterVolumeScale / 100f * controller.SFXVolumeScale;
         aus.clip = SpawnSoundEffect;
         aus.spatialBlend = 1;
         aus.rolloffMode = AudioRolloffMode.Linear;
