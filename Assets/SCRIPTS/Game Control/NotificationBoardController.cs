@@ -204,14 +204,14 @@ public class NotificationBoardController : MonoBehaviour
     public void CreateMissionCompletedNotiBoard(string text, float autoCloseTimer)
     {
         Vector2 Position = Camera.main.transform.position;
-        int pos = 0;
+        float pos = 0;
         if (FindAnyObjectByType<UECMainMenuController>() != null)
         {
             pos = 4;
         }
         else
         {
-            pos = 250;
+            pos = 250 * Camera.main.transform.localScale.x;
         }
         GameObject notiBoard = Instantiate(MissionCompeletedBoard, new Vector3(Position.x, Position.y - pos, MissionCompeletedBoard.transform.position.z), Quaternion.identity);
         notiBoard.transform.GetChild(0).localScale = new Vector2(notiBoard.transform.GetChild(0).localScale.x / 1.5f, notiBoard.transform.GetChild(0).localScale.y);
@@ -220,6 +220,7 @@ public class NotificationBoardController : MonoBehaviour
         if (FindAnyObjectByType<UECMainMenuController>() == null)
         {
             notiBoard.transform.SetParent(Camera.main.transform);
+            notiBoard.transform.localScale = notiBoard.transform.localScale * Camera.main.transform.localScale.x;
         }
         StartCoroutine(NotiBoardAnim(autoCloseTimer, notiBoard.transform.GetChild(0).gameObject));
     }
