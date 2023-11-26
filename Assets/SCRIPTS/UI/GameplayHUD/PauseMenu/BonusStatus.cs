@@ -98,7 +98,7 @@ public class BonusStatus : MonoBehaviour
         {
             final += "-";
         }
-        float scaleToPercent = (scale - 1) * 100;
+        float scaleToPercent = Mathf.Abs(scale - 1) * 100;
         final += (Mathf.Round(scaleToPercent)).ToString() + "%";
         return final;
     }
