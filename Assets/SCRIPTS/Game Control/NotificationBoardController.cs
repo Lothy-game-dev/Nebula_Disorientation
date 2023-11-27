@@ -174,6 +174,7 @@ public class NotificationBoardController : MonoBehaviour
             {
                 go.GetComponent<UECDailyMissions>().DMInfo = infoBoard;
             }
+            Destroy(infoBoard, 10f);
         }
     }
 

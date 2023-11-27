@@ -105,7 +105,7 @@ public class FuelCellBar : MonoBehaviour
                     int hour = (int)Result / 3600;
                     int minute = (int)(Result - hour*3600) / 60;
                     int second = (int)(Result - hour * 3600 - minute * 60);
-                    RegenFuelTime = "Restore 1 in<br>" + "0" + hour + ":" + minute + ":" + second;
+                    RegenFuelTime = "Restore 1 in<br>" + "0" + hour + ":" + (minute >= 10 ? minute : "0" + minute) + ":" + second;
                 }
             }
             if (FuelCellInfo != null)
