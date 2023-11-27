@@ -79,6 +79,7 @@ public class UECSessionButton : MonoBehaviour
         } else if (Type=="SaveQuit")
         {
             // Quit To MainMenu
+            FindAnyObjectByType<StatisticController>().UpdateSessionPlaytime();
             PlayerPrefs.SetFloat("CreateLoading", 1f);
             SceneManager.UnloadSceneAsync("GameplayExterior");
             SceneManager.LoadSceneAsync("MainMenu");
@@ -92,8 +93,9 @@ public class UECSessionButton : MonoBehaviour
 
     public void Continue()
     {
+        FindAnyObjectByType<StatisticController>().UpdateSessionPlaytime();
         Controller.GenerateBlackFadeClose(0.5f, 3f);
-        StartCoroutine(MoveToLOTW());
+        StartCoroutine(MoveToLOTW());       
     }
 
     public void Retreat()
@@ -101,6 +103,7 @@ public class UECSessionButton : MonoBehaviour
         Dictionary<string, object> Data = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
         if ((int)Data["SessionFuelCore"] >= 1)
         {
+            FindAnyObjectByType<StatisticController>().UpdateSessionPlaytime();
             FindObjectOfType<AccessDatabase>().UpdateSessionFuelCore(PlayerPrefs.GetInt("PlayerID"), false);
             FindObjectOfType<GameplayExteriorController>().GenerateLoadingScene(2f);
             FindObjectOfType<GameplayExteriorController>().GenerateBlackFadeClose(1f, 4f);
@@ -121,6 +124,7 @@ public class UECSessionButton : MonoBehaviour
         Controller.GenerateLoadingScene(2f);
         Controller.ChangeToScene(LOTW);
         gameObject.SetActive(false);
+        Scene.SetActive(false);
     }
     
     private IEnumerator MoveToSessionSum()

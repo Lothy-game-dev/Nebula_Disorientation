@@ -28,6 +28,8 @@ public class UECController : UECMenuShared
     private AccessDatabase ad;
     private int currentId;
     private UECMainMenuController controller;
+    private float Timer;
+    private bool isCount;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -45,12 +47,22 @@ public class UECController : UECMenuShared
         controller = FindAnyObjectByType<UECMainMenuController>();
         CheckDailyMission();
         Tutorial.SetActive(true);
+        Timer = 1f;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call function and timer only if possible
+        if (controller.isStart)
+        {
+            Timer -= Time.deltaTime;
+            if (Timer <= 0)
+            {
+                isCount = true;
+                Timer = 1f;
+            }
+        }
         CheckDailyMission();
     }
     #endregion
@@ -157,7 +169,7 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color="+ missionColor + "> Eliminate " + listDM[1][i] + " enemies.";
+                            mission = "<color="+ missionColor + "> Eliminate " + listDM[1][i] + " enemies.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "SS":
                             if (listDM[3][i] == "N" )
@@ -181,14 +193,14 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " timeless shard.";
+                            mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " timeless shard.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "C":
                             if (listDM[3][i] == "Y")
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Space Zones.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Space Zones.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "SC":
                             if (listDM[3][i] == "N")
@@ -212,16 +224,17 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " cash.";
+                            mission = "<color=" + missionColor + "> Spend " + listDM[1][i] + " cash.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "P":
                             if (listDM[3][i] == "N")
                             {
-                                if (int.Parse(listDM[2][i]) < int.Parse(listDM[1][i]))
+                                if (int.Parse(listDM[2][i]) / 60 < int.Parse(listDM[1][i]))
                                 {
-                                    if (controller.isCount)
+                                    if (isCount)
                                     {
                                         ad.UpdateDailyMissionProgess(currentId, listDM[0][i], 1);
+                                        isCount = false;
                                     }
                                 }
                                 else
@@ -235,28 +248,28 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Play for at least " + listDM[1][i] + " minutes.";
+                            mission = "<color=" + missionColor + "> Play for at least " + listDM[1][i] + " minutes.\n(" + int.Parse(listDM[2][i]) / 60 + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "CD":
                             if (listDM[3][i] == "Y")
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Defend/Escort Space Zones.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Defend/Escort Space Zones.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "CA":
                             if (listDM[3][i] == "Y")
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Assault Space Zones.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Assault Space Zones.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "CAA":
                             if (listDM[3][i] == "Y")
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Onslaught Space Zone.";
+                            mission = "<color=" + missionColor + "> Complete " + listDM[1][i] + " Onslaught Space Zone.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         case "B":
                             if (listDM[3][i] == "N")
@@ -279,18 +292,16 @@ public class UECController : UECMenuShared
                             {
                                 missionColor = "#008000";
                             }
-                            mission = "<color=" + missionColor + "> Purchase " + listDM[1][i] + " items.";
+                            mission = "<color=" + missionColor + "> Purchase " + listDM[1][i] + " items.\n(" + listDM[2][i] + "/" + listDM[1][i] + ")</color>";
                             break;
                         default: break;
                     }
-                    mission += "\n(" + listDM[2][i] + "/" + listDM[1][i] + ") </color>";
                     Missions.Add(mission);
                 }
             }           
             DailyMissionBar.GetComponent<UECDailyMissions>().missions = Missions;
             DailyMissionBar.GetComponent<UECDailyMissions>().MissionUndone = (listDMUndone == null ? 0 : listDMUndone.Count);
             controller.BuyAmount = 0;
-            controller.isCount = false;
         }
     }
     #endregion
