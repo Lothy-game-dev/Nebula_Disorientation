@@ -261,6 +261,8 @@ public class SpaceZoneMission : MonoBehaviour
         stat.StageName = MissionStageName;
         Timer.DoneSetupTimer = false;
         stat.UpdateStatistic();
+        stat.UpdateSessionPlaytime();
+        stat.isStart = true;
         TextGO.CreateText("Mission Accomplished!", Color.green);
         
     }

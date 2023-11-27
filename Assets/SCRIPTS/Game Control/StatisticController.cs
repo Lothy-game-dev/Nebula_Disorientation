@@ -15,7 +15,6 @@ public class StatisticController : MonoBehaviour
     // Variables that will be initialize in Unity Design, will not initialize these variables in Start function
     // Must be public
     // All importants number related to how a game object behave will be declared in this part
-    public GameObject MissionCompeletedBoard;
     public GameObject Fighter;
     public TextMeshPro Shard;
     public TextMeshPro Cash;
@@ -53,9 +52,7 @@ public class StatisticController : MonoBehaviour
     public int PlayerID;
     public int SessionID;
     public string StageName;
-    private float InitScale;
-    private int Playedtime;
-    private bool isCount;
+    public int StageTime;
     public bool isStart;
     public DateTime StartTime;
     private string Cons;
@@ -63,7 +60,7 @@ public class StatisticController : MonoBehaviour
     public int CurrentShardReward;
     public int CurrentCashReward;
     private TimeSpan currentTimePlayed;
-    private int SessionTotalMinutes;
+    public string Timeplayed;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -86,7 +83,6 @@ public class StatisticController : MonoBehaviour
         Warship = int.Parse(CurrentAchievement["Warship"]);
         MaxSZReach = int.Parse(PlayerAchievement["MaxSZReach"].ToString());
         MissionCompleted = int.Parse(PlayerAchievement["TotalMission"].ToString());
-        InitScale = MissionCompeletedBoard.transform.GetChild(0).localScale.x;
         TotalEnemyDefeated = 0;
         // Set data to fuel cell bar
         Consumable = new Dictionary<string, int>();
@@ -114,7 +110,7 @@ public class StatisticController : MonoBehaviour
         MaxHP = Fighter.GetComponent<PlayerFighter>().MaxHP;
         CurrentShard = Shard.text;
         CurrentCash = Cash.text;
-        PlayedTime = currentTimePlayed.ToString(@"mm\:ss");     
+        PlayedTime = FindAnyObjectByType<SpaceZoneTimer>().Countdown ? "0" + StageTime/60 + ":00" : FindAnyObjectByType<SpaceZoneTimer>().TimeText.text;
         CurrentSZNo = FindAnyObjectByType<SpaceZoneGenerator>().SpaceZoneNo;
         string EnemyDefeated = "EI-" + EnemyTierI + "|EII-" + EnemyTierII + "|EIII-" + EnemyTierIII + "|WS-" + Warship;
         SessionID = (int)SessionInformation["SessionID"];
@@ -186,7 +182,8 @@ public class StatisticController : MonoBehaviour
     #region Check daily mission
     // Group all function that serve the same algorithm
     public void CheckDailyMission()
-    {       
+    {
+        SessionInformation = ad.GetSessionInfoByPlayerId(PlayerID);
         List<List<string>> listDM = ad.GetListDailyMissionUndone(PlayerID);
         int missionDone = 0;
         if (listDM != null)
@@ -200,25 +197,6 @@ public class StatisticController : MonoBehaviour
                         mission = "Eliminate  " + listDM[i][2] + " enemy(s).";
                         ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], TotalEnemyDefeated);
                         if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + TotalEnemyDefeated)
-                        {
-                            ad.DailyMissionDone(PlayerID, listDM[i][1]);
-                            missionDone++;
-                            FindAnyObjectByType<NotificationBoardController>().CreateMissionDoneNoti(mission, 1f, missionDone);
-                        }
-                        break;
-                    case "P":
-                        mission = "Play for at least " + listDM[i][2] + " minute(s).";
-                        if (SessionInformation != null && (string)SessionInformation["TotalPlayedTime"] != "")
-                        {
-                            string timeString = (string)SessionInformation["TotalPlayedTime"];
-                            string[] timeParts = timeString.Split(':');
-                            int hours = int.Parse(timeParts[0]);
-                            int minutes = int.Parse(timeParts[1]);
-                            int seconds = int.Parse(timeParts[2]);
-                            SessionTotalMinutes = hours * 60 + minutes + seconds / 60;
-                        }
-                        ad.UpdateDailyMissionProgess(PlayerID, listDM[i][1], SessionTotalMinutes);                                                        
-                        if (int.Parse(listDM[i][2]) <= int.Parse(listDM[i][0]) + SessionTotalMinutes)                       
                         {
                             ad.DailyMissionDone(PlayerID, listDM[i][1]);
                             missionDone++;
@@ -295,19 +273,13 @@ public class StatisticController : MonoBehaviour
         }       
         KillEnemy = false;
         KillBossEnemy = false;
-        isCount = false;
     }
 
     public void SetTimer(DateTime startTime)
     {
-        int oldTime = Playedtime;
         DateTime myDateTime = DateTime.Now;
-        currentTimePlayed = myDateTime - startTime;      
-        Playedtime = (int)currentTimePlayed.TotalMinutes;
-        if (oldTime < Playedtime)
-        {
-            isCount = true;
-        }
+        currentTimePlayed = myDateTime - startTime;
+        Debug.Log(currentTimePlayed);
     }
     #endregion
     #region Price Collected

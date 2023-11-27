@@ -61,6 +61,8 @@ public class UECSessionScene : MonoBehaviour
         SaveText.AlreadySetCountDown = true;
         StopMovingIcon = false;
         Tutorial.SetActive(true);
+        FindAnyObjectByType<StatisticController>().StartTime = System.DateTime.Now;
+        FindAnyObjectByType<StatisticController>().isStart = true;
     }
 
     // Update is called once per frame

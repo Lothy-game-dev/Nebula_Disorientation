@@ -59,6 +59,7 @@ public class SpaceZoneTimer : MonoBehaviour
     public void SetTimer(int timeInSecond)
     {
         Timer = timeInSecond;
+        FindAnyObjectByType<StatisticController>().StageTime = timeInSecond;
         if (Timer>0)
         {
             Countdown = true;
