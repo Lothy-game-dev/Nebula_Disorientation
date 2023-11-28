@@ -130,13 +130,13 @@ public class RocketBurstBullet : MonoBehaviour
     #endregion
     #region Homing to Target
     public void MoveToTarget()
-    {
-        
+    {       
         MovingVector = gameObject.transform.GetChild(0).position - gameObject.transform.GetChild(1).position;
         rb.velocity = MovingVector / MovingVector.magnitude * Velocity;
         ToEnemy = target.transform.position - transform.position;
         float angle = Vector3.Angle(ToEnemy, MovingVector);
         float curScale = 1;
+        // The closer the angle is to 90, the slower the rocket rotates.
         if (angle > 75 && angle < 105)
         {
             curScale = Velocity/500f * (1.1f + 0.2f * Mathf.Abs(angle-90));
@@ -151,12 +151,20 @@ public class RocketBurstBullet : MonoBehaviour
         Vector2 MovingVector = gameObject.transform.GetChild(0).position - gameObject.transform.GetChild(1).position;
         float angle = Vector2.Angle(HeadToTarget, MovingVector);
         float DistanceNew = Mathf.Cos(angle * Mathf.Deg2Rad) * HeadToTarget.magnitude;
-        Vector2 TempPos = new Vector2(gameObject.transform.GetChild(1).position.x, gameObject.transform.GetChild(1).position.y) + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
-        Vector2 CheckPos = new Vector2(target.transform.position.x, target.transform.position.y) + (TempPos - new Vector2(target.transform.position.x, target.transform.position.y)) * 2;
+
+        Vector2 TempPos = new Vector2(gameObject.transform.GetChild(1).position.x, gameObject.transform.GetChild(1).position.y)
+            + MovingVector / MovingVector.magnitude * (MovingVector.magnitude + DistanceNew);
+        // Get target's symmetrical position across the rocket.
+        Vector2 CheckPos = new Vector2(target.transform.position.x, target.transform.position.y) 
+            + (TempPos - new Vector2(target.transform.position.x, target.transform.position.y)) * 2;
+        
+        // When it is vertical
         if (gameObject.transform.GetChild(0).position.x == gameObject.transform.GetChild(1).position.x)
         {
+            // When it is pointing up
             if (gameObject.transform.GetChild(0).position.y > gameObject.transform.GetChild(1).position.y)
             {
+                // When the target is on the left side of the rocket
                 if (target.transform.position.x < gameObject.transform.GetChild(0).position.x)
                 {
                     DirMov = -1;
@@ -183,10 +191,13 @@ public class RocketBurstBullet : MonoBehaviour
                 }
             }
         }
+        // When it is horizontal
         else if (gameObject.transform.GetChild(0).position.y == gameObject.transform.GetChild(1).position.y)
         {
+            // When it is pointing to the right
             if (gameObject.transform.GetChild(0).position.x > gameObject.transform.GetChild(1).position.x)
             {
+                // When the target is above the rocket
                 if (target.transform.position.y > gameObject.transform.GetChild(0).position.y)
                 {
                     DirMov -= 1;
