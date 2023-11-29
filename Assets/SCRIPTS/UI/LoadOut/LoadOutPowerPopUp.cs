@@ -129,10 +129,6 @@ public class LoadOutPowerPopUp : MonoBehaviour
                 i++;
             }
         }
-            
-        // Set content size to 0
-        Content.GetComponent<RectTransform>().sizeDelta
-            = new Vector2(0,0);
         StartCoroutine(CloseAnimation());
     }
 

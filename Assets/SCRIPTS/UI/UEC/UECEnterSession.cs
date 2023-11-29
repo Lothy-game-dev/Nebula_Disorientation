@@ -60,7 +60,7 @@ public class UECEnterSession : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         FindObjectOfType<UECMainMenuController>().TeleportToScene(UECScene, LoadoutScene);
-        FindObjectOfType<MainMenuCameraController>().GenerateLoadingSceneAtPos(LoadoutScene.transform.position, 1f);
+        FindObjectOfType<MainMenuCameraController>().GenerateBlackFadeWaitAtPos(LoadoutScene.transform.position, 1f, 3f);
     }
 
     private void OnMouseExit()
