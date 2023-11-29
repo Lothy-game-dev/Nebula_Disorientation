@@ -410,11 +410,11 @@ public class PlayerMovement : MonoBehaviour
         {
             check++;
             autoPilot = true;
-            if (CurrentRotateAngle > 0)
+            if (CurrentRotateAngle > 0 && CurrentRotateAngle < 90)
             {
                 AorD = false;
             }
-            else if (CurrentRotateAngle < 360)
+            else if (CurrentRotateAngle < 360 && CurrentRotateAngle > 270)
             {
                 AorD = true;
             }
@@ -452,7 +452,7 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.x >= LimitRightX)
         {
             check++;
-            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitRightX)
+            if (transform.position.x - (180 / (120 * RotateSpeed)) * CurrentSpeed >= LimitRightX)
             {
                 if (CurrentRotateAngle > 260 && CurrentRotateAngle < 280)
                 RotateDirection = 0;
@@ -467,7 +467,7 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.x <= LimitLeftX)
         {
             check++; 
-            if (transform.position.x - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitLeftX)
+            if (transform.position.x - (180 / (120 * RotateSpeed)) * CurrentSpeed <= LimitLeftX)
             {
                 if (CurrentRotateAngle > 80 && CurrentRotateAngle < 100)
                 RotateDirection = 0;
@@ -482,7 +482,7 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.y >= LimitTopY)
         {
             check++;
-            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed >= LimitTopY )
+            if (transform.position.y - (180 / (120 * RotateSpeed)) * CurrentSpeed >= LimitTopY )
             {
                 if (CurrentRotateAngle > 170 && CurrentRotateAngle < 190)
                 RotateDirection = 0;
@@ -497,7 +497,7 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.y <= LimitBottomY)
         {
             check++;
-            if (transform.position.y - (180 / (120 * RotateSpeed)) * MovingSpeed <= LimitBottomY)
+            if (transform.position.y - (180 / (120 * RotateSpeed)) * CurrentSpeed <= LimitBottomY)
             {
                 if ((CurrentRotateAngle > 350 || CurrentRotateAngle < 10))
                 RotateDirection = 0;
