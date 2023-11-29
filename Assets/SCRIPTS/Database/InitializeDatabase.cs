@@ -432,24 +432,12 @@ public class InitializeDatabase : MonoBehaviour
             "(9, 'B', 2);";
         // Tutorial
         string Tutorial = "INSERT INTO Tutorial VALUES "+
-            "(1, 'Preparation', 'Basic Playthrough', '<b><u>Preparation</b></u><br><br>   -  Visit the Factory to purchase new Fighters." +
-            "<br>   -  Go to the Arsenal to permanently unlock upgrades and powers." +
-            "<br>   -  Look for the Space Shop to purchase consumables.')," +
-            "(2, 'Loadout', 'Basic Playthrough', '<b><u>Modify the Fighter s loadout before setting off</b></u><br><br>   -  Select 1 Fighter s form among the purchased ones from the Factory for this journey." +
-            "<br>   -  Equip Weapons, Special Powers, and Consumables acquired from Arsenal & Space Shop for this journey.')," +
-            "(3, 'Session I', 'Basic Playthrough', '<b><u>During a session: LOOPHOLE</b></u><br><br>   -  i.Luck of The Wanderer phase." +
-            "<br>   -  ii.Complete Stages (Space Zone) by handling the main mission in that Zone." +
-            "<br>   -  iii.Teleport back to UEC?" +
-            "<br>      - YES: Players can teleport back to the UEC (using 1 Fuel Core) for maintenance and upgrades. Afterward, they can retreat or continue the journey(d.). " +
-            "<br>      - NO: Forward to d. " +
-            "<br>   -  iv.Go through Luck of The Wanderer again, and onward to the next Stages (Space Zone).')," +
-            "(4, 'Session II', 'Basic Playthrough', '<b><u>End of a session</b></u><br><br>   -  By using a Fuel Core to retreat to the United Earth Capital (UEC) and decide to end the session." +
-            "<br>   -  By getting eliminated during the journey.')," +
-            "(5, 'Economy I', 'How Economy work?', '<b><u>UEC Economy (Cash, Shard, Fuel)</b></u><br><br>   -  All the currencies here can be spent on everything that doesnt relate to a session." +
-            "<br>   -  You cant use UEC Economy Cash and Shard inside a session. Start a session with 0 cash.')," +
-            "(6, 'Economy II', 'How Economy work?', '<b><u>Journey Economy (Cash, Fuel)</b></u><br><br>   -  All the currencies here are the only means that can be used for upgrading and buying stuff during a journey. Half of the leftover Cash and all the collected Timeless Shard will be added to the UEC Economy after successfully retreating to the UEC." +
-            "<br>   -  (The other half of the collected Cash is given to the UEC Government as tax.)" +
-            "<br>   -  Getting destroyed during a journey will only grant you 1/2 of the collected Timeless Shard and no Cash to your UEC Economy.');";
+            "(1, 'Preparation', 'Basic Playthrough', '<b><u>• Preparation</b></u><br><br>   -  Visit the <color=#3b8dff>Factory</color> to purchase new <color=#3b8dff>Fighters</color>.<br>   -  Go to the <color=#3b8dff>Arsenal</color> to permanently unlock upgrades and powers.<br>   -  Look for the <color=#3b8dff>Space Shop</color> to purchase consumables.')," +
+            "(2, 'Loadout', 'Basic Playthrough', '<b>• Modify the <color=#3b8dff>Fighter</color> loadout before setting off</b><br><br>   -  Select 1 Fighter s form among the purchased ones from the <color=#3b8dff>Factory</color> for this journey.<br>   -  Equip Weapons, Special Powers, and Consumables acquired from <color=#3b8dff>Arsenal</color> & <color=#3b8dff>Space Shop</color> for this journey.')," +
+            "(3, 'Session I', 'Basic Playthrough', '<b>• During a session: LOOPHOLE</b><br><br>   -  i. <color=#3b8dff>Luck of The Wanderer</color> phase.<br>   -  ii. Complete <color=#3b8dff>Stages (Space Zone)</color> by handling the main mission in that Zone.<br>   -  iii. <b>Teleport back to UEC</b>?<br>      - YES: Players can teleport back to the UEC (using 1 <sprite=2> <color=#3b8dff>Fuel Core</color>) for maintenance and upgrades. Afterward, they can retreat or continue the journey(d.). <br>      - NO: Forward to d. <br>   -  iv. Go through <color=#3b8dff>Luck of The Wanderer</color> again, and onward to the next <color=#3b8dff>Stages (Space Zone)</color>.')," +
+            "(4, 'Session II', 'Basic Playthrough', '<b>• End of a session</b><br><br>   -  By using a <sprite=2> <color=#3b8dff>Fuel Core</color> to retreat to the <color=#3b8dff>United Earth Capital (UEC)</color> and decide to end the session with 1 more Fuel Core.<br>   -  By getting eliminated during the journey.')," +
+            "(5, 'Economy I', 'How Economy work?', '<b>• UEC Economy (Cash, Shard, Fuel)</b><br><br>   -  All the currencies here can be spent on everything that <b>doesn’t relate to a session</b>.<br>   -  You can’t use UEC Economy Cash and Shard inside a session. Start a session with 0 cash.')," +
+            "(6, 'Economy II', 'How Economy work?', '<b>• Journey Economy (Cash, Fuel)</b><br><br>   -  All the currencies here are the <b>only means</b> that can be used for upgrading and buying stuff during a journey. <b>All of the leftover</b> <sprite=3> <color=#3b8dff>Cash</color> and <b>all the collected</b>       <sprite=0> <color=#3b8dff>Timeless Shard</color> will be added to the UEC Economy after successfully retreating to the <color=#3b8dff>UEC</color>.<br>   -  Getting destroyed during a journey will only grant you <b>1/2 of the collected</b>             <sprite=0> <color=#3b8dff>Timeless Shard</color> and <b>1/2 of the leftover</b>      <sprite=3> <color=#3b8dff>Cash</color> to your UEC Economy.');";
         //Damage Element
         string DElement = "INSERT INTO DamageElement VALUES" +
             "(1, 'Kinetic', 'Normal physical damage.')," +

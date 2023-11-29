@@ -176,6 +176,7 @@ public class RankController : MonoBehaviour
         }
 
         }
+        // Update rank 
         if (RankUpList.Count > 0 && int.Parse(ListData["RankId"].ToString()) < RankUpList[RankUpList.Count - 1])
         {
             RankStat = ad.GetRankById(RankUpList[RankUpList.Count - 1], int.Parse(ListData["SupremeWarriorNo"].ToString()) + 1);

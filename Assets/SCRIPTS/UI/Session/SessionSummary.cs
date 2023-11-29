@@ -46,6 +46,7 @@ public class SessionSummary : MonoBehaviour
     public int CashAmount;
     public bool ShardCollected;
     public bool CashCollected;
+    private int SessionTotalSeconds;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -57,6 +58,7 @@ public class SessionSummary : MonoBehaviour
         SetData();
         GenerateBlackFadeOpen(transform.position,3f, 1f);
         Tutorial.SetActive(true);
+        CheckDailyMission();
     }
 
     // Update is called once per frame
@@ -179,6 +181,34 @@ public class SessionSummary : MonoBehaviour
         GetComponent<AudioSource>().clip = isFailed ? Failed : Retreat;
         GetComponent<AudioSource>().Play();
         Destroy(Fade);
+    }
+    #endregion
+    #region Check daily mission
+    public void CheckDailyMission()
+    {
+        List<List<string>> listDM = ad.GetListDailyMissionUndone(PlayerPrefs.GetInt("PlayerID"));
+        if (listDM != null)
+        {
+            for (int i = 0; i < listDM.Count; i++)
+            {
+                switch (listDM[i][1])
+                {
+                    case "P":
+                        if (Data != null && Data["TotalPlayedTime"].ToString() != "")
+                        {
+                            string timeString = (string)Data["TotalPlayedTime"];
+                            string[] timeParts = timeString.Split(':');
+                            int hours = int.Parse(timeParts[0]);
+                            int minutes = int.Parse(timeParts[1]);
+                            int seconds = int.Parse(timeParts[2]);
+                            SessionTotalSeconds = hours * 3600 + minutes * 60 + seconds;
+                        }                      
+                        ad.UpdateDailyMissionProgess(PlayerPrefs.GetInt("PlayerID"), listDM[i][1], SessionTotalSeconds);                       
+                        break;
+                    default: break;
+                }
+            }
+        }
     }
     #endregion
 }

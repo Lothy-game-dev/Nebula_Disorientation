@@ -50,6 +50,7 @@ public class SpaceZoneSummaryButton : MonoBehaviour
             Dictionary<string, object> ListData = FindObjectOfType<AccessDatabase>().GetSessionInfoByPlayerId(PlayerPrefs.GetInt("PlayerID"));
             if ((int)ListData["SessionFuelCore"] >= 1)
             {
+                stat.UpdateSessionPlaytime();
                 /*FindObjectOfType<GameplayInteriorController>().GenerateBlackFadeClose(1f);
                 StartCoroutine(MoveToUEC());*/
                 FindObjectOfType<AccessDatabase>().UpdateSessionFuelCore(PlayerPrefs.GetInt("PlayerID"), false);
