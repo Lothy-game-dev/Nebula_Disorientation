@@ -208,18 +208,6 @@ public class LoadOutPowerPopUp : MonoBehaviour
     private IEnumerator GenerateIcons()
     {
         Vector2 pos = FirstGenPos.transform.position;
-        maximumWidth = BoxWidth * (ListPowerIcon.Count) - ScrollRect.GetComponent<RectTransform>().sizeDelta.x;
-        if (maximumWidth>0f)
-        {
-            Content.GetComponent<RectTransform>().sizeDelta
-                = new Vector2(maximumWidth,
-                Content.GetComponent<RectTransform>().sizeDelta.y);
-        } else
-        {
-            Content.GetComponent<RectTransform>().sizeDelta
-                = new Vector2(Content.GetComponent<RectTransform>().sizeDelta.x,
-                Content.GetComponent<RectTransform>().sizeDelta.y);
-        }
         for (int i=0;i<ListPowerIcon.Count;i++)
         {
             GameObject go = Instantiate(Template,
@@ -238,7 +226,6 @@ public class LoadOutPowerPopUp : MonoBehaviour
             }
             go.SetActive(true);
             PowerIconAfterGenerate.Add(go);
-            pos = new Vector2(pos.x + BoxWidth, pos.y);
             yield return new WaitForSeconds(0.1f);
         }
         ScrollRect.GetComponent<ScrollRect>().horizontal = true;
