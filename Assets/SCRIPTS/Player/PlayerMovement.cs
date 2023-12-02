@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Movable = true;
         }
-        // Rotate Left Right
+        // Rotate Left Right if not in auto-pilot
         if (!autoPilot) DetectADButton();
         // Dash using Spacebar
         // Timer for Dashing

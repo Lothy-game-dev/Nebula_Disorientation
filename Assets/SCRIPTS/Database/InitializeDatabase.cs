@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
+using SqlCipher4Unity3D;
 
 public class InitializeDatabase : MonoBehaviour
 {
@@ -20,9 +21,11 @@ public class InitializeDatabase : MonoBehaviour
             CreateDataDatabase();
         } else if ("Data Error".Equals(check))
         {
+            DropDataDatabase();
             CreateDataDatabase();
         } else if ("Not Initialize Yet".Equals(check))
         {
+            DropDataDatabase();
             CreateDataDatabase();
         }
         string check2 = CheckInitializeSave();
@@ -33,10 +36,12 @@ public class InitializeDatabase : MonoBehaviour
         }
         else if ("Data Error".Equals(check2))
         {
+            DropSaveDatabase();
             CreateSaveDatabase();
         }
         else if ("Not Initialize Yet".Equals(check2))
         {
+            DropSaveDatabase();
             CreateSaveDatabase();
         }
     }
@@ -911,27 +916,11 @@ public class InitializeDatabase : MonoBehaviour
         }
         dbConnection.Close();
     }
-    /*// Drop Database
-    public void DropDatabase()
+    // Drop Data Database
+    public void DropDataDatabase()
     {
         // Drop Tables
         string DropTable =
-            // PlayerArsenalWeapons
-            "DROP TABLE IF EXISTS PlayerArsenalWeapons;" +
-            // PlayerArsenalPower
-            "DROP TABLE IF EXISTS PlayerArsenalPower;" +
-            // PlayerSpaceShopItem
-            "DROP TABLE IF EXISTS PlayerSpaceShopItem;" +
-            // PlayerDailyMission
-            "DROP TABLE IF EXISTS PlayerDailyMission;" +
-            *//*// SessionArsenalPower
-            "DROP TABLE IF EXISTS SessionArsenalPower;" +
-            // SessionArsenalWeapons
-            "DROP TABLE IF EXISTS SessionArsenalWeapons;" +*//*
-            // SessionLOTWCards
-            "DROP TABLE IF EXISTS SessionLOTWCards;" +
-            // PlayerModelOwnership
-            "DROP TABLE IF EXISTS PlayerModelOwnership;" +
             // ArsenalPower
             "DROP TABLE IF EXISTS ArsenalPower;" +
             // ArsenalWeapon
@@ -940,24 +929,48 @@ public class InitializeDatabase : MonoBehaviour
             "DROP TABLE IF EXISTS DailyMissions;" +
             // Enemies
             "DROP TABLE IF EXISTS Enemies;" +
+            // Allies
+            "DROP TABLE IF EXISTS Allies;" +
             // FactoryModel
             "DROP TABLE IF EXISTS FactoryModel;" +
             // LuckOfTheWandererCards
             "DROP TABLE IF EXISTS LuckOfTheWandererCards;" +
-            // PlayerProfile
-            "DROP TABLE IF EXISTS PlayerProfile;" +
             // RankSystem
             "DROP TABLE IF EXISTS RankSystem;" +
-            // Session
-            "DROP TABLE IF EXISTS Session;" +
             // SpaceShop
             "DROP TABLE IF EXISTS SpaceShop;" +
-            // Stages
-            "DROP TABLE IF EXISTS Stages;" +
             // Table to check if database already Init
-            "DROP TABLE IF EXISTS DatabaseInitialize;";
+            "DROP TABLE IF EXISTS DatabaseInitialize;" +
+            // Table for Warship
+            "DROP TABLE IF EXISTS Warship;" +
+            // Table for SpaceStation
+            "DROP TABLE IF EXISTS SpaceStation;" +
+            // Table for Tutorial
+            "DROP TABLE IF EXISTS Tutorial;" +
+            // Table for DamageElement
+            "DROP TABLE IF EXISTS DamageElement;" +
+            // Table for Attribute
+            "DROP TABLE IF EXISTS Attribute;" +
+            // Table for FighterGroup
+            "DROP TABLE IF EXISTS FighterGroup;" +
+            // Table for SpaceZoneVariants
+            "DROP TABLE IF EXISTS SpaceZoneVariants;" +
+            // Table for SpaceZoneTemplate
+            "DROP TABLE IF EXISTS SpaceZoneTemplate;" +
+            // Table for SpaceZonePosition	
+            "DROP TABLE IF EXISTS SpaceZonePosition;" +
+            // Table for HazardEnvironment
+            "DROP TABLE IF EXISTS HazardEnvironment;" +
+            // Table for WarshipMilestone
+            "DROP TABLE IF EXISTS WarshipMilestone;" +
+            // Table for SpaceZoneMission
+            "DROP TABLE IF EXISTS SpaceZoneMission;" +
+            // Table for ArsenalService
+            "DROP TABLE IF EXISTS ArsenalService;" +
+            // Table for Encyclopedia
+            "DROP TABLE IF EXISTS Encyclopedia;";
         // Open DB
-        dbConnection = new SqliteConnection("URI=file:Database.db");
+        dbConnection = new SqliteConnection("URI=file:DataTables.db");
         dbConnection.Open();
         // Queries
         // Create Table Query
@@ -965,7 +978,51 @@ public class InitializeDatabase : MonoBehaviour
         dbCommandDropTable.CommandText = DropTable;
         dbCommandDropTable.ExecuteNonQuery();
         dbConnection.Close();
-    }*/
+    }
+
+    // Drop Save Database
+    public void DropSaveDatabase()
+    {
+        // Drop Tables
+        string DropTable =
+            // Purchase History
+            "DROP TABLE IF EXISTS PurchaseHistory;" +
+            // Table for Statistic
+            "DROP TABLE IF EXISTS Statistic;" +
+            // Table for SessionCurrentSaveData
+            "DROP TABLE IF EXISTS SessionCurrentSaveData;" +
+            // Table for CollectSalaryHistory
+            "DROP TABLE IF EXISTS CollectSalaryHistory;" +
+             // Table for option
+             "DROP TABLE IF EXISTS Option;" +
+            // Table for current play session
+            "DROP TABLE IF EXISTS CurrentPlaySession;" +
+            // LoadoutSaveData
+            "DROP TABLE IF EXISTS LoadoutSaveData;" +
+            // Player Ownership
+            "DROP TABLE IF EXISTS PlayerOwnership;" +
+            // PlayerDailyMission
+            "DROP TABLE IF EXISTS PlayerDailyMission;" +
+            // Session Ownership
+            "DROP TABLE IF EXISTS SessionOwnership;" +
+            // SessionLOTWCards
+            "DROP TABLE IF EXISTS SessionLOTWCards;" +
+            // PlayerProfile
+            "DROP TABLE IF EXISTS PlayerProfile;" +
+            // Session
+            "DROP TABLE IF EXISTS Session;" +
+            // Table to check if database already Init
+            "DROP TABLE IF EXISTS DatabaseInitialize;";
+        // Open DB
+        dbConnection = new SqliteConnection("URI=file:SaveTables.db");
+        dbConnection.Open();
+        // Queries
+        // Create Table Query
+        IDbCommand dbCommandDropTable = dbConnection.CreateCommand();
+        dbCommandDropTable.CommandText = DropTable;
+        dbCommandDropTable.ExecuteNonQuery();
+        dbConnection.Close();
+    }
     // Check if already init
     public string CheckInitializeData()
     {

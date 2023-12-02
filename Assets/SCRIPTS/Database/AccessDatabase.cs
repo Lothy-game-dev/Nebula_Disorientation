@@ -96,11 +96,11 @@ public class AccessDatabase : MonoBehaviour
         dbCommand.CommandText = "INSERT INTO PlayerProfile (Name,Rank,CurrentSession,FuelCell,FuelEnergy,Cash,TimelessShard,DailyIncome,DailyIncomeReceived,LastFuelCellUsedTime,CollectedSalaryTime,SupremeWarriorNo,DailyIncomeShard,NewPilotTutorial) " +
             "VALUES ('" + name + "',null,null,10,100,5000,5,500,'N',null,null,0,0, 'Cinematic|MainUEC|Arsenal|Factory|SpaceShop|Loadout|LOTW|Gameplay|SZSum|UECS|ArsenalS|SpaceShopS|Service|SSum|PA')";
         int n = dbCommand.ExecuteNonQuery();
+        dbConnectionSave.Close();
         if (n == 0)
         {
             return "Fail";
         }
-        dbConnectionSave.Close();
         return "Success";
     }
 
@@ -4157,58 +4157,6 @@ public class AccessDatabase : MonoBehaviour
         return list;
     }
     #endregion
-    public List<List<string>> GetAllSpaceZoneMissionType()
-    {
-        OpenConnection();
-        List<List<string>> list = new List<List<string>>();
-        List<string> Encyc;
-        // Open DB
-        dbConnectionData.Open();
-        // Queries
-        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
-        dbCheckCommand.CommandText = "Select * from Encyclopedia WHERE Type = 'SZMT'";
-        IDataReader dataReader = dbCheckCommand.ExecuteReader();
-        bool check = false;
-        while (dataReader.Read())
-        {
-            Encyc = new List<string>();
-            check = true;
-            Encyc.Add(dataReader.GetInt32(0).ToString());
-            Encyc.Add(dataReader.GetString(2));
-            Encyc.Add(dataReader.GetString(3));
-            Encyc.Add(dataReader.GetString(4));
-            list.Add(Encyc);
-        }
-        if (!check) return null;
-        dbConnectionData.Close();
-        return list;
-    }
-    public List<List<string>> GetAllHazardEnviroment()
-    {
-        OpenConnection();
-        List<List<string>> list = new List<List<string>>();
-        List<string> Encyc;
-        // Open DB
-        dbConnectionData.Open();
-        // Queries
-        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
-        dbCheckCommand.CommandText = "Select * from Encyclopedia WHERE Type = 'HE'";
-        IDataReader dataReader = dbCheckCommand.ExecuteReader();
-        bool check = false;
-        while (dataReader.Read())
-        {
-            Encyc = new List<string>();
-            check = true;
-            Encyc.Add(dataReader.GetInt32(0).ToString());
-            Encyc.Add(dataReader.GetString(2));
-            Encyc.Add(dataReader.GetString(3));
-            Encyc.Add(dataReader.GetString(4));
-            list.Add(Encyc);
-        }
-        if (!check) return null;
-        dbConnectionData.Close();
-        return list;
-    }
     #region Access Collect salary history
     public string SalaryCollected(int PlayerId)
     {
@@ -5334,7 +5282,58 @@ public class AccessDatabase : MonoBehaviour
         } else
         return data;
     }
-
+    public List<List<string>> GetAllSpaceZoneMissionType()
+    {
+        OpenConnection();
+        List<List<string>> list = new List<List<string>>();
+        List<string> Encyc;
+        // Open DB
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Encyclopedia WHERE Type = 'SZMT'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            Encyc = new List<string>();
+            check = true;
+            Encyc.Add(dataReader.GetInt32(0).ToString());
+            Encyc.Add(dataReader.GetString(2));
+            Encyc.Add(dataReader.GetString(3));
+            Encyc.Add(dataReader.GetString(4));
+            list.Add(Encyc);
+        }
+        if (!check) return null;
+        dbConnectionData.Close();
+        return list;
+    }
+    public List<List<string>> GetAllHazardEnviroment()
+    {
+        OpenConnection();
+        List<List<string>> list = new List<List<string>>();
+        List<string> Encyc;
+        // Open DB
+        dbConnectionData.Open();
+        // Queries
+        IDbCommand dbCheckCommand = dbConnectionData.CreateCommand();
+        dbCheckCommand.CommandText = "Select * from Encyclopedia WHERE Type = 'HE'";
+        IDataReader dataReader = dbCheckCommand.ExecuteReader();
+        bool check = false;
+        while (dataReader.Read())
+        {
+            Encyc = new List<string>();
+            check = true;
+            Encyc.Add(dataReader.GetInt32(0).ToString());
+            Encyc.Add(dataReader.GetString(2));
+            Encyc.Add(dataReader.GetString(3));
+            Encyc.Add(dataReader.GetString(4));
+            list.Add(Encyc);
+        }
+        if (!check) return null;
+        dbConnectionData.Close();
+        return list;
+    }
     public Dictionary<string, object> GetStageZoneTemplateByStageValueAndVariant(int StageValue, int Variants)
     {
         OpenConnection();

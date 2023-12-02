@@ -1063,6 +1063,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="SqlCipher4Unity3D.csproj">
+      <Project>{B3D6AAC3-A569-3724-742F-A788749B3BD7}</Project>
+      <Name>SqlCipher4Unity3D</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
