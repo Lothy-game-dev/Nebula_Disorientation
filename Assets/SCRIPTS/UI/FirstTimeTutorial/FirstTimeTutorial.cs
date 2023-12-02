@@ -114,6 +114,7 @@ public class FirstTimeTutorial : MonoBehaviour
                 BlackBG[i].SetActive(false);
             }
         
+            //Start tutorial
             if (!isInGameplay)
             {
                 StopAllCoroutines();
