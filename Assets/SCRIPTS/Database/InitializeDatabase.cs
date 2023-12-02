@@ -828,7 +828,6 @@ public class InitializeDatabase : MonoBehaviour
                 "SupremeWarriorNo INTEGER," +
                 "DailyIncomeShard INTEGER NOT NULL, " +
                 "NewPilotTutorial TEXT, " +
-                "FOREIGN KEY(Rank) REFERENCES RankSystem(RankID), " +
                 "FOREIGN KEY(CurrentSession) REFERENCES Session(SessionID), " +
                 "PRIMARY KEY(PlayerID AUTOINCREMENT) ); " +
             // Session

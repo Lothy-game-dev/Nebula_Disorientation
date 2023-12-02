@@ -140,6 +140,29 @@ public class MainMenuCameraController : MonoBehaviour
         StartCoroutine(BlackFadeOpen(bf, sec));
     }
 
+    public void GenerateBlackFadeWaitAtPos(Vector2 pos, float sec, float Wait)
+    {
+        GameObject bf = Instantiate(BlackFade, new Vector3(pos.x, pos.y, BlackFade.transform.position.z), Quaternion.identity);
+        Color c = bf.GetComponent<SpriteRenderer>().color;
+        c.a = 1;
+        bf.GetComponent<SpriteRenderer>().color = c;
+        bf.SetActive(true);
+        StartCoroutine(BlackFadeWait(bf, sec, Wait));
+    }
+
+    private IEnumerator BlackFadeWait(GameObject Fade, float duration, float wait)
+    {
+        yield return new WaitForSeconds(wait);
+        for (int i = 0; i < 50; i++)
+        {
+            Color c = Fade.GetComponent<SpriteRenderer>().color;
+            c.a -= 1 / 50f;
+            Fade.GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(duration / 50f);
+        }
+        Destroy(Fade);
+    }
+
     public void GenerateBlackFadeClose(float duration, float wait)
     {
         GameObject bf = Instantiate(BlackFade, new Vector3(transform.position.x, transform.position.y, BlackFade.transform.position.z), Quaternion.identity);

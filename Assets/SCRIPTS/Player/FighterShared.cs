@@ -898,30 +898,17 @@ public class FighterShared : MonoBehaviour
 
     private IEnumerator ApplyForce(Vector2 force, float strength, float time)
     {
-        if (time<=0.5f)
+        int n = time <= 0.5f ? 10 : 20;
+        for (int i = 0; i < n; i++)
         {
-            int n = 10;
-            for (int i = 0; i < n; i++)
+            if (gameObject!=null)
             {
-                if (gameObject!=null)
-                {
-                    GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n / 2) * n / 2) * (n - n / 2 + n - 1 - i)) * DeadPushScale, ForceMode2D.Impulse);
-                    yield return new WaitForSeconds(time / n);
-                }
-            }
-        } else
-        {
-            int n = 20;
-            for (int i = 0; i < n; i++)
-            {
-                if (gameObject != null)
-                {
-                    GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * (strength / ((n - 1 + n / 2) * n / 2) * (n - n / 2 + n - 1 - i)) * DeadPushScale, ForceMode2D.Impulse);
-                    yield return new WaitForSeconds(time / n);
-                }
+                GetComponent<Rigidbody2D>().AddForce(force / force.magnitude * 
+                    (strength * (n - i) / (n * (n - 1) / 2)) * DeadPushScale, 
+                    ForceMode2D.Impulse);
+                yield return new WaitForSeconds(time / n);
             }
         }
-
     }
     #endregion
 }
