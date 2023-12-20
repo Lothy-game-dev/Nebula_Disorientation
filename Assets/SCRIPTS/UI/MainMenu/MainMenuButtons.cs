@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class MainMenuButtons : MonoBehaviour
@@ -114,7 +115,12 @@ public class MainMenuButtons : MonoBehaviour
     #region Enter and Exit
     public void QuitGame()
     {
-        Application.Quit();
+        Process[] process = Process.GetProcessesByName("Nebula Disorientation");
+        foreach (var pro in process)
+        {
+            pro.Kill();
+        }
+/*        Application.Quit();*/
     }
     private IEnumerator DelayTransfer()
     {
