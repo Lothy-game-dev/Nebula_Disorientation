@@ -74,7 +74,7 @@ public class LaserBeam : Powers
                 RightWeapon.GetComponent<Weapons>().BeamActivating = false;
                 DurationTimer = 0f;               
                 isFire = false;
-                //slow down Fighter when firing
+                //slow down Fighter's rotation spd when firing
                 if (Fighter.GetComponent<PlayerMovement>() != null)
                 {
                     Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 1;
@@ -92,7 +92,7 @@ public class LaserBeam : Powers
     // Group all function that serve the same algorithm
     public void GenerateLaserBeam()
     {
-        //slow down Fighter when firing
+        //slow down Fighter's rotation spd when firing
         if (Fighter.GetComponent<PlayerMovement>()!=null)
         {
             Fighter.GetComponent<PlayerMovement>().ExteriorROTSpeed = 0.5f;
@@ -104,11 +104,6 @@ public class LaserBeam : Powers
         }
 
         Vector2 pos = CalculatePos(Range);
-        LeftWeapon = Fighter.GetComponent<FighterShared>().LeftWeapon;
-        RightWeapon = Fighter.GetComponent<FighterShared>().RightWeapon;
-
-        GameObject LeftWPRotationPoint = LeftWeapon.GetComponent<Weapons>().RotatePoint;
-        GameObject RightWPRotationPoint = RightWeapon.GetComponent<Weapons>().RotatePoint;
         //Generate          
         GameObject game = Instantiate(Effect, Fighter.GetComponent<FighterShared>().LeftLaserBeamPos.transform.position, Quaternion.identity);
         game.GetComponent<Beam>().Distance = Range;
