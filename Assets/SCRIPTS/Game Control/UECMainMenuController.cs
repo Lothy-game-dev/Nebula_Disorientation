@@ -27,6 +27,7 @@ public class UECMainMenuController : MonoBehaviour
     public int BuyAmount;
     public int CashSpent;
     public int ShardSpent;
+    private float GreetingTimer;
     #endregion
     #region Start & Update
     // Start is called before the first frame update
@@ -34,6 +35,7 @@ public class UECMainMenuController : MonoBehaviour
     {
         Camera.main.transparencySortAxis = new Vector3(0, 0, 1);
         isStart = false;
+        GreetingTimer = 1000f;
     }
     void OnEnable()
     {
@@ -41,6 +43,7 @@ public class UECMainMenuController : MonoBehaviour
         ad = FindObjectOfType<AccessDatabase>();      
         ExitAnimationAllScene();
         GetData();
+        StartCoroutine(StartGreeting());
     }
 
     // Update is called once per frame
@@ -50,6 +53,14 @@ public class UECMainMenuController : MonoBehaviour
         if (isStart)
         {
             SetTimer(StartTime);
+        }
+        if (GreetingTimer>0f)
+        {
+            GreetingTimer -= Time.deltaTime;
+        }  else
+        {
+            GreetingTimer = 10f;
+            controller.GenerateGreeting(ad.GetPlayerInformationById(PlayerId));
         }
     }
     #endregion
@@ -75,6 +86,13 @@ public class UECMainMenuController : MonoBehaviour
             FindObjectOfType<NotificationBoardController>().CreateNormalNotiBoard(transform.position,
                 "Can not find your pilot's data.\n Please try again or contact to our email.", 5f);
         }
+    }
+
+    private IEnumerator StartGreeting()
+    {
+        yield return new WaitForSeconds(2f);
+        GreetingTimer = 10f;
+        controller.GenerateGreeting(ad.GetPlayerInformationById(PlayerId));
     }
     #endregion
     #region Teleport To Scene

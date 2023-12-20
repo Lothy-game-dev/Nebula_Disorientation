@@ -83,7 +83,31 @@ public class UECController : UECMenuShared
         Cash.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["Cash"]).ToString();
         TimelessShard.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["TimelessShard"]).ToString();
         FuelEnergy.transform.GetChild(1).GetComponent<TextMeshPro>().text = ((int)datas["FuelEnergy"]).ToString();
-        NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = GenerateNameRankText((string)datas["Name"], (string)datas["Rank"], (datas.ContainsKey("RankColor")? (string)datas["RankColor"]:"") );
+    }
+
+    public void GenerateGreeting(Dictionary<string, object> datas)
+    {
+        StartCoroutine(ChangeText(GenerateNameRankText((string)datas["Name"], (string)datas["Rank"], (datas.ContainsKey("RankColor") ? (string)datas["RankColor"] : ""))));
+        
+    }
+
+    private IEnumerator ChangeText(string Text)
+    {
+        for (int i=0;i<10;i++)
+        {
+            Color c = NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+            c.a -= 0.1f;
+            NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.05f);
+        }
+        NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().text = Text;
+        for (int i = 0; i < 10; i++)
+        {
+            Color c = NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().color;
+            c.a += 0.1f;
+            NameRankBox.transform.GetChild(0).GetComponent<TextMeshPro>().color = c;
+            yield return new WaitForSeconds(0.05f);
+        }
     }
 
     private string GenerateNameRankText(string name, string rank, string rankColor)
@@ -108,29 +132,29 @@ public class UECController : UECMenuShared
         {
             hour = -1;
         }
-        string[] morningQuotes = { "Good morning", "Have a nice day,", "Getting up too early, huh" };
-        string[] morningQuotesAfter = { "!", "!", "?" };
-        string[] afternoonQuotes = { "Good afternoon", "What an afternoon to be at the UEC, right", "Get some nap," };
-        string[] afternoonQuotesAfter = { "!", "?", "!" };
-        string[] eveningQuotes = { "Good evening", "Have you got your dinner yet, ", "Time to study some new mechanics," };
-        string[] eveningQuotesAfter = { "!", "?", "!" };
-        string[] nightQuotes = { "Nighty night,", "Have you done your homework yet,", "Sleep when," };
-        string[] nightQuotesAfter = { "!", "?", "?" };
+        string[] morningQuotes = { "Good morning", "Have a nice day,", "Getting up too early, huh", "Five more minutes, right", "Ohayou", "Time to do some daily missions, right" };
+        string[] morningQuotesAfter = { "!", "!", "?", "?", "!", "?"};
+        string[] afternoonQuotes = { "Good afternoon", "What an afternoon to be at the UEC, right", "Get some nap,", "Time for lunch," };
+        string[] afternoonQuotesAfter = { "!", "?", "!", "!" };
+        string[] eveningQuotes = { "Good evening", "Have you got your dinner yet, ", "Time to study some new mechanics,", "Enjoy the game, dear" };
+        string[] eveningQuotesAfter = { "!", "?", "!", "!" };
+        string[] nightQuotes = { "Nighty night,", "Have you done your homework yet,", "Sleep when,", "Don't forget to do your dailies,", "Recommend sleeping, dear", "Don't forget to go to school tommorrow," };
+        string[] nightQuotesAfter = { "!", "?", "?", "!", ".", "!" };
         if (hour>=6 && hour < 11)
         {
-            int n = Random.Range(0, 3);
+            int n = Random.Range(0, morningQuotes.Length);
             text += morningQuotes[n] + " " + ranking + " " + name + morningQuotesAfter[n];
         } else if (hour >= 11 && hour < 17)
         {
-            int n = Random.Range(0, 3);
+            int n = Random.Range(0, afternoonQuotes.Length);
             text += afternoonQuotes[n] + " " + ranking + " " + name + afternoonQuotesAfter[n];
         } else if (hour >= 17 && hour < 21)
         {
-            int n = Random.Range(0, 3);
+            int n = Random.Range(0, eveningQuotes.Length);
             text += eveningQuotes[n] + " " + ranking + " " + name + eveningQuotesAfter[n];
         } else if (hour >= 21 || hour<6)
         {
-            int n = Random.Range(0, 3);
+            int n = Random.Range(0, nightQuotes.Length);
             text += nightQuotes[n] + " " + ranking + " " + name + nightQuotesAfter[n];
         }
         return text;
